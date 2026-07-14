@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Media;
 using Splat;
 using WolvenKit.App.Extensions;
@@ -16,10 +17,13 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
 {
     private readonly scnSceneResource _sceneResource;
+    private Enums.questUseWorkspotNodeFunctions? _lastUseWorkspotFunction;
+    private bool _removeWorkStartedWhenDisconnected;
     
     public scnQuestNodeWrapper(scnQuestNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode)
     {
         _sceneResource = scnSceneResource;
+        _lastUseWorkspotFunction = GetUseWorkspotFunction();
         if (_castedData.QuestNode != null)
         {
             //_castedData.QuestNode.PropertyChanged += QuestNodeOnPropertyChanged;
@@ -316,6 +320,8 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
     /// </summary>
     public override void RefreshFromData()
     {
+        SynchronizeUseWorkspotSockets();
+
         // Update title
         UpdateTitle();
         OnPropertyChanged(nameof(Title));
@@ -323,5 +329,111 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
         // Refresh details but DON'T regenerate sockets (this prevents duplication)
         // Sockets should only be regenerated when the socket structure actually changes
         RefreshDetails();
+    }
+
+    private Enums.questUseWorkspotNodeFunctions? GetUseWorkspotFunction()
+    {
+        if (_castedData.QuestNode?.Chunk is questUseWorkspotNodeDefinition useWorkspotNode)
+        {
+            return questUseWorkspotNodeDefinitionWrapper.GetWorkspotFunction(useWorkspotNode);
+        }
+
+        return null;
+    }
+
+    private void SynchronizeUseWorkspotSockets()
+    {
+        if (_castedData.QuestNode?.Chunk is not questUseWorkspotNodeDefinition)
+        {
+            return;
+        }
+
+        var function = GetUseWorkspotFunction();
+        var functionChanged = function != _lastUseWorkspotFunction;
+        if (!functionChanged && !_removeWorkStartedWhenDisconnected)
+        {
+            return;
+        }
+
+        _lastUseWorkspotFunction = function;
+        var shouldHaveWorkStarted = function == Enums.questUseWorkspotNodeFunctions.UseWorkspot;
+        var mappingIndex = GetOutputMappingIndex("Work Started");
+
+        if (shouldHaveWorkStarted)
+        {
+            _removeWorkStartedWhenDisconnected = false;
+            if (mappingIndex < 0)
+            {
+                AddWorkStartedSocket();
+            }
+            return;
+        }
+
+        if (mappingIndex < 0)
+        {
+            _removeWorkStartedWhenDisconnected = false;
+            return;
+        }
+
+        var socket = mappingIndex < _castedData.OutputSockets.Count
+            ? _castedData.OutputSockets[mappingIndex]
+            : null;
+        var connector = Output
+            .OfType<SceneOutputConnectorViewModel>()
+            .FirstOrDefault(x => x.Subtitle == "Work Started");
+
+        if ((socket?.Destinations.Count ?? 0) > 0 || connector?.IsConnected == true)
+        {
+            _removeWorkStartedWhenDisconnected = true;
+            return;
+        }
+
+        _removeWorkStartedWhenDisconnected = false;
+        if (connector != null)
+        {
+            Output.Remove(connector);
+        }
+        if (mappingIndex < _castedData.OutputSockets.Count)
+        {
+            _castedData.OutputSockets.RemoveAt(mappingIndex);
+        }
+        _castedData.OsockMappings.RemoveAt(mappingIndex);
+        NotifySocketsChanged();
+    }
+
+    private int GetOutputMappingIndex(string name)
+    {
+        for (var i = 0; i < _castedData.OsockMappings.Count; i++)
+        {
+            if (_castedData.OsockMappings[i].GetResolvedText() == name)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void AddWorkStartedSocket()
+    {
+        var socket = new scnOutputSocket
+        {
+            Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 1 }
+        };
+        _castedData.OsockMappings.Add("Work Started");
+        _castedData.OutputSockets.Add(socket);
+
+        var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+        Output.Add(new SceneOutputConnectorViewModel(
+            nameAndTitle,
+            nameAndTitle,
+            UniqueId,
+            socket.Stamp.Name,
+            socket.Stamp.Ordinal,
+            socket)
+        {
+            Subtitle = "Work Started"
+        });
+        NotifySocketsChanged();
     }
 }

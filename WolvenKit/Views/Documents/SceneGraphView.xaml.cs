@@ -525,12 +525,41 @@ namespace WolvenKit.Views.Documents
             if (viewModel?.MainGraph == null)
                 return;
 
+            // Shortcut: C to add a comment at the cursor or around selected nodes
+            if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.None)
+            {
+                if (IsEditingContextActive())
+                {
+                    return;
+                }
+
+                if (SceneGraphEditor.AddCommentFromCurrentCursor())
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+
             // Shortcut: Delete key to soft delete, Shift+Delete for hard delete
             if (e.Key == Key.Delete)
             {
                 // Don't handle delete key if user is editing text
                 if (IsEditingContextActive())
                     return;
+
+                var selectedComments = SceneGraphEditor?.Editor?.SelectedItems?
+                    .OfType<GraphCommentViewModel>()
+                    .ToList();
+
+                if (selectedComments is { Count: > 0 })
+                {
+                    foreach (var comment in selectedComments)
+                    {
+                        viewModel.MainGraph.RemoveCommentCommand.Execute(comment);
+                    }
+
+                    e.Handled = true;
+                }
 
                 // Use SelectedNodes from underlying GraphEditor
                 var selectedNodes = SceneGraphEditor?.Editor?.SelectedItems?

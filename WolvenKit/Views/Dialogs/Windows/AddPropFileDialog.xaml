@@ -248,15 +248,6 @@
                         Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Human-readable name (for AMM registration)" />
 
-                    <CheckBox
-                        x:Name="ReadAppearancesFromMeshCheckbox"
-                        Grid.Row="8"
-                        Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginLeft}"
-                        ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
-                        KeyboardNavigation.TabIndex="-1"
-                        Click="OnReadAppearancesCheckboxChecked" />
-
                     <Label
                         Grid.Row="10"
                         Grid.Column="0"

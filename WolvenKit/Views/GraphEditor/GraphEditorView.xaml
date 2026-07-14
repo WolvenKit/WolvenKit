@@ -122,11 +122,11 @@
             DisplayConnectionsOnTop="True"
             EnableRealtimeSelection="True"
             ItemsSource="{Binding ElementName=uc,
-                                  Path=Source.Nodes}"
+                                  Path=Source.CanvasItems}"
             PendingConnection="{Binding ElementName=uc,
                                         Path=Source.PendingConnection}"
             SelectedItem="{Binding ElementName=uc,
-                                   Path=SelectedNode,
+                                   Path=SelectedItem,
                                    Mode=TwoWay}"
             SelectedItems="{Binding ElementName=uc,
                                     Path=SelectedNodes,
@@ -610,6 +610,87 @@
                     </nodify:Node>
                 </DataTemplate>
 
+                <DataTemplate DataType="{x:Type nodes:GraphCommentViewModel}">
+                    <nodify:GroupingNode
+                        Width="{Binding Width}"
+                        Height="{Binding Height}"
+                        MaxWidth="{Binding MaximumWidth}"
+                        MaxHeight="{Binding MaximumHeight}"
+                        MinWidth="180"
+                        MinHeight="120"
+                        Background="{Binding BackgroundBrush}"
+                        BorderBrush="{Binding BorderBrush}"
+                        BorderThickness="3"
+                        CanResize="True"
+                        ContextMenuOpening="Comment_ContextMenuOpening"
+                        Header="{Binding}"
+                        HeaderBrush="{Binding HeaderBrush}"
+                        MovementMode="Group"
+                        ResizeCompleted="Comment_OnResizeCompleted">
+                        <nodify:GroupingNode.ContextMenu>
+                            <ContextMenu />
+                        </nodify:GroupingNode.ContextMenu>
+                        <nodify:GroupingNode.HeaderTemplate>
+                            <DataTemplate DataType="{x:Type nodes:GraphCommentViewModel}">
+                                <Grid Cursor="SizeAll">
+                                    <TextBlock
+                                        Padding="4,1,4,1"
+                                        VerticalAlignment="Center"
+                                        Foreground="White"
+                                        FontSize="{DynamicResource WolvenKitFontTitle}"
+                                        FontWeight="SemiBold"
+                                        MouseLeftButtonDown="CommentText_OnMouseLeftButtonDown"
+                                        Text="{Binding Text}"
+                                        TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <TextBox
+                                        x:Name="CommentEditTextBox"
+                                        MinWidth="120"
+                                        Padding="4,1,4,1"
+                                        VerticalContentAlignment="Center"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="White"
+                                        Cursor="IBeam"
+                                        Foreground="White"
+                                        FontSize="{DynamicResource WolvenKitFontTitle}"
+                                        FontWeight="SemiBold"
+                                        TextWrapping="Wrap"
+                                        IsVisibleChanged="CommentEditTextBox_OnIsVisibleChanged"
+                                        LostKeyboardFocus="CommentEditTextBox_OnLostKeyboardFocus"
+                                        PreviewKeyDown="CommentEditTextBox_OnPreviewKeyDown"
+                                        Text="{Binding Text,
+                                                       Mode=TwoWay,
+                                                       UpdateSourceTrigger=PropertyChanged,
+                                                       Delay=500}">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </Grid>
+                            </DataTemplate>
+                        </nodify:GroupingNode.HeaderTemplate>
+                    </nodify:GroupingNode>
+                </DataTemplate>
+
 
             </nodify:NodifyEditor.Resources>
 
@@ -676,6 +757,7 @@
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Location" Value="{Binding Location}" />
+                    <Setter Property="Panel.ZIndex" Value="{Binding ZIndex, FallbackValue=0}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="BorderBrush" Value="{StaticResource WolvenKitYellow}" />

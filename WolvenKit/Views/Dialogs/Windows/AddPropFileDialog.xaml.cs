@@ -328,7 +328,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void OnHelpButtonClicked(object sender, RoutedEventArgs e)
         {
-            var ps = new ProcessStartInfo(WikiLinks.Props) { UseShellExecute = true, Verb = "open" };
+            var ps = new ProcessStartInfo(WikiLinks.PropGenerator) { UseShellExecute = true, Verb = "open" };
             Process.Start(ps);
         }
 
