@@ -1109,7 +1109,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
-    private async Task ConvertArchiveFile()
+    internal async Task ConvertArchiveFile()
     {
         if (SelectedItems is null)
         {

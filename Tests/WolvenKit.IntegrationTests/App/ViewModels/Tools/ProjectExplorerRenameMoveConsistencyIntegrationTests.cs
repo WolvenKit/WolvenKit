@@ -66,7 +66,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
 
         // No real Syncfusion grid in the test: run the deferred-refresh task straight through. The tree we
         // assert on is the GridGuard's FileList, which the WatcherService handlers keep in sync.
-        _pe!.BeginDeferredRefreshContext = async (_, task) => await task;
+        _pe!.BeginDeferredRefreshContext = (task) => task();
 
         // Always confirm overwrite prompts (the final collision step relies on this).
         Interactions.ShowQuestionYesNo = _ => true;
