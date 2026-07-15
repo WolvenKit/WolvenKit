@@ -18,6 +18,7 @@ using DynamicData.Binding;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
 using MahApps.Metro.Controls;
+using Octokit;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Data;
@@ -35,6 +36,8 @@ using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
+using WolvenKit.Helpers;
+using Application = System.Windows.Application;
 
 namespace WolvenKit.Views.Tools
 {
@@ -86,9 +89,9 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
-            TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
-            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
+            TreeGrid.SortComparers.Add(new() { Comparer = new FileComparer.Paths(), PropertyName = "GameRelativePath" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Paths(), PropertyName = "GameRelativePath" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Sizes(), PropertyName = "FileSizeStr" });
 
             TreeGrid.NodeExpanding += TreeGrid_OnNodeExpanding;
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
@@ -120,7 +123,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowDeleteOrMoveFilesList = (args) =>
                 {
-                    var list = args.files.Order(new FilePathStringComparer());
+                    var list = args.files.Order(new FileComparer.PathStrings());
                     var dialog = new DeleteOrMoveFilesListDialogView(args.title, list.ToList(), args.currentProject);
 
                     if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
@@ -134,7 +137,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowDictionaryAsCopyableList = (args) =>
                 {
-                    var comparer = new FilePathComparer();
+                    var comparer = new FileComparer.Paths();
                     var dialog = new ShowDictionaryForCopyDialogView(args);
                     return dialog.ShowDialog(Application.Current.MainWindow) == true;
                 };
@@ -244,34 +247,83 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-        private bool _isLoading = false;
+        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
 
         #region Project_Loading
+
+        private bool ShouldStartLoadingProject(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject
+                   || mode == ProjectExplorerViewModel.LoadingMode.ReloadingSameProject;
+        }
+
+        private bool ShouldStopLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        private bool ShouldStopTemporaryLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        private bool ShouldStartTemporaryLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation;
+        }
+
+        private bool IsFreshLoad(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject;
+        }
+
+        private bool AlreadyLoadingProject()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject
+                   || _loadingMode == ProjectExplorerViewModel.LoadingMode.ReloadingSameProject;
+        }
+
+        private bool AlreadyTemporaryLoading()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation;
+        }
+
+        private bool Ready()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
 
         /// <summary>
         /// Called by the ViewModel when the View should show "Loading" on the file pane.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SetLoading(object sender, (bool isLoading, bool isReload) e)
+        private void SetLoading(object sender, ProjectExplorerViewModel.LoadingMode mode)
         {
-            if (e.isLoading && !_isLoading)
+            if (ShouldStartLoadingProject(mode) && Ready())
             {
-                _isLoading = true;
-                _ = StartLoading(!e.isReload);
+                _ = StartLoadingProject(IsFreshLoad(mode));
             }
-            else if (!e.isLoading)
+            else if (ShouldStopLoading(mode) && AlreadyLoadingProject())
             {
-                _isLoading = false;
                 _deferRefreshTokenSource?.Cancel();
             }
-        }
+            else if (ShouldStopTemporaryLoading(mode) && AlreadyTemporaryLoading())
+            {
+                IndicateProjectNotLoading(ViewModel.IsFlatModeEnabled);
+            }
+            else if (ShouldStartTemporaryLoading(mode) && Ready())
+            {
+                IndicateProjectLoading();
+            }
 
+            _loadingMode = mode;
+        }
 
         /// <summary>
         /// Helper method for starting `InitiateLoadingUntilCancellation` method.
         /// </summary>
-        private async Task StartLoading(bool isFirstLoad)
+        private async Task StartLoadingProject(bool isFirstLoad)
         {
             _deferRefreshTokenSource?.Cancel();
             _deferRefreshTokenSource = new CancellationTokenSource();
@@ -321,12 +373,13 @@ namespace WolvenKit.Views.Tools
                     }
                     else
                     {
-                        // RefreshTreeViewIfNeeded();
-                        // RefreshFlatViewIfNeeded();
+                        IndicateProjectNotLoading(isFlatModeEnabled);
 
+                        // Re-apply search after a full reload. Expand so deep matches stay visible
+                        // (tree was rebuilt; expansion state may not cover search hits).
                         if (!_currentFolderQuery.IsNullOrEmpty())
                         {
-                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                            ReapplyCurrentSearchFilter(expandAllForSearch: true);
                         }
 
                         DispatcherHelper.DelayOnMainThread(() =>
@@ -423,7 +476,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion Project_Loading
 
-        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Func<Task> doBeforeRefresh)
+        private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
             CompositeDisposable disposables =
             [
@@ -433,50 +486,42 @@ namespace WolvenKit.Views.Tools
 
             using (disposables)
             {
+                // Structural mutations only under DeferRefresh.
+                // Do not call any methods on views/grids/filters/refreshes here.
                 await doBeforeRefresh();
-
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
-                {
-                    DispatcherHelper.DelayOnMainThread(() =>
-                    {
-                        InvalidateLayout();
-
-                        if (!_currentFolderQuery.IsNullOrEmpty())
-                        {
-                            PESearchBar_OnSearchStarted(this,
-                                new FunctionEventArgs<string>(_currentFolderQuery));
-                        }
-                    }, 1);
-                });
             }
 
             DispatcherHelper.RunOnMainThread(() =>
             {
+                if (!_currentFolderQuery.IsNullOrEmpty())
+                {
+                    ReapplyCurrentSearchFilter(expandAllForSearch: true);
+                    return;
+                }
+
                 InvalidateLayout();
+
+                // We need a second Invalidate here because of AsyncRelay commands like Delete.
+                Dispatcher.BeginInvoke(InvalidateLayout, DispatcherPriority.Render);
             });
         }
 
         private void InvalidateLayout()
         {
-            // DeferRefresh has ended. Syncfusion's virtualized TreeGridPanel would otherwise present the
-            // refreshed rows painted OVER the stale ones for a few frames (the "drawn twice" ghost) before
-            // settling. Re-measure the panels and force the layout pass to complete NOW — synchronously, in
-            // this same dispatcher operation, before WPF presents the next frame — so the very FIRST frame
-            // after the refresh is already correct. (Doing this via a Background dispatch a tick later is
-            // what left the ghost briefly visible.) UpdateLayout re-measures only the virtualized/visible
-            // rows, so it's cheap, and it does not pump the dispatcher — no deferred-refresh deadlock risk.
+            // Always invalidate both grids, not just the visible one.
+            InvalidateVirtualizedRows(TreeGrid);
+            InvalidateVirtualizedRows(TreeGridFlat);
 
+            // Only update layout on the visible tree.
             if (TreeGrid.IsVisible)
             {
-                InvalidateVirtualizedRows(TreeGrid);
                 TreeGrid.UpdateLayout();
-                TreeGrid.InvalidateVisual();
-                return;
             }
 
-            InvalidateVirtualizedRows(TreeGridFlat);
-            TreeGridFlat.UpdateLayout();
-            TreeGridFlat.InvalidateVisual();
+            if (TreeGridFlat.IsVisible)
+            {
+                TreeGridFlat.UpdateLayout();
+            }
         }
 
         /// <summary>
@@ -487,11 +532,15 @@ namespace WolvenKit.Views.Tools
         private static void InvalidateVirtualizedRows(DependencyObject grid)
         {
             var panel = FindVisualDescendant<TreeGridPanel>(grid);
-                if (panel == null) return;
+            if (panel == null)
+            {
+                return;
+            }
 
-                panel.InvalidateMeasureInfo();
-                panel.InvalidateMeasure();
-                panel.InvalidateArrange();
+            // Fixes the appearance of a double "ghost table."
+            panel.InvalidateMeasureInfo();
+            panel.InvalidateMeasure();
+            panel.InvalidateArrange();
         }
 
         private static T FindVisualDescendant<T>(DependencyObject root) where T : DependencyObject
@@ -910,14 +959,25 @@ namespace WolvenKit.Views.Tools
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
             _currentFolderQuery = e.Info;
-            TreeGridFlat.View.RefreshFilter();
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrEmpty(e.Info));
+        }
 
-            // Only force-expand everything when there is an active search query.
-            // This makes deep search results visible. When re-applying an empty query
-            // (e.g. after deferred structural changes like delete/convert, or when the
-            // user clears the search), we must NOT call ExpandAllNodes(), otherwise
-            // it overrides the user's saved/per-model IsExpanded states for all folders.
-            if (!string.IsNullOrEmpty(e.Info))
+        private void ReapplyCurrentSearchFilter(bool expandAllForSearch)
+        {
+            if (TreeGridFlat.View is not null)
+            {
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.RefreshFilter();
+            }
+
+            if (TreeGrid.View is null)
+            {
+                return;
+            }
+
+            TreeGrid.View.Filter = IsFileIn;
+
+            if (expandAllForSearch && !string.IsNullOrEmpty(_currentFolderQuery))
             {
                 TreeGrid.ExpandAllNodes();
             }
@@ -1007,9 +1067,7 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
-                ViewModel.SuspendFileWatcher();
-                await ProcessFileAction(files, targetDirectory);
-                ViewModel.ResumeFileWatcher();
+                await ViewModel.ProcessFileAction(files, targetDirectory);
             }
             catch (Exception error)
             {
@@ -1018,351 +1076,6 @@ namespace WolvenKit.Views.Tools
         }
         private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
             _isDragging = false;
-
-        /// <summary>
-        ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
-        /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
-        /// </summary>
-        private async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
-        {
-            var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
-
-            // Abort if a directory is dragged on itself or its parent
-            if (!isCopy && sourceFiles.Count == 1 &&
-                (sourceFiles[0] == targetDirectory || Path.GetDirectoryName(sourceFiles[0]) == targetDirectory))
-            {
-                return;
-            }
-
-            // Split files and directories apart for cleaner handling
-            var directories = sourceFiles.Where(s => File.GetAttributes(s).HasFlag(FileAttributes.Directory)).ToList();
-
-            // Create a dictionary to map source files to target files
-            var fileMap = new Dictionary<string, string>();
-
-            // Add files directly under the source directories to the map
-            foreach (var sourceFile in sourceFiles.Where(s => !directories.Contains(s)))
-            {
-                var targetFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
-                fileMap[sourceFile] = targetFile;
-            }
-
-            // Add files under the subdirectories of the source directories to the map
-            foreach (var directory in directories.Where(Directory.Exists))
-            {
-                var directoryParent = Path.GetDirectoryName(directory) ?? directory;
-                foreach (var sourceFile in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
-                {
-                    // we don't care about directories, just about files
-                    if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
-                    {
-                        continue;
-                    }
-
-                    var relativePath = sourceFile.Substring(directoryParent.Length).TrimStart(Path.DirectorySeparatorChar);
-                    var targetFile = Path.Combine(targetDirectory, relativePath);
-                    if (targetFile == sourceFile && isCopy)
-                    {
-                        var directoryName = Path.GetFileName(Path.GetDirectoryName(sourceFile)) ?? "INVALID";
-                        relativePath = relativePath.Replace(directoryName, $"{directoryName}_copy");
-                        targetFile = Path.Combine(targetDirectory, relativePath);
-                    }
-
-                    fileMap[sourceFile] = targetFile;
-                }
-            }
-
-            var existingFiles = fileMap.Values.Where(File.Exists)
-                .Select(s => s.Replace(targetDirectory, "").TrimStart(Path.DirectorySeparatorChar)).OrderBy(s => s).Distinct()
-                .ToList();
-
-            // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
-            var isOverwrite = existingFiles.Count == 0;
-            var isAskIndividually = existingFiles.Count > 10;
-            var skipDialogue = false;
-
-            // We're copying or moving a file on itself - offer rename operation
-            if (fileMap.Count == 1 && existingFiles.Count == 1 &&
-                ViewModel?.ActiveProject is Cp77Project project &&
-                targetDirectory == Path.GetDirectoryName(fileMap.Keys.First()))
-            {
-                var filePath = fileMap.Keys.First();
-                var relativePath = filePath.Replace($"{project.ModDirectory}{Path.DirectorySeparatorChar}", "");
-                var destPath = Interactions.Rename(relativePath);
-                if (string.IsNullOrEmpty(destPath))
-                {
-                    // user cancelled dialogue
-                    return;
-                }
-
-                if (destPath != relativePath)
-                {
-                    fileMap[filePath] = filePath.Replace(relativePath, destPath);
-                    existingFiles.Clear();
-                }
-                else
-                {
-                    // we can't overwrite a file with itself, so we'll create a copy
-                    isCopy = true;
-                    skipDialogue = true;
-                }
-            }
-
-
-            // 1 - 10 files: Show a single dialogue that asks for confirmation
-            if (existingFiles.Count is < 10 and > 0)
-            {
-                var messageBoxResult = await Interactions.ShowMessageBoxAsync(
-                    $"Overwrite the following files? \n\n  {string.Join("\n  ", existingFiles)}",
-                    "File Overwrite Confirmation", WMessageBoxButtons.YesNoCancel);
-
-                if (messageBoxResult == WMessageBoxResult.Cancel)
-                {
-                    return;
-                }
-
-                isOverwrite = messageBoxResult == WMessageBoxResult.Yes;
-            }
-
-            // Track what actually happened on disk so we can hand the project explorer an
-            // authoritative reconciliation afterwards, rather than relying on (flaky) FS events.
-            var movedPairs = new List<(string From, string To)>();
-            var addedPaths = new List<string>();
-
-            foreach (var copyMe in fileMap)
-            {
-                var targetFile = copyMe.Value ?? "";
-
-                var canWriteToTargetFile =
-                    !File.Exists(targetFile)
-                    || isOverwrite
-                    || (!skipDialogue && isAskIndividually && await Interactions.ShowMessageBoxAsync(
-                        $"Overwrite the following file? {targetFile}",
-                        "File Overwrite Confirmation",
-                        WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
-                if (!canWriteToTargetFile)
-                {
-                    if (!isCopy)
-                    {
-                        continue;
-                    }
-
-                    var filenameWithoutExtension = Path.GetFileNameWithoutExtension(targetFile);
-                    targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension}_copy");
-                }
-
-                var containingDirectory = Path.GetDirectoryName(targetFile) ?? "";
-                if (!Directory.Exists(containingDirectory))
-                {
-                    Directory.CreateDirectory(containingDirectory);
-                }
-
-                if (isCopy)
-                {
-                    File.Copy(copyMe.Key, targetFile, true);
-                    addedPaths.Add(targetFile);
-                }
-                else
-                {
-                    File.Move(copyMe.Key, targetFile, true);
-                    movedPairs.Add((copyMe.Key, targetFile));
-                }
-            }
-
-            // Moves leave behind emptied source folders — delete them BEFORE reconciling so the
-            // watcher prunes their now-vanished models. Copies leave the source in place.
-            if (!isCopy)
-            {
-                foreach (var directory in directories.OrderByDescending(dir => dir.Length).ToList())
-                {
-                    if (Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Any())
-                    {
-                        continue;
-                    }
-
-                    Directory.Delete(directory, true);
-                }
-            }
-
-            if (ViewModel is ProjectExplorerViewModel reconcileVm)
-            {
-                reconcileVm.NotifyDragDropReconciled(movedPairs, addedPaths);
-            }
-        }
-
-        public class FilePathComparer : IComparer<object>, ISortDirection
-        {
-            public int Compare(object x, object y)
-            {
-                var item1 = x as FileSystemModel;
-                var item2 = y as FileSystemModel;
-                var c = 0;
-
-                if (item1 != null && item2 == null)
-                {
-                    c = -1;
-                }
-                else if (item1 == null && item2 != null)
-                {
-                    c = 1;
-                }
-                else if (item1 != null)
-                {
-                    switch (item1.IsDirectory)
-                    {
-                        case true when !item2.IsDirectory:
-                            c = -1;
-                            break;
-                        case false when item2.IsDirectory:
-                            c = 1;
-                            break;
-                        default:
-                        {
-                            c = CompareParts();
-                            if (c == 0)
-                            {
-                                c = string.CompareOrdinal(item1.GameRelativePath, item2.GameRelativePath);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-
-                if (SortDirection == ListSortDirection.Descending)
-                {
-                    c = -c;
-                }
-
-                return c;
-
-                int CompareParts()
-                {
-                    var item1Parts = item1.GameRelativePath.Split(Path.DirectorySeparatorChar);
-                    var item2Parts = item2.GameRelativePath.Split(Path.DirectorySeparatorChar);
-
-                    if (item1Parts.Length != item2Parts.Length)
-                    {
-                        return item1Parts.Length.CompareTo(item2Parts.Length);
-                    }
-
-                    for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
-                    {
-                        var result = string.CompareOrdinal(item1Parts[i], item2Parts[i]);
-                        if (result != 0)
-                        {
-                            return result;
-                        }
-                    }
-
-                    return 0;
-                }
-            }
-
-            public ListSortDirection SortDirection { get; set; }
-        }
-
-        public class FilePathStringComparer : IComparer<string>, ISortDirection
-        {
-            public int Compare(string item1, string item2)
-            {
-                var c = 0;
-
-                if (item1 == item2)
-                {
-                    return 0;
-                }
-
-                if (item1 != null && item2 == null)
-                {
-                    c = -1;
-                }
-                else if (item1 == null)
-                {
-                    c = 1;
-                }
-                else
-                {
-                    switch (Directory.Exists(item1))
-                    {
-                        case true when !Directory.Exists(item2):
-                            c = -1;
-                            break;
-                        case false when Directory.Exists(item2):
-                            c = 1;
-                            break;
-                        default:
-                        {
-                            c = CompareParts();
-                            if (c == 0)
-                            {
-                                c = string.CompareOrdinal(item1, item2);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-
-                if (SortDirection == ListSortDirection.Descending)
-                {
-                    c = -c;
-                }
-
-                return c;
-
-                int CompareParts()
-                {
-                    var item1Parts = item1.Split(Path.DirectorySeparatorChar);
-                    var item2Parts = item2.Split(Path.DirectorySeparatorChar);
-
-                    for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
-                    {
-                        var result = string.CompareOrdinal(item1Parts[i], item2Parts[i]);
-                        if (result != 0)
-                        {
-                            return result;
-                        }
-                    }
-
-                    return 0;
-                }
-            }
-
-            public ListSortDirection SortDirection { get; set; }
-        }
-
-        private class FileSizeComparer : IComparer<object>, ISortDirection
-        {
-            public int Compare(object x, object y)
-            {
-                var item1 = x as FileSystemModel;
-                var item2 = y as FileSystemModel;
-                var c = 0;
-
-                if (item1 != null && item2 == null)
-                {
-                    c = -1;
-                }
-                else if (item1 == null && item2 != null)
-                {
-                    c = 1;
-                }
-                else if (item1 != null)
-                {
-                    c = item1.FileSize.CompareTo(item2.FileSize);
-                }
-
-                if (SortDirection == ListSortDirection.Descending)
-                {
-                    c = -c;
-                }
-
-                return c;
-            }
-
-            public ListSortDirection SortDirection { get; set; }
-        }
 
         private static TreeNode GetTreeNode(string filePath, TreeNode node)
         {

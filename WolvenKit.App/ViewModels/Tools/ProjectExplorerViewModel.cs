@@ -77,15 +77,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private IPluginService _pluginService;
+    private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
+    private object _progressLock = new();
 
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
     private Guid _loadingCompletion = Guid.NewGuid();
-    private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
     private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromSeconds(3);
-    private readonly object _refreshLock = new();
     private bool _inFlight = false;
 
     // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
@@ -93,7 +93,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // source of truth is the guard.
     public DispatchedObservableCollection<FileSystemModel> FileTree => _gridGuard.FileTree;
     public DispatchedObservableCollection<FileSystemModel> FileList => _gridGuard.FileList;
-    public Func<CancellationToken, Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
+    public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
     public Dictionary<string, bool> ExpansionStateDictionary = [];
     public bool IsKeyUpEventAssigned { get; set; }
 
@@ -225,7 +225,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             UnwatchProject();
         }
 
-        EnableLoadingMode(isReload);
+        var mode = isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject;
+        EnableLoadingMode(mode);
 
         DispatcherHelper.DelayOnMainThread(() =>
         {
@@ -259,26 +260,38 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         StartWatcher_AndLoadProject(ActiveProject, true);
     }
 
-    private void EnableLoadingMode(bool isReload)
+    public enum LoadingMode
     {
-        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-            () =>
-            {
-                _progressService.IsIndeterminate = true;
-                _progressService.Status = EStatus.Running;
-            },
-            _singleOperationTimeout,
-            DisableLoadingMode
-        );
+        Ready,
+        LoadingNewProject,
+        ReloadingSameProject,
+        ShowLoadingDuringOperation
+    }
 
-        _projectWatcher.CompletionTimer = _loadingCompletion;
-        OnSetLoading?.Invoke(this, (true, isReload));
+    private void EnableLoadingMode(LoadingMode mode)
+    {
+        if (mode == LoadingMode.LoadingNewProject || mode == LoadingMode.ReloadingSameProject)
+        {
+            _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+                () =>
+                {
+                    _progressService.IsIndeterminate = true;
+                    _progressService.Status = EStatus.Running;
+                },
+                _singleOperationTimeout,
+                DisableLoadingMode
+            );
+
+            _projectWatcher.CompletionTimer = _loadingCompletion;
+        }
+
+        OnSetLoading?.Invoke(this, mode);
     }
 
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
-        OnSetLoading?.Invoke(this, (false, false));
+        OnSetLoading?.Invoke(this, (LoadingMode.Ready));
 
         // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
         // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from
@@ -1096,7 +1109,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
-    internal async Task ConvertArchiveFile()
+    private async Task ConvertArchiveFile()
     {
         if (SelectedItems is null)
         {
@@ -1128,8 +1141,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        SuspendFileWatcher();
-
         await Task.Run(async () =>
         {
             var allFiles = selection
@@ -1235,13 +1246,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
             catch { /* best effort for tests/headless */ }
         });
-
-        await _deferredRefreshCts.CancelAsync();
-        _deferredRefreshCts.Dispose();
-
-        // Pair the SuspendFileWatcher (which locked the guard) with resume + force back to Ready.
-        // This prevents the guard from being stranded in MakingChangesToFiles after a convert.
-        ResumeFileWatcher();
     }
 
     /// <summary>
@@ -1647,7 +1651,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             var items = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder);
             SuspendFileWatcher();
-            await RefreshAfter(() => ConvertFromJsonInternal(items));
+            EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+            await RefreshAfter(async () => await ConvertFromJsonInternal(items));
+            DisableLoadingMode();
             ResumeFileWatcher();
             return;
         }
@@ -1660,7 +1666,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
         SuspendFileWatcher();
-        await RefreshAfter(() => ConvertFromJsonInternal(convertSelection));
+        EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+        await RefreshAfter(async () => await ConvertFromJsonInternal(convertSelection));
+        DisableLoadingMode();
         ResumeFileWatcher();
     }
 
@@ -1686,15 +1694,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        List<FileInfo> fileInfos = new();
+        ConcurrentBag<FileInfo> fileInfos = new();
 
         // convert files
-        foreach (var file in files)
+        await Parallel.ForEachAsync(files,new ParallelOptions
+        {
+            MaxDegreeOfParallelism = _maxDoP,
+        }, async (file, __ /* add a cancel token here */) =>
         {
             try
             {
-                await ConvertFromJsonAsync(file);
-                fileInfos.Add(new FileInfo(file));
+                var convertedFilePath = await ConvertFromJsonAsync(file);
+
+                if (convertedFilePath != null)
+                {
+                    fileInfos.Add(new FileInfo(convertedFilePath));
+                }
             }
             catch (JsonException err)
             {
@@ -1711,38 +1726,61 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 }
             }
 
-            progress++;
-            _progressService.Report(progress / (float)files.Count);
+            await ReportProgress();
+        });
+
+
+        Task ReportProgress()
+        {
+            lock (_progressLock)
+            {
+                progress++;
+                _progressService.Report(progress / (float)files.Count);
+            }
+
+            return Task.CompletedTask;
         }
 
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.RawFiles(fileInfos));
+        DispatcherHelper.RunOnMainThread(() => _appViewModel.ReloadChangedFiles());
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.ArchiveFiles(fileInfos.ToList()));
         _progressService.Completed();
+        var report = "";
+        files.ForEach((file) => { report += $"Converted ${file}\r\n"; });
+        _loggerService.Info(report);
+        _loggerService.Info($"Converted ${files.Count} files.");
     }
 
-    private async Task ConvertFromJsonAsync(string file)
+    private async Task<string?> ConvertFromJsonAsync(string file)
     {
         if (!File.Exists(file))
         {
-            return;
+            return null;
         }
 
         if (Path.GetExtension(file).TrimStart('.').ToLower() != ETextConvertFormat.json.ToString())
         {
-            return;
+            return null;
         }
 
         var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetGameRelativePath(file));
         var outDirectoryPath = Path.GetDirectoryName(modPath);
         if (outDirectoryPath is null)
         {
-            return;
+            return null;
         }
 
         Directory.CreateDirectory(outDirectoryPath);
 
         try
         {
-            await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+            var success = await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+            if (success)
+            {
+                var withoutExtension = Path.GetFileNameWithoutExtension(file);
+                var fileName = Path.GetFileName(withoutExtension);
+                var newFullPath = Path.Combine(outDirectoryPath, fileName);
+                return newFullPath;
+            }
         }
         catch (JsonException err)
         {
@@ -1758,8 +1796,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        _appViewModel.ReloadChangedFiles();
-
+        return null;
     }
 
     /// <summary>
@@ -1866,7 +1903,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// The latter will be true if the user clicked the "reload" button.
     /// It will be false if the user has loaded a fresh project or changed projects.
     /// </summary>
-    public event EventHandler<(bool, bool)>? OnSetLoading;
+    public event EventHandler<LoadingMode>? OnSetLoading;
 
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
@@ -2118,27 +2155,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ModifierStateService.OnKeystateChanged(e);
     }
 
-
-    private void RefreshCts(ref CancellationTokenSource? cts)
-    {
-        lock (_refreshLock)
-        {
-            try
-            {
-                cts?.Cancel();
-            }
-            catch (WolvenKitException e)
-            {
-                _loggerService.Debug($"Token source was disposed: ${e}");
-            }
-            finally
-            {
-                cts?.Dispose();
-                cts = new CancellationTokenSource();
-            }
-        }
-    }
-
     private Task RefreshAfter(Action action)
     {
         return RefreshAfter(() =>
@@ -2157,7 +2173,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _inFlight = true;
-
         _gridGuard.BeginChanges();
 
         if (BeginDeferredRefreshContext == null)
@@ -2167,21 +2182,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        RefreshCts(ref _deferredRefreshCts!);
-
         try
         {
             _gridGuard.BeginChanges();
 
             await BeginDeferredRefreshContext(
-                _deferredRefreshCts.Token,
                 action
             );
-        }
-        catch (OperationCanceledException)
-            when (_deferredRefreshCts.IsCancellationRequested)
-        {
-            _loggerService.Debug($"DeferredRefreshCTS cancelled.");
         }
         catch (WolvenKitException e)
         {
@@ -2191,27 +2198,188 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             DispatcherHelper.DelayOnMainThread(() =>
             {
-                try
-                {
-                    _deferredRefreshCts?.Cancel();
-                }
-                catch (ObjectDisposedException)
-                {
-                    _loggerService.Debug($"DeferredRefreshCTS was disposed.");
-                }
-                catch (WolvenKitException e)
-                {
-                    _loggerService.Error($"Exception caught while cancelling refresh: ${e}");
-                }
-
-                _deferredRefreshCts?.Dispose();
-                _deferredRefreshCts = new CancellationTokenSource();
-
                 _gridGuard.ForceReady();
-
                 _inFlight = false;
             }, 1);
         }
     }
 
+    /// <summary>
+    ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
+    /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
+    /// </summary>
+    public async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
+    {
+        SuspendFileWatcher();
+        await RefreshAfter(() => InternalProcessFileAction(sourceFiles, targetDirectory));
+        ResumeFileWatcher();
+    }
+
+    /// <summary>
+    ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
+    /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
+    /// </summary>
+    private async Task InternalProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
+    {
+        var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
+
+        // Abort if a directory is dragged on itself or its parent
+        if (!isCopy && sourceFiles.Count == 1 &&
+            (sourceFiles[0] == targetDirectory || Path.GetDirectoryName(sourceFiles[0]) == targetDirectory))
+        {
+            return;
+        }
+
+        // Split files and directories apart for cleaner handling
+        var directories = sourceFiles.Where(s => File.GetAttributes(s).HasFlag(FileAttributes.Directory)).ToList();
+
+        // Create a dictionary to map source files to target files
+        var fileMap = new Dictionary<string, string>();
+
+        // Add files directly under the source directories to the map
+        foreach (var sourceFile in sourceFiles.Where(s => !directories.Contains(s)))
+        {
+            var targetFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
+            fileMap[sourceFile] = targetFile;
+        }
+
+        // Add files under the subdirectories of the source directories to the map
+        foreach (var directory in directories.Where(Directory.Exists))
+        {
+            var directoryParent = Path.GetDirectoryName(directory) ?? directory;
+            foreach (var sourceFile in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
+            {
+                // we don't care about directories, just about files
+                if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
+                {
+                    continue;
+                }
+
+                var relativePath = sourceFile.Substring(directoryParent.Length).TrimStart(Path.DirectorySeparatorChar);
+                var targetFile = Path.Combine(targetDirectory, relativePath);
+                if (targetFile == sourceFile && isCopy)
+                {
+                    var directoryName = Path.GetFileName(Path.GetDirectoryName(sourceFile)) ?? "INVALID";
+                    relativePath = relativePath.Replace(directoryName, $"{directoryName}_copy");
+                    targetFile = Path.Combine(targetDirectory, relativePath);
+                }
+
+                fileMap[sourceFile] = targetFile;
+            }
+        }
+
+        var existingFiles = fileMap.Values.Where(File.Exists)
+            .Select(s => s.Replace(targetDirectory, "").TrimStart(Path.DirectorySeparatorChar)).OrderBy(s => s).Distinct()
+            .ToList();
+
+        // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
+        var isOverwrite = existingFiles.Count == 0;
+        var isAskIndividually = existingFiles.Count > 10;
+        var skipDialogue = false;
+
+        // We're copying or moving a file on itself - offer rename operation
+        if (fileMap.Count == 1 && existingFiles.Count == 1 &&
+            ActiveProject is Cp77Project project &&
+            targetDirectory == Path.GetDirectoryName(fileMap.Keys.First()))
+        {
+            var filePath = fileMap.Keys.First();
+            var relativePath = filePath.Replace($"{project.ModDirectory}{Path.DirectorySeparatorChar}", "");
+            var destPath = Interactions.Rename(relativePath);
+            if (string.IsNullOrEmpty(destPath))
+            {
+                // user cancelled dialogue
+                return;
+            }
+
+            if (destPath != relativePath)
+            {
+                fileMap[filePath] = filePath.Replace(relativePath, destPath);
+                existingFiles.Clear();
+            }
+            else
+            {
+                // we can't overwrite a file with itself, so we'll create a copy
+                isCopy = true;
+                skipDialogue = true;
+            }
+        }
+
+
+        // 1 - 10 files: Show a single dialogue that asks for confirmation
+        if (existingFiles.Count is < 10 and > 0)
+        {
+            var messageBoxResult = await Interactions.ShowMessageBoxAsync(
+                $"Overwrite the following files? \n\n  {string.Join("\n  ", existingFiles)}",
+                "File Overwrite Confirmation", WMessageBoxButtons.YesNoCancel);
+
+            if (messageBoxResult == WMessageBoxResult.Cancel)
+            {
+                return;
+            }
+
+            isOverwrite = messageBoxResult == WMessageBoxResult.Yes;
+        }
+
+        // Track what actually happened on disk so we can hand the project explorer an
+        // authoritative reconciliation afterwards, rather than relying on (flaky) FS events.
+        var movedPairs = new List<(string From, string To)>();
+        var addedPaths = new List<string>();
+
+        foreach (var copyMe in fileMap)
+        {
+            var targetFile = copyMe.Value ?? "";
+
+            var canWriteToTargetFile =
+                !File.Exists(targetFile)
+                || isOverwrite
+                || (!skipDialogue && isAskIndividually && await Interactions.ShowMessageBoxAsync(
+                    $"Overwrite the following file? {targetFile}",
+                    "File Overwrite Confirmation",
+                    WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
+            if (!canWriteToTargetFile)
+            {
+                if (!isCopy)
+                {
+                    continue;
+                }
+
+                var filenameWithoutExtension = Path.GetFileNameWithoutExtension(targetFile);
+                targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension}_copy");
+            }
+
+            var containingDirectory = Path.GetDirectoryName(targetFile) ?? "";
+            if (!Directory.Exists(containingDirectory))
+            {
+                Directory.CreateDirectory(containingDirectory);
+            }
+
+            if (isCopy)
+            {
+                File.Copy(copyMe.Key, targetFile, true);
+                addedPaths.Add(targetFile);
+            }
+            else
+            {
+                File.Move(copyMe.Key, targetFile, true);
+                movedPairs.Add((copyMe.Key, targetFile));
+            }
+        }
+
+        // Moves leave behind emptied source folders — delete them BEFORE reconciling so the
+        // watcher prunes their now-vanished models. Copies leave the source in place.
+        if (!isCopy)
+        {
+            foreach (var directory in directories.OrderByDescending(dir => dir.Length).ToList())
+            {
+                if (Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Any())
+                {
+                    continue;
+                }
+
+                Directory.Delete(directory, true);
+            }
+        }
+
+        NotifyDragDropReconciled(movedPairs, addedPaths);
+    }
 }

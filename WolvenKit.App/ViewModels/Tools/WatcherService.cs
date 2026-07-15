@@ -854,6 +854,13 @@ public partial class ProjectExplorerViewModel
                     }
 
                     break;
+                case FilesImportedMessage.ArchiveFiles(var files):
+                    foreach (var file in files)
+                    {
+                        CreateFileAndAllNeededDirectories(FileDestination.Archive, file, batch);
+                    }
+
+                    break;
                 case FilesImportedMessage.RawFiles(var files):
                     foreach (var file in files)
                     {
@@ -1192,7 +1199,7 @@ public partial class ProjectExplorerViewModel
 
             if (!_fileLookup.TryGetValue(lookupKey, out var parentModel))
             {
-                throw new WolvenKitException(987, $"Filed to find needed directory ${lookupKey}. " +
+                throw new WolvenKitException(987, $"Failed to find needed directory ${lookupKey}. " +
                                                   "This means the file system is in an inconsistent state. " +
                                                   "Please close and reload WolvenKit. ");
 
