@@ -13,8 +13,8 @@ public class questOutputNodeDefinitionWrapper : questIONodeDefinitionWrapper<que
 
     protected override void PopulateDetailsInto(Dictionary<string, string> details)
     {
-        details.Add("Type", _castedData.Type.ToEnumString());
         base.PopulateDetailsInto(details);
+        details["Type"] = _castedData.Type.ToEnumString();
     }
 
     internal override void GenerateSockets()

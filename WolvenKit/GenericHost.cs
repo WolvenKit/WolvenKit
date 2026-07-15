@@ -72,6 +72,10 @@ namespace WolvenKit
                     services.AddSingleton<ArchiveXlItemService>();
                     services.AddSingleton<ICvmTools, CvmTools>();
 
+                    services.AddSingleton<RedTypeTemplateService>(provider => new RedTypeTemplateService(provider.GetRequiredService<ILoggerService>(),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates"),
+                        ISettingsManager.GetUserTemplateDir()));
+
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();
                     services.AddSingleton<AppScriptService>();

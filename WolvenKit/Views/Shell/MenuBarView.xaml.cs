@@ -209,6 +209,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowScriptManagerCommand,
                     view => view.MenuItemShowScriptManager)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ShowRedTypeTemplateManagerCommand,
+                    view => view.MenuItemShowRedTypeTemplateManager)
+                .DisposeWith(disposables);
 
             // Importers
             this.BindCommand(ViewModel,

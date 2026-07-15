@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3009
+      author: "misterchedda"
+      description: "More node graph details for Combat, MovePuppet, VoicesetManager. Output node also correctly shows its type now"

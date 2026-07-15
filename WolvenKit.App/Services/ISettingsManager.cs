@@ -135,6 +135,17 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
         return dir;
     }
 
+    public static string GetUserTemplateDir()
+    {
+        var dir = Path.Combine(GetAppData(), "Templates");
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
+    }
+
     public static string GetSaveDirectory() =>
         Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),

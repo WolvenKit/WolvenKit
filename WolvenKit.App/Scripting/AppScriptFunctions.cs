@@ -47,13 +47,6 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly IGameControllerFactory _gameController;
     private readonly GeometryCacheService _geometryCacheService;
     private readonly ISettingsManager _settingsManager;
-
-    // IMPORTANT: this is the ONLY sandboxed surface through which a script can mutate project files
-    // (the V8 engine exposes no System.IO / reflection). Every method here that creates, deletes,
-    // moves or renames a file/dir inside the project MUST notify the project explorer via
-    // _projectEvents, because ExecuteAsync suspends the file watcher around scripts. Once the
-    // post-script full reload is removed, an unpublished mutation here becomes a silent, un-fixable
-    // desync of the tree.
     private readonly IProjectEvents _projectEvents;
 
     public AppViewModel? AppViewModel;
@@ -520,16 +513,8 @@ public class AppScriptFunctions : ScriptFunctions
             _loggerService.Warning($"\"{entry}\" is not a valid entry");
         }
 
-        // Snapshot the raw output folder up front. Exports produce derived, possibly multi-file
-        // outputs (a mesh yields a .glb plus textures) whose exact paths we can't know here, so we
-        // diff the folder before/after rather than guess.
         var rawBefore = ProjectFileDiff.Snapshot(proj.RawDirectory);
 
-        // Kick off every export concurrently (Task.Run keeps the heavy sync portion off the calling
-        // thread, matching the old behaviour) but AWAIT them all, so ExportFiles only returns once the
-        // raw outputs have actually been written. Previously these were fire-and-forget Task.Run calls,
-        // so a caller had no way to know when — or whether — the exports finished; that made publishing
-        // the results or reconciling the tree impossible to do deterministically.
         var exportTasks = fileDict.Select(kvp =>
             kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod
                 ? Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()))
@@ -763,7 +748,7 @@ public class AppScriptFunctions : ScriptFunctions
         {
             return false;
         }
-        
+
         File.Delete(absoluteFilePath);
         _projectEvents.PublishFileDeleted(absoluteFilePath);
         return !File.Exists(baseFolder);

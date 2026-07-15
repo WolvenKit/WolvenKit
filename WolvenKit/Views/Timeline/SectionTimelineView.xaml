@@ -127,6 +127,28 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
+                    <Button
+                        Margin="8,0,0,0"
+                        Padding="8,3"
+                        Background="{StaticResource WolvenKitRed}"
+                        BorderBrush="{StaticResource WolvenKitRed}"
+                        Command="{Binding ExtendSectionDurationToEventsCommand}"
+                        Foreground="White"
+                        ToolTip="Extend section duration to the end of the last event"
+                        Visibility="{Binding IsSectionDurationTooShort,
+                                             Converter={StaticResource BoolToVis}}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial
+                                Kind="ArrowExpandHorizontal"
+                                Width="14"
+                                Height="14"
+                                Margin="0,0,4,0"
+                                VerticalAlignment="Center" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="Extend to event end" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>

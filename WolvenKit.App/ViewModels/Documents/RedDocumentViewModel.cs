@@ -45,6 +45,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
     private readonly Cr2WTools _cr2WTools;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
 
 
     private readonly AppViewModel _appViewModel;
@@ -66,6 +67,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         INodeWrapperFactory nodeWrapperFactory,
         Cr2WTools cr2WTools,
         ISettingsManager settingsManager,
+        RedTypeTemplateService redTypeTemplateService,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -78,6 +80,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
         _cr2WTools = cr2WTools;
+        _redTypeTemplateService = redTypeTemplateService;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -99,7 +102,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     }
 
     #region properties
-    
+
     public CR2WFile Cr2wFile { get; set; }
 
     public event EventHandler? OnSaveCompleted;
@@ -168,7 +171,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             .Select(fileType => new TypeEntry(fileType.Extension.ToString(), fileType.Description, fileType.RootType))
             .ToList();
 
-        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
         {
             DialogHandler = HandleEmbeddedFile
         });
@@ -495,9 +498,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
 
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type type } tsdvm)
         {
-            var instance = RedTypeManager.Create(selectedType);
+            var instance = (RedBaseClass)_redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, type);
 
             var file = new CR2WEmbedded
             {

@@ -1,0 +1,6 @@
+changes:
+  - type: "added"
+    packages: ["App","Nuget Packages"]
+    pr-number: 2979
+    author: "notaspirit"
+    description: "A templater is now available which fixes insensible default values for some created types,\n and enables the use of custom templates improving reusability."
