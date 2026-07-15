@@ -643,7 +643,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                OpenNewNodeDialog(viewModel.MainGraph);
+                _ = SceneGraphEditor?.OpenNodeSelectorAtViewportCenter();
                 e.Handled = true;
             }
 
@@ -697,89 +697,6 @@ namespace WolvenKit.Views.Documents
                     e.Handled = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Open the new node type selector dialog
-        /// </summary>
-        private async void OpenNewNodeDialog(RedGraph graph)
-        {
-            if (graph?.GraphType != RedGraphType.Scene) return;
-
-            try
-            {
-                var appViewModel = Locator.Current.GetService<AppViewModel>();
-                if (appViewModel == null) return;
-
-                // Get scene node types
-                var sceneNodeTypes = graph.GetSceneNodeTypes();
-
-                // Separate DynamicSceneGraph from regular scene types (move to end)
-                var regularSceneTypes = sceneNodeTypes.Where(x => x.Name != "DynamicSceneGraphNode").ToList();
-                var dynamicSceneTypes = sceneNodeTypes.Where(x => x.Name == "DynamicSceneGraphNode").ToList();
-
-                var sceneTypes = regularSceneTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x))
-                    .OrderBy(x => x.Name)
-                    .ToList();
-
-                // Get quest node types that can be embedded in scene graphs
-                var questNodeTypes = graph.GetQuestNodeTypesForScene();
-                var questTypes = questNodeTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Quest", x))
-                    .OrderBy(x => x.Name)
-                    .ToList();
-
-                // Combine both types
-                var allTypes = new List<TypeEntry>();
-                allTypes.AddRange(sceneTypes);
-                allTypes.AddRange(questTypes);
-
-                // Add DynamicSceneGraph at the end
-                allTypes.AddRange(dynamicSceneTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x)));
-
-                // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, allTypes)
-                {
-                    DialogHandler = model =>
-                    {
-                        appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
-                        {
-                            return;
-                        }
-
-                        // Create new node at current viewport center
-                        var viewportCenter = GetViewportCenter();
-                        var nodeId = graph.CreateSceneNode(selectedType, viewportCenter, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
-                        SelectNodeById(nodeId);
-                    }
-                });
-            }
-            catch (Exception)
-            {
-                // Silently handle any dialog creation errors
-            }
-        }
-
-
-
-        /// <summary>
-        /// Get the center point of the current viewport for placing new nodes
-        /// </summary>
-        private Point GetViewportCenter()
-        {
-            if (SceneGraphEditor?.Editor == null)
-                return new Point(0, 0);
-
-            var viewport = SceneGraphEditor.Editor.ViewportLocation;
-            var size = SceneGraphEditor.Editor.ViewportSize;
-
-            return new Point(
-                viewport.X + size.Width / 2,
-                viewport.Y + size.Height / 2
-            );
         }
 
         /// <summary>

@@ -37,14 +37,7 @@ public partial class RedGraph
     /// <summary>
     /// Get quest node types that can be embedded in scene graphs via scnQuestNode
     /// </summary>
-    public List<Type> GetQuestNodeTypesForScene()
-    {
-        // Get all quest node types that inherit from questNodeDefinition
-        return AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(x => x.GetTypes())
-            .Where(x => typeof(questNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
-            .ToList();
-    }
+    public List<Type> GetQuestNodeTypesForScene() => GetQuestNodeTypes();
 
     public uint CreateSceneNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
