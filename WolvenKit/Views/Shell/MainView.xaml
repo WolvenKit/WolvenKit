@@ -156,7 +156,7 @@
                             Storyboard.TargetProperty="Opacity"
                             From="0.0"
                             To="1.0"
-                            Duration="0:0:0.15" />
+                            Duration="0:0:0.35" />
                         <!--ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
                         </ObjectAnimationUsingKeyFrames-->
