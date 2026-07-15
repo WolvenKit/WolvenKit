@@ -858,7 +858,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveFile() => Save(ActiveDocument.NotNull());
+    private void SaveFile()
+    {
+        GetToolViewModel<ProjectExplorerViewModel>().SuspendFileWatcher();
+        Save(ActiveDocument.NotNull());
+        GetToolViewModel<ProjectExplorerViewModel>().ResumeFileWatcher();
+    }
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
