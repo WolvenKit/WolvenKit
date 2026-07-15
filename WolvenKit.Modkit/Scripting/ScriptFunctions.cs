@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Dynamic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WolvenKit.Common;
@@ -216,6 +214,7 @@ public partial class ScriptFunctions
         var serializer = new Serializer();
         return serializer.Serialize(deserializedObject);
     }
+
 }
 
 public enum OpenAs

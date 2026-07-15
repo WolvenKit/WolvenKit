@@ -7,7 +7,7 @@ public class questVoicesetManagerNodeDefinitionWrapper : questDisableableNodeDef
 {
     public questVoicesetManagerNodeDefinitionWrapper(questVoicesetManagerNodeDefinition questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
-        Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
+        RefreshDetails();
     }
 
     internal override void CreateDefaultSockets()

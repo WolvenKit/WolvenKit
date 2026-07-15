@@ -1,0 +1,282 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.RedTypeTemplateManagerView"
+    x:TypeArguments="dialogs:RedTypeTemplateManagerViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:RedTypeTemplateManagerViewModel}"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    Width="{DynamicResource WolvenKitDialogWidthMedium}"
+    Height="600"
+    Background="{StaticResource ContentBackgroundAlt3}">
+    <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" Margin="{DynamicResource WolvenKitMarginBottom}">
+            <TextBlock
+                FontSize="{DynamicResource WolvenKitFontHuge}"
+                Text="Template Manager" />
+
+            <Button
+                x:Name="CloseButton"
+                HorizontalAlignment="Right"
+                Background="Transparent">
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="Close"
+                    Size="{DynamicResource WolvenKitIconMicro}" />
+            </Button>
+        </DockPanel>
+
+        <Grid
+            Grid.Row="1"
+            Margin="{DynamicResource WolvenKitMarginBottom}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <syncfusion:SfDataGrid
+                x:Name="TemplateDataGrid"
+                Grid.Column="0"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
+                RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
+                SelectedItem="{Binding SelectedTemplate}"
+                Background="{StaticResource ContentBackground}"
+                BorderBrush="#373737"
+                GridLinesVisibility="Both"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Templates}"
+                NavigationMode="Row"
+                AllowGrouping="True"
+                ShowGroupDropArea="False"
+                AutoExpandGroups="True"
+                LiveDataUpdateMode="AllowDataShaping"
+                MouseDoubleClick="TemplateDataGrid_OnMouseDoubleClick">
+
+                <syncfusion:SfDataGrid.Resources>
+                    <!-- Normal data cell grid lines -->
+                    <Style TargetType="syncfusion:GridCell">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+
+                    <!-- Main column headers: Name / Type / Action -->
+                    <Style TargetType="syncfusion:GridHeaderCellControl">
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+
+                    <!-- Group/source sub headers -->
+                    <Style TargetType="syncfusion:GridCaptionSummaryCell">
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+
+                    <!-- Grid outer border when style-based resolution is needed -->
+                    <Style TargetType="syncfusion:SfDataGrid">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+
+                    <!-- Group drop area border, if enabled later -->
+                    <Style TargetType="syncfusion:GroupDropArea">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+
+                    <!-- Indent cells used by grouping/expander area -->
+                    <Style TargetType="syncfusion:GridIndentCell">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+                </syncfusion:SfDataGrid.Resources>
+
+                <syncfusion:SfDataGrid.SortColumnDescriptions>
+                    <syncfusion:SortColumnDescription
+                        ColumnName="TypeName"
+                        SortDirection="Ascending" />
+                </syncfusion:SfDataGrid.SortColumnDescriptions>
+
+                <syncfusion:SfDataGrid.GroupColumnDescriptions>
+                    <syncfusion:GroupColumnDescription ColumnName="Source" />
+                </syncfusion:SfDataGrid.GroupColumnDescriptions>
+
+                <syncfusion:SfDataGrid.Columns>
+                    <syncfusion:GridTextColumn
+                        HeaderText="Name"
+                        MappingName="Name"
+                        ColumnSizer="Star" />
+
+                    <syncfusion:GridTextColumn
+                        HeaderText="Type"
+                        MappingName="TypeName"/>
+
+                    <syncfusion:GridTemplateColumn
+                        HeaderText="Action"
+                        AllowSorting="False"
+                        MappingName="Name">
+                        <syncfusion:GridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        Click="Edit_OnClick"
+                                        ToolTip="Edit">
+                                        <iconPacks:PackIconMaterial
+                                            Kind="FileEdit"
+                                            Width="{DynamicResource WolvenKitIconMicro}"
+                                            Height="{DynamicResource WolvenKitIconMicro}"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                            Foreground="{StaticResource WolvenKitGreen}" />
+                                    </Button>
+
+                                    <Button
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        Visibility="{Binding CanEdit,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Click="Delete_OnClick"
+                                        ToolTip="Delete">
+                                        <iconPacks:PackIconMaterial
+                                            Kind="Delete"
+                                            Width="{DynamicResource WolvenKitIconMicro}"
+                                            Height="{DynamicResource WolvenKitIconMicro}"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                            Foreground="{StaticResource WolvenKitRed}" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </syncfusion:GridTemplateColumn.CellTemplate>
+                    </syncfusion:GridTemplateColumn>
+                </syncfusion:SfDataGrid.Columns>
+            </syncfusion:SfDataGrid>
+
+            <Border
+                Grid.Column="1"
+                BorderBrush="#373737"
+                BorderThickness="1"
+                Padding="{DynamicResource WolvenKitMarginSmall}"
+                Background="{StaticResource ContentBackground}">
+                <Grid
+                    Background="{StaticResource ContentBackground}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="Auto" MinHeight="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Version"
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"/>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Text="{Binding SelectedTemplate.Version, TargetNullValue=''}"
+                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"
+                        KeyUp="MetaDataProperty_OnKeyUp"/>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="Author"
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"/>
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Text="{Binding SelectedTemplate.Author, TargetNullValue=''}"
+                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"
+                        KeyUp="MetaDataProperty_OnKeyUp"/>
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Description"
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"/>
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Text="{Binding SelectedTemplate.Description, TargetNullValue=''}"
+                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"
+                        AcceptsReturn="True"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto"
+                        KeyUp="MetaDataProperty_OnKeyUp"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+
+        <StackPanel Grid.Row="2">
+            <DockPanel>
+                <hc:TextBox
+                    x:Name="FileNameTextBox"
+                    Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
+                    hc:InfoElement.Title="Name: "
+                    hc:InfoElement.TitlePlacement="Left"
+                    FlowDirection="LeftToRight"
+                    KeyUp="FileNameTextBox_OnKeyUp"
+                    Text="{Binding TemplateName}"/>
+
+                <syncfusion:ComboBoxAdv
+                    Name="TypeSelectorComboBox"
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
+                    IsEditable="True"
+                    ItemsSource="{Binding ValidNewTypes}"
+                    DisplayMemberPath="TypeName"
+                    SelectedItem="{Binding SelectedType, Mode=TwoWay}"
+                    KeyUp="TypeSelectorComboBox_OnKeyUp"/>
+
+                <controls:RedTypeTemplateDropdown
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    ViewModel="{Binding RedTypeTemplateDropdownViewModel}" />
+
+                <Button
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    Click="Add_OnClick"
+                    IsEnabled="{Binding IsTemplateNameValid}">
+                    <StackPanel
+                        Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                        Orientation="Horizontal">
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="NewFile"
+                            Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="{StaticResource WolvenKitYellow}" />
+
+                        <TextBlock
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            VerticalAlignment="Center"
+                            Text="Add" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+            <TextBlock
+                Name="TemplateNameErrorTextBlock"
+                Foreground="Red"
+                Visibility="Collapsed"/>
+        </StackPanel>
+    </Grid>
+</reactiveUi:ReactiveUserControl>

@@ -138,6 +138,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:ScriptManagerViewModel}">
                         <dialogs:ScriptManagerView ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:RedTypeTemplateManagerViewModel}">
+                        <dialogs:RedTypeTemplateManagerView ViewModel="{Binding}" />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:UpdateDialogViewModel}">
                         <dialogs:UpdateDialog ViewModel="{Binding}" />
                     </DataTemplate>
@@ -149,6 +152,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:ExportArgsDialogViewModel}">
                         <dialogs:ExportArgsDialog ViewModel="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:CreateTemplateFromChunkDialogViewModel}">
+                        <dialogs:CreateTemplateFromChunkDialog ViewModel="{Binding}" />
                     </DataTemplate>
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation

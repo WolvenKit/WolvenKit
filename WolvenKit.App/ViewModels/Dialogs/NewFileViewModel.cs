@@ -1,15 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Comparers;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Controls;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
@@ -25,16 +30,19 @@ public partial class NewFileViewModel : DialogViewModel
     private readonly IProjectManager _projectManager;
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
 
     public NewFileViewModel(
         IProjectManager projectManager,
         ISettingsManager settingsManager,
-        ILoggerService loggerService
+        ILoggerService loggerService,
+        RedTypeTemplateService redTypeTemplateService
     )
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
         _settingsManager = settingsManager;
+        _redTypeTemplateService = redTypeTemplateService;
 
         Title = "Create new file";
 
@@ -53,10 +61,12 @@ public partial class NewFileViewModel : DialogViewModel
             foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
             {
                 var c = CommonFunctions.GetResourceClassesFromExtension(ext);
-                if (c is not null)
+                if (c is null)
                 {
-                    resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, ""));
+                    continue;
                 }
+
+                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, ""));
             }
 
             var ordered = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull().OrderBy(x => x.Name).ToList();
@@ -64,6 +74,8 @@ public partial class NewFileViewModel : DialogViewModel
             Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
 
             SelectedCategory = Categories.FirstOrDefault();
+
+            _redTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(_redTypeTemplateService);
         }
         catch (Exception e)
         {
@@ -71,6 +83,9 @@ public partial class NewFileViewModel : DialogViewModel
             throw;
         }
     }
+
+    [ObservableProperty]
+    private RedTypeTemplateDropdownViewModel _redTypeTemplateDropdownViewModel;
 
     public string Title { get; set; }
 
@@ -128,6 +143,12 @@ public partial class NewFileViewModel : DialogViewModel
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases
+
+        var type = RedTypeTemplateService.ParseType(value.Name ?? "");
+        if (type != null)
+        {
+            RedTypeTemplateDropdownViewModel.RequestedType = type;
+        }
     }
 
     [ObservableProperty] private string? _whyNotCreate;
@@ -171,5 +192,4 @@ public partial class NewFileViewModel : DialogViewModel
     {
         FileHandler?.Invoke(null);
     }
-
 }

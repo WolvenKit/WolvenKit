@@ -22,6 +22,7 @@ namespace WolvenKit.Common.Model
         {
 
         }
+
         public AddFileModel(string? name, string? description, string? extension, EWolvenKitFile type, string? template)
         {
             Name = name;

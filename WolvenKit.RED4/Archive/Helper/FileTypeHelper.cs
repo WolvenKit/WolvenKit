@@ -147,7 +147,8 @@ public enum ERedExtension
     xbm,
     xcube,
 
-    wdyn
+    wdyn,
+    tempcr2w // used for temporarily created cr2w as part of e.g., template editing
 }
 // ReSharper restore InconsistentNaming
 // ReSharper restore IdentifierTypo

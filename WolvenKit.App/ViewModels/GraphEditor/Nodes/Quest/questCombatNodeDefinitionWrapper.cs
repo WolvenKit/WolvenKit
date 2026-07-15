@@ -6,6 +6,7 @@ public class questCombatNodeDefinitionWrapper : questConfigurableAICommandNodeWr
 {
     public questCombatNodeDefinitionWrapper(questCombatNodeDefinition questConfigurableAICommandNode) : base(questConfigurableAICommandNode)
     {
+        RefreshDetails();
     }
 
     internal override void CreateDefaultSockets()
