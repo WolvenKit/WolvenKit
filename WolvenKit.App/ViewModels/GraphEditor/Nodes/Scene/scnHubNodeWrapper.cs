@@ -118,13 +118,18 @@ public class scnHubNodeWrapper : BaseSceneViewModel<scnHubNode>, IDynamicInputNo
         };
     }
 
-    public void RemoveInput() 
+    public void RemoveInput()
     {
-        // Only remove if we have more than the base socket count
-        if (Input.Count > InputSocketNames.Count)
+        var removableSocket = Input
+            .OfType<SceneInputConnectorViewModel>()
+            .Where(input => input.NameId == 0 && input.Ordinal > 0)
+            .OrderByDescending(input => input.Ordinal)
+            .FirstOrDefault();
+
+        if (removableSocket != null)
         {
-            Input.Remove(Input[^1]);
-            
+            Input.Remove(removableSocket);
+
             // Notify UI and mark document dirty
             NotifySocketsChanged();
         }
