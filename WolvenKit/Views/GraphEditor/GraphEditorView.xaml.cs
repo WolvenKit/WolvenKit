@@ -5,11 +5,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using Nodify;
 using ReactiveUI;
@@ -25,14 +26,34 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.GraphEditor;
+
+#nullable enable
+public record NodeCreationParams(Type Type, RedTypeTemplateSelectionOption? RedTypeTemplateSelectionOption = null);
+#nullable disable
 /// <summary>
 /// Interaktionslogik für GraphEditorView.xaml
 /// </summary>
 public partial class GraphEditorView : UserControl
 {
+    private readonly RedTypeTemplateService _redTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>();
+
+    private static readonly (string Name, string Color)[] s_commentColorPresets =
+    [
+        ("Yellow", "#FFFFD400"),
+        ("Green", "#FF5BB85B"),
+        ("Blue", "#FF3FA7FF"),
+        ("Purple", "#FFB77AFF"),
+        ("Pink", "#FFFF80C8"),
+        ("Red", "#FFFF5C5C"),
+        ("Gray", "#FFAAAAAA"),
+        ("Orange", "#FFFF9F1C")
+    ];
+
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
         nameof(Source), typeof(RedGraph), typeof(GraphEditorView), new PropertyMetadata(null, OnSourceChanged));
 
@@ -75,6 +96,20 @@ public partial class GraphEditorView : UserControl
         remove => RemoveHandler(NodeDoubleClickEvent, value);
     }
 
+    private object _selectedItem;
+
+    public object SelectedItem
+    {
+        get => _selectedItem;
+        set
+        {
+            if (SetField(ref _selectedItem, value))
+            {
+                SelectedNode = value as NodeViewModel;
+            }
+        }
+    }
+
     private NodeViewModel _selectedNode;
 
     public NodeViewModel SelectedNode
@@ -82,9 +117,14 @@ public partial class GraphEditorView : UserControl
         get => _selectedNode;
         set
         {
-            if (SetField(ref _selectedNode, value))
+            var previousNode = _selectedNode;
+            if (!SetField(ref _selectedNode, value))
             {
-                // Update the global selection service
+                return;
+            }
+
+            if (value is not null || ReferenceEquals(NodeSelectionService.Instance.SelectedNode, previousNode))
+            {
                 NodeSelectionService.Instance.SelectedNode = value;
             }
         }
@@ -129,6 +169,22 @@ public partial class GraphEditorView : UserControl
         Source.GraphStateSave();
     }
 
+    internal void PrepareForClose()
+    {
+        var graph = Source;
+
+        SelectedNode = null;
+        SelectedNodes.Clear();
+
+        if (graph?.Editor == Editor)
+        {
+            graph.GraphStateSave();
+            graph.Editor = null;
+        }
+
+        SetCurrentValue(SourceProperty, null);
+    }
+
     private void ArrangeNodes()
     {
         if (Source == null)
@@ -139,6 +195,7 @@ public partial class GraphEditorView : UserControl
         UpdateLayout();
         Source.ArrangeNodes();
         Source.GraphStateSave();
+        Source.GraphCommentStateSave();
         Source.CenterOnSelectedNodes(SelectedNodes);
     }
 
@@ -169,16 +226,18 @@ public partial class GraphEditorView : UserControl
             // Open Dialog option
             addMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(allTypes.OrderBy(x => x.Name).ToList())
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, allTypes.OrderBy(x => x.Name).ToList())
                 {
                     DialogHandler = model =>
                     {
                         _appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
                         {
-                            var nodeId = Source.CreateSceneNode(selectedType, mousePosition);
-                            SelectNodeById(nodeId);
+                            return;
                         }
+
+                        var nodeId = Source.CreateSceneNode(selectedType, mousePosition, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
+                        SelectNodeById(nodeId);
                     }
                 });
             }));
@@ -318,15 +377,17 @@ public partial class GraphEditorView : UserControl
 
             addMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
                 {
                     DialogHandler = model =>
                     {
                         _appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType} tsdvm)
                         {
-                            Source.CreateQuestNode(selectedType, mousePosition);
+                            return;
                         }
+
+                        Source.CreateQuestNode(selectedType, mousePosition, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
                     }
                 });
             }));
@@ -354,11 +415,20 @@ public partial class GraphEditorView : UserControl
             var addMenu = CreateAddMenuItem();
             AddBehaviorNodeCreationItems(addMenu, type =>
             {
-                var nodeId = Source.CreateBehaviorRoot(type, mousePosition);
+                var nodeId = Source.CreateBehaviorRoot(type.Type, mousePosition, type.RedTypeTemplateSelectionOption);
                 SelectNodeById(nodeId);
             });
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
+        }
+
+        if (Source.GraphType is RedGraphType.Quest or RedGraphType.Scene)
+        {
+            var hasNodeSelection = SelectedNodes.OfType<NodeViewModel>().Any();
+            nodifyEditor.ContextMenu.Items.Add(CreateMenuItem(
+                hasNodeSelection ? "Add Comment Around Selection" : "Add Comment",
+                "CommentTextOutline",
+                () => Source.AddComment(mousePosition, SelectedNodes)));
         }
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", "ViewDashboard", ArrangeNodes));
@@ -426,7 +496,7 @@ public partial class GraphEditorView : UserControl
                 var addChildMenu = CreateCategoryMenuItem("Add Child");
                 AddBehaviorNodeCreationItems(addChildMenu, type =>
                 {
-                    var nodeId = Source.AddBehaviorChild(behaviorNode, type);
+                    var nodeId = Source.AddBehaviorChild(behaviorNode, type.Type, type.RedTypeTemplateSelectionOption);
                     SelectNodeById(nodeId);
                 });
 
@@ -446,12 +516,13 @@ public partial class GraphEditorView : UserControl
             return;
         }
 
-        if (SelectedNodes.Count > 1)
+        var selectedGraphNodes = SelectedNodes.OfType<NodeViewModel>().Cast<object>().ToList();
+        if (selectedGraphNodes.Count > 1)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(SelectedNodes)));
+            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(selectedGraphNodes)));
             if (Source.GraphType == RedGraphType.Quest)
             {
-                node.ContextMenu.Items.Add(CreateMenuItem("Convert to Phase", "FolderOutline", "WolvenKitRed", () => Source.CreatePhaseFromSelection(SelectedNodes)));
+                node.ContextMenu.Items.Add(CreateMenuItem("Convert to Phase", "FolderOutline", "WolvenKitRed", () => Source.CreatePhaseFromSelection(selectedGraphNodes)));
             }
             node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
@@ -660,6 +731,177 @@ public partial class GraphEditorView : UserControl
         e.Handled = true;
     }
 
+    public bool AddCommentFromCurrentCursor()
+    {
+        if (Source?.GraphType is not (RedGraphType.Quest or RedGraphType.Scene))
+        {
+            return false;
+        }
+
+        Source.AddComment(GetMousePositionInGraph(Editor), SelectedNodes);
+        return true;
+    }
+
+    private void Comment_OnResizeCompleted(object sender, Nodify.Events.ResizeEventArgs e)
+    {
+        if (sender is not GroupingNode { DataContext: GraphCommentViewModel comment })
+        {
+            return;
+        }
+
+        comment.Width = e.NewSize.Width;
+        comment.Height = e.NewSize.Height;
+        Source?.GraphCommentStateSave();
+    }
+
+    private void CommentText_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount < 2)
+        {
+            return;
+        }
+
+        if (sender is not FrameworkElement { DataContext: GraphCommentViewModel comment })
+        {
+            return;
+        }
+
+        comment.IsEditing = true;
+        e.Handled = true;
+    }
+
+    private void CommentEditTextBox_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is not TextBox { IsVisible: true } textBox)
+        {
+            return;
+        }
+
+        textBox.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            textBox.Focus();
+            textBox.SelectAll();
+        }), DispatcherPriority.Input);
+    }
+
+    private void CommentEditTextBox_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+        EndCommentTextEdit(sender);
+    }
+
+    private void CommentEditTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key is not (Key.Enter or Key.Escape))
+        {
+            return;
+        }
+
+        EndCommentTextEdit(sender);
+        Keyboard.ClearFocus();
+        e.Handled = true;
+    }
+
+    private static void EndCommentTextEdit(object sender)
+    {
+        if (sender is not TextBox { DataContext: GraphCommentViewModel comment } textBox)
+        {
+            return;
+        }
+
+        textBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+        comment.IsEditing = false;
+    }
+
+    private void Comment_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        if (sender is not GroupingNode { DataContext: GraphCommentViewModel comment } groupingNode || Source == null)
+        {
+            return;
+        }
+
+        groupingNode.ContextMenu ??= new ContextMenu();
+        groupingNode.ContextMenu.Items.Clear();
+        groupingNode.ContextMenu.Items.Add(CreateCommentColorMenu(comment));
+        groupingNode.ContextMenu.Items.Add(CreateMenuItem(
+            "Reset Comment Size",
+            "Resize",
+            "WolvenKitYellow",
+            () =>
+            {
+                comment.ResetSize();
+                Source.GraphCommentStateSave();
+            }));
+        groupingNode.ContextMenu.Items.Add(new Separator());
+        groupingNode.ContextMenu.Items.Add(CreateMenuItem(
+            "Delete Comment",
+            "Delete",
+            "WolvenKitRed",
+            () => Source.RemoveCommentCommand.Execute(comment)));
+        groupingNode.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+
+        e.Handled = true;
+    }
+
+    private MenuItem CreateCommentColorMenu(GraphCommentViewModel comment)
+    {
+        var item = new MenuItem
+        {
+            Header = "Change Color",
+            Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+            Icon = new IconBox
+            {
+                IconPack = IconPackType.Material,
+                Kind = "Palette",
+                Foreground = (Brush)Application.Current.Resources["WolvenKitYellow"]!,
+                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Size = (double)Application.Current.Resources["WolvenKitIconMicro"]!
+            }
+        };
+
+        foreach (var (name, color) in s_commentColorPresets)
+        {
+            var colorItem = new MenuItem
+            {
+                Header = name,
+                IsCheckable = true,
+                IsChecked = string.Equals(comment.AccentColor, color, StringComparison.OrdinalIgnoreCase),
+                Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Icon = new Rectangle
+                {
+                    Width = 12,
+                    Height = 12,
+                    Fill = CreateCommentSwatchBrush(color),
+                    Stroke = Brushes.White,
+                    StrokeThickness = 0.5,
+                    Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!
+                }
+            };
+
+            colorItem.Click += (_, _) => comment.AccentColor = color;
+            item.Items.Add(colorItem);
+        }
+
+        return item;
+    }
+
+    private static Brush CreateCommentSwatchBrush(string colorValue)
+    {
+        try
+        {
+            if (ColorConverter.ConvertFromString(colorValue) is Color color)
+            {
+                var brush = new SolidColorBrush(color);
+                brush.Freeze();
+                return brush;
+            }
+        }
+        catch (FormatException)
+        {
+        }
+
+        return Brushes.Gold;
+    }
+
 
     private static MenuItem CreateAddMenuItem() => new()
     {
@@ -756,7 +998,7 @@ public partial class GraphEditorView : UserControl
         nameof(AIbehaviorFailerNodeDefinition)
     };
 
-    private void AddBehaviorNodeCreationItems(MenuItem parentMenu, Action<Type> createNode, IEnumerable<Type> nodeTypesOverride = null)
+    private void AddBehaviorNodeCreationItems(MenuItem parentMenu, Action<NodeCreationParams> createNode, IEnumerable<Type> nodeTypesOverride = null)
     {
         var nodeTypes = (nodeTypesOverride ?? Source.GetBehaviorNodeTypes()).ToList();
         var typeMap = nodeTypes.ToDictionary(type => type.Name, type => type);
@@ -767,14 +1009,14 @@ public partial class GraphEditorView : UserControl
 
         parentMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
         {
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
             {
                 DialogHandler = model =>
                 {
                     _appViewModel.CloseDialogCommand.Execute(null);
-                    if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                    if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
                     {
-                        createNode(selectedType);
+                        createNode(new NodeCreationParams(selectedType, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate));
                     }
                 }
             });
@@ -788,7 +1030,7 @@ public partial class GraphEditorView : UserControl
         }
     }
 
-    private void AddBehaviorNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, Action<Type> createNode, bool isRootItem = false)
+    private void AddBehaviorNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, Action<NodeCreationParams> createNode, bool isRootItem = false)
     {
         if (!typeMap.TryGetValue(typeName, out var nodeType))
         {
@@ -798,7 +1040,7 @@ public partial class GraphEditorView : UserControl
         var displayName = GraphNodeStyling.GetTitleForNodeType(nodeType);
         var emoji = GraphNodeStyling.GetIconForNodeTitle(displayName);
         var leftMargin = isRootItem ? -30 : -15;
-        parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () => createNode(nodeType), leftMargin));
+        parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () => createNode(new NodeCreationParams(nodeType)), leftMargin));
     }
 
     private void AddNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, System.Windows.Point mousePosition, bool isRootItem = false)
@@ -930,7 +1172,7 @@ public partial class GraphEditorView : UserControl
         var replaceMenu = CreateCategoryMenuItem("Replace Child");
         AddBehaviorNodeCreationItems(replaceMenu, type =>
         {
-            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type);
+            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateSelectionOption);
             connectionViewModel.IsSelected = false;
             SelectNodeById(nodeId);
         });
@@ -939,7 +1181,7 @@ public partial class GraphEditorView : UserControl
         var wrapMenu = CreateCategoryMenuItem("Wrap Child With");
         AddBehaviorNodeCreationItems(wrapMenu, type =>
         {
-            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type);
+            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateSelectionOption);
             connectionViewModel.IsSelected = false;
             SelectNodeById(nodeId);
         }, Source.GetBehaviorWrapperNodeTypes());

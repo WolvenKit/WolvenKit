@@ -1,0 +1,11 @@
+changes:
+    - type: "change"
+      packages: ["App"]
+      pr-number: 3003
+      author: "manavortex"
+      description: "parametersBuffer will no longer be hidden if it's not empty"
+    - type: "change"
+      packages: ["App"]
+      pr-number: 3003
+      author: "manavortex"
+      description: "partsMasks will now be hidden if it's empty"

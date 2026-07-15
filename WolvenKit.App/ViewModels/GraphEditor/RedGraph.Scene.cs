@@ -2,12 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Model;
 using WolvenKit.Core.Extensions;
 using static WolvenKit.RED4.Types.Enums;
 
@@ -43,18 +46,18 @@ public partial class RedGraph
             .ToList();
     }
 
-    public uint CreateSceneNode(Type type, System.Windows.Point point)
+    public uint CreateSceneNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         scnSceneGraphNode instance;
 
         // Check if this is a quest node type - if so, create a scnQuestNode wrapper
         if (typeof(questNodeDefinition).IsAssignableFrom(type))
         {
-            instance = InternalCreateSceneQuestNode(type);
+            instance = InternalCreateSceneQuestNode(type, templateDesc);
         }
         else
         {
-            instance = InternalCreateSceneNode(type);
+            instance = InternalCreateSceneNode(type, templateDesc);
         }
 
         var wrappedInstance = WrapSceneNode(instance);
@@ -96,9 +99,17 @@ public partial class RedGraph
         return instance.NodeId.Id;
     }
 
-    private scnSceneGraphNode InternalCreateSceneNode(Type type)
+    private scnSceneGraphNode InternalCreateSceneNode(Type type, RedTypeTemplateSelectionOption? templateDesc = null)
     {
-        var instance = System.Activator.CreateInstance(type);
+        IRedType instance;
+        if (templateDesc != null)
+        {
+            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc, type);
+        }
+        else
+        {
+            instance = RedTypeManager.CreateAndInit(type);
+        }
         if (instance is not scnSceneGraphNode sceneNode)
         {
             throw new Exception($"Failed to create scene node of type {type.Name}");
@@ -221,10 +232,19 @@ public partial class RedGraph
     /// <summary>
     /// Create a scnQuestNode that wraps a quest node type
     /// </summary>
-    private scnQuestNode InternalCreateSceneQuestNode(Type questNodeType)
+    private scnQuestNode InternalCreateSceneQuestNode(Type questNodeType, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         // Create the quest node instance
-        var questInstance = System.Activator.CreateInstance(questNodeType);
+        IRedType questInstance;
+        if (templateDesc != null)
+        {
+            questInstance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc, questNodeType);
+        }
+        else
+        {
+            questInstance = RedTypeManager.CreateAndInit(questNodeType);
+        }
+
         if (questInstance is not questNodeDefinition questNode)
         {
             throw new Exception($"Failed to create quest node of type {questNodeType.Name}");
@@ -272,6 +292,16 @@ public partial class RedGraph
                 sceneQuestNode.OsockMappings.Add("False");
                 sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
                 sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 1 } });
+                break;
+            case questUseWorkspotNodeDefinition useWorkspotNode:
+                sceneQuestNode.OsockMappings.Add("Success");
+                sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+
+                if (questUseWorkspotNodeDefinitionWrapper.RequiresWorkStartedSocket(useWorkspotNode))
+                {
+                    sceneQuestNode.OsockMappings.Add("Work Started");
+                    sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 1 } });
+                }
                 break;
             default:
                 // Default case: single output socket

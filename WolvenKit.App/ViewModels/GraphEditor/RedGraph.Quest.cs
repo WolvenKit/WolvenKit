@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Factories;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Model;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
@@ -106,9 +108,9 @@ public partial class RedGraph
         return s_questNodeTypes;
     }
 
-    public void CreateQuestNode(Type type, System.Windows.Point point)
+    public void CreateQuestNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
-        var instance = InternalCreateQuestNode(type);
+        var instance = InternalCreateQuestNode(type, templateDesc);
         var wrappedInstance = WrapQuestNode(instance, true);
         wrappedInstance.Location = point;
 
@@ -121,9 +123,18 @@ public partial class RedGraph
         Nodes.Add(wrappedInstance);
     }
 
-    private graphGraphNodeDefinition InternalCreateQuestNode(Type type)
+    private graphGraphNodeDefinition InternalCreateQuestNode(Type type, RedTypeTemplateSelectionOption? templateDesc = null)
     {
-        var instance = System.Activator.CreateInstance(type);
+        IRedType instance;
+        if (templateDesc != null)
+        {
+            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc, type);
+        }
+        else
+        {
+            instance = RedTypeManager.CreateRedType(type);
+        }
+
         if (instance is not graphGraphNodeDefinition questNode)
         {
             throw new Exception();

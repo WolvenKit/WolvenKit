@@ -8,6 +8,7 @@
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     mc:Ignorable="d"
     d:DesignWidth="600"
     d:DesignHeight="350"
@@ -122,11 +123,21 @@
             </TabItem>
         </TabControl>
 
-        <StackPanel
-            Grid.Row="1"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <controls:RedTypeTemplateDropdown
+                Grid.Column="0"
+                ViewModel="{Binding RedTypeTemplateDropdownViewModel}"/>
+
             <Button
+                Grid.Column="2"
                 x:Name="OkButton"
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
@@ -134,10 +145,11 @@
                 Content="Create" />
 
             <Button
+                Grid.Column="3"
                 x:Name="CancelButton"
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
                 Content="Cancel" />
-        </StackPanel>
+        </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

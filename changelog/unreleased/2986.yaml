@@ -1,0 +1,19 @@
+# Indepth docs at https://wolvenkit.github.io/WolvenKit/contributing/keep-changelog.html
+Template changelog entry:
+    - type: "security | deprecated | removed | added | fixed | changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 0
+      author: ""
+      description: ""
+
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 2986
+      author: "manavortex"
+      description: "Removed obsolete checkbox from prop generator"
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 2986
+      author: "manavortex"
+      description: "Updated wiki link in prop generator"

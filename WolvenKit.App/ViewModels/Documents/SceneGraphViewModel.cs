@@ -18,6 +18,7 @@ using WolvenKit.Core.Extensions;
 using System.IO;
 using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels.Documents
 {
@@ -32,6 +33,9 @@ namespace WolvenKit.App.ViewModels.Documents
     {
         private bool _disposed = false;
         private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
+
+        public readonly RedTypeTemplateService RedTypeTemplateService =
+            Locator.Current.GetService<RedTypeTemplateService>() ?? throw new ArgumentNullException(nameof(RedTypeTemplateService));
         private readonly scnSceneResource _sceneData;
         private readonly GraphDocumentSearchState _searchState = new();
 
@@ -274,6 +278,11 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 // Use the built-in AddActor method which handles initialization and performer symbol creation
                 _sceneData.AddActor(newActor);
+
+                foreach (var node in MainGraph.Nodes.OfType<IRefreshableDetails>())
+                {
+                    node.RefreshDetails();
+                }
 
                 // Mark document as dirty
                 Parent?.SetIsDirty(true);

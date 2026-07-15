@@ -85,12 +85,20 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
 
     public void RecalculateSockets()
     {
-        _castedData.Sockets.Clear();
-        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+        var hasPrefetchSocket = false;
+        foreach (var socketHandle in _castedData.Sockets)
         {
-            Name = "CutDestination",
-            Type = Enums.questSocketType.CutDestination
-        }));
+            if (socketHandle.Chunk is questSocketDefinition socket &&
+                socket.Type == Enums.questSocketType.Input &&
+                socket.Name.GetResolvedText() == "Prefetch")
+            {
+                hasPrefetchSocket = true;
+                break;
+            }
+        }
+
+        _castedData.Sockets.Clear();
+        AddSocket("CutDestination", Enums.questSocketType.CutDestination);
 
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty)
         {
@@ -103,35 +111,39 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
 
             foreach (var entryPoint in res.EntryPoints)
             {
-                _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
-                {
-                    Name = entryPoint.Name,
-                    Type = Enums.questSocketType.Input
-                }));
+                AddSocket(entryPoint.Name, Enums.questSocketType.Input);
             }
 
             foreach (var exitPoint in res.ExitPoints)
             {
-                _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+                AddSocket(exitPoint.Name, Enums.questSocketType.Output);
+            }
+
+            foreach (var scenario in res.InterruptionScenarios)
+            {
+                if (!scenario.Name.TryGetResolvedText(out var scenarioName) || string.IsNullOrEmpty(scenarioName))
                 {
-                    Name = exitPoint.Name,
-                    Type = Enums.questSocketType.Output
-                }));
+                    continue;
+                }
+
+                AddSocket($"{scenarioName} INT", Enums.questSocketType.Output);
+                AddSocket($"{scenarioName} RET", Enums.questSocketType.Output);
             }
         }
 
-        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+        if (hasPrefetchSocket)
         {
-            Name = "Default INT",
-            Type = Enums.questSocketType.Output
-        }));
-        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
-        {
-            Name = "Default RET",
-            Type = Enums.questSocketType.Output
-        }));
+            AddSocket("Prefetch", Enums.questSocketType.Input);
+        }
 
         GenerateSockets();
+
+        void AddSocket(CName name, Enums.questSocketType type) =>
+            _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+            {
+                Name = name,
+                Type = type
+            }));
     }
 
     internal override void CreateDefaultSockets()
