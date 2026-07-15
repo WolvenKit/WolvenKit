@@ -423,7 +423,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion Project_Loading
 
-        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
+        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Func<Task> doBeforeRefresh)
         {
             CompositeDisposable disposables =
             [
@@ -433,7 +433,7 @@ namespace WolvenKit.Views.Tools
 
             using (disposables)
             {
-                await doBeforeRefresh;
+                await doBeforeRefresh();
 
                 DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
