@@ -6,6 +6,7 @@ public class questMovePuppetNodeDefinitionWrapper : questConfigurableAICommandNo
 {
     public questMovePuppetNodeDefinitionWrapper(questMovePuppetNodeDefinition questConfigurableAICommandNode) : base(questConfigurableAICommandNode)
     {
+        RefreshDetails();
     }
 
     internal override void CreateDefaultSockets()
