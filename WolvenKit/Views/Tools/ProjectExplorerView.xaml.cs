@@ -242,6 +242,8 @@ namespace WolvenKit.Views.Tools
             this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
+        #endregion
+
         private bool _isLoading = false;
 
         #region Project_Loading
@@ -467,14 +469,14 @@ namespace WolvenKit.Views.Tools
             if (TreeGrid.IsVisible)
             {
                 InvalidateVirtualizedRows(TreeGrid);
-                TreeGridFlat.UpdateLayout();
-                TreeGridFlat.InvalidateVisual();
+                TreeGrid.UpdateLayout();
+                TreeGrid.InvalidateVisual();
                 return;
             }
 
             InvalidateVirtualizedRows(TreeGridFlat);
-            TreeGrid.UpdateLayout();
-            TreeGrid.InvalidateVisual();
+            TreeGridFlat.UpdateLayout();
+            TreeGridFlat.InvalidateVisual();
         }
 
         /// <summary>
@@ -857,8 +859,6 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.View.RefreshFilter();
             }
         }
-
-        #endregion Constructors
 
         private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
         {
