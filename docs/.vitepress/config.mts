@@ -55,6 +55,33 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Homepage', link: '/code-documentation/home' },
+            {
+                text: 'Subprojects',
+                collapsed: false,
+                items: [
+                    {
+                        text: 'WolvenKit.App',
+                        collapsed: true,
+                        items: [
+                            { text: 'Red Type Template Dropdown', link: '/code-documentation/Subprojects/WolvenKit.App/RedTypeTemplateDropdown' },
+                        ]
+                    },
+                    {
+                        text: 'WolvenKit.Common',
+                        collapsed: true,
+                        items: [
+                            { text: 'Red Type Template Service', link: '/code-documentation/Subprojects/WolvenKit.Common/RedTypeTemplateService' },
+                        ]
+                    }
+                ]
+            },
+            {
+                text: 'WolvenKit UI/UX Design',
+                collapsed: true,
+                items: [
+                    { text: 'Exposing Templates to the User', link: '/code-documentation/WolvenKitUIUXDesign/ExposingTemplatesToTheUser' },
+                ]
+            },
         ]
       }
     ],
