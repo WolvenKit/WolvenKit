@@ -108,7 +108,7 @@ public partial class RedGraph
         return s_questNodeTypes;
     }
 
-    public void CreateQuestNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
+    public uint CreateQuestNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         var instance = InternalCreateQuestNode(type, templateDesc);
         var wrappedInstance = WrapQuestNode(instance, true);
@@ -123,6 +123,8 @@ public partial class RedGraph
         Nodes.Add(wrappedInstance);
 
         DocumentViewModel?.SetIsDirty(true);
+
+        return wrappedInstance.UniqueId;
     }
 
     private graphGraphNodeDefinition InternalCreateQuestNode(Type type, RedTypeTemplateSelectionOption? templateDesc = null)
