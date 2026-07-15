@@ -78,6 +78,7 @@ public abstract record FilesImportedMessage
 {
     public sealed record GameFiles(IReadOnlyList<IGameFile> Files): FilesImportedMessage;
     public sealed record RawFiles(IReadOnlyList<FileInfo> Files): FilesImportedMessage;
+    public sealed record ArchiveFiles(IReadOnlyList<FileInfo> Files) : FilesImportedMessage;
 }
 
 /// <summary>
