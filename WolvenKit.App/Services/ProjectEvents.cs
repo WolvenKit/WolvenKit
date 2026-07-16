@@ -9,6 +9,7 @@ public class ProjectEvents : IProjectEvents
     private readonly Subject<FilesImportedMessage> _filesImported = new();
     private readonly Subject<FilesMovedMessage> _filesMoved = new();
     private readonly Subject<FilesDeletedMessage> _filesDeleted = new();
+    private readonly Subject<FileChangedMessage> _fileChanged = new();
 
     public IObservable<FilesImportedMessage> FilesImported =>
         _filesImported.AsObservable();
@@ -19,6 +20,9 @@ public class ProjectEvents : IProjectEvents
     public IObservable<FilesDeletedMessage> FilesDeleted =>
         _filesDeleted.AsObservable();
 
+    public IObservable<FileChangedMessage> FileChanged =>
+        _fileChanged.AsObservable();
+
     public void PublishFilesImported(FilesImportedMessage message)
     {
         _filesImported.OnNext(message);
@@ -27,6 +31,11 @@ public class ProjectEvents : IProjectEvents
     public void PublishFilesMoved(FilesMovedMessage message)
     {
         _filesMoved.OnNext(message);
+    }
+
+    public void PublishFileChanged(FileChangedMessage message)
+    {
+        _fileChanged.OnNext(message);
     }
 
     // A single-file add is modelled as a move with an empty source: the consumer materializes the

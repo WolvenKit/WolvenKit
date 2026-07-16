@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.Services;
@@ -25,6 +26,11 @@ public interface IProjectEvents
     /// Consumers of completed-deletion events should subscribe here.
     /// </summary>
     IObservable<FilesDeletedMessage> FilesDeleted { get; }
+
+    /// <summary>
+    /// Consumers of completed change events should subscribe here.
+    /// </summary>
+    IObservable<FileChangedMessage> FileChanged { get; }
 
     /// <summary>
     /// To be called when a known batch of files are being added to the project.
@@ -67,18 +73,50 @@ public interface IProjectEvents
     /// </summary>
     /// <param name="absoluteDirectoryPath">Absolute path of the deleted directory.</param>
     void PublishDirectoryDeleted(string absoluteDirectoryPath);
+
+    /// <summary>
+    /// Publish that a file has been modified but not renamed.
+    /// </summary>
+    /// <param name="message"></param>
+    void PublishFileChanged(FileChangedMessage message);
 }
 
 /// <summary>
 /// A list of files published. If other formats of file lists are needed to be used,
 /// this record could be expanded upon.
 /// </summary>
-/// <param name="Files"></param>
 public abstract record FilesImportedMessage
 {
+    /// <summary>
+    /// A published list of IGameFiles that has been added to `archive/`.
+    /// </summary>
+    /// <param name="Files"></param>
     public sealed record GameFiles(IReadOnlyList<IGameFile> Files): FilesImportedMessage;
+
+    /// <summary>
+    /// A published list of FileInfo that have been added to `raw/`
+    /// </summary>
+    /// <param name="Files"></param>
     public sealed record RawFiles(IReadOnlyList<FileInfo> Files): FilesImportedMessage;
+
+    /// <summary>
+    /// A published list of FileInfo that have been added to `archive/`
+    /// </summary>
+    /// <param name="Files"></param>
     public sealed record ArchiveFiles(IReadOnlyList<FileInfo> Files) : FilesImportedMessage;
+}
+
+/// <summary>
+/// A message published when a file has changed, i.e. when it has been saved or modified
+/// without the filename changing.
+/// </summary>
+public abstract record FileChangedMessage
+{
+    /// <summary>
+    /// A published IFileSystemViewModel that has been changed without being renamed.
+    /// </summary>
+    /// <param name="File"></param>
+    public sealed record Document(IDocumentViewModel File): FileChangedMessage;
 }
 
 /// <summary>
