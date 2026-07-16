@@ -274,9 +274,19 @@ internal class NodeProperties
         }
         else if (node is questEventManagerNodeDefinition eventManagerNodeCasted)
         {
-            details["Component Name"] = eventManagerNodeCasted?.ComponentName.ToString()!;
+            var componentName = eventManagerNodeCasted.ComponentName.GetResolvedText();
+            if (!string.IsNullOrEmpty(componentName) && componentName != "None")
+            {
+                details["Component Name"] = componentName;
+            }
+
             details["Event"] = eventManagerNodeCasted?.Event?.Chunk?.GetType()?.Name!;
 
+            if (eventManagerNodeCasted?.Event?.Chunk is QuestExecuteTransition executeTransition)
+            {
+                var transition = executeTransition.Transition;
+                details["Transition"] = $"{transition.GetType().Name} to {transition.TransitionTo.ToEnumString()} ({transition.TransitionMode.ToEnumString()})";
+            }
             if (eventManagerNodeCasted?.Event?.Chunk is DisableBraindanceActions disableBDActionsCasted)
             {
                 details.AddRange(ParseBDMask(disableBDActionsCasted.ActionMask));
@@ -292,10 +302,38 @@ internal class NodeProperties
                 details["- Name"] = gameActionEventCasted?.Name.GetResolvedText()!;
                 details["- Time To Live"] = gameActionEventCasted?.TimeToLive.ToString()!;
             }
+            if (eventManagerNodeCasted?.Event?.Chunk is SetWantedLevel setWantedLevel)
+            {
+                details["Wanted Level"] = setWantedLevel.WantedLevel.ToEnumString();
+
+                var options = new List<string>();
+                if (setWantedLevel.ForceGreyStars)
+                {
+                    options.Add("Force Grey Stars");
+                }
+                if (setWantedLevel.ResetGreyStars)
+                {
+                    options.Add("Reset Grey Stars");
+                }
+                if (setWantedLevel.ForcePlayerPositionAsLastCrimePoint)
+                {
+                    options.Add("Player Position as Last Crime Point");
+                }
+                if (setWantedLevel.ForceIgnoreSecurityAreas)
+                {
+                    options.Add("Ignore Security Areas");
+                }
+
+                details["Wanted Options"] = options.Count == 0 ? "None" : string.Join(", ", options);
+            }
 
             details["Is Object Player"] = eventManagerNodeCasted?.IsObjectPlayer == true ? "True" : "False";
             details["Manager Name"] = eventManagerNodeCasted?.ManagerName.ToString()!;
-            details["Object Ref"] = ParseGameEntityReference(eventManagerNodeCasted?.ObjectRef);
+            var objectRef = ParseGameEntityReference(eventManagerNodeCasted?.ObjectRef);
+            if (objectRef != "-")
+            {
+                details["Object Ref"] = objectRef;
+            }
         }
         else if (node is questEnvironmentManagerNodeDefinition envManagerNodeCasted)
         {
@@ -607,6 +645,18 @@ internal class NodeProperties
                     details["#" + counter + " Slot Name"] = param?.Chunk?.SlotName.ToString()!;
 
                     counter++;
+                }
+            }
+            else if (interactiveObjectManagerCasted?.Type?.Chunk is questElevator_ManageNPCAttachment_NodeType elevatorManager)
+            {
+                var useNumberedLabels = elevatorManager.Params.Count > 1;
+                for (var i = 0; i < elevatorManager.Params.Count; i++)
+                {
+                    var param = elevatorManager.Params[i];
+                    var prefix = useNumberedLabels ? $"#{i + 1} " : "";
+                    details[$"{prefix}Action"] = param.Action.ToEnumString();
+                    details[$"{prefix}Elevator Ref"] = param.ElevatorRef.GetResolvedText()!;
+                    details[$"{prefix}NPC Ref"] = ParseGameEntityReference(param.NpcRef);
                 }
             }
         }
