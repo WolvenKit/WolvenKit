@@ -149,6 +149,51 @@ public class QuestGraphTests
     }
 
     [TestMethod]
+    public void RefreshDetailsReflectsChangesToQuestNodeData()
+    {
+        var graphData = GraphTestHelpers.CreateQuestGraph();
+        using var graph = GenerateGraph(graphData);
+        graph.CreateQuestNode(typeof(questFactsDBManagerNodeDefinition), new Point());
+        var wrapper = graph.Nodes.OfType<questFactsDBManagerNodeDefinitionWrapper>().Single();
+        var node = (questFactsDBManagerNodeDefinition)wrapper.Data;
+        var nodeType = (questSetVar_NodeType)node.Type.GetValue()!;
+        nodeType.FactName = "first_fact";
+        nodeType.Value = 1;
+        wrapper.RefreshDetails();
+
+        Assert.AreEqual("first_fact", wrapper.Details["Fact Name"]);
+        Assert.AreEqual("1", wrapper.Details["Value"]);
+
+        nodeType.FactName = "updated_fact";
+        nodeType.Value = 2;
+        wrapper.RefreshDetails();
+
+        Assert.AreEqual("updated_fact", wrapper.Details["Fact Name"]);
+        Assert.AreEqual("2", wrapper.Details["Value"]);
+        Assert.IsFalse(wrapper.Details.ContainsValue("first_fact"));
+    }
+
+    [TestMethod]
+    public void GenerateGraphSkipsConnectionToSocketOutsideGraph()
+    {
+        var start = new questStartNodeDefinition { Id = 1 };
+        var output = GraphTestHelpers.AddQuestSocket(start, "Out", Enums.questSocketType.Output);
+        var orphanInput = new questSocketDefinition
+        {
+            Name = "In",
+            Type = Enums.questSocketType.Input
+        };
+        GraphTestHelpers.ConnectQuestSockets(output, orphanInput);
+        var graphData = GraphTestHelpers.CreateQuestGraph(start);
+
+        using var graph = GenerateGraph(graphData);
+
+        Assert.AreEqual(1, graph.Nodes.Count);
+        Assert.AreEqual(0, graph.Connections.Count);
+        Assert.AreEqual(1, output.Connections.Count);
+    }
+
+    [TestMethod]
     public void LoadingExistingSocketsDoesNotDuplicateThem()
     {
         var node = new questStartNodeDefinition { Id = 1 };

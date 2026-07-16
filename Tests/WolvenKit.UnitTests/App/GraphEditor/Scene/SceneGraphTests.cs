@@ -146,6 +146,73 @@ public class SceneGraphTests
     }
 
     [TestMethod]
+    public void RefreshDetailsReflectsChangesToEmbeddedQuestNodeData()
+    {
+        var resource = GraphTestHelpers.CreateSceneResource();
+        using var graph = RedGraph.GenerateSceneGraph("test.scene", resource);
+        graph.CreateSceneNode(typeof(questFactsDBManagerNodeDefinition), new Point());
+        var wrapper = graph.Nodes.OfType<scnQuestNodeWrapper>().Single();
+        var sceneNode = (scnQuestNode)wrapper.Data;
+        var factsNode = (questFactsDBManagerNodeDefinition)sceneNode.QuestNode.GetValue()!;
+        var nodeType = (questSetVar_NodeType)factsNode.Type.GetValue()!;
+        nodeType.FactName = "first_fact";
+        nodeType.Value = 1;
+        wrapper.RefreshDetails();
+
+        Assert.AreEqual("first_fact", wrapper.Details["Fact Name"]);
+        Assert.AreEqual("1", wrapper.Details["Value"]);
+
+        nodeType.FactName = "updated_fact";
+        nodeType.Value = 2;
+        wrapper.RefreshDetails();
+
+        Assert.AreEqual("updated_fact", wrapper.Details["Fact Name"]);
+        Assert.AreEqual("2", wrapper.Details["Value"]);
+        Assert.IsFalse(wrapper.Details.ContainsValue("first_fact"));
+    }
+
+    [TestMethod]
+    public void RefreshFromDataPreservesSceneConnectorsAndConnection()
+    {
+        var start = new scnStartNode { NodeId = new scnNodeId { Id = 1 } };
+        var output = GraphTestHelpers.AddSceneOutput(start);
+        var end = new scnEndNode { NodeId = new scnNodeId { Id = 2 } };
+        GraphTestHelpers.ConnectSceneSocket(output, end.NodeId.Id);
+        var resource = GraphTestHelpers.CreateSceneResource(start, end);
+        using var graph = RedGraph.GenerateSceneGraph("test.scene", resource);
+        var startWrapper = graph.Nodes.OfType<scnStartNodeWrapper>().Single();
+        var endWrapper = graph.Nodes.OfType<scnEndNodeWrapper>().Single();
+        var source = startWrapper.Output.Single();
+        var target = endWrapper.Input.Single();
+        var connection = graph.Connections.Single();
+
+        startWrapper.RefreshFromData();
+        endWrapper.RefreshFromData();
+
+        Assert.AreSame(source, startWrapper.Output.Single());
+        Assert.AreSame(target, endWrapper.Input.Single());
+        Assert.AreSame(source, connection.Source);
+        Assert.AreSame(target, connection.Target);
+        Assert.IsTrue(source.IsConnected);
+        Assert.IsTrue(target.IsConnected);
+    }
+
+    [TestMethod]
+    public void GenerateGraphSkipsDestinationForNodeOutsideGraph()
+    {
+        var start = new scnStartNode { NodeId = new scnNodeId { Id = 1 } };
+        var output = GraphTestHelpers.AddSceneOutput(start);
+        GraphTestHelpers.ConnectSceneSocket(output, 999);
+        var resource = GraphTestHelpers.CreateSceneResource(start);
+
+        using var graph = RedGraph.GenerateSceneGraph("test.scene", resource);
+
+        Assert.AreEqual(1, graph.Nodes.Count);
+        Assert.AreEqual(0, graph.Connections.Count);
+        Assert.AreEqual(1, output.Destinations.Count);
+    }
+
+    [TestMethod]
     public void AddAndRemoveDynamicInputKeepsCancelAndBackingCountInSync()
     {
         var node = new scnAndNode
