@@ -46,6 +46,7 @@ public partial class GraphEditorView : UserControl
     private readonly RedTypeTemplateService _redTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>();
     private RedTypeTemplateDropdownViewModel _nodeTemplateOptions;
     private System.Windows.Point _actionPaletteGraphPosition;
+    private double _actionPalettePopupHorizontalOffset;
 
     private static readonly (string Name, string Color)[] s_commentColorPresets =
     [
@@ -155,6 +156,20 @@ public partial class GraphEditorView : UserControl
         _appViewModel = Locator.Current.GetService<AppViewModel>();
         ActionPalette.DismissRequested += (_, _) => CloseActionPalette();
         ActionPalette.ActionExecuted += (_, _) => CloseActionPalette();
+        ActionPalette.ShouldPlaceVariantsOnLeft = () =>
+        {
+            var spaceOnRight = Editor.ActualWidth -
+                               (_actionPalettePopupHorizontalOffset + GraphActionPalette.MainPanelWidth);
+            return spaceOnRight < GraphActionPalette.VariantPanelTotalWidth &&
+                   _actionPalettePopupHorizontalOffset >= GraphActionPalette.VariantPanelTotalWidth;
+        };
+        ActionPalette.MainPanelHorizontalAdjustmentRequested += horizontalAdjustment =>
+        {
+            var offset = ActionPalettePopup.HorizontalOffset + horizontalAdjustment;
+            ActionPalettePopup.SetCurrentValue(
+                System.Windows.Controls.Primitives.Popup.HorizontalOffsetProperty,
+                offset);
+        };
 
         Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
             handler => Editor.ViewportUpdated += handler,
@@ -398,6 +413,17 @@ public partial class GraphEditorView : UserControl
         node.ContextMenu.Items.Add(CreateMenuItem("Duplicate Node", "ContentDuplicate", "WolvenKitYellow", () => Source.DuplicateNode(nvm)));
         node.ContextMenu.Items.Add(CreateMenuItem("Copy Node", "ContentCopy", "WolvenKitYellow", () => GraphClipboardManager.CopyNode(nvm, Source.GraphType)));
 
+        var templateData = GetTemplateData(nvm);
+        if (templateData != null && RedTypeTemplateService.IsTypeTemplatable(templateData.GetType()))
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem(
+                "Create Template from Node",
+                "ContentSaveOutline",
+                "WolvenKitPurple",
+                async () => await _appViewModel.SetActiveDialog(
+                    new CreateTemplateFromChunkDialogViewModel(templateData, _redTypeTemplateService, _appViewModel))));
+        }
+
         if (Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel sceneViewModel)
         {
             node.ContextMenu.Items.Add(CreateMenuItem(
@@ -538,6 +564,16 @@ public partial class GraphEditorView : UserControl
         node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
+    }
+
+    private static IRedType GetTemplateData(NodeViewModel node)
+    {
+        if (node.Data is scnQuestNode sceneQuestNode)
+        {
+            return sceneQuestNode.QuestNode?.Chunk;
+        }
+
+        return node.Data;
     }
 
     public bool AddCommentFromCurrentCursor()
@@ -743,7 +779,7 @@ public partial class GraphEditorView : UserControl
         }
 
         var popupPosition = new System.Windows.Point(
-            Math.Max(8, (Editor.ActualWidth - 440) / 2),
+            Math.Max(8, (Editor.ActualWidth - 380) / 2),
             Math.Max(8, (Editor.ActualHeight - 500) / 2));
         OpenGraphActionPalette(GetViewportCenter(), popupPosition);
     }
@@ -757,8 +793,12 @@ public partial class GraphEditorView : UserControl
 
         CloseActionPalette();
         EnsureNodeTemplateOptions();
+        _nodeTemplateOptions.RefreshFromRegistry();
         _actionPaletteGraphPosition = graphPosition;
-        ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.HorizontalOffsetProperty, Math.Max(4, popupPosition.X));
+        _actionPalettePopupHorizontalOffset = Math.Max(4, popupPosition.X);
+        ActionPalettePopup.SetCurrentValue(
+            System.Windows.Controls.Primitives.Popup.HorizontalOffsetProperty,
+            _actionPalettePopupHorizontalOffset);
         ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.VerticalOffsetProperty, Math.Max(4, popupPosition.Y));
         ActionPalette.Open(
             Source.GraphType == RedGraphType.Quest ? "All Actions for Quest Graph" : "All Actions for Scene Graph",
@@ -826,7 +866,12 @@ public partial class GraphEditorView : UserControl
         {
             if (typeMap.TryGetValue(typeName, out var entry) && addedTypes.Add(entry.Type))
             {
-                items.Add(CreateNodePaletteItem(graph, entry.Type, category, position));
+                items.Add(CreateNodePaletteItem(
+                    graph,
+                    entry.Type,
+                    category,
+                    position,
+                    GraphNodeCreationCatalog.IsSearchOnly(entry.Type)));
             }
         }
 
@@ -870,7 +915,12 @@ public partial class GraphEditorView : UserControl
                      .ThenBy(entry => GraphNodeStyling.GetTitleForNodeType(entry.Type)))
         {
             var category = entry.Category == "Scene" ? "Other Scene Nodes" : "Other Quest Nodes";
-            items.Add(CreateNodePaletteItem(graph, entry.Type, category, position));
+            items.Add(CreateNodePaletteItem(
+                graph,
+                entry.Type,
+                category,
+                position,
+                GraphNodeCreationCatalog.IsSearchOnly(entry.Type)));
         }
 
         return items;
@@ -880,7 +930,8 @@ public partial class GraphEditorView : UserControl
         RedGraph graph,
         Type type,
         string category,
-        System.Windows.Point position)
+        System.Windows.Point position,
+        bool isSearchOnly = false)
     {
         var title = GraphNodeStyling.GetTitleForNodeType(type);
         var glyph = GraphNodeStyling.GetIconForNodeTitle(title);
@@ -916,12 +967,11 @@ public partial class GraphEditorView : UserControl
         return new GraphActionPaletteItem
         {
             Title = title,
-            Subtitle = templateCount > 0
-                ? $"{type.Name} - {templateCount} template{(templateCount == 1 ? "" : "s")}"
-                : type.Name,
+            Subtitle = type.Name,
             Category = category,
             SearchText = type.FullName ?? type.Name,
             Glyph = glyph,
+            IsSearchOnly = isSearchOnly,
             Variants = variants,
             Execute = () => CreateAndSelectNode(graph, type, position, defaultTemplate)
         };

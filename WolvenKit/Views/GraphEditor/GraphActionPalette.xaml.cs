@@ -22,31 +22,47 @@ public sealed class GraphActionPaletteItem
     public string IconKind { get; init; } = "";
     public string ParentTitle { get; init; } = "";
     public bool IsVariant { get; init; }
+    public bool IsSearchOnly { get; init; }
     public bool HasMaterialIcon => !string.IsNullOrEmpty(IconKind);
     public IReadOnlyList<GraphActionPaletteItem> Variants { get; init; } = [];
     public bool HasVariants => Variants.Count > 0;
     public Action Execute { get; init; } = () => { };
 
-    public bool Matches(string query) =>
-        Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-        Subtitle.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-        SearchText.Contains(query, StringComparison.OrdinalIgnoreCase);
+    public bool Matches(string query)
+    {
+        var searchableText = $"{Title} {Subtitle} {SearchText}";
+        return query
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .All(term => searchableText.Contains(term, StringComparison.OrdinalIgnoreCase));
+    }
 }
 
 public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
 {
+    public const double MainPanelWidth = 380;
+    public const double VariantPanelWidth = 230;
+    public const double VariantPanelGap = 4;
+    public const double VariantPanelTotalWidth = VariantPanelWidth + VariantPanelGap;
+
     private IReadOnlyList<GraphActionPaletteItem> _rootItems = [];
     private GraphActionPaletteItem _variantParent;
     private string _heading = "All Actions";
     private string _searchText = "";
     private string _variantHeading = "";
     private bool _isVariantPanelVisible;
+    private bool _variantsOnLeft;
+    private int _mainPanelColumn;
+    private int _variantPanelColumn = 1;
     private Thickness _variantPanelMargin = new(4, 0, 0, 0);
 
     public event EventHandler DismissRequested;
     public event EventHandler ActionExecuted;
+    public event Action<double> MainPanelHorizontalAdjustmentRequested;
     public event PropertyChangedEventHandler PropertyChanged;
 
+    public Func<bool> ShouldPlaceVariantsOnLeft { get; set; } = () => false;
+
+    public ObservableCollection<GraphActionPaletteItem> GraphItems { get; } = [];
     public ObservableCollection<GraphActionPaletteItem> VisibleItems { get; } = [];
     public ObservableCollection<GraphActionPaletteItem> VariantItems { get; } = [];
 
@@ -87,6 +103,18 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
         private set => SetField(ref _variantPanelMargin, value);
     }
 
+    public int MainPanelColumn
+    {
+        get => _mainPanelColumn;
+        private set => SetField(ref _mainPanelColumn, value);
+    }
+
+    public int VariantPanelColumn
+    {
+        get => _variantPanelColumn;
+        private set => SetField(ref _variantPanelColumn, value);
+    }
+
     public GraphActionPalette()
     {
         InitializeComponent();
@@ -123,7 +151,7 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
 
     private void RefreshVisibleItems()
     {
-        var selectedItem = ActionList.SelectedItem as GraphActionPaletteItem;
+        var selectedItem = GetSelectedMainItem();
         IEnumerable<GraphActionPaletteItem> items;
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
@@ -136,25 +164,30 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
         }
         else
         {
-            items = _rootItems;
+            items = _rootItems.Where(item => !item.IsSearchOnly);
         }
 
+        var filteredItems = items.ToList();
+        GraphItems.Clear();
         VisibleItems.Clear();
-        foreach (var item in items)
+        foreach (var item in filteredItems)
         {
-            VisibleItems.Add(item);
+            if (item.Category == "Graph")
+            {
+                GraphItems.Add(item);
+            }
+            else
+            {
+                VisibleItems.Add(item);
+            }
         }
 
         var selection = selectedItem is null
-            ? VisibleItems.FirstOrDefault()
-            : VisibleItems.FirstOrDefault(item =>
+            ? filteredItems.FirstOrDefault()
+            : filteredItems.FirstOrDefault(item =>
                 item.Title == selectedItem.Title &&
-                item.ParentTitle == selectedItem.ParentTitle) ?? VisibleItems.FirstOrDefault();
-        ActionList.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, selection);
-        if (selection is not null)
-        {
-            ActionList.ScrollIntoView(selection);
-        }
+                item.ParentTitle == selectedItem.ParentTitle) ?? filteredItems.FirstOrDefault();
+        SelectMainItem(selection);
     }
 
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -196,18 +229,44 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
     }
 
     private ListBox GetActiveList() =>
-        VariantList.IsKeyboardFocusWithin ? VariantList : ActionList;
+        VariantList.IsKeyboardFocusWithin
+            ? VariantList
+            : GraphActionList.IsKeyboardFocusWithin || GraphActionList.SelectedItem is not null
+                ? GraphActionList
+                : ActionList;
 
-    private static void MoveSelection(ListBox list, int offset)
+    private void MoveSelection(ListBox list, int offset)
     {
         if (list.Items.Count == 0)
         {
+            var fallbackList = ReferenceEquals(list, GraphActionList) ? ActionList : GraphActionList;
+            SelectListItem(fallbackList, offset > 0 ? 0 : fallbackList.Items.Count - 1);
             return;
         }
 
+        if (!ReferenceEquals(list, VariantList))
+        {
+            if (offset > 0 &&
+                ReferenceEquals(list, GraphActionList) &&
+                list.SelectedIndex == list.Items.Count - 1 &&
+                ActionList.Items.Count > 0)
+            {
+                SelectListItem(ActionList, 0);
+                return;
+            }
+
+            if (offset < 0 &&
+                ReferenceEquals(list, ActionList) &&
+                list.SelectedIndex <= 0 &&
+                GraphActionList.Items.Count > 0)
+            {
+                SelectListItem(GraphActionList, GraphActionList.Items.Count - 1);
+                return;
+            }
+        }
+
         var nextIndex = Math.Clamp(list.SelectedIndex + offset, 0, list.Items.Count - 1);
-        list.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedIndexProperty, nextIndex);
-        list.ScrollIntoView(list.SelectedItem);
+        SelectListItem(list, nextIndex);
     }
 
     private void ActionList_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -217,14 +276,28 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
             return;
         }
 
-        if (ItemsControl.ContainerFromElement(ActionList, e.OriginalSource as DependencyObject) is not ListBoxItem item)
+        if (sender is not ListBox list ||
+            ItemsControl.ContainerFromElement(list, e.OriginalSource as DependencyObject) is not ListBoxItem item)
         {
             return;
         }
 
-        ActionList.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, item.DataContext);
-        ExecuteSelectedItem(ActionList);
+        SelectListItem(list, list.ItemContainerGenerator.IndexFromContainer(item));
+        ExecuteSelectedItem(list);
         e.Handled = true;
+    }
+
+    private void ActionList_OnPreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        if (_variantParent is null ||
+            sender is not ListBox list ||
+            ItemsControl.ContainerFromElement(list, e.OriginalSource as DependencyObject) is not ListBoxItem item ||
+            ReferenceEquals(item.DataContext, _variantParent))
+        {
+            return;
+        }
+
+        CloseVariantPanel(false);
     }
 
     private void VariantList_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -262,7 +335,7 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
         bool selectFirst)
     {
         _variantParent = item;
-        VariantHeading = $"{item.Title} Templates";
+        VariantHeading = "Choose template";
         VariantItems.Clear();
         foreach (var variant in item.Variants)
         {
@@ -296,7 +369,11 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
             var rowTop = row.TranslatePoint(new Point(0, 0), Root).Y;
             var estimatedPanelHeight = Math.Min(420, 48 + (VariantItems.Count * 48));
             var maxTop = Math.Max(0, MainPanel.ActualHeight - estimatedPanelHeight);
-            VariantPanelMargin = new Thickness(4, Math.Clamp(rowTop, 0, maxTop), 0, 0);
+            SetVariantPanelPlacement(ShouldPlaceVariantsOnLeft());
+            var top = Math.Clamp(rowTop, 0, maxTop);
+            VariantPanelMargin = _variantsOnLeft
+                ? new Thickness(0, top, VariantPanelGap, 0)
+                : new Thickness(VariantPanelGap, top, 0, 0);
         }, DispatcherPriority.Loaded);
     }
 
@@ -306,6 +383,7 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
         _variantParent = null;
         IsVariantPanelVisible = false;
         VariantItems.Clear();
+        SetVariantPanelPlacement(false);
 
         if (!returnFocus)
         {
@@ -320,6 +398,74 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
 
         ActionList.Focus();
         Keyboard.Focus(ActionList);
+    }
+
+    private GraphActionPaletteItem GetSelectedMainItem() =>
+        GraphActionList.SelectedItem as GraphActionPaletteItem ??
+        ActionList.SelectedItem as GraphActionPaletteItem;
+
+    private void SelectMainItem(GraphActionPaletteItem item)
+    {
+        GraphActionList.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, null);
+        ActionList.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, null);
+        if (item is null)
+        {
+            return;
+        }
+
+        var list = item.Category == "Graph" ? GraphActionList : ActionList;
+        list.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, item);
+        list.ScrollIntoView(item);
+    }
+
+    private void SelectListItem(ListBox list, int index)
+    {
+        if (index < 0 || index >= list.Items.Count)
+        {
+            return;
+        }
+
+        if (!ReferenceEquals(list, VariantList))
+        {
+            var otherList = ReferenceEquals(list, GraphActionList) ? ActionList : GraphActionList;
+            otherList.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, null);
+        }
+
+        list.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedIndexProperty, index);
+        list.ScrollIntoView(list.SelectedItem);
+    }
+
+    private void SetVariantPanelPlacement(bool placeOnLeft)
+    {
+        if (_variantsOnLeft == placeOnLeft)
+        {
+            return;
+        }
+
+        double? mainPanelScreenX = PresentationSource.FromVisual(MainPanel) is null
+            ? null
+            : MainPanel.PointToScreen(new Point()).X;
+        _variantsOnLeft = placeOnLeft;
+        MainPanelColumn = placeOnLeft ? 1 : 0;
+        VariantPanelColumn = placeOnLeft ? 0 : 1;
+        if (mainPanelScreenX is null)
+        {
+            return;
+        }
+
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (PresentationSource.FromVisual(MainPanel) is null)
+            {
+                return;
+            }
+
+            var horizontalAdjustment = mainPanelScreenX.Value - MainPanel.PointToScreen(new Point()).X;
+            if (Math.Abs(horizontalAdjustment) > 0.5)
+            {
+                MainPanelHorizontalAdjustmentRequested?.Invoke(horizontalAdjustment);
+            }
+        }, DispatcherPriority.Render);
     }
 
     private void ExecuteSelectedItem(ListBox list)

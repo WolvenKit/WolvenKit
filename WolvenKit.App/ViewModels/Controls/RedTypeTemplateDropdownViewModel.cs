@@ -49,7 +49,7 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         SelectedRedTypeTemplate = ((List<RedTypeTemplateSelectionOption>)CurrentRedTypeTemplates.Source).First();
 
         RequestedType = typeof(object);
-        _ = Refresh();
+        RefreshFromRegistry();
     }
 
     partial void OnRequestedTypeChanged(Type value)
@@ -83,8 +83,9 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     {
         TemplatesByType.Clear();
 
-        IndexTemplates(_redTypeTemplateService.UserTemplates, RedTypeTemplateSelectionOptionSource.User);
-        IndexTemplates(_redTypeTemplateService.SystemTemplates, RedTypeTemplateSelectionOptionSource.System);
+        var templates = _redTypeTemplateService.GetTemplateRegistrySnapshot();
+        IndexTemplates(templates.User, RedTypeTemplateSelectionOptionSource.User);
+        IndexTemplates(templates.System, RedTypeTemplateSelectionOptionSource.System);
 
         foreach (var kvp in TemplatesByType)
         {

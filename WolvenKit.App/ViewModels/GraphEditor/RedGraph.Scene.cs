@@ -108,8 +108,19 @@ public partial class RedGraph
             throw new Exception($"Failed to create scene node of type {type.Name}");
         }
 
+        if (templateDesc != null)
+        {
+            foreach (var outputSocket in sceneNode.OutputSockets)
+            {
+                outputSocket.Destinations.Clear();
+            }
+        }
+
         sceneNode.NodeId = new scnNodeId { Id = ++_currentSceneNodeId };
-        sceneNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        if (sceneNode.OutputSockets.Count == 0)
+        {
+            sceneNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        }
 
         if (sceneNode is scnChoiceNode choiceNode)
         {
@@ -241,6 +252,17 @@ public partial class RedGraph
         if (questInstance is not questNodeDefinition questNode)
         {
             throw new Exception($"Failed to create quest node of type {questNodeType.Name}");
+        }
+
+        if (templateDesc != null)
+        {
+            foreach (var socket in questNode.Sockets)
+            {
+                if (socket.Chunk is questSocketDefinition socketDefinition)
+                {
+                    socketDefinition.Connections.Clear();
+                }
+            }
         }
 
         // Special initialization for certain quest node types

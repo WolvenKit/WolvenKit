@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.GraphEditor;
 
@@ -13,10 +15,34 @@ internal static class GraphNodeCreationCatalog
         "scnChoiceNode",
         "questPauseConditionNodeDefinition",
         "questFactsDBManagerNodeDefinition",
+        "questJournalNodeDefinition",
         "questUseWorkspotNodeDefinition",
-        "questUIManagerNodeDefinition",
-        "questJournalNodeDefinition"
+        "questConditionNodeDefinition",
+        "questSpawnManagerNodeDefinition"
     ];
+
+    private static readonly HashSet<Type> s_searchOnlyTypes =
+    [
+        typeof(questDebugShowMessageNodeDefinition),
+        typeof(questTestNodeDefinition),
+        typeof(tempshitJournalNodeDefinition),
+        typeof(tempshitMapPinManagerNodeDefinition),
+        typeof(questMultiplayerAIDirectorNodeDefinition),
+        typeof(questMultiplayerChoiceTokenNodeDefinition),
+        typeof(questMultiplayerHeistNodeDefinition),
+        typeof(questMultiplayerJunctionDialogNodeDefinition),
+        typeof(questMultiplayerTeleportPuppetNodeDefinition),
+        typeof(questPopulactionControllerNodeDefinition),
+        typeof(questStartNodeDefinition),
+        typeof(questEndNodeDefinition),
+        typeof(questTeleportVehicleNodeDefinition),
+        typeof(questUnequipItemNodeDefinition),
+        typeof(questRotateToNodeDefinition),
+        typeof(questPuppeteerNodeDefinition),
+        typeof(questAudioCharacterManagerNodeDefinition)
+    ];
+
+    internal static bool IsSearchOnly(Type type) => s_searchOnlyTypes.Contains(type);
 
     internal static IReadOnlyList<GraphNodeCreationCategory> Categories { get; } =
     [
@@ -32,12 +58,20 @@ internal static class GraphNodeCreationCatalog
             "scnCutControlNode",
             "scnInterruptManagerNode",
             null,
+            "questInputNodeDefinition",
+            "questOutputNodeDefinition",
+            null,
+            "questLogicalAndNodeDefinition",
+            "questLogicalHubNodeDefinition",
+            "questLogicalXorNodeDefinition",
+            "questFlowControlNodeDefinition",
+            "questRandomizerNodeDefinition",
             "questConditionNodeDefinition",
-            "scnRandomizerNode",
             "questFactsDBManagerNodeDefinition",
             "questCutControlNodeDefinition",
             "questPauseConditionNodeDefinition",
             null,
+            "scnRandomizerNode",
             "questSwitchNodeDefinition"
         ]),
         new("Character & AI",
