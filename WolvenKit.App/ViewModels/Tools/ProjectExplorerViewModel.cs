@@ -1645,7 +1645,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                             (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertRawFile))]
-    private async Task ConvertRawFile()
+    internal async Task ConvertRawFile()
     {
         if (!IsShiftKeyPressed)
         {
