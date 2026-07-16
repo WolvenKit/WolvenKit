@@ -771,5 +771,14 @@
                 <ContextMenu />
             </nodify:NodifyEditor.ContextMenu>
         </nodify:NodifyEditor>
+
+        <Popup
+            x:Name="ActionPalettePopup"
+            AllowsTransparency="True"
+            Placement="RelativePoint"
+            PlacementTarget="{Binding ElementName=Editor}"
+            StaysOpen="False">
+            <local:GraphActionPalette x:Name="ActionPalette" />
+        </Popup>
     </Grid>
 </UserControl>
