@@ -61,15 +61,20 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         ApplyTemplateCustomSort(CurrentRedTypeTemplates);
     }
 
+    public void RefreshFromRegistry()
+    {
+        IndexRedTypeTemplates();
+        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : _defaultList;
+        SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
+        CurrentRedTypeTemplates.View.Refresh();
+        ApplyTemplateCustomSort(CurrentRedTypeTemplates);
+    }
+
     [RelayCommand]
     private async Task Refresh()
     {
         await Task.Run(_redTypeTemplateService.LoadTemplates);
-        IndexRedTypeTemplates();
-        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : _defaultList;
-        SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
-        CurrentRedTypeTemplates?.View.Refresh();
-        ApplyTemplateCustomSort(CurrentRedTypeTemplates);
+        RefreshFromRegistry();
 
         PostRefresh?.Invoke(this, EventArgs.Empty);
     }
