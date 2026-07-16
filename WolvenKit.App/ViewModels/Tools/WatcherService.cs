@@ -119,6 +119,8 @@ public partial class ProjectExplorerViewModel
 
         #endregion
 
+        #region Constructor
+
         public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents, GridGuard guard)
         {
             _loggerService = loggerService;
@@ -156,7 +158,16 @@ public partial class ProjectExplorerViewModel
                 .ObserveOn(_projectEventScheduler)
                 .Subscribe(OnFilesOrDirectoriesDeleted)
                 .DisposeWith(_disposables);
+
+            projectEvents.FileChanged
+                .ObserveOn(_projectEventScheduler)
+                .Subscribe(OnFileChanged)
+                .DisposeWith(_disposables);
         }
+
+        #endregion
+
+        #region Start / Resume / Watch / Unwatch Methods
 
         public void ResumeWatcher_AndLoadProject()
         {
@@ -205,6 +216,8 @@ public partial class ProjectExplorerViewModel
             _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
             StopBackgroundPolling();
         }
+
+        #endregion
 
         private static readonly List<string> s_backupFilePartials =
         [
@@ -957,6 +970,25 @@ public partial class ProjectExplorerViewModel
             foreach (var parent in sourceParents)
             {
                 PruneVanishedDirectories(parent);
+            }
+        }
+
+        private void OnFileChanged(FileChangedMessage msg)
+        {
+            switch (msg)
+            {
+                case FileChangedMessage.Document(var file):
+                    if (file.FilePath is not string fullPath)
+                    {
+                        break;
+                    }
+
+                    if (_fileLookup.TryGetValue(fullPath, out var model))
+                    {
+                        _guard.ProjectUpdateFileInfo(model);
+                    }
+
+                    break;
             }
         }
 

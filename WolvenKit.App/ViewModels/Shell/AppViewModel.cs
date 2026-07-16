@@ -857,8 +857,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile()
     {
+        if (ActiveDocument is not IDocumentViewModel document)
+        {
+            return;
+        }
         GetToolViewModel<ProjectExplorerViewModel>().SuspendFileWatcher();
-        Save(ActiveDocument.NotNull());
+        _projectEvents.PublishFileChanged(new FileChangedMessage.Document(document));
+        Save(document);
         GetToolViewModel<ProjectExplorerViewModel>().ResumeFileWatcher();
     }
 
