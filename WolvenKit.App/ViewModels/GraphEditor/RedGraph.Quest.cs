@@ -119,6 +119,8 @@ public partial class RedGraph
         }
 
         Nodes.Add(wrappedInstance);
+
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     private graphGraphNodeDefinition InternalCreateQuestNode(Type type)
