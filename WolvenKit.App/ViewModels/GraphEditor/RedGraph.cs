@@ -645,6 +645,10 @@ public partial class RedGraph : IDisposable
     {
         var loaded = false;
         _allowGraphSave = false;
+        foreach (var node in Nodes)
+        {
+            node.IsInitialLoad = true;
+        }
 
         if (DocumentViewModel != null)
         {
