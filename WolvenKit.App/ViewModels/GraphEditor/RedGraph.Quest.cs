@@ -144,6 +144,17 @@ public partial class RedGraph
             throw new Exception();
         }
 
+        if (templateDesc != null)
+        {
+            foreach (var socket in questNode.Sockets)
+            {
+                if (socket.Chunk is questSocketDefinition socketDefinition)
+                {
+                    socketDefinition.Connections.Clear();
+                }
+            }
+        }
+
         if (instance is questNodeDefinition nodeDefinition)
         {
             nodeDefinition.Id = ++_currentQuestNodeId;
@@ -438,7 +449,7 @@ public partial class RedGraph
             nodeWrapper = tmp;
         }
 
-        if (isNew)
+        if (isNew && node.Sockets.Count == 0)
         {
             nodeWrapper.CreateDefaultSockets();
         }

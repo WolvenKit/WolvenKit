@@ -19,20 +19,20 @@
 
         <DataTemplate x:Key="GlyphIconTemplate">
             <TextBlock
-                Width="20"
-                Height="20"
-                HorizontalAlignment="Center"
+                Width="28"
+                Height="36"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                FontSize="16"
-                TextAlignment="Center"
+                FontSize="24"
+                TextAlignment="Right"
                 Text="{Binding Glyph}" />
         </DataTemplate>
 
         <DataTemplate x:Key="MaterialIconTemplate">
             <iconPacks:PackIconMaterial
-                Width="16"
-                Height="16"
-                HorizontalAlignment="Center"
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Foreground="{DynamicResource WolvenKitYellow}"
                 Kind="{Binding IconKind}" />
@@ -50,14 +50,18 @@
         </Style>
 
         <DataTemplate x:Key="PaletteItemTemplate">
-            <Grid Margin="6,5">
+            <Grid Margin="8,5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32" />
+                    <ColumnDefinition Width="36" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="36" />
                 </Grid.ColumnDefinitions>
 
-                <ContentControl Content="{Binding}">
+                <ContentControl
+                    Margin="-4,0,12,0"
+                    HorizontalContentAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Setter Property="ContentTemplate" Value="{StaticResource GlyphIconTemplate}" />
@@ -72,11 +76,12 @@
 
                 <StackPanel Grid.Column="1">
                     <TextBlock
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Title}"
                         TextTrimming="CharacterEllipsis" />
                     <TextBlock
                         Foreground="{DynamicResource BorderAlt2}"
-                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontSize="{DynamicResource WolvenKitFontAltTitle}"
                         Text="{Binding Subtitle}"
                         TextTrimming="CharacterEllipsis">
                         <TextBlock.Style>
@@ -95,7 +100,7 @@
                     Grid.Column="2"
                     Width="28"
                     Height="28"
-                    Margin="8,0,0,0"
+                    Margin="0"
                     Padding="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -119,32 +124,15 @@
         </DataTemplate>
 
         <DataTemplate x:Key="VariantItemTemplate">
-            <Grid Margin="7,6">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="28" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <ContentControl Content="{Binding}">
-                    <ContentControl.Style>
-                        <Style TargetType="ContentControl">
-                            <Setter Property="ContentTemplate" Value="{StaticResource GlyphIconTemplate}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasMaterialIcon}" Value="True">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource MaterialIconTemplate}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ContentControl.Style>
-                </ContentControl>
-
-                <StackPanel Grid.Column="1">
+            <Grid Margin="8,6">
+                <StackPanel>
                     <TextBlock
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Title}"
                         TextTrimming="CharacterEllipsis" />
                     <TextBlock
                         Foreground="{DynamicResource BorderAlt2}"
-                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontSize="{DynamicResource WolvenKitFontAltTitle}"
                         Text="{Binding Subtitle}"
                         TextTrimming="CharacterEllipsis" />
                 </StackPanel>
@@ -160,13 +148,17 @@
 
         <Border
             x:Name="MainPanel"
-            Width="440"
+            Grid.Column="{Binding MainPanelColumn, ElementName=Root}"
+            Width="380"
+            Height="520"
+            VerticalAlignment="Top"
             Background="{DynamicResource ContentBackgroundAlt3}"
             BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1"
             CornerRadius="4">
-            <Grid Margin="8">
+            <Grid Margin="4,8">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -174,7 +166,7 @@
 
                 <TextBlock
                     Margin="4,1,4,7"
-                    FontSize="{DynamicResource WolvenKitFontBody}"
+                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     FontWeight="SemiBold"
                     Text="{Binding Heading, ElementName=Root}" />
 
@@ -205,7 +197,7 @@
                             Padding="2,7"
                             Background="Transparent"
                             BorderThickness="0"
-                            FontSize="{DynamicResource WolvenKitFontBody}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Text="{Binding SearchText, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock
@@ -229,16 +221,55 @@
                     </Grid>
                 </Border>
 
+                <Border
+                    Grid.Row="2"
+                    Margin="0,0,0,4"
+                    Padding="0,0,0,7"
+                    BorderBrush="{DynamicResource BorderAlt}"
+                    BorderThickness="0,0,0,1">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasItems, ElementName=GraphActionList}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <StackPanel>
+                        <TextBlock
+                            Margin="8,0,8,5"
+                            Foreground="{DynamicResource BorderAlt2}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            FontWeight="SemiBold"
+                            Text="Graph" />
+
+                        <ListBox
+                            x:Name="GraphActionList"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemContainerStyle="{StaticResource PaletteListItemStyle}"
+                            ItemTemplate="{StaticResource PaletteItemTemplate}"
+                            ItemsSource="{Binding GraphItems, ElementName=Root}"
+                            PreviewMouseLeftButtonUp="ActionList_OnPreviewMouseLeftButtonUp"
+                            PreviewMouseMove="ActionList_OnPreviewMouseMove"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            SelectionMode="Single" />
+                    </StackPanel>
+                </Border>
+
                 <ListBox
                     x:Name="ActionList"
-                    Grid.Row="2"
-                    MaxHeight="420"
+                    Grid.Row="3"
                     Background="Transparent"
                     BorderThickness="0"
                     ItemContainerStyle="{StaticResource PaletteListItemStyle}"
                     ItemTemplate="{StaticResource PaletteItemTemplate}"
                     ItemsSource="{Binding Source={StaticResource GroupedActions}}"
                     PreviewMouseLeftButtonUp="ActionList_OnPreviewMouseLeftButtonUp"
+                    PreviewMouseMove="ActionList_OnPreviewMouseMove"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     SelectionMode="Single"
@@ -248,6 +279,7 @@
                         <GroupStyle>
                             <GroupStyle.ContainerStyle>
                                 <Style TargetType="GroupItem">
+                                    <Setter Property="Margin" Value="0,0,0,6" />
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="GroupItem">
@@ -263,7 +295,7 @@
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Margin="7,8,5,3"
+                                        Margin="8,8,8,5"
                                         Foreground="{DynamicResource BorderAlt2}"
                                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                         FontWeight="SemiBold"
@@ -278,8 +310,8 @@
 
         <Border
             x:Name="VariantPanel"
-            Grid.Column="1"
-            Width="270"
+            Grid.Column="{Binding VariantPanelColumn, ElementName=Root}"
+            Width="230"
             MaxHeight="420"
             Margin="{Binding VariantPanelMargin, ElementName=Root}"
             VerticalAlignment="Top"
@@ -296,7 +328,7 @@
 
                 <TextBlock
                     Margin="4,1,4,7"
-                    FontSize="{DynamicResource WolvenKitFontBody}"
+                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     FontWeight="SemiBold"
                     Text="{Binding VariantHeading, ElementName=Root}"
                     TextTrimming="CharacterEllipsis" />
