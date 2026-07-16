@@ -35,8 +35,7 @@ namespace WolvenKit.Core
             }
 
             var infoAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-
-            return infoAttr != null ? SemVersion.Parse(infoAttr.InformationalVersion, SemVersionStyles.Strict) : SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
+            return ParseInformationalVersion(infoAttr?.InformationalVersion);
         }
 
         public static SemVersion GetAssemblyVersion(string assemblyName)
@@ -78,9 +77,67 @@ namespace WolvenKit.Core
                     }
                 }
 
-                var version = SemVersion.Parse(productVersion.NotNull(), SemVersionStyles.Strict);
-                return version;
+                return ParseInformationalVersion(productVersion);
             }
+        }
+
+        /// <summary>
+        /// Parses an assembly informational version into a SemVersion.
+        /// Handles common .NET stamps that are not strict SemVer, e.g. four-part
+        /// versions with SourceLink metadata: "2.16.1.112+abc123" (test hosts / some deps).
+        /// </summary>
+        public static SemVersion ParseInformationalVersion(string? informationalVersion)
+        {
+            if (string.IsNullOrWhiteSpace(informationalVersion))
+            {
+                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
+            }
+
+            if (SemVersion.TryParse(informationalVersion, SemVersionStyles.Strict, out var strict))
+            {
+                return strict;
+            }
+
+            // Strip +build metadata, then optional -prerelease, then collapse a.b.c.d -> a.b.c.
+            var plusIndex = informationalVersion.IndexOf('+');
+            var build = plusIndex >= 0 ? informationalVersion[(plusIndex + 1)..] : null;
+            var coreAndPre = plusIndex >= 0 ? informationalVersion[..plusIndex] : informationalVersion;
+
+            var dashIndex = coreAndPre.IndexOf('-');
+            var core = dashIndex >= 0 ? coreAndPre[..dashIndex] : coreAndPre;
+            var prerelease = dashIndex >= 0 ? coreAndPre[(dashIndex + 1)..] : null;
+
+            var parts = core.Split('.');
+            if (parts.Length >= 3
+                && int.TryParse(parts[0], out var major)
+                && int.TryParse(parts[1], out var minor)
+                && int.TryParse(parts[2], out var patch))
+            {
+                // Rebuild a strict SemVer string: major.minor.patch[-pre][+build]
+                var rebuilt = $"{major}.{minor}.{patch}";
+                if (!string.IsNullOrEmpty(prerelease))
+                {
+                    rebuilt += $"-{prerelease}";
+                }
+
+                if (!string.IsNullOrEmpty(build))
+                {
+                    rebuilt += $"+{build}";
+                }
+
+                if (SemVersion.TryParse(rebuilt, SemVersionStyles.Strict, out var collapsed))
+                {
+                    return collapsed;
+                }
+
+                // Build metadata can contain characters SemVer rejects; keep major.minor.patch only.
+                if (SemVersion.TryParse($"{major}.{minor}.{patch}", SemVersionStyles.Strict, out collapsed))
+                {
+                    return collapsed;
+                }
+            }
+
+            return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
         }
 
         //public static string GetDepotPathFromHash(UInt64 hash)
