@@ -1164,7 +1164,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                _ = QuestPhaseGraphEditor?.OpenNodeSelectorAtViewportCenter();
+                QuestPhaseGraphEditor?.OpenActionPaletteAtViewportCenter();
                 e.Handled = true;
             }
 

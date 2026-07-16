@@ -247,7 +247,8 @@ public partial class RedGraph
         if (questNode is questFactsDBManagerNodeDefinition factsDBNode)
         {
             // Initialize the Type property with questSetVar_NodeType (the only implementation)
-            factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
+            factsDBNode.Type ??= new CHandle<questIFactsDBManagerNodeType>();
+            factsDBNode.Type.Chunk ??= new questSetVar_NodeType();
         }
 
         // Create the wrapper scene node and get its ID

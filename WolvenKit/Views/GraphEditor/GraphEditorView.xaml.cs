@@ -17,6 +17,7 @@ using Nodify;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Controls;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -27,6 +28,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
@@ -42,6 +44,8 @@ public record NodeCreationParams(Type Type, RedTypeTemplateSelectionOption? RedT
 public partial class GraphEditorView : UserControl
 {
     private readonly RedTypeTemplateService _redTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>();
+    private RedTypeTemplateDropdownViewModel _nodeTemplateOptions;
+    private System.Windows.Point _actionPaletteGraphPosition;
 
     private static readonly (string Name, string Color)[] s_commentColorPresets =
     [
@@ -65,6 +69,7 @@ public partial class GraphEditorView : UserControl
             return;
         }
 
+        view.ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
         view.Dispatcher.BeginInvoke(new Action(() =>
         {
             UpdateView(view);
@@ -148,6 +153,8 @@ public partial class GraphEditorView : UserControl
         InitializeComponent();
 
         _appViewModel = Locator.Current.GetService<AppViewModel>();
+        ActionPalette.DismissRequested += (_, _) => CloseActionPalette();
+        ActionPalette.ActionExecuted += (_, _) => CloseActionPalette();
 
         Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
             handler => Editor.ViewportUpdated += handler,
@@ -174,6 +181,7 @@ public partial class GraphEditorView : UserControl
     {
         var graph = Source;
 
+        CloseActionPalette();
         SelectedNode = null;
         SelectedNodes.Clear();
 
@@ -215,7 +223,9 @@ public partial class GraphEditorView : UserControl
 
         if (Source.GraphType is RedGraphType.Quest or RedGraphType.Scene)
         {
-            nodifyEditor.ContextMenu.Items.Add(CreateNodeMenu(mousePosition));
+            OpenGraphActionPalette(mousePosition, Mouse.GetPosition(nodifyEditor));
+            e.Handled = true;
+            return;
         }
 
         if (Source.GraphType == RedGraphType.Behavior && Source.CanCreateBehaviorRoot())
@@ -228,15 +238,6 @@ public partial class GraphEditorView : UserControl
             });
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
-        }
-
-        if (Source.GraphType is RedGraphType.Quest or RedGraphType.Scene)
-        {
-            var hasNodeSelection = SelectedNodes.OfType<NodeViewModel>().Any();
-            nodifyEditor.ContextMenu.Items.Add(CreateMenuItem(
-                hasNodeSelection ? "Add Comment Around Selection" : "Add Comment",
-                "CommentTextOutline",
-                () => Source.AddComment(mousePosition, SelectedNodes)));
         }
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", "ViewDashboard", ArrangeNodes));
@@ -629,7 +630,15 @@ public partial class GraphEditorView : UserControl
 
         groupingNode.ContextMenu ??= new ContextMenu();
         groupingNode.ContextMenu.Items.Clear();
-        groupingNode.ContextMenu.Items.Add(CreateNodeMenu(GetMousePositionInGraph(Editor)));
+        var graphPosition = GetMousePositionInGraph(Editor);
+        var popupPosition = Mouse.GetPosition(Editor);
+        groupingNode.ContextMenu.Items.Add(CreateMenuItem("Add Node ...", "Plus", () =>
+        {
+            groupingNode.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, false);
+            Dispatcher.BeginInvoke(
+                () => OpenGraphActionPalette(graphPosition, popupPosition),
+                DispatcherPriority.ContextIdle);
+        }));
         groupingNode.ContextMenu.Items.Add(new Separator());
         groupingNode.ContextMenu.Items.Add(CreateCommentColorMenu(comment));
         groupingNode.ContextMenu.Items.Add(CreateMenuItem(
@@ -726,112 +735,261 @@ public partial class GraphEditorView : UserControl
         }
     };
 
-    public Task OpenNodeSelectorAtViewportCenter() => OpenNodeSelector(GetViewportCenter());
-
-    private MenuItem CreateNodeMenu(System.Windows.Point position)
-    {
-        var menu = CreateAddMenuItem();
-        var availableTypes = GetNodeCreationTypes();
-        var typeMap = availableTypes
-            .Select(entry => entry.Type)
-            .GroupBy(type => type.Name)
-            .ToDictionary(group => group.Key, group => group.First());
-
-        menu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", () =>
-        {
-            _ = OpenNodeSelector(position);
-        }));
-        menu.Items.Add(new Separator());
-
-        var commonNodeCount = 0;
-        foreach (var typeName in GraphNodeCreationCatalog.CommonTypeNames)
-        {
-            if (AddNodeToMenu(menu, typeName, typeMap, position, true))
-            {
-                commonNodeCount++;
-            }
-        }
-
-        if (commonNodeCount > 0)
-        {
-            menu.Items.Add(new Separator());
-        }
-
-        foreach (var category in GraphNodeCreationCatalog.Categories)
-        {
-            var categoryMenu = CreateCategoryMenuItem(category.Name);
-
-            if (category.Name == "Debug" && Source.GraphType == RedGraphType.Scene)
-            {
-                var title = "UIManager (Debug Warning)";
-                var emoji = GraphNodeStyling.GetIconForNodeTitle(title);
-                categoryMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {title}", () =>
-                {
-                    var nodeId = Source.CreateCompositeSceneNode("DebugWarning", typeof(questUIManagerNodeDefinition), position);
-                    SelectNodeById(nodeId);
-                }, -15));
-            }
-
-            AddCatalogNodeTypes(categoryMenu, category.TypeNames, typeMap, position);
-            if (categoryMenu.Items.Count > 0)
-            {
-                menu.Items.Add(categoryMenu);
-            }
-        }
-
-        return menu;
-    }
-
-    private List<(Type Type, string Category)> GetNodeCreationTypes()
-    {
-        if (Source.GraphType == RedGraphType.Quest)
-        {
-            return Source.GetQuestNodeTypes()
-                .Select(type => (type, "Quest"))
-                .ToList();
-        }
-
-        if (Source.GraphType == RedGraphType.Scene)
-        {
-            return Source.GetSceneNodeTypes()
-                .Select(type => (type, "Scene"))
-                .Concat(Source.GetQuestNodeTypesForScene().Select(type => (type, "Quest")))
-                .ToList();
-        }
-
-        return [];
-    }
-
-    private async Task OpenNodeSelector(System.Windows.Point position)
+    public void OpenActionPaletteAtViewportCenter()
     {
         if (Source?.GraphType is not (RedGraphType.Quest or RedGraphType.Scene))
         {
             return;
         }
 
-        var graph = Source;
-        var types = GetNodeCreationTypes()
-            .Select(entry => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(entry.Type), entry.Category, entry.Type))
-            .OrderBy(entry => entry.Name)
-            .ToList();
+        var popupPosition = new System.Windows.Point(
+            Math.Max(8, (Editor.ActualWidth - 440) / 2),
+            Math.Max(8, (Editor.ActualHeight - 500) / 2));
+        OpenGraphActionPalette(GetViewportCenter(), popupPosition);
+    }
 
-        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+    private void OpenGraphActionPalette(System.Windows.Point graphPosition, System.Windows.Point popupPosition)
+    {
+        if (Source?.GraphType is not (RedGraphType.Quest or RedGraphType.Scene))
         {
-            DialogHandler = model =>
-            {
-                _appViewModel.CloseDialogCommand.Execute(null);
-                if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } selector)
-                {
-                    return;
-                }
+            return;
+        }
 
-                var nodeId = CreateNode(graph, selectedType, position, selector.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
-                if (ReferenceEquals(Source, graph))
-                {
-                    SelectNodeById(nodeId);
-                }
+        CloseActionPalette();
+        EnsureNodeTemplateOptions();
+        _actionPaletteGraphPosition = graphPosition;
+        ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.HorizontalOffsetProperty, Math.Max(4, popupPosition.X));
+        ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.VerticalOffsetProperty, Math.Max(4, popupPosition.Y));
+        ActionPalette.Open(
+            Source.GraphType == RedGraphType.Quest ? "All Actions for Quest Graph" : "All Actions for Scene Graph",
+            CreateGraphActionPaletteItems(Source, graphPosition));
+        ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, true);
+    }
+
+    private void CloseActionPalette() =>
+        ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+
+    private void NodeTemplateOptions_OnPostRefresh(object sender, EventArgs e)
+    {
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (ActionPalettePopup.IsOpen && Source?.GraphType is (RedGraphType.Quest or RedGraphType.Scene))
+            {
+                ActionPalette.RefreshItems(CreateGraphActionPaletteItems(Source, _actionPaletteGraphPosition));
             }
         });
+    }
+
+    private void EnsureNodeTemplateOptions()
+    {
+        if (_nodeTemplateOptions is not null)
+        {
+            return;
+        }
+
+        _nodeTemplateOptions = new RedTypeTemplateDropdownViewModel(_redTypeTemplateService);
+        _nodeTemplateOptions.PostRefresh += NodeTemplateOptions_OnPostRefresh;
+    }
+
+    private IReadOnlyList<GraphActionPaletteItem> CreateGraphActionPaletteItems(RedGraph graph, System.Windows.Point position)
+    {
+        var items = new List<GraphActionPaletteItem>();
+        var hasNodeSelection = SelectedNodes.OfType<NodeViewModel>().Any();
+
+        items.Add(CreatePaletteCommand(
+            hasNodeSelection ? "Add Comment Around Selection" : "Add Comment",
+            "Graph",
+            "CommentTextOutline",
+            "comment annotation note",
+            () => graph.AddComment(position, SelectedNodes)));
+        items.Add(CreatePaletteCommand("Arrange Items", "Graph", "ViewDashboard", "layout arrange nodes", ArrangeNodes));
+        items.Add(CreatePaletteCommand("Hide/unhide sockets", "Graph", "Eye", "toggle sockets connectors", ToggleAllSockets));
+
+        if (GraphClipboardManager.CanPaste(graph.GraphType))
+        {
+            items.Add(CreatePaletteCommand("Paste Node", "Graph", "ContentPaste", "clipboard paste", () =>
+            {
+                if (GraphClipboardManager.GetCopiedData() is { } copiedData)
+                {
+                    graph.PasteNode(copiedData, position);
+                }
+            }));
+        }
+
+        var availableTypes = GetNodeCreationTypes(graph);
+        var typeMap = availableTypes
+            .GroupBy(entry => entry.Type.Name)
+            .ToDictionary(group => group.Key, group => group.First());
+        var addedTypes = new HashSet<Type>();
+
+        void AddNodeType(string typeName, string category)
+        {
+            if (typeMap.TryGetValue(typeName, out var entry) && addedTypes.Add(entry.Type))
+            {
+                items.Add(CreateNodePaletteItem(graph, entry.Type, category, position));
+            }
+        }
+
+        foreach (var typeName in GraphNodeCreationCatalog.CommonTypeNames)
+        {
+            AddNodeType(typeName, "Common");
+        }
+
+        foreach (var category in GraphNodeCreationCatalog.Categories)
+        {
+            if (category.Name == "Debug" && graph.GraphType == RedGraphType.Scene)
+            {
+                const string title = "UIManager (Debug Warning)";
+                items.Add(new GraphActionPaletteItem
+                {
+                    Title = title,
+                    Subtitle = "Preset scene node",
+                    Category = category.Name,
+                    SearchText = "debug warning ui manager",
+                    Glyph = GraphNodeStyling.GetIconForNodeTitle(title),
+                    Execute = () =>
+                    {
+                        var nodeId = graph.CreateCompositeSceneNode("DebugWarning", typeof(questUIManagerNodeDefinition), position);
+                        if (ReferenceEquals(Source, graph))
+                        {
+                            SelectNodeById(nodeId);
+                        }
+                    }
+                });
+            }
+
+            foreach (var typeName in category.TypeNames.Where(typeName => typeName is not null))
+            {
+                AddNodeType(typeName, category.Name);
+            }
+        }
+
+        foreach (var entry in availableTypes
+                     .Where(entry => !addedTypes.Contains(entry.Type))
+                     .OrderBy(entry => entry.Category)
+                     .ThenBy(entry => GraphNodeStyling.GetTitleForNodeType(entry.Type)))
+        {
+            var category = entry.Category == "Scene" ? "Other Scene Nodes" : "Other Quest Nodes";
+            items.Add(CreateNodePaletteItem(graph, entry.Type, category, position));
+        }
+
+        return items;
+    }
+
+    private GraphActionPaletteItem CreateNodePaletteItem(
+        RedGraph graph,
+        Type type,
+        string category,
+        System.Windows.Point position)
+    {
+        var title = GraphNodeStyling.GetTitleForNodeType(type);
+        var glyph = GraphNodeStyling.GetIconForNodeTitle(title);
+        var templateOptions = GetTemplateOptions(type);
+        var defaultTemplate = GetDefaultTemplateOption(templateOptions);
+        var templateCount = templateOptions.Count(option => option.Source != RedTypeTemplateSelectionOptionSource.Raw);
+        IReadOnlyList<GraphActionPaletteItem> variants = [];
+
+        if (templateCount > 0)
+        {
+            variants = templateOptions
+                .OrderBy(option => option.Name == "default" ? 0 : option.Source == RedTypeTemplateSelectionOptionSource.Raw ? 2 : 1)
+                .ThenBy(option => option.Name)
+                .Select(option => new GraphActionPaletteItem
+                {
+                    Title = option.Name,
+                    Subtitle = option.Source switch
+                    {
+                        RedTypeTemplateSelectionOptionSource.User => "User template",
+                        RedTypeTemplateSelectionOptionSource.System => "System template",
+                        _ => "No template"
+                    },
+                    Category = category,
+                    SearchText = $"{type.Name} {title} {option.Name} template",
+                    Glyph = glyph,
+                    ParentTitle = title,
+                    IsVariant = true,
+                    Execute = () => CreateAndSelectNode(graph, type, position, option)
+                })
+                .ToList();
+        }
+
+        return new GraphActionPaletteItem
+        {
+            Title = title,
+            Subtitle = templateCount > 0
+                ? $"{type.Name} - {templateCount} template{(templateCount == 1 ? "" : "s")}"
+                : type.Name,
+            Category = category,
+            SearchText = type.FullName ?? type.Name,
+            Glyph = glyph,
+            Variants = variants,
+            Execute = () => CreateAndSelectNode(graph, type, position, defaultTemplate)
+        };
+    }
+
+    private IReadOnlyList<RedTypeTemplateSelectionOption> GetTemplateOptions(Type type)
+    {
+        if (_nodeTemplateOptions.TemplatesByType.TryGetValue(type, out var templates))
+        {
+            return templates;
+        }
+
+        return
+        [
+            new RedTypeTemplateSelectionOption("No Template", type, "", RedTypeTemplateSelectionOptionSource.Raw)
+        ];
+    }
+
+    private static RedTypeTemplateSelectionOption GetDefaultTemplateOption(IReadOnlyList<RedTypeTemplateSelectionOption> templates) =>
+        templates.FirstOrDefault(option => option is { Name: "default", Source: RedTypeTemplateSelectionOptionSource.User }) ??
+        templates.FirstOrDefault(option => option is { Name: "default", Source: RedTypeTemplateSelectionOptionSource.System }) ??
+        templates.First(option => option.Source == RedTypeTemplateSelectionOptionSource.Raw);
+
+    private void CreateAndSelectNode(
+        RedGraph graph,
+        Type type,
+        System.Windows.Point position,
+        RedTypeTemplateSelectionOption template)
+    {
+        var nodeId = CreateNode(graph, type, position, template);
+        if (ReferenceEquals(Source, graph))
+        {
+            SelectNodeById(nodeId);
+        }
+    }
+
+    private static GraphActionPaletteItem CreatePaletteCommand(
+        string title,
+        string category,
+        string iconKind,
+        string searchText,
+        Action execute) => new()
+        {
+            Title = title,
+            Category = category,
+            IconKind = iconKind,
+            SearchText = searchText,
+            Execute = execute
+        };
+
+    private static List<(Type Type, string Category)> GetNodeCreationTypes(RedGraph graph)
+    {
+        if (graph.GraphType == RedGraphType.Quest)
+        {
+            return graph.GetQuestNodeTypes()
+                .Select(type => (type, "Quest"))
+                .ToList();
+        }
+
+        if (graph.GraphType == RedGraphType.Scene)
+        {
+            return graph.GetSceneNodeTypes()
+                .Select(type => (type, "Scene"))
+                .Concat(graph.GetQuestNodeTypesForScene().Select(type => (type, "Quest")))
+                .ToList();
+        }
+
+        return [];
     }
 
     private uint CreateNode(RedGraph graph, Type type, System.Windows.Point position, RedTypeTemplateSelectionOption template = null) =>
@@ -841,43 +999,6 @@ public partial class GraphEditorView : UserControl
             RedGraphType.Scene => graph.CreateSceneNode(type, position, template),
             _ => throw new InvalidOperationException($"Cannot create a quest or scene node in a {graph.GraphType} graph.")
         };
-
-    private int AddCatalogNodeTypes(
-        MenuItem menu,
-        IReadOnlyList<string> typeNames,
-        Dictionary<string, Type> typeMap,
-        System.Windows.Point position)
-    {
-        var addedCount = 0;
-        var separatorPending = false;
-
-        foreach (var typeName in typeNames)
-        {
-            if (typeName is null)
-            {
-                separatorPending = addedCount > 0;
-                continue;
-            }
-
-            if (!typeMap.ContainsKey(typeName))
-            {
-                continue;
-            }
-
-            if (separatorPending)
-            {
-                menu.Items.Add(new Separator());
-                separatorPending = false;
-            }
-
-            if (AddNodeToMenu(menu, typeName, typeMap, position))
-            {
-                addedCount++;
-            }
-        }
-
-        return addedCount;
-    }
 
     private static MenuItem CreateMenuItem(string header, Action click) => CreateMenuItem(header, "Empty", null, click);
 
@@ -1004,25 +1125,6 @@ public partial class GraphEditorView : UserControl
         var emoji = GraphNodeStyling.GetIconForNodeTitle(displayName);
         var leftMargin = isRootItem ? -30 : -15;
         parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () => createNode(new NodeCreationParams(nodeType)), leftMargin));
-    }
-
-    private bool AddNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, System.Windows.Point position, bool isRootItem = false)
-    {
-        if (!typeMap.TryGetValue(typeName, out var nodeType))
-        {
-            return false;
-        }
-
-        var displayName = GraphNodeStyling.GetTitleForNodeType(nodeType);
-        var emoji = GraphNodeStyling.GetIconForNodeTitle(displayName);
-        var leftMargin = isRootItem ? -30 : -15;
-        parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () =>
-        {
-            var nodeId = CreateNode(Source, nodeType, position);
-            SelectNodeById(nodeId);
-        }, leftMargin));
-
-        return true;
     }
 
     #region INotifyPropertyChanged
