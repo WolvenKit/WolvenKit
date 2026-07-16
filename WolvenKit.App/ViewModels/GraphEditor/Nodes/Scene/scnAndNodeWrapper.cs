@@ -137,13 +137,15 @@ public class scnAndNodeWrapper : BaseSceneViewModel<scnAndNode>, IDynamicInputNo
             .OrderByDescending(input => input.Ordinal)
             .FirstOrDefault();
 
-        if (removableSocket != null)
+        if (removableSocket == null)
         {
-            Input.Remove(removableSocket);
-            _castedData.NumInSockets--;
-
-            // Notify UI and mark document dirty
-            NotifySocketsChanged();
+            return;
         }
+
+        Input.Remove(removableSocket);
+        _castedData.NumInSockets--;
+
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
     }
 }

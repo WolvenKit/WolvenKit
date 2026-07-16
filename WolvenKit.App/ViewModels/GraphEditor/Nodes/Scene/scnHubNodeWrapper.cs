@@ -126,12 +126,14 @@ public class scnHubNodeWrapper : BaseSceneViewModel<scnHubNode>, IDynamicInputNo
             .OrderByDescending(input => input.Ordinal)
             .FirstOrDefault();
 
-        if (removableSocket != null)
+        if (removableSocket == null)
         {
-            Input.Remove(removableSocket);
-
-            // Notify UI and mark document dirty
-            NotifySocketsChanged();
+            return;
         }
+
+        Input.Remove(removableSocket);
+
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
     }
 }
