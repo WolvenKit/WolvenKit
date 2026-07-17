@@ -185,43 +185,9 @@ public partial class ChunkViewModel
     }
 
     // Duplicate-safe search and replace
-    private static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord, bool isRegex)
-    {
-        if (s_replacedStrings.Contains(input))
-        {
-            return input;
-        }
-
-        if (isWholeWord)
-        {
-            if (input != searchOrPattern)
-            {
-                return input;
-            }
-
-            s_replacedStrings.Add(replace);
-            return replace;
-
-        }
-
-        string ret;
-        if (isRegex)
-        {
-            ret = Regex.Replace(input, searchOrPattern, replace);
-        }
-        else
-        {
-            ret = input.Replace(searchOrPattern, replace);
-        }
-
-        if (ret != input)
-        {
-            s_replacedStrings.Add(ret);
-        }
-
-        return ret;
-
-    }
+    private static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord,
+        bool isRegex) =>
+        StringHelper.ReplaceInString(input, searchOrPattern, replace, isWholeWord, isRegex, s_replacedStrings);
 
     private bool SearchAndReplaceInReference(string search, string replace, bool isWholeWord, bool isRegex,
         IRedRef reference, out IRedRef outReference)
