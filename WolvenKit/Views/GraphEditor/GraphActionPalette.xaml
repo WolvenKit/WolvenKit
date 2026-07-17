@@ -141,14 +141,8 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-
         <Border
             x:Name="MainPanel"
-            Grid.Column="{Binding MainPanelColumn, ElementName=Root}"
             Width="380"
             Height="520"
             VerticalAlignment="Top"
@@ -308,44 +302,48 @@
             </Grid>
         </Border>
 
-        <Border
-            x:Name="VariantPanel"
-            Grid.Column="{Binding VariantPanelColumn, ElementName=Root}"
-            Width="230"
-            MaxHeight="420"
-            Margin="{Binding VariantPanelMargin, ElementName=Root}"
-            VerticalAlignment="Top"
-            Background="{DynamicResource ContentBackgroundAlt3}"
-            BorderBrush="{DynamicResource BorderAlt}"
-            BorderThickness="1"
-            CornerRadius="4"
-            Visibility="{Binding IsVariantPanelVisible, ElementName=Root, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid Margin="8">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+        <Popup
+            x:Name="VariantPopup"
+            AllowsTransparency="True"
+            Placement="Custom"
+            PlacementTarget="{Binding ElementName=MainPanel}"
+            StaysOpen="True">
+            <Border
+                x:Name="VariantPanel"
+                Width="230"
+                MaxHeight="420"
+                Background="{DynamicResource ContentBackgroundAlt3}"
+                BorderBrush="{DynamicResource BorderAlt}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                <TextBlock
-                    Margin="4,1,4,7"
-                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                    FontWeight="SemiBold"
-                    Text="{Binding VariantHeading, ElementName=Root}"
-                    TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        Margin="4,1,4,7"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontWeight="SemiBold"
+                        Text="{Binding VariantHeading, ElementName=Root}"
+                        TextTrimming="CharacterEllipsis" />
 
-                <ListBox
-                    x:Name="VariantList"
-                    Grid.Row="1"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    ItemContainerStyle="{StaticResource PaletteListItemStyle}"
-                    ItemTemplate="{StaticResource VariantItemTemplate}"
-                    ItemsSource="{Binding VariantItems, ElementName=Root}"
-                    PreviewMouseLeftButtonUp="VariantList_OnPreviewMouseLeftButtonUp"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    SelectionMode="Single" />
-            </Grid>
-        </Border>
+                    <ListBox
+                        x:Name="VariantList"
+                        Grid.Row="1"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemContainerStyle="{StaticResource PaletteListItemStyle}"
+                        ItemTemplate="{StaticResource VariantItemTemplate}"
+                        ItemsSource="{Binding VariantItems, ElementName=Root}"
+                        PreviewKeyDown="OnPreviewKeyDown"
+                        PreviewMouseLeftButtonUp="VariantList_OnPreviewMouseLeftButtonUp"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        SelectionMode="Single" />
+                </Grid>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>
