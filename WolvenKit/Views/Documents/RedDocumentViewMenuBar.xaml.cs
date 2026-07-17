@@ -410,18 +410,17 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var failedMeshes = selected.Where(mesh =>
-                !_documentTools.CopyMeshMaterials(currentPath, mesh, false)
-            ).ToList();
+            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh, false))
+                .ToList();
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
             if (failedMeshes.Count == 0)
             {
-                _loggerService.Success($"Copied materials from {currentPath} to {output}");
-                _notificationService.Success(
-                    $"Copied materials from {currentPath} to {selected.Count} file(s). Check the log for details.");
-                return;
+            _loggerService.Success($"Copied materials from {currentPath} to {output}");
+            _notificationService.Success(
+                $"Copied materials from {currentPath} to {selected.Count} file(s). Check the log for details.");
+            return;
             }
 
             output = output + ", but there were problems:\nMaterial copy failed for:" +
