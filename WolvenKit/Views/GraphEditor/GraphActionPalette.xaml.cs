@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -51,13 +52,10 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
     private string _variantHeading = "";
     private bool _isVariantPanelVisible;
     private bool _variantsOnLeft;
-    private int _mainPanelColumn;
-    private int _variantPanelColumn = 1;
-    private Thickness _variantPanelMargin = new(4, 0, 0, 0);
+    private double _variantPanelTop;
 
     public event EventHandler DismissRequested;
     public event EventHandler ActionExecuted;
-    public event Action<double> MainPanelHorizontalAdjustmentRequested;
     public event PropertyChangedEventHandler PropertyChanged;
 
     public Func<bool> ShouldPlaceVariantsOnLeft { get; set; } = () => false;
@@ -97,27 +95,10 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
         private set => SetField(ref _isVariantPanelVisible, value);
     }
 
-    public Thickness VariantPanelMargin
-    {
-        get => _variantPanelMargin;
-        private set => SetField(ref _variantPanelMargin, value);
-    }
-
-    public int MainPanelColumn
-    {
-        get => _mainPanelColumn;
-        private set => SetField(ref _mainPanelColumn, value);
-    }
-
-    public int VariantPanelColumn
-    {
-        get => _variantPanelColumn;
-        private set => SetField(ref _variantPanelColumn, value);
-    }
-
     public GraphActionPalette()
     {
         InitializeComponent();
+        VariantPopup.CustomPopupPlacementCallback = PlaceVariantPopup;
     }
 
     public void Open(string heading, IReadOnlyList<GraphActionPaletteItem> items)
@@ -148,6 +129,8 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
             ShowVariants(parent, null, false);
         }
     }
+
+    public void Close() => CloseVariantPanel(false);
 
     private void RefreshVisibleItems()
     {
@@ -342,7 +325,6 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
             VariantItems.Add(variant);
         }
 
-        IsVariantPanelVisible = true;
         ActionList.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty, item);
         PositionVariantPanel(item, anchor);
 
@@ -362,19 +344,32 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
                       ActionList.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
             if (row is null)
             {
-                VariantPanelMargin = new Thickness(4, 0, 0, 0);
+                CloseVariantPanel(false);
                 return;
             }
 
-            var rowTop = row.TranslatePoint(new Point(0, 0), Root).Y;
+            var rowTop = row.TranslatePoint(new Point(0, 0), MainPanel).Y;
             var estimatedPanelHeight = Math.Min(420, 48 + (VariantItems.Count * 48));
             var maxTop = Math.Max(0, MainPanel.ActualHeight - estimatedPanelHeight);
-            SetVariantPanelPlacement(ShouldPlaceVariantsOnLeft());
-            var top = Math.Clamp(rowTop, 0, maxTop);
-            VariantPanelMargin = _variantsOnLeft
-                ? new Thickness(0, top, VariantPanelGap, 0)
-                : new Thickness(VariantPanelGap, top, 0, 0);
+            _variantsOnLeft = ShouldPlaceVariantsOnLeft();
+            _variantPanelTop = Math.Clamp(rowTop, 0, maxTop);
+
+            VariantPopup.SetCurrentValue(Popup.IsOpenProperty, false);
+            IsVariantPanelVisible = true;
+            VariantPopup.SetCurrentValue(Popup.IsOpenProperty, true);
         }, DispatcherPriority.Loaded);
+    }
+
+    private CustomPopupPlacement[] PlaceVariantPopup(Size popupSize, Size targetSize, Point offset)
+    {
+        var left = new CustomPopupPlacement(
+            new Point(-(popupSize.Width + VariantPanelGap), _variantPanelTop),
+            PopupPrimaryAxis.Horizontal);
+        var right = new CustomPopupPlacement(
+            new Point(targetSize.Width + VariantPanelGap, _variantPanelTop),
+            PopupPrimaryAxis.Horizontal);
+
+        return _variantsOnLeft ? [left, right] : [right, left];
     }
 
     private void CloseVariantPanel(bool returnFocus)
@@ -382,8 +377,9 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
         var parent = _variantParent;
         _variantParent = null;
         IsVariantPanelVisible = false;
+        VariantPopup.SetCurrentValue(Popup.IsOpenProperty, false);
         VariantItems.Clear();
-        SetVariantPanelPlacement(false);
+        _variantsOnLeft = false;
 
         if (!returnFocus)
         {
@@ -433,39 +429,6 @@ public partial class GraphActionPalette : UserControl, INotifyPropertyChanged
 
         list.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedIndexProperty, index);
         list.ScrollIntoView(list.SelectedItem);
-    }
-
-    private void SetVariantPanelPlacement(bool placeOnLeft)
-    {
-        if (_variantsOnLeft == placeOnLeft)
-        {
-            return;
-        }
-
-        double? mainPanelScreenX = PresentationSource.FromVisual(MainPanel) is null
-            ? null
-            : MainPanel.PointToScreen(new Point()).X;
-        _variantsOnLeft = placeOnLeft;
-        MainPanelColumn = placeOnLeft ? 1 : 0;
-        VariantPanelColumn = placeOnLeft ? 0 : 1;
-        if (mainPanelScreenX is null)
-        {
-            return;
-        }
-
-        Dispatcher.BeginInvoke(() =>
-        {
-            if (PresentationSource.FromVisual(MainPanel) is null)
-            {
-                return;
-            }
-
-            var horizontalAdjustment = mainPanelScreenX.Value - MainPanel.PointToScreen(new Point()).X;
-            if (Math.Abs(horizontalAdjustment) > 0.5)
-            {
-                MainPanelHorizontalAdjustmentRequested?.Invoke(horizontalAdjustment);
-            }
-        }, DispatcherPriority.Render);
     }
 
     private void ExecuteSelectedItem(ListBox list)

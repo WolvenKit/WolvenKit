@@ -156,19 +156,13 @@ public partial class GraphEditorView : UserControl
         _appViewModel = Locator.Current.GetService<AppViewModel>();
         ActionPalette.DismissRequested += (_, _) => CloseActionPalette();
         ActionPalette.ActionExecuted += (_, _) => CloseActionPalette();
+        ActionPalettePopup.Closed += (_, _) => ActionPalette.Close();
         ActionPalette.ShouldPlaceVariantsOnLeft = () =>
         {
             var spaceOnRight = Editor.ActualWidth -
                                (_actionPalettePopupHorizontalOffset + GraphActionPalette.MainPanelWidth);
             return spaceOnRight < GraphActionPalette.VariantPanelTotalWidth &&
                    _actionPalettePopupHorizontalOffset >= GraphActionPalette.VariantPanelTotalWidth;
-        };
-        ActionPalette.MainPanelHorizontalAdjustmentRequested += horizontalAdjustment =>
-        {
-            var offset = ActionPalettePopup.HorizontalOffset + horizontalAdjustment;
-            ActionPalettePopup.SetCurrentValue(
-                System.Windows.Controls.Primitives.Popup.HorizontalOffsetProperty,
-                offset);
         };
 
         Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
@@ -806,8 +800,11 @@ public partial class GraphEditorView : UserControl
         ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, true);
     }
 
-    private void CloseActionPalette() =>
+    private void CloseActionPalette()
+    {
+        ActionPalette.Close();
         ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+    }
 
     private void NodeTemplateOptions_OnPostRefresh(object sender, EventArgs e)
     {
