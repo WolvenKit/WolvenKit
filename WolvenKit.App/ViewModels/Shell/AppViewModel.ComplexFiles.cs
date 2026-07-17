@@ -472,4 +472,76 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             _notificationService.Success($"Successfully added {filesToAdd.Count} files to your project.");
         }
     }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void AddNPV()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        if (Interactions.ShowNpvCreationDialogue(activeProject) is not { } dialogModel)
+        {
+            return;
+        }
+
+        List<string> filesToAdd = [];
+        var failedFiles = 0;
+        //
+        //
+        // var filesToAdd = dialogModel.SelectedFiles.ToList();
+        // var existingFiles = activeProject.ModFiles.Where(f => dialogModel.SelectedFiles.Contains(f)).ToList();
+        //
+        // if (existingFiles.Count > 0 && !Interactions.ShowQuestionYesNo((
+        //         $"Do you want to overwrite the existing files \n\t{string.Join("\n\t", existingFiles)}?",
+        //         "One or more files already exists!")))
+        // {
+        //     filesToAdd = filesToAdd.Where(f => !existingFiles.Contains(f)).ToList();
+        // }
+        //
+        // if (filesToAdd.Count == 0)
+        // {
+        //     return;
+        // }
+        //
+        // _notificationService.Info("Adding player head files. Wolvenkit may be unresponsive...");
+        //
+        // var failedFiles = 0;
+        // var tasks = filesToAdd.Select(relativePath => Task.Run(() =>
+        // {
+        //     try
+        //     {
+        //         ProjectResourceTools.AddToProject(relativePath);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         System.Threading.Interlocked.Increment(ref failedFiles);
+        //         _loggerService.Error($"Failed to add file {relativePath}: {e.Message}");
+        //     }
+        // })).ToArray();
+        //
+        // Task.WhenAll(tasks).GetAwaiter().GetResult();
+
+        if (filesToAdd.Count == failedFiles)
+        {
+            _loggerService.Error("Failed to add player head files. Please see the log view for details.");
+            _notificationService.Error("Failed to add player head files. Please see the log view for details.");
+        }
+        else if (failedFiles > 0)
+        {
+            _loggerService.Success(
+                $"Added {filesToAdd.Count - failedFiles} files. {failedFiles} files failed. See log for details.");
+            _loggerService.Warning($"{failedFiles} files failed. See log for details.");
+            _notificationService.Success(
+                $"Added {filesToAdd.Count - failedFiles} files. {failedFiles} files failed. See log for details.");
+            _notificationService.Warning($"{failedFiles} files failed. See log for details.");
+        }
+        else
+        {
+            _loggerService.Success(
+                $"Added player head files. For sculpting tutorial, see {WikiLinks.PlayerHeadTutorial}.");
+            _notificationService.Success($"Successfully added {filesToAdd.Count} files to your project.");
+        }
+    }
 }

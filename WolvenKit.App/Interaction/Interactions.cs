@@ -259,6 +259,9 @@ public static class Interactions
         (Cp77Project currentProject) => throw new NotImplementedException();
     public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
 
+    public static Func<Cp77Project, NpvCreationDialogViewModel?> ShowNpvCreationDialogue { get; set; } =
+        _ => throw new NotImplementedException();
+
     public static Func<(IEnumerable<IDisplayable>? availableItems, IEnumerable<IDisplayable>? selectedItems),
         IEnumerable<IDisplayable>> ShowCollectionView { get; set; } = _ => throw new NotImplementedException();
 
