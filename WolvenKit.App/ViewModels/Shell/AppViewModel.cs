@@ -793,7 +793,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task NewProject()
     {
         //IsOverlayShown = false;
-        await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
+        await SetActiveDialog(new ProjectWizardViewModel(SettingsManager, _recentlyUsedItemsService)
         {
             FileHandler = NewProject
         });
@@ -836,6 +836,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             np.CreateDefaultDirectories();
 
             await LoadProjectFromPathAsync(projectLocation);
+
+            // Apply the group chosen in the wizard to the newly created recent project.
+            if (!string.IsNullOrWhiteSpace(project.SelectedGroup))
+            {
+                var recent = _recentlyUsedItemsService.Items.Items
+                    .FirstOrDefault(i => i.Name == projectLocation);
+                if (recent is not null)
+                {
+                    recent.Group = project.SelectedGroup.Trim();
+                }
+            }
         }
         catch (Exception ex)
         {
