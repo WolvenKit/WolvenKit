@@ -960,6 +960,15 @@ public partial class RedImage : IDisposable
 
     private static unsafe RedImage Create(STextureGroupSetup setup, rendRenderTextureBlobPC blob)
     {
+        if (setup.RawFormat == ETextureRawFormat.TRF_Invalid)
+        {
+            if (setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale && setup.Compression == ETextureCompression.TCM_QualityR || setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color && setup.Compression == ETextureCompression.TCM_DXTAlpha)
+            {
+                setup.RawFormat = ETextureRawFormat.TRF_Grayscale;
+            }
+        }
+            
+         
         var info = new DDSUtils.DDSInfo()
         {
             Compression = setup.Compression,

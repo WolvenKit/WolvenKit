@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W;
@@ -181,7 +183,7 @@ public static class CommonFunctions
         return (outRawFormat, outCompression, outPixelSize);
     }
 
-    public static DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, bool isGamma)
+    public static DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, bool isGamma, string? sourcePath = null)
     {
         return compression switch
         {
@@ -199,7 +201,11 @@ public static class CommonFunctions
                 ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
                 ETextureRawFormat.TRF_R32UI => DXGI_FORMAT.DXGI_FORMAT_R32_UINT,
 
-                ETextureRawFormat.TRF_Invalid => throw new NotImplementedException(),
+                ETextureRawFormat.TRF_Invalid => IsKnownTrfInvalidFile(sourcePath)
+                    ? GetFallbackForKnownInvalid(compression)
+                    : throw new NotImplementedException(
+                        $"TRF_Invalid is not handled for this texture. File: {sourcePath ?? "unknown"}"),
+
                 ETextureRawFormat.TRF_Max => throw new NotImplementedException(),
                 _ => throw new ArgumentOutOfRangeException(),
             },
@@ -250,6 +256,34 @@ public static class CommonFunctions
             _ when fileName.Contains("_icon") => GpuWrapApieTextureGroup.TEXG_Generic_UI,
             _ => GpuWrapApieTextureGroup.TEXG_Generic_Color
         };
+    }
+
+    private static bool IsKnownTrfInvalidFile(string? path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        return path.Contains("kitsch_dj_set_e", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("poor_fly_killer_a_decal_r", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("q001_bathtub_ice_instances_r", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("blood_decal_01_r", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("t_001__drill_machine_screen_frame_r", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("t_001__drill_machine_screen_frame_m", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("t_001__drill_machine_screen_r", StringComparison.OrdinalIgnoreCase) ||
+               path.Contains("t_001__drill_machine_screen_m", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static DXGI_FORMAT GetFallbackForKnownInvalid(ETextureCompression compression)
+    {
+        Log.Warning("Applying known TRF_Invalid fallback. Compression: {Compression}", compression);
+
+        if (compression == ETextureCompression.TCM_QualityR)
+            return DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
+
+        if (compression == ETextureCompression.TCM_DXTAlpha)
+            return DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
+
+        return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
     }
 
     /// <summary>
