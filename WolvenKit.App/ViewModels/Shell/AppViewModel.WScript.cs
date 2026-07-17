@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Semver;
 using Microsoft.VisualBasic.FileIO;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -173,7 +174,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 continue;
             }
 
-            _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
+            _loggerService.Info($"Scanning {ActiveProject.GetGameRelativePath(file.FileName)}");
             try
             {
                 await _scriptService.ExecuteAsync(code);
@@ -315,9 +316,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 }
 
                 File.Delete(destPath);
+                _projectEvents.PublishFileDeleted(destPath);
             }
 
             File.Copy(filePath, destPath);
+            _projectEvents.PublishFileImported(destPath);
         }
 
         try
@@ -341,7 +344,12 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         try
         {
             File.Delete(destPath);
-            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject);
+            _projectEvents.PublishFileDeleted(destPath);
+            // NOTE: destPath sits directly under RawDirectory, so DeleteEmptyParents stops immediately
+            // (it never deletes a folder directly under the project root), i.e. nothing to publish here in
+            // practice. We still forward _projectEvents so that if this path ever moves deeper, the emptied
+            // folders it removes are announced to the tree rather than left stale.
+            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject, _projectEvents);
         }
         catch
         {

@@ -45,7 +45,6 @@ namespace WolvenKit.Views.Documents
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
-        private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
         private readonly ProjectExplorerViewModel _projectExplorer;
@@ -56,24 +55,22 @@ namespace WolvenKit.Views.Documents
         private readonly ICvmTools _cvmTools;
         private readonly Cr2WTools _cr2WTools;
 
-
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
             _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
             _projectManager = Locator.Current.GetService<IProjectManager>()!;
             _loggerService = Locator.Current.GetService<ILoggerService>()!;
-            _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
-            _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;
             _cvmTools = Locator.Current.GetService<ICvmTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
+            _projectExplorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()!;
 
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
@@ -205,7 +202,7 @@ namespace WolvenKit.Views.Documents
                 var allReferences = await project.GetAllReferencesAsync(
                     _progressService,
                     _loggerService,
-                    [project.GetRelativePath(CurrentTab.FilePath)]
+                    [project.GetGameRelativePath(CurrentTab.FilePath)]
 
                 );
 
@@ -319,7 +316,7 @@ namespace WolvenKit.Views.Documents
                     .ToList();
 
             var filterDefaultValue = string.Empty;
-            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+            if (Path.GetDirectoryName(project.GetGameRelativePath(currentPath)) is string parentFolder &&
                 otherMeshFiles.Any(f => f.Contains(parentFolder)))
             {
                 filterDefaultValue = parentFolder;
@@ -393,7 +390,7 @@ namespace WolvenKit.Views.Documents
             }
 
             var filterDefaultValue = string.Empty;
-            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+            if (Path.GetDirectoryName(project.GetGameRelativePath(currentPath)) is string parentFolder &&
                 otherMeshFiles.Select(kvp => kvp.Key).Any(f => f.Contains(parentFolder)))
             {
                 filterDefaultValue = parentFolder;
@@ -859,9 +856,12 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                _projectWatcher.Suspend();
 
+                _projectExplorer.SuspendFileWatcher();
+
+                // TODO: Migrate to use RefreshAfter
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
+
                 _notificationService.Success("Successfully added dependencies");
                 _loggerService.Success("Successfully added dependencies");
             }
@@ -883,11 +883,10 @@ namespace WolvenKit.Views.Documents
                 }
 
                 // Project browser will throw an error if we do it immediately - so let's not
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
-                    await Task.Delay(100);
-                    _projectWatcher.Refresh();
-                    _projectWatcher.Resume();
+                    DispatcherHelper.DelayOnMainThread(() =>
+                            _projectExplorer.ResumeWatcher_AndReloadProject(), 100);
                 });
             }
 
@@ -1178,7 +1177,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                var relativePath = project.GetRelativePath(currentFile);
+                var relativePath = project.GetGameRelativePath(currentFile);
 
                 _loggerService.Info("Reading references from .app file...");
                 var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(

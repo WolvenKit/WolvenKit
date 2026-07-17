@@ -39,12 +39,13 @@ public partial class AppScriptService : ScriptService
         ImportExportHelper importExportHelper,
         IHookService hookService,
         IGameControllerFactory gameController,
-        GeometryCacheService geometryCacheService) : base(loggerService)
+        GeometryCacheService geometryCacheService,
+        IProjectEvents projectEvents) : base(loggerService)
     {
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService, settingsManager);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService, settingsManager, projectEvents);
         _ui = new UiScriptFunctions(this);
 
         DefaultHostObject = new() { { "wkit", _wkit } };
@@ -60,15 +61,19 @@ public partial class AppScriptService : ScriptService
 
     private ProjectExplorerViewModel? GetProjectExplorerViewModel()
     {
-        _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
+        if (_projectExplorerViewModel == null && _wkit.AppViewModel != null)
+        {
+            _projectExplorerViewModel = _wkit.AppViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+        }
         return _projectExplorerViewModel;
     }
 
     public async Task ExecuteAsync(string code, bool enableDebugging = false)
     {
-        GetProjectExplorerViewModel()?.SuspendFileWatcher();
-        await ExecuteAsync(code, DefaultHostObject, null, enableDebugging);
-        GetProjectExplorerViewModel()?.ResumeFileWatcher();
+        var vm = GetProjectExplorerViewModel()!;
+        vm.SuspendFileWatcher();
+        await vm.RefreshAfter(async () => await ExecuteAsync(code, DefaultHostObject, null, enableDebugging));
+        vm.ResumeFileWatcher();
     }
 
     public void SetAppViewModel(AppViewModel appViewModel) => _wkit.AppViewModel = appViewModel;

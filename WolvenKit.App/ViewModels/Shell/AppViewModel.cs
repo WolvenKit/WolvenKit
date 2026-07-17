@@ -20,6 +20,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -71,6 +72,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
+    private readonly IProjectEvents _projectEvents;
     private readonly IGameControllerFactory _gameControllerFactory;
     private readonly INotificationService _notificationService;
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -83,7 +85,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     public readonly TemplateFileTools TemplateFileTools;
-    private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     private readonly RedTypeTemplateService _redTypeTemplateService;
@@ -111,7 +112,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         ArchiveXlItemService archiveXlItemService,
         AppScriptService scriptService,
         IModTools modTools,
@@ -120,6 +120,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
+        IProjectEvents projectEvents,
         RedTypeTemplateService redTypeTemplateService
     )
     {
@@ -138,7 +139,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _watcherService = watcherService;
         _archiveXlItemService = archiveXlItemService;
         _scriptService = scriptService;
         _documentTools = documentTools;
@@ -146,6 +146,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
+        _projectEvents = projectEvents;
+        _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
+        _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
         _redTypeTemplateService = redTypeTemplateService;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
@@ -711,7 +714,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-            await LoadProjectFromPathAsync(location);
+            await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
 
@@ -835,7 +838,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await LoadProjectFromPathAsync(projectLocation);
+            await RunAfterModalClosed(async () =>
+            {
+                await LoadProjectFromPathAsync(projectLocation);
+            });
         }
         catch (Exception ex)
         {
@@ -849,7 +855,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveFile() => Save(ActiveDocument.NotNull());
+    private void SaveFile()
+    {
+        if (ActiveDocument is not IDocumentViewModel document)
+        {
+            return;
+        }
+        GetToolViewModel<ProjectExplorerViewModel>().SuspendFileWatcher();
+        _projectEvents.PublishFileChanged(new FileChangedMessage.Document(document));
+        Save(document);
+        GetToolViewModel<ProjectExplorerViewModel>().ResumeFileWatcher();
+    }
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
@@ -1030,7 +1046,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
+    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService, _projectEvents);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void DeleteEmptyMeshes()
@@ -1113,9 +1129,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
-            .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
+            .Where(f => !referencesHashSet.Contains(ActiveProject.GetGameRelativePath(f))) // they're used
             .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
-            .Where(f => !ActiveProject.GetRelativePath(f)
+            .Where(f => !ActiveProject.GetGameRelativePath(f)
                 .StartsWith(@"base\characters\appearances\main_npc\npv")) // npv apps
             .ToList();
 
@@ -1421,15 +1437,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.Suspend();
+        GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
         try
         {
             _archiveXlItemService.CreateEquipmentItem(item);
         }
         finally
         {
-            _watcherService.Resume();
-            _watcherService.Refresh();
+            GetToolViewModel<ProjectExplorerViewModel>()?
+                .ResumeWatcher_AndReloadProject();
         }
     }
 
@@ -1597,8 +1613,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
+            // Clean tab: nothing to lose, so refresh silently to show the new on-disk content.
+            if (!documentViewModel.IsDirty)
+            {
+                documentViewModel.Reload(true);
+                continue;
+            }
+
+            // Dirty tab: the user has unsaved edits — let them choose rather than discarding them.
             var result = Interactions.ShowConfirmation((
-                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                $"The file {documentViewModel.FilePath} has been modified on disk, but you have unsaved changes. " +
+                "Reload and discard your changes?",
                 "File Modified",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
@@ -1890,6 +1915,102 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             IsOverlayShown = false;
         }
+
+        // Run any work that was deferred because an overlay or dialog was open.
+        // This gives animations (like OverlayFadeOut) a clean shot at the UI thread.
+        while (_pendingAfterModalCloseActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            var action = _pendingAfterModalCloseActions.Dequeue();
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred post-modal action: {ex.Message}");
+            }
+        }
+
+        while (_pendingAfterModalCloseAsyncActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            var asyncAction = _pendingAfterModalCloseAsyncActions.Dequeue();
+            _ = ExecuteDeferredAsync(asyncAction);
+        }
+    }
+
+    private async Task ExecuteDeferredAsync(Func<Task> asyncAction)
+    {
+        try
+        {
+            await asyncAction();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+        }
+    }
+
+    private readonly Queue<Action> _pendingAfterModalCloseActions = new();
+    private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
+
+    /// <summary>
+    /// Schedules an action to run on the UI thread after all modals and overlays have fully closed.
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time.
+    /// </summary>
+    public void RunAfterModalClosed(Action action)
+    {
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            action();
+        }
+        else
+        {
+            _pendingAfterModalCloseActions.Enqueue(action);
+        }
+    }
+
+    /// <summary>
+    /// Schedules an async action to run on the UI thread after all modals and overlays have fully closed.
+    /// Returns a Task that completes when the action has executed (immediately if no modals are open,
+    /// or after the close animation + execution if deferred).
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time, while still allowing callers to await completion.
+    /// </summary>
+    public Task RunAfterModalClosed(Func<Task> asyncAction)
+    {
+        _progressService.Status = EStatus.Running;
+        _progressService.IsIndeterminate = true;
+
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            var task = asyncAction();
+            // Ensure errors are logged even if caller does not await the returned task.
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    _loggerService.Error($"Error running immediate post-modal async action: {t.Exception?.GetBaseException().Message}");
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+            return task;
+        }
+
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _pendingAfterModalCloseAsyncActions.Enqueue(async () =>
+        {
+            try
+            {
+                await asyncAction();
+                tcs.TrySetResult();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+                tcs.TrySetException(ex);
+            }
+        });
+        return tcs.Task;
     }
 
     private bool CanCloseOverlay() => IsOverlayShown;
@@ -2939,7 +3060,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else if (!saveIfDirty)
         {
             _loggerService.Warning(
-                $"File {project.GetRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
+                $"File {project.GetGameRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
             return;
         }
 
@@ -2952,7 +3073,133 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch
         {
-            _loggerService.Error($"Failed to reload {project.GetRelativePath(absolutePath)}");
+            _loggerService.Error($"Failed to reload {project.GetGameRelativePath(absolutePath)}");
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an authoritative set of file moves/renames (from
+    /// <see cref="IProjectEvents.FilesMoved"/>). A tab whose file was relocated is retargeted to the
+    /// new path and reloaded; a tab already open at a move's destination (i.e. it was overwritten) is
+    /// reloaded in place.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterMoves(FilesMovedMessage msg)
+    {
+        if (!DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return; // nothing open to refresh (fast path for large directory moves)
+        }
+
+        foreach (var (from, to) in msg.Moves)
+        {
+            // A real relocation (rename/move): follow the open tab from its old path to the new one.
+            var handledMovedTab = !string.IsNullOrEmpty(from)
+                                  && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                                  && TryRefreshOpenDocument(from, to);
+
+            // Otherwise a document already open at the destination had its content replaced.
+            if (!handledMovedTab)
+            {
+                TryRefreshOpenDocument(to);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an authoritative set of imported/created files (from
+    /// <see cref="IProjectEvents.FilesImported"/>, e.g. import, convert, overwrite-with-game-file).
+    /// Any open tab whose file was overwritten is reloaded in place.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterImports(FilesImportedMessage msg)
+    {
+        if (_projectManager.ActiveProject is not { } project
+            || !DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return;
+        }
+
+        switch (msg)
+        {
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var gameFile in files)
+                {
+                    // FileName is a resource path and may use '/'; normalize to an OS path so it matches the
+                    // document's FilePath (which the watcher builds via FileInfo).
+                    TryRefreshOpenDocument(Path.GetFullPath(Path.Combine(project.ModDirectory, gameFile.FileName)));
+                }
+
+                break;
+
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var rawFile in files)
+                {
+                    TryRefreshOpenDocument(rawFile.FullName);
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// If a document is open at <paramref name="currentFilePath"/>, refresh it from disk, optionally
+    /// retargeting it to <paramref name="newFilePath"/> first (for a rename/move). Clean documents are
+    /// reloaded silently; documents with unsaved changes are skipped with a warning so edits aren't
+    /// lost. Returns true if a matching open document was found.
+    /// </summary>
+    private bool TryRefreshOpenDocument(string currentFilePath, string? newFilePath = null)
+    {
+        var targetPath = newFilePath ?? currentFilePath;
+
+        if (string.IsNullOrEmpty(currentFilePath) || !File.Exists(targetPath))
+        {
+            return false;
+        }
+
+        if (DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(doc =>
+                currentFilePath.Equals(doc.FilePath, StringComparison.OrdinalIgnoreCase)) is not { } openDocument)
+        {
+            return false;
+        }
+
+        if (openDocument.IsDirty)
+        {
+            _loggerService.Warning(
+                $"\"{Path.GetFileName(targetPath)}\" changed on disk but has unsaved changes; its editor was not refreshed.");
+            return true;
+        }
+
+        if (!targetPath.Equals(openDocument.FilePath, StringComparison.OrdinalIgnoreCase))
+        {
+            openDocument.FilePath = targetPath; // follow the rename/move so Reload reads the new file
+        }
+
+        try
+        {
+            openDocument.Reload(true);
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to refresh \"{Path.GetFileName(targetPath)}\" after it changed on disk.");
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Runs an open-document refresh on the UI thread, swallowing and logging any error. The
+    /// FilesMoved/FilesImported subscriptions run synchronously on the publishing thread, so a throw
+    /// here would escape into the publisher (e.g. MoveAndRefactorAsync mid-rename) and strand the
+    /// file watcher / guard. Refreshing documents is best-effort and must never do that.
+    /// </summary>
+    private void SafeRefreshOpenDocuments(Action refresh)
+    {
+        try
+        {
+            DispatcherHelper.RunOnMainThread(refresh);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to refresh open documents after a file change: {ex.Message}");
         }
     }
 
@@ -2983,7 +3230,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch
         {
-            _loggerService.Error($"Failed to save {project.GetRelativePath(absolutePath)}");
+            _loggerService.Error($"Failed to save {project.GetGameRelativePath(absolutePath)}");
             return false;
         }
 
