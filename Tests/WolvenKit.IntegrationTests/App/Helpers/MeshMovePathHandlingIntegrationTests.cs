@@ -17,15 +17,16 @@ using Assert = Xunit.Assert;
 namespace WolvenKit.IntegrationTests.App.Helpers;
 
 /// <summary>
-/// Guards the game-relative path handling that <c>TemplateFileTools.MoveMesh</c> (GeneratePropItem's
-/// "move meshes to folder") relies on: a mesh under <c>archive</c> is relocated into a sibling folder by
-/// deriving <c>(root, sourceGameRel, destGameRel)</c> exactly the way MoveMesh does, then calling
-/// <see cref="ProjectResourceTools.MoveAndRefactorAsync"/>.
+/// Guards the path handling that <c>TemplateFileTools.MoveMesh</c> (GeneratePropItem's
+/// "move meshes to folder") relies on: a mesh under <c>archive</c> is relocated into a sibling
+/// folder by deriving <c>(root, sourceRawRel, destRawRel)</c> exactly the way MoveMesh does,
+/// then calling <see cref="ProjectResourceTools.MoveAndRefactorAsync"/>.
 ///
-/// The file must land at the intended target — NOT at a double-prefixed <c>archive\archive\...</c> path,
-/// which is what feeding a raw-relative path into the game-relative API used to produce. This is a
-/// filesystem-backed test (real move) but needs no game install: the archive manager is mocked and
-/// <c>refactor: false</c> keeps it off the Cr2W/reference-rewriting path.
+/// Raw-relative paths include the <c>archive\</c> segment and must be joined with
+/// <see cref="Cp77Project.FileDirectory"/> (<c>source/</c>). Feeding them with the archive
+/// subdir as prefix produces a double-prefixed <c>archive\archive\...</c> path — the bug this
+/// test guards against. Filesystem-backed (real move) but needs no game install: the archive
+/// manager is mocked and <c>refactor: false</c> skips Cr2W/reference rewriting.
 /// </summary>
 public sealed class MeshMovePathHandlingIntegrationTests : IDisposable
 {
@@ -76,7 +77,7 @@ public sealed class MeshMovePathHandlingIntegrationTests : IDisposable
     [Fact]
     public async Task MoveMesh_DerivesGameRelativePaths_MovesFileToTargetFolder_NoDoubleArchivePrefix()
     {
-        // A mesh sitting in archive\base\props\old on disk (paths are game-relative, as prop.MeshFileN).
+        // prop.MeshFileN / ParentFolder are game-relative (depot paths under archive/).
         const string meshFile = @"base\props\old\mymesh.mesh";
         const string parentFolder = @"base\props\new"; // prop.ParentFolder
         var meshFileName = Path.GetFileName(meshFile);
@@ -88,17 +89,15 @@ public sealed class MeshMovePathHandlingIntegrationTests : IDisposable
         // ---- exactly what TemplateFileTools.MoveMesh does ----
         var meshFilePath = Path.Combine(parentFolder, meshFileName);
         var destAbsPath = _project.GetAbsolutePath(meshFilePath);
-        var (root, sourceGameRelPath) = _project.SplitFilePathIntoAbsoluteAndGameRelativePaths(sourceAbsPath);
-        var destGameRelPath = _project.GetGameRelativePath(destAbsPath);
-        await _tools.MoveAndRefactorAsync(sourceGameRelPath, destGameRelPath, root, false);
+        await _tools.MoveAndRefactorAsync(sourceAbsPath, destAbsPath, "", false);
         // -------------------------------------------------------
 
         // Landed at the intended target, gone from the source.
         Assert.True(File.Exists(destAbsPath), $"Expected mesh at {destAbsPath}");
         Assert.False(File.Exists(sourceAbsPath), $"Source {sourceAbsPath} should have been moved away");
 
-        // The double-prefix bug (raw-relative fed into the game-relative API) would have produced
-        // ...\source\archive\archive\... — assert that nested archive folder does not exist.
+        // The double-prefix bug (raw-relative joined with archive subdir as root) would have
+        // produced ...\source\archive\archive\... — assert that nested archive folder does not exist.
         Assert.False(Directory.Exists(Path.Combine(_project.ModDirectory, "archive")),
             "A nested archive\\archive folder indicates a raw-vs-game path double-prefix regression.");
 

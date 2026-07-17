@@ -35,15 +35,16 @@ public class Cp77ProjectTest
     [InlineData(@"raw\base\file.xbm", @"base\file.xbm", @"raw")]
     [InlineData(@"resources\file.yaml", @"file.yaml", "resources")]
     [InlineData(@"invalid\file.yaml", @"invalid\file.yaml", "")]
-    public void SplitPathTest(string relativePath, string expectedRelativePath, string expectedPrefix)
+    public void SplitGameRelativePathTest(string relativePath, string expectedGameRelativePath, string expectedPrefix)
     {
         var absolutePath = Path.Join(testProject.FileDirectory, relativePath);
         var absolutePrefix = Path.Join(testProject.FileDirectory, expectedPrefix);
 
         var (prefix, rel) = testProject.SplitFilePathIntoAbsoluteAndGameRelativePaths(absolutePath);
-        Assert.Equal(expectedRelativePath, rel);
+        Assert.Equal(expectedGameRelativePath, rel);
+        Assert.Equal(absolutePrefix, prefix);
 
-        Assert.Equal(expectedRelativePath, testProject.GetGameRelativePath(absolutePath));
+        Assert.Equal(expectedGameRelativePath, testProject.GetGameRelativePath(absolutePath));
         Assert.Equal(absolutePrefix, testProject.GetAbsoluteSubDirPath(absolutePath));
     }
 }
