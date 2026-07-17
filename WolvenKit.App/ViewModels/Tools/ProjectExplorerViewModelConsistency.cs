@@ -383,6 +383,11 @@ public sealed class GridGuard : IDisposable
                 {
                     if (_cloneByKey.TryGetValue(domainNode.FullName, out var clone) && !clone.IsDirectory)
                     {
+                        if (clone.IsDirectory)
+                        {
+                            clone.IsExpanded = domainNode.IsExpanded;
+                        }
+
                         clone.UpdateFileInfo();
                     }
                 }
