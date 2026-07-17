@@ -73,7 +73,7 @@ namespace WolvenKit
                     services.AddSingleton<ICvmTools, CvmTools>();
 
                     services.AddSingleton<RedTypeTemplateService>(provider => new RedTypeTemplateService(provider.GetRequiredService<ILoggerService>(),
-                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates"),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Templates"),
                         ISettingsManager.GetUserTemplateDir()));
 
                     // scripting
