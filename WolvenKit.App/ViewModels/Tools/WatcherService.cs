@@ -16,7 +16,9 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using ReactiveUI;
+using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
@@ -1205,6 +1207,8 @@ public partial class ProjectExplorerViewModel
             var parentDirInfo = Directory.GetParent(fullPath);
             var parentPath = parentDirInfo!.FullName;
             var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
+            var vm = Locator.Current.GetService<AppViewModel>()!.GetToolViewModel<ProjectExplorerViewModel>();
+            Dictionary<string, FileSystemModel> expandedLeaves = new();
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
@@ -1214,6 +1218,8 @@ public partial class ProjectExplorerViewModel
                     parent.Children.Add(fileSystemModel);
                     _fileLookup.TryAdd(fullPath, fileSystemModel);
                     batch.Add(fileSystemModel);
+
+                    ExpandAllParents(parent, expandedLeaves, vm);
                 }
                 return;
             }
@@ -1240,29 +1246,31 @@ public partial class ProjectExplorerViewModel
             while (parentDirs.Count > 0)
             {
                 var current = parentDirs.Pop();
-                var lookup = current.FullName.Substring(_projectDirectory.Length + 1);
 
-                if (_fileLookup.TryGetValue(lookup, out var currentModel))
+                // If the directory already exists in our tree...
+                if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
                 {
                     parentModel = currentModel;
                     continue;
                 }
 
-                // Make the directory if needed. (Does nothing if already exists.)
+                // Make the new directory.
                 current.Create();
                 var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
-                if (!_fileLookup.ContainsKey(current.FullName))
-                {
-                    var newCurrentModel = new FileSystemModel(parentModel, current.Name, currentRawRelativePath, true);
-                    parentModel.Children.Add(newCurrentModel);
-                    _fileLookup.TryAdd(current.FullName, newCurrentModel);
-                    batch.Add(newCurrentModel);
-                    parentModel = newCurrentModel;
-                }
-                else
-                {
-                    parentModel = _fileLookup[current.FullName];
-                }
+
+                // Make the new model for that directory, auto-expanded.
+                var newCurrentModel = new FileSystemModel(
+                    parentModel,
+                    current.Name, currentRawRelativePath,
+                    true,
+                    true
+                );
+
+                parentModel.Children.Add(newCurrentModel);
+                _fileLookup.TryAdd(current.FullName, newCurrentModel);
+                batch.Add(newCurrentModel);
+                ExpandAllParents(parentModel, expandedLeaves, vm);
+                parentModel = newCurrentModel;
             }
 
             if (!_fileLookup.ContainsKey(fullPath))
@@ -1271,6 +1279,24 @@ public partial class ProjectExplorerViewModel
                 batch.Add(newFileModel);
                 parentModel.Children.Add(newFileModel);
                 _fileLookup.TryAdd(fullPath, newFileModel);
+            }
+        }
+
+        private static void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves, ProjectExplorerViewModel vm)
+        {
+            FileSystemModel? expandParent = parent;
+
+            while (expandParent != null)
+            {
+                if (expandedLeaves.ContainsKey(expandParent.FullName))
+                {
+                    expandParent = null;
+                    continue;
+                }
+
+                // Auto-expand the existing parent..
+                vm.NotifyDirectoryExpanded(expandParent);
+                expandParent = expandParent.Parent;
             }
         }
     }

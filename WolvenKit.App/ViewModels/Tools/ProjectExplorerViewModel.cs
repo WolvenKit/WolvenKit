@@ -2105,6 +2105,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (model is { IsDirectory: true })
         {
             model.IsExpanded = true;
+            _gridGuard.ProjectUpdateFileInfo(model);
             SaveNodeExpansionState(model.RawRelativePath, true);
         }
     }
@@ -2155,7 +2156,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ModifierStateService.OnKeystateChanged(e);
     }
 
-    private Task RefreshAfter(Action action)
+    public Task RefreshAfter(Action action)
     {
         return RefreshAfter(() =>
         {
@@ -2164,7 +2165,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
-    private async Task RefreshAfter(Func<Task> action)
+    public async Task RefreshAfter(Func<Task> action)
     {
         if (_inFlight)
         {
