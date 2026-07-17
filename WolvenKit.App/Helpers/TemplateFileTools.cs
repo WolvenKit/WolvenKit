@@ -1275,12 +1275,12 @@ public partial class TemplateFileTools
             var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
             var sourceAbsPath = project.GetAbsolutePath(meshFile);
             var destAbsPath = project.GetAbsolutePath(meshFilePath);
-            var (root, sourceGameRelPath) = project.SplitFilePathIntoAbsoluteAndGameRelativePaths(sourceAbsPath);
-            var destGameRelPath = project.GetGameRelativePath(destAbsPath);
+
             _projectResourceTools
-                .MoveAndRefactorAsync(sourceGameRelPath, destGameRelPath, root, false)
+                .MoveAndRefactorAsync(sourceAbsPath, destAbsPath, "", false)
                 .GetAwaiter()
                 .GetResult();
+
             return meshFilePath;
         }
 

@@ -574,32 +574,32 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         };
 
     /// <summary>
-    /// Resolves a path to its absolute form: an already-absolute path is returned unchanged; a relative
-    /// path is resolved under the appropriate source subdirectory.
+    /// Resolves a path to its absolute form: an already-absolute path is returned unchanged;
+    /// a GAME-relative path is resolved under the appropriate source subdirectory.
     /// </summary>
     /// <param name="relativeOrAbsolutePath"></param>
     /// <returns>The absolute path on disk.</returns>
-    public string GetAbsolutePath(string relativeOrAbsolutePath)
+    public string GetAbsolutePath(string gameRelativeOrAbsolutePath)
     {
-        if (Path.IsPathRooted(relativeOrAbsolutePath))
+        if (Path.IsPathRooted(gameRelativeOrAbsolutePath))
         {
-            return relativeOrAbsolutePath;
+            return gameRelativeOrAbsolutePath;
         }
 
-        var (prefix, relativePath) = SplitFilePathIntoAbsoluteAndGameRelativePaths(relativeOrAbsolutePath);
+        var (prefix, gameRelativePath) = SplitFilePathIntoAbsoluteAndGameRelativePaths(gameRelativeOrAbsolutePath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
-        if (relativePath == relativeOrAbsolutePath)
+        if (gameRelativePath == gameRelativeOrAbsolutePath)
         {
-            return Path.Join(ModDirectory, prefix, relativePath);
+            return Path.Join(ModDirectory, prefix, gameRelativePath);
         }
 
         if (prefix != "")
         {
-            return Path.Join(FileDirectory, prefix, relativePath);
+            return Path.Join(FileDirectory, prefix, gameRelativePath);
         }
 
-        return Path.Join(prefix, relativePath);
+        return Path.Join(prefix, gameRelativePath);
     }
 
 
