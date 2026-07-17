@@ -1,0 +1,349 @@
+<UserControl
+    x:Class="WolvenKit.Views.GraphEditor.GraphActionPalette"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    x:Name="Root"
+    MaxHeight="520"
+    PreviewKeyDown="OnPreviewKeyDown"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="GroupedActions" Source="{Binding VisibleItems, ElementName=Root}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Category" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <DataTemplate x:Key="GlyphIconTemplate">
+            <TextBlock
+                Width="28"
+                Height="36"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="24"
+                TextAlignment="Right"
+                Text="{Binding Glyph}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="MaterialIconTemplate">
+            <iconPacks:PackIconMaterial
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Foreground="{DynamicResource WolvenKitYellow}"
+                Kind="{Binding IconKind}" />
+        </DataTemplate>
+
+        <Style x:Key="PaletteListItemStyle" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,1" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="IsSelected" Value="True" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataTemplate x:Key="PaletteItemTemplate">
+            <Grid Margin="8,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="36" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="36" />
+                </Grid.ColumnDefinitions>
+
+                <ContentControl
+                    Margin="-4,0,12,0"
+                    HorizontalContentAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    Content="{Binding}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="ContentTemplate" Value="{StaticResource GlyphIconTemplate}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasMaterialIcon}" Value="True">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource MaterialIconTemplate}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="{Binding Title}"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        Foreground="{DynamicResource BorderAlt2}"
+                        FontSize="{DynamicResource WolvenKitFontAltTitle}"
+                        Text="{Binding Subtitle}"
+                        TextTrimming="CharacterEllipsis">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Subtitle}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+
+                <Button
+                    Grid.Column="2"
+                    Width="28"
+                    Height="28"
+                    Margin="0"
+                    Padding="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    MouseEnter="TemplateVariantsButton_OnMouseEnter"
+                    PreviewMouseLeftButtonUp="TemplateVariantsButton_OnPreviewMouseLeftButtonUp"
+                    Tag="{Binding}"
+                    ToolTip="Choose template"
+                    Visibility="{Binding HasVariants, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <templates:IconBox
+                        Width="16"
+                        Height="16"
+                        Margin="0"
+                        Foreground="{DynamicResource BorderAlt2}"
+                        IconPack="Material"
+                        Kind="ChevronRight"
+                        Size="{DynamicResource WolvenKitIconMicro}" />
+                </Button>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="VariantItemTemplate">
+            <Grid Margin="8,6">
+                <StackPanel>
+                    <TextBlock
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="{Binding Title}"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        Foreground="{DynamicResource BorderAlt2}"
+                        FontSize="{DynamicResource WolvenKitFontAltTitle}"
+                        Text="{Binding Subtitle}"
+                        TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border
+            x:Name="MainPanel"
+            Width="380"
+            Height="520"
+            VerticalAlignment="Top"
+            Background="{DynamicResource ContentBackgroundAlt3}"
+            BorderBrush="{DynamicResource BorderAlt}"
+            BorderThickness="1"
+            CornerRadius="4">
+            <Grid Margin="4,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Margin="4,1,4,7"
+                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                    FontWeight="SemiBold"
+                    Text="{Binding Heading, ElementName=Root}" />
+
+                <Border
+                    Grid.Row="1"
+                    Margin="0,0,0,6"
+                    Background="{DynamicResource ContentBackgroundAlt2}"
+                    BorderBrush="{DynamicResource WolvenKitYellow}"
+                    BorderThickness="1"
+                    CornerRadius="3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <iconPacks:PackIconMaterial
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource WolvenKitYellow}"
+                            Kind="Magnify" />
+
+                        <TextBox
+                            x:Name="SearchBox"
+                            Grid.Column="1"
+                            Padding="2,7"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding SearchText, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            IsHitTestVisible="False"
+                            Foreground="{DynamicResource BorderAlt2}"
+                            Text="Search actions">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </Border>
+
+                <Border
+                    Grid.Row="2"
+                    Margin="0,0,0,4"
+                    Padding="0,0,0,7"
+                    BorderBrush="{DynamicResource BorderAlt}"
+                    BorderThickness="0,0,0,1">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasItems, ElementName=GraphActionList}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <StackPanel>
+                        <TextBlock
+                            Margin="8,0,8,5"
+                            Foreground="{DynamicResource BorderAlt2}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            FontWeight="SemiBold"
+                            Text="Graph" />
+
+                        <ListBox
+                            x:Name="GraphActionList"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemContainerStyle="{StaticResource PaletteListItemStyle}"
+                            ItemTemplate="{StaticResource PaletteItemTemplate}"
+                            ItemsSource="{Binding GraphItems, ElementName=Root}"
+                            PreviewMouseLeftButtonUp="ActionList_OnPreviewMouseLeftButtonUp"
+                            PreviewMouseMove="ActionList_OnPreviewMouseMove"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            SelectionMode="Single" />
+                    </StackPanel>
+                </Border>
+
+                <ListBox
+                    x:Name="ActionList"
+                    Grid.Row="3"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ItemContainerStyle="{StaticResource PaletteListItemStyle}"
+                    ItemTemplate="{StaticResource PaletteItemTemplate}"
+                    ItemsSource="{Binding Source={StaticResource GroupedActions}}"
+                    PreviewMouseLeftButtonUp="ActionList_OnPreviewMouseLeftButtonUp"
+                    PreviewMouseMove="ActionList_OnPreviewMouseMove"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    SelectionMode="Single"
+                    VirtualizingPanel.IsVirtualizing="True"
+                    VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="GroupItem">
+                                    <Setter Property="Margin" Value="0,0,0,6" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="GroupItem">
+                                                <StackPanel>
+                                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                                    <ItemsPresenter />
+                                                </StackPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Margin="8,8,8,5"
+                                        Foreground="{DynamicResource BorderAlt2}"
+                                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding Name}" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <Popup
+            x:Name="VariantPopup"
+            AllowsTransparency="True"
+            Placement="Custom"
+            PlacementTarget="{Binding ElementName=MainPanel}"
+            StaysOpen="True">
+            <Border
+                x:Name="VariantPanel"
+                Width="230"
+                MaxHeight="420"
+                Background="{DynamicResource ContentBackgroundAlt3}"
+                BorderBrush="{DynamicResource BorderAlt}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Margin="4,1,4,7"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontWeight="SemiBold"
+                        Text="{Binding VariantHeading, ElementName=Root}"
+                        TextTrimming="CharacterEllipsis" />
+
+                    <ListBox
+                        x:Name="VariantList"
+                        Grid.Row="1"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemContainerStyle="{StaticResource PaletteListItemStyle}"
+                        ItemTemplate="{StaticResource VariantItemTemplate}"
+                        ItemsSource="{Binding VariantItems, ElementName=Root}"
+                        PreviewKeyDown="OnPreviewKeyDown"
+                        PreviewMouseLeftButtonUp="VariantList_OnPreviewMouseLeftButtonUp"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        SelectionMode="Single" />
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

@@ -1,0 +1,11 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3016
+      author: "misterchedda"
+      description: "Quest and scene graphs now use a searchable action palette for graph actions, categorized node creation, and template selection"
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3016
+      author: "misterchedda"
+      description: "EventManager and InteractiveObjectManager graph nodes now show additional node details"

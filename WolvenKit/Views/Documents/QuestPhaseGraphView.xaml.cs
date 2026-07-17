@@ -1164,7 +1164,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                OpenNewNodeDialog(currentGraph);
+                QuestPhaseGraphEditor?.OpenActionPaletteAtViewportCenter();
                 e.Handled = true;
             }
 
@@ -1217,73 +1217,6 @@ namespace WolvenKit.Views.Documents
                     e.Handled = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Open the new node type selector dialog
-        /// </summary>
-        private async void OpenNewNodeDialog(RedGraph? graph)
-        {
-            if (graph?.GraphType != RedGraphType.Quest)
-            {
-                return;
-            }
-
-            try
-            {
-                if (Locator.Current.GetService<AppViewModel>() is not { } appViewModel)
-                {
-                    return;
-                }
-
-                // Get quest node types
-                var questNodeTypes = graph.GetQuestNodeTypes();
-
-                var questTypes = questNodeTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Quest", x))
-                    .OrderBy(x => x.Name)
-                    .ToList();
-
-                // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, questTypes)
-                {
-                    DialogHandler = model =>
-                    {
-                        appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
-                        {
-                            return;
-                        }
-
-                        // Create new node at current viewport center
-                        var viewportCenter = GetViewportCenter();
-                        graph.CreateQuestNode(selectedType, viewportCenter, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
-                    }
-                });
-            }
-            catch (Exception)
-            {
-                // Silently handle any dialog creation errors
-            }
-        }
-
-        /// <summary>
-        /// Get the center point of the current viewport for placing new nodes
-        /// </summary>
-        private System.Windows.Point GetViewportCenter()
-        {
-            if (QuestPhaseGraphEditor?.Editor == null)
-            {
-                return new System.Windows.Point(0, 0);
-            }
-
-            var viewport = QuestPhaseGraphEditor.Editor.ViewportLocation;
-            var size = QuestPhaseGraphEditor.Editor.ViewportSize;
-
-            return new System.Windows.Point(
-                viewport.X + size.Width / 2,
-                viewport.Y + size.Height / 2
-            );
         }
 
         /// <summary>

@@ -108,7 +108,7 @@ public partial class RedGraph
         return s_questNodeTypes;
     }
 
-    public void CreateQuestNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
+    public uint CreateQuestNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         var instance = InternalCreateQuestNode(type, templateDesc);
         var wrappedInstance = WrapQuestNode(instance, true);
@@ -123,6 +123,8 @@ public partial class RedGraph
         Nodes.Add(wrappedInstance);
 
         DocumentViewModel?.SetIsDirty(true);
+
+        return wrappedInstance.UniqueId;
     }
 
     private graphGraphNodeDefinition InternalCreateQuestNode(Type type, RedTypeTemplateSelectionOption? templateDesc = null)
@@ -142,6 +144,17 @@ public partial class RedGraph
             throw new Exception();
         }
 
+        if (templateDesc != null)
+        {
+            foreach (var socket in questNode.Sockets)
+            {
+                if (socket.Chunk is questSocketDefinition socketDefinition)
+                {
+                    socketDefinition.Connections.Clear();
+                }
+            }
+        }
+
         if (instance is questNodeDefinition nodeDefinition)
         {
             nodeDefinition.Id = ++_currentQuestNodeId;
@@ -150,7 +163,8 @@ public partial class RedGraph
             if (nodeDefinition is questFactsDBManagerNodeDefinition factsDBNode)
             {
                 // Initialize the Type property with questSetVar_NodeType (the only implementation)
-                factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
+                factsDBNode.Type ??= new CHandle<questIFactsDBManagerNodeType>();
+                factsDBNode.Type.Chunk ??= new questSetVar_NodeType();
             }
 
             if (nodeDefinition is questInputNodeDefinition inputNode)
@@ -435,7 +449,7 @@ public partial class RedGraph
             nodeWrapper = tmp;
         }
 
-        if (isNew)
+        if (isNew && node.Sockets.Count == 0)
         {
             nodeWrapper.CreateDefaultSockets();
         }
