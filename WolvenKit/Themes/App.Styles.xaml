@@ -328,6 +328,9 @@
         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
         <Setter Property="Foreground" Value="White" />
     </Style>
+    <Style
+      BasedOn="{StaticResource WolvenkitTextBoxStyle}"
+      TargetType="{x:Type TextBox}"/>
 
     <!-- Also counts for syncfusion:SfTextBoxExt -->
     <Style
