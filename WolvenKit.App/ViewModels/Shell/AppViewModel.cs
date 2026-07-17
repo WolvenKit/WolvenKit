@@ -936,7 +936,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     return true;
                 }
 
-                var filePath = project.GetRelativePath(tab.FilePath) ?? tab.FilePath;
+                var filePath = project.GetGameRelativePath(tab.FilePath) ?? tab.FilePath;
                 return project.ModFiles.Contains(filePath, StringComparer.InvariantCultureIgnoreCase);
             }).ToList();
 
