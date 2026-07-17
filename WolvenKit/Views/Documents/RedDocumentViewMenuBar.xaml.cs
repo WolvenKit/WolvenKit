@@ -55,7 +55,6 @@ namespace WolvenKit.Views.Documents
         private readonly ICvmTools _cvmTools;
         private readonly Cr2WTools _cr2WTools;
 
-
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -65,13 +64,13 @@ namespace WolvenKit.Views.Documents
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
-            _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;
             _cvmTools = Locator.Current.GetService<ICvmTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
+            _projectExplorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()!;
 
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
@@ -857,9 +856,12 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                Locator.Current.GetService<ProjectExplorerViewModel>()?.SuspendFileWatcher();
 
+                _projectExplorer.SuspendFileWatcher();
+
+                // TODO: Migrate to use RefreshAfter
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
+
                 _notificationService.Success("Successfully added dependencies");
                 _loggerService.Success("Successfully added dependencies");
             }
@@ -881,13 +883,10 @@ namespace WolvenKit.Views.Documents
                 }
 
                 // Project browser will throw an error if we do it immediately - so let's not
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
-                    await Task.Delay(100);
-                    if (_appViewModel.ActiveProject != null)
-                    {
-                        Locator.Current.GetService<ProjectExplorerViewModel>()?.ResumeWatcher_AndReloadProject();
-                    }
+                    DispatcherHelper.DelayOnMainThread(() =>
+                            _projectExplorer.ResumeWatcher_AndReloadProject(), 100);
                 });
             }
 
