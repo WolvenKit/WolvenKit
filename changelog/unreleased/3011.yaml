@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3011
+      author: "misterchedda"
+      description: "Scene section durations are no longer adjusted automatically when selecting sections or moving timeline events, and can now be changed explicitly using the timeline marker or Extend to event end action"

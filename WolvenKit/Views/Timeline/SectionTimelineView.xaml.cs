@@ -34,6 +34,17 @@ public partial class SectionTimelineView : UserControl
     private TimelineEvent? _selectedEvent;
     private Border? _selectedBorder;
     private Border? _activeResizeGrip;
+    private Border? _sectionEndHandle;
+    private Line? _rulerSectionEndLine;
+    private Line? _rulerSectionEndCap;
+    private Line? _timelineSectionEndLine;
+    private Rectangle? _overrunRegion;
+    private bool _isRenderPending;
+    private bool _isDraggingSectionEnd;
+    private bool _isSectionEndHovered;
+    private bool _sectionEndDragHasChanged;
+    private Point _sectionEndDragStartPoint;
+    private uint _sectionEndDragStartDuration;
     private const double DragThreshold = 5.0;
 
     public SectionTimelineView()
@@ -53,6 +64,13 @@ public partial class SectionTimelineView : UserControl
     
     private void OnGlobalMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
+        if (_isDraggingSectionEnd)
+        {
+            FinishSectionEndDrag();
+            e.Handled = true;
+            return;
+        }
+
         if (_isResizing)
         {
             _draggedEvent = null;
@@ -82,13 +100,16 @@ public partial class SectionTimelineView : UserControl
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         UpdateViewportWidth();
-        RenderTimeline();
+        QueueRenderTimeline();
     }
 
     private void OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
         UpdateViewportWidth();
-        RenderTimeline();
+        if (!_isDraggingSectionEnd)
+        {
+            QueueRenderTimeline();
+        }
     }
 
     private void UpdateViewportWidth()
@@ -101,7 +122,7 @@ public partial class SectionTimelineView : UserControl
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (_draggedEvent != null || _isResizing)
+        if (_draggedEvent != null || _isResizing || _isDraggingSectionEnd)
         {
             return;
         }
@@ -109,10 +130,29 @@ public partial class SectionTimelineView : UserControl
         if (e.PropertyName is nameof(SectionTimelineViewModel.HasSectionNode) 
             or nameof(SectionTimelineViewModel.PixelsPerMs)
             or nameof(SectionTimelineViewModel.SectionDuration)
+            or nameof(SectionTimelineViewModel.TimelineDuration)
             or nameof(SectionTimelineViewModel.Tracks))
         {
-            Dispatcher.BeginInvoke(new Action(RenderTimeline));
+            QueueRenderTimeline();
         }
+    }
+
+    private void QueueRenderTimeline()
+    {
+        if (_isRenderPending)
+        {
+            return;
+        }
+
+        _isRenderPending = true;
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            _isRenderPending = false;
+            if (!_isDraggingSectionEnd)
+            {
+                RenderTimeline();
+            }
+        }));
     }
 
     private void RenderTimeline()
@@ -137,11 +177,14 @@ public partial class SectionTimelineView : UserControl
         }
 
         TimeRulerCanvas.Children.Clear();
+        _rulerSectionEndLine = null;
+        _rulerSectionEndCap = null;
+        _sectionEndHandle = null;
 
-        var duration = _viewModel.SectionDuration;
+        var duration = _viewModel.TimelineDuration;
         var pixelsPerMs = _viewModel.PixelsPerMs;
         
-        if (duration == 0 || pixelsPerMs == 0)
+        if (pixelsPerMs == 0)
         {
             return;
         }
@@ -176,6 +219,8 @@ public partial class SectionTimelineView : UserControl
             Canvas.SetTop(label, 2);
             TimeRulerCanvas.Children.Add(label);
         }
+
+        RenderRulerSectionEndMarker();
     }
 
     private static uint GetTickInterval(double pixelsPerMs)
@@ -209,11 +254,14 @@ public partial class SectionTimelineView : UserControl
 
         TimelineCanvas.Children.Clear();
         _eventElements.Clear();
+        _timelineSectionEndLine = null;
+        _overrunRegion = null;
 
         var pixelsPerMs = _viewModel.PixelsPerMs;
         double yOffset = 0;
 
         RenderGridLines();
+        RenderOverrunRegion();
 
         foreach (var track in _viewModel.Tracks)
         {
@@ -243,7 +291,273 @@ public partial class SectionTimelineView : UserControl
             yOffset += trackHeight;
         }
 
+        RenderTimelineSectionEndMarker(yOffset);
+
         TimelineCanvas.SetCurrentValue(HeightProperty, yOffset);
+    }
+
+    private void RenderOverrunRegion()
+    {
+        if (_viewModel == null || !_viewModel.IsSectionDurationTooShort)
+        {
+            return;
+        }
+
+        var sectionEndX = _viewModel.TimeToPixels(_viewModel.SectionDuration);
+        _overrunRegion = new Rectangle
+        {
+            Width = Math.Max(0, _viewModel.TimelineWidth - sectionEndX),
+            Height = _viewModel.TotalTrackHeight,
+            Fill = new SolidColorBrush(Color.FromArgb(38, 223, 41, 53)),
+            IsHitTestVisible = false
+        };
+
+        Canvas.SetLeft(_overrunRegion, sectionEndX);
+        Canvas.SetTop(_overrunRegion, 0);
+        TimelineCanvas.Children.Add(_overrunRegion);
+    }
+
+    private void RenderRulerSectionEndMarker()
+    {
+        if (_viewModel == null)
+        {
+            return;
+        }
+
+        var sectionEndX = _viewModel.TimeToPixels(_viewModel.SectionDuration);
+        var markerBrush = GetSectionEndMarkerBrush();
+        _rulerSectionEndLine = new Line
+        {
+            X1 = sectionEndX,
+            X2 = sectionEndX,
+            Y1 = 0,
+            Y2 = 24,
+            Stroke = markerBrush,
+            StrokeThickness = _viewModel.IsSectionDurationTooShort ? 2 : 1,
+            IsHitTestVisible = false
+        };
+
+        _rulerSectionEndCap = new Line
+        {
+            X1 = sectionEndX - 8,
+            X2 = sectionEndX,
+            Y1 = 2,
+            Y2 = 2,
+            Stroke = markerBrush,
+            StrokeThickness = 2,
+            IsHitTestVisible = false
+        };
+
+        _sectionEndHandle = new Border
+        {
+            Width = 16,
+            Height = 24,
+            Background = Brushes.Transparent,
+            Cursor = Cursors.SizeWE,
+            ToolTip = $"Section end: {_viewModel.SectionDuration}ms. Drag to adjust."
+        };
+        _sectionEndHandle.MouseLeftButtonDown += SectionEndHandle_MouseLeftButtonDown;
+        _sectionEndHandle.MouseMove += SectionEndHandle_MouseMove;
+        _sectionEndHandle.MouseEnter += SectionEndHandle_MouseEnter;
+        _sectionEndHandle.MouseLeave += SectionEndHandle_MouseLeave;
+
+        Canvas.SetLeft(_sectionEndHandle, Math.Max(0, sectionEndX - 12));
+        Canvas.SetTop(_sectionEndHandle, 0);
+        Panel.SetZIndex(_rulerSectionEndLine, 10);
+        Panel.SetZIndex(_rulerSectionEndCap, 10);
+        Panel.SetZIndex(_sectionEndHandle, 11);
+        TimeRulerCanvas.Children.Add(_rulerSectionEndLine);
+        TimeRulerCanvas.Children.Add(_rulerSectionEndCap);
+        TimeRulerCanvas.Children.Add(_sectionEndHandle);
+    }
+
+    private void RenderTimelineSectionEndMarker(double height)
+    {
+        if (_viewModel == null || height <= 0)
+        {
+            return;
+        }
+
+        var sectionEndX = _viewModel.TimeToPixels(_viewModel.SectionDuration);
+        _timelineSectionEndLine = new Line
+        {
+            X1 = sectionEndX,
+            X2 = sectionEndX,
+            Y1 = 0,
+            Y2 = height,
+            Stroke = GetSectionEndMarkerBrush(),
+            StrokeThickness = _viewModel.IsSectionDurationTooShort ? 2 : 1,
+            IsHitTestVisible = false
+        };
+
+        Panel.SetZIndex(_timelineSectionEndLine, 10);
+        TimelineCanvas.Children.Add(_timelineSectionEndLine);
+    }
+
+    private Brush GetSectionEndMarkerBrush()
+    {
+        if ((_isDraggingSectionEnd || _isSectionEndHovered) &&
+            TryFindResource("WolvenKitYellow") is Brush highlightBrush)
+        {
+            return highlightBrush;
+        }
+
+        return new SolidColorBrush(_viewModel?.IsSectionDurationTooShort == true
+            ? Color.FromRgb(223, 41, 53)
+            : Color.FromRgb(120, 120, 120));
+    }
+
+    private void SectionEndHandle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (_viewModel == null || sender is not Border handle || _viewModel.PixelsPerMs <= 0)
+        {
+            return;
+        }
+
+        _isDraggingSectionEnd = true;
+        _sectionEndDragHasChanged = false;
+        _sectionEndDragStartPoint = e.GetPosition(TimeRulerCanvas);
+        _sectionEndDragStartDuration = _viewModel.SectionDuration;
+        _viewModel.IsDragging = true;
+        handle.CaptureMouse();
+        UpdateSectionEndMarkerBrushes();
+        e.Handled = true;
+    }
+
+    private void SectionEndHandle_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (!_isDraggingSectionEnd || _viewModel == null || _viewModel.PixelsPerMs <= 0)
+        {
+            return;
+        }
+
+        var currentPoint = e.GetPosition(TimeRulerCanvas);
+        var deltaMs = (currentPoint.X - _sectionEndDragStartPoint.X) / _viewModel.PixelsPerMs;
+        var rawDuration = Math.Clamp(_sectionEndDragStartDuration + deltaMs, 0, uint.MaxValue);
+        var newDuration = _viewModel.GetSnappedSectionDuration((uint)Math.Round(rawDuration));
+
+        if (newDuration == _viewModel.SectionDuration)
+        {
+            return;
+        }
+
+        _sectionEndDragHasChanged = true;
+        _viewModel.PreviewSectionDuration(newDuration);
+        UpdateSectionEndMarkerVisuals();
+        e.Handled = true;
+    }
+
+    private void SectionEndHandle_MouseEnter(object sender, MouseEventArgs e)
+    {
+        _isSectionEndHovered = true;
+        UpdateSectionEndMarkerBrushes();
+    }
+
+    private void SectionEndHandle_MouseLeave(object sender, MouseEventArgs e)
+    {
+        _isSectionEndHovered = false;
+        UpdateSectionEndMarkerBrushes();
+    }
+
+    private void FinishSectionEndDrag()
+    {
+        if (!_isDraggingSectionEnd || _viewModel == null)
+        {
+            return;
+        }
+
+        _isDraggingSectionEnd = false;
+        _sectionEndHandle?.ReleaseMouseCapture();
+        _viewModel.IsDragging = false;
+
+        if (_sectionEndDragHasChanged)
+        {
+            _viewModel.SetSectionDuration(_viewModel.SectionDuration);
+        }
+
+        _sectionEndDragHasChanged = false;
+        QueueRenderTimeline();
+    }
+
+    private void UpdateSectionEndMarkerVisuals()
+    {
+        if (_viewModel == null)
+        {
+            return;
+        }
+
+        var sectionEndX = _viewModel.TimeToPixels(_viewModel.SectionDuration);
+
+        if (_rulerSectionEndLine != null)
+        {
+            _rulerSectionEndLine.SetCurrentValue(Line.X1Property, sectionEndX);
+            _rulerSectionEndLine.SetCurrentValue(Line.X2Property, sectionEndX);
+        }
+
+        if (_rulerSectionEndCap != null)
+        {
+            _rulerSectionEndCap.SetCurrentValue(Line.X1Property, sectionEndX - 8);
+            _rulerSectionEndCap.SetCurrentValue(Line.X2Property, sectionEndX);
+        }
+
+        if (_timelineSectionEndLine != null)
+        {
+            _timelineSectionEndLine.SetCurrentValue(Line.X1Property, sectionEndX);
+            _timelineSectionEndLine.SetCurrentValue(Line.X2Property, sectionEndX);
+        }
+
+        if (_sectionEndHandle != null)
+        {
+            Canvas.SetLeft(_sectionEndHandle, Math.Max(0, sectionEndX - 12));
+            _sectionEndHandle.SetCurrentValue(ToolTipProperty, GetSectionEndToolTip());
+        }
+
+        if (_overrunRegion != null)
+        {
+            _overrunRegion.SetCurrentValue(VisibilityProperty,
+                _viewModel.IsSectionDurationTooShort ? Visibility.Visible : Visibility.Collapsed);
+            Canvas.SetLeft(_overrunRegion, sectionEndX);
+            _overrunRegion.SetCurrentValue(WidthProperty, Math.Max(0, _viewModel.TimelineWidth - sectionEndX));
+        }
+
+        UpdateSectionEndMarkerBrushes();
+    }
+
+    private void UpdateSectionEndMarkerBrushes()
+    {
+        var brush = GetSectionEndMarkerBrush();
+        var isEmphasized = _isDraggingSectionEnd || _isSectionEndHovered ||
+                           _viewModel?.IsSectionDurationTooShort == true;
+        var thickness = isEmphasized ? 2.0 : 1.0;
+
+        if (_rulerSectionEndLine != null)
+        {
+            _rulerSectionEndLine.SetCurrentValue(Shape.StrokeProperty, brush);
+            _rulerSectionEndLine.SetCurrentValue(Shape.StrokeThicknessProperty, thickness);
+        }
+
+        if (_rulerSectionEndCap != null)
+        {
+            _rulerSectionEndCap.SetCurrentValue(Shape.StrokeProperty, brush);
+        }
+
+        if (_timelineSectionEndLine != null)
+        {
+            _timelineSectionEndLine.SetCurrentValue(Shape.StrokeProperty, brush);
+            _timelineSectionEndLine.SetCurrentValue(Shape.StrokeThicknessProperty, thickness);
+        }
+    }
+
+    private string GetSectionEndToolTip()
+    {
+        if (_viewModel == null)
+        {
+            return "Section end";
+        }
+
+        return _viewModel.LatestEventEndTime > 0
+            ? $"Section end: {_viewModel.SectionDuration}ms. Drag to adjust (minimum {_viewModel.LatestEventEndTime}ms)."
+            : $"Section end: {_viewModel.SectionDuration}ms. Drag to adjust.";
     }
 
     private void RenderGridLines()
@@ -252,7 +566,7 @@ public partial class SectionTimelineView : UserControl
             return;
 
         var pixelsPerMs = _viewModel.PixelsPerMs;
-        var duration = _viewModel.SectionDuration;
+        var duration = _viewModel.TimelineDuration;
         var totalHeight = _viewModel.TotalTrackHeight;
         
         uint gridInterval = GetTickInterval(pixelsPerMs);
@@ -280,6 +594,9 @@ public partial class SectionTimelineView : UserControl
         var x = evt.StartTime * pixelsPerMs;
         var width = Math.Max(80, evt.Duration * pixelsPerMs);
         var eventColor = TimelineColorHelper.GetColorForEventType(evt.EventType);
+        var titleLine = evt.TitleLine;
+        var detailsLine = evt.DetailsLine;
+        var displayLabel = $"{titleLine} {detailsLine}".Trim();
 
         var border = new Border
         {
@@ -289,7 +606,7 @@ public partial class SectionTimelineView : UserControl
             MinWidth = 80,
             Cursor = Cursors.SizeAll,
             Tag = evt,
-            ToolTip = $"{evt.DisplayLabel}\nStart: {evt.StartTime}ms\nDuration: {evt.Duration}ms"
+            ToolTip = $"{displayLabel}\nStart: {evt.StartTime}ms\nDuration: {evt.Duration}ms"
         };
 
         var stackPanel = new StackPanel
@@ -300,7 +617,7 @@ public partial class SectionTimelineView : UserControl
 
         var titleLabel = new TextBlock
         {
-            Text = evt.TitleLine,
+            Text = titleLine,
             Foreground = Brushes.White,
             FontWeight = FontWeights.SemiBold,
             TextTrimming = TextTrimming.CharacterEllipsis
@@ -309,14 +626,14 @@ public partial class SectionTimelineView : UserControl
 
         var detailsLabel = new TextBlock
         {
-            Text = evt.DetailsLine,
+            Text = detailsLine,
             Foreground = new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)),
             TextTrimming = TextTrimming.CharacterEllipsis
         };
         detailsLabel.SetResourceReference(TextBlock.FontSizeProperty, "WolvenKitFontAltTitle");
 
         stackPanel.Children.Add(titleLabel);
-        if (!string.IsNullOrEmpty(evt.DetailsLine))
+        if (!string.IsNullOrEmpty(detailsLine))
         {
             stackPanel.Children.Add(detailsLabel);
         }

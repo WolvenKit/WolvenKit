@@ -37,6 +37,15 @@ public partial class TimelineService : ObservableObject, IDisposable
     private uint _sectionDuration;
 
     [ObservableProperty]
+    private uint _timelineDuration;
+
+    [ObservableProperty]
+    private uint _latestEventEndTime;
+
+    [ObservableProperty]
+    private bool _isSectionDurationTooShort;
+
+    [ObservableProperty]
     private uint _snapInterval = 100;
 
     [ObservableProperty]
@@ -92,6 +101,9 @@ public partial class TimelineService : ObservableObject, IDisposable
         HasSectionNode = false;
         Tracks.Clear();
         SectionDuration = 0;
+        TimelineDuration = 0;
+        LatestEventEndTime = 0;
+        IsSectionDurationTooShort = false;
     }
 
     private void RebuildTracks()
@@ -147,7 +159,8 @@ public partial class TimelineService : ObservableObject, IDisposable
             Tracks.Add(track);
         }
 
-        RecalculateSectionDuration();
+        SectionDuration = _sectionNode.SectionDuration?.Stu ?? 0;
+        RefreshTimelineDuration();
         _lastKnownEventCount = _sectionNode.Events?.Count ?? 0;
         
         OnPropertyChanged(nameof(Tracks));
@@ -174,7 +187,7 @@ public partial class TimelineService : ObservableObject, IDisposable
             OnPropertyChanged(nameof(Tracks));
         }
         
-        RecalculateSectionDuration();
+        RefreshTimelineDuration();
         
         if (!IsDragging)
         {
@@ -255,20 +268,27 @@ public partial class TimelineService : ObservableObject, IDisposable
         NodePropertyUpdateService.RequestPropertyPanelRefresh();
     }
 
-    private void RecalculateSectionDuration()
+    private void RefreshTimelineDuration()
+    {
+        LatestEventEndTime = GetMaxEventEndTime();
+        TimelineDuration = Math.Max(SectionDuration, LatestEventEndTime);
+        IsSectionDurationTooShort = LatestEventEndTime > SectionDuration;
+    }
+
+    private uint GetMaxEventEndTime()
     {
         if (_sectionNode == null)
         {
-            return;
+            return 0;
         }
 
         uint maxEndTime = 0;
 
-        foreach (var track in Tracks)
+        foreach (var eventHandle in _sectionNode.Events)
         {
-            foreach (var evt in track.Events)
+            if (eventHandle.GetValue() is scnSceneEvent sceneEvent)
             {
-                var endTime = evt.EndTime;
+                var endTime = sceneEvent.StartTime + sceneEvent.Duration;
                 if (endTime > maxEndTime)
                 {
                     maxEndTime = endTime;
@@ -276,11 +296,50 @@ public partial class TimelineService : ObservableObject, IDisposable
             }
         }
 
-        var currentDuration = _sectionNode.SectionDuration?.Stu ?? 0;
-        var newDuration = Math.Max(maxEndTime, currentDuration);
+        return maxEndTime;
+    }
 
-        SectionDuration = newDuration;
+    private bool HaveEventTimingsChanged()
+    {
+        return Tracks
+            .SelectMany(track => track.Events)
+            .Any(evt => evt.StartTime != evt.Event.StartTime || evt.Duration != evt.Event.Duration);
+    }
+
+    public void ExtendSectionDurationToEvents()
+    {
+        if (LatestEventEndTime > SectionDuration)
+        {
+            SetSectionDuration(LatestEventEndTime);
+        }
+    }
+
+    public void PreviewSectionDuration(uint duration)
+    {
+        SectionDuration = duration;
+        TimelineDuration = Math.Max(duration, LatestEventEndTime);
+        IsSectionDurationTooShort = LatestEventEndTime > duration;
+    }
+
+    public void SetSectionDuration(uint duration)
+    {
+        if (_sectionNode == null)
+        {
+            return;
+        }
+
+        var newDuration = Math.Max(duration, LatestEventEndTime);
+        if ((_sectionNode.SectionDuration?.Stu ?? 0) == newDuration)
+        {
+            PreviewSectionDuration(newDuration);
+            return;
+        }
+
+        PreviewSectionDuration(newDuration);
         _sectionNode.SectionDuration = new scnSceneTime { Stu = newDuration };
+
+        MarkDocumentDirty();
+        NotifyPropertyUpdate();
     }
 
     private void MarkDocumentDirty()
@@ -298,6 +357,9 @@ public partial class TimelineService : ObservableObject, IDisposable
         return (uint)(Math.Round((double)value / SnapInterval) * SnapInterval);
     }
 
+    public uint GetSnappedSectionDuration(uint duration) =>
+        Math.Max(SnapValue(duration), LatestEventEndTime);
+
     public void ZoomIn()
     {
         ZoomLevel = Math.Min(MaxZoomLevel, ZoomLevel * 1.5);
@@ -310,9 +372,9 @@ public partial class TimelineService : ObservableObject, IDisposable
 
     public void ZoomToFit(double viewportWidth)
     {
-        if (SectionDuration > 0 && viewportWidth > 0)
+        if (TimelineDuration > 0 && viewportWidth > 0)
         {
-            var targetPixelsPerMs = viewportWidth / SectionDuration * 0.9;
+            var targetPixelsPerMs = viewportWidth / TimelineDuration * 0.9;
             ZoomLevel = targetPixelsPerMs / 0.1;
             ZoomLevel = Math.Clamp(ZoomLevel, MinZoomLevel, MaxZoomLevel);
         }
@@ -331,17 +393,24 @@ public partial class TimelineService : ObservableObject, IDisposable
             isOurNode = otherSection.NodeId?.Id == _sectionNode.NodeId?.Id;
         }
         
-        if (!isOurNode)
+        var isOurEvent = e.NodeData is scnSceneEvent updatedEvent &&
+                         _sectionNode.Events.Any(handle => ReferenceEquals(handle.GetValue(), updatedEvent));
+
+        if (!isOurNode && !isOurEvent)
         {
             return;
         }
             
         var currentEventCount = _sectionNode.Events?.Count ?? 0;
-        if (currentEventCount != _lastKnownEventCount)
+        if (currentEventCount != _lastKnownEventCount || HaveEventTimingsChanged())
         {
             _lastKnownEventCount = currentEventCount;
             RebuildTracks();
+            return;
         }
+
+        SectionDuration = _sectionNode.SectionDuration?.Stu ?? 0;
+        RefreshTimelineDuration();
     }
 
     public void Dispose()
