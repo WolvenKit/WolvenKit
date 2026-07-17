@@ -155,7 +155,7 @@ public partial class TemplateFileTools
         }
         catch (JsonException err)
         {
-            var relativePath = activeProject.GetRelativePath(sourceAbsolutePath);
+            var relativePath = activeProject.GetGameRelativePath(sourceAbsolutePath);
 
             if (err.Message.Contains(" | LineNumber"))
             {
@@ -1269,6 +1269,21 @@ public partial class TemplateFileTools
             }
         }
 
+        string MoveMesh(string meshFile)
+        {
+            var meshFileName = Path.GetFileName(meshFile);
+            var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+            var sourceAbsPath = project.GetAbsolutePath(meshFile);
+            var destAbsPath = project.GetAbsolutePath(meshFilePath);
+
+            _projectResourceTools
+                .MoveAndRefactorAsync(sourceAbsPath, destAbsPath, "", false)
+                .GetAwaiter()
+                .GetResult();
+
+            return meshFilePath;
+        }
+
         void MoveMeshes()
         {
             if (!prop.MoveMeshesToFolder)
@@ -1278,46 +1293,22 @@ public partial class TemplateFileTools
 
             if (!string.IsNullOrEmpty(prop.MeshFile1) && !prop.MeshFile1.Contains(prop.ParentFolder))
             {
-                var meshFileName = Path.GetFileName(prop.MeshFile1);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
-                _projectResourceTools
-                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile1),
-                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
-                    .GetResult();
-                prop.MeshFile1 = meshFilePath;
+                prop.MeshFile1 = MoveMesh(prop.MeshFile1);
             }
 
             if (!string.IsNullOrEmpty(prop.MeshFile2) && !prop.MeshFile2.Contains(prop.ParentFolder))
             {
-                var meshFileName = Path.GetFileName(prop.MeshFile2);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
-                _projectResourceTools
-                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile2),
-                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
-                    .GetResult();
-                prop.MeshFile2 = meshFilePath;
+                prop.MeshFile2 = MoveMesh(prop.MeshFile2);
             }
 
             if (!string.IsNullOrEmpty(prop.MeshFile3) && !prop.MeshFile3.Contains(prop.ParentFolder))
             {
-                var meshFileName = Path.GetFileName(prop.MeshFile3);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
-                _projectResourceTools
-                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile3),
-                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
-                    .GetResult();
-                prop.MeshFile3 = meshFilePath;
+                prop.MeshFile3 = MoveMesh(prop.MeshFile3);
             }
 
             if (!string.IsNullOrEmpty(prop.MeshFile4) && !prop.MeshFile4.Contains(prop.ParentFolder))
             {
-                var meshFileName = Path.GetFileName(prop.MeshFile4);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
-                _projectResourceTools
-                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile4),
-                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
-                    .GetResult();
-                prop.MeshFile4 = meshFilePath;
+                prop.MeshFile4 = MoveMesh(prop.MeshFile4);
             }
         }
 
