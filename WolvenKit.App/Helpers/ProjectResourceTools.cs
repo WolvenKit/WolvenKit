@@ -569,17 +569,17 @@ public partial class ProjectResourceTools
 
             publishedMoves.Add((fromAbsPath, targetAbsPath));
 
-            var relativeSourcePath = activeProject.GetRawRelativePath(sourceAbsPath);
+            var relativeSourcePath = activeProject.GetGameRelativePath(sourceAbsPath);
 
             // We've been moving across temp directories
             if (originalSourceGameRelativeOrAbsolutePath != sourceFileOrDirAbsPath)
             {
-                var relativeTempPath = activeProject.GetRawRelativePath(sourceFileOrDirAbsPath);
-                var relativePath = activeProject.GetRawRelativePath(originalSourceGameRelativeOrAbsolutePath);
+                var relativeTempPath = activeProject.GetGameRelativePath(sourceFileOrDirAbsPath);
+                var relativePath = activeProject.GetGameRelativePath(originalSourceGameRelativeOrAbsolutePath);
                 relativeSourcePath = relativeSourcePath.Replace(relativeTempPath, relativePath);
             }
 
-            var relativeDestPath = activeProject.GetRawRelativePath(targetAbsPath);
+            var relativeDestPath = activeProject.GetGameRelativePath(targetAbsPath);
             _loggerService.Info($"Moved \"{relativeSourcePath}\" to \"{relativeDestPath}\"");
 
         }
