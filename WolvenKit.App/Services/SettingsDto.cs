@@ -57,6 +57,7 @@ public class SettingsDto : ISettingsDto
         GameLanguage = settings.GameLanguage;
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
         GraphEditorPropertiesLayout = settings.GraphEditorPropertiesLayout;
+        SceneEditorTimelineHeight = settings.SceneEditorTimelineHeight;
 
         // File Editor
         TreeViewGroups = settings.TreeViewGroups;
@@ -126,6 +127,7 @@ public class SettingsDto : ISettingsDto
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
     public GraphEditorPropertiesLayout GraphEditorPropertiesLayout { get; set; } = GraphEditorPropertiesLayout.SideBySide;
+    public double SceneEditorTimelineHeight { get; set; }
 
     #endregion
 
@@ -205,6 +207,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.GameLanguage = GameLanguage;
         settingsManager.ShowGraphEditorNodeProperties = ShowGraphEditorNodeProperties;
         settingsManager.GraphEditorPropertiesLayout = GraphEditorPropertiesLayout;
+        settingsManager.SceneEditorTimelineHeight = SceneEditorTimelineHeight;
 
         // File Editor
         settingsManager.TreeViewGroups = TreeViewGroups;

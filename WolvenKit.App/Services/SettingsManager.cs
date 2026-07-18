@@ -65,6 +65,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(GameLanguage),
             nameof(ShowGraphEditorNodeProperties),
             nameof(GraphEditorPropertiesLayout),
+            nameof(SceneEditorTimelineHeight),
 
             // FileEditor
             nameof(TreeViewGroups),
@@ -267,6 +268,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Graph Editor Properties Layout", GroupName = "Display")]
     [ObservableProperty]
     private GraphEditorPropertiesLayout _graphEditorPropertiesLayout = GraphEditorPropertiesLayout.SideBySide;
+
+    [ObservableProperty]
+    private double _sceneEditorTimelineHeight;
 
     #endregion
 
