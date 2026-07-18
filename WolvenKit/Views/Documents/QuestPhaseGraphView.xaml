@@ -208,15 +208,10 @@
                                     </Style>
                                 </Grid.Style>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
+                                <local:GraphEditorPropertiesPanel>
 
                                 <!-- RedTreeView bound directly to the filtered ICollectionView -->
                                 <tools:RedTreeView
-                                    Grid.Column="0"
                                     ItemsSource="{Binding DataContext.SelectedTabContent,
                                                           RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}}"
                                     SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk,
@@ -227,15 +222,13 @@
                                                             Mode=TwoWay}" />
 
                                 <GridSplitter
-                                    Grid.Column="1"
-                                    Width="4"
-                                    HorizontalAlignment="Stretch"
-                                    Background="#FF404040" />
+                                    Background="#FF404040"
+                                    ResizeBehavior="PreviousAndNext" />
 
                                 <editors:RedTypeView
-                                    Grid.Column="2"
                                     DataContext="{Binding DataContext.RDTViewModel.SelectedChunk,
-                                                          RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}}" />
+                                                              RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}}" />
+                                </local:GraphEditorPropertiesPanel>
                             </Grid>
 
                             <!-- Node Properties tab shows our custom selection-driven view -->
