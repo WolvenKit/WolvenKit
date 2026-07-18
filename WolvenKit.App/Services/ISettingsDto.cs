@@ -5,7 +5,7 @@ using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;
 
-public enum GraphNodePropertiesLayout
+public enum GraphEditorPropertiesLayout
 {
     SideBySide,
     Stacked
@@ -48,7 +48,7 @@ public interface ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; }
-    public GraphNodePropertiesLayout GraphEditorNodePropertiesLayout { get; set; }
+    public GraphEditorPropertiesLayout GraphEditorPropertiesLayout { get; set; }
 
     #endregion
 

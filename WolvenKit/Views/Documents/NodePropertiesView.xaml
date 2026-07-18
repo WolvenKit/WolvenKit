@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:services="clr-namespace:WolvenKit.App.Services;assembly=WolvenKit.App"
+             xmlns:local="clr-namespace:WolvenKit.Views.Documents"
              xmlns:graphEditor="clr-namespace:WolvenKit.App.ViewModels.GraphEditor;assembly=WolvenKit.App"
              xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
              xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
@@ -53,9 +54,9 @@
         </Border>
         
                 <!-- Content -->
-        <Grid x:Name="PropertyContentGrid" Grid.Row="1">
-            <Grid.Style>
-                <Style TargetType="Grid">
+        <local:GraphEditorPropertiesPanel Grid.Row="1">
+            <local:GraphEditorPropertiesPanel.Style>
+                <Style TargetType="local:GraphEditorPropertiesPanel">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
                                      Value="{x:Null}">
@@ -63,7 +64,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Grid.Style>
+            </local:GraphEditorPropertiesPanel.Style>
             
             <!-- Property tree for the selected node -->
             <tools:RedTreeView x:Name="PropertyTree"
@@ -77,13 +78,12 @@
             </tools:RedTreeView>
             
             <GridSplitter
-                x:Name="PropertySplitter"
                 Background="#FF404040"
                 ResizeBehavior="PreviousAndNext" />
             
             <!-- Detail editor for selected property -->
-            <editors:RedTypeView x:Name="PropertyEditor" DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
-        </Grid>
+            <editors:RedTypeView DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
+        </local:GraphEditorPropertiesPanel>
         
         <!-- No selection message -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.6">
