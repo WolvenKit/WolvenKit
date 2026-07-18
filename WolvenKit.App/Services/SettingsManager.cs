@@ -64,6 +64,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowReferenceGraph),
             nameof(GameLanguage),
             nameof(ShowGraphEditorNodeProperties),
+            nameof(GraphEditorNodePropertiesLayout),
 
             // FileEditor
             nameof(TreeViewGroups),
@@ -262,6 +263,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Show Graph Editor Node Properties", GroupName = "Display")]
     [ObservableProperty]
     private bool _showGraphEditorNodeProperties = true;
+
+    [Display(Name = "Graph Editor Node Properties Layout", GroupName = "Display")]
+    [ObservableProperty]
+    private GraphNodePropertiesLayout _graphEditorNodePropertiesLayout = GraphNodePropertiesLayout.SideBySide;
 
     #endregion
 

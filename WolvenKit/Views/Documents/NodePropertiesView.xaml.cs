@@ -1,7 +1,11 @@
 #nullable enable
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
@@ -12,14 +16,79 @@ namespace WolvenKit.Views.Documents
     /// </summary>
     public partial class NodePropertiesView : UserControl
     {
+        private readonly ISettingsManager _settingsManager;
+
         public NodePropertiesView()
         {
             InitializeComponent();
+
+            _settingsManager = Locator.Current.GetService<ISettingsManager>() ?? throw new ArgumentNullException(nameof(ISettingsManager));
+            _settingsManager.PropertyChanged += OnSettingsPropertyChanged;
+            ApplyLayout();
             
             // Subscribe to property panel refresh requests (e.g., from timeline editor)
             NodePropertyUpdateService.PropertyPanelRefreshRequested += OnPropertyPanelRefreshRequested;
             NodePropertyUpdateService.EventSelectionRequested += OnEventSelectionRequested;
             Unloaded += OnUnloaded;
+        }
+
+        private void OnSettingsPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ISettingsDto.GraphEditorNodePropertiesLayout))
+            {
+                ApplyLayout();
+            }
+        }
+
+        private void ApplyLayout()
+        {
+            PropertyContentGrid.RowDefinitions.Clear();
+            PropertyContentGrid.ColumnDefinitions.Clear();
+
+            if (_settingsManager.GraphEditorNodePropertiesLayout == GraphNodePropertiesLayout.Stacked)
+            {
+                PropertyContentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
+                PropertyContentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(6) });
+                PropertyContentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(3, GridUnitType.Star) });
+                PropertyContentGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+                Grid.SetRow(PropertyTree, 0);
+                Grid.SetColumn(PropertyTree, 0);
+                Grid.SetRow(PropertySplitter, 1);
+                Grid.SetColumn(PropertySplitter, 0);
+                Grid.SetRow(PropertyEditor, 2);
+                Grid.SetColumn(PropertyEditor, 0);
+
+                PropertySplitter.SetCurrentValue(HeightProperty, double.NaN);
+                PropertySplitter.SetCurrentValue(WidthProperty, double.NaN);
+                PropertySplitter.SetCurrentValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
+                PropertySplitter.SetCurrentValue(VerticalAlignmentProperty, VerticalAlignment.Stretch);
+                PropertySplitter.SetCurrentValue(CursorProperty, Cursors.SizeNS);
+                PropertySplitter.SetCurrentValue(IsHitTestVisibleProperty, true);
+                PropertySplitter.SetCurrentValue(GridSplitter.ResizeDirectionProperty, GridResizeDirection.Rows);
+            }
+            else
+            {
+                PropertyContentGrid.RowDefinitions.Add(new RowDefinition());
+                PropertyContentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
+                PropertyContentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6) });
+                PropertyContentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+
+                Grid.SetRow(PropertyTree, 0);
+                Grid.SetColumn(PropertyTree, 0);
+                Grid.SetRow(PropertySplitter, 0);
+                Grid.SetColumn(PropertySplitter, 1);
+                Grid.SetRow(PropertyEditor, 0);
+                Grid.SetColumn(PropertyEditor, 2);
+
+                PropertySplitter.SetCurrentValue(HeightProperty, double.NaN);
+                PropertySplitter.SetCurrentValue(WidthProperty, double.NaN);
+                PropertySplitter.SetCurrentValue(HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
+                PropertySplitter.SetCurrentValue(VerticalAlignmentProperty, VerticalAlignment.Stretch);
+                PropertySplitter.SetCurrentValue(CursorProperty, Cursors.SizeWE);
+                PropertySplitter.SetCurrentValue(IsHitTestVisibleProperty, true);
+                PropertySplitter.SetCurrentValue(GridSplitter.ResizeDirectionProperty, GridResizeDirection.Columns);
+            }
         }
         
         private void OnPropertyPanelRefreshRequested(object? sender, EventArgs e)
@@ -110,6 +179,7 @@ namespace WolvenKit.Views.Documents
         {
             NodePropertyUpdateService.PropertyPanelRefreshRequested -= OnPropertyPanelRefreshRequested;
             NodePropertyUpdateService.EventSelectionRequested -= OnEventSelectionRequested;
+            _settingsManager.PropertyChanged -= OnSettingsPropertyChanged;
         }
     }
 }

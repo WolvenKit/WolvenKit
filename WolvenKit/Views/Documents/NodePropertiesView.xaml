@@ -53,7 +53,7 @@
         </Border>
         
                 <!-- Content -->
-        <Grid Grid.Row="1">
+        <Grid x:Name="PropertyContentGrid" Grid.Row="1">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -65,14 +65,8 @@
                 </Style>
             </Grid.Style>
             
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="2*" />
-            </Grid.ColumnDefinitions>
-
-            <!-- Left: Property tree for the selected node -->
-            <tools:RedTreeView Grid.Column="0" 
+            <!-- Property tree for the selected node -->
+            <tools:RedTreeView x:Name="PropertyTree"
                                SelectedItem="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty, Mode=TwoWay}"
                                SelectedItems="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperties, Mode=TwoWay}">
                 <tools:RedTreeView.ItemsSource>
@@ -82,10 +76,13 @@
                 </tools:RedTreeView.ItemsSource>
             </tools:RedTreeView>
             
-            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+            <GridSplitter
+                x:Name="PropertySplitter"
+                Background="#FF404040"
+                ResizeBehavior="PreviousAndNext" />
             
-            <!-- Right: Detail editor for selected property -->
-            <editors:RedTypeView Grid.Column="2" DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
+            <!-- Detail editor for selected property -->
+            <editors:RedTypeView x:Name="PropertyEditor" DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
         </Grid>
         
         <!-- No selection message -->
@@ -112,4 +109,4 @@
                        Foreground="Gray"/>
         </StackPanel>
     </Grid>
-</UserControl> 
+</UserControl>
