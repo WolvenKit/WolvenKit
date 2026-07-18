@@ -464,6 +464,7 @@
                 Height="4"
                 HorizontalAlignment="Stretch"
                 Background="#FF404040"
+                DragCompleted="TimelineSplitter_OnDragCompleted"
                 Visibility="{Binding ElementName=TimelinePanel, Path=DataContext.HasSectionNode, Converter={StaticResource BooleanToVisibilityConverter}}" />
             
             <!-- Timeline Panel - spans full width, visible only when section node is selected -->

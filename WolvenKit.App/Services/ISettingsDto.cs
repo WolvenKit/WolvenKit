@@ -49,6 +49,7 @@ public interface ISettingsDto
     public EGameLanguage GameLanguage { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; }
     public GraphEditorPropertiesLayout GraphEditorPropertiesLayout { get; set; }
+    public double SceneEditorTimelineHeight { get; set; }
 
     #endregion
 
