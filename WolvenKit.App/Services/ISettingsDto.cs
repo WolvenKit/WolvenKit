@@ -5,6 +5,12 @@ using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;
 
+public enum GraphNodePropertiesLayout
+{
+    SideBySide,
+    Stacked
+}
+
 public interface ISettingsDto
 {
     // I wish there was a better way to inject deps
@@ -42,6 +48,7 @@ public interface ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; }
+    public GraphNodePropertiesLayout GraphEditorNodePropertiesLayout { get; set; }
 
     #endregion
 

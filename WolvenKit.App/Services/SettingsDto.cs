@@ -56,6 +56,7 @@ public class SettingsDto : ISettingsDto
         ShowReferenceGraph = settings.ShowReferenceGraph;
         GameLanguage = settings.GameLanguage;
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
+        GraphEditorNodePropertiesLayout = settings.GraphEditorNodePropertiesLayout;
 
         // File Editor
         TreeViewGroups = settings.TreeViewGroups;
@@ -124,6 +125,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
+    public GraphNodePropertiesLayout GraphEditorNodePropertiesLayout { get; set; } = GraphNodePropertiesLayout.SideBySide;
 
     #endregion
 
@@ -202,6 +204,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;
         settingsManager.GameLanguage = GameLanguage;
         settingsManager.ShowGraphEditorNodeProperties = ShowGraphEditorNodeProperties;
+        settingsManager.GraphEditorNodePropertiesLayout = GraphEditorNodePropertiesLayout;
 
         // File Editor
         settingsManager.TreeViewGroups = TreeViewGroups;
