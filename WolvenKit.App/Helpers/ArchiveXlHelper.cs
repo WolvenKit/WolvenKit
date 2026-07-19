@@ -183,9 +183,16 @@ public static partial class ArchiveXlHelper
     /// </summary>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
-        if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder
-                              || ProjectManager.ActiveProject?.FileDirectory is not string pathToGameFiles)
+        if (string.IsNullOrEmpty(depotPath))
         {
+            s_loggerService?.Error("Invalid depot path, can't resolve dynamic paths");
+            return null;
+        }
+        activeProject ??= ProjectManager?.ActiveProject;
+        if (activeProject?.ModDirectory is not string pathToArchiveFolder
+            || activeProject.FileDirectory is not string pathToGameFiles)
+        {
+            s_loggerService?.Error("Failed to read file paths from active project");
             return null;
         }
 
