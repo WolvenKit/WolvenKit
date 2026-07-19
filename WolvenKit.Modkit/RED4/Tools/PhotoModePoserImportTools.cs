@@ -50,14 +50,16 @@ public sealed class PhotoModePoserImportTools
 
         var pack = ReadPack(posePackFile);
         var groups = ValidateAndGroup(pack, posePackFile.Name);
-        Directory.CreateDirectory(outputDirectory.FullName);
+        var packDirectoryName = MakePackDirectoryName(pack, posePackFile);
+        var packOutputDirectory = Path.Combine(outputDirectory.FullName, packDirectoryName);
+        Directory.CreateDirectory(packOutputDirectory);
 
         var outputNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var results = new List<PhotoModePoserImportResult>(groups.Count);
         foreach (var group in groups)
         {
             var outputName = MakeOutputName(posePackFile, group.RigPath, outputNames);
-            var outputPath = Path.Combine(outputDirectory.FullName, outputName);
+            var outputPath = Path.Combine(packOutputDirectory, outputName);
             WriteAnimSet(group, outputPath);
 
             _loggerService.Success($"Imported {group.Poses.Count} PhotoMode Poser pose(s) for {group.RigPath} to {outputPath}");
@@ -340,6 +342,32 @@ public sealed class PhotoModePoserImportTools
         return candidate;
     }
 
+    private static string MakePackDirectoryName(PosePack pack, FileInfo posePackFile)
+    {
+        var sourceName = string.IsNullOrWhiteSpace(pack.Pack?.Name)
+            ? Path.GetFileNameWithoutExtension(posePackFile.Name)
+            : pack.Pack.Name;
+
+        var builder = new StringBuilder(sourceName.Length);
+        var previousWasSeparator = false;
+        foreach (var character in sourceName.ToLowerInvariant())
+        {
+            if (char.IsLetterOrDigit(character) || character is '-' or '_')
+            {
+                builder.Append(character);
+                previousWasSeparator = false;
+            }
+            else if (!previousWasSeparator)
+            {
+                builder.Append('_');
+                previousWasSeparator = true;
+            }
+        }
+
+        var directoryName = builder.ToString().Trim('_');
+        return string.IsNullOrEmpty(directoryName) ? "pose_pack" : directoryName;
+    }
+
     private static string SanitizeFileName(string value)
     {
         var invalid = Path.GetInvalidFileNameChars();
@@ -366,7 +394,13 @@ public sealed class PhotoModePoserImportTools
     {
         public string? Kind { get; set; }
         public int Version { get; set; }
+        public PackMetadata? Pack { get; set; }
         public List<Pose> Poses { get; set; } = [];
+    }
+
+    private sealed class PackMetadata
+    {
+        public string? Name { get; set; }
     }
 
     private sealed class Pose

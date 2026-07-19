@@ -17,7 +17,7 @@ internal sealed class PhotoModePoserImportCommand : CommandBase
         "Import a PhotoMode Poser pose-pack JSON into one .anims file per target rig.")
     {
         AddArgument(new Argument<FileInfo>("path", "Input PhotoMode Poser pose-pack JSON."));
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory. Defaults to the JSON file's directory."));
+        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output root. A pose-pack folder is created inside it. Defaults to the JSON file's directory."));
 
         SetInternalHandler(CommandHandler.Create<FileInfo, DirectoryInfo, IHost>(Action));
     }
