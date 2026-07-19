@@ -181,6 +181,8 @@ public static partial class ArchiveXlHelper
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
     /// and return null if it can't be found.
     /// </summary>
+    /// <param name="depotPath">Depot path to resolve. Can be null, can be static.</param>
+    /// <param name="activeProject">As ProjectManager can be null in file, pass this from calling class where available.</param>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
         if (string.IsNullOrEmpty(depotPath))
