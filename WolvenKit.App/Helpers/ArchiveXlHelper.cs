@@ -180,11 +180,20 @@ public static partial class ArchiveXlHelper
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
     /// and return null if it can't be found.
     /// </summary>
+    /// <param name="depotPath">Depot path to resolve. Can be null, can be static.</param>
+    /// <param name="activeProject">As ProjectManager can be null in file, pass this from calling class where available.</param>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
-        if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder
-                              || ProjectManager.ActiveProject?.FileDirectory is not string pathToGameFiles)
+        if (string.IsNullOrEmpty(depotPath))
         {
+            s_loggerService?.Error("Invalid depot path, can't resolve dynamic paths");
+            return null;
+        }
+        activeProject ??= ProjectManager?.ActiveProject;
+        if (activeProject?.ModDirectory is not string pathToArchiveFolder
+            || activeProject.FileDirectory is not string pathToGameFiles)
+        {
+            s_loggerService?.Error("Failed to read file paths from active project");
             return null;
         }
 
