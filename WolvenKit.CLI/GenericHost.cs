@@ -56,6 +56,7 @@ internal static class GenericHost
                 //services.AddScoped<TweakDBService>();
                 services.AddScoped<Red4ParserService>();
                 services.AddScoped<MeshTools>();        //RIG, Cp77FileService
+                services.AddScoped<PhotoModePoserImportTools>();
                 services.AddSingleton<IArchiveManager, ArchiveManager>();
                 services.AddSingleton<IModTools, ModTools>();
 

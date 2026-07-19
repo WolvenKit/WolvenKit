@@ -92,6 +92,7 @@ namespace WolvenKit
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddTransient<GeometryCacheService>();
                     services.AddTransient<MeshTools>();
+                    services.AddTransient<PhotoModePoserImportTools>();
                     services.AddTransient<IModTools, ModTools>();
                     services.AddTransient<MockGameController>();
                     services.AddTransient<RED4Controller>();

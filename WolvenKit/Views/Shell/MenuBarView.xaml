@@ -238,6 +238,20 @@
                                 Foreground="{StaticResource WolvenKitCyan}" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <MenuItem
+                        x:Name="MenuItemImportPhotoModePoser"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Import PhotoMode Poser .json"
+                        ToolTip="Create one .anims file per rig from a PhotoMode Poser pose pack">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="AnimationPlayOutline"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitCyan}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem

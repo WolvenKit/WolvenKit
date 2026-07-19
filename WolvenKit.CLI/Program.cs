@@ -47,6 +47,7 @@ internal class Program
             new UnbundleCommand(),
             new UncookCommand(),
             new ImportCommand(),
+            new PhotoModePoserImportCommand(),
             new ExportCommand(),
             new PackCommand(),
             new BuildCommand(),

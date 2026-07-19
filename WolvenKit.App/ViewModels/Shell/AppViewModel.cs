@@ -49,6 +49,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -87,6 +88,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     private readonly RedTypeTemplateService _redTypeTemplateService;
+    private readonly PhotoModePoserImportTools _photoModePoserImportTools;
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
@@ -120,7 +122,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
-        RedTypeTemplateService redTypeTemplateService
+        RedTypeTemplateService redTypeTemplateService,
+        PhotoModePoserImportTools photoModePoserImportTools
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -147,6 +150,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
         _redTypeTemplateService = redTypeTemplateService;
+        _photoModePoserImportTools = photoModePoserImportTools;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -529,6 +533,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(DeleteEmptyFoldersCommand))]
     [NotifyCanExecuteChangedFor(nameof(FindUnusedFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportPhotoModePoserCommand))]
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(CheckForScriptUpdatesCommand))]
     private EStatus _taskStatus;
@@ -1956,6 +1961,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportPhotoModePoserCommand))]
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
@@ -1973,6 +1979,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportPhotoModePoserCommand))]
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
