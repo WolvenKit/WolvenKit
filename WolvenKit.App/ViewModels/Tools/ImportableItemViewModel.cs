@@ -139,7 +139,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
 
         // first get the texture group from the vanilla file
 
-        var relPath = Path.ChangeExtension(activeProject.GetRelativePath(fileName), "xbm");
+        var relPath = Path.ChangeExtension(activeProject.GetGameRelativePath(fileName), "xbm");
         var hash = FNV1A64HashAlgorithm.HashString(relPath);
         var file = archiveManager.Lookup(hash);
         if (!file.HasValue)

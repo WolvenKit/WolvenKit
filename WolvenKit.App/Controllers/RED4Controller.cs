@@ -46,6 +46,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
+    private readonly IProjectEvents _projectEvents;
 
     #endregion
 
@@ -60,7 +61,8 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService)
+        Red4ParserService parserService,
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -73,6 +75,7 @@ public class RED4Controller : ObservableObject, IGameController
         _pluginService = pluginService;
         _modifierService = modifierService;
         _parserService = parserService;
+        _projectEvents = projectEvents;
     }
 
     public async Task HandleStartup()
@@ -208,7 +211,6 @@ public class RED4Controller : ObservableObject, IGameController
         {
             // Always stop the heartbeat timer and release the progress indicator.
             DisableLoadingMode();
-            LoadCustomHashes();
         }
     }
 
@@ -1062,13 +1064,17 @@ public class RED4Controller : ObservableObject, IGameController
             // often saturates the disk and ends up slower + spams the UI thread.
             var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
 
+            var bulkScope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+
             await Parallel.ForEachAsync(
                 files,
                 new ParallelOptions { MaxDegreeOfParallelism = dop },
                 (file, token) =>
                 {
                     token.ThrowIfCancellationRequested();
-                    AddToMod(file);
+                    // publish:false — we emit ONE FilesImported batch after the loop (below) instead
+                    // of thousands of per-file events, which is the whole point of the bulk path.
+                    AddToMod(file, bulkScope, publish: false);
                     var current = Interlocked.Increment(ref progress);
                     var reportInterval = Math.Max(1, total / 50);
 
@@ -1080,17 +1086,22 @@ public class RED4Controller : ObservableObject, IGameController
                     return ValueTask.CompletedTask;
                 });
 
-            var report = "";
-
-            foreach (var file in files)
-            {
-                report += $"Added game file to project: {file.Name}\r\n";
-            }
-
-            _loggerService.Info(report);
         }
 
         _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles([.. files]));
+
+        // Ensure projection of the imported files onto the GridGuard clones (FileList/FileTree)
+        // has completed before returning to awaiters (e.g. tests asserting counts, or UI code).
+        // The publish is observed via ObserveOn main and the adds are dispatched; Invoke to
+        // ContextIdle drains the queue so callers see the updated collections synchronously.
+        try
+        {
+            System.Windows.Application.Current?.Dispatcher?.Invoke(
+                () => { },
+                System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* test/headless/no dispatcher or cross-thread invoke not available; best effort */ }
     }
 
 
@@ -1116,7 +1127,7 @@ public class RED4Controller : ObservableObject, IGameController
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, bool publish = true)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -1160,6 +1171,13 @@ public class RED4Controller : ObservableObject, IGameController
                 _loggerService.Error(ex);
             }
 
+        }
+
+        // Announce the single add to the project explorer (only if the write actually landed). Bulk
+        // callers pass publish:false and emit one FilesImported batch instead — see AddToModAsync.
+        if (publish && File.Exists(diskPathInfo.FullName))
+        {
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
 
         return true;
