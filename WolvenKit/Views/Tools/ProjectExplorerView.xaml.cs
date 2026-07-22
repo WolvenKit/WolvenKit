@@ -70,7 +70,6 @@ namespace WolvenKit.Views.Tools
         private string _currentFolderQuery = "";
         private bool _isDragging;
         private ISettingsManager _settingsManager;
-        private CancellationTokenSource _deferRefreshTokenSource = new();
 
         #region Constructors
 
@@ -300,13 +299,13 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void SetLoading(object sender, ProjectExplorerViewModel.LoadingMode mode)
         {
-            if (ShouldStartLoadingProject(mode) && Ready())
+            if (ShouldStartLoadingProject(mode) && Ready() && IsFreshLoad(mode))
             {
-                _ = StartLoadingProject(IsFreshLoad(mode));
+                IndicateProjectLoading();
             }
             else if (ShouldStopLoading(mode) && AlreadyLoadingProject())
             {
-                _deferRefreshTokenSource?.Cancel();
+                IndicateProjectNotLoading(ViewModel.IsFlatModeEnabled);
             }
             else if (ShouldStopTemporaryLoading(mode) && AlreadyTemporaryLoading())
             {
@@ -318,79 +317,6 @@ namespace WolvenKit.Views.Tools
             }
 
             _loadingMode = mode;
-        }
-
-        /// <summary>
-        /// Helper method for starting `InitiateLoadingUntilCancellation` method.
-        /// </summary>
-        private async Task StartLoadingProject(bool isFirstLoad)
-        {
-            _deferRefreshTokenSource?.Cancel();
-            _deferRefreshTokenSource = new CancellationTokenSource();
-
-            await InitiateLoadingUntilCancellation(_deferRefreshTokenSource.Token, isFirstLoad);
-        }
-
-        /// <summary>
-        /// Does the following steps in a specific timing order to ensure UI consistency:
-        ///     1. Starts a `DeferRefresh` cycle to prevent the `TreeGrid` from overreacting
-        ///        to batches of changes to its datasource, causing performance issues and
-        ///        other problems. Within this cycle it performs the remaining steps.
-        ///     2. Displays "Loading" in the tree/list pane and hides the tree views.
-        ///        (via `IndicateProjectLoading`) if _isFirstLoad is true.
-        ///     3. Waits until the `deferRefreshToken` is cancelled to proceed.
-        ///        (This will be cancelled when `SetLoading(false)` is called by the
-        ///        ViewModel upon the completion of WatcherService rebuilding the file tree
-        ///        and populates the datasource of the `TreeGrid` with the new nodes
-        ///        when a new project has been loaded or existing one refreshed.
-        ///     4. Finally, `ResetUiElements` is called, which refreshes the tree views
-        ///        and restores the state of the UI to normal use.
-        ///
-        /// </summary>
-        /// <param name="deferRefreshToken"></param>
-        /// <param name="isFirstLoad"></param>
-        /// <returns></returns>
-        private Task InitiateLoadingUntilCancellation(CancellationToken deferRefreshToken, bool isFirstLoad)
-        {
-            using (TreeGrid.View.DeferRefresh(TreeViewRefreshMode.NodeRefresh))
-            {
-                // Only show "Loading" if switching projects or loading the first one after
-                // a fresh launch of the app.
-                if (isFirstLoad)
-                {
-                    IndicateProjectLoading();
-                }
-
-                var tcs = new TaskCompletionSource<bool>();
-
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
-                {
-                    var isFlatModeEnabled = ViewModel?.IsFlatModeEnabled ?? false;
-                    if (isFirstLoad)
-                    {
-                        IndicateProjectNotLoading(isFlatModeEnabled);
-                        ClearFiltersAndRefreshTrees();
-                    }
-                    else
-                    {
-                        IndicateProjectNotLoading(isFlatModeEnabled);
-
-                        // Re-apply search after a full reload. Expand so deep matches stay visible
-                        // (tree was rebuilt; expansion state may not cover search hits).
-                        if (!_currentFolderQuery.IsNullOrEmpty())
-                        {
-                            ReapplyCurrentSearchFilter(expandAllForSearch: true);
-                        }
-
-                        DispatcherHelper.DelayOnMainThread(() =>
-                        {
-                            InvalidateLayout();
-                        }, 10);
-                    }
-                });
-
-                return tcs.Task;
-            }
         }
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)

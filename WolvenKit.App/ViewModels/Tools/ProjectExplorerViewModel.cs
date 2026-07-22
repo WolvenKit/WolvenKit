@@ -228,7 +228,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var mode = isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject;
         EnableLoadingMode(mode);
 
-        DispatcherHelper.DelayOnMainThread(() =>
+        RefreshAfter(() =>
         {
             try
             {
@@ -248,7 +248,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     CheckForOneDriveInPath();
                 }
             }
-        }, 50);
+
+        });
     }
 
     /// <summary>
