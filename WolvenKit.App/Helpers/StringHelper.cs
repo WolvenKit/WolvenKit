@@ -443,4 +443,6 @@ public abstract partial class StringHelper
 
         return text.Substring(0, maxLength) + "...";
     }
+
+    public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 }

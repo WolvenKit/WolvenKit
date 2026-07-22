@@ -202,6 +202,9 @@ public partial class ChunkViewModel
             case scnSectionInternalsActorBehavior actorBehavior:
                 Descriptor = $"{actorBehavior.ActorId.Id}";
                 return;
+            case scnOutputSocketStamp scnOutput:
+                Descriptor = $"{scnOutput.Name}, ${scnOutput.Ordinal}";
+                return;
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
@@ -393,7 +396,22 @@ public partial class ChunkViewModel
                 Descriptor = $"{workspotInstance.OriginMarker.NodeRef.GetResolvedText()}";
                 return;
             case scnChoiceNodeOption choiceNodeOption:
-                Descriptor = $"{choiceNodeOption.Caption}";
+                Descriptor = $"{choiceNodeOption.ScreenplayOptionId.Id}";
+                return;
+            case gameinteractionsChoiceTypeWrapper choiceTypeWrapper:
+                Descriptor = $"{choiceTypeWrapper.Properties}";
+                return;
+            case scnChoiceNodeNsAttachToActorParams actorParams:
+                Descriptor = $"{actorParams.ActorId.Id}";
+                return;
+            case scnChoiceNodeNsAttachToGameObjectParams atgoParams:
+                Descriptor = $"{atgoParams.NodeRef}";
+                return;
+            case scnChoiceNodeNsAttachToPropParams propParams:
+                Descriptor = $"{propParams.PropId.Id}";
+                return;
+            case scnChoiceNodeNsAttachToWorldParams atwParams:
+                Descriptor = StringHelper.Stringify(atwParams.EntityPosition);
                 return;
             case scnSectionNode sectionNode:
                 Descriptor = $"{sectionNode.NodeId.Id}";

@@ -542,6 +542,10 @@ public partial class ChunkViewModel
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
                 break;
+            case scnOutputSocket scnOutputSocket:
+                Value = $"({scnOutputSocket.Stamp.Name}, {scnOutputSocket.Stamp.Ordinal})";
+                IsValueExtrapolated = true;
+                break;
             case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 var node = wss.Nodes[sst.NodeIndex].Chunk;
                 Value = $"#{sst.NodeIndex}";
@@ -1017,7 +1021,13 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             case scnPerformerSymbol debugSymbol:
-                Value = $"{debugSymbol.EntityRef.Reference}";
+                if (!string.IsNullOrEmpty(debugSymbol.EntityRef.Reference.GetResolvedText()))
+                {
+                    Value = $"{debugSymbol.EntityRef.Reference.GetResolvedText()}";
+                } else if (!string.IsNullOrEmpty(debugSymbol.EntityRef.DynamicEntityUniqueName))
+                 {
+                     Value = $"{debugSymbol.EntityRef.DynamicEntityUniqueName}";
+                 }
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             case scnSceneEventSymbol sceneEventSymbol:
@@ -1168,7 +1178,7 @@ public partial class ChunkViewModel
                 Value = $"{StringHelper.Stringify(socketIds.Select(s => s.NodeId.Id.ToString()).ToArray())}";
                 IsValueExtrapolated = Value != string.Empty;
                 return;
-            case scnChoiceNodeOption scnChoiceNodeOption:
+            case scnChoiceNodeOption scnChoiceNodeOption when scnChoiceNodeOption.Caption.GetResolvedText() is string s && !StringHelper.IsNoneOrEmpty(s):
                 Value = $"{scnChoiceNodeOption.Caption.GetResolvedText()}";
                 IsValueExtrapolated = Value != string.Empty;
                 return;
