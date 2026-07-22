@@ -836,11 +836,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 Version = project.Version
             };
 
+            np.CreateDefaultDirectories();
             _projectManager.ActiveProject = np;
             _archiveManager.ProjectArchive = np.AsArchive();
 
             await _projectManager.SaveAsync();
-            np.CreateDefaultDirectories();
 
             // Defer loading so the wizard close animation can complete smoothly.
             // Await the returned task so that callers (e.g. NewProject) do not proceed until
