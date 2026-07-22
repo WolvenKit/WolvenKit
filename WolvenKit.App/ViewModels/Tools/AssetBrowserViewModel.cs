@@ -77,7 +77,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
-
+    private bool _isLoading = false;
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     #endregion fields
@@ -134,6 +134,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         this.WhenAnyValue(x => x.LeftItems)
             .Subscribe(_ =>
             {
+                _isLoading = false;
                 UpdateLoadArchiveButtonVisibility();
                 UpdateLoadingIndicatorVisibility();
             });
@@ -143,10 +144,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void UpdateLoadArchiveButtonVisibility()
     {
-        if (LeftItems.Count == 0 && !ShouldShowLoadButton && _archiveManager.ProjectArchive == null && _projectManager.ActiveProject != null)
+        if (LeftItems.Count == 0 && !ShouldShowLoadButton && _archiveManager.ProjectArchive == null && !_isLoading)
         {
             ShouldShowLoadButton = true;
-        } else if (LeftItems.Count > 0 && ShouldShowLoadButton)
+        } else if ((LeftItems.Count > 0 && ShouldShowLoadButton) || _isLoading)
         {
             ShouldShowLoadButton = false;
         }
@@ -154,7 +155,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void UpdateLoadingIndicatorVisibility()
     {
-        if (LeftItems.Count > 0 && LoadVisibility == Visibility.Visible)
+        if (LeftItems.Count > 0 && LoadVisibility == Visibility.Visible && !_isLoading)
         {
             LoadVisibility = Visibility.Collapsed;
         } else if (LoadVisibility == Visibility.Collapsed && !IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
@@ -289,7 +290,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    internal async Task LoadAssetBrowser() => await _gameController.GetRed4Controller().HandleStartup();
+    internal async Task LoadAssetBrowser()
+    {
+        _isLoading = true;
+        UpdateLoadArchiveButtonVisibility();
+        UpdateLoadingIndicatorVisibility();
+        await _gameController.GetRed4Controller().HandleStartup();
+    }
 
     [RelayCommand]
     private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePageAsync(EHomePage.Settings);
