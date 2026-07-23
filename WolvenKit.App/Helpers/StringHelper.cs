@@ -156,6 +156,16 @@ public abstract partial class StringHelper
         return Stringify(nodeIds);
     }
 
+    public static string Stringify(scnIKEventData ikEvent, scnSceneResource scene)
+    {
+        var scnData = Stringify(ikEvent.Basic, scene);
+        if (ikEvent.ChainName.GetResolvedText() is string chainName && chainName != "")
+        {
+            return $"Chain {chainName} ({scnData})";
+        }
+
+        return scnData;
+    }
     public static string Stringify(scnAnimTargetBasicData animEvtData, scnSceneResource scene)
     {
         var performerName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.PerformerId.Id, scene) ?? $"{animEvtData.PerformerId.Id}";
