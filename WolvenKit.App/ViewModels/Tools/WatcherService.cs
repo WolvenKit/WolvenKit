@@ -280,6 +280,7 @@ public partial class ProjectExplorerViewModel
         public void UnwatchProject()
         {
             Suspend();
+            StopBackgroundPolling();
             _watcherState = WatcherState.NoProject;
             _projectDirectory = "";
             _projectFileSystemModel = null;
@@ -542,6 +543,7 @@ public partial class ProjectExplorerViewModel
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
                     _loggerService?.Info($"Loaded {FileList.Count} project files.");
+                    StartBackgroundPolling();
                     Resume();
                 });
             });
