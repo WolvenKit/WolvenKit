@@ -105,23 +105,6 @@ public partial class ChunkViewModel
             case RedDummy:
                 return;
 
-            case scnPlaySkAnimEvent playSkAnimEvent:
-            {
-                var startTime = $"[{playSkAnimEvent.StartTime}ms] ";
-                var animDetails = "";
- if (playSkAnimEvent.AnimName?.GetValue() is scnAnimName animName &&
-                    animName.Unk1 is not null && animName.Unk1.Count > 0)
-                {
-                    var unk1Details = string.Join(", ", animName.Unk1.Select(u => (string?)u ?? "").Take(3));
-                    if (!string.IsNullOrEmpty(unk1Details))
-                    {
-                        animDetails = $" - {unk1Details}";
-                    }
-                }
-
-                Descriptor = $"{startTime}scnPlaySkAnimEvent{animDetails}";
-                return;
-            }
             case scnAudioEvent audioEvent:
             {
                 var startTime = $"[{audioEvent.StartTime}ms] ";
@@ -174,14 +157,8 @@ public partial class ChunkViewModel
                 return;
             }
             case scnSceneEvent sceneEvent:
-            {
-                // Fallback for other scene events - just show start time
-                var startTime = $"[{sceneEvent.StartTime}ms] ";
-                var eventType = sceneEvent.GetType().Name;
-
-                Descriptor = $"{startTime}{eventType}";
+                Descriptor = $"[{sceneEvent.StartTime}ms]";
                 return;
-            }
             case scnScenesVersionsSceneChanges scn when scn.Scene.DepotPath.GetResolvedText() is string s && s != string.Empty:
             {
                 Descriptor = s;

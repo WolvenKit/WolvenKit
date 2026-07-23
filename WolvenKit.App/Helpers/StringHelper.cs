@@ -156,6 +156,15 @@ public abstract partial class StringHelper
         return Stringify(nodeIds);
     }
 
+    public static string Stringify(scnAnimTargetBasicData animEvtData, scnSceneResource scene)
+    {
+        var performerName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.PerformerId.Id, scene) ?? $"{animEvtData.PerformerId.Id}";
+        var targetName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.TargetPerformerId.Id, scene)
+                         ?? SceneEditingHelper.GetActorNameById(animEvtData.TargetActorId.Id, scene)
+                         ?? $"{animEvtData.TargetActorId.Id}";
+        return $"{performerName} => {targetName}";
+    }
+
 
     public static string Stringify(CColor color)
     {

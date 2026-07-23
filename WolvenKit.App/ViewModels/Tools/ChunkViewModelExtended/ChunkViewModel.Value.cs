@@ -236,7 +236,8 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             // csv files: Some of them have a fallbackXYZname
-            case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
+            case IRedArray { Count: > 0 } csvAry
+                when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
 
                 var pathIndex = 0;
                 for (var i = 0; i < csv.CompiledHeaders.Count; i++)
@@ -390,6 +391,7 @@ public partial class ChunkViewModel
                 return;
 
             #region app
+
             case appearanceAppearancePartOverrides partsOverrides:
                 if (GetPropertyChild("componentsOverrides") is ChunkViewModel cvm)
                 {
@@ -471,6 +473,7 @@ public partial class ChunkViewModel
             #endregion
 
             #region mesh
+
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 if (appearance.ChunkMaterials.Count == 0 && appearance.Tags.Count == 1)
                 {
@@ -481,6 +484,7 @@ public partial class ChunkViewModel
                     Value = string.Join(", ", appearance.ChunkMaterials);
                     Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
                 }
+
                 IsValueExtrapolated = true;
                 break;
             case CArray<CHandle<meshMeshAppearance>> appearanceArray:
@@ -494,6 +498,7 @@ public partial class ChunkViewModel
                 break;
 
             #endregion
+
             // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
             case CMaterialInstance { BaseMaterial: { } cResourceReference } material:
             {
@@ -538,6 +543,14 @@ public partial class ChunkViewModel
                 }
 
                 break;
+
+            #region sceneFile
+
+            case scnLookAtEvent { BasicData: { Basic: { } basic } }
+                when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{StringHelper.Stringify(basic, scene)}";
+                IsValueExtrapolated = true;
+                return;
             case scnSceneWorkspotDataId sceneWorkspotData when sceneWorkspotData.Id != 0:
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
@@ -546,7 +559,11 @@ public partial class ChunkViewModel
                 Value = $"({scnOutputSocket.Stamp.Name}, {scnOutputSocket.Stamp.Ordinal})";
                 IsValueExtrapolated = true;
                 break;
-            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+
+            #endregion
+
+            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
+                                        sst.NodeIndex < wss.Nodes.Count:
                 var node = wss.Nodes[sst.NodeIndex].Chunk;
                 Value = $"#{sst.NodeIndex}";
                 if (node?.GetType().Name is string nodeName && !string.IsNullOrEmpty(nodeName))
@@ -602,7 +619,9 @@ public partial class ChunkViewModel
                             var referenceString = performerSymbol.EntityRef.Reference.ToString();
                             if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
                             {
-                                performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
+                                performerName = referenceString.StartsWith("#")
+                                    ? referenceString.Substring(1)
+                                    : referenceString;
                             }
                         }
 
@@ -612,31 +631,36 @@ public partial class ChunkViewModel
                         }
                     }
                 }
+
                 break;
-            case scnSceneWorkspotInstanceId sceneWorkspotInstance when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
-                 Value = $"{sceneWorkspotInstance.Id}";
-                 IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
+            case scnSceneWorkspotInstanceId sceneWorkspotInstance
+                when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
+                Value = $"{sceneWorkspotInstance.Id}";
+                IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
 
-                 var matchingWorkspotInstance = sceneForWorkspot.WorkspotInstances
-                     .FirstOrDefault(w => w.WorkspotInstanceId.Id == sceneWorkspotInstance.Id);
-                 if (matchingWorkspotInstance != null)
-                 {
-                     var instanceDataId = matchingWorkspotInstance.DataId.Id;
-                     var workspotResource = sceneForWorkspot.Workspots
-                         .FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
+                var matchingWorkspotInstance = sceneForWorkspot.WorkspotInstances
+                    .FirstOrDefault(w => w.WorkspotInstanceId.Id == sceneWorkspotInstance.Id);
+                if (matchingWorkspotInstance != null)
+                {
+                    var instanceDataId = matchingWorkspotInstance.DataId.Id;
+                    var workspotResource = sceneForWorkspot.Workspots
+                        .FirstOrDefault(w =>
+                            w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
 
-                     if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
-                     {
-                         var workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText();
-                         if (!string.IsNullOrEmpty(workspotPath))
-                         {
-                             var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
-                             Value = $"{sceneWorkspotInstance.Id}: {filename}";
-                         }
-                     }
-                 }
-                 break;
-            case scnEffectInstanceId scnEffectInstance when GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
+                    if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
+                    {
+                        var workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText();
+                        if (!string.IsNullOrEmpty(workspotPath))
+                        {
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
+                            Value = $"{sceneWorkspotInstance.Id}: {filename}";
+                        }
+                    }
+                }
+
+                break;
+            case scnEffectInstanceId scnEffectInstance
+                when GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
                 Value = $"{scnEffectInstance.Id}";
                 IsValueExtrapolated = scnEffectInstance.Id != 0;
 
@@ -658,6 +682,7 @@ public partial class ChunkViewModel
                         }
                     }
                 }
+
                 break;
             case scnPropId scnPropId when GetRootModel().ResolvedData is scnSceneResource sceneForProp:
                 Value = $"{scnPropId.Id}";
@@ -674,6 +699,7 @@ public partial class ChunkViewModel
                         Value = $"{scnPropId.Id}: {propName}";
                     }
                 }
+
                 break;
             case scnPlayerActorDef playerActorDef:
                 Value = $"NodeId: {playerActorDef.SpecCharacterRecordId.GetResolvedText()}";
@@ -706,7 +732,8 @@ public partial class ChunkViewModel
                         Value = $"{type.ComparisonType.ToEnumString()}: {type.FactName}";
                         break;
                     case questVarVsVarComparison_ConditionType type:
-                        Value = $"{type.ComparisonType.ToEnumString()}: {StringHelper.Stringify([type.FactName1, type.FactName2])}";
+                        Value =
+                            $"{type.ComparisonType.ToEnumString()}: {StringHelper.Stringify([type.FactName1, type.FactName2])}";
                         break;
 
                     default:
@@ -719,6 +746,7 @@ public partial class ChunkViewModel
                 Value = $"(empty hands)";
                 IsValueExtrapolated = true;
                 break;
+
             case scneventsPlayAnimEventExData { Basic: scneventsPlayAnimEventData data }:
                 if (data.BlendIn > 0 || data.BlendOut > 0)
                 {
@@ -761,11 +789,13 @@ public partial class ChunkViewModel
                 return;
             case Multilayer_Layer layer:
                 Value = layer.ColorScale;
-                if (layer.Microblend.DepotPath.GetResolvedText() is string microblend && !string.IsNullOrEmpty(microblend) &&
+                if (layer.Microblend.DepotPath.GetResolvedText() is string microblend &&
+                    !string.IsNullOrEmpty(microblend) &&
                     microblend != "base\\surfaces\\microblends\\default.xbm")
                 {
                     Value = $"{Value}, {microblend.Split('\\').Last()}";
                 }
+
                 IsValueExtrapolated = true;
                 break;
             case scnVoicesetComponent voiceset:
@@ -881,6 +911,7 @@ public partial class ChunkViewModel
                 break;
 
             # region components
+
             case entVisualControllerComponent entVisualControllerComponent:
                 Value = $"{entVisualControllerComponent.ForcedLodDistance}";
                 if (entVisualControllerComponent.MeshProxy.DepotPath.GetResolvedText() is string meshProxyPath &&
@@ -940,6 +971,7 @@ public partial class ChunkViewModel
                 break;
 
             #endregion
+
             case scnlocLocstringId stringId when
                 stringId.Ruid != 0:
                 Value = stringId.Ruid.ToString();
@@ -1024,10 +1056,12 @@ public partial class ChunkViewModel
                 if (!string.IsNullOrEmpty(debugSymbol.EntityRef.Reference.GetResolvedText()))
                 {
                     Value = $"{debugSymbol.EntityRef.Reference.GetResolvedText()}";
-                } else if (!string.IsNullOrEmpty(debugSymbol.EntityRef.DynamicEntityUniqueName))
-                 {
-                     Value = $"{debugSymbol.EntityRef.DynamicEntityUniqueName}";
-                 }
+                }
+                else if (!string.IsNullOrEmpty(debugSymbol.EntityRef.DynamicEntityUniqueName))
+                {
+                    Value = $"{debugSymbol.EntityRef.DynamicEntityUniqueName}";
+                }
+
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             case scnSceneEventSymbol sceneEventSymbol:
@@ -1038,33 +1072,27 @@ public partial class ChunkViewModel
                 Value = scnWorkspotSymbol.WsEditorEventId.ToString();
                 IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
                 break;
-            case scnAnimTargetBasicData animData when animData.PerformerId.Id > 0:
-                Value = $"performerId: {animData.PerformerId.Id}";
+            case scnAnimTargetBasicData animData when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{StringHelper.Stringify(animData, scene)}";
                 IsValueExtrapolated = Value != string.Empty;
                 break;
-            case scnIKEventData ikEvent
-                when ikEvent.Basic is scnAnimTargetBasicData animData && animData.PerformerId.Id > 0:
-                Value = $"performerId: {animData.PerformerId.Id}";
-                IsValueExtrapolated = Value != string.Empty;
-                break;
-            case scnCinematicAnimSetSRRefId cinematicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForAnimSetRef:
-                var animSetId = cinematicAnimSetRefId.Id;
-                Value = ((uint)animSetId).ToString();
-
+            case scnPlaySkAnimEvent playSkAnimEvent
+                when playSkAnimEvent.AnimName?.GetValue() is scnAnimName { Unk1.Count: > 0 } animName:
+                Value = $"{string.Join(", ", animName.Unk1.Select(u => (string?)u ?? "").Take(3))}";
+                IsValueExtrapolated = true;
+                return;
+            case scnCinematicAnimSetSRRefId cinematicAnimSetRefId
+                when GetRootModel().ResolvedData is scnSceneResource { ResouresReferences.CinematicAnimSets: { } animSets}
+                     && cinematicAnimSetRefId.Id < animSets.Count:
                 // Try to show the animation set file name if available
-                var animSetIdValue = (uint)animSetId;
-                if (sceneForAnimSetRef.ResouresReferences?.CinematicAnimSets != null &&
-                    animSetIdValue < sceneForAnimSetRef.ResouresReferences.CinematicAnimSets.Count)
-                {
-                    var animSet = sceneForAnimSetRef.ResouresReferences.CinematicAnimSets[(int)animSetIdValue];
-                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                var cinematicAnimSet = animSets[(int)(uint)cinematicAnimSetRefId.Id];
+                var cinematicAnimSetPath = cinematicAnimSet.AsyncAnimSet.DepotPath.GetResolvedText();
 
-                    if (!string.IsNullOrEmpty(animSetPath))
-                    {
-                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
-                        Value = $"{animSetIdValue}: {filename}.anims";
-                        IsValueExtrapolated = true;
-                    }
+                if (!string.IsNullOrEmpty(cinematicAnimSetPath))
+                {
+                    var filename = System.IO.Path.GetFileNameWithoutExtension(cinematicAnimSetPath);
+                    Value = $"{cinematicAnimSetRefId.Id}: {filename}.anims";
+                    IsValueExtrapolated = true;
                 }
                 break;
             case scnCinematicAnimSetSRRefId cinematicAnimSetRefId:
