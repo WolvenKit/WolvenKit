@@ -1,11 +1,12 @@
 using System;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.HomePage.Pages;
-using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -70,6 +71,88 @@ namespace WolvenKit.Views.HomePage.Pages
 
             });
 
+        }
+
+        /// <summary>
+        /// CardView marks wheel events handled even when it does not scroll,
+        /// so drive the projects ScrollViewer explicitly while the pointer is over it.
+        /// </summary>
+        private void ProjectsScrollViewer_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (sender is not ScrollViewer scrollViewer || e.Delta == 0)
+            {
+                return;
+            }
+
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
+        private void ProjectsScrollViewer_OnScrollChanged(object sender, ScrollChangedEventArgs e) =>
+            UpdateStickySectionHeaders();
+
+        private void ProjectsScrollContent_OnSizeChanged(object sender, SizeChangedEventArgs e) =>
+            UpdateStickySectionHeaders();
+
+        /// <summary>
+        /// iOS-style sticky section headers: each header pins to the top of the
+        /// scroll viewport until its section scrolls fully out of view (pushed off
+        /// by the next section).
+        /// </summary>
+        private void UpdateStickySectionHeaders()
+        {
+            if (ProjectsScrollContent is null || !ProjectsScrollContent.IsLoaded)
+            {
+                return;
+            }
+
+            var offset = ProjectsScrollViewer.VerticalOffset;
+
+            UpdateStickyHeader(PinnedSection, PinnedHeader, PinnedHeaderTransform, offset);
+            UpdateStickyHeader(RecentSection, RecentHeader, RecentHeaderTransform, offset);
+        }
+
+        private void UpdateStickyHeader(
+            FrameworkElement section,
+            FrameworkElement header,
+            TranslateTransform transform,
+            double scrollOffset)
+        {
+            if (section is null || header is null || transform is null)
+            {
+                return;
+            }
+
+            if (section.Visibility != Visibility.Visible
+                || !section.IsLoaded
+                || section.ActualHeight <= 0
+                || header.ActualHeight <= 0)
+            {
+                transform.SetCurrentValue(TranslateTransform.YProperty, 0d);
+                return;
+            }
+
+            // Layout position of the section within the scroll content (section has no sticky transform).
+            Point sectionOrigin;
+            try
+            {
+                sectionOrigin = section.TransformToAncestor(ProjectsScrollContent).Transform(new Point(0, 0));
+            }
+            catch (InvalidOperationException)
+            {
+                transform.SetCurrentValue(TranslateTransform.YProperty, 0d);
+                return;
+            }
+
+            // Natural top of the header content (section top + top margin).
+            var sectionTop = sectionOrigin.Y + header.Margin.Top;
+            var headerBlockHeight = header.ActualHeight + header.Margin.Top + header.Margin.Bottom;
+            var maxStick = Math.Max(0, section.ActualHeight - headerBlockHeight);
+
+            // Stick once scrolled past the header; unstick/push up as the section ends.
+            transform.SetCurrentValue(
+                TranslateTransform.YProperty,
+                Math.Clamp(scrollOffset - sectionTop, 0, maxStick));
         }
     }
 }

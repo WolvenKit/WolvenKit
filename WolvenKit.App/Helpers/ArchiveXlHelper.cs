@@ -83,7 +83,7 @@ public static partial class ArchiveXlHelper
         return openBracesCount;
     }
 
-    private static IEnumerable<string> Substitute(string depotPath, Cp77Project? activeProject = null)
+    private static IEnumerable<string> Substitute(string depotPath, List<string> modFiles)
     {
         // Base case: if the string does not contain '{', return the string as the only element in a list
         if (!depotPath.Contains('{'))
@@ -93,15 +93,14 @@ public static partial class ArchiveXlHelper
 
         // For {body}: If we get meshes from active project, we'll use these instead of substituting.
         // The list will only hold "base_body" anyway.
-        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is { Length: 2 } parts &&
-            activeProject is not null)
+        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is { Length: 2 } parts)
         {
             if (!s_keysAndValues.TryGetValue("{body}", out var bodyValues))
             {
                 bodyValues = [];
             }
 
-            var bodiesFromProject = activeProject.ModFiles
+            var bodiesFromProject = modFiles
                 .Where(f => f.StartsWith(parts[0]) && f.EndsWith(parts[1]))
                 .Select(f => f.Replace(parts[0], "").Replace(parts[1], ""))
                 .ToList();
@@ -124,7 +123,7 @@ public static partial class ArchiveXlHelper
             // If the key is not in the dictionary, return early. Empty array will result in a warning.
             if (key.Contains("variant") || !s_keysAndValues.TryGetValue(key, out var substitutionList))
             {
-                if (placeholders.Count == 1 && activeProject is not null)
+                if (placeholders.Count == 1)
                 {
                     results.AddRange(ExtractVariants());
                 }
@@ -136,7 +135,7 @@ public static partial class ArchiveXlHelper
             foreach (var substitution in substitutionList)
             {
                 var newPath = depotPath.Replace(key, substitution);
-                results.AddRange(Substitute(newPath, activeProject));
+                results.AddRange(Substitute(newPath, modFiles));
             }
         }
 
@@ -159,7 +158,7 @@ public static partial class ArchiveXlHelper
             var pathStart = parts1[0];
             HashSet<string> variantMatches = [];
 
-            foreach (var path in activeProject.ModFiles)
+            foreach (var path in modFiles)
             {
                 if (!string.IsNullOrEmpty(pathStart) && path.StartsWith(pathStart) &&
                     path.Replace(pathStart, "").Split(Path.DirectorySeparatorChar) is
@@ -181,11 +180,20 @@ public static partial class ArchiveXlHelper
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
     /// and return null if it can't be found.
     /// </summary>
+    /// <param name="depotPath">Depot path to resolve. Can be null, can be static.</param>
+    /// <param name="activeProject">As ProjectManager can be null in file, pass this from calling class where available.</param>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
-        if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder
-                              || ProjectManager.ActiveProject?.FileDirectory is not string pathToGameFiles)
+        if (string.IsNullOrEmpty(depotPath))
         {
+            s_loggerService?.Error("Invalid depot path, can't resolve dynamic paths");
+            return null;
+        }
+        activeProject ??= ProjectManager?.ActiveProject;
+        if (activeProject?.ModDirectory is not string pathToArchiveFolder
+            || activeProject.FileDirectory is not string pathToGameFiles)
+        {
+            s_loggerService?.Error("Failed to read file paths from active project");
             return null;
         }
 
@@ -222,7 +230,14 @@ public static partial class ArchiveXlHelper
             return [depotPath];
         }
 
-        return Substitute(depotPath, activeProject);
+        if (activeProject == null)
+        {
+            throw new WolvenKitException(2342, $"There is no active project to add files to. Aborting.");
+        }
+
+        var modFiles = activeProject.ModFiles;
+
+        return Substitute(depotPath, modFiles);
     }
 
     /// <summary>
@@ -233,7 +248,8 @@ public static partial class ArchiveXlHelper
     {
         var meshAppearances = apps.Select(m => m.Chunk).OfType<meshMeshAppearance>().ToList();
         var appearancesWithMaterials =
-            meshAppearances.Where(mA => mA.ChunkMaterials.Count > 0).ToDictionary(k => k.Name, v => v);
+            meshAppearances.Where(mA => mA.ChunkMaterials.Count > 0).DistinctBy(k => k.Name)
+                .ToDictionary(k => k.Name, v => v);
 
         if (meshAppearances.Count <= 1 || // can't expand anything if there's just one appearance
             meshAppearances.Count == appearancesWithMaterials.Count || // they all have materials

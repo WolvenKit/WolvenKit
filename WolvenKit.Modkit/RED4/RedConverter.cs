@@ -140,7 +140,7 @@ namespace WolvenKit.Modkit.RED4
         public Task<bool> ConvertFromJsonAndWriteAsync(string absoluteFilePath, string absoluteDestFolder,
             string? destFileName = null) =>
             ConvertFromJsonAndWriteAsync(new FileInfo(absoluteFilePath), new DirectoryInfo(absoluteDestFolder));
-        
+
         /// <summary>
         /// Creates a redengine file from a given textual representation and saves it to a given output directory
         /// </summary>
@@ -186,13 +186,10 @@ namespace WolvenKit.Modkit.RED4
                 writer.Close();
             }
 
-            _loggerService.Success($"Imported {fileInfo.Name} to {outPath}");
-
             if (destFileName is not null)
             {
                 File.Move(outPath, Path.Join(outPath, destFileName));
             }
-
 
             return true;
         }

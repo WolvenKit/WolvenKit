@@ -16,16 +16,16 @@ namespace WolvenKit.Views.Dialogs.Windows
         private static bool s_lastRegex;
 
         public static bool IsInstanceOpen { get; private set; }
-        
-        public SearchAndReplaceDialog()
+
+        public SearchAndReplaceDialog(bool isSearchOnly = false)
         {
             InitializeComponent();
 
-            ViewModel = Locator.Current.GetService<SearchAndReplaceDialogViewModel>();
+            ViewModel = new SearchAndReplaceDialogViewModel(isSearchOnly);
             DataContext = ViewModel;
 
             LoadLastSelection();
-            
+
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel,
@@ -76,7 +76,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             ViewModel.IsRegex = s_lastRegex;
             ViewModel.IsWholeWord = s_lastWholeWord;
-            
+
             if (s_lastSearch != "")
             {
                 ViewModel.SearchText = s_lastSearch;
@@ -114,7 +114,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             s_lastReplace = ViewModel.ReplaceText;
         }
 
-        
+
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)

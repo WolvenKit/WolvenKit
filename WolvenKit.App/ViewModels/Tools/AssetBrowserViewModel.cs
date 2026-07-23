@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
+using ReactiveUI;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -27,7 +29,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
@@ -74,10 +75,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
-
+    private bool _isLoading = false;
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
-
-    private bool _manuallyLoading;
+    private ProjectExplorerViewModel.LoadingMode _projectLoadingMode;
 
     #endregion fields
 
@@ -123,10 +123,66 @@ public partial class AssetBrowserViewModel : ToolViewModel
             _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
         }
 
+        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().PropertyChanged += OnProjectLoadingModeUpdated;
+
         ProjectLoaded = _projectManager.IsProjectLoaded;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
 
+        // Subscribe to _rightItems so dependent commands (e.g. AddSelected) can be re-evaluated
+        // when the list is repopulated (folder nav, search results) or items added/removed.
+        // Uses reactive Switch() so that when RightItems is replaced (e.g. ToggleModBrowser),
+        // we automatically unsubscribe from the old collection's events and subscribe the new one.
+        this.WhenAnyValue(x => x.LeftItems)
+            .Subscribe(_ =>
+            {
+                _isLoading = false;
+                UpdateLoadArchiveButtonVisibility();
+                UpdateLoadingIndicatorVisibility();
+            });
+
         CheckView();
+    }
+
+    private void OnProjectLoadingModeUpdated(object? _, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ProjectExplorerViewModel.CurrentLoadingMode))
+        {
+            _projectLoadingMode = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().CurrentLoadingMode;
+
+            switch (_projectLoadingMode)
+            {
+                case ProjectExplorerViewModel.LoadingMode.LoadingNewProject:
+                    if (ShouldShowLoadButton)
+                    {
+                        _isLoading = true;
+                    }
+
+                    CheckView();
+                    break;
+            }
+        }
+    }
+
+    private void UpdateLoadArchiveButtonVisibility()
+    {
+        if (LeftItems.Count == 0 && _archiveManager.ProjectArchive == null && !_isLoading && !_archiveManager.IsManagerLoaded)
+        {
+            ShouldShowLoadButton = true;
+        } else
+        {
+            ShouldShowLoadButton = false;
+        }
+    }
+
+    private void UpdateLoadingIndicatorVisibility()
+    {
+        if (LeftItems.Count > 0 && !_isLoading)
+        {
+            LoadVisibility = Visibility.Collapsed;
+        } else if (!IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
+        {
+            LoadVisibility = Visibility.Visible;
+        }
     }
 
     private string[] IgnoredArchives =>
@@ -140,10 +196,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private void CheckView()
     {
         ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
-        LoadVisibility = _archiveManager.IsManagerLoaded ? Visibility.Collapsed : Visibility.Visible;
-
+        UpdateLoadArchiveButtonVisibility();
+        UpdateLoadingIndicatorVisibility();
         ShouldShowExecutablePathWarning = ArchiveDirNotFound;
-        ShouldShowLoadButton = !_manuallyLoading && _archiveManager is { IsManagerLoaded: false, IsManagerLoading: false };
     }
 
     // if the game exe path changes
@@ -169,6 +224,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (e.PropertyName is nameof(IArchiveManager.IsManagerLoading) or nameof(IArchiveManager.IsManagerLoaded))
         {
+            if (_archiveManager.IsManagerLoading)
+            {
+                _isLoading = true;
+            }
+
             CheckView();
         }
 
@@ -202,7 +262,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool _shouldShowExecutablePathWarning = true;
 
     [ObservableProperty]
-    private ObservableCollection<RedFileSystemModel> _leftItems = new();
+    internal ObservableCollection<RedFileSystemModel> _leftItems = new();
 
     [ObservableProperty]
     private object? _leftSelectedItem;
@@ -258,8 +318,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     internal async Task LoadAssetBrowser()
     {
-        _manuallyLoading = true;
-        ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+        _isLoading = true;
+        UpdateLoadArchiveButtonVisibility();
+        UpdateLoadingIndicatorVisibility();
         await _gameController.GetRed4Controller().HandleStartup();
     }
 
@@ -488,10 +549,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// Add File to Project
     /// </summary>
     ///
-    private bool CanAddToProject() => ProjectLoaded;
+    private bool CanAddToProject() => ProjectLoaded && RightItems.Any(x => x.IsChecked);
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private async Task AddSelectedAsync()
+    internal async Task AddSelectedAsync()
     {
         // get all selected files
         Dictionary<ulong, IGameFile> filesToAdd = new();
@@ -567,7 +628,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         await InternalAddFiles(finalFilesToAdd);
     }
 
-    private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
+    internal void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
     {
         foreach (var (_, model) in directory.Directories)
         {
@@ -581,10 +642,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
-        await _gameController.GetController().AddToModAsync(files);
+        var explorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()!;
+        explorer.SuspendFileWatcher();
+        await explorer.RefreshAfter(async () => await _gameController.GetController().AddToModAsync(files));
+        explorer.ResumeFileWatcher();
         _loggerService.Success($"Added {files.Count} files to the project.");
-        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.ResumeFileWatcher();
     }
 
     /// <summary>
@@ -728,9 +790,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     #region methods
 
-    private void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
+    internal void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
 
-    private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
+    internal void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
     /// <summary>
     /// Navigates the Asset Browser to the existing file.

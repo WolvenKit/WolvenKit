@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2945
+      author: "gistya"
+      description: "Adding very large amounts of files, and opening very large projects, is now exponentially faster. Loading indicators are improved. Expansion state of the Project Explorer tree is now remembered properly. Various UI freezes and hitches are fixed."

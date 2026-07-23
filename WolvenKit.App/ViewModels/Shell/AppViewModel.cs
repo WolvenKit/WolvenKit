@@ -20,6 +20,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -71,6 +72,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
+    private readonly IProjectEvents _projectEvents;
     private readonly IGameControllerFactory _gameControllerFactory;
     private readonly INotificationService _notificationService;
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -83,7 +85,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     public readonly TemplateFileTools TemplateFileTools;
-    private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     private readonly RedTypeTemplateService _redTypeTemplateService;
@@ -111,7 +112,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         ArchiveXlItemService archiveXlItemService,
         AppScriptService scriptService,
         IModTools modTools,
@@ -120,6 +120,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
+        IProjectEvents projectEvents,
         RedTypeTemplateService redTypeTemplateService
     )
     {
@@ -138,7 +139,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _watcherService = watcherService;
         _archiveXlItemService = archiveXlItemService;
         _scriptService = scriptService;
         _documentTools = documentTools;
@@ -146,6 +146,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
+        _projectEvents = projectEvents;
+        _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
+        _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
         _redTypeTemplateService = redTypeTemplateService;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
@@ -711,7 +714,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-            await LoadProjectFromPathAsync(location);
+            await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
 
@@ -829,13 +832,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 Version = project.Version
             };
 
+            np.CreateDefaultDirectories();
             _projectManager.ActiveProject = np;
             _archiveManager.ProjectArchive = np.AsArchive();
 
             await _projectManager.SaveAsync();
-            np.CreateDefaultDirectories();
 
-            await LoadProjectFromPathAsync(projectLocation);
+            await RunAfterModalClosed(async () =>
+            {
+                await LoadProjectFromPathAsync(projectLocation);
+            });
         }
         catch (Exception ex)
         {
@@ -849,7 +855,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveFile() => Save(ActiveDocument.NotNull());
+    private void SaveFile()
+    {
+        if (ActiveDocument is not IDocumentViewModel document)
+        {
+            return;
+        }
+        GetToolViewModel<ProjectExplorerViewModel>().SuspendFileWatcher();
+        _projectEvents.PublishFileChanged(new FileChangedMessage.Document(document));
+        Save(document);
+        GetToolViewModel<ProjectExplorerViewModel>().ResumeFileWatcher();
+    }
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
@@ -891,15 +907,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Any();
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
-    private void SaveAll()
+    private void SaveAll(bool onlyProjectFiles = false)
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not { } activeProject)
         {
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
 
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>()
+                     .Where(f => f.IsDirty)
+                     .Where(f => !onlyProjectFiles || activeProject.ModFiles
+                         .Select(relPath => Path.Join(activeProject.ModDirectory, relPath).ToLower())
+                         .Contains(f.FilePath?.ToLower())))
         {
             Save(file);
         }
@@ -907,7 +927,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
     {
-        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>()
+            .Where(tab => tab.IsDirty)
+            .Where(tab =>
+            {
+                if (_projectManager.ActiveProject is not { } project || string.IsNullOrEmpty(tab.FilePath))
+                {
+                    return true;
+                }
+
+                var filePath = project.GetGameRelativePath(tab.FilePath) ?? tab.FilePath;
+                return project.ModFiles.Contains(filePath, StringComparer.InvariantCultureIgnoreCase);
+            }).ToList();
+
         if (dirtyFiles.Count == 0)
         {
             return true;
@@ -928,7 +960,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case WMessageBoxResult.OK:
             case WMessageBoxResult.Yes:
             default:
-                SaveAll();
+                SaveAll(true);
                 break;
         }
 
@@ -1030,7 +1062,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
+    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService, _projectEvents);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void DeleteEmptyMeshes()
@@ -1113,9 +1145,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
-            .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
+            .Where(f => !referencesHashSet.Contains(ActiveProject.GetGameRelativePath(f))) // they're used
             .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
-            .Where(f => !ActiveProject.GetRelativePath(f)
+            .Where(f => !ActiveProject.GetGameRelativePath(f)
                 .StartsWith(@"base\characters\appearances\main_npc\npv")) // npv apps
             .ToList();
 
@@ -1421,15 +1453,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.Suspend();
+        GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
         try
         {
             _archiveXlItemService.CreateEquipmentItem(item);
         }
         finally
         {
-            _watcherService.Resume();
-            _watcherService.Refresh();
+            GetToolViewModel<ProjectExplorerViewModel>()?
+                .ResumeWatcher_AndReloadProject();
         }
     }
 
@@ -1597,8 +1629,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
+            // Clean tab: nothing to lose, so refresh silently to show the new on-disk content.
+            if (!documentViewModel.IsDirty)
+            {
+                documentViewModel.Reload(true);
+                continue;
+            }
+
+            // Dirty tab: the user has unsaved edits — let them choose rather than discarding them.
             var result = Interactions.ShowConfirmation((
-                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                $"The file {documentViewModel.FilePath} has been modified on disk, but you have unsaved changes. " +
+                "Reload and discard your changes?",
                 "File Modified",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
@@ -1890,6 +1931,102 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             IsOverlayShown = false;
         }
+
+        // Run any work that was deferred because an overlay or dialog was open.
+        // This gives animations (like OverlayFadeOut) a clean shot at the UI thread.
+        while (_pendingAfterModalCloseActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            var action = _pendingAfterModalCloseActions.Dequeue();
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred post-modal action: {ex.Message}");
+            }
+        }
+
+        while (_pendingAfterModalCloseAsyncActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            var asyncAction = _pendingAfterModalCloseAsyncActions.Dequeue();
+            _ = ExecuteDeferredAsync(asyncAction);
+        }
+    }
+
+    private async Task ExecuteDeferredAsync(Func<Task> asyncAction)
+    {
+        try
+        {
+            await asyncAction();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+        }
+    }
+
+    private readonly Queue<Action> _pendingAfterModalCloseActions = new();
+    private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
+
+    /// <summary>
+    /// Schedules an action to run on the UI thread after all modals and overlays have fully closed.
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time.
+    /// </summary>
+    public void RunAfterModalClosed(Action action)
+    {
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            action();
+        }
+        else
+        {
+            _pendingAfterModalCloseActions.Enqueue(action);
+        }
+    }
+
+    /// <summary>
+    /// Schedules an async action to run on the UI thread after all modals and overlays have fully closed.
+    /// Returns a Task that completes when the action has executed (immediately if no modals are open,
+    /// or after the close animation + execution if deferred).
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time, while still allowing callers to await completion.
+    /// </summary>
+    public Task RunAfterModalClosed(Func<Task> asyncAction)
+    {
+        _progressService.Status = EStatus.Running;
+        _progressService.IsIndeterminate = true;
+
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            var task = asyncAction();
+            // Ensure errors are logged even if caller does not await the returned task.
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    _loggerService.Error($"Error running immediate post-modal async action: {t.Exception?.GetBaseException().Message}");
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+            return task;
+        }
+
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _pendingAfterModalCloseAsyncActions.Enqueue(async () =>
+        {
+            try
+            {
+                await asyncAction();
+                tcs.TrySetResult();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+                tcs.TrySetException(ex);
+            }
+        });
+        return tcs.Task;
     }
 
     private bool CanCloseOverlay() => IsOverlayShown;
@@ -2026,6 +2163,33 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return (semVersion, path);
     }
     */
+
+
+    public async Task SearchInProject(string searchText, bool isRegex, bool isWholeWord)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        var filesWithMatch =
+            await ProjectResourceTools.GetFilesContainingString(searchText, isRegex, isWholeWord, _progressService);
+        if (filesWithMatch.Count == 0)
+        {
+            _notificationService.Success("Finished search, but found no results");
+            return;
+        }
+
+        _notificationService.Success($"Finished search, found {filesWithMatch.Count} results");
+        _loggerService.Success($"Finished search for {searchText}: \n\t{string.Join("\n\t", filesWithMatch)}");
+
+        var dict = new Dictionary<string, List<string>>() { { searchText, filesWithMatch } };
+
+        Interactions.ShowDictionaryAsCopyableList(
+            new ShowDictAsCopyableListDialogOptions("Search results", "Files containing your search term", dict,
+                false));
+    }
+
 
     private void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
     {
@@ -2180,130 +2344,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await _tweakDBService.LoadDB(dbPath);
     }
 
-    /// <summary>
-    /// Open a file and return its content in a viewmodel.
-    /// </summary>
-    /// <returns></returns>
-    private async Task<IDocumentViewModel?> Open(string fullPath, EWolvenKitFile type)
-    {
-        var result = false;
-
-        // Check if we have already loaded this file and return it if so
-        var fileViewModel = DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(fm => fm.ContentId == fullPath);
-        if (fileViewModel is not null)
-        {
-            return fileViewModel;
-        }
-
-        // open file
-        switch (type)
-        {
-            case EWolvenKitFile.Cr2w:
-                if (OpenFile(fullPath, out var file))
-                {
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
-                    result = fileViewModel.IsInitialized();
-                }
-                break;
-            case EWolvenKitFile.TweakXl:
-                await LoadTweakDB();
-                fileViewModel = _documentViewmodelFactory.TweakXLDocumentViewModel(fullPath);
-                result = fileViewModel.IsInitialized();
-                break;
-            case EWolvenKitFile.WScript:
-                fileViewModel = _documentViewmodelFactory.WScriptDocumentViewModel(fullPath);
-                result = fileViewModel.IsInitialized();
-                break;
-            case EWolvenKitFile.ArchiveXl:
-            case EWolvenKitFile.RedScript:
-            case EWolvenKitFile.CETLua:
-            case EWolvenKitFile.Other:
-            default:
-                break;
-        }
-
-        if (result)
-        {
-            _loggerService.Success($"Opening File: {fullPath}");
-            return fileViewModel;
-        }
-
-        _loggerService.Warning($"Unable to open file: {fullPath}");
-        return null;
-    }
-
 
     private const string s_noProjectText = "You need to have a Wolvenkit project to save files. See the wiki for more detes:\n" +
                                            "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/wolvenkit-projects";
 
     private const string s_noProjectTitle = "No Wolvenkit project";
-
-    /// <summary>
-    /// Saves a document and resets the dirty flag.
-    /// </summary>
-    /// <param name="fileToSave"></param>
-    /// <param name="saveAsDialogRequested"></param>
-    private void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
-    {
-        var isWscript = fileToSave is WScriptDocumentViewModel;
-
-        // Do not allow saving of anything that's not wscript without a project. Bad user!
-        if (_projectManager.ActiveProject is null && !isWscript)
-        {
-            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
-            return;
-        }
-
-        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null && !isWscript)
-        {
-            return;
-        }
-
-        var needSaveAsDialog =
-            fileToSave switch
-            {
-                RedDocumentViewModel red =>
-                    saveAsDialogRequested ||
-                    string.IsNullOrEmpty(red.FilePath) ||
-                    !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)))
-                ,
-                WScriptDocumentViewModel wScript =>
-                    saveAsDialogRequested ||
-                    string.IsNullOrEmpty(wScript.FilePath) ||
-                    !Directory.Exists(ISettingsManager.GetWScriptDir()),
-                _ => false,
-            };
-
-        if (needSaveAsDialog)
-        {
-            SaveFileDialog dlg = new();
-            if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
-            {
-                var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)).NotNull();
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-                dlg.FileName = Path.GetFileName(red.RelativePath);
-                dlg.InitialDirectory = directory;
-            }
-            else
-            {
-                dlg.FileName = fileToSave.FilePath is not null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
-                dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
-            }
-
-            if (dlg.ShowDialog().GetValueOrDefault())
-            {
-                fileToSave.FilePath = dlg.FileName;
-                fileToSave.SaveCommand.SafeExecute();
-            }
-        }
-        else
-        {
-            fileToSave.SaveCommand.SafeExecute();
-        }
-    }
 
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
@@ -2422,112 +2467,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         (SettingsManager.TreeViewIgnoredExtensions ?? "")
         .Split(s_ignoredExceptionsDelimiter)
         .Any(entry => entry.ToLower().Trim().Equals(ext));
-
-    /// <param name="absolutePath">Absolute path of the file</param>
-    /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
-    /// <exception cref="InvalidFileTypeException"></exception>
-    public void RequestFileOpen(string absolutePath, bool ignoreIgnoredExtension = false)
-    {
-        if (!File.Exists(absolutePath))
-        {
-            return;
-        }
-
-        var ext = Path.GetExtension(absolutePath).ToLower();
-
-        if (!ignoreIgnoredExtension && IsExtensionIgnored(ext))
-        {
-            ShellExecute(absolutePath);
-            return;
-        }
-
-        switch (ext)
-        {
-            // custom raw file extensions
-            case $".{nameof(ERawFileFormat.masklist)}":
-
-            // images
-            case ".png":
-            case ".jpg":
-            case ".tga":
-            case ".bmp":
-            case ".jpeg":
-            case ".dds":
-
-            //text
-            case ".xml":
-            case ".txt":
-            case ".ws":
-            case ".lua":
-
-            // other
-            case ".mp3":
-            case ".wav":
-            case ".glb":
-            case ".gltf":
-            case ".fbx":
-            case ".xcf":
-            case ".psd":
-            case ".apb":
-            case ".apx":
-            case ".ctw":
-            case ".blend":
-            case ".zip":
-            case ".rar":
-            case ".bat":
-            case ".yml":
-            case ".log":
-            case ".ini":
-            case ".xl":
-            case ".reds":
-            case ".yaml":
-            case ".tweak":
-                ShellExecute(absolutePath);
-                break;
-            // double file formats
-            case ".csv":
-            case ".json":
-                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath) || IsInTemplateFolder(absolutePath))
-                {
-                    ShellExecute(absolutePath);
-                }
-                else
-                {
-                    OpenRedengineFile(absolutePath, ext);
-                }
-
-                break;
-            // VIDEO
-            case ".bk2":
-                break;
-
-            // AUDIO
-
-            case ".wem":
-                OpenAudioFile();
-                break;
-            case ".subs":
-                PolymorphExecute(absolutePath, ".txt");
-                break;
-            case ".usm":
-            {
-                // TODO: port winforms
-                //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
-                //    return;
-                //var usmPlayer = new frmUsmPlayer(fullpath);
-                //usmPlayer.Show(dockPanel, DockState.Document);
-                break;
-            }
-            //case ".BNK":
-            // TODO SPLIT WEMs TO PLAYLIST FROM BNK
-            default:
-                OpenRedengineFile(absolutePath, ext);
-                break;
-        }
-
-    }
-
-    public void CloseFile(IDocumentViewModel documentViewModel) => DockedViews.Remove(documentViewModel);
 
     public void SetStatusReady()
     {
@@ -2819,6 +2758,241 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     #endregion methods
 
+    # region file_and_document_handling
+
+    /// <param name="absolutePath">Absolute path of the file</param>
+    /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
+    /// <exception cref="InvalidFileTypeException"></exception>
+    public void RequestFileOpen(string absolutePath, bool ignoreIgnoredExtension = false)
+    {
+        if (!File.Exists(absolutePath))
+        {
+            return;
+        }
+
+        var ext = Path.GetExtension(absolutePath).ToLower();
+
+        if (!ignoreIgnoredExtension && IsExtensionIgnored(ext))
+        {
+            ShellExecute(absolutePath);
+            return;
+        }
+
+        switch (ext)
+        {
+            // custom raw file extensions
+            case $".{nameof(ERawFileFormat.masklist)}":
+
+            // images
+            case ".png":
+            case ".jpg":
+            case ".tga":
+            case ".bmp":
+            case ".jpeg":
+            case ".dds":
+
+            //text
+            case ".xml":
+            case ".txt":
+            case ".ws":
+            case ".lua":
+
+            // other
+            case ".mp3":
+            case ".wav":
+            case ".glb":
+            case ".gltf":
+            case ".fbx":
+            case ".xcf":
+            case ".psd":
+            case ".apb":
+            case ".apx":
+            case ".ctw":
+            case ".blend":
+            case ".zip":
+            case ".rar":
+            case ".bat":
+            case ".yml":
+            case ".log":
+            case ".ini":
+            case ".xl":
+            case ".reds":
+            case ".yaml":
+            case ".tweak":
+                ShellExecute(absolutePath);
+                break;
+            // double file formats
+            case ".csv":
+            case ".json":
+                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath))
+                {
+                    ShellExecute(absolutePath);
+                }
+                else
+                {
+                    OpenRedengineFile(absolutePath, ext);
+                }
+
+                break;
+            // VIDEO
+            case ".bk2":
+                break;
+
+            // AUDIO
+
+            case ".wem":
+                OpenAudioFile();
+                break;
+            case ".subs":
+                PolymorphExecute(absolutePath, ".txt");
+                break;
+            case ".usm":
+            {
+                // TODO: port winforms
+                //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
+                //    return;
+                //var usmPlayer = new frmUsmPlayer(fullpath);
+                //usmPlayer.Show(dockPanel, DockState.Document);
+                break;
+            }
+            //case ".BNK":
+            // TODO SPLIT WEMs TO PLAYLIST FROM BNK
+            default:
+                OpenRedengineFile(absolutePath, ext);
+                break;
+        }
+    }
+
+    public void CloseFile(IDocumentViewModel documentViewModel) => DockedViews.Remove(documentViewModel);
+
+    /// <summary>
+    /// Open a file and return its content in a viewmodel.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<IDocumentViewModel?> Open(string fullPath, EWolvenKitFile type)
+    {
+        var result = false;
+
+        // Check if we have already loaded this file and return it if so
+        var fileViewModel = DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(fm => fm.ContentId == fullPath);
+        if (fileViewModel is not null)
+        {
+            return fileViewModel;
+        }
+
+        // open file
+        switch (type)
+        {
+            case EWolvenKitFile.Cr2w:
+                if (OpenFile(fullPath, out var file))
+                {
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
+                    result = fileViewModel.IsInitialized();
+                }
+
+                break;
+            case EWolvenKitFile.TweakXl:
+                await LoadTweakDB();
+                fileViewModel = _documentViewmodelFactory.TweakXLDocumentViewModel(fullPath);
+                result = fileViewModel.IsInitialized();
+                break;
+            case EWolvenKitFile.WScript:
+                fileViewModel = _documentViewmodelFactory.WScriptDocumentViewModel(fullPath);
+                result = fileViewModel.IsInitialized();
+                break;
+            case EWolvenKitFile.ArchiveXl:
+            case EWolvenKitFile.RedScript:
+            case EWolvenKitFile.CETLua:
+            case EWolvenKitFile.Other:
+            default:
+                break;
+        }
+
+        if (result)
+        {
+            _loggerService.Success($"Opening File: {fullPath}");
+            return fileViewModel;
+        }
+
+        _loggerService.Warning($"Unable to open file: {fullPath}");
+        return null;
+    }
+
+
+    /// <summary>
+    /// Saves a document and resets the dirty flag.
+    /// </summary>
+    /// <param name="fileToSave"></param>
+    /// <param name="saveAsDialogRequested"></param>
+    private void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
+    {
+        var isWscript = fileToSave is WScriptDocumentViewModel;
+
+        // Do not allow saving of anything that's not wscript without a project. Bad user!
+        if (_projectManager.ActiveProject is null && !isWscript)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning,
+                WMessageBoxButtons.Ok));
+            return;
+        }
+
+        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null && !isWscript)
+        {
+            return;
+        }
+
+        var needSaveAsDialog =
+            fileToSave switch
+            {
+                RedDocumentViewModel red =>
+                    saveAsDialogRequested ||
+                    string.IsNullOrEmpty(red.FilePath) ||
+                    !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory,
+                        red.RelativePath))),
+                WScriptDocumentViewModel wScript =>
+                    saveAsDialogRequested ||
+                    string.IsNullOrEmpty(wScript.FilePath) ||
+                    !Directory.Exists(ISettingsManager.GetWScriptDir()),
+                _ => false,
+            };
+
+        if (needSaveAsDialog)
+        {
+            SaveFileDialog dlg = new();
+            if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
+            {
+                var directory = Path
+                    .GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath))
+                    .NotNull();
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                dlg.FileName = Path.GetFileName(red.RelativePath);
+                dlg.InitialDirectory = directory;
+            }
+            else
+            {
+                dlg.FileName = fileToSave.FilePath is not null
+                    ? Path.GetFileName(fileToSave.FilePath)
+                    : Path.GetFileName(fileToSave.ContentId);
+                dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
+            }
+
+            if (dlg.ShowDialog().GetValueOrDefault())
+            {
+                fileToSave.FilePath = dlg.FileName;
+                fileToSave.SaveCommand.SafeExecute();
+            }
+        }
+        else
+        {
+            fileToSave.SaveCommand.SafeExecute();
+        }
+    }
+
+
     /// <summary>
     /// Checks if the document has unsaved changes and prompts the user if necessary.
     /// </summary>
@@ -2939,7 +3113,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else if (!saveIfDirty)
         {
             _loggerService.Warning(
-                $"File {project.GetRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
+                $"File {project.GetGameRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
             return;
         }
 
@@ -2952,7 +3126,133 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch
         {
-            _loggerService.Error($"Failed to reload {project.GetRelativePath(absolutePath)}");
+            _loggerService.Error($"Failed to reload {project.GetGameRelativePath(absolutePath)}");
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an authoritative set of file moves/renames (from
+    /// <see cref="IProjectEvents.FilesMoved"/>). A tab whose file was relocated is retargeted to the
+    /// new path and reloaded; a tab already open at a move's destination (i.e. it was overwritten) is
+    /// reloaded in place.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterMoves(FilesMovedMessage msg)
+    {
+        if (!DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return; // nothing open to refresh (fast path for large directory moves)
+        }
+
+        foreach (var (from, to) in msg.Moves)
+        {
+            // A real relocation (rename/move): follow the open tab from its old path to the new one.
+            var handledMovedTab = !string.IsNullOrEmpty(from)
+                                  && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                                  && TryRefreshOpenDocument(from, to);
+
+            // Otherwise a document already open at the destination had its content replaced.
+            if (!handledMovedTab)
+            {
+                TryRefreshOpenDocument(to);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an authoritative set of imported/created files (from
+    /// <see cref="IProjectEvents.FilesImported"/>, e.g. import, convert, overwrite-with-game-file).
+    /// Any open tab whose file was overwritten is reloaded in place.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterImports(FilesImportedMessage msg)
+    {
+        if (_projectManager.ActiveProject is not { } project
+            || !DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return;
+        }
+
+        switch (msg)
+        {
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var gameFile in files)
+                {
+                    // FileName is a resource path and may use '/'; normalize to an OS path so it matches the
+                    // document's FilePath (which the watcher builds via FileInfo).
+                    TryRefreshOpenDocument(Path.GetFullPath(Path.Combine(project.ModDirectory, gameFile.FileName)));
+                }
+
+                break;
+
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var rawFile in files)
+                {
+                    TryRefreshOpenDocument(rawFile.FullName);
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// If a document is open at <paramref name="currentFilePath"/>, refresh it from disk, optionally
+    /// retargeting it to <paramref name="newFilePath"/> first (for a rename/move). Clean documents are
+    /// reloaded silently; documents with unsaved changes are skipped with a warning so edits aren't
+    /// lost. Returns true if a matching open document was found.
+    /// </summary>
+    private bool TryRefreshOpenDocument(string currentFilePath, string? newFilePath = null)
+    {
+        var targetPath = newFilePath ?? currentFilePath;
+
+        if (string.IsNullOrEmpty(currentFilePath) || !File.Exists(targetPath))
+        {
+            return false;
+        }
+
+        if (DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(doc =>
+                currentFilePath.Equals(doc.FilePath, StringComparison.OrdinalIgnoreCase)) is not { } openDocument)
+        {
+            return false;
+        }
+
+        if (openDocument.IsDirty)
+        {
+            _loggerService.Warning(
+                $"\"{Path.GetFileName(targetPath)}\" changed on disk but has unsaved changes; its editor was not refreshed.");
+            return true;
+        }
+
+        if (!targetPath.Equals(openDocument.FilePath, StringComparison.OrdinalIgnoreCase))
+        {
+            openDocument.FilePath = targetPath; // follow the rename/move so Reload reads the new file
+        }
+
+        try
+        {
+            openDocument.Reload(true);
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to refresh \"{Path.GetFileName(targetPath)}\" after it changed on disk.");
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Runs an open-document refresh on the UI thread, swallowing and logging any error. The
+    /// FilesMoved/FilesImported subscriptions run synchronously on the publishing thread, so a throw
+    /// here would escape into the publisher (e.g. MoveAndRefactorAsync mid-rename) and strand the
+    /// file watcher / guard. Refreshing documents is best-effort and must never do that.
+    /// </summary>
+    private void SafeRefreshOpenDocuments(Action refresh)
+    {
+        try
+        {
+            DispatcherHelper.RunOnMainThread(refresh);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to refresh open documents after a file change: {ex.Message}");
         }
     }
 
@@ -2983,10 +3283,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch
         {
-            _loggerService.Error($"Failed to save {project.GetRelativePath(absolutePath)}");
+            _loggerService.Error($"Failed to save {project.GetGameRelativePath(absolutePath)}");
             return false;
         }
 
         return true;
     }
+
+    #endregion
+
 }
