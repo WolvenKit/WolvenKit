@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using WolvenKit.Modkit.RED4.Sounds;
 
-namespace WolvenKit.App.Models;
+namespace WolvenKit.Modkit.RED4;
 
 public class ModInfo
 {

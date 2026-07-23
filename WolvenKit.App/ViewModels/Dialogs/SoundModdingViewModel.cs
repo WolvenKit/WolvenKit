@@ -9,11 +9,11 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Sounds;
 
 namespace WolvenKit.App.ViewModels.Dialogs;

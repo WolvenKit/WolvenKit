@@ -9,7 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;

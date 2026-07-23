@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;

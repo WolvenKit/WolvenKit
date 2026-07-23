@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.App.Models;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4;
 
 namespace WolvenKit.App.ViewModels.HomePage.Pages;
 

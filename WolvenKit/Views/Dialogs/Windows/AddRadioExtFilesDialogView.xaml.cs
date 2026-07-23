@@ -9,7 +9,7 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using DragEventArgs = System.Windows.DragEventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;

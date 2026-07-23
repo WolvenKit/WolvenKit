@@ -8,7 +8,7 @@ using ReactiveUI;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs.Windows;
