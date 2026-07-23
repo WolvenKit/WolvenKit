@@ -24,7 +24,6 @@ public abstract partial class StringHelper
         return $"{vec.X}, {vec.Y}, {vec.Z}, {vec.W}";
     }
 
-
     private static string Stringify(Quaternion quat, bool defaultIsOne = false)
     {
         var val = defaultIsOne ? 1 : 0;
@@ -543,6 +542,7 @@ public abstract partial class StringHelper
         return SearchType.RegexWholeWord;
     }
 
+    public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 }
 
 public enum SearchType
@@ -551,6 +551,4 @@ public enum SearchType
     Regex,
     WholeWord,
     RegexWholeWord,
-
-    public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 }
