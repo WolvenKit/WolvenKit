@@ -44,6 +44,8 @@ namespace WolvenKit.Views.Documents
         private static IDocumentViewModel? s_lastActiveDocument;
         private static bool s_selectionManagerInitialized = false;
 
+        private readonly ILoggerService _loggerService = Locator.Current.GetService<ILoggerService>()!;
+
         private bool _disposed = false;
 
         public SceneGraphView()
@@ -740,7 +742,7 @@ namespace WolvenKit.Views.Documents
                     .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x)));
 
                 // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, allTypes)
+                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, _loggerService, allTypes)
                 {
                     DialogHandler = model =>
                     {
