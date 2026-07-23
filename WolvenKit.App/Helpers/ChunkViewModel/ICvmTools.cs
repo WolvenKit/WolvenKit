@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.Helpers;
@@ -18,9 +20,14 @@ public interface ICvmTools
 
     void AdjustSubmeshCount(ChunkViewModel cvm);
     void UnDynamifyMaterials(ChunkViewModel? cvm);
+
+    void ExpandMeshAppearances(ChunkViewModel? cvm, out Dictionary<string, List<string>> templatesAndValues,
+        bool preserveDynamicChunks = false);
     void AddMaterialAndDefinition(ChunkViewModel cvm, string newName);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
+    void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager, Cp77Project? project);
+    void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project);
     #endregion
 
     #region CvmDependencyTools

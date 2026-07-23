@@ -138,7 +138,7 @@ public class HashServiceExt : HashService
         {
             var thread = new Thread(() =>
             {
-                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                 Thread.CurrentThread.IsBackground = true;
                 _projectRefCache.Clear();
                 _projectTweakCache.Clear();

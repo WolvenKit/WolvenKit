@@ -47,6 +47,7 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly IGameControllerFactory _gameController;
     private readonly GeometryCacheService _geometryCacheService;
     private readonly ISettingsManager _settingsManager;
+    private readonly IProjectEvents _projectEvents;
 
     public AppViewModel? AppViewModel;
 
@@ -59,7 +60,8 @@ public class AppScriptFunctions : ScriptFunctions
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
-        ISettingsManager settingsManager)
+        ISettingsManager settingsManager,
+        IProjectEvents projectEvents)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
@@ -68,7 +70,7 @@ public class AppScriptFunctions : ScriptFunctions
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
         _settingsManager = settingsManager;
-
+        _projectEvents = projectEvents;
     }
 
     /// <summary>
@@ -158,6 +160,9 @@ public class AppScriptFunctions : ScriptFunctions
         try
         {
             action(diskPathInfo.FullName);
+            // Announce the add to the project explorer (covers SaveToProject/SaveToRaw/SaveToResources).
+            // For an overwrite the tree add is a no-op, but the publish still reloads an open editor tab.
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
         catch (Exception ex)
         {
@@ -473,7 +478,7 @@ public class AppScriptFunctions : ScriptFunctions
     /// <param name="fileList"></param>
     /// <param name="defaultSettings"></param>
     /// <param name="blocking"></param>
-    public void ExportFiles(IList fileList, ScriptObject? defaultSettings = null)
+    public async Task ExportFiles(IList fileList, ScriptObject? defaultSettings = null)
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
@@ -508,17 +513,18 @@ public class AppScriptFunctions : ScriptFunctions
             _loggerService.Warning($"\"{entry}\" is not a valid entry");
         }
 
-        Parallel.ForEach(fileDict, (kvp) =>
-        {
-            if (kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
-            {
-                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()));
-            }
-            else
-            {
-                Task.Run(() => _importExportHelper.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
-            }
-        });
+        var rawBefore = ProjectFileDiff.Snapshot(proj.RawDirectory);
+
+        var exportTasks = fileDict.Select(kvp =>
+            kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod
+                ? Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()))
+                : Task.Run(() => _importExportHelper.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)))
+        ).ToList();
+
+        await Task.WhenAll(exportTasks).ConfigureAwait(false);
+
+        // Everything has landed — announce exactly what the exports wrote to the project explorer.
+        ProjectFileDiff.Publish(rawBefore, ProjectFileDiff.Snapshot(proj.RawDirectory), _projectEvents);
 
         void AddFile(string filePath, ScriptObject? settings = null)
         {
@@ -744,6 +750,7 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         File.Delete(absoluteFilePath);
+        _projectEvents.PublishFileDeleted(absoluteFilePath);
         return !File.Exists(baseFolder);
     }
 

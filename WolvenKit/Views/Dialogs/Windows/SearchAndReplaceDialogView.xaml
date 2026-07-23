@@ -6,9 +6,11 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
-    Title="Replace in Selection"
+    Title="{Binding Title}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=SearchTextBox}"
     WindowStartupLocation="CenterScreen">
@@ -79,6 +81,8 @@
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Background="Transparent"
                         Style="{StaticResource ButtonCustom}"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Click="SwapFieldsButton_OnClick"
                         ToolTip="Swap search and replace fields">
                         <templates:IconBox
@@ -92,11 +96,15 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         VerticalAlignment="Center"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Text="Replace:" />
                     <TextBox
                         x:Name="ReplaceTextBox"
                         Grid.Row="2"
                         Grid.Column="1"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="2" />
 
@@ -129,11 +137,15 @@
                         Grid.Row="8"
                         Grid.Column="0"
                         VerticalAlignment="Center"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Text="Remember:" />
                     <CheckBox
                         x:Name="RememberValuesCheckBox"
                         Grid.Row="8"
                         Grid.Column="1"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         KeyboardNavigation.TabIndex="5" />
                 </Grid>
             </syncfusion:WizardPage>

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
@@ -266,6 +269,7 @@ public class CvmMaterialTools
                 externalMaterialIdx += 1;
             }
 
+            t.Index = (CUInt16)i;
             mesh.MaterialEntries.Add(t);
         }
 
@@ -564,35 +568,54 @@ public class CvmMaterialTools
         }
     }
 
-
-    public void UnDynamifyMaterials(ChunkViewModel? cvm)
+    public Dictionary<string, List<string>> ExpandMeshAppearances(ChunkViewModel? cvm,
+        out Dictionary<string, List<string>> templatesAndValues, bool preserveDynamicChunks = false)
     {
+        templatesAndValues = [];
+
         if (cvm?.ResolvedData is not CMesh mesh ||
             cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
         {
-            return;
+            return templatesAndValues;
         }
 
         appearances.CalculatePropertiesRecursive();
 
-        var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
+        templatesAndValues.AddRange(ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances));
 
         // nothing to do here
         if (templatesAndValues.Count == 0)
         {
-            return;
+            return templatesAndValues;
         }
 
         var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
-        appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+
+        if (!preserveDynamicChunks)
+        {
+            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+        }
 
         appearances.RecalculateProperties();
+
+        return templatesAndValues;
+    }
+
+    public void UnDynamifyMaterials(ChunkViewModel? cvm)
+    {
+        if (cvm?.ResolvedData is not CMesh mesh ||
+            cvm.GetPropertyChild("appearances") is not ChunkViewModel)
+        {
+            return;
+        }
+
+        ExpandMeshAppearances(cvm, out var templatesAndValues);
 
         cvm.GetPropertyChild("materials")?.CalculateProperties();
         cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
         cvm.GetPropertyChild("preloadLocalMaterialInstances")?.CalculateProperties();
 
-        var hasPreload = CvmMaterialTools.HasPreloadMaterials(cvm);
+        var hasPreload = HasPreloadMaterials(cvm);
 
         // iterate over dictionary and create new materials
         foreach (var (matName, resolvedMatNames) in templatesAndValues)
@@ -627,11 +650,17 @@ public class CvmMaterialTools
                 foreach (var cvp in matInstance.Values)
                 {
                     var value = ArchiveXlHelper.UnDynamifyResourceReference(cvp.Value, newMatName);
-
                     newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
                 }
 
-                mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                if (hasPreload)
+                {
+                    mesh.PreloadLocalMaterialInstances.Add(new CHandle<IMaterial>() { Chunk = newMaterialInstance });
+                }
+                else
+                {
+                    mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                }
             }
         }
 
@@ -655,6 +684,7 @@ public class CvmMaterialTools
             };
         }
     }
+
 
     /// <summary>
     /// Called from <see cref="ChunkViewModel.AddMaterialAndDefinition"/>
@@ -778,23 +808,30 @@ public class CvmMaterialTools
         return ret;
     }
 
-    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> materialEntries, bool isLocalMaterial)
+    public int FindHighestMaterialIndex(ChunkViewModel? materialDefinitionArray, bool isLocalInstance)
     {
-        if (materialEntries.Count == 0)
+        if (materialDefinitionArray?.ResolvedData is not CArray<CMeshMaterialEntry> array || array.Count == 0)
         {
             return -1;
         }
 
-        var existingIndices = materialEntries
-            .Select(m => m.IsLocalInstance == isLocalMaterial ? m.Index : -1)
-            .ToList();
+        return FindHighestMaterialIndex(array, isLocalInstance);
+    }
 
-        if (existingIndices.Count == 0)
+    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
+    {
+        var maxIndex = -1;
+        // ReSharper disable once ForCanBeConvertedToForeach - can't LINQ here
+        // ReSharper disable once LoopCanBeConvertedToQuery - will throw NoElementsException
+        for (var i = 0; i < matDefArray.Count; i++)
         {
-            existingIndices.Add(-1);
+            if (matDefArray[i].IsLocalInstance == isLocalInstance && matDefArray[i].Index > maxIndex)
+            {
+                maxIndex = matDefArray[i].Index;
+            }
         }
 
-        return existingIndices.Max();
+        return maxIndex;
     }
 
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
@@ -839,6 +876,203 @@ public class CvmMaterialTools
         }
 
         appearanceChunks.First().Tab?.Parent.SetIsDirty(true);
+    }
+
+    private static readonly Dictionary<string, List<CKeyValuePair>> s_materialValuesByRelPath = [];
+    private static readonly Dictionary<string, string> s_baseMaterialByRelPath = [];
+
+    private static void ReadMaterialValuesRecursive(string relPath, IAppArchiveManager archiveManager)
+    {
+        // already read this file
+        if (s_baseMaterialByRelPath.ContainsKey(relPath) && s_materialValuesByRelPath.ContainsKey(relPath))
+        {
+            return;
+        }
+
+        // failed to read file
+        if (archiveManager.GetCR2WFile(relPath, true, true) is not CR2WFile file)
+        {
+            return;
+        }
+
+        switch (file.RootChunk)
+        {
+            case CMaterialInstance matInstance:
+                s_materialValuesByRelPath[relPath] = matInstance.Values.ToList();
+                var parentPath = matInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "invalid";
+                s_baseMaterialByRelPath[relPath] = parentPath;
+                ReadMaterialValuesRecursive(parentPath, archiveManager);
+                return;
+
+            case CMaterialTemplate shader
+                when shader.Parameters.Count > 1 && shader.Parameters[^1] is { } shaderParamList:
+            {
+                s_materialValuesByRelPath[relPath] = shaderParamList.Select(p => p.Chunk)
+                    .OfType<CMaterialParameter>()
+                    .Select(CKeyValuePairFactory.Create)
+                    .ToList();
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reads a material's properties into <see cref="s_materialValuesByRelPath"/> for quick lookup.
+    /// This includes shader properties and parameters.
+    /// </summary>
+    /// <param name="resourcePath">resource path to material</param>
+    /// <param name="archiveManager">pass as argument (so we can call static)</param>
+    /// <param name="baseMaterial">path to shader material</param>
+    /// <returns>List of material properties (CKeyValuePairs)</returns>
+    private static List<CKeyValuePair> GetMaterialValueChain(
+        ResourcePath resourcePath,
+        IAppArchiveManager archiveManager,
+        out string baseMaterial)
+    {
+        var basePath = resourcePath.GetResolvedText() ?? "invalid";
+        baseMaterial = basePath;
+
+        // materials have not been cached yet
+        if (!s_materialValuesByRelPath.ContainsKey(basePath))
+        {
+            ReadMaterialValuesRecursive(basePath, archiveManager);
+        }
+
+        // Failed to read parent material, or we're already at an .mt file
+        if (!basePath.EndsWith(".mi") || !s_baseMaterialByRelPath.TryGetValue(basePath, out var parentPath))
+        {
+            return s_materialValuesByRelPath.TryGetValue(basePath, out var value) ? value : [];
+        }
+
+        List<string> baseMaterialChain = [basePath];
+        while (s_baseMaterialByRelPath.TryGetValue(basePath, out parentPath) && !baseMaterialChain.Contains(parentPath))
+        {
+            baseMaterialChain.Add(parentPath);
+            baseMaterial = parentPath;
+        }
+
+        List<CKeyValuePair> values = [];
+        foreach (var relPath in baseMaterialChain.Where(relPath => relPath.EndsWith(".mi")))
+        {
+            var properties = s_materialValuesByRelPath.TryGetValue(relPath, out var value) ? value : [];
+            values.AddRange(properties.Where(v => !values.Contains(v)));
+        }
+
+        return values;
+    }
+
+    public void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager, Cp77Project? project)
+    {
+        s_materialValuesByRelPath.Clear();
+        s_baseMaterialByRelPath.Clear();
+        foreach (var cvm in cvmSelection)
+        {
+            FlattenMiChain(cvm, archiveManager, project);
+        }
+    }
+
+    public bool FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project,
+        bool clearCache = false)
+    {
+        if (cvm is null || project is null)
+        {
+            return false;
+        }
+
+        if (clearCache)
+        {
+            s_materialValuesByRelPath.Clear();
+            s_baseMaterialByRelPath.Clear();
+        }
+
+        var isDirty = false;
+
+        switch (cvm.ResolvedData)
+        {
+            case CMaterialInstance mi:
+                isDirty = FlattenMiChainInMaterial(mi) || isDirty;
+                cvm.RecalculateProperties();
+                break;
+            case IRedArray<IMaterial>:
+                foreach (var arrayItem in cvm.Properties.Where(c => c.ResolvedData is IMaterial))
+                {
+                    isDirty = FlattenMiChain(arrayItem, archiveManager, project) || isDirty;
+                    arrayItem.RecalculateProperties();
+                }
+
+                break;
+            case CMesh mesh:
+                FlattenMeshMaterials(mesh);
+                RecalculateMaterialProperties(cvm, true);
+                break;
+
+            // this will run on the selected cvm, so might have to use whatever node. Let's check if it's inside a .mi
+            default:
+                if (cvm.GetRootModel() is { ResolvedData: CMaterialInstance miParent } root)
+                {
+                    FlattenMiChainInMaterial(miParent);
+                    root.RecalculateProperties();
+                }
+                break;
+        }
+
+        if (isDirty)
+        {
+            cvm.RecalculateProperties();
+            cvm.Tab?.Parent.SetIsDirty(true);
+        }
+
+        return isDirty;
+
+        // flattens all local materials in a mesh
+        void FlattenMeshMaterials(CMesh mesh)
+        {
+            foreach (var material in mesh.LocalMaterialBuffer.Materials.OfType<CMaterialInstance>())
+            {
+                FlattenMiChainInMaterial(material);
+            }
+
+            foreach (var material in mesh.PreloadLocalMaterialInstances.Select(h => h.Chunk)
+                         .OfType<CMaterialInstance>())
+            {
+                FlattenMiChainInMaterial(material);
+            }
+        }
+
+        // flattens a material's .mi chain
+        bool FlattenMiChainInMaterial(CMaterialInstance inst)
+        {
+            var materialProperties = inst.Values.ToList();
+
+            var baseMaterial = inst.BaseMaterial.DepotPath.GetResolvedText() ?? "invalid";
+
+            // first, read the entire material chain into the cache
+            var consolidatedValues = GetMaterialValueChain(
+                baseMaterial,
+                archiveManager,
+                out var shaderPath);
+
+            if (baseMaterial == shaderPath)
+            {
+                // nothing to do
+                return false;
+            }
+
+            materialProperties.AddRange(consolidatedValues.Where(v =>
+                !materialProperties.Contains(v)
+            ));
+
+            inst.BaseMaterial = new CResourceReference<IMaterial>(shaderPath);
+            inst.Values.Clear();
+
+            // can't LINQ here because CArray doesn't support it
+            foreach (var cKeyValuePair in consolidatedValues)
+            {
+                inst.Values.Add(cKeyValuePair);
+            }
+
+            return true;
+        }
     }
 
     public static IMaterial EmbeddedToDefault(IMaterial mat)

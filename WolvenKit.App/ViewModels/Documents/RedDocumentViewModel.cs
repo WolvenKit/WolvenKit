@@ -13,6 +13,7 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -219,9 +220,26 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         _suppressNextReload = true;
 
-        if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
+        var explorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+        explorer.SuspendFileWatcher();
+
+        try
         {
-            _suppressNextReload = false; // Clear on failure
+            explorer.RefreshAfter(() =>
+            {
+                if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
+                {
+                    _suppressNextReload = false; // Clear on failure
+                }
+            });
+        }
+        finally
+        {
+            explorer?.ResumeFileWatcher();
+        }
+
+        if (!_suppressNextReload)
+        {
             return false;
         }
 
@@ -560,7 +578,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     {
                         foreach (var file in Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories))
                         {
-                            var relativePath = _projectManager.ActiveProject.GetRelativePath(file);
+                            var relativePath = _projectManager.ActiveProject.GetGameRelativePath(file);
                             if (depotPath.GetRedHash() == ResourcePath.CalculateHash(relativePath))
                             {
                                 path = file;
