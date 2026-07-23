@@ -12,10 +12,8 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using DynamicData.Binding;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -79,6 +77,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ProjectResourceTools _projectResourceTools;
     private bool _isLoading = false;
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
+    private ProjectExplorerViewModel.LoadingMode _projectLoadingMode;
 
     #endregion fields
 
@@ -124,6 +123,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
             _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
         }
 
+        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().PropertyChanged += OnProjectLoadingModeUpdated;
+
         ProjectLoaded = _projectManager.IsProjectLoaded;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
 
@@ -142,12 +143,32 @@ public partial class AssetBrowserViewModel : ToolViewModel
         CheckView();
     }
 
+    private void OnProjectLoadingModeUpdated(object? _, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ProjectExplorerViewModel.CurrentLoadingMode))
+        {
+            _projectLoadingMode = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().CurrentLoadingMode;
+
+            switch (_projectLoadingMode)
+            {
+                case ProjectExplorerViewModel.LoadingMode.LoadingNewProject:
+                    if (ShouldShowLoadButton)
+                    {
+                        _isLoading = true;
+                    }
+
+                    CheckView();
+                    break;
+            }
+        }
+    }
+
     private void UpdateLoadArchiveButtonVisibility()
     {
-        if (LeftItems.Count == 0 && !ShouldShowLoadButton && _archiveManager.ProjectArchive == null && !_isLoading)
+        if (LeftItems.Count == 0 && _archiveManager.ProjectArchive == null && !_isLoading && !_archiveManager.IsManagerLoaded)
         {
             ShouldShowLoadButton = true;
-        } else if ((LeftItems.Count > 0 && ShouldShowLoadButton) || _isLoading)
+        } else
         {
             ShouldShowLoadButton = false;
         }
@@ -155,10 +176,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void UpdateLoadingIndicatorVisibility()
     {
-        if (LeftItems.Count > 0 && LoadVisibility == Visibility.Visible && !_isLoading)
+        if (LeftItems.Count > 0 && !_isLoading)
         {
             LoadVisibility = Visibility.Collapsed;
-        } else if (LoadVisibility == Visibility.Collapsed && !IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
+        } else if (!IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
         {
             LoadVisibility = Visibility.Visible;
         }
@@ -203,6 +224,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (e.PropertyName is nameof(IArchiveManager.IsManagerLoading) or nameof(IArchiveManager.IsManagerLoaded))
         {
+            if (_archiveManager.IsManagerLoading)
+            {
+                _isLoading = true;
+            }
+
             CheckView();
         }
 

@@ -209,6 +209,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="isReload"></param>
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
+        CurrentLoadingMode = isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject;
+        EnableLoadingMode(CurrentLoadingMode);
+
         _gridGuard.NotifyChangeRequested();
         _gridGuard.BeginChanges();
 
@@ -224,9 +227,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ActiveProject = null;
             UnwatchProject();
         }
-
-        var mode = isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject;
-        EnableLoadingMode(mode);
 
         RefreshAfter(() =>
         {
@@ -248,7 +248,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     CheckForOneDriveInPath();
                 }
             }
-
         });
     }
 
@@ -292,7 +291,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
-        OnSetLoading?.Invoke(this, (LoadingMode.Ready));
+        CurrentLoadingMode = LoadingMode.Ready;
+        OnSetLoading?.Invoke(this, (CurrentLoadingMode));
 
         // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
         // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from
@@ -365,6 +365,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     #region properties
+
+    [ObservableProperty]
+    private LoadingMode _currentLoadingMode;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
@@ -1666,7 +1669,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             var items = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder);
             SuspendFileWatcher();
-            EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+            CurrentLoadingMode = LoadingMode.ShowLoadingDuringOperation;
+            EnableLoadingMode(CurrentLoadingMode);
             await RefreshAfter(async () => await ConvertFromJsonInternal(items));
             DisableLoadingMode();
             ResumeFileWatcher();
@@ -1681,7 +1685,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
         SuspendFileWatcher();
-        EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+        CurrentLoadingMode = LoadingMode.ShowLoadingDuringOperation;
+        EnableLoadingMode(CurrentLoadingMode);
         await RefreshAfter(async () => await ConvertFromJsonInternal(convertSelection));
         DisableLoadingMode();
         ResumeFileWatcher();
