@@ -220,26 +220,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         _suppressNextReload = true;
 
-        var explorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
-        explorer.SuspendFileWatcher();
-
-        try
+        if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
         {
-            explorer.RefreshAfter(() =>
-            {
-                if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
-                {
-                    _suppressNextReload = false; // Clear on failure
-                }
-            });
-        }
-        finally
-        {
-            explorer?.ResumeFileWatcher();
-        }
-
-        if (!_suppressNextReload)
-        {
+            _suppressNextReload = false; // Clear on failure
             return false;
         }
 
