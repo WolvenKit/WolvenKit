@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DynamicData;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -52,11 +51,17 @@ public partial class ProjectExplorerViewModel
         private readonly Func<string, bool> _getDesiredExpansionState;
         private string _projectDirectory = string.Empty;
         private FileSystemModel? _projectFileSystemModel;
-
         private readonly FileSystemWatcher _modsWatcher;
 
         private readonly object _modLoadingLock = new();
         private readonly object _batchLock = new();
+        private readonly object _suspendLock = new();
+        private readonly object _resumeLock = new();
+
+        /// <summary>
+        /// Keeps track of in-flight suspends so we don't over-resume.
+        /// </summary>
+        private readonly ConcurrentQueue<SuspendToken> _suspendQueue = new();
 
         private Task? _updateTask;
         private CancellationTokenSource _updateThreadCancellationTokenSource = new();
@@ -105,6 +110,8 @@ public partial class ProjectExplorerViewModel
             "blend@", // Blender temp files
             "blend1", // Blender temp files
         ];
+
+        private sealed record SuspendToken;
 
         public Guid CompletionTimer = Guid.NewGuid();
 
@@ -171,11 +178,32 @@ public partial class ProjectExplorerViewModel
 
         #region Start / Resume / Watch / Unwatch Methods
 
-        public void ResumeWatcher_AndLoadProject()
+        private void ResumeWatcher_AndLoadProject()
         {
-            Suspend();
+            switch (_watcherState)
+            {
+                case WatcherState.NoProject:
+                    _loggerService?.Debug("Loading new project.");
+                    _suspendQueue.Clear();
+                    _suspendQueue.Enqueue(new SuspendToken());
+                    break;
+                case WatcherState.Suspended:
+                    throw new WolvenKitException(0xBADB01,
+                        $"Resuming from a suspended state with {_suspendQueue.Count} suspends in the queue.");
+                case WatcherState.Active:
+                    _loggerService?.Debug("Suspending watcher and reloading existing project.");
+                    Suspend();
+                    break;
+                case WatcherState.Error:
+                    _loggerService?.Debug("Reloading project to recover from error.");
+                    break;
+                case WatcherState.Loading:
+                    _loggerService?.Debug("Ignoring resume attempt while already reloading project.");
+                    return;
+            }
+
+            _watcherState = WatcherState.Loading;
             Locked_LoadModProjectFileStructure();
-            Resume();
         }
 
         public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
@@ -187,24 +215,64 @@ public partial class ProjectExplorerViewModel
 
         public void Resume()
         {
-            if (_projectDirectory == "")
+            lock (_resumeLock)
             {
-                throw new Exception("No project directory to resume watching!.");
+                switch (_watcherState, _suspendQueue.Count)
+                {
+                    // happy path
+                    case (WatcherState.Suspended, > 0):
+                        _ = _suspendQueue.TryDequeue(out _);
+
+                        if (_suspendQueue.Count == 0)
+                        {
+                            InternalResume();
+                        }
+                        else
+                        {
+                            _loggerService?.Debug($"Waiting to resume file watcher for {_suspendQueue.Count} remaining file operations.");
+                        }
+
+                        return;
+
+                    // happy path for reloading/loading
+                    case (WatcherState.Loading, 1):
+                        _ = _suspendQueue.TryDequeue(out _);
+                        InternalResume();
+                        return;
+
+                    // resuming while active has no effect
+                    case (WatcherState.Active, 0):
+                        _loggerService?.Debug(
+                            $"FileWatcher confirmed active with no pending operations.");
+                        return;
+
+                    default:
+                        throw new Exception(
+                            $"Unexpected condition: attempting to resume file watcher while its state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
+                }
             }
-            _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
-            _modsWatcher.Path = _projectDirectory;
-            _modsWatcher.IncludeSubdirectories = true;
-            _modsWatcher.EnableRaisingEvents = true;
-            _watcherState = WatcherState.Active;
+
+
+            void InternalResume()
+            {
+                if (_projectDirectory == "")
+                {
+                    throw new Exception("No project directory to resume watching!.");
+                }
+
+                _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
+                _modsWatcher.Path = _projectDirectory;
+                _modsWatcher.IncludeSubdirectories = true;
+                _modsWatcher.EnableRaisingEvents = true;
+                _watcherState = WatcherState.Active;
+            }
         }
 
         /// <summary>
         ///  Does the following:
-        ///     1. Suspend the OS file watcher.
+        ///     1. Suspend the OS file watcher & batch update monitor.
         ///     2. Sets _watcherState to `noProject`
-        ///     3. Clears the _projectDirectory & _projectFileSystemModel vars.
-        ///     4. Stops background polling for things added to the update batches.
-        ///     5. Clears lookup caches, batches, and data models.
+        ///     3. Clears the project references.
         ///
         /// This must be called before performing anything that sends a Reset for
         /// FileList or FileTree collections.
@@ -216,7 +284,6 @@ public partial class ProjectExplorerViewModel
             _projectDirectory = "";
             _projectFileSystemModel = null;
             _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
-            StopBackgroundPolling();
         }
 
         #endregion
@@ -450,6 +517,7 @@ public partial class ProjectExplorerViewModel
                 _fileLookup.Clear();
                 FileTree.Clear();
                 FileList.Clear();
+                _guard.ProjectReset(FileList, FileTree);
             }
 
             Clear();
@@ -473,8 +541,8 @@ public partial class ProjectExplorerViewModel
                     _guard.ProjectReset(flatListReturn, treeRoot?.Children.ToList() ?? new List<FileSystemModel>());
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
-                    StartBackgroundPolling();
-                    _watcherState = WatcherState.Active;
+                    _loggerService?.Info($"Loaded {FileList.Count} project files.");
+                    Resume();
                 });
             });
         }
@@ -621,9 +689,24 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
-            _loggerService?.Debug("Stopping file system watcher in mod folder.");
-            _modsWatcher.EnableRaisingEvents = false;
-            _watcherState = WatcherState.Suspended;
+            lock (_suspendLock)
+            {
+                if (_suspendQueue.IsEmpty)
+                {
+                    _suspendQueue.Enqueue(new SuspendToken());
+                    _loggerService?.Debug("Stopping file system watcher in mod folder.");
+                    _modsWatcher.EnableRaisingEvents = false;
+                    _watcherState = WatcherState.Suspended;
+                    return;
+                }
+
+                if (_watcherState != WatcherState.Suspended)
+                {
+                    _loggerService?.Error($"WatcherState should be suspended but was instead: {_watcherState}");
+                }
+
+                _suspendQueue.Enqueue(new SuspendToken());
+            }
         }
 
         private void CancelFileLoggingToken()
