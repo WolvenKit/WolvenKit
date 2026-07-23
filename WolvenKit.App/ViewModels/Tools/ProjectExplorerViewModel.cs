@@ -221,17 +221,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        if (ActiveProject != null)
-        {
-            SaveProjectState();
-            ActiveProject = null;
-            UnwatchProject();
-        }
-
         RefreshAfter(() =>
         {
             try
             {
+                if (ActiveProject != null)
+                {
+                    SaveProjectState();
+                    ActiveProject = null;
+                    UnwatchProject();
+                }
+
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
                 LoadExpansionStateDictionary(activeProject);
