@@ -844,7 +844,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         SuspendFileWatcher();
+        await RefreshAfter(() => DeleteRecursively(selected));
+        ResumeFileWatcher();
+    }
 
+    private void DeleteRecursively(List<FileSystemModel> selected)
+    {
         foreach (var item in selected)
         {
             var fullPath = item.FullName;
@@ -852,11 +857,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 if (item.IsDirectory)
                 {
+                    if (
+                        item.FullName == ActiveProject!.ModDirectory ||
+                        item.FullName == ActiveProject!.RawDirectory ||
+                        item.FullName == ActiveProject!.ResourcesDirectory
+                    )
+                    {
+                        var children = item.Children.ToList();
+                        DeleteRecursively(children);
+                        continue;
+                    }
+
                     FileSystem.DeleteDirectory(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    _projectEvents.PublishDirectoryDeleted(fullPath);
                 }
                 else
                 {
                     FileSystem.DeleteFile(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    _projectEvents.PublishFileDeleted(fullPath);
                 }
             }
             catch (Exception)
@@ -864,10 +882,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _loggerService.Error("Failed to delete " + fullPath + ".\r\n");
             }
         }
-
-        SuspendFileWatcher();
-        await RefreshAfter(() => _projectWatcher.RemoveItems(selected));
-        ResumeFileWatcher();
     }
 
     /// <summary>
