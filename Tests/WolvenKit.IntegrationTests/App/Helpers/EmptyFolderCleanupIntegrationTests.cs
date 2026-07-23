@@ -5,6 +5,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.IntegrationTests.Helpers;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -41,6 +42,7 @@ public sealed class EmptyFolderCleanupIntegrationTests : IDisposable
     {
         try
         {
+            RecentProjectsTestCleanup.RemoveProjectsUnder(_tempRoot);
             if (Directory.Exists(_tempRoot))
             {
                 Directory.Delete(_tempRoot, recursive: true);
