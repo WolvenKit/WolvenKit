@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.Json;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.Core.Extensions;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;

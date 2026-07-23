@@ -6,7 +6,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Core;
 using WolvenKit.Interfaces.Extensions;

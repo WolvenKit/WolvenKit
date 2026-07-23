@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using WolvenKit.App.Models;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 
 namespace WolvenKit.App.Services;
 
