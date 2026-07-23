@@ -9,7 +9,7 @@ using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
+using WolvenKit.IntegrationTests.Helpers;
 using WolvenKit.RED4.CR2W;
 using Xunit;
 using Assert = Xunit.Assert;
@@ -66,6 +66,7 @@ public sealed class MeshMovePathHandlingIntegrationTests : IDisposable
     {
         try
         {
+            RecentProjectsTestCleanup.RemoveProjectsUnder(_tempRoot);
             if (Directory.Exists(_tempRoot))
             {
                 Directory.Delete(_tempRoot, recursive: true);

@@ -169,9 +169,34 @@ public sealed class WolvenKitTestFixture : IDisposable
 
     public void Dispose()
     {
+        // Shut down the app fully before editing recentItems.json, or a late Save can restore the entry.
         try { _application?.Close(); } catch { /* best effort */ }
+
+        try
+        {
+            if (_application is { HasExited: false })
+            {
+                // Give the process a short window to exit cleanly, then force-kill.
+                WaitUntil(() => _application.HasExited, timeoutMs: 15_000, pollIntervalMs: 200);
+            }
+
+            if (_application is { HasExited: false })
+            {
+                _application.Kill();
+                WaitUntil(() => _application.HasExited, timeoutMs: 5_000, pollIntervalMs: 100);
+            }
+        }
+        catch { /* best effort */ }
+
         try { _application?.Dispose(); } catch { /* best effort */ }
         try { _automation?.Dispose(); } catch { /* best effort */ }
+
+        // Drop this run's projects from Welcome page recent/pinned before deleting files.
+        try
+        {
+            RecentProjectsTestCleanup.RemoveProjectsUnder(TempRoot);
+        }
+        catch { /* best effort */ }
 
         // Clean up temp projects created by this run.
         try

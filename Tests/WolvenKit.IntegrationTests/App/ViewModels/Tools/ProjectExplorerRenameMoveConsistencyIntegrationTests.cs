@@ -307,6 +307,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         try
         {
             _host?.Dispose();
+            RecentProjectsTestCleanup.RemoveProjectsUnder(_tempProjectRoot);
             if (Directory.Exists(_tempProjectRoot))
             {
                 Directory.Delete(_tempProjectRoot, true);
