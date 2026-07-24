@@ -753,7 +753,7 @@ public partial class ProjectExplorerViewModel
 
         private void BatchUpdate(CancellationToken cancellationToken)
         {
-            var batch = new List<FileSystemEventArgsWrapper>(64);
+            var batch = new List<FileSystemEventArgsWrapper>();
             var stopwatch = Stopwatch .StartNew();
 
             while (true)
