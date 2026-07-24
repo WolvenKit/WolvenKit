@@ -37,6 +37,7 @@ namespace WolvenKit.Views.Documents
         // Navigation memory: tracks which child was last visited from each node in each direction
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
+        private RedGraph? _subscribedGraph;
 
         // Selection persistence across document switches
         private static readonly Dictionary<string, uint> s_documentNodeSelections = new();
@@ -53,12 +54,18 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             Loaded += OnViewLoaded;
+            Unloaded += OnViewUnloaded;
         }
 
         private void OnViewLoaded(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as SceneGraphViewModel;
             var document = viewModel?.Parent;
+
+            if (viewModel != null)
+            {
+                SubscribeToGraph(viewModel.MainGraph);
+            }
 
             if (document != null)
             {
@@ -69,12 +76,15 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        private void OnViewUnloaded(object sender, RoutedEventArgs e) => UnsubscribeFromGraph();
+
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            UnsubscribeFromGraph();
+
             if (e.NewValue is not SceneGraphViewModel viewModel) return;
 
-            viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-            viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
+            SubscribeToGraph(viewModel.MainGraph);
 
             // Initialize centralized selection manager
             InitializeGlobalSelectionManager();
@@ -93,6 +103,39 @@ namespace WolvenKit.Views.Documents
                     RestoreSelectionIfReady(viewModel.Parent);
                 }), System.Windows.Threading.DispatcherPriority.Background);
             }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private void SubscribeToGraph(RedGraph graph)
+        {
+            if (ReferenceEquals(_subscribedGraph, graph))
+            {
+                return;
+            }
+
+            UnsubscribeFromGraph();
+            _subscribedGraph = graph;
+            graph.Connections.CollectionChanged += OnGraphCollectionChanged;
+            graph.Nodes.CollectionChanged += OnGraphCollectionChanged;
+        }
+
+        private void UnsubscribeFromGraph()
+        {
+            if (_subscribedGraph == null)
+            {
+                return;
+            }
+
+            _subscribedGraph.Connections.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph.Nodes.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph = null;
+        }
+
+        private void OnGraphCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_subscribedGraph != null)
+            {
+                UpdateConnectionPathTypes(_subscribedGraph);
+            }
         }
 
         private void SetupConnectionTemplate()
@@ -1042,6 +1085,10 @@ namespace WolvenKit.Views.Documents
             }
 
             _disposed = true;
+            UnsubscribeFromGraph();
+            DataContextChanged -= OnDataContextChanged;
+            Loaded -= OnViewLoaded;
+            Unloaded -= OnViewUnloaded;
         }
 
         #endregion

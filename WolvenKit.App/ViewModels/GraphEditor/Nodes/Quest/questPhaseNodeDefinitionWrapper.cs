@@ -141,6 +141,16 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
 
     internal override void CreateDefaultSockets() => CreateSocket("CutDestination", Enums.questSocketType.CutDestination);
 
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _graph?.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
+
     /// <summary>
     /// Get the node count from an inline phase graph without loading an external resource
     /// </summary>

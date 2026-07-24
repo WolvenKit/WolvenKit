@@ -63,6 +63,7 @@ namespace WolvenKit.Views.Documents
         private IDocumentViewModel? _lastActiveDocument;
         private bool _disposed = false;
         private IDocumentViewModel? _currentDocument; // Track current document for disposal detection
+        private RedGraph? _subscribedGraph;
 
         private ILoggerService _loggerService = Locator.Current.GetService<ILoggerService>()!;
 
@@ -211,6 +212,8 @@ namespace WolvenKit.Views.Documents
                     viewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
                 }
 
+                UnsubscribeFromGraph();
+
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
 
@@ -249,6 +252,8 @@ namespace WolvenKit.Views.Documents
                 CleanupEventSubscription();
             }
 
+            UnsubscribeFromGraph();
+
             if (e.NewValue is not QuestPhaseGraphViewModel viewModel)
             {
                 return;
@@ -261,8 +266,7 @@ namespace WolvenKit.Views.Documents
             // Monitor document closing by watching DockedViews collection
             MonitorDocumentClosing();
 
-            viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-            viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
+            SubscribeToGraph(viewModel.MainGraph);
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -276,6 +280,39 @@ namespace WolvenKit.Views.Documents
                     viewModel.SetGraphLoaded();
                 }), DispatcherPriority.Background);
             }), DispatcherPriority.Loaded);
+        }
+
+        private void SubscribeToGraph(RedGraph graph)
+        {
+            if (ReferenceEquals(_subscribedGraph, graph))
+            {
+                return;
+            }
+
+            UnsubscribeFromGraph();
+            _subscribedGraph = graph;
+            graph.Connections.CollectionChanged += OnGraphCollectionChanged;
+            graph.Nodes.CollectionChanged += OnGraphCollectionChanged;
+        }
+
+        private void UnsubscribeFromGraph()
+        {
+            if (_subscribedGraph == null)
+            {
+                return;
+            }
+
+            _subscribedGraph.Connections.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph.Nodes.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph = null;
+        }
+
+        private void OnGraphCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_subscribedGraph != null)
+            {
+                UpdateConnectionPathTypes(_subscribedGraph);
+            }
         }
 
 
