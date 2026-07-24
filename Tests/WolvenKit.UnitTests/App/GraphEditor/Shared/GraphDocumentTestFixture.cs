@@ -54,6 +54,8 @@ internal sealed class GraphDocumentTestFixture : IDisposable
 
     public void Dispose()
     {
+        Document.Dispose();
+
         if (Directory.Exists(ProjectDirectory))
         {
             Directory.Delete(ProjectDirectory, true);

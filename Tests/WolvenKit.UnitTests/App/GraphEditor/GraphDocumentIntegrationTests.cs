@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
@@ -167,6 +169,18 @@ public class GraphDocumentIntegrationTests
         Assert.AreEqual(0, notifications);
     }
 
+    [TestMethod]
+    public void DisposingDocumentDisposesOwnedGraphTabs()
+    {
+        using var fixture = new GraphDocumentTestFixture();
+        var tab = new DisposableGraphTab(fixture.Document);
+        fixture.Document.TabItemViewModels.Add(tab);
+
+        fixture.Document.Dispose();
+
+        Assert.IsTrue(tab.IsDisposed);
+    }
+
     private static void AttachDocument(RedGraph graph, WolvenKit.App.ViewModels.Documents.RedDocumentViewModel document)
     {
         graph.DocumentViewModel = document;
@@ -197,6 +211,15 @@ public class GraphDocumentIntegrationTests
         graph.StateParents = stateParents;
         graph.GraphStateLoad();
         return graph.Nodes.Single().Location;
+    }
+
+    private sealed class DisposableGraphTab(RedDocumentViewModel parent) : RedDocumentTabViewModel(parent, "Graph"), IDisposable
+    {
+        public bool IsDisposed { get; private set; }
+
+        public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.Editor;
+
+        public void Dispose() => IsDisposed = true;
     }
 
 }
