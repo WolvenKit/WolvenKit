@@ -376,6 +376,7 @@
                     <Grid
                         x:Name="ProjectsScrollContent"
                         Margin="0,0,6,24"
+                        ClipToBounds="False"
                         VerticalAlignment="Top"
                         SizeChanged="ProjectsScrollContent_OnSizeChanged">
                         <Grid.RowDefinitions>
@@ -387,6 +388,7 @@
                         <Grid
                             x:Name="PinnedSection"
                             Grid.Row="0"
+                            ClipToBounds="False"
                             Margin="{DynamicResource WolvenKitMarginBottom}"
                             Visibility="{Binding ShowPinned,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -475,7 +477,6 @@
                             <syncfusion:CardView
                                 Name="PinnedCardView"
                                 Grid.Row="1"
-                                MaxHeight="190"
                                 Margin="0,12,0,0"
                                 HorizontalAlignment="Left"
                                 Background="Transparent"
@@ -496,7 +497,8 @@
                         <!-- Recent Projects -->
                         <Grid
                             x:Name="RecentSection"
-                            Grid.Row="1">
+                            Grid.Row="1"
+                            ClipToBounds="False">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
