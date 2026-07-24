@@ -26,8 +26,7 @@ public interface ICvmTools
     void AddMaterialAndDefinition(ChunkViewModel cvm, string newName);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
-    void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager, Cp77Project? project);
-    void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project);
+    void FlattenMiChain(List<ChunkViewModel> cvmSelection, IAppArchiveManager archiveManager);
     #endregion
 
     #region CvmDependencyTools

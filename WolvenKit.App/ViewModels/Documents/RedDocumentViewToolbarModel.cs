@@ -674,18 +674,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        if (SelectedChunks.Count == 0)
+        var selection = SelectedChunks.ToList();
+        if (selection.Count == 0)
         {
-            _cvmTools.FlattenMiChain(chunk, _archiveManager, _projectManager.ActiveProject);
-        }
-        else
-        {
-            foreach (var selected in SelectedChunks)
-            {
-                _cvmTools.FlattenMiChain(selected, _archiveManager, _projectManager.ActiveProject);
-            }
+            selection.Add(chunk);
         }
 
+        _cvmTools.FlattenMiChain(SelectedChunks, _archiveManager);
     }
 
 
