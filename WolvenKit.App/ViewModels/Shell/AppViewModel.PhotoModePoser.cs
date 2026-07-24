@@ -9,6 +9,26 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class AppViewModel
 {
+    private static readonly string s_photoModePoserPosePacksRelPath = Path.Join(
+        "bin",
+        "x64",
+        "plugins",
+        "cyber_engine_tweaks",
+        "mods",
+        "PhotoModePoser",
+        "data",
+        "pose_packs");
+
+    private string? GetPhotoModePoserGameDir()
+    {
+        if (SettingsManager.GetRED4GameRootDir() is not string gameDir)
+        {
+            return null;
+        }
+
+        return Path.Join(gameDir, s_photoModePoserPosePacksRelPath);
+    }
+
     private bool CanImportPhotoModePoser() => CanShowProjectActions();
 
     [RelayCommand(CanExecute = nameof(CanImportPhotoModePoser))]
@@ -25,6 +45,12 @@ public partial class AppViewModel
             Title = "Import PhotoMode Poser pose pack",
             RestoreDirectory = true
         };
+
+        var posePacksDirectory = GetPhotoModePoserGameDir();
+        if (posePacksDirectory is not null && Directory.Exists(posePacksDirectory))
+        {
+            openFileDialog.InitialDirectory = posePacksDirectory;
+        }
 
         if (openFileDialog.ShowDialog() != true || !File.Exists(openFileDialog.FileName))
         {
