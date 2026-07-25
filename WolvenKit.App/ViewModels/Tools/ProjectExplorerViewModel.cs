@@ -221,17 +221,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        if (ActiveProject != null)
-        {
-            SaveProjectState();
-            ActiveProject = null;
-            UnwatchProject();
-        }
-
         RefreshAfter(() =>
         {
             try
             {
+                if (ActiveProject != null)
+                {
+                    SaveProjectState();
+                    ActiveProject = null;
+                    UnwatchProject();
+                }
+
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
                 LoadExpansionStateDictionary(activeProject);
@@ -2187,42 +2187,45 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public async Task RefreshAfter(Func<Task> action)
     {
-        if (_inFlight)
+        await DispatcherHelper.RunOnMainThreadAsync(async () =>
         {
-            await action();
-            return;
-        }
+            if (_inFlight)
+            {
+                await action();
+                return;
+            }
 
-        _inFlight = true;
-        _gridGuard.BeginChanges();
-
-        if (BeginDeferredRefreshContext == null)
-        {
-            await action();
-            _inFlight = false;
-            return;
-        }
-
-        try
-        {
+            _inFlight = true;
             _gridGuard.BeginChanges();
 
-            await BeginDeferredRefreshContext(
-                action
-            );
-        }
-        catch (WolvenKitException e)
-        {
-            _loggerService.Debug($"Exception caught while refreshing: ${e}.");
-        }
-        finally
-        {
-            DispatcherHelper.DelayOnMainThread(() =>
+            if (BeginDeferredRefreshContext == null)
             {
-                _gridGuard.ForceReady();
+                await action();
                 _inFlight = false;
-            }, 1);
-        }
+                return;
+            }
+
+            try
+            {
+                _gridGuard.BeginChanges();
+
+                await BeginDeferredRefreshContext(
+                    action
+                );
+            }
+            catch (WolvenKitException e)
+            {
+                _loggerService.Debug($"Exception caught while refreshing: ${e}.");
+            }
+            finally
+            {
+                DispatcherHelper.DelayOnMainThread(() =>
+                {
+                    _gridGuard.ForceReady();
+                    _inFlight = false;
+                }, 1);
+            }
+        });
     }
 
     /// <summary>
