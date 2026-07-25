@@ -31,8 +31,15 @@
             </ResourceDictionary>
         </Grid.Resources>
 
+        <!-- Page scroll used in stacked (single-column) layout; disabled when projects|actions sit side-by-side. -->
+        <ScrollViewer
+            x:Name="PageScrollViewer"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Disabled"
+            CanContentScroll="False">
         <Grid
             x:Name="topGrid"
+            MinHeight="{Binding ViewportHeight, RelativeSource={RelativeSource AncestorType=ScrollViewer}}"
             Margin="{DynamicResource WolvenKitMarginHorizontal}"
             Style="{StaticResource LayoutResponsiveStyle}">
             <Grid.Resources>
@@ -352,7 +359,8 @@
             <!-- Logo / projects+actions / stacked actions (narrow) -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <!-- * side-by-side; Auto when stacked so the page ScrollViewer can scroll projects then buttons -->
+                <RowDefinition x:Name="ContentRow" Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -897,5 +905,6 @@
                 </ScrollViewer>
             </Grid>
         </Grid>
+        </ScrollViewer>
     </Grid>
 </reactiveUi:ReactiveUserControl>
