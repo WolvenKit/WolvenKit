@@ -1,20 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Comparers;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.ViewModels.Controls;
 
 public partial class RedTypeTemplateDropdownViewModel : ObservableObject
 {
     private readonly RedTypeTemplateService _redTypeTemplateService;
+    private readonly ILoggerService _loggerService;
 
     private readonly List<RedTypeTemplateSelectionOption> _defaultList;
 
@@ -32,9 +36,10 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     [ObservableProperty]
     private Dictionary<Type, List<RedTypeTemplateSelectionOption>> _templatesByType = new();
 
-    public RedTypeTemplateDropdownViewModel(RedTypeTemplateService redTypeTemplateService)
+    public RedTypeTemplateDropdownViewModel(RedTypeTemplateService redTypeTemplateService, ILoggerService loggerService)
     {
         _redTypeTemplateService = redTypeTemplateService;
+        _loggerService = loggerService;
 
         _defaultList = new List<RedTypeTemplateSelectionOption>([
             new RedTypeTemplateSelectionOption("No Template", typeof(object), "", RedTypeTemplateSelectionOptionSource.Raw)
@@ -64,7 +69,9 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     [RelayCommand]
     private async Task Refresh()
     {
-        await Task.Run(_redTypeTemplateService.LoadTemplates);
+        await Task.Run(() => RedTypeTemplateServiceHelper.UpdateSystemTemplatesFromRemote(_loggerService));
+        _redTypeTemplateService.LoadTemplates();
+
         IndexRedTypeTemplates();
         CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : _defaultList;
         SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();

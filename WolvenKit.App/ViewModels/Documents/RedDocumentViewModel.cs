@@ -171,7 +171,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             .Select(fileType => new TypeEntry(fileType.Extension.ToString(), fileType.Description, fileType.RootType))
             .ToList();
 
-        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
         {
             DialogHandler = HandleEmbeddedFile
         });

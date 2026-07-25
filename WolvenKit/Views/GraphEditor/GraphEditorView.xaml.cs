@@ -17,6 +17,7 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
@@ -41,6 +42,7 @@ public record NodeCreationParams(Type Type, RedTypeTemplateSelectionOption? RedT
 public partial class GraphEditorView : UserControl
 {
     private readonly RedTypeTemplateService _redTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>();
+    private readonly ILoggerService _loggerService = Locator.Current.GetService<ILoggerService>();
 
     private static readonly (string Name, string Color)[] s_commentColorPresets =
     [
@@ -226,7 +228,7 @@ public partial class GraphEditorView : UserControl
             // Open Dialog option
             addMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, allTypes.OrderBy(x => x.Name).ToList())
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, allTypes.OrderBy(x => x.Name).ToList())
                 {
                     DialogHandler = model =>
                     {
@@ -377,7 +379,7 @@ public partial class GraphEditorView : UserControl
 
             addMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
                 {
                     DialogHandler = model =>
                     {
@@ -1009,7 +1011,7 @@ public partial class GraphEditorView : UserControl
 
         parentMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
         {
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
             {
                 DialogHandler = model =>
                 {

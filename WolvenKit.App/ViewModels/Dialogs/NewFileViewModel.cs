@@ -75,7 +75,7 @@ public partial class NewFileViewModel : DialogViewModel
 
             SelectedCategory = Categories.FirstOrDefault();
 
-            _redTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(_redTypeTemplateService);
+            _redTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(_redTypeTemplateService, _loggerService);
         }
         catch (Exception e)
         {
