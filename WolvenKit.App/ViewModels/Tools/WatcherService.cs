@@ -461,8 +461,15 @@ public partial class ProjectExplorerViewModel
             if (removedAt != 0)
                 _removedFiles.TryAdd(model.FullName, removedAt);
 
+            Suspend();
+
             // Mirror the removal onto the grid-bound clone subtree.
-            _guard.ProjectRemove(model);
+            Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
+            {
+                _guard.ProjectRemove(model);
+            });
+
+            Resume();
         }
 
         private void RemoveChildModels(FileSystemModel model)
@@ -475,6 +482,16 @@ public partial class ProjectExplorerViewModel
                 _fileLookup.Remove(subModel.FullName, out _);
                 if (FileList.Contains(subModel))
                     FileList.Remove(subModel);
+
+                Suspend();
+
+                // Mirror the removal onto the grid-bound clone subtree.
+                Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
+                {
+                    _guard.ProjectRemove(model);
+                });
+
+                Resume();
             }
         }
 
