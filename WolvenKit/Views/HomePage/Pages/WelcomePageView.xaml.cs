@@ -12,12 +12,20 @@ namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>
     {
+        private bool _isStackedLayout;
+        private bool _layoutModeInitialized;
+        private Window _hostWindow;
+
         public WelcomePageView()
         {
             InitializeComponent();
 
             ViewModel = Locator.Current.GetService<WelcomePageViewModel>();
             DataContext = ViewModel;
+
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+            SizeChanged += (_, _) => UpdateLayoutMode();
 
             this.WhenActivated(disposables =>
             {
@@ -73,13 +81,105 @@ namespace WolvenKit.Views.HomePage.Pages
 
         }
 
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (_hostWindow is null)
+            {
+                _hostWindow = Window.GetWindow(this);
+                if (_hostWindow is not null)
+                {
+                    _hostWindow.SizeChanged += OnHostWindowSizeChanged;
+                }
+            }
+
+            UpdateLayoutMode();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (_hostWindow is not null)
+            {
+                _hostWindow.SizeChanged -= OnHostWindowSizeChanged;
+                _hostWindow = null;
+            }
+        }
+
+        private void OnHostWindowSizeChanged(object sender, SizeChangedEventArgs e) => UpdateLayoutMode();
+
+        /// <summary>
+        /// Side-by-side: projects and actions each scroll in place.
+        /// Stacked (narrow / high UI scale): one page scroll, projects above actions.
+        /// Break matches ProjectsResponsiveStyle / MainActionsResponsiveStyle.
+        /// </summary>
+        private void UpdateLayoutMode()
+        {
+            if (PageScrollViewer is null
+                || ContentRow is null
+                || ProjectsScrollViewer is null
+                || ActionsScrollViewer is null)
+            {
+                return;
+            }
+
+            var breakWidthResource = TryFindResource("WolvenKitWelcomeActionsColumnBreakWidth")
+                ?? Application.Current?.TryFindResource("WolvenKitWelcomeActionsColumnBreakWidth");
+            var breakWidth = breakWidthResource is double d ? d : 914d;
+
+            var width = _hostWindow?.ActualWidth ?? ActualWidth;
+            if (width <= 0)
+            {
+                return;
+            }
+
+            var stacked = width < breakWidth;
+            if (_layoutModeInitialized && stacked == _isStackedLayout)
+            {
+                return;
+            }
+
+            _layoutModeInitialized = true;
+            _isStackedLayout = stacked;
+
+            if (stacked)
+            {
+                ContentRow.SetCurrentValue(RowDefinition.HeightProperty, GridLength.Auto);
+                PageScrollViewer.SetCurrentValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
+                ProjectsScrollViewer.SetCurrentValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Disabled);
+                ActionsScrollViewer.SetCurrentValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Disabled);
+
+                // Sticky headers only apply to the projects scroller.
+                PinnedHeaderTransform?.SetCurrentValue(TranslateTransform.YProperty, 0d);
+                RecentHeaderTransform?.SetCurrentValue(TranslateTransform.YProperty, 0d);
+            }
+            else
+            {
+                ContentRow.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(1, GridUnitType.Star));
+                PageScrollViewer.SetCurrentValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Disabled);
+                ProjectsScrollViewer.SetCurrentValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
+                ActionsScrollViewer.SetCurrentValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
+            }
+        }
+
         /// <summary>
         /// CardView marks wheel events handled even when it does not scroll,
-        /// so drive the projects ScrollViewer explicitly while the pointer is over it.
+        /// so drive the active ScrollViewer explicitly while the pointer is over projects.
         /// </summary>
         private void ProjectsScrollViewer_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (sender is not ScrollViewer scrollViewer || e.Delta == 0)
+            if (e.Delta == 0)
+            {
+                return;
+            }
+
+            // Stacked: page scrolls projects then buttons as one document.
+            if (_isStackedLayout)
+            {
+                PageScrollViewer.ScrollToVerticalOffset(PageScrollViewer.VerticalOffset - e.Delta);
+                e.Handled = true;
+                return;
+            }
+
+            if (sender is not ScrollViewer scrollViewer)
             {
                 return;
             }
@@ -103,7 +203,7 @@ namespace WolvenKit.Views.HomePage.Pages
         /// </summary>
         private void UpdateStickySectionHeaders()
         {
-            if (ProjectsScrollContent is null || !ProjectsScrollContent.IsLoaded)
+            if (_isStackedLayout || ProjectsScrollContent is null || !ProjectsScrollContent.IsLoaded)
             {
                 return;
             }
