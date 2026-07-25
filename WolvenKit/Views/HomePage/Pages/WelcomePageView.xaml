@@ -389,7 +389,7 @@
                             x:Name="PinnedSection"
                             Grid.Row="0"
                             ClipToBounds="False"
-                            Margin="{DynamicResource WolvenKitMarginBottom}"
+                            Margin="0,8,6,8"
                             Visibility="{Binding ShowPinned,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.RowDefinitions>
@@ -398,80 +398,83 @@
                             </Grid.RowDefinitions>
 
                             <!-- Sticky section header (title + filter/order) -->
-                            <Grid
+                            <Border
                                 x:Name="PinnedHeader"
                                 Grid.Row="0"
                                 Panel.ZIndex="1"
-                                Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-                                <Grid.RenderTransform>
+                                Padding="{DynamicResource WolvenKitMarginSmall}"
+                                Background="{StaticResource ContentBackground}">
+                                <Border.RenderTransform>
                                     <TranslateTransform x:Name="PinnedHeaderTransform" />
-                                </Grid.RenderTransform>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <!-- 2nd row reserved for responsiveness -->
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Pinned Projects -->
+                                </Border.RenderTransform>
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <!-- 2nd row reserved for responsiveness -->
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <iconPacks:PackIconCodicons
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Kind="StarFull"
-                                        Width="{DynamicResource WolvenKitIconSmall}"
-                                        Height="{DynamicResource WolvenKitIconSmall}"
-                                        VerticalAlignment="Center"
-                                        Foreground="{StaticResource ForegroundColor}"
-                                        Spin="False"
-                                        SpinAutoReverse="False" />
+                                    <!-- Pinned Projects -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock
-                                        x:Name="PinnedProjectTour"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontTitle}"
-                                        Text="Pinned Projects" />
+                                        <iconPacks:PackIconCodicons
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Kind="StarFull"
+                                            Width="{DynamicResource WolvenKitIconSmall}"
+                                            Height="{DynamicResource WolvenKitIconSmall}"
+                                            VerticalAlignment="Center"
+                                            Foreground="{StaticResource ForegroundColor}"
+                                            Spin="False"
+                                            SpinAutoReverse="False" />
+
+                                        <TextBlock
+                                            x:Name="PinnedProjectTour"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontTitle}"
+                                            Text="Pinned Projects" />
+                                    </Grid>
+
+                                    <!-- Filter and Dropdown -->
+                                    <Grid Style="{StaticResource ActionResponsiveStyle}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox
+                                            x:Name="PinnedFilter"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
+
+                                        <ComboBox
+                                            x:Name="PinnedOrder"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
+                                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                            DisplayMemberPath="Key"
+                                            ItemsSource="{Binding SortMode,
+                                                                  Mode=OneWay}"
+                                            SelectedValuePath="Value" />
+                                    </Grid>
                                 </Grid>
-
-                                <!-- Filter and Dropdown -->
-                                <Grid Style="{StaticResource ActionResponsiveStyle}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBox
-                                        x:Name="PinnedFilter"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
-
-                                    <ComboBox
-                                        x:Name="PinnedOrder"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
-                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                        DisplayMemberPath="Key"
-                                        ItemsSource="{Binding SortMode,
-                                                              Mode=OneWay}"
-                                        SelectedValuePath="Value" />
-                                </Grid>
-                            </Grid>
+                            </Border>
 
                             <!-- Cards -->
                             <syncfusion:CardView
@@ -505,80 +508,83 @@
                             </Grid.RowDefinitions>
 
                             <!-- Sticky section header (title + filter/order) -->
-                            <Grid
+                            <Border
                                 x:Name="RecentHeader"
                                 Grid.Row="0"
                                 Panel.ZIndex="1"
-                                Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-                                <Grid.RenderTransform>
+                                Padding="{DynamicResource WolvenKitMarginSmall}"
+                                Background="{StaticResource ContentBackground}">
+                                <Border.RenderTransform>
                                     <TranslateTransform x:Name="RecentHeaderTransform" />
-                                </Grid.RenderTransform>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <!-- 2nd row reserved for responsiveness -->
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Recent Projects -->
+                                </Border.RenderTransform>
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <!-- 2nd row reserved for responsiveness -->
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <iconPacks:PackIconCodicons
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Kind="GoToFile"
-                                        Width="{DynamicResource WolvenKitIconSmall}"
-                                        Height="{DynamicResource WolvenKitIconSmall}"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                        Spin="False"
-                                        SpinAutoReverse="False" />
+                                    <!-- Recent Projects -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock
-                                        x:Name="RecentProjectTour"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontTitle}"
-                                        Text="Recent Projects" />
+                                        <iconPacks:PackIconCodicons
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Kind="GoToFile"
+                                            Width="{DynamicResource WolvenKitIconSmall}"
+                                            Height="{DynamicResource WolvenKitIconSmall}"
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                            Spin="False"
+                                            SpinAutoReverse="False" />
+
+                                        <TextBlock
+                                            x:Name="RecentProjectTour"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontTitle}"
+                                            Text="Recent Projects" />
+                                    </Grid>
+
+                                    <!-- Filter and Dropdown -->
+                                    <Grid Style="{StaticResource ActionResponsiveStyle}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox
+                                            x:Name="RecentFilter"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
+
+                                        <ComboBox
+                                            x:Name="RecentOrder"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
+                                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                            DisplayMemberPath="Key"
+                                            ItemsSource="{Binding SortMode,
+                                                                  Mode=OneWay}"
+                                            SelectedValuePath="Value" />
+                                    </Grid>
                                 </Grid>
-
-                                <!-- Filter and Dropdown -->
-                                <Grid Style="{StaticResource ActionResponsiveStyle}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBox
-                                        x:Name="RecentFilter"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
-
-                                    <ComboBox
-                                        x:Name="RecentOrder"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
-                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                        DisplayMemberPath="Key"
-                                        ItemsSource="{Binding SortMode,
-                                                              Mode=OneWay}"
-                                        SelectedValuePath="Value" />
-                                </Grid>
-                            </Grid>
+                            </Border>
 
                             <!-- Cards -->
                             <syncfusion:CardView
