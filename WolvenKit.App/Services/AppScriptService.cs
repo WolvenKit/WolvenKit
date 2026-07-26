@@ -71,9 +71,7 @@ public partial class AppScriptService : ScriptService
     public async Task ExecuteAsync(string code, bool enableDebugging = false)
     {
         var vm = GetProjectExplorerViewModel()!;
-        vm.SuspendFileWatcher();
         await vm.RefreshAfter(async () => await ExecuteAsync(code, DefaultHostObject, null, enableDebugging));
-        vm.ResumeFileWatcher();
     }
 
     public void SetAppViewModel(AppViewModel appViewModel) => _wkit.AppViewModel = appViewModel;

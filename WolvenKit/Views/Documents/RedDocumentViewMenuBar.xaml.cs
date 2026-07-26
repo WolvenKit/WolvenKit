@@ -833,7 +833,10 @@ namespace WolvenKit.Views.Documents
         private readonly SemaphoreSlim _addDependencySemaphore = new(1, 1);
 
 
-        private async void OnAddDependencies(object? _, EventArgs eventArgs)
+        private async void OnAddDependencies(object? _, EventArgs eventArgs) =>
+            await _projectExplorer.RefreshAfter(async () => await InternalOnDependencies(eventArgs));
+
+        private async Task InternalOnDependencies(EventArgs eventArgs)
         {
             try
             {
@@ -865,12 +868,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-
-                _projectExplorer.SuspendFileWatcher();
-
-                // TODO: Migrate to use RefreshAfter
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
-
                 _notificationService.Success("Successfully added dependencies");
                 _loggerService.Success("Successfully added dependencies");
             }
@@ -890,15 +888,7 @@ namespace WolvenKit.Views.Documents
                 {
                     // Don't release?
                 }
-
-                // Project browser will throw an error if we do it immediately - so let's not
-                await Task.Run(() =>
-                {
-                    DispatcherHelper.DelayOnMainThread(() =>
-                            _projectExplorer.ResumeWatcher_AndReloadProject(), 100);
-                });
             }
-
         }
 
         private List<appearanceAppearanceDefinition> GetAppearancesFromSelectionOrRoot()

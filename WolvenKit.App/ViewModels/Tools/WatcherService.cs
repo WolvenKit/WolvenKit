@@ -188,12 +188,11 @@ public partial class ProjectExplorerViewModel
                     _suspendQueue.Enqueue(new SuspendToken());
                     break;
                 case WatcherState.Suspended:
-                    throw new WolvenKitException(0xBADB01,
-                        $"Resuming from a suspended state with {_suspendQueue.Count} suspends in the queue.");
-                case WatcherState.Active:
-                    _loggerService?.Debug("Suspending watcher and reloading existing project.");
-                    Suspend();
+                    _loggerService?.Debug("Reloading existing project.");
                     break;
+                case WatcherState.Active:
+                    throw new WolvenKitException(0xBADB01,
+                        $"Resuming from a non-suspended state with {_suspendQueue.Count} suspends in the queue.");
                 case WatcherState.Error:
                     _loggerService?.Debug("Reloading project to recover from error.");
                     break;
@@ -461,15 +460,11 @@ public partial class ProjectExplorerViewModel
             if (removedAt != 0)
                 _removedFiles.TryAdd(model.FullName, removedAt);
 
-            Suspend();
-
             // Mirror the removal onto the grid-bound clone subtree.
             Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
             {
                 _guard.ProjectRemove(model);
             });
-
-            Resume();
         }
 
         private void RemoveChildModels(FileSystemModel model)
@@ -483,15 +478,11 @@ public partial class ProjectExplorerViewModel
                 if (FileList.Contains(subModel))
                     FileList.Remove(subModel);
 
-                Suspend();
-
                 // Mirror the removal onto the grid-bound clone subtree.
                 Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
                 {
                     _guard.ProjectRemove(model);
                 });
-
-                Resume();
             }
         }
 
