@@ -393,7 +393,8 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
 
     public void PopulateItems(bool keepRootTab = false)
     {
-        foreach (var tab in TabItemViewModels)
+        var previousTabs = TabItemViewModels.ToList();
+        foreach (var tab in previousTabs)
         {
             switch (tab)
             {
@@ -423,6 +424,19 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
         }
 
         TabItemViewModels.Clear();
+
+        if (ReferenceEquals(NodeSelectionService.Instance.SelectedNode?.DocumentViewModel, this))
+        {
+            NodeSelectionService.Instance.SelectedNode = null;
+        }
+
+        foreach (var disposableTab in previousTabs.OfType<IDisposable>())
+        {
+            if (!ReferenceEquals(disposableTab, rootTab))
+            {
+                disposableTab.Dispose();
+            }
+        }
 
         TabItemViewModels.Add(rootTab);
         AddTabForRedType(Cr2wFile.RootChunk);
