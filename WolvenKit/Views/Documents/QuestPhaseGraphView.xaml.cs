@@ -64,6 +64,8 @@ namespace WolvenKit.Views.Documents
         private bool _disposed = false;
         private IDocumentViewModel? _currentDocument; // Track current document for disposal detection
 
+        private ILoggerService _loggerService = Locator.Current.GetService<ILoggerService>()!;
+
         // Node selection persistence across document switches
         private static readonly Dictionary<string, (uint nodeId, int graphLevel)> s_documentNodeSelections = new();
 
@@ -1245,7 +1247,7 @@ namespace WolvenKit.Views.Documents
                     .ToList();
 
                 // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, questTypes)
+                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, _loggerService, questTypes)
                 {
                     DialogHandler = model =>
                     {

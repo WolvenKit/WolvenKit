@@ -59,7 +59,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         _loggerService = loggerService;
         _cr2wTools = cr2wTools;
 
-        RedTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(templateService);
+        RedTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(templateService, _loggerService);
         RedTypeTemplateDropdownViewModel.PostRefresh += (_, _) => LoadTemplates();
 
         ValidNewTypes = new ObservableCollection<TypeDesc>(AppDomain.CurrentDomain.GetAssemblies()

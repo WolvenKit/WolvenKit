@@ -861,10 +861,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             return;
         }
-        GetToolViewModel<ProjectExplorerViewModel>().SuspendFileWatcher();
-        _projectEvents.PublishFileChanged(new FileChangedMessage.Document(document));
+
         Save(document);
-        GetToolViewModel<ProjectExplorerViewModel>().ResumeFileWatcher();
     }
 
     private bool CanReloadFile() => ActiveDocument is not null;
@@ -1453,16 +1451,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
-        try
-        {
-            _archiveXlItemService.CreateEquipmentItem(item);
-        }
-        finally
-        {
-            GetToolViewModel<ProjectExplorerViewModel>()?
-                .ResumeWatcher_AndReloadProject();
-        }
+
+        GetToolViewModel<ProjectExplorerViewModel>()?
+            .RefreshAfter(() => _archiveXlItemService.CreateEquipmentItem(item));
     }
 
     private async Task OpenFromNewFile(NewFileViewModel? file)

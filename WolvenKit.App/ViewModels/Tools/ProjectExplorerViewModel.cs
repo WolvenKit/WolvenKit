@@ -846,9 +846,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        SuspendFileWatcher();
         await RefreshAfter(() => DeleteRecursively(selected));
-        ResumeFileWatcher();
     }
 
     private void DeleteRecursively(List<FileSystemModel> selected)
@@ -1031,9 +1029,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        SuspendFileWatcher();
-        await RefreshAfter(() => InternalRenameFile(gameRelativePath, newGameRelativePath, prefixPath, refactor));
-        ResumeFileWatcher();
+        await RefreshAfter(async () => await InternalRenameFile(gameRelativePath, newGameRelativePath, prefixPath, refactor));
     }
 
     // add sanitizer to ensure moves can't cross file scope boundary
@@ -1052,14 +1048,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         await _projectResourceTools.MoveAndRefactorAsync(gameRelativePath, newGameRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
-    }
-
-    public void ResumeFileWatcher()
-    {
-        _projectWatcher.Resume();
-        // The watcher is live again, so the grids are back to a safe, mutable state. ForceReady is a
-        // no-op if we were already Ready, so calling it here can never strand the guard.
-        _gridGuard.ForceReady();
     }
 
     /// <summary>
@@ -1138,9 +1126,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            SuspendFileWatcher();
-            await RefreshAfter(() => ConvertToJsonInternal(selection));
-            ResumeFileWatcher();
+            await RefreshAfter(async () => await ConvertToJsonInternal(selection));
             return;
         }
 
@@ -1152,9 +1138,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        SuspendFileWatcher();
-        await RefreshAfter(() => ConvertToJsonInternal(convertSelection));
-        ResumeFileWatcher();
+        await RefreshAfter(async () => await ConvertToJsonInternal(convertSelection));
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1668,12 +1652,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (!IsShiftKeyPressed)
         {
             var items = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder);
-            SuspendFileWatcher();
             CurrentLoadingMode = LoadingMode.ShowLoadingDuringOperation;
             EnableLoadingMode(CurrentLoadingMode);
             await RefreshAfter(async () => await ConvertFromJsonInternal(items));
             DisableLoadingMode();
-            ResumeFileWatcher();
             return;
         }
 
@@ -1684,12 +1666,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        SuspendFileWatcher();
         CurrentLoadingMode = LoadingMode.ShowLoadingDuringOperation;
         EnableLoadingMode(CurrentLoadingMode);
         await RefreshAfter(async () => await ConvertFromJsonInternal(convertSelection));
         DisableLoadingMode();
-        ResumeFileWatcher();
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -2143,28 +2123,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public void SuspendFileWatcher()
-    {
-        if (ActiveProject is not Cp77Project project)
-        {
-            return;
-        }
-
-        try
-        {
-            _projectWatcher.Suspend();
-            // Suspending the watcher means a high-level operation is about to mutate files behind the
-            // grids. Move the guard into MakingChangesToFiles so GridsLocked is true for the duration;
-            // ResumeFileWatcher (or the next load) walks it back to Ready.
-            _gridGuard.NotifyChangeRequested();
-            _gridGuard.BeginChanges();
-        }
-        catch
-        {
-            _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
-        }
-    }
-
     public void OnKeyStateChanged(KeyEventArgs e)
     {
         if (e.Key == Key.W && (e.KeyboardDevice.Modifiers & ModifierKeys.Control) != 0)
@@ -2189,6 +2147,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         await DispatcherHelper.RunOnMainThreadAsync(async () =>
         {
+            _projectWatcher.Suspend();
+            _gridGuard.NotifyChangeRequested();
+            _gridGuard.BeginChanges();
+
             if (_inFlight)
             {
                 await action();
@@ -2196,7 +2158,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
 
             _inFlight = true;
-            _gridGuard.BeginChanges();
 
             if (BeginDeferredRefreshContext == null)
             {
@@ -2207,8 +2168,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             try
             {
-                _gridGuard.BeginChanges();
-
                 await BeginDeferredRefreshContext(
                     action
                 );
@@ -2221,8 +2180,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 DispatcherHelper.DelayOnMainThread(() =>
                 {
-                    _gridGuard.ForceReady();
                     _inFlight = false;
+                    _projectWatcher.Resume();
+                    _gridGuard.ForceReady();
                 }, 1);
             }
         });
@@ -2232,12 +2192,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
     /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
     /// </summary>
-    public async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
-    {
-        SuspendFileWatcher();
-        await RefreshAfter(() => InternalProcessFileAction(sourceFiles, targetDirectory));
-        ResumeFileWatcher();
-    }
+    public async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory) =>
+        await RefreshAfter(async () => await InternalProcessFileAction(sourceFiles, targetDirectory));
 
     /// <summary>
     ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
