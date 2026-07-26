@@ -2154,6 +2154,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             if (_inFlight)
             {
                 await action();
+                _projectWatcher.Resume();
                 return;
             }
 
@@ -2163,6 +2164,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 await action();
                 _inFlight = false;
+                _projectWatcher.Resume();
                 return;
             }
 

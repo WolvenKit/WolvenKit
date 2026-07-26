@@ -399,18 +399,30 @@ public partial class ProjectExplorerViewModel
 
                 foreach (var key in _fileLookup.Keys)
                 {
-                    if (!key.StartsWith(renamedEventArgs.OldName))
+                    var oldFullPathNormalized = (!Directory.Exists(renamedEventArgs.FullPath))
+                        ? renamedEventArgs.OldFullPath
+                        : Path.GetFullPath(renamedEventArgs.OldFullPath)
+                            .TrimEnd(Path.DirectorySeparatorChar,
+                                Path.AltDirectorySeparatorChar);
+
+                    if (!key.StartsWith(oldFullPathNormalized))
                     {
                         continue;
                     }
 
-                    var newKey = renamedEventArgs.Name + key.Substring(renamedEventArgs.OldName.Length);
+                    if (key != oldFullPathNormalized && !key[oldFullPathNormalized.Length..].StartsWith('\\'))
+                    {
+                        // we've matched \my\dir to \my\dir2 because it has substring "\my\dir" so continue
+                        continue;
+                    }
+
+                    var newKey = renamedEventArgs.FullPath + key[oldFullPathNormalized.Length..];
                     if (!_fileLookup.TryRemove(key, out var item) || !_fileLookup.TryAdd(newKey, item))
                     {
                         throw new Exception();
                     }
 
-                    if (key != renamedEventArgs.OldName)
+                    if (key != oldFullPathNormalized)
                     {
                         continue;
                     }
@@ -715,6 +727,7 @@ public partial class ProjectExplorerViewModel
                     _loggerService?.Error($"WatcherState should be suspended but was instead: {_watcherState}");
                 }
 
+                _loggerService?.Debug("Stopping file system watcher in mod folder.");
                 _suspendQueue.Enqueue(new SuspendToken());
             }
         }
