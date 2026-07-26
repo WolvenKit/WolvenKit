@@ -716,6 +716,7 @@ public partial class ProjectExplorerViewModel
                     _loggerService?.Error($"WatcherState should be suspended but was instead: {_watcherState}");
                 }
 
+                _loggerService?.Debug("Stopping file system watcher in mod folder.");
                 _suspendQueue.Enqueue(new SuspendToken());
         }
 
