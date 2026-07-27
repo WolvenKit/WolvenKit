@@ -1391,7 +1391,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (assetBrowser.RightItems.FirstOrDefault(f => f.FullName.Contains(result)) is FileSystemViewModel mod)
         {
-            assetBrowser.ShowFile(new FileSystemModel(null, result, mod.FullName, true));
+            assetBrowser.ShowFile(new FileSystemModel(null, result, mod.FullName, true, shouldPublish: false));
         }
         else
         {

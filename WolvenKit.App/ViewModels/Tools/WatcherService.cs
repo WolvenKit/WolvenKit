@@ -208,14 +208,13 @@ public partial class ProjectExplorerViewModel
         public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
         {
             _projectDirectory = project.FileDirectory;
-            _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+            _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true,
+                shouldPublish: false);
             ResumeWatcher_AndLoadProject();
         }
 
         public void Resume()
         {
-            lock (_resumeLock)
-            {
                 switch (_watcherState, _suspendQueue.Count)
                 {
                     // happy path
@@ -225,10 +224,6 @@ public partial class ProjectExplorerViewModel
                         if (_suspendQueue.Count == 0)
                         {
                             InternalResume();
-                        }
-                        else
-                        {
-                            _loggerService?.Debug($"Waiting to resume file watcher for {_suspendQueue.Count} remaining file operations.");
                         }
 
                         return;
@@ -248,7 +243,6 @@ public partial class ProjectExplorerViewModel
                     default:
                         throw new Exception(
                             $"Unexpected condition: attempting to resume file watcher while its state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
-                }
             }
 
 
@@ -572,7 +566,7 @@ public partial class ProjectExplorerViewModel
         private (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
         {
             var flatList = new List<FileSystemModel>(10000);
-            var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+            var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true, shouldPublish: false);
             var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
             stack.Push((new DirectoryInfo(rootModel.FullName), rootModel));
 
@@ -711,8 +705,6 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
-            lock (_suspendLock)
-            {
                 if (_suspendQueue.IsEmpty)
                 {
                     _suspendQueue.Enqueue(new SuspendToken());
@@ -727,9 +719,7 @@ public partial class ProjectExplorerViewModel
                     _loggerService?.Error($"WatcherState should be suspended but was instead: {_watcherState}");
                 }
 
-                _loggerService?.Debug("Stopping file system watcher in mod folder.");
                 _suspendQueue.Enqueue(new SuspendToken());
-            }
         }
 
         private void CancelFileLoggingToken()
@@ -934,7 +924,7 @@ public partial class ProjectExplorerViewModel
                 var name = Path.GetFileName(e.FullPath);
 
                 bool desiredExpansion = isDirectory && _getDesiredExpansionState(relativePath);
-                var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion);
+                var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion, shouldPublish: false);
                 return model;
             }
             catch (Exception ex)
@@ -1182,7 +1172,7 @@ public partial class ProjectExplorerViewModel
             var name = Path.GetFileName(absolutePath);
             var desiredExpansion = isDirectory && _getDesiredExpansionState(relativePath);
 
-            var model = new FileSystemModel(parentModel, name, relativePath, isDirectory, desiredExpansion);
+            var model = new FileSystemModel(parentModel, name, relativePath, isDirectory, desiredExpansion, shouldPublish: false);
 
             if (!parentModel.Children.Contains(model))
             {
@@ -1320,7 +1310,7 @@ public partial class ProjectExplorerViewModel
             {
                 if (!parent.Children.Any(m => m.FullName == fullPath) && !_fileLookup.ContainsKey(fullPath))
                 {
-                    var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
+                    var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false, shouldPublish: false);
                     parent.Children.Add(fileSystemModel);
                     _fileLookup.TryAdd(fullPath, fileSystemModel);
                     batch.Add(fileSystemModel);
@@ -1381,7 +1371,7 @@ public partial class ProjectExplorerViewModel
 
             if (!_fileLookup.ContainsKey(fullPath))
             {
-                var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
+                var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false, shouldPublish: false);
                 batch.Add(newFileModel);
                 parentModel.Children.Add(newFileModel);
                 _fileLookup.TryAdd(fullPath, newFileModel);
