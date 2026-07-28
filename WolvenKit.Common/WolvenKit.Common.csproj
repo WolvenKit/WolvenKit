@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -85,7 +85,6 @@
     <PackageReference Include="SharpDX.Direct3D11" />
     <PackageReference Include="SharpDX.Mathematics" />
     <PackageReference Include="SharpGLTF.Core" />
-    <PackageReference Include="SharpZipLib" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
       <PrivateAssets>all</PrivateAssets>

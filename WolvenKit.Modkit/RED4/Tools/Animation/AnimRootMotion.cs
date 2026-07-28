@@ -25,7 +25,6 @@ using TranslationsAtTimes = System.Collections.Generic.Dictionary<float, System.
 using RotationsAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Quaternion>;
 using ScalesAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>;
 using WolvenKit.Core.Extensions;
-using ICSharpCode.SharpZipLib;
 
 
 namespace WolvenKit.Modkit.RED4.Animation
@@ -164,7 +163,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
                             if (transform.JointIndex != RootJointIndex)
                             {
-                                throw new ValueOutOfRangeException($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
+                                throw new Exception($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
                             }
 
                             var x = transform.TRS.t;
@@ -195,7 +194,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
                             if (transform.JointIndex != RootJointIndex)
                             {
-                                throw new ValueOutOfRangeException($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
+                                throw new Exception($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
                             }
 
                             rotations[RootJointIndex].Add(transform.TimePercent, ((RGQuat)transform.TRS.r)._);
