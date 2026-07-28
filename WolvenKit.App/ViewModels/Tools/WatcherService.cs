@@ -1029,7 +1029,7 @@ public partial class ProjectExplorerViewModel
                     continue;
                 }
 
-                // Otherwise remove the source model (and its grid clone) then add the destination.
+                // Otherwise remove the source model, then add the destination.
                 if (!string.IsNullOrEmpty(from))
                 {
                     var parent = Path.GetDirectoryName(from);
@@ -1049,6 +1049,7 @@ public partial class ProjectExplorerViewModel
 
             if (batch.Count > 0)
             {
+                batch.ForEach(ExpandParents);
                 FileList.AddRange(batch);
             }
 
@@ -1057,6 +1058,20 @@ public partial class ProjectExplorerViewModel
             foreach (var parent in sourceParents)
             {
                 PruneVanishedDirectories(parent);
+            }
+        }
+
+        private void ExpandParents(FileSystemModel? model)
+        {
+            var current = model;
+            while (current != null)
+            {
+                if (current is { IsDirectory: true, IsExpanded: false })
+                {
+                    current.IsExpanded = true;
+                }
+
+                current = current.Parent;
             }
         }
 
