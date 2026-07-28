@@ -9,7 +9,7 @@
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,NU5104</WarningsNotAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -44,7 +44,6 @@
     <PackageReference Include="SharpGLTF.Toolkit" />
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="NAudio" />
-    <PackageReference Include="System.Net.Http" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
   </ItemGroup>
 
