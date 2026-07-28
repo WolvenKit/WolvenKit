@@ -40,7 +40,6 @@ public class WatcherServiceTests : IDisposable
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
     private readonly ProjectExplorerViewModel.WatcherService _watcher;
-    private readonly GridGuard _guard;
     private readonly string _tempRootDir;
     private readonly string _tempProjectDir;
     private Cp77Project? _currentProject;
@@ -93,8 +92,7 @@ public class WatcherServiceTests : IDisposable
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
 
-        _guard = new GridGuard();
-        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents, _guard);
+        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents);
 
         // Cp77Project derives ProjectDirectory as Path.GetDirectoryName(Location). If Location is a
         // folder directly under %TEMP%, ProjectDirectory collapses to the shared %TEMP% root and
