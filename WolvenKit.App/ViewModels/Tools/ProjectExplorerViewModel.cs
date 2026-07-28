@@ -89,7 +89,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _inFlight = false;
 
     // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
-    // owned by the WatcherService and are the grids' single source of truth.
+    // owned by the GridGuard (the watcher mutates those same instances), so the grids' single
+    // source of truth is the guard.
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
     public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
