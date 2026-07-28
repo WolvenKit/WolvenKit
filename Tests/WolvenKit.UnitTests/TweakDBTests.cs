@@ -134,8 +134,7 @@ namespace WolvenKit.UnitTests
                 )
             });
 
-        // Failing for over a year, should be checked. Removed for now to allow all other unit tests to run on each pull request.
-        // [TestMethod]
+        [TestMethod]
         public void Serialize_Db_ExpectedOutput()
         {
             using var stream = s_streamManager.GetStream();
@@ -157,7 +156,7 @@ namespace WolvenKit.UnitTests
             var expected = new byte[]
             {
                 0x47, 0xDB, 0xB1, 0x0B, // Magic
-                0x05, 0x00, 0x00, 0x00, // Blob version
+                0x08, 0x00, 0x00, 0x00, // Blob version
                 0x04, 0x00, 0x00, 0x00, // Parser version
                 0x00, 0x00, 0x00, 0x00, // Records Checksum
                 0x20, 0x00, 0x00, 0x00, // Flats offset
