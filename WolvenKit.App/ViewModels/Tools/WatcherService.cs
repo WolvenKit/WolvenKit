@@ -213,8 +213,6 @@ public partial class ProjectExplorerViewModel
 
         public void Resume()
         {
-            lock (_resumeLock)
-            {
                 switch (_watcherState, _suspendQueue.Count)
                 {
                     // happy path
@@ -224,10 +222,6 @@ public partial class ProjectExplorerViewModel
                         if (_suspendQueue.Count == 0)
                         {
                             InternalResume();
-                        }
-                        else
-                        {
-                            _loggerService?.Debug($"Waiting to resume file watcher for {_suspendQueue.Count} remaining file operations.");
                         }
 
                         return;
@@ -247,7 +241,6 @@ public partial class ProjectExplorerViewModel
                     default:
                         throw new Exception(
                             $"Unexpected condition: attempting to resume file watcher while its state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
-                }
             }
 
 
@@ -704,8 +697,6 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
-            lock (_suspendLock)
-            {
                 if (_suspendQueue.IsEmpty)
                 {
                     _suspendQueue.Enqueue(new SuspendToken());
@@ -720,9 +711,7 @@ public partial class ProjectExplorerViewModel
                     _loggerService?.Error($"WatcherState should be suspended but was instead: {_watcherState}");
                 }
 
-                _loggerService?.Debug("Stopping file system watcher in mod folder.");
                 _suspendQueue.Enqueue(new SuspendToken());
-            }
         }
 
         private void CancelFileLoggingToken()
