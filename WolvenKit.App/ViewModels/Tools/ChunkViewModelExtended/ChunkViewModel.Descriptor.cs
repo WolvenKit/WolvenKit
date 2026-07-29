@@ -180,7 +180,7 @@ public partial class ChunkViewModel
                 Descriptor = $"{actorBehavior.ActorId.Id}";
                 return;
             case scnOutputSocketStamp scnOutput:
-                Descriptor = $"{scnOutput.Name}, ${scnOutput.Ordinal}";
+                Descriptor = $"{scnOutput.Name}, {scnOutput.Ordinal}";
                 return;
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
