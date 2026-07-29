@@ -77,7 +77,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 
         await AddRightItemsToProject(vm);
         PumpDispatcher();
-        Assert.Equal(expectedNumberOfItems, _projectExplorerVm.FileList.Count - numberOfFolders);
+        Assert.Equal(expectedNumberOfItems, _projectExplorerVm?.FileList.Count - numberOfFolders);
     }
 
     [StaFact]
