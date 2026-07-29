@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -56,8 +55,6 @@ public partial class ProjectExplorerViewModel
 
         private readonly object _modLoadingLock = new();
         private readonly object _batchLock = new();
-        private readonly object _suspendLock = new();
-        private readonly object _resumeLock = new();
 
         /// <summary>
         /// Keeps track of in-flight suspends so we don't over-resume.
