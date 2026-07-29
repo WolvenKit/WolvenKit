@@ -5,7 +5,7 @@
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <Platforms>x64</Platforms>
-    <TargetFrameworks>net8.0-windows7.0</TargetFrameworks>
+    <TargetFramework>net8.0-windows7.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
