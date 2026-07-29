@@ -15,7 +15,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 10.x
 
       - name: Publish with Dotnet
         run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release -p:DebugType=None -p:DebugSymbols=false
@@ -34,7 +34,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 10.x
 
       - name: Restore dependencies
         run: dotnet restore ./WolvenKit.CLI/WolvenKit.CLI.csproj

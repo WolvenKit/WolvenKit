@@ -1292,7 +1292,7 @@ public partial class ChunkViewModel
             case IRedMeshComponent meshComponent:
             {
                 Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
-                if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != string.Empty)
+                if (meshComponent.MeshAppearance.GetResolvedText() is string app and not ("default" or "") && Value != string.Empty)
                 {
                     Value = $"{Value} ({app})";
                 }
@@ -1302,7 +1302,7 @@ public partial class ChunkViewModel
             case entMorphTargetSkinnedMeshComponent morphtargetComponent:
             {
                 Value = StringHelper.Stringify(morphtargetComponent.MorphResource.DepotPath, true);
-                if (morphtargetComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != string.Empty)
+                if (morphtargetComponent.MeshAppearance.GetResolvedText() is string app and not ("default" or "") && Value != string.Empty)
                 {
                     Value = $"{Value} ({app})";
                 }

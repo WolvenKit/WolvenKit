@@ -19,7 +19,7 @@ public class RDTLayeredPreviewViewModel : RedDocumentTabViewModel
         for (var i = 0; i < streams.Count; i++)
         {
             var buffer = new byte[streams[i].Length];
-            _ = streams[i].Read(buffer, 0, buffer.Length);
+            streams[i].ReadExactly(buffer, 0, buffer.Length);
 
             if (RedImage.LoadFromDDSMemory(buffer) is not { } redImage)
             {

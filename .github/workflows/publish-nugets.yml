@@ -2,7 +2,7 @@ name: publish-nuget
 on:
   workflow_dispatch:
 
-jobs:   
+jobs:
 
   publish-nugets:
     runs-on: windows-latest
@@ -13,14 +13,14 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.x
+        dotnet-version: 10.x
 
     # Pack and upload nugets for Core, Types, Modkit and CLI
     - run: dotnet pack .\WolvenKit.Core\WolvenKit.Core.csproj
     - name: Core
       continue-on-error: true
       run: dotnet nuget push .\WolvenKit.Core\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-    
+
     - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.csproj
     - name: RED4
       continue-on-error: true
