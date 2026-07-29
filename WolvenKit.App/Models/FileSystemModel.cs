@@ -16,7 +16,7 @@ public class FileSystemModel : INotifyPropertyChanged
 {
     public const string ProjectDirName = "<ProjectDir>";
 
-   private readonly string _projectDirectory;
+    private readonly string _projectDirectory;
     private string _name;
     private string _gameRelativePath = null!;
     private long _fileSize;
@@ -107,7 +107,7 @@ public class FileSystemModel : INotifyPropertyChanged
     /// <param name="name"></param><remark>Name of the file with extension but no paths.</remark>
     /// <param name="rawRelativePath"></param><remark>Path above 'source' to the file. E.g. archive/worlds/myfile.ent</remark>
     /// <param name="isDirectory"></param>
-    public FileSystemModel(FileSystemModel? parent, string name, string rawRelativePath, bool isDirectory, bool isExpanded = false, bool shouldPublish = true)
+    public FileSystemModel(FileSystemModel? parent, string name, string rawRelativePath, bool isDirectory, bool isExpanded = false)
     {
         Parent = parent;
 

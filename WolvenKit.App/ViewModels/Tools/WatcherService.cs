@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;

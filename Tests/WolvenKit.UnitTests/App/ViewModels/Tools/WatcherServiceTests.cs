@@ -731,6 +731,233 @@ public class WatcherServiceTests : IDisposable
         watcherWithNullLogger.UnwatchProject();
     }
 
+    // ============================================================
+    // FilesMoved apply path (post-hoc, authoritative move reconciliation)
+    // ============================================================
+
+    /// <summary>
+    /// Regression for the "declined overwrite desyncs the tree" bug. When a move only partially
+    /// happens (the user says "no" to overwriting some files), MoveAndRefactorAsync publishes ONLY
+    /// the files that actually moved. The tree must end up reflecting exactly that: the moved file
+    /// relocated, and the file the user declined to move left untouched.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_PartialSet_RelocatesMovedFile_AndKeepsDeclinedFile()
+    {
+        _currentProject = CreateTestProject("MoveTestMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        // Seed two files on disk BEFORE loading so BuildFullFileStructure indexes them.
+        var movedSrc = Path.GetFullPath(Path.Combine(archiveRoot, "src", "moved.mesh"));
+        var declinedSrc = Path.GetFullPath(Path.Combine(archiveRoot, "src", "declined.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(movedSrc)!);
+        File.WriteAllText(movedSrc, "moved");
+        File.WriteAllText(declinedSrc, "declined");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForAsync(
+            () => LookupHas(movedSrc) && LookupHas(declinedSrc),
+            TimeSpan.FromSeconds(10),
+            () => $"lookup missing seed files; FileList.Count={_watcher.FileList.Count}");
+
+        // Reproduce the on-disk result of a move where the user DECLINED overwriting 'declined':
+        // only 'moved' actually relocated to archive\dst; 'declined' stays exactly where it was.
+        var movedDest = Path.GetFullPath(Path.Combine(archiveRoot, "dst", "moved.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(movedDest)!);
+        File.Move(movedSrc, movedDest);
+
+        // Publish only what actually happened.
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(movedSrc, movedDest)]));
+
+        await WaitForAsync(
+            () => LookupHas(movedDest) && !LookupHas(movedSrc),
+            TimeSpan.FromSeconds(10),
+            () => $"movedDest={LookupHas(movedDest)}, movedSrc={LookupHas(movedSrc)}");
+
+        Assert.True(LookupHas(movedDest), "moved file should now be at the destination");
+        Assert.False(LookupHas(movedSrc), "moved file should no longer be at the source");
+        Assert.True(LookupHas(declinedSrc),
+            "the declined file must remain in the tree — declining an overwrite must not desync it");
+    }
+
+    /// <summary>
+    /// Moving a whole directory publishes a flat set of the files that relocated. The apply must add
+    /// them at the destination and prune the emptied source directory models (which the move deleted
+    /// off disk), rather than leaving orphaned empty folders in the tree.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_WholeDirectory_PrunesEmptiedSourceFolders()
+    {
+        _currentProject = CreateTestProject("MoveDirMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        var f1Src = Path.GetFullPath(Path.Combine(archiveRoot, "grp", "f1.mesh"));
+        var f2Src = Path.GetFullPath(Path.Combine(archiveRoot, "grp", "sub", "f2.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(f2Src)!);
+        File.WriteAllText(f1Src, "f1");
+        File.WriteAllText(f2Src, "f2");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+
+        var grpDir = Path.GetFullPath(Path.Combine(archiveRoot, "grp"));
+        var subDir = Path.GetFullPath(Path.Combine(archiveRoot, "grp", "sub"));
+        await WaitForAsync(
+            () => LookupHas(f1Src) && LookupHas(f2Src),
+            TimeSpan.FromSeconds(10));
+        Assert.True(LookupHas(grpDir));
+        Assert.True(LookupHas(subDir));
+
+        // Move the whole 'grp' directory to 'dst\grp' on disk, then delete the emptied source
+        // (mirrors MoveAndRefactorAsync + DeleteEmptyDirectoriesRecursive).
+        var f1Dest = Path.GetFullPath(Path.Combine(archiveRoot, "dst", "grp", "f1.mesh"));
+        var f2Dest = Path.GetFullPath(Path.Combine(archiveRoot, "dst", "grp", "sub", "f2.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(f2Dest)!);
+        File.Move(f1Src, f1Dest);
+        File.Move(f2Src, f2Dest);
+        Directory.Delete(grpDir, true);
+
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(f1Src, f1Dest), (f2Src, f2Dest)]));
+
+        await WaitForAsync(
+            () => LookupHas(f1Dest)
+                  && LookupHas(f2Dest)
+                  && !LookupHas(f1Src),
+            TimeSpan.FromSeconds(10));
+
+        Assert.True(LookupHas(f1Dest), "moved file present at destination");
+        Assert.True(LookupHas(f2Dest), "nested moved file present at destination");
+        Assert.False(LookupHas(f1Src), "old file path gone");
+        Assert.False(LookupHas(f2Src), "old nested file path gone");
+        Assert.False(LookupHas(grpDir), "emptied source directory model should be pruned");
+        Assert.False(LookupHas(subDir), "emptied nested source directory model should be pruned");
+    }
+
+    /// <summary>
+    /// Re-applying the same move (e.g. a live OS watcher event races the published set) must be a
+    /// no-op rather than throwing or duplicating nodes.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_AppliedTwice_IsIdempotent()
+    {
+        _currentProject = CreateTestProject("MoveIdempotentMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        var src = Path.GetFullPath(Path.Combine(archiveRoot, "a", "file.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(src)!);
+        File.WriteAllText(src, "x");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForAsync(() => LookupHas(src), TimeSpan.FromSeconds(10));
+
+        var dest = Path.GetFullPath(Path.Combine(archiveRoot, "b", "file.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+        File.Move(src, dest);
+
+        var msg = new FilesMovedMessage([(src, dest)]);
+        _projectEvents.PublishFilesMoved(msg);
+        await WaitForAsync(() => LookupHas(dest), TimeSpan.FromSeconds(10));
+
+        var ex = Record.Exception(() => _projectEvents.PublishFilesMoved(msg));
+        Assert.Null(ex);
+
+        var destCount = _watcher.FileList.Count(f =>
+            string.Equals(f.FullName, dest, StringComparison.OrdinalIgnoreCase));
+        Assert.Equal(1, destCount);
+    }
+
+    /// <summary>
+    /// Drag-and-drop COPY reconciliation is modelled as a move with an empty source. Such an entry
+    /// must add the destination model and remove nothing (mirrors NotifyDragDropReconciled additions).
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_EmptyFrom_IsTreatedAsPureAddition()
+    {
+        _currentProject = CreateTestProject("MoveAddMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        // A pre-existing file so the archive root is indexed at load and gives us a "must not be
+        // removed" witness.
+        var seed = Path.GetFullPath(Path.Combine(archiveRoot, "seed.mesh"));
+        Directory.CreateDirectory(archiveRoot);
+        File.WriteAllText(seed, "seed");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForAsync(() => LookupHas(seed), TimeSpan.FromSeconds(10));
+
+        // Simulate a drag-COPY: a brand-new file appears at the destination, nothing is removed.
+        var copyTarget = Path.GetFullPath(Path.Combine(archiveRoot, "copies", "copied.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(copyTarget)!);
+        File.WriteAllText(copyTarget, "copied");
+
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(string.Empty, copyTarget)]));
+
+        await WaitForAsync(() => LookupHas(copyTarget), TimeSpan.FromSeconds(10));
+
+        Assert.True(LookupHas(copyTarget), "empty-From entry should add the destination");
+        Assert.True(LookupHas(seed), "a pure addition must not remove anything");
+    }
+
+    /// <summary>
+    /// Same-folder renames must update the domain tree and preserve node identity so selection/UI
+    /// state can survive a rename (remove+add would mint a new node).
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_SameFolderFileRename_PreservesNodeIdentity()
+    {
+        _currentProject = CreateTestProject("RenameIdentityMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var pathA = Path.GetFullPath(Path.Combine(archiveRoot, "foo", "A.mesh"));
+        var pathB = Path.GetFullPath(Path.Combine(archiveRoot, "foo", "B.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(pathA)!);
+        File.WriteAllText(pathA, "data");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForAsync(() => LookupHas(pathA), TimeSpan.FromSeconds(10));
+
+        var before = _watcher.FileList.First(m =>
+            string.Equals(m.FullName, pathA, StringComparison.OrdinalIgnoreCase));
+
+        File.Move(pathA, pathB);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(pathA, pathB)]));
+        await WaitForAsync(() => LookupHas(pathB) && !LookupHas(pathA), TimeSpan.FromSeconds(10));
+
+        var after = _watcher.FileList.First(m =>
+            string.Equals(m.FullName, pathB, StringComparison.OrdinalIgnoreCase));
+
+        Assert.Same(before, after);
+        Assert.Equal("B.mesh", after.Name);
+    }
+
+    /// <summary>
+    /// Rename A→B then B→A must leave the domain tree showing A only.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_RenameThenRenameBackToOriginal_KeepsTreeConsistent()
+    {
+        _currentProject = CreateTestProject("RenameBackMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var pathA = Path.GetFullPath(Path.Combine(archiveRoot, "foo", "A.mesh"));
+        var pathB = Path.GetFullPath(Path.Combine(archiveRoot, "foo", "B.mesh"));
+        Directory.CreateDirectory(Path.GetDirectoryName(pathA)!);
+        File.WriteAllText(pathA, "data");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForAsync(() => LookupHas(pathA), TimeSpan.FromSeconds(10));
+
+        File.Move(pathA, pathB);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(pathA, pathB)]));
+        await WaitForAsync(() => LookupHas(pathB) && !LookupHas(pathA), TimeSpan.FromSeconds(10));
+
+        File.Move(pathB, pathA);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(pathB, pathA)]));
+        await WaitForAsync(() => LookupHas(pathA) && !LookupHas(pathB), TimeSpan.FromSeconds(10));
+
+        Assert.True(LookupHas(pathA));
+        Assert.False(LookupHas(pathB));
+        Assert.Contains(_watcher.FileList,
+            m => string.Equals(m.FullName, pathA, StringComparison.OrdinalIgnoreCase));
+    }
+
     public void Dispose()
     {
         try
@@ -793,6 +1020,22 @@ public class WatcherServiceTests : IDisposable
             },
             timeout,
             () => $"State={_watcher.WatcherState}, FileList.Count={_watcher.FileList.Count}");
+    }
+
+    /// <summary>
+    /// Case-insensitive FileLookup membership. ConcurrentDictionary keys are ordinal by default,
+    /// while Windows paths may differ only by case between seed paths and model FullName.
+    /// </summary>
+    private bool LookupHas(string absolutePath)
+    {
+        var full = Path.GetFullPath(absolutePath);
+        if (_watcher.FileLookup.ContainsKey(full))
+        {
+            return true;
+        }
+
+        return _watcher.FileLookup.Keys.Any(k =>
+            string.Equals(Path.GetFullPath(k), full, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
