@@ -229,9 +229,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     UnwatchProject();
                 }
 
+                LoadExpansionStateDictionary(activeProject);
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
-                LoadExpansionStateDictionary(activeProject);
             }
             catch (Exception e)
             {
