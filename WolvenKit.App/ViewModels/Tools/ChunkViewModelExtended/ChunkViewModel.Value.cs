@@ -746,6 +746,24 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
 
+            case scnChangeIdleAnimEvent idleEvt when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+
+                if (idleEvt.Performer is not null && SceneEditingHelper.GetActorNameByPerformerId(idleEvt.Performer.Id, scene) is string actorName)
+                {
+                    Value = $"{actorName} ";
+                }
+
+                if (idleEvt.ActorComponent.GetResolvedText() is string s && !string.IsNullOrEmpty(s))
+                {
+                    Value = $"{Value}{s} ";
+                }
+                if (idleEvt.BakedFacialTransition.ToIdleFemale.GetResolvedText() is string s && !string.IsNullOrEmpty(s))
+                {
+                    Value = $"{Value}{s} ";
+                }
+
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value.Trim());
+                break;
             case scneventsPlayAnimEventExData { Basic: scneventsPlayAnimEventData data }:
                 if (data.BlendIn > 0 || data.BlendOut > 0)
                 {
