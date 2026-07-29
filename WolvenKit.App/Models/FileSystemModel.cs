@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -167,6 +168,8 @@ public class FileSystemModel : INotifyPropertyChanged
 
         if (IsDirectory)
         {
+            Extension = nameof(ECustomImageKeys.OpenDirImageKey);
+
             if (RawRelativePath.Equals("archive", StringComparison.CurrentCultureIgnoreCase))
             {
                 Extension = Constants.ModDirectoryTop;
