@@ -76,11 +76,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         Assert.Equal(expectedNumberOfItems, vm.RightItems.Count);
 
         await AddRightItemsToProject(vm);
-
-        // Pump dispatcher to ensure any posted projections (ProjectAdd via import publish) have landed
-        // in the GridGuard's FileList before we assert counts (shim isolation + ObserveOn + dispatch can queue).
         PumpDispatcher();
-
         Assert.Equal(expectedNumberOfItems, _projectExplorerVm.FileList.Count - numberOfFolders);
     }
 

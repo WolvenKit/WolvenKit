@@ -29,8 +29,7 @@ using Assert = Xunit.Assert;
 namespace WolvenKit.IntegrationTests.App.ViewModels.Tools;
 
 /// <summary>
-/// End-to-end consistency test for the rename/move reconciliation pipeline (IProjectEvents ->
-/// MainThreadInlineScheduler -> WatcherService -> GridGuard) that the deferred-refresh race exposed.
+/// End-to-end consistency test for the rename/move reconciliation pipeline.
 ///
 /// Drives a real project + asset browser through: import a file, rename it, rename it back, rename it
 /// again, move it to its parent folder, import it again, move the first one back into the child folder,
