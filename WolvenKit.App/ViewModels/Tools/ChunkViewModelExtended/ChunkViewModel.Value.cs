@@ -753,16 +753,16 @@ public partial class ChunkViewModel
                     Value = $"{actorName} ";
                 }
 
-                if (idleEvt.ActorComponent.GetResolvedText() is string s && !string.IsNullOrEmpty(s))
+                if (idleEvt.ActorComponent.GetResolvedText() is string s3 && !string.IsNullOrEmpty(s3))
                 {
-                    Value = $"{Value}{s} ";
+                    Value = $"{Value}{s3} ";
                 }
-                if (idleEvt.BakedFacialTransition.ToIdleFemale.GetResolvedText() is string s && !string.IsNullOrEmpty(s))
+                if (idleEvt.BakedFacialTransition.ToIdleFemale.GetResolvedText() is string s2 && !string.IsNullOrEmpty(s2))
                 {
-                    Value = $"{Value}{s} ";
+                    Value = $"{Value}{s2} ";
                 }
 
-                IsValueExtrapolated = !string.IsNullOrEmpty(Value.Trim());
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value?.Trim());
                 break;
             case scneventsPlayAnimEventExData { Basic: scneventsPlayAnimEventData data }:
                 if (data.BlendIn > 0 || data.BlendOut > 0)
