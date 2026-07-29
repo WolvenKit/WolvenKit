@@ -2129,7 +2129,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ModifierStateService.OnKeystateChanged(e);
     }
 
-    public Task RefreshAfter(Action action)
+    /// <summary>
+    /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
+    /// <returns></returns>
+    public Task RefreshAfter(Action action, bool shouldSuspend = false)
     {
         return RefreshAfter(() =>
         {
@@ -2138,11 +2144,20 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
-    public async Task RefreshAfter(Func<Task> action)
+    /// <summary>
+    /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
+    /// <returns>Task</returns>
+    public async Task RefreshAfter(Func<Task> action, bool shouldSuspend = false)
     {
         await DispatcherHelper.RunOnMainThreadAsync(async () =>
         {
-            _projectWatcher.Suspend();
+            if (shouldSuspend)
+            {
+                _projectWatcher.Suspend();
+            }
 
             if (_inFlight)
             {
@@ -2176,7 +2191,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 DispatcherHelper.DelayOnMainThread(() =>
                 {
                     _inFlight = false;
-                    _projectWatcher.Resume();
+
+                    if (shouldSuspend)
+                    {
+                        _projectWatcher.Resume();
+                    }
                 }, 1);
             }
         });
