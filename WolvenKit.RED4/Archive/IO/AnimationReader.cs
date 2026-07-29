@@ -41,7 +41,7 @@ public class AnimationReader : IBufferReader
                             var dataAddr = animBuff.DataAddress;
                             var bytes = new byte[dataAddr.ZeInBytes];
                             animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
-                            animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
+                            animDataBuffers[(int)((uint)dataAddr.UnkIndex)].ReadExactly(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
                             animBuff.TempBuffer = new SerializationDeferredDataBuffer(bytes);
                         }
                         // super intensive, and not really needed in the GUI

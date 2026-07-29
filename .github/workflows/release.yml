@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 10.x
 
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJC}} -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained -p:DebugType=None -p:DebugSymbols=false
@@ -41,7 +41,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 10.x
 
       ##########################################
       # VERSIONS
@@ -184,7 +184,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 10.x
 
       # Pack and upload nugets for Core, Types, Modkit and CLI
       - run: dotnet pack .\WolvenKit.Core\WolvenKit.Core.csproj
