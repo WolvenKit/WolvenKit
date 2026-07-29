@@ -89,10 +89,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _inFlight = false;
 
     // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
-    // owned by the GridGuard (the watcher mutates those same instances), so the grids' single
-    // source of truth is the guard.
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _gridGuard.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _gridGuard.FileList;
+    // owned by the WatcherService and are the grids' single source of truth.
+    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
+    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
     public Dictionary<string, bool> ExpansionStateDictionary = [];
     public bool IsKeyUpEventAssigned { get; set; }
@@ -133,7 +132,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents, _gridGuard);
+        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents);
 
         SideInDockedMode = DockSide.Left;
 
@@ -212,8 +211,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CurrentLoadingMode = isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject;
         EnableLoadingMode(CurrentLoadingMode);
 
-        _gridGuard.NotifyChangeRequested();
-        _gridGuard.BeginChanges();
 
         if (_appViewModel.IsDialogShown || _appViewModel.IsOverlayShown)
         {
@@ -232,9 +229,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     UnwatchProject();
                 }
 
+                LoadExpansionStateDictionary(activeProject);
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
-                LoadExpansionStateDictionary(activeProject);
             }
             catch (Exception e)
             {
@@ -297,7 +294,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
         // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from
         // any mode, so this can't strand the guard if the load took an unusual path.
-        _gridGuard.ForceReady();
 
         _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
     }
@@ -2105,7 +2101,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (model is { IsDirectory: true })
         {
             model.IsExpanded = true;
-            _gridGuard.ProjectUpdateFileInfo(model);
             SaveNodeExpansionState(model.RawRelativePath, true);
         }
     }
@@ -2119,7 +2114,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (model is { IsDirectory: true })
         {
             model.IsExpanded = false;
-            SaveNodeExpansionState(model.RawRelativePath, false);
+            SaveNodeExpansionState(model.RawRelativePath, model.IsExpanded);
         }
     }
 
@@ -2134,7 +2129,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ModifierStateService.OnKeystateChanged(e);
     }
 
-    public Task RefreshAfter(Action action)
+    /// <summary>
+    /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
+    /// <returns></returns>
+    public Task RefreshAfter(Action action, bool shouldSuspend = false)
     {
         return RefreshAfter(() =>
         {
@@ -2143,13 +2144,20 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
-    public async Task RefreshAfter(Func<Task> action)
+    /// <summary>
+    /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
+    /// <returns>Task</returns>
+    public async Task RefreshAfter(Func<Task> action, bool shouldSuspend = false)
     {
         await DispatcherHelper.RunOnMainThreadAsync(async () =>
         {
-            _projectWatcher.Suspend();
-            _gridGuard.NotifyChangeRequested();
-            _gridGuard.BeginChanges();
+            if (shouldSuspend)
+            {
+                _projectWatcher.Suspend();
+            }
 
             if (_inFlight)
             {
@@ -2183,8 +2191,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 DispatcherHelper.DelayOnMainThread(() =>
                 {
                     _inFlight = false;
-                    _projectWatcher.Resume();
-                    _gridGuard.ForceReady();
+
+                    if (shouldSuspend)
+                    {
+                        _projectWatcher.Resume();
+                    }
                 }, 1);
             }
         });

@@ -55,8 +55,6 @@ public partial class ProjectExplorerViewModel
 
         private readonly object _modLoadingLock = new();
         private readonly object _batchLock = new();
-        private readonly object _suspendLock = new();
-        private readonly object _resumeLock = new();
 
         /// <summary>
         /// Keeps track of in-flight suspends so we don't over-resume.
@@ -78,22 +76,9 @@ public partial class ProjectExplorerViewModel
         public ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
 
         private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
-
-        // TODO: This is never read from, can it be cleaned out?
         private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
         private readonly CompositeDisposable _disposables = new();
-
-        // Delivers IProjectEvents onto the UI thread, but runs INLINE when the publisher is already on
-        // it (unlike RxApp.MainThreadScheduler, which always re-posts). That makes a UI-thread publish +
-        // deferred-refresh release deterministic — the GridGuard is updated before the refresh runs.
-        private readonly IScheduler _projectEventScheduler;
-
-        // The grids bind to the GridGuard's clone projection, not to these. These are the DOMAIN
-        // models the watcher builds and the rest of the app mutates freely. After each domain
-        // mutation the watcher calls _guard.Project*(...) so the shim updates the clones the grids
-        // actually show — that indirection is what keeps the wild mutations off the Syncfusion grids.
-        private readonly GridGuard _guard;
 
         private readonly DispatchedObservableCollection<FileSystemModel> _fileList = new();
         private readonly DispatchedObservableCollection<FileSystemModel> _fileTree = new();
@@ -130,11 +115,10 @@ public partial class ProjectExplorerViewModel
 
         #region Constructor
 
-        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents, GridGuard guard)
+        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
         {
             _loggerService = loggerService;
             _getDesiredExpansionState = getDesiredExpansionState;
-            _guard = guard;
 
             _modsWatcher = new FileSystemWatcher
             {
@@ -151,25 +135,25 @@ public partial class ProjectExplorerViewModel
             // dispatcher when available and fall back to the current thread's so this also works in
             // headless/STA test hosts where Application.Current may be null.
             var uiDispatcher = System.Windows.Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
-            _projectEventScheduler = new MainThreadInlineScheduler(RxApp.MainThreadScheduler, uiDispatcher);
+            IScheduler projectEventScheduler = new MainThreadInlineScheduler(RxApp.MainThreadScheduler, uiDispatcher);
 
             projectEvents.FilesImported
-                .ObserveOn(_projectEventScheduler)
+                .ObserveOn(projectEventScheduler)
                 .Subscribe(OnFilesImported)
                 .DisposeWith(_disposables);
 
             projectEvents.FilesMoved
-                .ObserveOn(_projectEventScheduler)
+                .ObserveOn(projectEventScheduler)
                 .Subscribe(OnFilesMoved)
                 .DisposeWith(_disposables);
 
             projectEvents.FilesDeleted
-                .ObserveOn(_projectEventScheduler)
+                .ObserveOn(projectEventScheduler)
                 .Subscribe(OnFilesOrDirectoriesDeleted)
                 .DisposeWith(_disposables);
 
             projectEvents.FileChanged
-                .ObserveOn(_projectEventScheduler)
+                .ObserveOn(projectEventScheduler)
                 .Subscribe(OnFileChanged)
                 .DisposeWith(_disposables);
         }
@@ -214,8 +198,6 @@ public partial class ProjectExplorerViewModel
 
         public void Resume()
         {
-            lock (_resumeLock)
-            {
                 switch (_watcherState, _suspendQueue.Count)
                 {
                     // happy path
@@ -226,17 +208,27 @@ public partial class ProjectExplorerViewModel
                         {
                             InternalResume();
                         }
-                        else
-                        {
-                            _loggerService?.Debug($"Waiting to resume file watcher for {_suspendQueue.Count} remaining file operations.");
-                        }
 
                         return;
 
-                    // happy path for reloading/loading
-                    case (WatcherState.Loading, 1):
+                    // Load completion (and mid-load Resume from PublishFilesImported) always
+                    // dequeues the load token. Nested Suspend() calls during Loading leave extra
+                    // tokens so we must land in Suspended rather than throwing or going Active.
+                    case (WatcherState.Loading, > 0):
                         _ = _suspendQueue.TryDequeue(out _);
-                        InternalResume();
+
+                        if (_suspendQueue.Count == 0)
+                        {
+                            InternalResume();
+                        }
+                        else
+                        {
+                            _watcherState = WatcherState.Suspended;
+                            _modsWatcher.EnableRaisingEvents = false;
+                            _loggerService?.Debug(
+                                $"Load finished with {_suspendQueue.Count} suspend token(s) remaining; staying suspended.");
+                        }
+
                         return;
 
                     // resuming while active has no effect
@@ -248,7 +240,6 @@ public partial class ProjectExplorerViewModel
                     default:
                         throw new Exception(
                             $"Unexpected condition: attempting to resume file watcher while its state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
-                }
             }
 
 
@@ -376,7 +367,6 @@ public partial class ProjectExplorerViewModel
                 }
 
                 item.UpdateFileInfo();
-                _guard.ProjectUpdateFileInfo(item);
             }
 
             void Renamed(FileSystemEventArgsWrapper e)
@@ -428,10 +418,7 @@ public partial class ProjectExplorerViewModel
                     }
 
                     var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
-                    // Capture the clone key before the rename changes FullName, then project it.
-                    var oldFullName = item.FullName;
                     item.Rename(newName);
-                    _guard.ProjectRename(item, oldFullName);
                 }
             }
 
@@ -455,28 +442,23 @@ public partial class ProjectExplorerViewModel
 
         private void RemoveModel(FileSystemModel model, long removedAt = 0)
         {
-            if (model == null) return;
-
-            _fileLookup.TryRemove(model.FullName, out _);
-
-            if (FileTree.Contains(model))
-                FileTree.Remove(model);
-            if (FileList.Contains(model))
-                FileList.Remove(model);
-
-            RemoveChildModels(model);
-
-            if (model.Parent != null && model.Parent.Children.Contains(model))
-                model.Parent.Children.Remove(model);
-
-            if (removedAt != 0)
-                _removedFiles.TryAdd(model.FullName, removedAt);
-
-            // Mirror the removal onto the grid-bound clone subtree.
             Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
             {
-                _guard.ProjectRemove(model);
-            });
+                _fileLookup.TryRemove(model.FullName, out _);
+
+                if (FileTree.Contains(model))
+                    FileTree.Remove(model);
+                if (FileList.Contains(model))
+                    FileList.Remove(model);
+
+                RemoveChildModels(model);
+
+                if (model.Parent != null && model.Parent.Children.Contains(model))
+                    model.Parent.Children.Remove(model);
+
+                if (removedAt != 0)
+                    _removedFiles.TryAdd(model.FullName, removedAt);
+            }, false);
         }
 
         private void RemoveChildModels(FileSystemModel model)
@@ -489,12 +471,6 @@ public partial class ProjectExplorerViewModel
                 _fileLookup.Remove(subModel.FullName, out _);
                 if (FileList.Contains(subModel))
                     FileList.Remove(subModel);
-
-                // Mirror the removal onto the grid-bound clone subtree.
-                Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
-                {
-                    _guard.ProjectRemove(model);
-                });
             }
         }
 
@@ -502,10 +478,6 @@ public partial class ProjectExplorerViewModel
         {
             foreach (var item in items)
             {
-                if (item == null) continue;
-                // `item` is usually a grid clone (it came from the grid's SelectedItems). Resolve it
-                // to the domain model of the same path so RemoveModel operates on real domain state;
-                // RemoveModel then projects the removal back onto the clones.
                 var domain = _fileLookup.TryGetValue(item.FullName, out var d) ? d : item;
                 RemoveModel(domain, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
             }
@@ -538,7 +510,6 @@ public partial class ProjectExplorerViewModel
                 _fileLookup.Clear();
                 FileTree.Clear();
                 FileList.Clear();
-                _guard.ProjectReset(FileList, FileTree);
             }
 
             Clear();
@@ -557,9 +528,6 @@ public partial class ProjectExplorerViewModel
                     FileTree.AddRange((treeRoot != null)
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
-
-                    // Project the freshly built domain tree onto the grid-bound clones.
-                    _guard.ProjectReset(flatListReturn, treeRoot?.Children.ToList() ?? new List<FileSystemModel>());
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
                     _loggerService?.Info($"Loaded {FileList.Count} project files.");
@@ -711,8 +679,6 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
-            lock (_suspendLock)
-            {
                 if (_suspendQueue.IsEmpty)
                 {
                     _suspendQueue.Enqueue(new SuspendToken());
@@ -722,14 +688,15 @@ public partial class ProjectExplorerViewModel
                     return;
                 }
 
-                if (_watcherState != WatcherState.Suspended)
-                {
-                    _loggerService?.Error($"WatcherState should be suspended but was instead: {_watcherState}");
-                }
-
-                _loggerService?.Debug("Stopping file system watcher in mod folder.");
+                // Nested suspend (including while Loading): keep existing load/suspend tokens and
+                // add another so a later Resume (or load-completion Resume) does not go Active until
+                // every suspend is balanced. Always reflect Suspended to callers.
+                _modsWatcher.EnableRaisingEvents = false;
                 _suspendQueue.Enqueue(new SuspendToken());
-            }
+                if (_watcherState is WatcherState.Loading or WatcherState.Active or WatcherState.Error)
+                {
+                    _watcherState = WatcherState.Suspended;
+                }
         }
 
         private void CancelFileLoggingToken()
@@ -900,7 +867,6 @@ public partial class ProjectExplorerViewModel
                         FileTree.AddRange(created);
                     }
 
-                    _guard.ProjectAdd(created);
 
                 }, DispatcherPriority.Background);
             }
@@ -993,7 +959,6 @@ public partial class ProjectExplorerViewModel
             }
 
             FileList.AddRange(batch);
-            _guard.ProjectAdd(batch);
             Resume();
 
             // Log added files in the background to avoid hanging the UI on very large imports.
@@ -1002,12 +967,11 @@ public partial class ProjectExplorerViewModel
 
         /// <summary>
         /// Applies an authoritative, already-completed set of file moves (see
-        /// <see cref="IProjectEvents.PublishFilesMoved"/>) to the domain models and, through the
-        /// guard, the grid clones. This is the replacement for optimistic pre-projection from command
-        /// handlers: the tree is only ever changed to match what actually happened on disk, so
-        /// declining an overwrite prompt can no longer leave it out of sync. Runs on the UI thread
-        /// and is idempotent, so racing with a live OS watcher event (or a duplicate publish) is a
-        /// no-op.
+        /// <see cref="IProjectEvents.PublishFilesMoved"/>) to the domain models and. This is the
+        /// replacement for optimistic handlers: the tree is only ever changed to match what actually
+        /// happened on disk, so declining an overwrite prompt can no longer leave it out of sync.
+        /// Runs on the UI thread and is idempotent, so racing with a live OS watcher event (or a
+        /// duplicate publish) is a no-op.
         /// </summary>
         private void OnFilesMoved(FilesMovedMessage msg)
         {
@@ -1026,20 +990,12 @@ public partial class ProjectExplorerViewModel
                     continue;
                 }
 
-                // A same-folder file rename: rename the node IN PLACE instead of remove+add. This
-                // preserves the model's (and its grid clone's) identity, so the grid keeps its
-                // selection and expansion — which is exactly what GridGuard.ProjectRename is for.
-                // Losing that identity is what left "Rename" greyed out and broke the next rename.
                 if (!string.IsNullOrEmpty(from)
                     && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
                     && PathsShareParent(from, to)
                     && _fileLookup.TryGetValue(from, out var renameModel)
                     && !renameModel.IsDirectory)
                 {
-                    // Overwrite case: if a different node already occupies the destination (the moved
-                    // file replaced an existing file on disk), drop that stale node first so the in-place
-                    // rename doesn't leave a duplicate. The remove+add branch below gets this for free via
-                    // EnsureModelForPath's idempotency; the in-place branch has to do it explicitly.
                     if (_fileLookup.TryGetValue(to, out var overwritten) && !ReferenceEquals(overwritten, renameModel))
                     {
                         RemoveModel(overwritten);
@@ -1049,7 +1005,7 @@ public partial class ProjectExplorerViewModel
                     continue;
                 }
 
-                // Otherwise remove the source model (and its grid clone) then add the destination.
+                // Otherwise remove the source model, then add the destination.
                 if (!string.IsNullOrEmpty(from))
                 {
                     var parent = Path.GetDirectoryName(from);
@@ -1069,8 +1025,8 @@ public partial class ProjectExplorerViewModel
 
             if (batch.Count > 0)
             {
+                batch.ForEach(ExpandParents);
                 FileList.AddRange(batch);
-                _guard.ProjectAdd(batch);
             }
 
             // Prune source directory models whose backing folder no longer exists (an empty folder
@@ -1078,6 +1034,20 @@ public partial class ProjectExplorerViewModel
             foreach (var parent in sourceParents)
             {
                 PruneVanishedDirectories(parent);
+            }
+        }
+
+        private void ExpandParents(FileSystemModel? model)
+        {
+            var current = model;
+            while (current != null)
+            {
+                if (current is { IsDirectory: true, IsExpanded: false })
+                {
+                    current.IsExpanded = true;
+                }
+
+                current = current.Parent;
             }
         }
 
@@ -1093,7 +1063,6 @@ public partial class ProjectExplorerViewModel
 
                     if (_fileLookup.TryGetValue(fullPath, out var model))
                     {
-                        _guard.ProjectUpdateFileInfo(model);
                     }
 
                     break;
@@ -1104,24 +1073,21 @@ public partial class ProjectExplorerViewModel
             string.Equals(Path.GetDirectoryName(a), Path.GetDirectoryName(b), StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Renames a file model in place (domain + grid clone), preserving node identity so the grid
-        /// keeps its selection/expansion. Re-keys the lookup and hands GridGuard a ProjectRename intent
-        /// rather than a remove-then-add. Must be called on the UI thread.
+        /// Renames a file model in place preserving node identity so the grid keeps its selection/expansion.
+        /// Re-keys the lookup rather than a remove-then-add. Must be called on the UI thread.
         /// </summary>
         private void RenameModelInPlace(FileSystemModel model, string oldFullName, string newFullName)
         {
             _fileLookup.TryRemove(oldFullName, out _);
             model.Rename(Path.GetFileName(newFullName)); // recomputes FullName; keeps the same parent
             _fileLookup.TryAdd(newFullName, model);
-            _guard.ProjectRename(model, oldFullName);
         }
 
         /// <summary>
         /// Applies an authoritative set of deletions (see <see cref="IProjectEvents.PublishFileDeleted"/>
-        /// / <see cref="IProjectEvents.PublishDirectoryDeleted"/>) to the domain models and grid clones.
-        /// Handles BOTH files and directories: RemoveModel recurses into children, so a deleted
-        /// directory path drops its whole subtree. Idempotent: a path the tree doesn't know is a no-op.
-        /// Must run on the UI thread.
+        /// / <see cref="IProjectEvents.PublishDirectoryDeleted"/>) to the domain models. Handles BOTH
+        /// files and directories: RemoveModel recurses into children, so a deleted directory path drops
+        /// its whole subtree. Idempotent: a path the tree doesn't know is a no-op. Must run on the UI thread.
         /// </summary>
         private void OnFilesOrDirectoriesDeleted(FilesDeletedMessage msg)
         {
@@ -1138,7 +1104,7 @@ public partial class ProjectExplorerViewModel
         /// Ensures a <see cref="FileSystemModel"/> exists for the given absolute path, creating it
         /// and any missing ancestor directory models up to the project root. Returns the existing
         /// model when one is already present (keeping the apply idempotent). New models are appended
-        /// to <paramref name="batch"/> so the caller can add them to the flat list / grid clones in
+        /// to <paramref name="batch"/> so the caller can add them to the flat list in
         /// one shot. Must be called on the UI thread.
         /// </summary>
         private FileSystemModel? EnsureModelForPath(string absolutePath, List<FileSystemModel> batch)
@@ -1313,7 +1279,10 @@ public partial class ProjectExplorerViewModel
             var parentDirInfo = Directory.GetParent(fullPath);
             var parentPath = parentDirInfo!.FullName;
             var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
-            var vm = Locator.Current.GetService<AppViewModel>()!.GetToolViewModel<ProjectExplorerViewModel>();
+            // Optional: unit tests and headless hosts have no AppViewModel in the Splat locator.
+            // Expansion still works via ExpandParents; persistence goes through PE when available.
+            var projectExplorer = Locator.Current.GetService<AppViewModel>()
+                ?.GetToolViewModel<ProjectExplorerViewModel>();
             Dictionary<string, FileSystemModel> expandedLeaves = new();
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
@@ -1325,7 +1294,7 @@ public partial class ProjectExplorerViewModel
                     _fileLookup.TryAdd(fullPath, fileSystemModel);
                     batch.Add(fileSystemModel);
 
-                    ExpandAllParents(parent, expandedLeaves, vm);
+                    ExpandAllParents(parent, expandedLeaves, projectExplorer);
                 }
                 return;
             }
@@ -1375,7 +1344,7 @@ public partial class ProjectExplorerViewModel
                 parentModel.Children.Add(newCurrentModel);
                 _fileLookup.TryAdd(current.FullName, newCurrentModel);
                 batch.Add(newCurrentModel);
-                ExpandAllParents(parentModel, expandedLeaves, vm);
+                ExpandAllParents(parentModel, expandedLeaves, projectExplorer);
                 parentModel = newCurrentModel;
             }
 
@@ -1388,7 +1357,7 @@ public partial class ProjectExplorerViewModel
             }
         }
 
-        private static void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves, ProjectExplorerViewModel vm)
+        private static void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves, ProjectExplorerViewModel? projectExplorer)
         {
             FileSystemModel? expandParent = parent;
 
@@ -1400,8 +1369,18 @@ public partial class ProjectExplorerViewModel
                     continue;
                 }
 
-                // Auto-expand the existing parent..
-                vm.NotifyDirectoryExpanded(expandParent);
+                // Auto-expand the existing parent. Prefer PE so expansion state is persisted when
+                // running in the app; fall back to IsExpanded for headless/unit-test hosts.
+                if (projectExplorer != null)
+                {
+                    projectExplorer.NotifyDirectoryExpanded(expandParent);
+                }
+                else if (expandParent.IsDirectory && !expandParent.IsExpanded)
+                {
+                    expandParent.IsExpanded = true;
+                }
+
+                expandedLeaves[expandParent.FullName] = expandParent;
                 expandParent = expandParent.Parent;
             }
         }

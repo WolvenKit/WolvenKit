@@ -29,8 +29,7 @@ using Assert = Xunit.Assert;
 namespace WolvenKit.IntegrationTests.App.ViewModels.Tools;
 
 /// <summary>
-/// End-to-end consistency test for the rename/move reconciliation pipeline (IProjectEvents ->
-/// MainThreadInlineScheduler -> WatcherService -> GridGuard) that the deferred-refresh race exposed.
+/// End-to-end consistency test for the rename/move reconciliation pipeline.
 ///
 /// Drives a real project + asset browser through: import a file, rename it, rename it back, rename it
 /// again, move it to its parent folder, import it again, move the first one back into the child folder,
@@ -65,7 +64,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         Assert.NotNull(_ab);
 
         // No real Syncfusion grid in the test: run the deferred-refresh task straight through. The tree we
-        // assert on is the GridGuard's FileList, which the WatcherService handlers keep in sync.
+        // assert on is the WatcherService FileList, which the project-event handlers keep in sync.
         _pe!.BeginDeferredRefreshContext = (task) => task();
 
         // Always confirm overwrite prompts (the final collision step relies on this).
