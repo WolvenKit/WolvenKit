@@ -28,6 +28,7 @@ public sealed class WolvenKitTestFixture : IDisposable
 
     private Application? _application;
     private UIA3Automation? _automation;
+    private int? _previousUiScale;
 
     public Application Application => _application ?? throw new InvalidOperationException("Fixture not started.");
     public UIA3Automation Automation => _automation ?? throw new InvalidOperationException("Fixture not started.");
@@ -53,6 +54,10 @@ public sealed class WolvenKitTestFixture : IDisposable
     /// </param>
     public Window Start(int startupTimeoutSeconds = 400)
     {
+        // Magnification above 100% enlarges chrome enough to hide action buttons
+        // that FlaUI needs (copy path, open explorer, etc.). Force 100% for the run.
+        _previousUiScale = UiScaleTestSetup.ForceTo100Percent();
+
         var exePath = ResolveExePath();
         _automation = new UIA3Automation();
         _application = Application.Launch(exePath);
@@ -197,6 +202,14 @@ public sealed class WolvenKitTestFixture : IDisposable
             RecentProjectsTestCleanup.RemoveProjectsUnder(TempRoot);
         }
         catch { /* best effort */ }
+
+        // Put the developer's UI scale back after the process has fully exited.
+        try
+        {
+            UiScaleTestSetup.Restore(_previousUiScale);
+        }
+        catch { /* best effort */ }
+        _previousUiScale = null;
 
         // Clean up temp projects created by this run.
         try
