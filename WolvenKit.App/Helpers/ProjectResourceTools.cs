@@ -495,7 +495,7 @@ public partial class ProjectResourceTools
                                  && !destAbsPath.Contains(s_tempDirSuffix) // it's not the temp dir
                                  && !Directory.Exists(sourceFileOrDirAbsPath); // and the source dir got deleted/moved
 
-            // Notify GridGuard that the move succeeded so the file grids can be updated.
+            // Notify the project explorer that the move succeeded so the file grids can be updated.
             if (didMoveSucceed)
             {
                 _projectEvents.PublishFilesMoved(

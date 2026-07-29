@@ -55,8 +55,6 @@ public partial class ProjectExplorerViewModel
 
         private readonly object _modLoadingLock = new();
         private readonly object _batchLock = new();
-        private readonly object _suspendLock = new();
-        private readonly object _resumeLock = new();
 
         /// <summary>
         /// Keeps track of in-flight suspends so we don't over-resume.

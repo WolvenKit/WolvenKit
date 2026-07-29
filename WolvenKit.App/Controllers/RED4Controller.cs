@@ -1091,10 +1091,10 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService.Completed();
         _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles([.. files]));
 
-        // Ensure projection of the imported files onto the GridGuard clones (FileList/FileTree)
-        // has completed before returning to awaiters (e.g. tests asserting counts, or UI code).
-        // The publish is observed via ObserveOn main and the adds are dispatched; Invoke to
-        // ContextIdle drains the queue so callers see the updated collections synchronously.
+        // Ensure projection of the imported files onto FileList/FileTree has completed before
+        // returning to awaiters (e.g. tests asserting counts, or UI code). The publish is observed
+        // via ObserveOn main and the adds are dispatched; Invoke to ContextIdle drains the queue
+        // so callers see the updated collections synchronously.
         try
         {
             System.Windows.Application.Current?.Dispatcher?.Invoke(
