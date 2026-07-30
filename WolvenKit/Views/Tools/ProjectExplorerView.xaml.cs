@@ -34,6 +34,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Others;
 using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
 using WolvenKit.Helpers;
@@ -70,6 +71,7 @@ namespace WolvenKit.Views.Tools
         private string _currentFolderQuery = "";
         private bool _isDragging;
         private ISettingsManager _settingsManager;
+        private readonly CancellableRowDragDropController _rowDragDropController;
 
         #region Constructors
 
@@ -80,6 +82,8 @@ namespace WolvenKit.Views.Tools
 
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
+            _rowDragDropController = new CancellableRowDragDropController();
+            TreeGrid.RowDragDropController = _rowDragDropController;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
@@ -395,6 +399,10 @@ namespace WolvenKit.Views.Tools
 
         private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
+            // The refresh below disposes every TreeNode; a pending drag-hover auto-expand
+            // would fire on a disposed node afterwards.
+            _rowDragDropController.CancelPendingAutoExpand();
+
             CompositeDisposable disposables =
             [
                 TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
@@ -412,8 +420,9 @@ namespace WolvenKit.Views.Tools
             {
                 if (!_currentFolderQuery.IsNullOrEmpty())
                 {
+                    // The rebuild recreated every node collapsed and filtered; re-expand
+                    // the ancestor chains of matches so the Extended filter can see them.
                     ReapplyCurrentSearchFilter(expandAllForSearch: true);
-                    return;
                 }
 
                 InvalidateLayout();
@@ -786,7 +795,12 @@ namespace WolvenKit.Views.Tools
             // Filtered by search
             if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !fm.Name.Contains(_currentFolderQuery))
             {
-                return false;
+                bool matches =
+                    fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
+                    fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase);
+
+                if (!matches)
+                    return false;
             }
 
             return tabControl.SelectedIndex switch
@@ -875,32 +889,112 @@ namespace WolvenKit.Views.Tools
 
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
-            _currentFolderQuery = e.Info;
-            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrEmpty(e.Info));
+            _currentFolderQuery = e?.Info ?? PESearchBar?.Text ?? string.Empty;
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
 
         private void ReapplyCurrentSearchFilter(bool expandAllForSearch)
         {
-            if (TreeGridFlat.View is not null)
+            var hasQuery = !string.IsNullOrWhiteSpace(_currentFolderQuery);
+
+            if (TreeGridFlat?.View is not null)
             {
                 TreeGridFlat.View.Filter = IsFileInFlat;
                 TreeGridFlat.View.RefreshFilter();
             }
 
-            if (TreeGrid.View is null)
+            if (TreeGrid?.View is not null)
+            {
+                TreeGrid.View.Filter = IsFileIn;
+
+                if (expandAllForSearch && hasQuery)
+                {
+                    ExpandAncestorsOfSearchMatches();
+                }
+
+                TreeGrid.View.RefreshFilter();
+            }
+        }
+
+                /// <summary>
+        /// Expands only directory ancestors of nodes that match the current search
+        /// (and matching directories themselves). Avoids ExpandAllNodes, which walks the
+        /// entire project and storms IsExpanded / expansion persistence.
+        /// </summary>
+        private void ExpandAncestorsOfSearchMatches()
+        {
+            if (ViewModel is null || TreeGrid?.View is null || string.IsNullOrWhiteSpace(_currentFolderQuery))
             {
                 return;
             }
 
-            TreeGrid.View.Filter = IsFileIn;
+            // Collect unique directory models that must be expanded for hits to be visible.
+            var parentsToExpand = new HashSet<FileSystemModel>();
 
-            if (expandAllForSearch && !string.IsNullOrEmpty(_currentFolderQuery))
+            foreach (var fm in ViewModel.FileList)
             {
-                TreeGrid.ExpandAllNodes();
+                if (!IsFileIn(fm))
+                {
+                    continue;
+                }
+
+                // Matching directories need to be open so Extended filter children can show.
+                for (var p = fm.IsDirectory ? fm : fm.Parent; p != null; p = p.Parent)
+                {
+                    parentsToExpand.Add(p);
+                }
             }
 
-            TreeGrid.View.RefreshFilter();
+            if (parentsToExpand.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var dir in parentsToExpand
+                         .OrderBy(d => d.RawRelativePath.Length)
+                         .ThenBy(d => d.RawRelativePath, StringComparer.OrdinalIgnoreCase))
+            {
+                var node = FindNodeIgnoringFilter(dir);
+                if (node is { IsExpanded: false })
+                {
+                    TreeGrid.ExpandNode(node);
+                    ViewModel.NotifyDirectoryExpanded((node.Item as FileSystemModel)!);
+                }
+            }
         }
+
+        /// <summary>
+        /// Resolves the TreeNode for a model by walking parent-to-child from the root nodes.
+        /// <see cref="TreeNodeCollection.GetNode"/> only returns visible (unfiltered) nodes,
+        /// so right after a full view rebuild — where every recreated node starts out
+        /// filtered — it returns null for everything and no ancestor chain can be expanded.
+        /// Expanding shallowest-first keeps each parent's ChildNodes populated before its
+        /// children are looked up.
+        /// </summary>
+        private TreeNode FindNodeIgnoringFilter(FileSystemModel model)
+        {
+            var chain = new Stack<FileSystemModel>();
+            for (var p = model; p is not null; p = p.Parent)
+            {
+                chain.Push(p);
+            }
+
+            var level = TreeGrid.View.Nodes.RootNodes;
+            TreeNode node = null;
+            while (chain.Count > 0)
+            {
+                node = level.GetNode(chain.Pop());
+                if (node is null)
+                {
+                    return null;
+                }
+
+                level = node.ChildNodes;
+            }
+
+            return node;
+        }
+
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
         {
@@ -925,6 +1019,7 @@ namespace WolvenKit.Views.Tools
                 treeNodes[0].Item is not FileSystemModel sourceFile ||
                 e.TargetNode?.Item is not FileSystemModel targetFile)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -940,13 +1035,20 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
+        private void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
             try
             {
+                // ProcessOnDrop re-arms the hover auto-expand timer via GetDropPosition after
+                // stopping it; kill it here or it fires ExpandNode on a node the deferred
+                // refresh has already disposed (NRE in TreeGridNestedView.RequestTreeItems).
+                _rowDragDropController.CancelPendingAutoExpand();
+
                 e.Handled = _isDragging;
-                if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
+
+                if (e.TargetNode?.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
+                    e.Handled = true;
                     return;
                 }
 
@@ -974,17 +1076,24 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // if dragged on file, use file's parent directory as target dir
-                var targetDirectory = Directory.Exists(targetFile.FullName)
+                var targetDirectory = (Directory.Exists(targetFile.FullName)
                     ? targetFile.FullName
-                    : Path.GetDirectoryName(targetFile.FullName);
+                    : Path.GetDirectoryName(targetFile.FullName)) ?? string.Empty;
+
+                if (targetFile.Parent is { } parent && parent.FullName == targetDirectory)
+                {
+                    e.Handled = true;
+                    return;
+                }
 
                 // 1146: addresses "prevent self-drag-and-drop"
                 if (files.Count == 0 || files[0] == targetDirectory)
                 {
+                    e.Handled = true;
                     return;
                 }
 
-                await ViewModel.ProcessFileAction(files, targetDirectory);
+                ViewModel.ProcessFileAction(files, targetDirectory);
             }
             catch (Exception error)
             {
@@ -1009,6 +1118,7 @@ namespace WolvenKit.Views.Tools
         {
             if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -1018,6 +1128,7 @@ namespace WolvenKit.Views.Tools
 
             if (activeFileNode is null)
             {
+                e.Handled = true;
                 return;
             }
 

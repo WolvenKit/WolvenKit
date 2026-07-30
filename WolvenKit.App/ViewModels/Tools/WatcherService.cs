@@ -431,7 +431,8 @@ public partial class ProjectExplorerViewModel
 
                 if (_fileLookup.TryRemove(e.FullPath, out var item))
                 {
-                    RemoveModel(item, e.EventAddedAt);
+                    Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>()
+                        .RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
                 }
                 else
                 {
@@ -442,23 +443,20 @@ public partial class ProjectExplorerViewModel
 
         private void RemoveModel(FileSystemModel model, long removedAt = 0)
         {
-            Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
-            {
-                _fileLookup.TryRemove(model.FullName, out _);
+            _fileLookup.TryRemove(model.FullName, out _);
 
-                if (FileTree.Contains(model))
-                    FileTree.Remove(model);
-                if (FileList.Contains(model))
-                    FileList.Remove(model);
+            if (FileTree.Contains(model))
+                FileTree.Remove(model);
+            if (FileList.Contains(model))
+                FileList.Remove(model);
 
-                RemoveChildModels(model);
+            RemoveChildModels(model);
 
-                if (model.Parent != null && model.Parent.Children.Contains(model))
-                    model.Parent.Children.Remove(model);
+            if (model.Parent != null && model.Parent.Children.Contains(model))
+                model.Parent.Children.Remove(model);
 
-                if (removedAt != 0)
-                    _removedFiles.TryAdd(model.FullName, removedAt);
-            }, false);
+            if (removedAt != 0)
+                _removedFiles.TryAdd(model.FullName, removedAt);
         }
 
         private void RemoveChildModels(FileSystemModel model)
