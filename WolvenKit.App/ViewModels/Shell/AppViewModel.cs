@@ -1967,14 +1967,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// </summary>
     public void RunAfterModalClosed(Action action)
     {
-        if (!IsDialogShown && !IsOverlayShown)
-        {
-            action();
-        }
-        else
-        {
-            _pendingAfterModalCloseActions.Enqueue(action);
-        }
+        DispatcherHelper.DelayOnMainThread(action, 500);
     }
 
     /// <summary>
