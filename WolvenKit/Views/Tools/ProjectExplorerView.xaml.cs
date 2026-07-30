@@ -299,9 +299,14 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void SetLoading(object sender, ProjectExplorerViewModel.LoadingMode mode)
         {
-            if (ShouldStartLoadingProject(mode) && Ready() && IsFreshLoad(mode))
+            if (ShouldStartLoadingProject(mode) && Ready())
             {
-                IndicateProjectLoading();
+                ResetCurrentFolderQuerySearchFilter();
+
+                if (IsFreshLoad(mode))
+                {
+                    IndicateProjectLoading();
+                }
             }
             else if (ShouldStopLoading(mode) && AlreadyLoadingProject())
             {
@@ -380,24 +385,10 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        // Run inside Dispatcher to avoid exception on startup
-        private void ClearFiltersAndRefreshTrees() {
+        private void ResetCurrentFolderQuerySearchFilter()
+        {
             _currentFolderQuery = "";
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
-
-            if (TreeGridFlat.View is not null)
-            {
-                TreeGridFlat.ClearFilters();
-                TreeGridFlat.ClearSelections(false);
-                TreeGridFlat.View.Refresh();
-            }
-
-            if (TreeGrid.View is not null)
-            {
-                TreeGrid.ClearFilters();
-                TreeGrid.ClearSelections(false);
-                TreeGrid.View.Refresh();
-            }
         }
 
         #endregion Project_Loading
