@@ -974,7 +974,6 @@
                     hc:InfoElement.Placeholder="Search"
                     hc:InfoElement.ShowClearButton="True"
                     FlowDirection="LeftToRight"
-                    SearchStarted="PESearchBar_OnSearchStarted"
                     TextChanged="PESearchBar_TextChanged"/>
 
                 <StackPanel
