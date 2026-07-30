@@ -69,6 +69,7 @@ namespace WolvenKit.Views.Tools
         }
 
         private string _currentFolderQuery = "";
+        private readonly DispatcherTimer _searchDebounceTimer;
         private bool _isDragging;
         private ISettingsManager _settingsManager;
         private readonly CancellableRowDragDropController _rowDragDropController;
@@ -78,6 +79,14 @@ namespace WolvenKit.Views.Tools
         public ProjectExplorerView()
         {
             InitializeComponent();
+
+            // Debounce for live search
+            _searchDebounceTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(350)
+            };
+            _searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
+
             _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
 
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
@@ -437,8 +446,6 @@ namespace WolvenKit.Views.Tools
             {
                 if (!_currentFolderQuery.IsNullOrEmpty())
                 {
-                    // The rebuild recreated every node collapsed and filtered; re-expand
-                    // the ancestor chains of matches so the Extended filter can see them.
                     ReapplyCurrentSearchFilter(expandAllForSearch: true);
                 }
 
@@ -904,14 +911,36 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void SearchDebounceTimer_Tick(object sender, EventArgs e)
+        {
+            _searchDebounceTimer.Stop();
+
+            if (PESearchBar == null)
+                return;
+
+            _currentFolderQuery = PESearchBar.Text ?? string.Empty;
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
+        }
+
+        private void PESearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (PESearchBar == null)
+                return;
+
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Start();
+        }
+
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
+            _searchDebounceTimer.Stop();
             _currentFolderQuery = e?.Info ?? PESearchBar?.Text ?? string.Empty;
             ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
 
         private void ReapplyCurrentSearchFilter(bool expandAllForSearch)
         {
+            bool searchBarHadFocus = PESearchBar != null && PESearchBar.IsKeyboardFocused;
             var hasQuery = !string.IsNullOrWhiteSpace(_currentFolderQuery);
 
             if (TreeGridFlat?.View is not null)
@@ -923,17 +952,30 @@ namespace WolvenKit.Views.Tools
             if (TreeGrid?.View is not null)
             {
                 TreeGrid.View.Filter = IsFileIn;
+                // Filter first so only relevant hierarchy is considered for expand.
+                TreeGrid.View.RefreshFilter();
 
                 if (expandAllForSearch && hasQuery)
                 {
                     ExpandAncestorsOfSearchMatches();
                 }
+            }
 
-                TreeGrid.View.RefreshFilter();
+            if (searchBarHadFocus)
+            {
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (PESearchBar == null || PESearchBar.IsKeyboardFocused)
+                        return;
+
+                    Keyboard.Focus(PESearchBar);
+                    PESearchBar.Focus();
+                    PESearchBar.CaretIndex = PESearchBar.Text?.Length ?? 0;
+                }, DispatcherPriority.ContextIdle);
             }
         }
 
-                /// <summary>
+        /// <summary>
         /// Expands only directory ancestors of nodes that match the current search
         /// (and matching directories themselves). Avoids ExpandAllNodes, which walks the
         /// entire project and storms IsExpanded / expansion persistence.
