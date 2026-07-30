@@ -550,9 +550,7 @@ namespace WolvenKit.Views.Tools
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
 
-            //ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
-
-            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
