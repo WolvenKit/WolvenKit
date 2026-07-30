@@ -203,12 +203,12 @@ public abstract partial class StringHelper
 
     public static string? StringifyOrNull(CName cname)
     {
-        if (cname.GetResolvedText() is not string path || path == "")
+        if (cname.GetResolvedText() is not string value || string.IsNullOrWhiteSpace(value))
         {
             return null;
         }
 
-        return cname.GetResolvedText();
+        return value;
     }
 
     public static string? StringifyOrNull(CString? str)
