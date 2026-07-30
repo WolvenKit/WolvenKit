@@ -153,7 +153,10 @@ namespace WolvenKit.Views.Documents
                 [
                     "File validation script not found!",
                     "Try deleting '%APPDATA%\\REDModding\\WolvenKit\\Scripts\\Wolvenkit_FileValidation.wscript',",
-                    "then restart Wolvenkit. If that does not help, please get in touch with the devs."
+                    "then restart Wolvenkit. If that does not help, make sure that Wolvenkit is installed in a location ",
+                    "that is not restricted by windows (e.g. 'C:\\CyberpunkModding\\WolvenKit')",
+                    "If that doesn't help either, please get in touch with the devs!"
+
                 ];
                 throw new WolvenKitException(0x5002, string.Join('\n', exceptionMsg));
             }
