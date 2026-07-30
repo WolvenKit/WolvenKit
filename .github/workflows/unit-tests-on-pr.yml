@@ -26,7 +26,7 @@ jobs:
   unit-tests:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Run unit tests
         run: |
           cd "Tests\WolvenKit.UnitTests"
