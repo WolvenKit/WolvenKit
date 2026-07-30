@@ -79,6 +79,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private IPluginService _pluginService;
     private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
     private object _progressLock = new();
+    private Guid? _autoSaveCancelToken;
 
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
@@ -149,9 +150,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        DispatcherHelper.StartRepeatingAction(
-            () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
-            TimeSpan.FromSeconds(10));
+        _autoSaveCancelToken = null;
 
         s_instance = this;
 
@@ -162,7 +161,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 // Get a fresh reference to the project instead of the one we captured
                 // a long time ago in this closure.
                 var active = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().ActiveProject;
-                if (project == null || project == active)
+                if (project == null || project.Equals(active))
                 {
                     return;
                 }
@@ -177,8 +176,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 {
                     // Get a fresh reference to the project instead of the one we captured
                     // a long time ago in this closure.
-                    var active = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().ActiveProject;
-                    if (project == active)
+                    var activeProject = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().ActiveProject;
+                    if (project.Equals(activeProject))
                     {
                         return;
                     }
@@ -225,8 +224,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             try
             {
-                if (ActiveProject != null)
+                if (ActiveProject != null && _autoSaveCancelToken is { } cancelToken)
                 {
+                    DispatcherHelper.StopRepeatingAction(cancelToken);
+                    _autoSaveCancelToken = null;
                     SaveProjectState();
                     ActiveProject = null;
                     UnwatchProject();
@@ -235,6 +236,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 LoadExpansionStateDictionary(activeProject);
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
+                _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
+                    () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+                    TimeSpan.FromSeconds(10));
             }
             catch (Exception e)
             {
@@ -246,6 +250,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 {
                     RestoreProjectState(ActiveProject!);
                     CheckForOneDriveInPath();
+                    DisableLoadingMode();
                 }
             }
         });
@@ -270,26 +275,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void EnableLoadingMode(LoadingMode mode)
     {
-        if (mode == LoadingMode.LoadingNewProject || mode == LoadingMode.ReloadingSameProject)
+        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject)
         {
-            _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-                () =>
-                {
-                    _progressService.IsIndeterminate = true;
-                    _progressService.Status = EStatus.Running;
-                },
-                _singleOperationTimeout,
-                DisableLoadingMode
-            );
-
-            _projectWatcher.CompletionTimer = _loadingCompletion;
+            return;
         }
 
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            _singleOperationTimeout,
+            DisableLoadingMode
+        );
+
+        _projectWatcher.CompletionTimer = _loadingCompletion;
         OnSetLoading?.Invoke(this, mode);
     }
 
     private void DisableLoadingMode()
     {
+        if (CurrentLoadingMode == LoadingMode.Ready)
+        {
+            return;
+        }
+
         _progressService.IsIndeterminate = false;
         CurrentLoadingMode = LoadingMode.Ready;
         OnSetLoading?.Invoke(this, (CurrentLoadingMode));
