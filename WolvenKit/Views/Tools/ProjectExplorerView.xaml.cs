@@ -69,10 +69,26 @@ namespace WolvenKit.Views.Tools
         }
 
         private string _currentFolderQuery = "";
+
+        private HashSet<string> _searchVisiblePaths;
+
         private readonly DispatcherTimer _searchDebounceTimer;
         private bool _isDragging;
         private ISettingsManager _settingsManager;
         private readonly CancellableRowDragDropController _rowDragDropController;
+
+        /// <summary>
+        /// When true, NodeExpanded/NodeCollapsed must not persist expansion state or write
+        /// FileSystemModel.IsExpanded via the ViewModel. Used for search-driven expand/restore
+        /// so bulk view operations do not dirtily rewrite the project tree state.
+        /// </summary>
+        private bool _suppressExpansionPersistence;
+
+        /// <summary>
+        /// True after search auto-expanded ancestors so clearing the query can restore
+        /// ExpansionStateDictionary without re-touching an untouched tree.
+        /// </summary>
+        private bool _searchMutatedExpansion;
 
         #region Constructors
 
@@ -418,6 +434,7 @@ namespace WolvenKit.Views.Tools
         private void ResetCurrentFolderQuerySearchFilter()
         {
             _currentFolderQuery = "";
+            _searchVisiblePaths = null;
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
         }
 
@@ -533,6 +550,8 @@ namespace WolvenKit.Views.Tools
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
 
+            //ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
+
             PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
         }
 
@@ -597,7 +616,10 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeExpanded(object sender, NodeExpandedEventArgs e)
         {
-            if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
+            if (ViewModel is null
+                || _suppressExpansionPersistence
+                || !string.IsNullOrEmpty(_currentFolderQuery)
+                || e.Node.Item is not FileSystemModel fileSystemModel)
             {
                 return;
             }
@@ -664,7 +686,10 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeCollapsed(object sender, NodeCollapsedEventArgs e)
         {
-            if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
+            if (ViewModel is null
+                || _suppressExpansionPersistence
+                || !string.IsNullOrEmpty(_currentFolderQuery)
+                || e.Node.Item is not FileSystemModel fileSystemModel)
             {
                 return;
             }
@@ -742,6 +767,7 @@ namespace WolvenKit.Views.Tools
 
             TreeGrid.View.NodeCollectionChanged += View_OnNodeCollectionChanged;
 
+            RebuildSearchVisiblePaths();
             TreeGrid.View.Filter = IsFileIn;
             TreeGrid.View.RefreshFilter();
         }
@@ -816,15 +842,22 @@ namespace WolvenKit.Views.Tools
                 return false;
             }
 
-            // Filtered by search
-            if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !fm.Name.Contains(_currentFolderQuery))
-            {
-                bool matches =
-                    fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
-                    fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase);
+            // if (!string.IsNullOrWhiteSpace(_currentFolderQuery))
+            // {
+            //     bool matches =
+            //         fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
+            //         fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase);
+            //
+            //     if (!matches)
+            //         return false;
+            // }
 
-                if (!matches)
-                    return false;
+            // Search filter: keep the node if it is a match or an ancestor of a match.
+            // Without this, matching leaves under non-matching folders are unreachable.
+            if (_searchVisiblePaths is not null
+                && !_searchVisiblePaths.Contains(fm.RawRelativePath))
+            {
+                return false;
             }
 
             return tabControl.SelectedIndex switch
@@ -841,6 +874,47 @@ namespace WolvenKit.Views.Tools
                 return fm.RawRelativePath == folder ||
                        fm.RawRelativePath.StartsWith($"{folder}{Path.DirectorySeparatorChar}");
             }
+        }
+
+        private bool MatchesSearchQuery(FileSystemModel fm)
+        {
+            if (string.IsNullOrWhiteSpace(_currentFolderQuery))
+            {
+                return true;
+            }
+
+            return fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase)
+                   || fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void RebuildSearchVisiblePaths()
+        {
+            if (string.IsNullOrWhiteSpace(_currentFolderQuery) || ViewModel is null)
+            {
+                _searchVisiblePaths = null;
+                return;
+            }
+
+            var visible = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var fm in ViewModel.FileList)
+            {
+                if (!MatchesSearchQuery(fm))
+                {
+                    continue;
+                }
+
+                for (var p = fm; p is not null; p = p.Parent)
+                {
+                    // Once an ancestor is already present, higher ones are too — stop walking.
+                    if (!visible.Add(p.RawRelativePath))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            _searchVisiblePaths = visible;
         }
 
         private bool IsFileInFlat(object o) => tabControl != null && o is FileSystemModel fm && IsFileIn(o) && !fm.IsDirectory;
@@ -943,6 +1017,9 @@ namespace WolvenKit.Views.Tools
             bool searchBarHadFocus = PESearchBar != null && PESearchBar.IsKeyboardFocused;
             var hasQuery = !string.IsNullOrWhiteSpace(_currentFolderQuery);
 
+            // Must run before RefreshFilter so IsFileIn sees the up-to-date ancestor set.
+            RebuildSearchVisiblePaths();
+
             if (TreeGridFlat?.View is not null)
             {
                 TreeGridFlat.View.Filter = IsFileInFlat;
@@ -958,6 +1035,11 @@ namespace WolvenKit.Views.Tools
                 if (expandAllForSearch && hasQuery)
                 {
                     ExpandAncestorsOfSearchMatches();
+                }
+                else if (!hasQuery && _searchMutatedExpansion)
+                {
+                    RestoreExpansionStateAfterSearch();
+                    _searchMutatedExpansion = false;
                 }
             }
 
@@ -992,12 +1074,13 @@ namespace WolvenKit.Views.Tools
 
             foreach (var fm in ViewModel.FileList)
             {
-                if (!IsFileIn(fm))
+                // Only actual matches — ancestors are already in the visible set via RebuildSearchVisiblePaths.
+                if (!MatchesSearchQuery(fm))
                 {
                     continue;
                 }
 
-                // Matching directories need to be open so Extended filter children can show.
+                // Matching directories need to be open so filtered children can show.
                 for (var p = fm.IsDirectory ? fm : fm.Parent; p != null; p = p.Parent)
                 {
                     parentsToExpand.Add(p);
@@ -1009,16 +1092,26 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            foreach (var dir in parentsToExpand
-                         .OrderBy(d => d.RawRelativePath.Length)
-                         .ThenBy(d => d.RawRelativePath, StringComparer.OrdinalIgnoreCase))
+            _suppressExpansionPersistence = true;
+
+            try
             {
-                var node = FindNodeIgnoringFilter(dir);
-                if (node is { IsExpanded: false })
+                foreach (var dir in parentsToExpand
+                             .OrderBy(d => d.RawRelativePath.Length)
+                             .ThenBy(d => d.RawRelativePath, StringComparer.OrdinalIgnoreCase))
                 {
-                    TreeGrid.ExpandNode(node);
-                    ViewModel.NotifyDirectoryExpanded((node.Item as FileSystemModel)!);
+                    var node = FindNodeIgnoringFilter(dir);
+                    if (node is { IsExpanded: false })
+                    {
+                        TreeGrid.ExpandNode(node);
+                    }
                 }
+
+                _searchMutatedExpansion = true;
+            }
+            finally
+            {
+                _suppressExpansionPersistence = false;
             }
         }
 
@@ -1042,7 +1135,16 @@ namespace WolvenKit.Views.Tools
             TreeNode node = null;
             while (chain.Count > 0)
             {
-                node = level.GetNode(chain.Pop());
+                var check = chain.Pop();
+
+                // If we hit "source" directory then keep going.
+                if (check.Name == FileSystemModel.ProjectDirName)
+                {
+                    continue;
+                }
+
+                node = level.GetNode(check);
+
                 if (node is null)
                 {
                     return null;
@@ -1054,6 +1156,65 @@ namespace WolvenKit.Views.Tools
             return node;
         }
 
+        /// <summary>
+        /// After clearing search, put expansion back to ExpansionStateDictionary so
+        /// folders that were only opened to reveal hits do not stay permanently open.
+        /// </summary>
+        private void RestoreExpansionStateAfterSearch()
+        {
+            if (ViewModel is null || TreeGrid?.View is null)
+            {
+                return;
+            }
+
+            _suppressExpansionPersistence = true;
+            try
+            {
+                RestoreExpansionRecursive(TreeGrid.View.Nodes);
+            }
+            finally
+            {
+                _suppressExpansionPersistence = false;
+            }
+        }
+
+        private void RestoreExpansionRecursive(IEnumerable<TreeNode> nodes)
+        {
+            if (ViewModel is null || nodes is null)
+            {
+                return;
+            }
+
+            foreach (var node in nodes)
+            {
+                if (node.Item is not FileSystemModel { IsDirectory: true } model)
+                {
+                    continue;
+                }
+
+                // Depth-first: fix children before this node so collapsing a parent
+                // does not leave child model/view state inconsistent.
+                if (node.ChildNodes is { Count: > 0 })
+                {
+                    RestoreExpansionRecursive(node.ChildNodes);
+                }
+
+                // Paths never recorded stay collapsed after search (search may have opened them).
+                var desired = ViewModel.GetExpansionStateOrNull(model.RawRelativePath) is true;
+
+                if (desired)
+                {
+                    if (!node.IsExpanded)
+                    {
+                        TreeGrid.ExpandNode(node);
+                    }
+                }
+                else if (node.IsExpanded)
+                {
+                    TreeGrid.CollapseNode(node);
+                }
+            }
+        }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
         {
