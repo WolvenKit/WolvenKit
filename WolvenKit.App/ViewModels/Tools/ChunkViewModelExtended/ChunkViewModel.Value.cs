@@ -598,40 +598,10 @@ public partial class ChunkViewModel
                 Value = $"{scnActorId.Id}";
                 IsValueExtrapolated = scnActorId.Id != 0;
                 break;
-            case scnPerformerId scnPerformerId when GetRootModel().ResolvedData is scnSceneResource sceneForPerformer:
-                Value = $"{scnPerformerId.Id}";
-                IsValueExtrapolated = scnPerformerId.Id != 0;
-
-                if (sceneForPerformer.DebugSymbols?.PerformersDebugSymbols != null)
-                {
-                    var performerSymbol = sceneForPerformer.DebugSymbols.PerformersDebugSymbols
-                        .FirstOrDefault(p => p.PerformerId.Id == scnPerformerId.Id);
-                    if (performerSymbol != null)
-                    {
-                        string? performerName = null;
-                        if (performerSymbol.EntityRef?.Names != null && performerSymbol.EntityRef.Names.Count > 0)
-                        {
-                            performerName = performerSymbol.EntityRef.Names[0].GetResolvedText();
-                        }
-
-                        if (string.IsNullOrEmpty(performerName) && performerSymbol.EntityRef?.Reference != null)
-                        {
-                            var referenceString = performerSymbol.EntityRef.Reference.ToString();
-                            if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
-                            {
-                                performerName = referenceString.StartsWith("#")
-                                    ? referenceString.Substring(1)
-                                    : referenceString;
-                            }
-                        }
-
-                        if (!string.IsNullOrEmpty(performerName))
-                        {
-                            Value = $"{scnPerformerId.Id}: {performerName}";
-                        }
-                    }
-                }
-
+            case scnPerformerId scnPerformerId when GetRootModel().ResolvedData is scnSceneResource scene:
+                var performer = SceneEditingHelper.GetActorNameByPerformerId(scnPerformerId.Id, scene) ??
+                                "no actor found";
+                                Value = $"{scnPerformerId.Id} ({performer})" ;
                 break;
             case scnSceneWorkspotInstanceId sceneWorkspotInstance
                 when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
@@ -748,18 +718,36 @@ public partial class ChunkViewModel
 
             case scnChangeIdleAnimEvent idleEvt when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
 
-                if (idleEvt.Performer is not null && SceneEditingHelper.GetActorNameByPerformerId(idleEvt.Performer.Id, scene) is string actorName)
+                if (SceneEditingHelper.GetActorNameByPerformerId(idleEvt.Performer.Id, scene) is string actorName)
                 {
-                    Value = $"{actorName} ";
+                    Value = $"{actorName}";
                 }
 
-                if (idleEvt.ActorComponent.GetResolvedText() is string s3 && !string.IsNullOrEmpty(s3))
+                if (StringHelper.StringifyOrNull(idleEvt.ActorComponent) is string s2)
                 {
-                    Value = $"{Value}{s3} ";
+                    Value = $"{Value}: {s2}";
                 }
-                if (idleEvt.BakedFacialTransition.ToIdleFemale.GetResolvedText() is string s2 && !string.IsNullOrEmpty(s2))
+                if (StringHelper.StringifyOrNull(idleEvt.BakedFacialTransition.ToIdleFemale) is string s3)
                 {
-                    Value = $"{Value}{s2} ";
+                    Value = $"{Value} ({s3})";
+                }
+
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value?.Trim());
+                break;
+            case animFacialEmotionTransitionBaked bakedTransition:
+                if (StringHelper.StringifyOrNull(bakedTransition.ToIdleFemale) is string toIdleF)
+                {
+                    Value = $"{toIdleF}";
+                } else if (StringHelper.StringifyOrNull(bakedTransition.ToIdleMale) is string toIdleM)
+                {
+                    Value = $"{toIdleM}";
+                }
+
+                var facialKey = StringHelper.StringifyOrNull(bakedTransition.FacialKey_Female)
+                    ?? StringHelper.StringifyOrNull(bakedTransition.FacialKey_Male);
+                if (!string.IsNullOrEmpty(facialKey))
+                {
+                    Value = $"{Value} ({facialKey})";
                 }
 
                 IsValueExtrapolated = !string.IsNullOrEmpty(Value?.Trim());
