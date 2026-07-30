@@ -137,12 +137,11 @@ public partial class ChunkViewModel
         {
             Value = ibt.GetBrowsableValue();
         }
-        else if (ResolvedData is animPoseLink link && StringHelper.GetNodeName(link.Node) is string s && s != "")
+        else if (ResolvedData is animPoseLink link && StringHelper.GetNodeName(link.Node) is string animPose && animPose != "")
         {
-            Value = s;
+            Value = animPose;
             IsValueExtrapolated = true;
             return;
-
         }
         else if (ResolvedData is inkTextureSlot inkTextureSlot)
         {
@@ -150,7 +149,6 @@ public partial class ChunkViewModel
             IsValueExtrapolated = true;
             return;
         }
-
         else if (ResolvedData is gameuiOptionsGroup &&
                  GetPropertyChild("options") is ChunkViewModel opts && !string.IsNullOrEmpty(opts.Value))
         {
@@ -423,12 +421,11 @@ public partial class ChunkViewModel
 
                 break;
 
-            case appearancePartComponentOverrides compOverride
-                when compOverride.MeshAppearance.GetResolvedText() is string s:
+            case appearancePartComponentOverrides compOverride when StringHelper.StringifyOrNull(compOverride.MeshAppearance) is string meshAppearance:
                 Value = string.Empty;
-                if (s is not ("default" or "None"))
+                if (meshAppearance is not ("default" or "None"))
                 {
-                    Value = s;
+                    Value = meshAppearance;
                 }
 
                 Value = StringHelper.AppendToString(Value, StringHelper.StringifyChunkMask(compOverride.ChunkMask),
@@ -598,13 +595,17 @@ public partial class ChunkViewModel
                 Value = $"{scnActorId.Id}";
                 IsValueExtrapolated = scnActorId.Id != 0;
                 break;
-            case scnPerformerId scnPerformerId when GetRootModel().ResolvedData is scnSceneResource scene:
+            case scnPerformerId scnPerformerId when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
                 var performer = SceneEditingHelper.GetActorNameByPerformerId(scnPerformerId.Id, scene) ??
                                 "no actor found";
                                 Value = $"{scnPerformerId.Id} ({performer})" ;
                 break;
+            case scnlocLocStoreEmbeddedVariantDescriptorEntry locstoreEntry when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{SceneEditingHelper.GetLocstringValueById(locstoreEntry.LocstringId.Ruid, scene)}";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case scnSceneWorkspotInstanceId sceneWorkspotInstance
-                when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
+                when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource sceneForWorkspot:
                 Value = $"{sceneWorkspotInstance.Id}";
                 IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
 
@@ -630,7 +631,7 @@ public partial class ChunkViewModel
 
                 break;
             case scnEffectInstanceId scnEffectInstance
-                when GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
+                when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource sceneForEffect:
                 Value = $"{scnEffectInstance.Id}";
                 IsValueExtrapolated = scnEffectInstance.Id != 0;
 
@@ -653,7 +654,7 @@ public partial class ChunkViewModel
                 }
 
                 break;
-            case scnPropId scnPropId when GetRootModel().ResolvedData is scnSceneResource sceneForProp:
+            case scnPropId scnPropId when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource sceneForProp:
                 Value = $"{scnPropId.Id}";
                 IsValueExtrapolated = scnPropId.Id != 0;
 
@@ -977,9 +978,49 @@ public partial class ChunkViewModel
 
             #endregion
 
+            case scnDialogLineEvent dialogLine when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{SceneEditingHelper.GetScreenplayLineById(dialogLine.ScreenplayLineId.Id, scene)}";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case scnlocLocstringId stringId when
                 stringId.Ruid != 0:
                 Value = stringId.Ruid.ToString();
+                IsValueExtrapolated = true;
+                break;
+            case scnlocLocStoreEmbeddedVariantDescriptorEntry locstoreVariant when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                if (SceneEditingHelper.GetLocstringValueByVariantId(locstoreVariant.LocstringId.Ruid,
+                        scene) is string s)
+                {
+                    Value = $": {locstoreVariant.LocstringId.Ruid} => {SceneEditingHelper.GetLocstringValueByVariantId(locstoreVariant.LocstringId.Ruid, scene)}";
+                }
+                else
+                {
+                    Value = $" => {locstoreVariant.LocstringId.Ruid}";
+                }
+                IsValueExtrapolated = true;
+                break;
+            case scnlocLocStoreEmbeddedVariantPayloadEntry locstoreVariant when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                if (SceneEditingHelper.GetLocstringValueByVariantId(locstoreVariant.VariantId.Ruid,
+                        scene) is string locstoreString)
+                {
+                    Value = $": {locstoreVariant.VariantId.Ruid} => {locstoreString}";
+                }
+                else
+                {
+                    Value = $" => {locstoreVariant.VariantId.Ruid}";
+                }
+                IsValueExtrapolated = true;
+                break;
+            case scnlocLocStoreEmbeddedVariantPayloadEntry locstoreVariant when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                if (SceneEditingHelper.GetLocstringValueByVariantId(locstoreVariant.VariantId.Ruid,
+                        scene) is string locstorePayload)
+                {
+                    Value = $": {locstoreVariant.VariantId.Ruid} => {locstorePayload}";
+                }
+                else
+                {
+                    Value = $" => {locstoreVariant.VariantId.Ruid}";
+                }
                 IsValueExtrapolated = true;
                 break;
             case scnEntryPoint entryPoint:
@@ -1116,7 +1157,7 @@ public partial class ChunkViewModel
                 // Fallback case when not in a scene context
                 Value = cinematicAnimSetRefId.Id.ToString();
                 return;
-            case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForLipsyncAnimSetRef:
+            case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource sceneForLipsyncAnimSetRef:
                 uint lipsyncAnimSetId = lipsyncAnimSetRefId.Id;
                 Value = $"{lipsyncAnimSetId}";
 
@@ -1261,8 +1302,8 @@ public partial class ChunkViewModel
                 return;
             case scnScenesVersionsSceneChanges scn when scn.SceneChanges.FirstOrDefault() is { } change &&
                                                         StringHelper.Stringify(change.SceneBeforeChange.DepotPath,
-                                                            true) is string s && s != string.Empty:
-           Value = s;
+                                                            true) is string scenePath && scenePath != string.Empty:
+           Value = scenePath;
                 IsValueExtrapolated = true;
                 return;
             case scneventsSetAnimFeatureEvent featureEvt
@@ -1294,12 +1335,12 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != string.Empty;
                 return;
             case scnFindEntityInNodeParams findInParams
-                when findInParams.NodeRef.GetResolvedText() is string s && s != "":
-                Value = $"NodeRef: {s}";
+                when findInParams.NodeRef.GetResolvedText() is string nodeRef && nodeRef != "":
+                Value = $"NodeRef: {nodeRef}";
                 return;
             case scnFindEntityInNodeParams nodeParams
-                when nodeParams.NodeRef.GetResolvedText() is string s && s != "":
-                Value = $"NodeRef: {s}";
+                when nodeParams.NodeRef.GetResolvedText() is string nodeRef && nodeRef != "":
+                Value = $"NodeRef: {nodeRef}";
                 return;
             case entTriggerActivatorComponent tActivatorComponent:
             {
