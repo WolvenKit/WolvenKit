@@ -1046,32 +1046,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.ReloadChangedFiles();
     }
 
-    /// <summary>
-    /// Called by the View after a drag-and-drop has moved and/or copied files on disk. Publishes an
-    /// authoritative reconciliation so the grids update immediately from what actually happened,
-    /// instead of waiting on (flaky) OS file system events. <paramref name="moves"/> are
-    /// (fromAbs -&gt; toAbs) relocations; <paramref name="additions"/> are newly created absolute
-    /// paths (copy targets). The watcher applies this idempotently, so a live FS event for the same
-    /// change is a harmless no-op.
-    /// </summary>
-    public void NotifyDragDropReconciled(
-        IReadOnlyList<(string From, string To)> moves,
-        IReadOnlyList<string> additions)
-    {
-        if (moves.Count == 0 && additions.Count == 0)
-        {
-            return;
-        }
-
-        // Pure additions are modelled as moves with an empty source (OnFilesMoved skips the removal
-        // for an empty From and just materializes the destination).
-        var payload = new List<(string From, string To)>(moves.Count + additions.Count);
-        payload.AddRange(moves);
-        payload.AddRange(additions.Select(a => (string.Empty, a)));
-
-        _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload));
-    }
-
     public void UnwatchProject() => _projectWatcher.UnwatchProject();
 
     public void CloseProject() => _projectWatcher.UnwatchProject();
@@ -2135,7 +2109,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="action"></param>
     /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
     /// <returns></returns>
-    public Task RefreshAfter(Action action, bool shouldSuspend = false)
+    public Task RefreshAfter(Action action, bool shouldSuspend = true)
     {
         return RefreshAfter(() =>
         {
@@ -2150,7 +2124,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="action"></param>
     /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
     /// <returns>Task</returns>
-    public async Task RefreshAfter(Func<Task> action, bool shouldSuspend = false)
+    public async Task RefreshAfter(Func<Task> action, bool shouldSuspend = true)
     {
         await DispatcherHelper.RunOnMainThreadAsync(async () =>
         {
@@ -2201,19 +2175,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
-    /// <summary>
-    ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
-    /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
-    /// </summary>
-    public async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory) =>
-        await RefreshAfter(async () => await InternalProcessFileAction(sourceFiles, targetDirectory));
-
-    /// <summary>
-    ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
-    /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
-    /// </summary>
-    private async Task InternalProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
-    {
+    public void ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory) {
         var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
 
         // Abort if a directory is dragged on itself or its parent
@@ -2301,7 +2263,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // 1 - 10 files: Show a single dialogue that asks for confirmation
         if (existingFiles.Count is < 10 and > 0)
         {
-            var messageBoxResult = await Interactions.ShowMessageBoxAsync(
+            var messageBoxResult = Interactions.ShowMessageBox(
                 $"Overwrite the following files? \n\n  {string.Join("\n  ", existingFiles)}",
                 "File Overwrite Confirmation", WMessageBoxButtons.YesNoCancel);
 
@@ -2325,7 +2287,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var canWriteToTargetFile =
                 !File.Exists(targetFile)
                 || isOverwrite
-                || (!skipDialogue && isAskIndividually && await Interactions.ShowMessageBoxAsync(
+                || (!skipDialogue && isAskIndividually && Interactions.ShowMessageBox(
                     $"Overwrite the following file? {targetFile}",
                     "File Overwrite Confirmation",
                     WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
@@ -2373,6 +2335,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        NotifyDragDropReconciled(movedPairs, addedPaths);
+        if (movedPairs.Count == 0 && addedPaths.Count == 0)
+        {
+            return;
+        }
+
+        var payload = new List<(string From, string To)>(movedPairs.Count + addedPaths.Count);
+        payload.AddRange(movedPairs);
+        payload.AddRange(addedPaths.Select(a => (string.Empty, a)));
+
+        RefreshAfter(() =>
+        {
+            _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload));
+        });
     }
 }
