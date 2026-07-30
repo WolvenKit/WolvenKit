@@ -491,6 +491,18 @@
                         Content="Export Appearance with Rig" />
                 </Grid>
 
+                <Border Background="{StaticResource WolvenKitRed}"
+                        CornerRadius="{DynamicResource WolvenKitTinyRadius}"
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch">
+                    <TextBlock Text="The material preview is experimental and may be incorrect in some cases."
+                               Foreground="White"
+                               FontWeight="Regular"
+                               HorizontalAlignment="Stretch"
+                               FontSize="{DynamicResource WolvenKitFontBody}"/>
+                </Border>
+
                 <!-- Collisions/Sectors -->
                 <Grid>
                     <Grid.ColumnDefinitions>

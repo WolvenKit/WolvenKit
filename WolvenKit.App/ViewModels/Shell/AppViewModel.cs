@@ -2554,6 +2554,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginMicroHorizontal"] = new Thickness(2, 0, 2, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginMicroVertical"] = new Thickness(0, 2, 0, 2).Mul(_uiScalePercentage).Round();
 
+        resources["WolvenKitTinyRadius"] = new CornerRadius(2).Mul(_uiScalePercentage).Round();
         resources["WolvenKitSmallRadius"] = new CornerRadius(5).Mul(_uiScalePercentage).Round();
         resources["WolvenKitRadius"] = new CornerRadius(10).Mul(_uiScalePercentage).Round();
 
