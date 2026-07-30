@@ -240,6 +240,23 @@ namespace WolvenKit.Views.Tools
                 // Assign, do NOT '+=': WhenActivated re-runs on every re-activation of this view
                 ViewModel.BeginDeferredRefreshContext = BeginDeferredRefreshContext;
 
+                ViewModel.OnLiveGridMutationStarting = () =>
+                {
+                    // Prevents Null Dereferences in FlatView
+                    TreeGridFlat.View?.Suspend();
+                };
+
+                ViewModel.OnLiveGridMutationCompleted = () =>
+                {
+                    TreeGridFlat.View?.Resume();
+                    RefreshFlatViewIfNeeded(); // no-op while hidden
+
+                    if (!_currentFolderQuery.IsNullOrEmpty())
+                    {
+                        ReapplyCurrentSearchFilter(expandAllForSearch: true);
+                    }
+                };
+
                 ViewModel.WhenAnyValue(x => x.FileList)
                     .Subscribe(_ => RefreshFlatViewIfNeeded())
                     .DisposeWith(disposables);

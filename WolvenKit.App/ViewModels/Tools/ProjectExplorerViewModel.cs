@@ -93,6 +93,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
     public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
+    public Action? OnLiveGridMutationStarting { get; set; }
+    public Action? OnLiveGridMutationCompleted { get; set; }
+
     public Dictionary<string, bool> ExpansionStateDictionary = [];
     public bool IsKeyUpEventAssigned { get; set; }
 
@@ -2175,6 +2178,29 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
+    public void ApplyGridMutationLive(Action mutate)
+    {
+        DispatcherHelper.PostOnMainThread(() =>
+        {
+            _projectWatcher.Suspend();
+            OnLiveGridMutationStarting?.Invoke();
+            try
+            {
+                mutate();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Debug($"Exception caught during live grid mutation: {e}.");
+            }
+            finally
+            {
+                // Completed must run even on failure so the View can resume suspended grids.
+                OnLiveGridMutationCompleted?.Invoke();
+                _projectWatcher.Resume();
+            }
+        });
+    }
+
     public void ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory) {
         var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
 
@@ -2343,10 +2369,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var payload = new List<(string From, string To)>(movedPairs.Count + addedPaths.Count);
         payload.AddRange(movedPairs);
         payload.AddRange(addedPaths.Select(a => (string.Empty, a)));
-
-        RefreshAfter(() =>
-        {
-            _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload));
-        });
+        ApplyGridMutationLive(() => _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload)));
     }
 }
