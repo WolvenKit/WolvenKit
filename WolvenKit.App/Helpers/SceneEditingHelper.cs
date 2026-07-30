@@ -136,5 +136,67 @@ namespace WolvenKit.App.Helpers
             var actorId = GetActorIdFromPerformerId(performerId) ?? int.MaxValue;
             return GetActorNameById(actorId, sceneResource);
         }
+
+
+        #region voicelines
+
+        /// <summary>
+        /// Called with actual screenplay line ID
+        /// </summary>
+
+        public static string? GetScreenplayLineById(CUInt32 screenplayId, scnSceneResource scene)
+        {
+            var screenplayLine = scene.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
+
+            if (screenplayLine?.LocstringId == null ||
+                scene.LocStore?.VdEntries == null ||
+                scene.LocStore?.VpEntries == null)
+            {
+                return "";
+            }
+
+            return GetLocstringValueById(screenplayLine.LocstringId.Ruid, scene);
+        }
+
+
+
+        /// <summary>
+        /// This is called from ChunkViewModel.Value, we need to find the correct screenplayLine first
+        /// </summary>
+        public static string? GetScreenplayLineByLocstringId(CUInt64 locstringId, scnSceneResource scene)
+        {
+            var option = scene.ScreenplayStore.Options.FirstOrDefault(o => o.LocstringId.Ruid == locstringId);
+            if (option is null)
+            {
+                return null;
+            }
+            return GetScreenplayLineById(option.ItemId.Id, scene);
+
+        }
+
+        public static string? GetLocstringValueById(CRUID locstringRuid, scnSceneResource scene)
+        {
+            var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
+            var vdEntry = scene.LocStore.VdEntries.FirstOrDefault(vd =>
+                vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
+
+            if (vdEntry?.VariantId == null)
+            {
+                return "";
+            }
+
+            return GetLocstringValueByVariantId(vdEntry.VariantId.Ruid, scene);
+
+        }
+
+        public static string? GetLocstringValueByVariantId(CRUID variantId, scnSceneResource scene)
+        {
+            var vpEntry = scene.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId.Ruid == variantId);
+
+            return StringHelper.Truncate(vpEntry?.Content.ToString() ?? "", 40);
+        }
+
+#endregion
+
     }
 }
