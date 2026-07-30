@@ -492,7 +492,7 @@
                 </Grid>
 
                 <Border Background="{StaticResource WolvenKitRed}"
-                        CornerRadius="2"
+                        CornerRadius="{DynamicResource WolvenKitTinyRadius}"
                         Margin="{DynamicResource WolvenKitMarginTiny}"
                         Padding="{DynamicResource WolvenKitMarginTiny}"
                         HorizontalAlignment="Stretch">
