@@ -28,7 +28,7 @@ namespace Wolvenkit.Test.App.ViewModels.Shell;
 /// HandleStartup faults still raise OnInitialProjectLoaded; failed loads cancel PE chrome;
 /// location mismatch vs ProjectManager previous project cancels loading.
 /// </summary>
-[Collection(DispatcherTimerTestCollection.Name)]
+[Collection(ProjectLoadHeartbeatCollection.Name)]
 public class AppViewModelProjectLoadTests : IDisposable
 {
     private readonly string _tempRoot;
@@ -92,18 +92,18 @@ public class AppViewModelProjectLoadTests : IDisposable
 
     public void Dispose()
     {
+        _pe.CancelProjectLoad();
+
         try
         {
-            _pe.CancelProjectLoad();
-            if (Directory.Exists(_tempRoot))
-            {
-                Directory.Delete(_tempRoot, recursive: true);
-            }
+            _pe.UnwatchProject();
         }
-        catch
+        catch (Exception)
         {
-            // best-effort
+            // The watcher may never have been started for a given test.
         }
+
+        TempProjectDirectory.Delete(_tempRoot);
     }
 
     private Cp77Project CreateProject(string name)
@@ -204,6 +204,37 @@ public class AppViewModelProjectLoadTests : IDisposable
 
         Assert.True(raised);
         Assert.Equal(project, _app.ActiveProject);
+    }
+
+    [Fact]
+    public async Task LoadProjectFromPathAsync_AnnouncesPendingLoadBeforeProjectManagerSwapsActiveProject()
+    {
+        var project = CreateProject("ModA");
+        var modeWhenLoadAsyncRan = ProjectExplorerViewModel.LoadingMode.Ready;
+
+        _projectManager.Setup(m => m.LoadAsync(project.Location))
+            .Callback(() => modeWhenLoadAsyncRan = _pe.CurrentLoadingMode)
+            .ReturnsAsync(project);
+        _projectManager.SetupGet(m => m.ActiveProject).Returns(project);
+        _gameController.Setup(c => c.HandleStartup()).Returns(Task.CompletedTask);
+
+        await _app.LoadProjectFromPathAsync(project.Location);
+
+        Assert.Equal(ProjectExplorerViewModel.LoadingMode.LoadingNewProject, modeWhenLoadAsyncRan);
+    }
+
+    [Fact]
+    public async Task LoadProjectFromPathAsync_FailedLoad_DoesNotReportProjectLoaded()
+    {
+        var path = Path.Combine(_tempRoot, "ghost", "ghost.cpmodproj");
+        _projectManager.Setup(m => m.LoadAsync(path)).ReturnsAsync((Cp77Project?)null);
+
+        await _app.LoadProjectFromPathAsync(path);
+
+        Assert.Equal(ProjectExplorerViewModel.LoadingMode.Ready, _pe.CurrentLoadingMode);
+        _logger.Verify(
+            l => l.Success(It.Is<string>(s => s.Contains("Loaded project", StringComparison.Ordinal))),
+            Times.Never);
     }
 
     private static void SetField(object target, string name, object? value)

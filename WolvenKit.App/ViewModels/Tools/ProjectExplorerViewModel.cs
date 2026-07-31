@@ -79,7 +79,20 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private IPluginService _pluginService;
     private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
     private object _progressLock = new();
-    private Guid? _autoSaveCancelToken;
+    private DispatcherHelper.RepeatingActionHandle? _autoSaveCancelToken;
+
+    /// <summary>
+    /// Live claim on the project-load progress heartbeat, or null when no load is in flight.
+    /// Owned here rather than on the watcher: the view model is what arms and disarms it.
+    /// </summary>
+    private DispatcherHelper.RepeatingActionHandle? _loadingIndicatorHandle;
+
+    /// <summary>
+    /// Autosave is per view model, so it gets a purpose unique to this instance. A shared
+    /// purpose would let a second Project Explorer either collide with, or silently inherit,
+    /// the first instance's autosave callback.
+    /// </summary>
+    private readonly string _autoSavePurpose = $"ProjectExplorer autosave {Guid.NewGuid():N}";
 
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
@@ -135,7 +148,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents);
+        _projectWatcher = new WatcherService(
+            GetDesiredExpansionState,
+            loggerService,
+            projectEvents,
+
+            onInitialLoadCompleted: succeeded => DisableLoadingMode(reportResult: succeeded));
 
         SideInDockedMode = DockSide.Left;
 
@@ -156,8 +174,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
+    /// <summary>
+    /// Announces that a different project is about to load: flushes the outgoing project's state
+    /// and arms the loading chrome. Must be called before the project manager swaps its active
+    /// project, or the outgoing state is saved against the incoming one.
+    ///
+    /// Idempotent — the welcome page arms the chrome on click for responsiveness and the load path
+    /// announces the same load again; only the first call flushes.
+    /// </summary>
     public void ProjectWillLoad(string projectPath)
     {
+        if (CurrentLoadingMode == LoadingMode.LoadingNewProject)
+        {
+            return;
+        }
+
         if (ActiveProject != null)
         {
             if (IsSameProjectPath(ActiveProject, projectPath))
@@ -260,13 +291,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 LoadExpansionStateDictionary(activeProject);
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
+
+                DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
                 _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
-                    purpose: "ProjectExplorer autosave", () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+                    purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
                     TimeSpan.FromSeconds(10));
             }
             catch (Exception e)
             {
-                _loggerService.Error($"Error refreshing project: {e.Message}");
+                _loggerService.Error($"Error refreshing project: {e.Message}. Try reloading the app. If this error persists, please reach out on the WolvenKit discord.");
+
+                CancelProjectLoad();
             }
             finally
             {
@@ -297,9 +332,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ShowLoadingDuringOperation
     }
 
+    public const string LoadProjectPurpose = "ProjectExplorer load project";
+
     private void EnableLoadingMode(LoadingMode mode)
     {
-        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject)
+        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject && mode != LoadingMode.ShowLoadingDuringOperation)
         {
             return;
         }
@@ -310,13 +347,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             CurrentLoadingMode = mode;
         }
 
-        if (_projectWatcher.ProgressIndicatorCancellationToken != Guid.Empty)
+        if (_loadingIndicatorHandle is not null)
         {
             return;
         }
 
-        _projectWatcher.ProgressIndicatorCancellationToken = DispatcherHelper.StartRepeatingAction(
-            purpose: "ProjectExplorer load project",
+        _loadingIndicatorHandle = DispatcherHelper.StartRepeatingAction(
+            purpose: LoadProjectPurpose,
             () =>
             {
                 _progressService.IsIndeterminate = true;
@@ -335,16 +372,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        var completedMode = CurrentLoadingMode;
+
         _progressService.IsIndeterminate = false;
         _progressService.Status = EStatus.Ready;
         CurrentLoadingMode = LoadingMode.Ready;
         OnSetLoading?.Invoke(this, CurrentLoadingMode);
 
-        var token = _projectWatcher.ProgressIndicatorCancellationToken;
-        _projectWatcher.ProgressIndicatorCancellationToken = Guid.Empty;
-        DispatcherHelper.StopRepeatingAction(token);
+        DispatcherHelper.StopRepeatingAction(_loadingIndicatorHandle);
+        _loadingIndicatorHandle = null;
 
         if (!reportResult)
+        {
+            return;
+        }
+
+        if (completedMode is not (LoadingMode.LoadingNewProject or LoadingMode.ReloadingSameProject))
         {
             return;
         }
@@ -1684,8 +1727,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (!IsShiftKeyPressed)
         {
             var items = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder);
-            CurrentLoadingMode = LoadingMode.ShowLoadingDuringOperation;
-            EnableLoadingMode(CurrentLoadingMode);
+            EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
             await RefreshAfter(async () => await ConvertFromJsonInternal(items));
             DisableLoadingMode();
             return;
@@ -1698,8 +1740,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        CurrentLoadingMode = LoadingMode.ShowLoadingDuringOperation;
-        EnableLoadingMode(CurrentLoadingMode);
+        EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
         await RefreshAfter(async () => await ConvertFromJsonInternal(convertSelection));
         DisableLoadingMode();
     }

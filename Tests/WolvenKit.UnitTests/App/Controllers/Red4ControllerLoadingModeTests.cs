@@ -11,49 +11,94 @@ using Xunit;
 namespace Wolvenkit.Test.App.Controllers;
 
 /// <summary>
-/// Covers RED4Controller archive-loading heartbeat idempotency (review issue 5)
-/// via reflection on private Enable/DisableLoadingMode, without loading real game archives.
+/// Covers the RED4Controller archive-loading heartbeat.
+///
+/// RED4Controller is registered transient, so the app view model, asset browser and materials
+/// dialog each own an instance and can load archives concurrently. These tests pin the sharing
+/// contract between those instances, which the previous depth-counter implementation got wrong.
+///
+/// Every scope is held with <c>using</c> so a failed assertion cannot leak a claim on the shared
+/// purpose into the next test in this collection.
 /// </summary>
-[Collection(DispatcherTimerTestCollection.Name)]
-public class Red4ControllerLoadingModeTests : IDisposable
+[Collection(ArchiveLoadHeartbeatCollection.Name)]
+public class Red4ControllerLoadingModeTests
 {
-    private const string Purpose = "RED4Controller archive loading";
-
-    public void Dispose()
-    {
-        if (DispatcherHelper.TryGetRepeatingAction(Purpose, out var guid))
-        {
-            DispatcherHelper.StopRepeatingAction(guid);
-        }
-    }
+    private const string Purpose = RED4Controller.ArchiveLoadingPurpose;
 
     [Fact]
-    public void EnableLoadingMode_Twice_DoesNotThrow_AndSharesHeartbeat()
+    public void BeginLoadingIndicator_ArmsHeartbeat_AndReleasesOnDispose()
     {
         var controller = CreateUninitializedController(out var progress);
 
-        InvokePrivate(controller, "EnableLoadingMode");
-        InvokePrivate(controller, "EnableLoadingMode");
+        using (var scope = BeginLoadingIndicator(controller))
+        {
+            Assert.True(DispatcherHelper.IsRepeatingActionRunning(Purpose));
+        }
 
-        Assert.True(DispatcherHelper.IsRepeatingActionRunning(Purpose));
-        Assert.True(DispatcherHelper.TryGetRepeatingAction(Purpose, out _));
-
-        InvokePrivate(controller, "DisableLoadingMode");
-        // depth 2 -> 1, still running
-        Assert.True(DispatcherHelper.IsRepeatingActionRunning(Purpose));
-
-        InvokePrivate(controller, "DisableLoadingMode");
-        // depth 1 -> 0, stopped
         Assert.False(DispatcherHelper.IsRepeatingActionRunning(Purpose));
         Assert.Equal(EStatus.Ready, progress.Object.Status);
+        Assert.False(progress.Object.IsIndeterminate);
     }
 
     [Fact]
-    public void DisableLoadingMode_WithoutEnable_DoesNotThrow()
+    public void BeginLoadingIndicator_NestedOnSameController_StaysArmedUntilOuterScopeCloses()
     {
         var controller = CreateUninitializedController(out _);
-        InvokePrivate(controller, "DisableLoadingMode");
+
+        using var outer = BeginLoadingIndicator(controller);
+        using (var inner = BeginLoadingIndicator(controller))
+        {
+            Assert.Equal(2, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
+        }
+
+        Assert.True(DispatcherHelper.IsRepeatingActionRunning(Purpose));
+        Assert.Equal(1, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
+    }
+
+    [Fact]
+    public void BeginLoadingIndicator_SecondControllerFinishingFirst_DoesNotStopTheFirstControllersHeartbeat()
+    {
+        var first = CreateUninitializedController(out var firstProgress);
+        var second = CreateUninitializedController(out _);
+
+        using (var firstScope = BeginLoadingIndicator(first))
+        {
+            using (var secondScope = BeginLoadingIndicator(second))
+            {
+                Assert.Equal(2, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
+            }
+
+            Assert.True(DispatcherHelper.IsRepeatingActionRunning(Purpose));
+            Assert.NotEqual(EStatus.Ready, firstProgress.Object.Status);
+        }
+
         Assert.False(DispatcherHelper.IsRepeatingActionRunning(Purpose));
+        Assert.Equal(EStatus.Ready, firstProgress.Object.Status);
+    }
+
+    [Fact]
+    public void BeginLoadingIndicator_ScopeDisposeIsIdempotent()
+    {
+        var controller = CreateUninitializedController(out _);
+
+        using var scope = BeginLoadingIndicator(controller);
+        scope.Dispose();
+        scope.Dispose();
+
+        Assert.False(DispatcherHelper.IsRepeatingActionRunning(Purpose));
+        Assert.Equal(0, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
+    }
+
+    private static IDisposable BeginLoadingIndicator(RED4Controller controller)
+    {
+        var method = typeof(RED4Controller).GetMethod(
+            "BeginLoadingIndicator",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(method);
+
+        var scope = method!.Invoke(controller, null) as IDisposable;
+        Assert.NotNull(scope);
+        return scope!;
     }
 
     private static RED4Controller CreateUninitializedController(out Mock<IProgressService<double>> progress)
@@ -63,16 +108,7 @@ public class Red4ControllerLoadingModeTests : IDisposable
 
         var controller = (RED4Controller)RuntimeHelpers.GetUninitializedObject(typeof(RED4Controller));
         SetField(controller, "_progressService", progress.Object);
-        SetField(controller, "_loadingCompletion", Guid.Empty);
-        SetField(controller, "_loadingModeDepth", 0);
         return controller;
-    }
-
-    private static void InvokePrivate(object target, string methodName)
-    {
-        var method = target.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic);
-        Assert.NotNull(method);
-        method!.Invoke(target, null);
     }
 
     private static void SetField(object target, string name, object? value)

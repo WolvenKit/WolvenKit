@@ -137,58 +137,32 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private const string s_archiveLoadingPurpose = "RED4Controller archive loading";
-    private Guid _loadingCompletion = Guid.Empty;
-    private int _loadingModeDepth;
+    public const string ArchiveLoadingPurpose = "RED4Controller archive loading";
 
     /// <summary>
-    /// Starts (or reuses) the archive-loading progress heartbeat.
-    /// Idempotent / re-entrant: overlapping load entry points share one timer via depth counting.
+    /// Starts the archive-loading progress heartbeat and returns a scope that releases it.
+    ///
+    /// The heartbeat is reference counted on <see cref="ArchiveLoadingPurpose"/>, so overlapping
+    /// loads — RED4Controller is registered transient, so the app view model, the asset browser
+    /// and the materials dialog each hold their own instance — share a single timer. The
+    /// indicator is only reset to Ready once the last loader disposes its scope, rather than
+    /// whichever loader happens to finish first.
     /// </summary>
-    private void EnableLoadingMode()
-    {
-        if (Interlocked.Increment(ref _loadingModeDepth) > 1)
-        {
-            return;
-        }
-
-        if (DispatcherHelper.TryGetRepeatingAction(s_archiveLoadingPurpose, out var existing))
-        {
-            _loadingCompletion = existing;
-            return;
-        }
-
-        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-            purpose: s_archiveLoadingPurpose,
+    private IDisposable BeginLoadingIndicator() =>
+        DispatcherHelper.StartRepeatingAction(
+            purpose: ArchiveLoadingPurpose,
             () =>
             {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
             },
-            TimeSpan.FromMilliseconds(100)
+            TimeSpan.FromMilliseconds(100),
+            onCancelled: () =>
+            {
+                _progressService.IsIndeterminate = false;
+                _progressService.Status = EStatus.Ready;
+            }
         );
-    }
-
-    private void DisableLoadingMode()
-    {
-        var depth = Interlocked.Decrement(ref _loadingModeDepth);
-        if (depth > 0)
-        {
-            return;
-        }
-
-        if (depth < 0)
-        {
-            Interlocked.Exchange(ref _loadingModeDepth, 0);
-        }
-
-        _progressService.IsIndeterminate = false;
-        _progressService.Status = EStatus.Ready;
-
-        var token = _loadingCompletion;
-        _loadingCompletion = Guid.Empty;
-        DispatcherHelper.StopRepeatingAction(token);
-    }
 
     /// <summary>
     /// Loads the basegame + EP1 archives on a background thread.
@@ -212,7 +186,7 @@ public class RED4Controller : ObservableObject, IGameController
             return;
         }
 
-        EnableLoadingMode();
+        using var loadingIndicator = BeginLoadingIndicator();
 
         try
         {
@@ -237,11 +211,6 @@ public class RED4Controller : ObservableObject, IGameController
         {
             _loggerService.Error(e);
             throw;
-        }
-        finally
-        {
-            // Always stop the heartbeat timer and release the progress indicator.
-            DisableLoadingMode();
         }
     }
 
