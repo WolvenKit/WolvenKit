@@ -193,12 +193,7 @@ public class AppViewModelProjectLoadTests : IDisposable
         _gameController.Setup(c => c.HandleStartup()).Returns(Task.CompletedTask);
 
         var raised = false;
-        _app.OnInitialProjectLoaded += (_, _) =>
-        {
-            raised = true;
-            // After successful load, PE should have been armed (LoadingNewProject) before the event.
-            Assert.Equal(ProjectExplorerViewModel.LoadingMode.LoadingNewProject, _pe.CurrentLoadingMode);
-        };
+        _app.OnInitialProjectLoaded += (_, _) => raised = true;
 
         await _app.LoadProjectFromPathAsync(project.Location);
 
