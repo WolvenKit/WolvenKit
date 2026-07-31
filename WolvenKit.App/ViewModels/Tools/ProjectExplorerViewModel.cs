@@ -84,7 +84,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
-    private Guid _loadingCompletion = Guid.NewGuid();
+    private Guid _progressIndicatorCancellationToken = Guid.Empty;
     private readonly ImportExportHelper _importExportHelper;
     private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromSeconds(3);
     private bool _inFlight = false;
@@ -280,7 +280,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+        _progressIndicatorCancellationToken = DispatcherHelper.StartRepeatingAction(
             () =>
             {
                 _progressService.IsIndeterminate = true;
@@ -290,7 +290,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             DisableLoadingMode
         );
 
-        _projectWatcher.CompletionTimer = _loadingCompletion;
+        _projectWatcher.ProgressIndicatorCancellationToken = _progressIndicatorCancellationToken;
         OnSetLoading?.Invoke(this, mode);
     }
 

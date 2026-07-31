@@ -652,7 +652,7 @@
             Background="{StaticResource ContentBackgroundAlt3}"
             BorderBrush="Black"
             BorderThickness="0"
-            Visibility="{Binding Path=LoadVisibility,
+            Visibility="{Binding Path=LoadingIndicatorVisibility,
                                  Mode=OneWay,
                                  UpdateSourceTrigger=PropertyChanged}">
             <Grid>
@@ -673,7 +673,7 @@
             x:Name="NoProjectBorder"
             Grid.RowSpan="3"
             Background="{StaticResource ContentBackgroundAlt2}"
-            Visibility="{Binding Path=ShouldShowLoadButton,
+            Visibility="{Binding Path=ShouldShowLoadArchivesButton,
                                  Mode=OneWay,
                                  Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>

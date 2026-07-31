@@ -152,7 +152,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             switch (_projectLoadingMode)
             {
                 case ProjectExplorerViewModel.LoadingMode.LoadingNewProject:
-                    if (ShouldShowLoadButton)
+                    if (ShouldShowLoadArchivesButton)
                     {
                         _isLoading = true;
                     }
@@ -167,10 +167,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (LeftItems.Count == 0 && _archiveManager.ProjectArchive == null && !_isLoading && !_archiveManager.IsManagerLoaded)
         {
-            ShouldShowLoadButton = true;
+            ShouldShowLoadArchivesButton = true;
         } else
         {
-            ShouldShowLoadButton = false;
+            ShouldShowLoadArchivesButton = false;
         }
     }
 
@@ -178,10 +178,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (LeftItems.Count > 0 && !_isLoading)
         {
-            LoadVisibility = Visibility.Collapsed;
         } else if (!IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
+            LoadingIndicatorVisibility = Visibility.Collapsed;
         {
-            LoadVisibility = Visibility.Visible;
+            LoadingIndicatorVisibility = Visibility.Visible;
         }
     }
 
@@ -253,10 +253,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private GridLength _previewWidth = new(0, GridUnitType.Pixel);
 
     [ObservableProperty]
-    private Visibility _loadVisibility = Visibility.Visible;
+    private Visibility _loadingIndicatorVisibility = Visibility.Visible;
 
     [ObservableProperty]
-    private bool _shouldShowLoadButton;
+    private bool _shouldShowLoadArchivesButton;
 
     [ObservableProperty]
     private bool _shouldShowExecutablePathWarning = true;
