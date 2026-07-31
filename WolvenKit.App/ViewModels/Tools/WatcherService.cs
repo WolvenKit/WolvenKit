@@ -98,7 +98,7 @@ public partial class ProjectExplorerViewModel
 
         private sealed record SuspendToken;
 
-        public Guid CompletionTimer = Guid.NewGuid();
+        public Guid ProgressIndicatorCancellationToken = Guid.NewGuid();
 
         private static bool HasIgnoredExtension(string? fileName)
         {
@@ -527,7 +527,7 @@ public partial class ProjectExplorerViewModel
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
 
-                    DispatcherHelper.StopRepeatingAction(CompletionTimer);
+                    DispatcherHelper.StopRepeatingAction(ProgressIndicatorCancellationToken);
                     _loggerService?.Info($"Loaded {FileList.Count} project files.");
                     StartBackgroundPolling();
                     Resume();
