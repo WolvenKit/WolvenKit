@@ -172,14 +172,16 @@ public partial class AssetBrowserViewModel : ToolViewModel
         {
             ShouldShowLoadArchivesButton = false;
         }
+
+        DispatcherHelper.RunOnMainThread(UpdateLoadingIndicatorVisibility);
     }
 
     private void UpdateLoadingIndicatorVisibility()
     {
-        if (LeftItems.Count > 0 && !_isLoading)
+        if (LeftItems.Count > 0 && !_isLoading && LoadingIndicatorVisibility != Visibility.Collapsed)
         {
-        } else if (!IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
             LoadingIndicatorVisibility = Visibility.Collapsed;
+        } else if (LeftItems.Count == 0 && !IsModBrowserEnabled && LoadingIndicatorVisibility != Visibility.Visible)
         {
             LoadingIndicatorVisibility = Visibility.Visible;
         }
@@ -195,10 +197,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void CheckView()
     {
-        ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
-        UpdateLoadArchiveButtonVisibility();
-        UpdateLoadingIndicatorVisibility();
-        ShouldShowExecutablePathWarning = ArchiveDirNotFound;
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
+            UpdateLoadArchiveButtonVisibility();
+            UpdateLoadingIndicatorVisibility();
+            ShouldShowExecutablePathWarning = ArchiveDirNotFound;
+        });
     }
 
     // if the game exe path changes
