@@ -27,6 +27,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.x
+
       - name: Run unit tests
         run: |
           cd "Tests\WolvenKit.UnitTests"
