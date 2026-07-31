@@ -98,7 +98,7 @@ public partial class ProjectExplorerViewModel
 
         private sealed record SuspendToken;
 
-        public Guid ProgressIndicatorCancellationToken = Guid.NewGuid();
+        public Guid ProgressIndicatorCancellationToken = Guid.Empty;
 
         private static bool HasIgnoredExtension(string? fileName)
         {
