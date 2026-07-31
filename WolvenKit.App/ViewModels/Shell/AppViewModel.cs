@@ -775,6 +775,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     internal async Task LoadProjectFromPathAsync(string location)
     {
         var projectExplorer = GetToolViewModel<ProjectExplorerViewModel>();
+        projectExplorer.ProjectWillLoad(location);
         var p = await _projectManager.LoadAsync(location);
 
         if (p is null || !ProjectLocationsMatch(p.Location, location))
@@ -784,8 +785,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         ActiveProject = p;
-
-        projectExplorer.ProjectWillLoad(location);
 
         if (!File.Exists(SettingsManager.CP77ExecutablePath))
         {

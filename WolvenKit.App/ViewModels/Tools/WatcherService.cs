@@ -57,6 +57,12 @@ public partial class ProjectExplorerViewModel
         private readonly object _batchLock = new();
 
         /// <summary>
+        /// Guards the (_watcherState, _suspendQueue) pair. Suspend/Resume must observe and mutate
+        /// them as one unit — see Resume() for the interleaving this prevents.
+        /// </summary>
+        private readonly object _watcherStateLock = new();
+
+        /// <summary>
         /// Keeps track of in-flight suspends so we don't over-resume.
         /// </summary>
         private readonly ConcurrentQueue<SuspendToken> _suspendQueue = new();
@@ -98,7 +104,6 @@ public partial class ProjectExplorerViewModel
 
         private sealed record SuspendToken;
 
-        public Guid ProgressIndicatorCancellationToken = Guid.Empty;
 
         private static bool HasIgnoredExtension(string? fileName)
         {
@@ -115,10 +120,24 @@ public partial class ProjectExplorerViewModel
 
         #region Constructor
 
-        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
+        /// <summary>
+        /// Raised on the UI thread once the initial project file structure has been built, with
+        /// true when it succeeded and false when it threw. Supplied by the owning
+        /// <see cref="ProjectExplorerViewModel"/> so the watcher reports completion directly
+        /// instead of resolving its owner through the service locator, which could hand back a
+        /// different (or newly constructed) view model.
+        /// </summary>
+        private readonly Action<bool>? _onInitialLoadCompleted;
+
+        public WatcherService(
+            Func<string, bool> getDesiredExpansionState,
+            ILoggerService? loggerService,
+            IProjectEvents projectEvents,
+            Action<bool>? onInitialLoadCompleted = null)
         {
             _loggerService = loggerService;
             _getDesiredExpansionState = getDesiredExpansionState;
+            _onInitialLoadCompleted = onInitialLoadCompleted;
 
             _modsWatcher = new FileSystemWatcher
             {
@@ -198,6 +217,16 @@ public partial class ProjectExplorerViewModel
 
         public void Resume()
         {
+            // Serialized against Suspend(): both mutate _watcherState and _suspendQueue, and the
+            // read of (state, count) below must not observe another thread mid-transition. The
+            // initial load completes on a detached Task.Run, and in a headless host
+            // DispatcherHelper.RunOnMainThread executes inline on that pool thread rather than
+            // marshalling to a dispatcher — so a load-completion Resume can genuinely run
+            // concurrently with an import-triggered Resume. Unsynchronized, one thread could
+            // dequeue the last token while the other still saw state == Loading, producing a
+            // bogus (Loading, 0) and throwing.
+            lock (_watcherStateLock)
+            {
                 switch (_watcherState, _suspendQueue.Count)
                 {
                     // happy path
@@ -237,9 +266,16 @@ public partial class ProjectExplorerViewModel
                             $"FileWatcher confirmed active with no pending operations.");
                         return;
 
+                    // Unbalanced resume. The common cause is benign and unavoidable: the initial
+                    // load runs detached, so its completion Resume can land after UnwatchProject
+                    // has already torn the watcher down (state NoProject, queue cleared). Throwing
+                    // from a fire-and-forget continuation cannot be handled by any caller — it just
+                    // escapes onto a pool thread — so log it and leave the state alone.
                     default:
-                        throw new Exception(
-                            $"Unexpected condition: attempting to resume file watcher while its state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
+                        _loggerService?.Debug(
+                            $"Ignoring unbalanced resume: watcher state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
+                        return;
+                }
             }
 
 
@@ -514,24 +550,37 @@ public partial class ProjectExplorerViewModel
 
             Task.Run(() =>
             {
-                var (flatListReturn, treeRoot) = BuildFullFileStructure();
-
-                DispatcherHelper.RunOnMainThread(() =>
+                var succeeded = false;
+                try
                 {
-                    if (flatListReturn.Count != 0)
+                    var (flatListReturn, treeRoot) = BuildFullFileStructure();
+
+                    DispatcherHelper.RunOnMainThread(() =>
                     {
-                        FileList.AddRange(flatListReturn);
-                    }
+                        if (flatListReturn.Count != 0)
+                        {
+                            FileList.AddRange(flatListReturn);
+                        }
 
-                    FileTree.AddRange((treeRoot != null)
-                        ? treeRoot.Children
-                        : Array.Empty<FileSystemModel>());
+                        FileTree.AddRange((treeRoot != null)
+                            ? treeRoot.Children
+                            : Array.Empty<FileSystemModel>());
 
-                    Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().DisableLoadingMode();
-                    _loggerService?.Info($"Loaded {FileList.Count} project files.");
-                    StartBackgroundPolling();
-                    Resume();
-                });
+                        _loggerService?.Info($"Loaded {FileList.Count} project files.");
+                        StartBackgroundPolling();
+                        Resume();
+                    });
+
+                    succeeded = true;
+                }
+                catch (Exception e)
+                {
+                    _loggerService?.Error($"Failed to load project files: {e.Message}");
+                }
+                finally
+                {
+                    DispatcherHelper.RunOnMainThread(() => _onInitialLoadCompleted?.Invoke(succeeded));
+                }
             });
         }
 
@@ -677,6 +726,9 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
+            // See Resume() for why this is locked.
+            lock (_watcherStateLock)
+            {
                 if (_suspendQueue.IsEmpty)
                 {
                     _suspendQueue.Enqueue(new SuspendToken());
@@ -695,6 +747,7 @@ public partial class ProjectExplorerViewModel
                 {
                     _watcherState = WatcherState.Suspended;
                 }
+            }
         }
 
         private void CancelFileLoggingToken()
@@ -1285,7 +1338,7 @@ public partial class ProjectExplorerViewModel
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
-                if (!parent.Children.Any(m => m.FullName == fullPath) && !_fileLookup.ContainsKey(fullPath))
+                if (!_fileLookup.ContainsKey(fullPath))
                 {
                     var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
                     parent.Children.Add(fileSystemModel);

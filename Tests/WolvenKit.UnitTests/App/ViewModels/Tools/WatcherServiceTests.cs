@@ -42,47 +42,10 @@ public class WatcherServiceTests : IDisposable
     private Cp77Project? _currentProject;
     bool NoOp(string rawRelativePath) => false;
 
-    // === Real game archive loading for realistic large-project tests ===
-    private static readonly Lazy<IArchiveManager> _archiveManager = new(() =>
-    {
-        Oodle.Load();
-
-        var gameDir = WolvenKit.UnitTests.GameDirectoryHelper.GameDirectory;
-        var exePath = Path.Combine(gameDir, "bin", "x64", "Cyberpunk2077.exe");
-
-        var host = Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) =>
-            {
-                services
-                    .AddSingleton<ILoggerService, NoopLoggerService>()
-                    .AddSingleton<IProgressService<double>, ProgressService<double>>()
-                    .AddSingleton<IHashService, HashService>()
-                    .AddSingleton<IHookService, WolvenKit.Common.Services.HookService>()
-                    .AddSingleton<Red4ParserService>()
-                    .AddSingleton<IArchiveManager, WolvenKit.RED4.CR2W.Archive.ArchiveManager>();
-            })
-            .Build();
-
-        var am = host.Services.GetRequiredService<IArchiveManager>();
-        am.LoadGameArchives(new FileInfo(exePath));
-        return am;
-    });
-
-    public static IArchiveManager ArchiveManager => _archiveManager.Value;
-
-    public static List<IGameFile> GetGameFilesWithPrefix(string prefix)
-    {
-        var normalized = prefix.Replace('\\', '/').ToLowerInvariant();
-
-        return ArchiveManager.GetGroupedFiles(ArchiveManagerScope.Basegame)
-            .SelectMany(kvp => kvp.Value)
-            .Where(f =>
-            {
-                var filePath = f.FileName.Replace('\\', '/').ToLowerInvariant();
-                return filePath.StartsWith(normalized);
-            })
-            .ToList();
-    }
+    // Tests that need real game file lists (and therefore a Cyberpunk 2077 install via CP77_DIR)
+    // live in WolvenKit.IntegrationTests/App/ViewModels/Tools/WatcherServiceGameArchiveIntegrationTests.cs.
+    // Everything in this class must run on a machine with no game installed, so it uses only
+    // synthetic FakeGameFile data.
 
     public WatcherServiceTests()
     {
@@ -221,9 +184,6 @@ public class WatcherServiceTests : IDisposable
     [Fact]
     public async Task AssetBrowserAdd_LightingFolder_ThenBatchJsonConversion_UsesBypassCorrectly()
     {
-        // Make sure the user has CP77_DIR set (the only supported way now)
-        _ = WolvenKit.UnitTests.GameDirectoryHelper.GameDirectory; // will throw with a clear message if not set
-
         // 1. Create a real project
         _currentProject = CreateTestProject("LightingTestMod");
         _watcher.StartWatcher_AndLoadProject(_currentProject);
@@ -379,103 +339,6 @@ public class WatcherServiceTests : IDisposable
     // ============================================================
 
     [Fact]
-    public async Task RapidProjectSwitch_DuringLargeBatchImport_CancelsPreviousLogging()
-    {
-        // Use a real mid-sized folder with deep structure (976 files)
-        var openWorldFiles = GetGameFilesWithPrefix(@"ep1\openworld");
-
-        Assert.True(openWorldFiles.Count > 800, "Expected a large number of files from base\\ep1\\openworld");
-
-        // First project
-        var project1 = CreateTestProject("RapidSwitch1");
-        _watcher.StartWatcher_AndLoadProject(project1);
-
-        // Create physical files for the bypass path
-        var archiveRoot1 = Path.Combine(project1.FileDirectory, "archive");
-        foreach (var f in openWorldFiles)
-        {
-            var dest = Path.Combine(archiveRoot1, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest))
-                File.WriteAllText(dest, "dummy");
-        }
-
-        // Start large import
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(openWorldFiles));
-
-        // Immediately switch projects (the critical race condition)
-        _watcher.UnwatchProject();
-
-        var project2 = CreateTestProject("RapidSwitch2");
-        _watcher.StartWatcher_AndLoadProject(project2);
-
-        // Small import on new project
-        var smallBatch = openWorldFiles.Take(30).ToList();
-        var archiveRoot2 = Path.Combine(project2.FileDirectory, "archive");
-        foreach (var f in smallBatch)
-        {
-            var dest = Path.Combine(archiveRoot2, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest))
-                File.WriteAllText(dest, "dummy");
-        }
-
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(smallBatch));
-
-        await Task.Delay(2000);
-
-        // With the new DeferRefresh timing, a rapid switch during a large import may leave a lot of
-        // the first batch's work in the model (or the watcher may still be attached to the old project
-        // until fully disposed). The main thing we can reliably assert is that the small batch on the
-        // second project was at least partially processed without crashing.
-        Assert.True(_watcher.FileList.Count >= smallBatch.Count,
-            "The small batch on the second project should be visible after the rapid switch");
-    }
-
-    // ============================================================
-    // Small batch boundary tests (real folders + mocks)
-    // ============================================================
-
-    [Fact]
-    public async Task OnFilesImported_SmallRealBatches_LogCorrectSummary()
-    {
-        var project = CreateTestProject("SmallBatchTest");
-        _watcher.StartWatcher_AndLoadProject(project);
-
-        // Ensure initial structure (roots in _fileLookup) exists before publishing batches.
-        await WaitForFileListCountAsync(1, TimeSpan.FromSeconds(10));
-
-        var dynamicEvents = GetGameFilesWithPrefix(@"ep1\openworld\dynamic_events"); // ~49 files
-        var worldEncounters = GetGameFilesWithPrefix(@"ep1\openworld\world_encounters"); // ~21 files
-
-        var archiveRoot = Path.Combine(project.FileDirectory, "archive");
-
-        // 49 files
-        foreach (var f in dynamicEvents)
-        {
-            var dest = Path.Combine(archiveRoot, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
-        }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(dynamicEvents));
-        await WaitForFileListCountAsync(dynamicEvents.Count, TimeSpan.FromSeconds(10));
-
-        Assert.True(_watcher.FileList.Count >= dynamicEvents.Count);
-
-        // 21 files
-        foreach (var f in worldEncounters)
-        {
-            var dest = Path.Combine(archiveRoot, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
-        }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(worldEncounters));
-        await WaitForFileListCountAsync(dynamicEvents.Count + worldEncounters.Count, TimeSpan.FromSeconds(10));
-
-        Assert.True(_watcher.FileList.Count >= dynamicEvents.Count + worldEncounters.Count);
-    }
-
-    [Fact]
     public async Task OnFilesImported_VerySmallAndEmptyBatches()
     {
         var project = CreateTestProject("TinyBatchTest");
@@ -517,138 +380,6 @@ public class WatcherServiceTests : IDisposable
     // ============================================================
     // Alphabetical ordering guarantee
     // ============================================================
-
-    [Fact]
-    public async Task OnFilesImported_LargeBatch_LogsInAlphabeticalOrder()
-    {
-        var openWorldFiles = GetGameFilesWithPrefix(@"ep1\openworld");
-
-        var project = CreateTestProject("AlphaTest");
-        _watcher.StartWatcher_AndLoadProject(project);
-
-        var archiveRoot = Path.Combine(project.FileDirectory, "archive");
-        foreach (var f in openWorldFiles.Take(300)) // limit for speed
-        {
-            var dest = Path.Combine(archiveRoot, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
-        }
-
-        var batch = openWorldFiles.Take(300).ToList();
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(batch));
-
-        await WaitForFileListCountAsync(300, TimeSpan.FromSeconds(15));
-
-        // Note: This test previously asserted on log message ordering.
-        // With the new DeferRefresh + CollectionChange approach, we verify the final model state instead.
-        // If alphabetical processing order in the model is still important, add an assertion here
-        // against the sorted list of added files in FileList.
-        Assert.True(_watcher.FileList.Count >= 300);
-    }
-
-    // ============================================================
-    // Mixed game files + raw files in one publish
-    // ============================================================
-
-    [Fact]
-    public async Task OnFilesImported_MixedGameAndRawFiles_PopulatesCorrectly()
-    {
-        var gameFiles = GetGameFilesWithPrefix(@"ep1\openworld\dynamic_events").Take(40).ToList();
-
-        var project = CreateTestProject("MixedTest");
-        _watcher.StartWatcher_AndLoadProject(project);
-
-        var archiveRoot = Path.Combine(project.FileDirectory, "archive");
-        foreach (var f in gameFiles)
-        {
-            var dest = Path.Combine(archiveRoot, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
-        }
-
-        // Mix real game files + mock raw files.
-        // Raw paths must live under project.RawDirectory (…/source/raw), not the project
-        // location root — Cp77Project.Location is the .cpmodproj path, FileDirectory is /source.
-        var mockRawFiles = new[]
-        {
-            new FileInfo(Path.Combine(project.RawDirectory, "test", "extra1.json")),
-            new FileInfo(Path.Combine(project.RawDirectory, "test", "extra2.json"))
-        };
-        foreach (var rf in mockRawFiles)
-        {
-            Directory.CreateDirectory(rf.Directory!.FullName);
-            File.WriteAllText(rf.FullName, "{ \"test\": true }");
-        }
-
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.RawFiles(mockRawFiles));
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(gameFiles));
-
-        await WaitForFileListCountAsync(gameFiles.Count + mockRawFiles.Length, TimeSpan.FromSeconds(10));
-
-        // Should have both game files (under archive) and raw files
-        var totalAdded = gameFiles.Count + mockRawFiles.Length;
-        Assert.True(_watcher.FileList.Count >= totalAdded);
-    }
-
-    // ============================================================
-    // Medium value tests
-    // ============================================================
-
-    [Fact]
-    public async Task OnFilesImported_BuildsCorrectDirectoryHierarchy()
-    {
-        var files = GetGameFilesWithPrefix(@"ep1\openworld\dynamic_events").Take(30).ToList();
-
-        var project = CreateTestProject("HierarchyTest");
-        _watcher.StartWatcher_AndLoadProject(project);
-
-        var archiveRoot = Path.Combine(project.FileDirectory, "archive");
-        foreach (var f in files)
-        {
-            var dest = Path.Combine(archiveRoot, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
-        }
-
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(files));
-
-        await Task.Delay(1000);
-
-        // Verify some deep nesting exists in the tree
-        // Note: FileTree only contains top-level roots (archive, raw, resources).
-        // We must traverse into the archive node to find dynamic_events.
-        var archiveNode = _watcher.FileTree.FirstOrDefault(n => n.Name == "archive");
-        var dynamicEventsNode = archiveNode != null
-            ? FindNode(archiveNode, "dynamic_events")
-            : null;
-
-        var hasNested = dynamicEventsNode != null && dynamicEventsNode.Children.Count > 0;
-
-        Assert.True(hasNested, "Expected nested directory structure under archive/ep1/openworld/dynamic_events");
-    }
-
-    [Fact]
-    public async Task OnFilesImported_SmallBatch_StillLogsSummary()
-    {
-        var files = GetGameFilesWithPrefix(@"ep1\openworld\world_encounters"); // ~21 files
-
-        var project = CreateTestProject("SmallSummaryTest");
-        _watcher.StartWatcher_AndLoadProject(project);
-
-        var archiveRoot = Path.Combine(project.FileDirectory, "archive");
-        foreach (var f in files)
-        {
-            var dest = Path.Combine(archiveRoot, f.FileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
-        }
-
-        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(files));
-
-        await WaitForFileListCountAsync(files.Count, TimeSpan.FromSeconds(10));
-
-        Assert.True(_watcher.FileList.Count >= files.Count);
-    }
 
     // ============================================================
     // Additional targeted tests
