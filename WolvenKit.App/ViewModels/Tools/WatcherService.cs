@@ -57,6 +57,12 @@ public partial class ProjectExplorerViewModel
         private readonly object _batchLock = new();
 
         /// <summary>
+        /// Guards the (_watcherState, _suspendQueue) pair. Suspend/Resume must observe and mutate
+        /// them as one unit — see Resume() for the interleaving this prevents.
+        /// </summary>
+        private readonly object _watcherStateLock = new();
+
+        /// <summary>
         /// Keeps track of in-flight suspends so we don't over-resume.
         /// </summary>
         private readonly ConcurrentQueue<SuspendToken> _suspendQueue = new();
@@ -211,6 +217,16 @@ public partial class ProjectExplorerViewModel
 
         public void Resume()
         {
+            // Serialized against Suspend(): both mutate _watcherState and _suspendQueue, and the
+            // read of (state, count) below must not observe another thread mid-transition. The
+            // initial load completes on a detached Task.Run, and in a headless host
+            // DispatcherHelper.RunOnMainThread executes inline on that pool thread rather than
+            // marshalling to a dispatcher — so a load-completion Resume can genuinely run
+            // concurrently with an import-triggered Resume. Unsynchronized, one thread could
+            // dequeue the last token while the other still saw state == Loading, producing a
+            // bogus (Loading, 0) and throwing.
+            lock (_watcherStateLock)
+            {
                 switch (_watcherState, _suspendQueue.Count)
                 {
                     // happy path
@@ -250,9 +266,16 @@ public partial class ProjectExplorerViewModel
                             $"FileWatcher confirmed active with no pending operations.");
                         return;
 
+                    // Unbalanced resume. The common cause is benign and unavoidable: the initial
+                    // load runs detached, so its completion Resume can land after UnwatchProject
+                    // has already torn the watcher down (state NoProject, queue cleared). Throwing
+                    // from a fire-and-forget continuation cannot be handled by any caller — it just
+                    // escapes onto a pool thread — so log it and leave the state alone.
                     default:
-                        throw new Exception(
-                            $"Unexpected condition: attempting to resume file watcher while its state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
+                        _loggerService?.Debug(
+                            $"Ignoring unbalanced resume: watcher state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
+                        return;
+                }
             }
 
 
@@ -703,6 +726,9 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
+            // See Resume() for why this is locked.
+            lock (_watcherStateLock)
+            {
                 if (_suspendQueue.IsEmpty)
                 {
                     _suspendQueue.Enqueue(new SuspendToken());
@@ -721,6 +747,7 @@ public partial class ProjectExplorerViewModel
                 {
                     _watcherState = WatcherState.Suspended;
                 }
+            }
         }
 
         private void CancelFileLoggingToken()
