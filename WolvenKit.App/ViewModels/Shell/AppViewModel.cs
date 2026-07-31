@@ -56,6 +56,8 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
+using Application = System.Windows.Application;
+using FileMode = System.IO.FileMode;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 using Rect = System.Windows.Rect;
@@ -401,7 +403,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         string? projectPathToOpen = null;
 
         // Will be overwritten if the launch args contain a project path
-        if (args.Contains("-reopenProject") && SettingsManager.LastUsedProjectPath is string projectPath)
+        if (args.Contains("-reopenProject") && (SettingsManager.LastUsedProjectPath is string projectPath) && SettingsManager.ReopenLastProject)
         {
             projectPathToOpen = projectPath;
         }
@@ -795,7 +797,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task NewProject()
     {
-        //IsOverlayShown = false;
         await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
         {
             FileHandler = NewProject
@@ -817,6 +818,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     internal async Task NewProjectTask(ProjectWizardViewModel project)
     {
+        GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad();
+
         try
         {
             var newProjectName = project.ProjectName.NotNull().Trim();

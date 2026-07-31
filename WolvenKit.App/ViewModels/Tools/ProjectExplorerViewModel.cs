@@ -84,7 +84,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
-    private Guid _progressIndicatorCancellationToken = Guid.Empty;
     private readonly ImportExportHelper _importExportHelper;
     private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromSeconds(3);
     private bool _inFlight = false;
@@ -154,39 +153,33 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         s_instance = this;
 
-        _projectManager.WhenAnyValue(x => x.ActiveProject)
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(project =>
-            {
-                // Get a fresh reference to the project instead of the one we captured
-                // a long time ago in this closure.
-                var active = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().ActiveProject;
-                if (project == null || project.Equals(active))
-                {
-                    return;
-                }
-
-                var isReload = project.FileDirectory == _activeProject?.FileDirectory;
-
-                // If a modal or overlay is currently visible (e.g. HomePage, settings, etc.),
-                // defer the (potentially very expensive) watcher + tree build until after the
-                // overlay has finished fading out. This prevents the 0.3s OverlayFadeOut animation
-                // from becoming extremely choppy on large projects.
-                _appViewModel.RunAfterModalClosed(() =>
-                {
-                    // Get a fresh reference to the project instead of the one we captured
-                    // a long time ago in this closure.
-                    var activeProject = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().ActiveProject;
-                    if (project.Equals(activeProject))
-                    {
-                        return;
-                    }
-
-                    StartWatcher_AndLoadProject(project, isReload);
-                });
-            });
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
+    public void ProjectWillLoad()
+    {
+        if (ActiveProject != null)
+        {
+            SaveProjectState();
+        }
+
+        EnableLoadingMode(LoadingMode.LoadingNewProject);
+    }
+
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        _loggerService.Debug($"Initiating project load.");
+        DispatcherHelper.PostOnMainThread(() =>
+        {
+            var activeProject = _projectManager.ActiveProject;
+            if (activeProject == null || activeProject.Equals(ActiveProject))
+            {
+                return;
+            }
+
+            StartWatcher_AndLoadProject(activeProject, false);
+        });
+    }
 
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
     {
@@ -210,15 +203,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="isReload"></param>
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
-        CurrentLoadingMode = isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject;
-        EnableLoadingMode(CurrentLoadingMode);
-
-
-        if (_appViewModel.IsDialogShown || _appViewModel.IsOverlayShown)
-        {
-            _appViewModel.RunAfterModalClosed(() => StartWatcher_AndLoadProject(activeProject, isReload));
-            return;
-        }
+        EnableLoadingMode(isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject);
 
         RefreshAfter(() =>
         {
@@ -237,7 +222,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
                 _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
-                    () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+                    purpose: "ProjectExplorer autosave", () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
                     TimeSpan.FromSeconds(10));
             }
             catch (Exception e)
@@ -250,7 +235,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 {
                     RestoreProjectState(ActiveProject!);
                     CheckForOneDriveInPath();
-                    DisableLoadingMode();
+                    // Don't run DisableLoadingMode here
                 }
             }
         });
@@ -280,8 +265,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        _progressIndicatorCancellationToken = DispatcherHelper.StartRepeatingAction(
-            () =>
+        if (mode != CurrentLoadingMode)
+        {
+            OnSetLoading?.Invoke(this, mode);
+            CurrentLoadingMode = mode;
+        }
+
+        if (_projectWatcher.ProgressIndicatorCancellationToken != Guid.Empty)
+        {
+            return;
+        }
+
+        _projectWatcher.ProgressIndicatorCancellationToken = DispatcherHelper.StartRepeatingAction(
+            purpose: "ProjectExplorer load project", () =>
             {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
@@ -289,9 +285,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _singleOperationTimeout,
             DisableLoadingMode
         );
-
-        _projectWatcher.ProgressIndicatorCancellationToken = _progressIndicatorCancellationToken;
-        OnSetLoading?.Invoke(this, mode);
     }
 
     private void DisableLoadingMode()
@@ -302,8 +295,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
         CurrentLoadingMode = LoadingMode.Ready;
         OnSetLoading?.Invoke(this, (CurrentLoadingMode));
+        _projectWatcher.ProgressIndicatorCancellationToken = Guid.Empty;
 
         // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
         // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from

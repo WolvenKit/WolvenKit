@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Serilog.Debugging;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.App.Helpers;
 
@@ -139,7 +141,12 @@ public static class DispatcherHelper
         dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
     }
 
-    private static ConcurrentDictionary<Guid, DispatcherTimer> _dispatcherTimers = new();
+    private static ConcurrentDictionary<Guid, RepeatingAction> _dispatcherTimers = new();
+
+    private sealed record RepeatingAction(
+        string Purpose,
+        DispatcherTimer Timer
+    );
 
     /// <summary>
     /// Repeats action every interval TimeSpan until the timer is
@@ -153,6 +160,7 @@ public static class DispatcherHelper
     /// <param name="onCancelled"></param>
     /// <returns>Guid</returns>
     public static Guid StartRepeatingAction(
+        string purpose,
         Action action,
         TimeSpan interval,
         Action? onCancelled = null)
@@ -164,7 +172,12 @@ public static class DispatcherHelper
             Tag = onCancelled
         };
 
-        _dispatcherTimers.TryAdd(guid, timer);
+        if (_dispatcherTimers.Values.Select(x => x.Purpose).Contains(purpose))
+        {
+            throw new WolvenKitException(0xBa57a2d, $"{purpose} is already running.");
+        }
+
+        _dispatcherTimers.TryAdd(guid, new RepeatingAction(purpose, timer));
 
         timer.Tick += (sender, e) =>
         {
@@ -185,10 +198,10 @@ public static class DispatcherHelper
     /// <param name="guid"></param>
     public static void StopRepeatingAction(Guid guid)
     {
-        if (_dispatcherTimers.TryRemove(guid, out DispatcherTimer? timer))
+        if (_dispatcherTimers.TryRemove(guid, out var record))
         {
-            var onCancelled = timer.Tag as Action;
-            timer.Stop();
+            var onCancelled = record.Timer.Tag as Action;
+            record.Timer.Stop();
             onCancelled?.Invoke();
         }
     }
