@@ -101,7 +101,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _inFlight = false;
 
     // FileTree / FileList are declared in the file-watching half of this class
-    // (WatcherService.cs) and are the grids' single source of truth.
+    // (ProjectExplorerViewModel+Watcher.cs) and are the grids' single source of truth.
     public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
     public Action? OnLiveGridMutationStarting { get; set; }
     public Action? OnLiveGridMutationCompleted { get; set; }
