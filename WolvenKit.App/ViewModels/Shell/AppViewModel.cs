@@ -716,10 +716,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-
-            // Defer the actual (very expensive) project load until after the overlay fade-out
-            // animation has completed. This dramatically improves the perceived smoothness
-            // of OverlayFadeOut on large projects.
             await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
@@ -760,7 +756,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(filePath))
         {
             CloseModal();
-            await _projectManager.LoadAsync(filePath);
+            await LoadProjectFromPathAsync(filePath);
         }
     }
 
@@ -781,6 +777,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             UpdateTitle();
             _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
             return;
         }
 
@@ -822,8 +819,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     internal async Task NewProjectTask(ProjectWizardViewModel project)
     {
-        GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad();
-
         try
         {
             var newProjectName = project.ProjectName.NotNull().Trim();
@@ -845,9 +840,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             await _projectManager.SaveAsync();
 
-            // Defer loading so the wizard close animation can complete smoothly.
-            // Await the returned task so that callers (e.g. NewProject) do not proceed until
-            // LoadProjectFromPathAsync has actually completed (after any modal close animation).
+            GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad(projectLocation);
+
             await RunAfterModalClosed(async () =>
             {
                 await LoadProjectFromPathAsync(projectLocation);

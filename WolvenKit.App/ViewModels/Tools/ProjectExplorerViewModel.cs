@@ -156,10 +156,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
-    public void ProjectWillLoad()
+    public void ProjectWillLoad(string projectPath)
     {
         if (ActiveProject != null)
         {
+            if (projectPath.Contains(ActiveProject.ProjectDirectory))
+            {
+                return;
+            }
+
             SaveProjectState();
         }
 
@@ -298,6 +303,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.Status = EStatus.Ready;
         CurrentLoadingMode = LoadingMode.Ready;
         OnSetLoading?.Invoke(this, (CurrentLoadingMode));
+        DispatcherHelper.StopRepeatingAction(_projectWatcher.ProgressIndicatorCancellationToken);
         _projectWatcher.ProgressIndicatorCancellationToken = Guid.Empty;
 
         if (ActiveProject != null)

@@ -123,7 +123,7 @@ public partial class WelcomePageViewModel : PageViewModel
         }
 
         _mainViewModel.OpenProjectCommand.Execute(s);
-        _mainViewModel.GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad();
+        _mainViewModel.GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad(s);
 
         // clear filters
         RecentFilter = string.Empty;

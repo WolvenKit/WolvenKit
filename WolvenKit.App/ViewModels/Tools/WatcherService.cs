@@ -527,7 +527,7 @@ public partial class ProjectExplorerViewModel
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
 
-                    DispatcherHelper.StopRepeatingAction(ProgressIndicatorCancellationToken);
+                    Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().DisableLoadingMode();
                     _loggerService?.Info($"Loaded {FileList.Count} project files.");
                     StartBackgroundPolling();
                     Resume();
