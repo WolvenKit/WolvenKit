@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Serilog.Debugging;
 using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.App.Helpers;
@@ -141,7 +139,8 @@ public static class DispatcherHelper
         dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
     }
 
-    private static ConcurrentDictionary<Guid, RepeatingAction> _dispatcherTimers = new();
+    private static readonly ConcurrentDictionary<Guid, RepeatingAction> s_dispatcherTimers = new();
+    private static readonly ConcurrentDictionary<string, Guid> s_purposeToGuid = new();
 
     private sealed record RepeatingAction(
         string Purpose,
@@ -149,60 +148,87 @@ public static class DispatcherHelper
     );
 
     /// <summary>
+    /// Returns true if a repeating action with the given purpose is currently registered.
+    /// </summary>
+    public static bool IsRepeatingActionRunning(string purpose) =>
+        !string.IsNullOrEmpty(purpose) && s_purposeToGuid.ContainsKey(purpose);
+
+    /// <summary>
+    /// Tries to get the guid of a running repeating action by purpose.
+    /// </summary>
+    public static bool TryGetRepeatingAction(string purpose, out Guid guid)
+    {
+        if (string.IsNullOrEmpty(purpose))
+        {
+            guid = Guid.Empty;
+            return false;
+        }
+
+        return s_purposeToGuid.TryGetValue(purpose, out guid);
+    }
+
+    /// <summary>
     /// Repeats action every interval TimeSpan until the timer is
     /// stopped by passing the returned guid to StopRepeatingAction.
     ///
-    /// Returns a Guid to call StopRepeatingSetter(guid) with, to stop it.
+    /// Purpose names are unique: a second start with the same purpose throws
+    /// unless the first was stopped. Registration of purpose is atomic.
     ///
+    /// Returns a Guid to call StopRepeatingAction(guid) with, to stop it.
     /// </summary>
-    /// <param name="action"></param>
-    /// <param name="interval"></param>
-    /// <param name="onCancelled"></param>
-    /// <returns>Guid</returns>
     public static Guid StartRepeatingAction(
         string purpose,
         Action action,
         TimeSpan interval,
         Action? onCancelled = null)
     {
+        ArgumentException.ThrowIfNullOrEmpty(purpose);
+        ArgumentNullException.ThrowIfNull(action);
         var guid = Guid.NewGuid();
+
+        if (!s_purposeToGuid.TryAdd(purpose, guid))
+        {
+            throw new WolvenKitException(0xBa57a2d, $"{purpose} is already running.");
+        }
+
         DispatcherTimer timer = new()
         {
             Interval = interval,
             Tag = onCancelled
         };
 
-        if (_dispatcherTimers.Values.Select(x => x.Purpose).Contains(purpose))
+        if (!s_dispatcherTimers.TryAdd(guid, new RepeatingAction(purpose, timer)))
         {
+            s_purposeToGuid.TryRemove(purpose, out _);
             throw new WolvenKitException(0xBa57a2d, $"{purpose} is already running.");
         }
 
-        _dispatcherTimers.TryAdd(guid, new RepeatingAction(purpose, timer));
-
-        timer.Tick += (sender, e) =>
-        {
-            if (sender is DispatcherTimer timer)
-            {
-                action();
-            }
-        };
-
+        timer.Tick += (_, _) => action();
         timer.Start();
 
         return guid;
     }
 
     /// <summary>
-    /// Call with a guid to cancel a repeating setter timer.
+    /// Call with a guid to cancel a repeating action timer.
     /// </summary>
-    /// <param name="guid"></param>
     public static void StopRepeatingAction(Guid guid)
     {
-        if (_dispatcherTimers.TryRemove(guid, out var record))
+        if (guid == Guid.Empty)
         {
-            var onCancelled = record.Timer.Tag as Action;
-            record.Timer.Stop();
-            onCancelled?.Invoke();
+            return;
         }
+
+        if (!s_dispatcherTimers.TryRemove(guid, out var record))
+        {
+            return;
+        }
+
+        s_purposeToGuid.TryRemove(record.Purpose, out _);
+
+        var onCancelled = record.Timer.Tag as Action;
+        record.Timer.Tag = null;
+        record.Timer.Stop();
+        onCancelled?.Invoke();
     }
 }

@@ -122,8 +122,8 @@ public partial class WelcomePageViewModel : PageViewModel
             return;
         }
 
-        _mainViewModel.OpenProjectCommand.Execute(s);
         _mainViewModel.GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad(s);
+        _mainViewModel.OpenProjectCommand.Execute(s);
 
         // clear filters
         RecentFilter = string.Empty;

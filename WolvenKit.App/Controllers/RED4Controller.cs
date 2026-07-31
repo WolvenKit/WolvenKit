@@ -137,26 +137,57 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private Guid _loadingCompletion = Guid.NewGuid();
+    private const string s_archiveLoadingPurpose = "RED4Controller archive loading";
+    private Guid _loadingCompletion = Guid.Empty;
+    private int _loadingModeDepth;
 
+    /// <summary>
+    /// Starts (or reuses) the archive-loading progress heartbeat.
+    /// Idempotent / re-entrant: overlapping load entry points share one timer via depth counting.
+    /// </summary>
     private void EnableLoadingMode()
     {
+        if (Interlocked.Increment(ref _loadingModeDepth) > 1)
+        {
+            return;
+        }
+
+        if (DispatcherHelper.TryGetRepeatingAction(s_archiveLoadingPurpose, out var existing))
+        {
+            _loadingCompletion = existing;
+            return;
+        }
+
         _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-            purpose: "RED4Controller archive loading", () =>
+            purpose: s_archiveLoadingPurpose,
+            () =>
             {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
             },
-            TimeSpan.FromMilliseconds(100),
-            DisableLoadingMode
+            TimeSpan.FromMilliseconds(100)
         );
     }
 
     private void DisableLoadingMode()
     {
+        var depth = Interlocked.Decrement(ref _loadingModeDepth);
+        if (depth > 0)
+        {
+            return;
+        }
+
+        if (depth < 0)
+        {
+            Interlocked.Exchange(ref _loadingModeDepth, 0);
+        }
+
         _progressService.IsIndeterminate = false;
         _progressService.Status = EStatus.Ready;
-        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
+
+        var token = _loadingCompletion;
+        _loadingCompletion = Guid.Empty;
+        DispatcherHelper.StopRepeatingAction(token);
     }
 
     /// <summary>

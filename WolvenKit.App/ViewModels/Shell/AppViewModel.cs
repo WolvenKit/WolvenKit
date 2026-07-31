@@ -688,7 +688,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task OpenProjectAsync(string location)
     {
-        // "Open Project" button was pushed
+        var projectExplorer = GetToolViewModel<ProjectExplorerViewModel>();
+
         if (string.IsNullOrWhiteSpace(location))
         {
             var dlg = new OpenFileDialog
@@ -701,6 +702,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             if (dlg.ShowDialog() != true || dlg.FileName is not string result || string.IsNullOrEmpty(result))
             {
+                projectExplorer.CancelProjectLoad();
                 return;
             }
 
@@ -709,6 +711,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (_projectManager.ActiveProject?.Location == location)
         {
+            projectExplorer.CancelProjectLoad();
             CloseModal();
             return;
         }
@@ -723,6 +726,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // file was moved or deleted
         if (_recentlyUsedItemsService.Items.Items.All(x => x.Name != location))
         {
+            projectExplorer.CancelProjectLoad();
             throw new WolvenKitException(0x5002,
                 "Failed to load project. Please open a github issue and attach a zip so that we can fix it!");
         }
@@ -734,6 +738,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (res is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
         {
+            projectExplorer.CancelProjectLoad();
             return;
         }
 
@@ -747,6 +752,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (dlg2.ShowDialog() != true || dlg2.FileName is not string filePath || string.IsNullOrEmpty(filePath))
         {
+            projectExplorer.CancelProjectLoad();
             return;
         }
 
@@ -758,21 +764,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             CloseModal();
             await LoadProjectFromPathAsync(filePath);
         }
+        else
+        {
+            projectExplorer.CancelProjectLoad();
+        }
     }
 
     public event EventHandler? OnInitialProjectLoaded;
 
     internal async Task LoadProjectFromPathAsync(string location)
     {
+        var projectExplorer = GetToolViewModel<ProjectExplorerViewModel>();
         var p = await _projectManager.LoadAsync(location);
-        if (p is null)
+
+        if (p is null || !ProjectLocationsMatch(p.Location, location))
         {
+            projectExplorer.CancelProjectLoad();
             return;
         }
 
         ActiveProject = p;
 
-        // If the assets can't be found, stop here and notify the user in the log
+        projectExplorer.ProjectWillLoad(location);
+
         if (!File.Exists(SettingsManager.CP77ExecutablePath))
         {
             UpdateTitle();
@@ -781,18 +795,44 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+        try
         {
-            UpdateTitle();
-            _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-            // https://github.com/WolvenKit/WolvenKit/issues/1962
-            if (!FilepathValidationTools.IsOsFilePathValid(location))
-            {
-                _notificationService.Warning($"Project path {location} contains invalid characters!");
-            }
+            await _gameControllerFactory.GetController().HandleStartup();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
 
-            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
-        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+        UpdateTitle();
+        _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+        // https://github.com/WolvenKit/WolvenKit/issues/1962
+        if (!FilepathValidationTools.IsOsFilePathValid(location))
+        {
+            _notificationService.Warning($"Project path {location} contains invalid characters!");
+        }
+
+        OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+    }
+
+    private static bool ProjectLocationsMatch(string loadedLocation, string requestedLocation)
+    {
+        if (string.IsNullOrWhiteSpace(loadedLocation) || string.IsNullOrWhiteSpace(requestedLocation))
+        {
+            return false;
+        }
+
+        try
+        {
+            return string.Equals(
+                Path.GetFullPath(loadedLocation),
+                Path.GetFullPath(requestedLocation),
+                StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return string.Equals(loadedLocation, requestedLocation, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     [RelayCommand]
@@ -840,8 +880,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             await _projectManager.SaveAsync();
 
-            GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad(projectLocation);
-
             await RunAfterModalClosed(async () =>
             {
                 await LoadProjectFromPathAsync(projectLocation);
@@ -851,6 +889,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             _loggerService.Error("Failed to create a new project!");
             _loggerService.Error(ex);
+            GetToolViewModel<ProjectExplorerViewModel>().CancelProjectLoad();
         }
     }
 
