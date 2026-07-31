@@ -24,7 +24,7 @@ namespace Wolvenkit.Test.App.ViewModels.Tools;
 /// Covers PE loading chrome lifecycle (review issues 3, 4-related CancelProjectLoad, DisableLoadingMode).
 /// Uses an uninitialized AppViewModel so we avoid the heavy DI graph while still exercising PEVM.
 /// </summary>
-[Collection(DispatcherTimerTestCollection.Name)]
+[Collection(ProjectLoadHeartbeatCollection.Name)]
 public class ProjectExplorerLoadingModeTests : IDisposable
 {
     private readonly string _tempRoot;
@@ -48,10 +48,15 @@ public class ProjectExplorerLoadingModeTests : IDisposable
         Directory.CreateDirectory(_tempRoot);
 
         _appViewModel = (AppViewModel)RuntimeHelpers.GetUninitializedObject(typeof(AppViewModel));
+        _pe = CreateProjectExplorer();
+    }
+
+    private ProjectExplorerViewModel CreateProjectExplorer()
+    {
         var projectResourceTools = (ProjectResourceTools)RuntimeHelpers.GetUninitializedObject(typeof(ProjectResourceTools));
         var importExportHelper = (ImportExportHelper)RuntimeHelpers.GetUninitializedObject(typeof(ImportExportHelper));
 
-        _pe = new ProjectExplorerViewModel(
+        return new ProjectExplorerViewModel(
             _appViewModel,
             _projectManager.Object,
             _logger.Object,
@@ -70,18 +75,18 @@ public class ProjectExplorerLoadingModeTests : IDisposable
 
     public void Dispose()
     {
+        _pe.CancelProjectLoad();
+
         try
         {
-            _pe.CancelProjectLoad();
-            if (Directory.Exists(_tempRoot))
-            {
-                Directory.Delete(_tempRoot, recursive: true);
-            }
+            _pe.UnwatchProject();
         }
-        catch
+        catch (Exception)
         {
-            // best-effort
+            // The watcher may never have been started for a given test.
         }
+
+        TempProjectDirectory.Delete(_tempRoot);
     }
 
     private Cp77Project CreateProject(string name)
@@ -186,6 +191,62 @@ public class ProjectExplorerLoadingModeTests : IDisposable
 
         Assert.Equal(ProjectExplorerViewModel.LoadingMode.LoadingNewProject, _pe.CurrentLoadingMode);
         Assert.True(DispatcherHelper.IsRepeatingActionRunning("ProjectExplorer load project"));
+    }
+
+    [Fact]
+    public void DisableLoadingMode_AfterOperationLoading_DoesNotReportProjectLoaded()
+    {
+        var project = CreateProject("ModA");
+        _pe.ActiveProject = project;
+
+        InvokeEnableLoadingMode(ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation);
+        Assert.Equal(ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation, _pe.CurrentLoadingMode);
+
+        _pe.DisableLoadingMode();
+
+        Assert.Equal(ProjectExplorerViewModel.LoadingMode.Ready, _pe.CurrentLoadingMode);
+        Assert.False(DispatcherHelper.IsRepeatingActionRunning(ProjectExplorerViewModel.LoadProjectPurpose));
+        _logger.Verify(
+            l => l.Success(It.Is<string>(s => s.Contains("Loaded project", StringComparison.Ordinal))),
+            Times.Never);
+    }
+
+    [Fact]
+    public void TwoProjectExplorerInstances_LoadingProjects_DoNotCollideOnAutosave()
+    {
+        var project = CreateProject("ModA");
+        var second = CreateProjectExplorer();
+
+        try
+        {
+            _pe.StartWatcher_AndLoadProject(project, false);
+            second.StartWatcher_AndLoadProject(project, false);
+
+            _logger.Verify(
+                l => l.Error(It.Is<string>(s => s.Contains("Error refreshing project", StringComparison.Ordinal))),
+                Times.Never);
+        }
+        finally
+        {
+            second.CancelProjectLoad();
+            try
+            {
+                second.UnwatchProject();
+            }
+            catch (Exception)
+            {
+                // Nothing to unwatch if the load bailed early.
+            }
+        }
+    }
+
+    private void InvokeEnableLoadingMode(ProjectExplorerViewModel.LoadingMode mode)
+    {
+        var method = typeof(ProjectExplorerViewModel).GetMethod(
+            "EnableLoadingMode",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(method);
+        method!.Invoke(_pe, new object?[] { mode });
     }
 
     private void InvokeOnInitialProjectLoaded()

@@ -98,7 +98,6 @@ public partial class ProjectExplorerViewModel
 
         private sealed record SuspendToken;
 
-        public Guid ProgressIndicatorCancellationToken = Guid.Empty;
 
         private static bool HasIgnoredExtension(string? fileName)
         {
@@ -115,10 +114,24 @@ public partial class ProjectExplorerViewModel
 
         #region Constructor
 
-        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
+        /// <summary>
+        /// Raised on the UI thread once the initial project file structure has been built, with
+        /// true when it succeeded and false when it threw. Supplied by the owning
+        /// <see cref="ProjectExplorerViewModel"/> so the watcher reports completion directly
+        /// instead of resolving its owner through the service locator, which could hand back a
+        /// different (or newly constructed) view model.
+        /// </summary>
+        private readonly Action<bool>? _onInitialLoadCompleted;
+
+        public WatcherService(
+            Func<string, bool> getDesiredExpansionState,
+            ILoggerService? loggerService,
+            IProjectEvents projectEvents,
+            Action<bool>? onInitialLoadCompleted = null)
         {
             _loggerService = loggerService;
             _getDesiredExpansionState = getDesiredExpansionState;
+            _onInitialLoadCompleted = onInitialLoadCompleted;
 
             _modsWatcher = new FileSystemWatcher
             {
@@ -514,24 +527,37 @@ public partial class ProjectExplorerViewModel
 
             Task.Run(() =>
             {
-                var (flatListReturn, treeRoot) = BuildFullFileStructure();
-
-                DispatcherHelper.RunOnMainThread(() =>
+                var succeeded = false;
+                try
                 {
-                    if (flatListReturn.Count != 0)
+                    var (flatListReturn, treeRoot) = BuildFullFileStructure();
+
+                    DispatcherHelper.RunOnMainThread(() =>
                     {
-                        FileList.AddRange(flatListReturn);
-                    }
+                        if (flatListReturn.Count != 0)
+                        {
+                            FileList.AddRange(flatListReturn);
+                        }
 
-                    FileTree.AddRange((treeRoot != null)
-                        ? treeRoot.Children
-                        : Array.Empty<FileSystemModel>());
+                        FileTree.AddRange((treeRoot != null)
+                            ? treeRoot.Children
+                            : Array.Empty<FileSystemModel>());
 
-                    Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>().DisableLoadingMode();
-                    _loggerService?.Info($"Loaded {FileList.Count} project files.");
-                    StartBackgroundPolling();
-                    Resume();
-                });
+                        _loggerService?.Info($"Loaded {FileList.Count} project files.");
+                        StartBackgroundPolling();
+                        Resume();
+                    });
+
+                    succeeded = true;
+                }
+                catch (Exception e)
+                {
+                    _loggerService?.Error($"Failed to load project files: {e.Message}");
+                }
+                finally
+                {
+                    DispatcherHelper.RunOnMainThread(() => _onInitialLoadCompleted?.Invoke(succeeded));
+                }
             });
         }
 
@@ -1285,7 +1311,7 @@ public partial class ProjectExplorerViewModel
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
-                if (!parent.Children.Any(m => m.FullName == fullPath) && !_fileLookup.ContainsKey(fullPath))
+                if (!_fileLookup.ContainsKey(fullPath))
                 {
                     var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
                     parent.Children.Add(fileSystemModel);

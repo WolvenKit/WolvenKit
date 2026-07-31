@@ -117,11 +117,6 @@ public partial class WelcomePageViewModel : PageViewModel
     [RelayCommand]
     private void OpenProject(string s)
     {
-        if (string.IsNullOrEmpty(s))
-        {
-            return;
-        }
-
         _mainViewModel.GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad(s);
         _mainViewModel.OpenProjectCommand.Execute(s);
 
