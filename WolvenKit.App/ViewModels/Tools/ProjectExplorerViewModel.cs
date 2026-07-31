@@ -85,7 +85,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
     private readonly ImportExportHelper _importExportHelper;
-    private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromSeconds(3);
+    private readonly TimeSpan _projectLoadPollingInterval = TimeSpan.FromMilliseconds(50);
     private bool _inFlight = false;
 
     // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
@@ -160,7 +160,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (ActiveProject != null)
         {
-            if (projectPath.Contains(ActiveProject.ProjectDirectory))
+            if (IsSameProjectPath(ActiveProject, projectPath))
             {
                 return;
             }
@@ -171,6 +171,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         EnableLoadingMode(LoadingMode.LoadingNewProject);
     }
 
+    /// <summary>
+    /// Clears project-load loading chrome without reporting a successful load.
+    /// Use on cancel / failed open / same-project no-op after ProjectWillLoad armed the UI.
+    /// </summary>
+    public void CancelProjectLoad() => DisableLoadingMode(reportResult: false);
+
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         _loggerService.Debug($"Initiating project load.");
@@ -179,11 +185,39 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var activeProject = _projectManager.ActiveProject;
             if (activeProject == null || activeProject.Equals(ActiveProject))
             {
+                CancelProjectLoad();
                 return;
             }
 
             StartWatcher_AndLoadProject(activeProject, false);
         });
+    }
+
+    private static bool IsSameProjectPath(Cp77Project activeProject, string projectPath)
+    {
+        if (string.IsNullOrWhiteSpace(projectPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            var requested = Path.GetFullPath(projectPath);
+            var location = Path.GetFullPath(activeProject.Location);
+            if (string.Equals(requested, location, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            var projectDirectory = Path.GetFullPath(activeProject.ProjectDirectory);
+            return string.Equals(requested, projectDirectory, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return string.Equals(activeProject.Location, projectPath, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
@@ -282,17 +316,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _projectWatcher.ProgressIndicatorCancellationToken = DispatcherHelper.StartRepeatingAction(
-            purpose: "ProjectExplorer load project", () =>
+            purpose: "ProjectExplorer load project",
+            () =>
             {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
             },
-            _singleOperationTimeout,
-            DisableLoadingMode
+            _projectLoadPollingInterval
         );
     }
 
-    private void DisableLoadingMode()
+    public void DisableLoadingMode() => DisableLoadingMode(reportResult: true);
+
+    private void DisableLoadingMode(bool reportResult)
     {
         if (CurrentLoadingMode == LoadingMode.Ready)
         {
@@ -302,9 +338,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.IsIndeterminate = false;
         _progressService.Status = EStatus.Ready;
         CurrentLoadingMode = LoadingMode.Ready;
-        OnSetLoading?.Invoke(this, (CurrentLoadingMode));
-        DispatcherHelper.StopRepeatingAction(_projectWatcher.ProgressIndicatorCancellationToken);
+        OnSetLoading?.Invoke(this, CurrentLoadingMode);
+
+        var token = _projectWatcher.ProgressIndicatorCancellationToken;
         _projectWatcher.ProgressIndicatorCancellationToken = Guid.Empty;
+        DispatcherHelper.StopRepeatingAction(token);
+
+        if (!reportResult)
+        {
+            return;
+        }
 
         if (ActiveProject != null)
         {
