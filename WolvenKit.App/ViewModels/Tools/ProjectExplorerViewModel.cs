@@ -71,7 +71,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
-    private readonly WatcherService _projectWatcher;
     private readonly IProjectEvents _projectEvents;
 
     [ObservableProperty]
@@ -101,10 +100,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly TimeSpan _projectLoadPollingInterval = TimeSpan.FromMilliseconds(50);
     private bool _inFlight = false;
 
-    // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
-    // owned by the WatcherService and are the grids' single source of truth.
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
+    // FileTree / FileList are declared in the file-watching half of this class
+    // (WatcherService.cs) and are the grids' single source of truth.
     public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
     public Action? OnLiveGridMutationStarting { get; set; }
     public Action? OnLiveGridMutationCompleted { get; set; }
@@ -148,12 +145,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(
-            GetDesiredExpansionState,
-            loggerService,
-            projectEvents,
-
-            onInitialLoadCompleted: succeeded => DisableLoadingMode(reportResult: succeeded));
+        InitializeProjectWatcher(projectEvents);
 
         SideInDockedMode = DockSide.Left;
 
@@ -290,7 +282,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
                 LoadExpansionStateDictionary(activeProject);
                 ActiveProject = activeProject;
-                _projectWatcher.StartWatcher_AndLoadProject(activeProject);
+                StartWatcher_AndLoadProject(activeProject);
 
                 DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
                 _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
@@ -1151,9 +1143,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.ReloadChangedFiles();
     }
 
-    public void UnwatchProject() => _projectWatcher.UnwatchProject();
 
-    public void CloseProject() => _projectWatcher.UnwatchProject();
+    public void CloseProject() => UnwatchProject();
 
     #endregion general commands
 
@@ -1288,7 +1279,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                             {
                                 var jsonFileInfo = new FileInfo(jsonFilePath);
 
-                                if (_projectWatcher.FileLookup.ContainsKey(jsonFilePath))
+                                if (FileLookup.ContainsKey(jsonFilePath))
                                 {
                                     // don't add a duplicate file to the trees
                                     return;
@@ -1747,7 +1738,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        _projectWatcher.Resume();
+        Resume();
 
         var progress = 0;
         _progressService.Report(0);
@@ -2233,13 +2224,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             if (shouldSuspend)
             {
-                _projectWatcher.Suspend();
+                Suspend();
             }
 
             if (_inFlight)
             {
                 await action();
-                _projectWatcher.Resume();
+                Resume();
                 return;
             }
 
@@ -2249,7 +2240,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 await action();
                 _inFlight = false;
-                _projectWatcher.Resume();
+                Resume();
                 return;
             }
 
@@ -2271,7 +2262,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
                     if (shouldSuspend)
                     {
-                        _projectWatcher.Resume();
+                        Resume();
                     }
                 }, 1);
             }
@@ -2282,7 +2273,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         DispatcherHelper.PostOnMainThread(() =>
         {
-            _projectWatcher.Suspend();
+            Suspend();
             OnLiveGridMutationStarting?.Invoke();
             try
             {
@@ -2296,7 +2287,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 // Completed must run even on failure so the View can resume suspended grids.
                 OnLiveGridMutationCompleted?.Invoke();
-                _projectWatcher.Resume();
+                Resume();
             }
         });
     }

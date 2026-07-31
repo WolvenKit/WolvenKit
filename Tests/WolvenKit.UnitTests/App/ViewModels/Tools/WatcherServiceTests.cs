@@ -18,6 +18,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
+using Wolvenkit.Test.App.Helpers;
 using Xunit;
 
 namespace Wolvenkit.Test.App.ViewModels.Tools;
@@ -37,10 +38,9 @@ public class WatcherServiceTests : IDisposable
 {
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
-    private readonly ProjectExplorerViewModel.WatcherService _watcher;
+    private readonly ProjectExplorerViewModel _watcher;
     private readonly string _tempProjectDir;
     private Cp77Project? _currentProject;
-    bool NoOp(string rawRelativePath) => false;
 
     // Tests that need real game file lists (and therefore a Cyberpunk 2077 install via CP77_DIR)
     // live in WolvenKit.IntegrationTests/App/ViewModels/Tools/WatcherServiceGameArchiveIntegrationTests.cs.
@@ -52,8 +52,7 @@ public class WatcherServiceTests : IDisposable
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
 
-
-        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents);
+        _watcher = TestProjectExplorer.Create(_projectEvents, _loggerMock.Object);
 
         _tempProjectDir = Path.Combine(Path.GetTempPath(), "WatcherServiceTests_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectDir);
@@ -140,7 +139,7 @@ public class WatcherServiceTests : IDisposable
         // After suspend, EnableRaisingEvents should be false (internal state)
         // We can't easily assert the private _modsWatcher here without InternalsVisibleTo or reflection.
         // The important behavioral contract: subsequent manual file drops should not immediately flood queues.
-        Assert.True(_watcher.WatcherState == ProjectExplorerViewModel.WatcherState.Suspended);
+        Assert.True(_watcher.CurrentWatcherState == ProjectExplorerViewModel.WatcherState.Suspended);
     }
 
     [Fact]
@@ -231,7 +230,7 @@ public class WatcherServiceTests : IDisposable
         // 3. Batch JSON conversion on the added files
         // Simulate what ConvertToJsonInternal + the publish at the end does
         _watcher.Suspend();
-        Assert.Equal(ProjectExplorerViewModel.WatcherState.Suspended, _watcher.WatcherState);
+        Assert.Equal(ProjectExplorerViewModel.WatcherState.Suspended, _watcher.CurrentWatcherState);
 
         var rawRoot = _currentProject.RawDirectory;
         var createdJsons = new List<FileInfo>();
@@ -433,7 +432,11 @@ public class WatcherServiceTests : IDisposable
     public void OnFilesImported_WithNullLogger_DoesNotThrow()
     {
         var events = new ProjectEvents();
-        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(NoOp, null, events);
+
+        // The watching code still calls the logger through `?.` throughout, so a null logger
+        // (a DI misconfiguration) must not take the import path down. Forced in deliberately:
+        // the constructor's parameter is non-nullable.
+        var watcherWithNullLogger = TestProjectExplorer.Create(events, logger: null!);
 
         var project = CreateTestProject("NullLoggerTest");
         watcherWithNullLogger.StartWatcher_AndLoadProject(project);
@@ -744,13 +747,13 @@ public class WatcherServiceTests : IDisposable
         await WaitForAsync(
             () =>
             {
-                var state = _watcher.WatcherState;
+                var state = _watcher.CurrentWatcherState;
                 return (state is ProjectExplorerViewModel.WatcherState.Active
                            or ProjectExplorerViewModel.WatcherState.Suspended)
                        && _watcher.FileList.Count >= 1;
             },
             timeout,
-            () => $"State={_watcher.WatcherState}, FileList.Count={_watcher.FileList.Count}");
+            () => $"State={_watcher.CurrentWatcherState}, FileList.Count={_watcher.FileList.Count}");
     }
 
     /// <summary>
@@ -796,7 +799,7 @@ public class WatcherServiceTests : IDisposable
                     .ToHashSet(StringComparer.OrdinalIgnoreCase);
                 var missing = expected.Where(p => !present.Contains(p));
                 return $"missing=[{string.Join("; ", missing)}], FileList.Count={_watcher.FileList.Count}, " +
-                       $"projectDir={_currentProject?.FileDirectory}, State={_watcher.WatcherState}";
+                       $"projectDir={_currentProject?.FileDirectory}, State={_watcher.CurrentWatcherState}";
             });
     }
 
