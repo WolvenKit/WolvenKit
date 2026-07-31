@@ -26,1414 +26,1396 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public partial class ProjectExplorerViewModel
 {
+    // ==========================================================================================
+    // Project file watching.
+    //
+    // This half of the view model:
+    //   1. Owns FileList and FileTree, including building and populating them on project load.
+    //   2. While not "suspended", monitors OS file system events from _modsWatcher and queues them.
+    //   3. Subscribes to IProjectEvents change sets published by other parts of the app, to bypass
+    //      the need to rely on file system events for large batches of changes.
+    //   4. Runs the Update and BatchUpdate background jobs that drain those queues into the models.
+    //        * Update processes individual Changed, Renamed and Deleted events one at a time.
+    //        * BatchUpdate processes batches of Add events in groups, for performance.
+    //
+    // Due to flakiness with file system events, various parts of the app suspend monitoring in
+    // order to make broad changes in the mod directory, then reload the whole project from disk.
+    // ==========================================================================================
+
+    #region fields
+
+    private string _projectDirectory = string.Empty;
+    private FileSystemModel? _projectFileSystemModel;
+    private FileSystemWatcher _modsWatcher = null!;
+
+    private readonly object _modLoadingLock = new();
+    private readonly object _batchLock = new();
+
     /// <summary>
-    /// WatcherService is an internal class of ProjectExplorerViewModel.
-    ///
-    /// There's three fundamental things WatcherService does:
-    ///    1. Owns & manages changes to data models FileList and FileTree that are state of ProjectExplorerViewModel.
-    ///       This includes building and populating these models when WatchProject is called.
-    ///    2. While not "suspended", monitor OS file system events from _modsWatcher & add change events update queues.
-    ///    3. Subscribe to IProjectEvents change sets coming from other parts of the app to bypass the need
-    ///       to rely on file system events for large batches of changes.
-    ///    4. Run background jobs Update & BatchUpdate that dequeue file change events and update the FileList/Tree.
-    ///        * Update checks _fileChanges and processes individual Changed, Renamed, and Deleted events one at a time.
-    ///        * BatchUpdate checks _batchFileChanges and processes batches of Add events in groups for performance.
-    ///
-    /// Due to flakiness with file system events, various parts of the app currently suspend/stop the monitoring of
-    /// file system events in order to make broad changes in the mod directory, then they call "Refresh" to reload the
-    /// whole project from disk.
+    /// Guards the (_watcherState, _suspendQueue) pair. Suspend/Resume must observe and mutate
+    /// them as one unit — see Resume() for the interleaving this prevents.
     /// </summary>
-    internal partial class WatcherService : ObservableObject
+    private readonly object _watcherStateLock = new();
+
+    /// <summary>
+    /// Keeps track of in-flight suspends so we don't over-resume.
+    /// </summary>
+    private readonly ConcurrentQueue<SuspendToken> _suspendQueue = new();
+
+    private Task? _updateTask;
+    private CancellationTokenSource _updateThreadCancellationTokenSource = new();
+    private Task? _batchUpdateTask;
+    private CancellationTokenSource _batchUpdateThreadCancellationTokenSource = new();
+
+    private CancellationTokenSource? _fileLoggingCts;
+
+    private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
+    private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
+
+    private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
+
+    public ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
+
+    private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
+    private readonly ConcurrentDictionary<string, long> _removedFiles = new();
+
+    private readonly CompositeDisposable _disposables = new();
+
+    private readonly DispatchedObservableCollection<FileSystemModel> _fileList = new();
+    private readonly DispatchedObservableCollection<FileSystemModel> _fileTree = new();
+
+    public DispatchedObservableCollection<FileSystemModel> FileList => _fileList;
+    public DispatchedObservableCollection<FileSystemModel> FileTree => _fileTree;
+
+
+    private static readonly List<string> s_ignoredExtensions =
+    [
+        "tmp",
+        "pdnsave",
+        "bak", // photoshop
+        "blend@", // Blender temp files
+        "blend1", // Blender temp files
+    ];
+
+    private sealed record SuspendToken;
+
+
+    private static bool HasIgnoredExtension(string? fileName)
     {
-        #region fields
+        var fileExtension = Path.GetExtension(fileName)?.ToUpper();
+        return fileExtension is not null && s_ignoredExtensions.Any(partial =>
+            fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
+    }
 
-        private readonly ILoggerService? _loggerService;
-        private readonly Func<string, bool> _getDesiredExpansionState;
-        private string _projectDirectory = string.Empty;
-        private FileSystemModel? _projectFileSystemModel;
-        private readonly FileSystemWatcher _modsWatcher;
+    public WatcherState _watcherState = WatcherState.NoProject;
 
-        private readonly object _modLoadingLock = new();
-        private readonly object _batchLock = new();
+    public WatcherState CurrentWatcherState => _watcherState;
 
-        /// <summary>
-        /// Guards the (_watcherState, _suspendQueue) pair. Suspend/Resume must observe and mutate
-        /// them as one unit — see Resume() for the interleaving this prevents.
-        /// </summary>
-        private readonly object _watcherStateLock = new();
+    #endregion
 
-        /// <summary>
-        /// Keeps track of in-flight suspends so we don't over-resume.
-        /// </summary>
-        private readonly ConcurrentQueue<SuspendToken> _suspendQueue = new();
+    #region Constructor
 
-        private Task? _updateTask;
-        private CancellationTokenSource _updateThreadCancellationTokenSource = new();
-        private Task? _batchUpdateTask;
-        private CancellationTokenSource _batchUpdateThreadCancellationTokenSource = new();
-
-        private CancellationTokenSource? _fileLoggingCts;
-
-        private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
-        private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
-
-        private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
-
-        public ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
-
-        private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
-        private readonly ConcurrentDictionary<string, long> _removedFiles = new();
-
-        private readonly CompositeDisposable _disposables = new();
-
-        private readonly DispatchedObservableCollection<FileSystemModel> _fileList = new();
-        private readonly DispatchedObservableCollection<FileSystemModel> _fileTree = new();
-
-        public DispatchedObservableCollection<FileSystemModel> FileList => _fileList;
-        public DispatchedObservableCollection<FileSystemModel> FileTree => _fileTree;
-
-
-        private static readonly List<string> s_ignoredExtensions =
-        [
-            "tmp",
-            "pdnsave",
-            "bak", // photoshop
-            "blend@", // Blender temp files
-            "blend1", // Blender temp files
-        ];
-
-        private sealed record SuspendToken;
-
-
-        private static bool HasIgnoredExtension(string? fileName)
+    /// <summary>
+    /// Wires up the file system watcher and the IProjectEvents subscriptions.
+    /// Called from the constructor; split out only to keep the two halves of the view model
+    /// readable.
+    /// </summary>
+    private void InitializeProjectWatcher(IProjectEvents projectEvents)
+    {
+        _modsWatcher = new FileSystemWatcher
         {
-            var fileExtension = Path.GetExtension(fileName)?.ToUpper();
-            return fileExtension is not null && s_ignoredExtensions.Any(partial =>
-                fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
+            Filter = "*",
+            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes | NotifyFilters.DirectoryName,
+            IncludeSubdirectories = true
+        };
+        _modsWatcher.Created += OnChanged;
+        _modsWatcher.Changed += OnChanged;
+        _modsWatcher.Deleted += OnChanged;
+        _modsWatcher.Renamed += OnRenamed;
+
+        // Capture the UI dispatcher now (this ctor runs on the UI thread). Prefer the application's
+        // dispatcher when available and fall back to the current thread's so this also works in
+        // headless/STA test hosts where Application.Current may be null.
+        var uiDispatcher = System.Windows.Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
+        IScheduler projectEventScheduler = new MainThreadInlineScheduler(RxApp.MainThreadScheduler, uiDispatcher);
+
+        projectEvents.FilesImported
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFilesImported)
+            .DisposeWith(_disposables);
+
+        projectEvents.FilesMoved
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFilesMoved)
+            .DisposeWith(_disposables);
+
+        projectEvents.FilesDeleted
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFilesOrDirectoriesDeleted)
+            .DisposeWith(_disposables);
+
+        projectEvents.FileChanged
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFileChanged)
+            .DisposeWith(_disposables);
+    }
+
+    #endregion
+
+    #region Start / Resume / Watch / Unwatch Methods
+
+    private void ResumeWatcher_AndLoadProject()
+    {
+        switch (_watcherState)
+        {
+            case WatcherState.NoProject:
+                _loggerService?.Debug("Loading new project.");
+                _suspendQueue.Clear();
+                _suspendQueue.Enqueue(new SuspendToken());
+                break;
+            case WatcherState.Suspended:
+                _loggerService?.Debug("Reloading existing project.");
+                break;
+            case WatcherState.Active:
+                throw new WolvenKitException(0xBADB01,
+                    $"Resuming from a non-suspended state with {_suspendQueue.Count} suspends in the queue.");
+            case WatcherState.Error:
+                _loggerService?.Debug("Reloading project to recover from error.");
+                break;
+            case WatcherState.Loading:
+                _loggerService?.Debug("Ignoring resume attempt while already reloading project.");
+                return;
         }
 
-        public WatcherState _watcherState = WatcherState.NoProject;
+        _watcherState = WatcherState.Loading;
+        Locked_LoadModProjectFileStructure();
+    }
 
-        public WatcherState WatcherState => _watcherState;
+    public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
+    {
+        _projectDirectory = project.FileDirectory;
+        _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+        ResumeWatcher_AndLoadProject();
+    }
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Raised on the UI thread once the initial project file structure has been built, with
-        /// true when it succeeded and false when it threw. Supplied by the owning
-        /// <see cref="ProjectExplorerViewModel"/> so the watcher reports completion directly
-        /// instead of resolving its owner through the service locator, which could hand back a
-        /// different (or newly constructed) view model.
-        /// </summary>
-        private readonly Action<bool>? _onInitialLoadCompleted;
-
-        public WatcherService(
-            Func<string, bool> getDesiredExpansionState,
-            ILoggerService? loggerService,
-            IProjectEvents projectEvents,
-            Action<bool>? onInitialLoadCompleted = null)
+    public void Resume()
+    {
+        // Serialized against Suspend(): both mutate _watcherState and _suspendQueue, and the
+        // read of (state, count) below must not observe another thread mid-transition. The
+        // initial load completes on a detached Task.Run, and in a headless host
+        // DispatcherHelper.RunOnMainThread executes inline on that pool thread rather than
+        // marshalling to a dispatcher — so a load-completion Resume can genuinely run
+        // concurrently with an import-triggered Resume. Unsynchronized, one thread could
+        // dequeue the last token while the other still saw state == Loading, producing a
+        // bogus (Loading, 0) and throwing.
+        lock (_watcherStateLock)
         {
-            _loggerService = loggerService;
-            _getDesiredExpansionState = getDesiredExpansionState;
-            _onInitialLoadCompleted = onInitialLoadCompleted;
-
-            _modsWatcher = new FileSystemWatcher
+            switch (_watcherState, _suspendQueue.Count)
             {
-                Filter = "*",
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes | NotifyFilters.DirectoryName,
-                IncludeSubdirectories = true
-            };
-            _modsWatcher.Created += OnChanged;
-            _modsWatcher.Changed += OnChanged;
-            _modsWatcher.Deleted += OnChanged;
-            _modsWatcher.Renamed += OnRenamed;
+                // happy path
+                case (WatcherState.Suspended, > 0):
+                    _ = _suspendQueue.TryDequeue(out _);
 
-            // Capture the UI dispatcher now (this ctor runs on the UI thread). Prefer the application's
-            // dispatcher when available and fall back to the current thread's so this also works in
-            // headless/STA test hosts where Application.Current may be null.
-            var uiDispatcher = System.Windows.Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
-            IScheduler projectEventScheduler = new MainThreadInlineScheduler(RxApp.MainThreadScheduler, uiDispatcher);
+                    if (_suspendQueue.Count == 0)
+                    {
+                        InternalResume();
+                    }
 
-            projectEvents.FilesImported
-                .ObserveOn(projectEventScheduler)
-                .Subscribe(OnFilesImported)
-                .DisposeWith(_disposables);
+                    return;
 
-            projectEvents.FilesMoved
-                .ObserveOn(projectEventScheduler)
-                .Subscribe(OnFilesMoved)
-                .DisposeWith(_disposables);
+                // Load completion (and mid-load Resume from PublishFilesImported) always
+                // dequeues the load token. Nested Suspend() calls during Loading leave extra
+                // tokens so we must land in Suspended rather than throwing or going Active.
+                case (WatcherState.Loading, > 0):
+                    _ = _suspendQueue.TryDequeue(out _);
 
-            projectEvents.FilesDeleted
-                .ObserveOn(projectEventScheduler)
-                .Subscribe(OnFilesOrDirectoriesDeleted)
-                .DisposeWith(_disposables);
+                    if (_suspendQueue.Count == 0)
+                    {
+                        InternalResume();
+                    }
+                    else
+                    {
+                        _watcherState = WatcherState.Suspended;
+                        _modsWatcher.EnableRaisingEvents = false;
+                        _loggerService?.Debug(
+                            $"Load finished with {_suspendQueue.Count} suspend token(s) remaining; staying suspended.");
+                    }
 
-            projectEvents.FileChanged
-                .ObserveOn(projectEventScheduler)
-                .Subscribe(OnFileChanged)
-                .DisposeWith(_disposables);
-        }
+                    return;
 
-        #endregion
+                // resuming while active has no effect
+                case (WatcherState.Active, 0):
+                    _loggerService?.Debug(
+                        $"FileWatcher confirmed active with no pending operations.");
+                    return;
 
-        #region Start / Resume / Watch / Unwatch Methods
-
-        private void ResumeWatcher_AndLoadProject()
-        {
-            switch (_watcherState)
-            {
-                case WatcherState.NoProject:
-                    _loggerService?.Debug("Loading new project.");
-                    _suspendQueue.Clear();
-                    _suspendQueue.Enqueue(new SuspendToken());
-                    break;
-                case WatcherState.Suspended:
-                    _loggerService?.Debug("Reloading existing project.");
-                    break;
-                case WatcherState.Active:
-                    throw new WolvenKitException(0xBADB01,
-                        $"Resuming from a non-suspended state with {_suspendQueue.Count} suspends in the queue.");
-                case WatcherState.Error:
-                    _loggerService?.Debug("Reloading project to recover from error.");
-                    break;
-                case WatcherState.Loading:
-                    _loggerService?.Debug("Ignoring resume attempt while already reloading project.");
+                // Unbalanced resume. The common cause is benign and unavoidable: the initial
+                // load runs detached, so its completion Resume can land after UnwatchProject
+                // has already torn the watcher down (state NoProject, queue cleared). Throwing
+                // from a fire-and-forget continuation cannot be handled by any caller — it just
+                // escapes onto a pool thread — so log it and leave the state alone.
+                default:
+                    _loggerService?.Debug(
+                        $"Ignoring unbalanced resume: watcher state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
                     return;
             }
-
-            _watcherState = WatcherState.Loading;
-            Locked_LoadModProjectFileStructure();
         }
 
-        public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
-        {
-            _projectDirectory = project.FileDirectory;
-            _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-            ResumeWatcher_AndLoadProject();
-        }
 
-        public void Resume()
+        void InternalResume()
         {
-            // Serialized against Suspend(): both mutate _watcherState and _suspendQueue, and the
-            // read of (state, count) below must not observe another thread mid-transition. The
-            // initial load completes on a detached Task.Run, and in a headless host
-            // DispatcherHelper.RunOnMainThread executes inline on that pool thread rather than
-            // marshalling to a dispatcher — so a load-completion Resume can genuinely run
-            // concurrently with an import-triggered Resume. Unsynchronized, one thread could
-            // dequeue the last token while the other still saw state == Loading, producing a
-            // bogus (Loading, 0) and throwing.
-            lock (_watcherStateLock)
+            if (_projectDirectory == "")
             {
-                switch (_watcherState, _suspendQueue.Count)
+                throw new Exception("No project directory to resume watching!.");
+            }
+
+            _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
+            _modsWatcher.Path = _projectDirectory;
+            _modsWatcher.IncludeSubdirectories = true;
+            _modsWatcher.EnableRaisingEvents = true;
+            _watcherState = WatcherState.Active;
+        }
+    }
+
+    /// <summary>
+    ///  Does the following:
+    ///     1. Suspend the OS file watcher & batch update monitor.
+    ///     2. Sets _watcherState to `noProject`
+    ///     3. Clears the project references.
+    ///
+    /// This must be called before performing anything that sends a Reset for
+    /// FileList or FileTree collections.
+    /// </summary>
+    public void UnwatchProject()
+    {
+        Suspend();
+        StopBackgroundPolling();
+        _watcherState = WatcherState.NoProject;
+        _projectDirectory = "";
+        _projectFileSystemModel = null;
+        _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
+    }
+
+    #endregion
+
+    private static readonly List<string> s_backupFilePartials =
+    [
+        "_tmp", ".bak", ".bkp"
+    ];
+
+    /// <summary>
+    /// Processes file system events saved to the _fileChanges queue.
+    /// The only ones Update cares about in that queue are change/rename/remove.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="Exception"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="TodoException"></exception>
+    private void Update(CancellationToken cancellationToken)
+    {
+        while (true)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
+            if (!_fileChanges.TryDequeue(out var e))
+            {
+                _removedFiles.Clear();
+
+                Thread.Sleep(100);
+                continue;
+            }
+
+            var extension = Path.GetExtension(e.Name);
+            if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
+            {
+                continue;
+            }
+
+            try
+            {
+                switch (e.ChangeType)
                 {
-                    // happy path
-                    case (WatcherState.Suspended, > 0):
-                        _ = _suspendQueue.TryDequeue(out _);
-
-                        if (_suspendQueue.Count == 0)
-                        {
-                            InternalResume();
-                        }
-
-                        return;
-
-                    // Load completion (and mid-load Resume from PublishFilesImported) always
-                    // dequeues the load token. Nested Suspend() calls during Loading leave extra
-                    // tokens so we must land in Suspended rather than throwing or going Active.
-                    case (WatcherState.Loading, > 0):
-                        _ = _suspendQueue.TryDequeue(out _);
-
-                        if (_suspendQueue.Count == 0)
-                        {
-                            InternalResume();
-                        }
-                        else
-                        {
-                            _watcherState = WatcherState.Suspended;
-                            _modsWatcher.EnableRaisingEvents = false;
-                            _loggerService?.Debug(
-                                $"Load finished with {_suspendQueue.Count} suspend token(s) remaining; staying suspended.");
-                        }
-
-                        return;
-
-                    // resuming while active has no effect
-                    case (WatcherState.Active, 0):
-                        _loggerService?.Debug(
-                            $"FileWatcher confirmed active with no pending operations.");
-                        return;
-
-                    // Unbalanced resume. The common cause is benign and unavoidable: the initial
-                    // load runs detached, so its completion Resume can land after UnwatchProject
-                    // has already torn the watcher down (state NoProject, queue cleared). Throwing
-                    // from a fire-and-forget continuation cannot be handled by any caller — it just
-                    // escapes onto a pool thread — so log it and leave the state alone.
+                    case WatcherChangeTypes.Created:
+                        throw new Exception($"Tried to create file ${e.FullPath} outside of batch update.");
+                    case WatcherChangeTypes.Deleted:
+                        Delete(e);
+                        break;
+                    case WatcherChangeTypes.Changed:
+                        Changed(e);
+                        break;
+                    case WatcherChangeTypes.Renamed:
+                        Renamed(e);
+                        break;
+                    case WatcherChangeTypes.All:
+                        throw new Exception();
                     default:
-                        _loggerService?.Debug(
-                            $"Ignoring unbalanced resume: watcher state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
-                        return;
+                        throw new ArgumentOutOfRangeException();
                 }
             }
-
-
-            void InternalResume()
+            catch (Exception)
             {
-                if (_projectDirectory == "")
+                if (e.Name is not null && !s_backupFilePartials.Any(partial => e.Name.Contains(partial)))
                 {
-                    throw new Exception("No project directory to resume watching!.");
+                    _loggerService?.Error($"Project Explorer: something went wrong while changing {e.Name}. You can try a manual refresh.");
                 }
-
-                _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
-                _modsWatcher.Path = _projectDirectory;
-                _modsWatcher.IncludeSubdirectories = true;
-                _modsWatcher.EnableRaisingEvents = true;
-                _watcherState = WatcherState.Active;
             }
         }
 
-        /// <summary>
-        ///  Does the following:
-        ///     1. Suspend the OS file watcher & batch update monitor.
-        ///     2. Sets _watcherState to `noProject`
-        ///     3. Clears the project references.
-        ///
-        /// This must be called before performing anything that sends a Reset for
-        /// FileList or FileTree collections.
-        /// </summary>
-        public void UnwatchProject()
+        void Changed(FileSystemEventArgsWrapper e)
         {
-            Suspend();
-            StopBackgroundPolling();
-            _watcherState = WatcherState.NoProject;
-            _projectDirectory = "";
-            _projectFileSystemModel = null;
-            _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
+            if (string.IsNullOrEmpty(e.Name))
+            {
+                throw new TodoException();
+            }
+
+            if (!_fileLookup.TryGetValue(e.FullPath, out var item))
+            {
+                if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
+                {
+                    _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
+                }
+                return;
+            }
+
+            if (item.IsDirectory)
+            {
+                return;
+            }
+
+            item.UpdateFileInfo();
         }
 
-        #endregion
-
-        private static readonly List<string> s_backupFilePartials =
-        [
-            "_tmp", ".bak", ".bkp"
-        ];
-
-        /// <summary>
-        /// Processes file system events saved to the _fileChanges queue.
-        /// The only ones Update cares about in that queue are change/rename/remove.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <exception cref="Exception"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <exception cref="TodoException"></exception>
-        private void Update(CancellationToken cancellationToken)
+        void Renamed(FileSystemEventArgsWrapper e)
         {
-            while (true)
+            if (e.Args is not RenamedEventArgs renamedEventArgs)
             {
+                throw new Exception();
+            }
+
+            if (string.IsNullOrEmpty(renamedEventArgs.OldName) || string.IsNullOrEmpty(renamedEventArgs.Name))
+            {
+                throw new Exception();
+            }
+
+            if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
+                return;
+            }
+
+            foreach (var key in _fileLookup.Keys)
+            {
+                var oldFullPathNormalized = (!Directory.Exists(renamedEventArgs.FullPath))
+                    ? renamedEventArgs.OldFullPath
+                    : Path.GetFullPath(renamedEventArgs.OldFullPath)
+                        .TrimEnd(Path.DirectorySeparatorChar,
+                            Path.AltDirectorySeparatorChar);
+
+                if (!key.StartsWith(oldFullPathNormalized))
+                {
+                    continue;
+                }
+
+                if (key != oldFullPathNormalized && !key[oldFullPathNormalized.Length..].StartsWith('\\'))
+                {
+                    // we've matched \my\dir to \my\dir2 because it has substring "\my\dir" so continue
+                    continue;
+                }
+
+                var newKey = renamedEventArgs.FullPath + key[oldFullPathNormalized.Length..];
+                if (!_fileLookup.TryRemove(key, out var item) || !_fileLookup.TryAdd(newKey, item))
+                {
+                    throw new Exception();
+                }
+
+                if (key != oldFullPathNormalized)
+                {
+                    continue;
+                }
+
+                var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
+                item.Rename(newName);
+            }
+        }
+
+        void Delete(FileSystemEventArgsWrapper e)
+        {
+            if (string.IsNullOrEmpty(e.FullPath))
+            {
+                throw new TodoException();
+            }
+
+            if (_fileLookup.TryRemove(e.FullPath, out var item))
+            {
+                Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>()
+                    .RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
+            }
+            else
+            {
+                _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
+            }
+        }
+    }
+
+    private void RemoveModel(FileSystemModel model, long removedAt = 0)
+    {
+        _fileLookup.TryRemove(model.FullName, out _);
+
+        if (FileTree.Contains(model))
+            FileTree.Remove(model);
+        if (FileList.Contains(model))
+            FileList.Remove(model);
+
+        RemoveChildModels(model);
+
+        if (model.Parent != null && model.Parent.Children.Contains(model))
+            model.Parent.Children.Remove(model);
+
+        if (removedAt != 0)
+            _removedFiles.TryAdd(model.FullName, removedAt);
+    }
+
+    private void RemoveChildModels(FileSystemModel model)
+    {
+        var children = model.Children.ToList();
+        foreach (var subModel in children)
+        {
+            RemoveChildModels(subModel);
+
+            _fileLookup.Remove(subModel.FullName, out _);
+            if (FileList.Contains(subModel))
+                FileList.Remove(subModel);
+        }
+    }
+
+    internal void RemoveItems(IEnumerable<FileSystemModel> items)
+    {
+        foreach (var item in items)
+        {
+            var domain = _fileLookup.TryGetValue(item.FullName, out var d) ? d : item;
+            RemoveModel(domain, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
+        }
+    }
+
+    private void Locked_LoadModProjectFileStructure()
+    {
+        lock (_modLoadingLock)
+        {
+            LoadModProjectFileStructure();
+        }
+    }
+
+    private void LoadModProjectFileStructure()
+    {
+        if (_projectFileSystemModel == null)
+        {
+            // On first app launch, there's no project yet.
+            return;
+        }
+
+        _watcherState = WatcherState.Loading;
+
+        void Clear()
+        {
+            _loggerService?.Debug("Clearing all file changes and project data sources.");
+
+            _fileChanges.Clear();
+            _batchFileChanges.Clear();
+            _fileLookup.Clear();
+            FileTree.Clear();
+            FileList.Clear();
+        }
+
+        Clear();
+
+        Task.Run(() =>
+        {
+            var succeeded = false;
+            try
+            {
+                var (flatListReturn, treeRoot) = BuildFullFileStructure();
+
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (flatListReturn.Count != 0)
+                    {
+                        FileList.AddRange(flatListReturn);
+                    }
+
+                    FileTree.AddRange((treeRoot != null)
+                        ? treeRoot.Children
+                        : Array.Empty<FileSystemModel>());
+
+                    _loggerService?.Info($"Loaded {FileList.Count} project files.");
+                    StartBackgroundPolling();
+                    Resume();
+                });
+
+                succeeded = true;
+            }
+            catch (Exception e)
+            {
+                _loggerService?.Error($"Failed to load project files: {e.Message}");
+            }
+            finally
+            {
+                DispatcherHelper.RunOnMainThread(() => DisableLoadingMode(reportResult: succeeded));
+            }
+        });
+    }
+
+    private (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
+    {
+        var flatList = new List<FileSystemModel>(10000);
+        var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+        var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
+        stack.Push((new DirectoryInfo(rootModel.FullName), rootModel));
+
+        while (stack.Count > 0)
+        {
+            var (dir, parent) = stack.Pop();
+
+            try
+            {
+                // dir
+                foreach (var subDir in dir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
+                {
+                    if (IsIgnoredPath(subDir.FullName))
+                        continue;
+
+                    var wrapper = new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created,
+                        subDir.Parent?.FullName ?? "", subDir.Name));
+
+                    var dirModel = CreateFromScratch(parent, wrapper);
+
+                    if (dirModel != null)
+                    {
+                        if (dirModel.FullName != rootModel.FullName)
+                            flatList.Add(dirModel);
+                        parent.Children.Add(dirModel);
+                        _fileLookup.TryAdd(dirModel.FullName, dirModel);
+                        stack.Push((subDir, dirModel));
+                    }
+                }
+
+                // file
+                foreach (var file in dir.EnumerateFiles("*", SearchOption.TopDirectoryOnly))
+                {
+                    if (IsIgnoredPath(file.FullName))
+                        continue;
+
+                    var fileModel = CreateFromScratch(parent, new FileSystemEventArgsWrapper(new FileSystemEventArgs(
+                        WatcherChangeTypes.Created,
+                        file.DirectoryName ?? "", file.Name)));
+
+                    if (fileModel != null)
+                    {
+                        flatList.Add(fileModel);
+                        parent.Children.Add(fileModel);
+                        _fileLookup[fileModel.FullName] = fileModel;
+                    }
+                }
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                _loggerService?.Warning($"Access denied on {dir.FullName}");
+            }
+        }
+
+        return (flatList, rootModel);
+    }
+
+    private void StartBackgroundPolling()
+    {
+        // Always ensure any previous polling tasks are fully stopped first.
+        // This is the single choke point that prevents duplicate long-running tasks.
+        StopBackgroundPollingInternal();
+
+        _updateThreadCancellationTokenSource = new CancellationTokenSource();
+        _updateTask = Task.Factory.StartNew(
+            () => Update(_updateThreadCancellationTokenSource.Token),
+            _updateThreadCancellationTokenSource.Token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+
+        _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
+        _batchUpdateTask = Task.Factory.StartNew(
+            () => BatchUpdate(_batchUpdateThreadCancellationTokenSource.Token),
+            _batchUpdateThreadCancellationTokenSource.Token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+
+        ResetFileLoggingToken();
+    }
+
+    private void ResetFileLoggingToken()
+    {
+        _fileLoggingCts?.Cancel();
+        _fileLoggingCts?.Dispose();
+        _fileLoggingCts = new CancellationTokenSource();
+    }
+
+    private void StopBackgroundPolling()
+    {
+        _loggerService?.Debug("Suspending file system watcher and cancelling file tree update listeners.");
+        StopBackgroundPollingInternal();
+        CancelFileLoggingToken();
+    }
+
+    /// <summary>
+    /// Internal implementation that actually cancels and waits for the background tasks.
+    /// Called from both public Stop and defensively from Start.
+    /// </summary>
+    private void StopBackgroundPollingInternal()
+    {
+        // Cancel update task
+        if (_updateTask != null)
+        {
+            try
+            {
+                _updateThreadCancellationTokenSource.Cancel();
+                // Best-effort wait so the loop can exit its Sleep and observe the token.
+                _updateTask.Wait(TimeSpan.FromMilliseconds(250));
+            }
+            catch (AggregateException) { /* task cancelled, expected */ }
+            finally
+            {
+                _updateTask = null;
+                _updateThreadCancellationTokenSource.Dispose();
+                _updateThreadCancellationTokenSource = new CancellationTokenSource();
+            }
+        }
+
+        // Cancel batch update task
+        if (_batchUpdateTask != null)
+        {
+            try
+            {
+                _batchUpdateThreadCancellationTokenSource.Cancel();
+                _batchUpdateTask.Wait(TimeSpan.FromMilliseconds(250));
+            }
+            catch (AggregateException) { /* task cancelled, expected */ }
+            finally
+            {
+                _batchUpdateTask = null;
+                _batchUpdateThreadCancellationTokenSource.Dispose();
+                _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
+            }
+        }
+    }
+
+    public void Suspend()
+    {
+        // See Resume() for why this is locked.
+        lock (_watcherStateLock)
+        {
+            if (_suspendQueue.IsEmpty)
+            {
+                _suspendQueue.Enqueue(new SuspendToken());
+                _loggerService?.Debug("Stopping file system watcher in mod folder.");
+                _modsWatcher.EnableRaisingEvents = false;
+                _watcherState = WatcherState.Suspended;
+                return;
+            }
+
+            // Nested suspend (including while Loading): keep existing load/suspend tokens and
+            // add another so a later Resume (or load-completion Resume) does not go Active until
+            // every suspend is balanced. Always reflect Suspended to callers.
+            _modsWatcher.EnableRaisingEvents = false;
+            _suspendQueue.Enqueue(new SuspendToken());
+            if (_watcherState is WatcherState.Loading or WatcherState.Active or WatcherState.Error)
+            {
+                _watcherState = WatcherState.Suspended;
+            }
+        }
+    }
+
+    private void CancelFileLoggingToken()
+    {
+        _fileLoggingCts?.Cancel();
+        _fileLoggingCts?.Dispose();
+        _fileLoggingCts = null;
+    }
+
+    private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+
+    private void OnChanged(object sender, FileSystemEventArgs e)
+    {
+        if (e.ChangeType == WatcherChangeTypes.Created)
+        {
+            _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+        }
+        else
+        {
+            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+        }
+    }
+
+    private class FileSystemEventArgsWrapper
+    {
+        public FileSystemEventArgsWrapper(FileSystemEventArgs fileSystemEventArgs)
+        {
+            Args = fileSystemEventArgs;
+        }
+
+        public FileSystemEventArgs Args { get; }
+
+        public string? Name => Args.Name;
+        public string FullPath => Args.FullPath;
+        public WatcherChangeTypes ChangeType => Args.ChangeType;
+
+        public int RetryCount { get; set; }
+        public long Ticks { get; set; }
+
+        public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+
+    private void BatchUpdate(CancellationToken cancellationToken)
+    {
+        var batch = new List<FileSystemEventArgsWrapper>();
+        var stopwatch = Stopwatch .StartNew();
+
+        while (true)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
+            while (_batchFileChanges.TryDequeue(out var e))
+            {
+                // temporary until we support batch ops for others
+                if (e.ChangeType != WatcherChangeTypes.Created)
+                {
+                    break;
+                }
+
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
 
-                if (!_fileChanges.TryDequeue(out var e))
-                {
-                    _removedFiles.Clear();
-
-                    Thread.Sleep(100);
-                    continue;
-                }
-
+                _fileProcessing.TryAdd(e.FullPath, e);
                 var extension = Path.GetExtension(e.Name);
+
                 if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
                 {
                     continue;
                 }
+
+                batch.Add(e);
+            }
+
+            if (batch.Count == 0)
+            {
+                _removedFiles.Clear();
+                Thread.Sleep(50);
+                continue;
+            }
+
+            try
+            {
+                ApplyBatch(batch, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _loggerService?.Error($"ProjectExplorer: batch processing failed. {ex.Message}");
+            }
+            finally
+            {
+                if (stopwatch.ElapsedMilliseconds > 500)
+                {
+                    stopwatch.Restart();
+                }
+                batch.Clear();
+            }
+        }
+
+        void ApplyBatch(List<FileSystemEventArgsWrapper> batch, CancellationToken ct)
+        {
+            var created = new List<FileSystemModel>();
+            //var deleted = new List<string>();
+            //var changed = new List<FileSystemModel>();
+
+            foreach (var e in batch)
+            {
+                ct.ThrowIfCancellationRequested();
 
                 try
                 {
                     switch (e.ChangeType)
                     {
                         case WatcherChangeTypes.Created:
-                            throw new Exception($"Tried to create file ${e.FullPath} outside of batch update.");
-                        case WatcherChangeTypes.Deleted:
-                            Delete(e);
+                            DispatcherHelper.RunOnMainThread(() =>
+                            {
+                                lock (_batchLock)
+                                {
+                                    var parent = FindParentModel(e.FullPath);
+                                    var newItem = CreateFromScratch(parent, e);
+                                    if (newItem != null)
+                                    {
+                                        if (parent != null && !parent.Children.Contains(newItem) && !_fileLookup.ContainsKey(e.FullPath))
+                                        {
+                                            parent.Children.Add(newItem);
+                                            created.Add(newItem);
+                                            _fileLookup.TryAdd(e.FullPath, newItem);
+                                        }
+                                        _fileProcessing.TryRemove(e.FullPath, out _);
+                                    }
+                                }
+                            });
                             break;
-                        case WatcherChangeTypes.Changed:
-                            Changed(e);
-                            break;
-                        case WatcherChangeTypes.Renamed:
-                            Renamed(e);
-                            break;
-                        case WatcherChangeTypes.All:
-                            throw new Exception();
-                        default:
-                            throw new ArgumentOutOfRangeException();
                     }
-                }
-                catch (Exception)
-                {
-                    if (e.Name is not null && !s_backupFilePartials.Any(partial => e.Name.Contains(partial)))
-                    {
-                        _loggerService?.Error($"Project Explorer: something went wrong while changing {e.Name}. You can try a manual refresh.");
-                    }
-                }
-            }
-
-            void Changed(FileSystemEventArgsWrapper e)
-            {
-                if (string.IsNullOrEmpty(e.Name))
-                {
-                    throw new TodoException();
-                }
-
-                if (!_fileLookup.TryGetValue(e.FullPath, out var item))
-                {
-                    if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
-                    {
-                        _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
-                    }
-                    return;
-                }
-
-                if (item.IsDirectory)
-                {
-                    return;
-                }
-
-                item.UpdateFileInfo();
-            }
-
-            void Renamed(FileSystemEventArgsWrapper e)
-            {
-                if (e.Args is not RenamedEventArgs renamedEventArgs)
-                {
-                    throw new Exception();
-                }
-
-                if (string.IsNullOrEmpty(renamedEventArgs.OldName) || string.IsNullOrEmpty(renamedEventArgs.Name))
-                {
-                    throw new Exception();
-                }
-
-                if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
-                    return;
-                }
-
-                foreach (var key in _fileLookup.Keys)
-                {
-                    var oldFullPathNormalized = (!Directory.Exists(renamedEventArgs.FullPath))
-                        ? renamedEventArgs.OldFullPath
-                        : Path.GetFullPath(renamedEventArgs.OldFullPath)
-                            .TrimEnd(Path.DirectorySeparatorChar,
-                                Path.AltDirectorySeparatorChar);
-
-                    if (!key.StartsWith(oldFullPathNormalized))
-                    {
-                        continue;
-                    }
-
-                    if (key != oldFullPathNormalized && !key[oldFullPathNormalized.Length..].StartsWith('\\'))
-                    {
-                        // we've matched \my\dir to \my\dir2 because it has substring "\my\dir" so continue
-                        continue;
-                    }
-
-                    var newKey = renamedEventArgs.FullPath + key[oldFullPathNormalized.Length..];
-                    if (!_fileLookup.TryRemove(key, out var item) || !_fileLookup.TryAdd(newKey, item))
-                    {
-                        throw new Exception();
-                    }
-
-                    if (key != oldFullPathNormalized)
-                    {
-                        continue;
-                    }
-
-                    var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
-                    item.Rename(newName);
-                }
-            }
-
-            void Delete(FileSystemEventArgsWrapper e)
-            {
-                if (string.IsNullOrEmpty(e.FullPath))
-                {
-                    throw new TodoException();
-                }
-
-                if (_fileLookup.TryRemove(e.FullPath, out var item))
-                {
-                    Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>()
-                        .RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
-                }
-                else
-                {
-                    _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
-                }
-            }
-        }
-
-        private void RemoveModel(FileSystemModel model, long removedAt = 0)
-        {
-            _fileLookup.TryRemove(model.FullName, out _);
-
-            if (FileTree.Contains(model))
-                FileTree.Remove(model);
-            if (FileList.Contains(model))
-                FileList.Remove(model);
-
-            RemoveChildModels(model);
-
-            if (model.Parent != null && model.Parent.Children.Contains(model))
-                model.Parent.Children.Remove(model);
-
-            if (removedAt != 0)
-                _removedFiles.TryAdd(model.FullName, removedAt);
-        }
-
-        private void RemoveChildModels(FileSystemModel model)
-        {
-            var children = model.Children.ToList();
-            foreach (var subModel in children)
-            {
-                RemoveChildModels(subModel);
-
-                _fileLookup.Remove(subModel.FullName, out _);
-                if (FileList.Contains(subModel))
-                    FileList.Remove(subModel);
-            }
-        }
-
-        internal void RemoveItems(IEnumerable<FileSystemModel> items)
-        {
-            foreach (var item in items)
-            {
-                var domain = _fileLookup.TryGetValue(item.FullName, out var d) ? d : item;
-                RemoveModel(domain, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
-            }
-        }
-
-        private void Locked_LoadModProjectFileStructure()
-        {
-            lock (_modLoadingLock)
-            {
-                LoadModProjectFileStructure();
-            }
-        }
-
-        private void LoadModProjectFileStructure()
-        {
-            if (_projectFileSystemModel == null)
-            {
-                // On first app launch, there's no project yet.
-                return;
-            }
-
-            _watcherState = WatcherState.Loading;
-
-            void Clear()
-            {
-                _loggerService?.Debug("Clearing all file changes and project data sources.");
-
-                _fileChanges.Clear();
-                _batchFileChanges.Clear();
-                _fileLookup.Clear();
-                FileTree.Clear();
-                FileList.Clear();
-            }
-
-            Clear();
-
-            Task.Run(() =>
-            {
-                var succeeded = false;
-                try
-                {
-                    var (flatListReturn, treeRoot) = BuildFullFileStructure();
-
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        if (flatListReturn.Count != 0)
-                        {
-                            FileList.AddRange(flatListReturn);
-                        }
-
-                        FileTree.AddRange((treeRoot != null)
-                            ? treeRoot.Children
-                            : Array.Empty<FileSystemModel>());
-
-                        _loggerService?.Info($"Loaded {FileList.Count} project files.");
-                        StartBackgroundPolling();
-                        Resume();
-                    });
-
-                    succeeded = true;
-                }
-                catch (Exception e)
-                {
-                    _loggerService?.Error($"Failed to load project files: {e.Message}");
-                }
-                finally
-                {
-                    DispatcherHelper.RunOnMainThread(() => _onInitialLoadCompleted?.Invoke(succeeded));
-                }
-            });
-        }
-
-        private (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
-        {
-            var flatList = new List<FileSystemModel>(10000);
-            var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-            var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
-            stack.Push((new DirectoryInfo(rootModel.FullName), rootModel));
-
-            while (stack.Count > 0)
-            {
-                var (dir, parent) = stack.Pop();
-
-                try
-                {
-                    // dir
-                    foreach (var subDir in dir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
-                    {
-                        if (IsIgnoredPath(subDir.FullName))
-                            continue;
-
-                        var wrapper = new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created,
-                            subDir.Parent?.FullName ?? "", subDir.Name));
-
-                        var dirModel = CreateFromScratch(parent, wrapper);
-
-                        if (dirModel != null)
-                        {
-                            if (dirModel.FullName != rootModel.FullName)
-                                flatList.Add(dirModel);
-                            parent.Children.Add(dirModel);
-                            _fileLookup.TryAdd(dirModel.FullName, dirModel);
-                            stack.Push((subDir, dirModel));
-                        }
-                    }
-
-                    // file
-                    foreach (var file in dir.EnumerateFiles("*", SearchOption.TopDirectoryOnly))
-                    {
-                        if (IsIgnoredPath(file.FullName))
-                            continue;
-
-                        var fileModel = CreateFromScratch(parent, new FileSystemEventArgsWrapper(new FileSystemEventArgs(
-                            WatcherChangeTypes.Created,
-                            file.DirectoryName ?? "", file.Name)));
-
-                        if (fileModel != null)
-                        {
-                            flatList.Add(fileModel);
-                            parent.Children.Add(fileModel);
-                            _fileLookup[fileModel.FullName] = fileModel;
-                        }
-                    }
-                }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-                {
-                    _loggerService?.Warning($"Access denied on {dir.FullName}");
-                }
-            }
-
-            return (flatList, rootModel);
-        }
-
-        private void StartBackgroundPolling()
-        {
-            // Always ensure any previous polling tasks are fully stopped first.
-            // This is the single choke point that prevents duplicate long-running tasks.
-            StopBackgroundPollingInternal();
-
-            _updateThreadCancellationTokenSource = new CancellationTokenSource();
-            _updateTask = Task.Factory.StartNew(
-                () => Update(_updateThreadCancellationTokenSource.Token),
-                _updateThreadCancellationTokenSource.Token,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
-
-            _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
-            _batchUpdateTask = Task.Factory.StartNew(
-                () => BatchUpdate(_batchUpdateThreadCancellationTokenSource.Token),
-                _batchUpdateThreadCancellationTokenSource.Token,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
-
-            ResetFileLoggingToken();
-        }
-
-        private void ResetFileLoggingToken()
-        {
-            _fileLoggingCts?.Cancel();
-            _fileLoggingCts?.Dispose();
-            _fileLoggingCts = new CancellationTokenSource();
-        }
-
-        private void StopBackgroundPolling()
-        {
-            _loggerService?.Debug("Suspending file system watcher and cancelling file tree update listeners.");
-            StopBackgroundPollingInternal();
-            CancelFileLoggingToken();
-        }
-
-        /// <summary>
-        /// Internal implementation that actually cancels and waits for the background tasks.
-        /// Called from both public Stop and defensively from Start.
-        /// </summary>
-        private void StopBackgroundPollingInternal()
-        {
-            // Cancel update task
-            if (_updateTask != null)
-            {
-                try
-                {
-                    _updateThreadCancellationTokenSource.Cancel();
-                    // Best-effort wait so the loop can exit its Sleep and observe the token.
-                    _updateTask.Wait(TimeSpan.FromMilliseconds(250));
-                }
-                catch (AggregateException) { /* task cancelled, expected */ }
-                finally
-                {
-                    _updateTask = null;
-                    _updateThreadCancellationTokenSource.Dispose();
-                    _updateThreadCancellationTokenSource = new CancellationTokenSource();
-                }
-            }
-
-            // Cancel batch update task
-            if (_batchUpdateTask != null)
-            {
-                try
-                {
-                    _batchUpdateThreadCancellationTokenSource.Cancel();
-                    _batchUpdateTask.Wait(TimeSpan.FromMilliseconds(250));
-                }
-                catch (AggregateException) { /* task cancelled, expected */ }
-                finally
-                {
-                    _batchUpdateTask = null;
-                    _batchUpdateThreadCancellationTokenSource.Dispose();
-                    _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
-                }
-            }
-        }
-
-        public void Suspend()
-        {
-            // See Resume() for why this is locked.
-            lock (_watcherStateLock)
-            {
-                if (_suspendQueue.IsEmpty)
-                {
-                    _suspendQueue.Enqueue(new SuspendToken());
-                    _loggerService?.Debug("Stopping file system watcher in mod folder.");
-                    _modsWatcher.EnableRaisingEvents = false;
-                    _watcherState = WatcherState.Suspended;
-                    return;
-                }
-
-                // Nested suspend (including while Loading): keep existing load/suspend tokens and
-                // add another so a later Resume (or load-completion Resume) does not go Active until
-                // every suspend is balanced. Always reflect Suspended to callers.
-                _modsWatcher.EnableRaisingEvents = false;
-                _suspendQueue.Enqueue(new SuspendToken());
-                if (_watcherState is WatcherState.Loading or WatcherState.Active or WatcherState.Error)
-                {
-                    _watcherState = WatcherState.Suspended;
-                }
-            }
-        }
-
-        private void CancelFileLoggingToken()
-        {
-            _fileLoggingCts?.Cancel();
-            _fileLoggingCts?.Dispose();
-            _fileLoggingCts = null;
-        }
-
-        private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
-
-        private void OnChanged(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Created)
-            {
-                _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
-            }
-            else
-            {
-                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
-            }
-        }
-
-        private class FileSystemEventArgsWrapper
-        {
-            public FileSystemEventArgsWrapper(FileSystemEventArgs fileSystemEventArgs)
-            {
-                Args = fileSystemEventArgs;
-            }
-
-            public FileSystemEventArgs Args { get; }
-
-            public string? Name => Args.Name;
-            public string FullPath => Args.FullPath;
-            public WatcherChangeTypes ChangeType => Args.ChangeType;
-
-            public int RetryCount { get; set; }
-            public long Ticks { get; set; }
-
-            public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-        }
-
-        private void BatchUpdate(CancellationToken cancellationToken)
-        {
-            var batch = new List<FileSystemEventArgsWrapper>();
-            var stopwatch = Stopwatch .StartNew();
-
-            while (true)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    break;
-                }
-
-                while (_batchFileChanges.TryDequeue(out var e))
-                {
-                    // temporary until we support batch ops for others
-                    if (e.ChangeType != WatcherChangeTypes.Created)
-                    {
-                        break;
-                    }
-
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
-
-                    _fileProcessing.TryAdd(e.FullPath, e);
-                    var extension = Path.GetExtension(e.Name);
-
-                    if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
-                    {
-                        continue;
-                    }
-
-                    batch.Add(e);
-                }
-
-                if (batch.Count == 0)
-                {
-                    _removedFiles.Clear();
-                    Thread.Sleep(50);
-                    continue;
-                }
-
-                try
-                {
-                    ApplyBatch(batch, cancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    _loggerService?.Error($"ProjectExplorer: batch processing failed. {ex.Message}");
-                }
-                finally
-                {
-                    if (stopwatch.ElapsedMilliseconds > 500)
+                    if (e.Name is not null && !s_backupFilePartials.Any(p => e.Name.Contains(p)))
                     {
-                        stopwatch.Restart();
-                    }
-                    batch.Clear();
-                }
-            }
-
-            void ApplyBatch(List<FileSystemEventArgsWrapper> batch, CancellationToken ct)
-            {
-                var created = new List<FileSystemModel>();
-                //var deleted = new List<string>();
-                //var changed = new List<FileSystemModel>();
-
-                foreach (var e in batch)
-                {
-                    ct.ThrowIfCancellationRequested();
-
-                    try
-                    {
-                        switch (e.ChangeType)
-                        {
-                            case WatcherChangeTypes.Created:
-                                DispatcherHelper.RunOnMainThread(() =>
-                                {
-                                    lock (_batchLock)
-                                    {
-                                        var parent = FindParentModel(e.FullPath);
-                                        var newItem = CreateFromScratch(parent, e);
-                                        if (newItem != null)
-                                        {
-                                            if (parent != null && !parent.Children.Contains(newItem) && !_fileLookup.ContainsKey(e.FullPath))
-                                            {
-                                                parent.Children.Add(newItem);
-                                                created.Add(newItem);
-                                                _fileLookup.TryAdd(e.FullPath, newItem);
-                                            }
-                                            _fileProcessing.TryRemove(e.FullPath, out _);
-                                        }
-                                    }
-                                });
-                                break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (e.Name is not null && !s_backupFilePartials.Any(p => e.Name.Contains(p)))
-                        {
-                            _loggerService?.Error($"Project Explorer: error processing {e.Name}: {ex.Message}");
-                        }
-                    }
-
-                    FileSystemModel? FindParentModel(string fullPath)
-                    {
-                        if (string.IsNullOrEmpty(fullPath))
-                            return null;
-
-                        var parentPath = Path.GetDirectoryName(fullPath);
-                        if (string.IsNullOrEmpty(parentPath))
-                            return null;
-
-                        return _fileLookup.TryGetValue(parentPath, out var parent)
-                            ? parent
-                            : null;
+                        _loggerService?.Error($"Project Explorer: error processing {e.Name}: {ex.Message}");
                     }
                 }
 
-                DispatcherHelper.RunOnMainThread(() =>
+                FileSystemModel? FindParentModel(string fullPath)
                 {
-                    FileList.AddRange(created);
-                    if (FileTree.Count < 3)
-                    {
-                        FileTree.AddRange(created);
-                    }
+                    if (string.IsNullOrEmpty(fullPath))
+                        return null;
 
+                    var parentPath = Path.GetDirectoryName(fullPath);
+                    if (string.IsNullOrEmpty(parentPath))
+                        return null;
 
-                }, DispatcherPriority.Background);
-            }
-        }
-
-        /// <summary>
-        /// Creates a FileSystemMoodel from a FileSystemEventArgsWrapper and parent.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private FileSystemModel? CreateFromScratch(FileSystemModel? parent, FileSystemEventArgsWrapper e)
-        {
-            if (parent == null && e.Name != _projectDirectory && e.Name != "archive" && e.Name != "raw" && e.Name != "resources")
-            {
-                return null;
+                    return _fileLookup.TryGetValue(parentPath, out var parent)
+                        ? parent
+                        : null;
+                }
             }
 
-            if (string.IsNullOrEmpty(e.FullPath))
-                return null;
-
-            var fullPath = e.FullPath;
-
-            if (IsIgnoredPath(fullPath))
-                return null;
-
-            try
+            DispatcherHelper.RunOnMainThread(() =>
             {
-                var isDirectory = Directory.Exists(fullPath);
-                var relativePath = fullPath[(_projectDirectory.Length + 1)..];
-                var name = Path.GetFileName(e.FullPath);
-
-                bool desiredExpansion = isDirectory && _getDesiredExpansionState(relativePath);
-                var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion);
-                return model;
-            }
-            catch (Exception ex)
-            {
-                _loggerService?.Warning($"Failed to create FileSystemModel for {fullPath}: {ex.Message}");
-                return null;
-            }
-        }
-
-        private bool IsIgnoredPath(string fullPath)
-        {
-            if (string.IsNullOrWhiteSpace(fullPath)) return true;
-
-            var fileName = Path.GetFileName(fullPath);
-            return HasIgnoredExtension(fileName)
-                   || s_backupFilePartials.Any(p => fileName.Contains(p, StringComparison.OrdinalIgnoreCase))
-                   || fileName.StartsWith(".");
-        }
-
-        /// <summary>
-        /// Subscriber to published lists of files being added by other objects.
-        /// Bypasses the need for monitoring file system events for performance.
-        /// </summary>
-        /// <param name="msg"></param>
-        private void OnFilesImported(FilesImportedMessage msg)
-        {
-            var batch = new List<FileSystemModel>();
-
-            switch (msg)
-            {
-                case FilesImportedMessage.GameFiles(var files):
-                    foreach (var file in files)
-                    {
-                        var gameRelativePath = file.FileName;
-                        var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
-                        var fileInfo = new FileInfo(fullPath);
-                        CreateFileAndAllNeededDirectories(FileDestination.Archive, fileInfo, batch);
-                    }
-
-                    break;
-                case FilesImportedMessage.ArchiveFiles(var files):
-                    foreach (var file in files)
-                    {
-                        CreateFileAndAllNeededDirectories(FileDestination.Archive, file, batch);
-                    }
-
-                    break;
-                case FilesImportedMessage.RawFiles(var files):
-                    foreach (var file in files)
-                    {
-                        CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
-                    }
-
-                    break;
-
-            }
-
-            FileList.AddRange(batch);
-            Resume();
-
-            // Log added files in the background to avoid hanging the UI on very large imports.
-            LogBatchAddedFiles(batch);
-        }
-
-        /// <summary>
-        /// Applies an authoritative, already-completed set of file moves (see
-        /// <see cref="IProjectEvents.PublishFilesMoved"/>) to the domain models and. This is the
-        /// replacement for optimistic handlers: the tree is only ever changed to match what actually
-        /// happened on disk, so declining an overwrite prompt can no longer leave it out of sync.
-        /// Runs on the UI thread and is idempotent, so racing with a live OS watcher event (or a
-        /// duplicate publish) is a no-op.
-        /// </summary>
-        private void OnFilesMoved(FilesMovedMessage msg)
-        {
-            if (msg.Moves.Count == 0)
-            {
-                return;
-            }
-
-            var sourceParents = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var batch = new List<FileSystemModel>();
-
-            foreach (var (from, to) in msg.Moves)
-            {
-                if (string.IsNullOrEmpty(to))
+                FileList.AddRange(created);
+                if (FileTree.Count < 3)
                 {
-                    continue;
+                    FileTree.AddRange(created);
                 }
 
-                if (!string.IsNullOrEmpty(from)
-                    && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
-                    && PathsShareParent(from, to)
-                    && _fileLookup.TryGetValue(from, out var renameModel)
-                    && !renameModel.IsDirectory)
-                {
-                    if (_fileLookup.TryGetValue(to, out var overwritten) && !ReferenceEquals(overwritten, renameModel))
-                    {
-                        RemoveModel(overwritten);
-                    }
 
-                    RenameModelInPlace(renameModel, from, to);
-                    continue;
+            }, DispatcherPriority.Background);
+        }
+    }
+
+    /// <summary>
+    /// Creates a FileSystemMoodel from a FileSystemEventArgsWrapper and parent.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private FileSystemModel? CreateFromScratch(FileSystemModel? parent, FileSystemEventArgsWrapper e)
+    {
+        if (parent == null && e.Name != _projectDirectory && e.Name != "archive" && e.Name != "raw" && e.Name != "resources")
+        {
+            return null;
+        }
+
+        if (string.IsNullOrEmpty(e.FullPath))
+            return null;
+
+        var fullPath = e.FullPath;
+
+        if (IsIgnoredPath(fullPath))
+            return null;
+
+        try
+        {
+            var isDirectory = Directory.Exists(fullPath);
+            var relativePath = fullPath[(_projectDirectory.Length + 1)..];
+            var name = Path.GetFileName(e.FullPath);
+
+            bool desiredExpansion = isDirectory && GetDesiredExpansionState(relativePath);
+            var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion);
+            return model;
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Warning($"Failed to create FileSystemModel for {fullPath}: {ex.Message}");
+            return null;
+        }
+    }
+
+    private bool IsIgnoredPath(string fullPath)
+    {
+        if (string.IsNullOrWhiteSpace(fullPath)) return true;
+
+        var fileName = Path.GetFileName(fullPath);
+        return HasIgnoredExtension(fileName)
+               || s_backupFilePartials.Any(p => fileName.Contains(p, StringComparison.OrdinalIgnoreCase))
+               || fileName.StartsWith(".");
+    }
+
+    /// <summary>
+    /// Subscriber to published lists of files being added by other objects.
+    /// Bypasses the need for monitoring file system events for performance.
+    /// </summary>
+    /// <param name="msg"></param>
+    private void OnFilesImported(FilesImportedMessage msg)
+    {
+        var batch = new List<FileSystemModel>();
+
+        switch (msg)
+        {
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var file in files)
+                {
+                    var gameRelativePath = file.FileName;
+                    var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
+                    var fileInfo = new FileInfo(fullPath);
+                    CreateFileAndAllNeededDirectories(FileDestination.Archive, fileInfo, batch);
                 }
 
-                // Otherwise remove the source model, then add the destination.
-                if (!string.IsNullOrEmpty(from))
+                break;
+            case FilesImportedMessage.ArchiveFiles(var files):
+                foreach (var file in files)
                 {
-                    var parent = Path.GetDirectoryName(from);
-                    if (!string.IsNullOrEmpty(parent))
-                    {
-                        sourceParents.Add(parent);
-                    }
-
-                    if (_fileLookup.TryGetValue(from, out var model))
-                    {
-                        RemoveModel(model);
-                    }
+                    CreateFileAndAllNeededDirectories(FileDestination.Archive, file, batch);
                 }
 
-                EnsureModelForPath(to, batch);
-            }
-
-            if (batch.Count > 0)
-            {
-                batch.ForEach(ExpandParents);
-                FileList.AddRange(batch);
-            }
-
-            // Prune source directory models whose backing folder no longer exists (an empty folder
-            // left behind by the move was deleted on disk). Walk upward so nested empties go too.
-            foreach (var parent in sourceParents)
-            {
-                PruneVanishedDirectories(parent);
-            }
-        }
-
-        private void ExpandParents(FileSystemModel? model)
-        {
-            var current = model;
-            while (current != null)
-            {
-                if (current is { IsDirectory: true, IsExpanded: false })
+                break;
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var file in files)
                 {
-                    current.IsExpanded = true;
+                    CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
                 }
 
-                current = current.Parent;
-            }
+                break;
+
         }
 
-        private void OnFileChanged(FileChangedMessage msg)
+        FileList.AddRange(batch);
+        Resume();
+
+        // Log added files in the background to avoid hanging the UI on very large imports.
+        LogBatchAddedFiles(batch);
+    }
+
+    /// <summary>
+    /// Applies an authoritative, already-completed set of file moves (see
+    /// <see cref="IProjectEvents.PublishFilesMoved"/>) to the domain models and. This is the
+    /// replacement for optimistic handlers: the tree is only ever changed to match what actually
+    /// happened on disk, so declining an overwrite prompt can no longer leave it out of sync.
+    /// Runs on the UI thread and is idempotent, so racing with a live OS watcher event (or a
+    /// duplicate publish) is a no-op.
+    /// </summary>
+    private void OnFilesMoved(FilesMovedMessage msg)
+    {
+        if (msg.Moves.Count == 0)
         {
-            switch (msg)
+            return;
+        }
+
+        var sourceParents = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var batch = new List<FileSystemModel>();
+
+        foreach (var (from, to) in msg.Moves)
+        {
+            if (string.IsNullOrEmpty(to))
             {
-                case FileChangedMessage.Document(var file):
-                    if (file.FilePath is not string fullPath)
-                    {
-                        break;
-                    }
-
-                    if (_fileLookup.TryGetValue(fullPath, out var model))
-                    {
-                    }
-
-                    break;
+                continue;
             }
-        }
 
-        private static bool PathsShareParent(string a, string b) =>
-            string.Equals(Path.GetDirectoryName(a), Path.GetDirectoryName(b), StringComparison.OrdinalIgnoreCase);
-
-        /// <summary>
-        /// Renames a file model in place preserving node identity so the grid keeps its selection/expansion.
-        /// Re-keys the lookup rather than a remove-then-add. Must be called on the UI thread.
-        /// </summary>
-        private void RenameModelInPlace(FileSystemModel model, string oldFullName, string newFullName)
-        {
-            _fileLookup.TryRemove(oldFullName, out _);
-            model.Rename(Path.GetFileName(newFullName)); // recomputes FullName; keeps the same parent
-            _fileLookup.TryAdd(newFullName, model);
-        }
-
-        /// <summary>
-        /// Applies an authoritative set of deletions (see <see cref="IProjectEvents.PublishFileDeleted"/>
-        /// / <see cref="IProjectEvents.PublishDirectoryDeleted"/>) to the domain models. Handles BOTH
-        /// files and directories: RemoveModel recurses into children, so a deleted directory path drops
-        /// its whole subtree. Idempotent: a path the tree doesn't know is a no-op. Must run on the UI thread.
-        /// </summary>
-        private void OnFilesOrDirectoriesDeleted(FilesDeletedMessage msg)
-        {
-            foreach (var path in msg.AbsolutePaths)
+            if (!string.IsNullOrEmpty(from)
+                && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                && PathsShareParent(from, to)
+                && _fileLookup.TryGetValue(from, out var renameModel)
+                && !renameModel.IsDirectory)
             {
-                if (!string.IsNullOrEmpty(path) && _fileLookup.TryGetValue(path, out var model))
+                if (_fileLookup.TryGetValue(to, out var overwritten) && !ReferenceEquals(overwritten, renameModel))
+                {
+                    RemoveModel(overwritten);
+                }
+
+                RenameModelInPlace(renameModel, from, to);
+                continue;
+            }
+
+            // Otherwise remove the source model, then add the destination.
+            if (!string.IsNullOrEmpty(from))
+            {
+                var parent = Path.GetDirectoryName(from);
+                if (!string.IsNullOrEmpty(parent))
+                {
+                    sourceParents.Add(parent);
+                }
+
+                if (_fileLookup.TryGetValue(from, out var model))
                 {
                     RemoveModel(model);
                 }
             }
+
+            EnsureModelForPath(to, batch);
         }
 
-        /// <summary>
-        /// Ensures a <see cref="FileSystemModel"/> exists for the given absolute path, creating it
-        /// and any missing ancestor directory models up to the project root. Returns the existing
-        /// model when one is already present (keeping the apply idempotent). New models are appended
-        /// to <paramref name="batch"/> so the caller can add them to the flat list in
-        /// one shot. Must be called on the UI thread.
-        /// </summary>
-        private FileSystemModel? EnsureModelForPath(string absolutePath, List<FileSystemModel> batch)
+        if (batch.Count > 0)
         {
-            if (string.IsNullOrEmpty(absolutePath) || _projectFileSystemModel is null)
-            {
-                return null;
-            }
-
-            if (_fileLookup.TryGetValue(absolutePath, out var existing))
-            {
-                return existing;
-            }
-
-            // The project root itself is the base of every FullName but is not stored in _fileLookup.
-            if (string.Equals(absolutePath, _projectDirectory, StringComparison.OrdinalIgnoreCase))
-            {
-                return _projectFileSystemModel;
-            }
-
-            if (!absolutePath.StartsWith(_projectDirectory, StringComparison.OrdinalIgnoreCase)
-                || IsIgnoredPath(absolutePath))
-            {
-                return null;
-            }
-
-            var parentPath = Path.GetDirectoryName(absolutePath);
-            if (string.IsNullOrEmpty(parentPath))
-            {
-                return null;
-            }
-
-            var parentModel = EnsureModelForPath(parentPath, batch);
-            if (parentModel is null)
-            {
-                return null;
-            }
-
-            var isDirectory = Directory.Exists(absolutePath);
-            var relativePath = absolutePath[(_projectDirectory.Length + 1)..];
-            var name = Path.GetFileName(absolutePath);
-            var desiredExpansion = isDirectory && _getDesiredExpansionState(relativePath);
-
-            var model = new FileSystemModel(parentModel, name, relativePath, isDirectory, desiredExpansion);
-
-            if (!parentModel.Children.Contains(model))
-            {
-                parentModel.Children.Add(model);
-            }
-
-            _fileLookup.TryAdd(absolutePath, model);
-            batch.Add(model);
-            return model;
+            batch.ForEach(ExpandParents);
+            FileList.AddRange(batch);
         }
 
-        /// <summary>
-        /// Removes directory models whose backing directory no longer exists on disk, walking upward
-        /// from <paramref name="directoryAbsPath"/> so a chain of emptied parents is cleaned. Never
-        /// removes the archive/raw/resources roots. Must be called on the UI thread.
-        /// </summary>
-        private void PruneVanishedDirectories(string directoryAbsPath)
+        // Prune source directory models whose backing folder no longer exists (an empty folder
+        // left behind by the move was deleted on disk). Walk upward so nested empties go too.
+        foreach (var parent in sourceParents)
         {
-            var dir = directoryAbsPath;
-            while (!string.IsNullOrEmpty(dir)
-                   && dir.Length > _projectDirectory.Length
-                   && _fileLookup.TryGetValue(dir, out var dirModel))
+            PruneVanishedDirectories(parent);
+        }
+    }
+
+    private void ExpandParents(FileSystemModel? model)
+    {
+        var current = model;
+        while (current != null)
+        {
+            if (current is { IsDirectory: true, IsExpanded: false })
             {
-                // Never prune the archive/raw/resources roots (parent is the invisible project root).
-                if (dirModel.Parent is null || dirModel.Parent.Name == FileSystemModel.ProjectDirName)
+                current.IsExpanded = true;
+            }
+
+            current = current.Parent;
+        }
+    }
+
+    private void OnFileChanged(FileChangedMessage msg)
+    {
+        switch (msg)
+        {
+            case FileChangedMessage.Document(var file):
+                if (file.FilePath is not string fullPath)
                 {
                     break;
                 }
 
-                // Keep any directory that still exists on disk (it may hold files we did not move).
-                if (Directory.Exists(dir))
+                if (_fileLookup.TryGetValue(fullPath, out var model))
                 {
-                    break;
                 }
 
-                var parent = Path.GetDirectoryName(dir);
-                RemoveModel(dirModel);
-                dir = parent;
+                break;
+        }
+    }
+
+    private static bool PathsShareParent(string a, string b) =>
+        string.Equals(Path.GetDirectoryName(a), Path.GetDirectoryName(b), StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Renames a file model in place preserving node identity so the grid keeps its selection/expansion.
+    /// Re-keys the lookup rather than a remove-then-add. Must be called on the UI thread.
+    /// </summary>
+    private void RenameModelInPlace(FileSystemModel model, string oldFullName, string newFullName)
+    {
+        _fileLookup.TryRemove(oldFullName, out _);
+        model.Rename(Path.GetFileName(newFullName)); // recomputes FullName; keeps the same parent
+        _fileLookup.TryAdd(newFullName, model);
+    }
+
+    /// <summary>
+    /// Applies an authoritative set of deletions (see <see cref="IProjectEvents.PublishFileDeleted"/>
+    /// / <see cref="IProjectEvents.PublishDirectoryDeleted"/>) to the domain models. Handles BOTH
+    /// files and directories: RemoveModel recurses into children, so a deleted directory path drops
+    /// its whole subtree. Idempotent: a path the tree doesn't know is a no-op. Must run on the UI thread.
+    /// </summary>
+    private void OnFilesOrDirectoriesDeleted(FilesDeletedMessage msg)
+    {
+        foreach (var path in msg.AbsolutePaths)
+        {
+            if (!string.IsNullOrEmpty(path) && _fileLookup.TryGetValue(path, out var model))
+            {
+                RemoveModel(model);
             }
         }
+    }
 
-        /// <summary>
-        /// Logs a large number of added files in the background.
-        /// Chunks the list, logs alphabetically, uses a low-priority background task with light debouncing,
-        /// and ends with a summary count.
-        /// </summary>
-        private void LogBatchAddedFiles(List<FileSystemModel> addedFiles)
+    /// <summary>
+    /// Ensures a <see cref="FileSystemModel"/> exists for the given absolute path, creating it
+    /// and any missing ancestor directory models up to the project root. Returns the existing
+    /// model when one is already present (keeping the apply idempotent). New models are appended
+    /// to <paramref name="batch"/> so the caller can add them to the flat list in
+    /// one shot. Must be called on the UI thread.
+    /// </summary>
+    private FileSystemModel? EnsureModelForPath(string absolutePath, List<FileSystemModel> batch)
+    {
+        if (string.IsNullOrEmpty(absolutePath) || _projectFileSystemModel is null)
         {
-            if (_loggerService == null || addedFiles.Count == 0)
-                return;
+            return null;
+        }
 
-            // Capture the token at the start to avoid races if the CTS is replaced mid-operation
-            var token = _fileLoggingCts?.Token ?? CancellationToken.None;
+        if (_fileLookup.TryGetValue(absolutePath, out var existing))
+        {
+            return existing;
+        }
 
-            Task.Factory.StartNew(async () =>
+        // The project root itself is the base of every FullName but is not stored in _fileLookup.
+        if (string.Equals(absolutePath, _projectDirectory, StringComparison.OrdinalIgnoreCase))
+        {
+            return _projectFileSystemModel;
+        }
+
+        if (!absolutePath.StartsWith(_projectDirectory, StringComparison.OrdinalIgnoreCase)
+            || IsIgnoredPath(absolutePath))
+        {
+            return null;
+        }
+
+        var parentPath = Path.GetDirectoryName(absolutePath);
+        if (string.IsNullOrEmpty(parentPath))
+        {
+            return null;
+        }
+
+        var parentModel = EnsureModelForPath(parentPath, batch);
+        if (parentModel is null)
+        {
+            return null;
+        }
+
+        var isDirectory = Directory.Exists(absolutePath);
+        var relativePath = absolutePath[(_projectDirectory.Length + 1)..];
+        var name = Path.GetFileName(absolutePath);
+        var desiredExpansion = isDirectory && GetDesiredExpansionState(relativePath);
+
+        var model = new FileSystemModel(parentModel, name, relativePath, isDirectory, desiredExpansion);
+
+        if (!parentModel.Children.Contains(model))
+        {
+            parentModel.Children.Add(model);
+        }
+
+        _fileLookup.TryAdd(absolutePath, model);
+        batch.Add(model);
+        return model;
+    }
+
+    /// <summary>
+    /// Removes directory models whose backing directory no longer exists on disk, walking upward
+    /// from <paramref name="directoryAbsPath"/> so a chain of emptied parents is cleaned. Never
+    /// removes the archive/raw/resources roots. Must be called on the UI thread.
+    /// </summary>
+    private void PruneVanishedDirectories(string directoryAbsPath)
+    {
+        var dir = directoryAbsPath;
+        while (!string.IsNullOrEmpty(dir)
+               && dir.Length > _projectDirectory.Length
+               && _fileLookup.TryGetValue(dir, out var dirModel))
+        {
+            // Never prune the archive/raw/resources roots (parent is the invisible project root).
+            if (dirModel.Parent is null || dirModel.Parent.Name == FileSystemModel.ProjectDirName)
             {
-                try
+                break;
+            }
+
+            // Keep any directory that still exists on disk (it may hold files we did not move).
+            if (Directory.Exists(dir))
+            {
+                break;
+            }
+
+            var parent = Path.GetDirectoryName(dir);
+            RemoveModel(dirModel);
+            dir = parent;
+        }
+    }
+
+    /// <summary>
+    /// Logs a large number of added files in the background.
+    /// Chunks the list, logs alphabetically, uses a low-priority background task with light debouncing,
+    /// and ends with a summary count.
+    /// </summary>
+    private void LogBatchAddedFiles(List<FileSystemModel> addedFiles)
+    {
+        if (_loggerService == null || addedFiles.Count == 0)
+            return;
+
+        // Capture the token at the start to avoid races if the CTS is replaced mid-operation
+        var token = _fileLoggingCts?.Token ?? CancellationToken.None;
+
+        Task.Factory.StartNew(async () =>
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+
+                // Sort alphabetically for consistent logging order
+                var sortedNames = addedFiles
+                    .Where(file => !file.IsDirectory)
+                    .Select(f => f.FullName)
+                    .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                const int chunkSize = 100;
+                int total = sortedNames.Count;
+
+                for (int i = 0; i < sortedNames.Count; i += chunkSize)
                 {
                     token.ThrowIfCancellationRequested();
 
-                    // Sort alphabetically for consistent logging order
-                    var sortedNames = addedFiles
-                        .Where(file => !file.IsDirectory)
-                        .Select(f => f.FullName)
-                        .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
-                        .ToList();
+                    var chunk = sortedNames.Skip(i).Take(chunkSize);
+                    var message = string.Join(Environment.NewLine,
+                        chunk.Select(name => $"Added file to project: {name}"));
 
-                    const int chunkSize = 100;
-                    int total = sortedNames.Count;
+                    _loggerService.Info(message);
 
-                    for (int i = 0; i < sortedNames.Count; i += chunkSize)
-                    {
-                        token.ThrowIfCancellationRequested();
-
-                        var chunk = sortedNames.Skip(i).Take(chunkSize);
-                        var message = string.Join(Environment.NewLine,
-                            chunk.Select(name => $"Added file to project: {name}"));
-
-                        _loggerService.Info(message);
-
-                        // Light debouncing / pacing so we don't flood the logger during very large imports
-                        await Task.Delay(60, token);
-                    }
-
-                    token.ThrowIfCancellationRequested();
-                    _loggerService.Info($"Added {total} files to the project via batch import.");
+                    // Light debouncing / pacing so we don't flood the logger during very large imports
+                    await Task.Delay(60, token);
                 }
-                catch (OperationCanceledException)
-                {
-                    // Expected when project is unwatched during a large batch import
-                }
-                catch (Exception ex)
-                {
-                    _loggerService?.Warning($"Error while logging batch import details: {ex.Message}");
-                }
-            },
-            token,
-            TaskCreationOptions.LongRunning,
-            TaskScheduler.Default);
+
+                token.ThrowIfCancellationRequested();
+                _loggerService.Info($"Added {total} files to the project via batch import.");
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected when project is unwatched during a large batch import
+            }
+            catch (Exception ex)
+            {
+                _loggerService?.Warning($"Error while logging batch import details: {ex.Message}");
+            }
+        },
+        token,
+        TaskCreationOptions.LongRunning,
+        TaskScheduler.Default);
+    }
+
+    private enum FileDestination
+    {
+        Archive,
+        Raw,
+        Resources
+    }
+
+    private void CreateFileAndAllNeededDirectories(FileDestination fileDestination, FileInfo file, List<FileSystemModel> batch)
+    {
+        var destination = "";
+
+        switch (fileDestination)
+        {
+            case FileDestination.Archive:
+                destination = "archive";
+                break;
+            case FileDestination.Raw:
+                destination = "raw";
+                break;
+            default:
+                destination = "";
+                break;
         }
 
-        private enum FileDestination
+        var fullPath = file.FullName;
+        var fileName = file.Name;
+        var parentDirInfo = Directory.GetParent(fullPath);
+        var parentPath = parentDirInfo!.FullName;
+        var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
+        // Optional: unit tests and headless hosts have no AppViewModel in the Splat locator.
+        // Expansion still works via ExpandParents; persistence goes through PE when available.
+        var projectExplorer = Locator.Current.GetService<AppViewModel>()
+            ?.GetToolViewModel<ProjectExplorerViewModel>();
+        Dictionary<string, FileSystemModel> expandedLeaves = new();
+
+        if (_fileLookup.TryGetValue(parentPath, out var parent))
         {
-            Archive,
-            Raw,
-            Resources
-        }
-
-        private void CreateFileAndAllNeededDirectories(FileDestination fileDestination, FileInfo file, List<FileSystemModel> batch)
-        {
-            var destination = "";
-
-            switch (fileDestination)
-            {
-                case FileDestination.Archive:
-                    destination = "archive";
-                    break;
-                case FileDestination.Raw:
-                    destination = "raw";
-                    break;
-                default:
-                    destination = "";
-                    break;
-            }
-
-            var fullPath = file.FullName;
-            var fileName = file.Name;
-            var parentDirInfo = Directory.GetParent(fullPath);
-            var parentPath = parentDirInfo!.FullName;
-            var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
-            // Optional: unit tests and headless hosts have no AppViewModel in the Splat locator.
-            // Expansion still works via ExpandParents; persistence goes through PE when available.
-            var projectExplorer = Locator.Current.GetService<AppViewModel>()
-                ?.GetToolViewModel<ProjectExplorerViewModel>();
-            Dictionary<string, FileSystemModel> expandedLeaves = new();
-
-            if (_fileLookup.TryGetValue(parentPath, out var parent))
-            {
-                if (!_fileLookup.ContainsKey(fullPath))
-                {
-                    var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
-                    parent.Children.Add(fileSystemModel);
-                    _fileLookup.TryAdd(fullPath, fileSystemModel);
-                    batch.Add(fileSystemModel);
-
-                    ExpandAllParents(parent, expandedLeaves, projectExplorer);
-                }
-                return;
-            }
-
-            var parentDirs = new Stack<DirectoryInfo>();
-            var currentLevel = Directory.GetParent(fullPath)!;
-
-            while (currentLevel.Name != destination)
-            {
-                parentDirs.Push(currentLevel);
-                currentLevel = currentLevel.Parent!;
-            }
-
-            var lookupKey = Path.Combine(_projectDirectory, destination);
-
-            if (!_fileLookup.TryGetValue(lookupKey, out var parentModel))
-            {
-                throw new WolvenKitException(987, $"Failed to find needed directory ${lookupKey}. " +
-                                                  "This means the file system is in an inconsistent state. " +
-                                                  "Please close and reload WolvenKit. ");
-
-            }
-
-            while (parentDirs.Count > 0)
-            {
-                var current = parentDirs.Pop();
-
-                // If the directory already exists in our tree...
-                if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
-                {
-                    parentModel = currentModel;
-                    continue;
-                }
-
-                // Make the new directory.
-                current.Create();
-                var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
-
-                // Make the new model for that directory, auto-expanded.
-                var newCurrentModel = new FileSystemModel(
-                    parentModel,
-                    current.Name, currentRawRelativePath,
-                    true,
-                    true
-                );
-
-                parentModel.Children.Add(newCurrentModel);
-                _fileLookup.TryAdd(current.FullName, newCurrentModel);
-                batch.Add(newCurrentModel);
-                ExpandAllParents(parentModel, expandedLeaves, projectExplorer);
-                parentModel = newCurrentModel;
-            }
-
             if (!_fileLookup.ContainsKey(fullPath))
             {
-                var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
-                batch.Add(newFileModel);
-                parentModel.Children.Add(newFileModel);
-                _fileLookup.TryAdd(fullPath, newFileModel);
+                var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
+                parent.Children.Add(fileSystemModel);
+                _fileLookup.TryAdd(fullPath, fileSystemModel);
+                batch.Add(fileSystemModel);
+
+                ExpandAllParents(parent, expandedLeaves, projectExplorer);
             }
+            return;
         }
 
-        private static void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves, ProjectExplorerViewModel? projectExplorer)
+        var parentDirs = new Stack<DirectoryInfo>();
+        var currentLevel = Directory.GetParent(fullPath)!;
+
+        while (currentLevel.Name != destination)
         {
-            FileSystemModel? expandParent = parent;
+            parentDirs.Push(currentLevel);
+            currentLevel = currentLevel.Parent!;
+        }
 
-            while (expandParent != null)
+        var lookupKey = Path.Combine(_projectDirectory, destination);
+
+        if (!_fileLookup.TryGetValue(lookupKey, out var parentModel))
+        {
+            throw new WolvenKitException(987, $"Failed to find needed directory ${lookupKey}. " +
+                                              "This means the file system is in an inconsistent state. " +
+                                              "Please close and reload WolvenKit. ");
+
+        }
+
+        while (parentDirs.Count > 0)
+        {
+            var current = parentDirs.Pop();
+
+            // If the directory already exists in our tree...
+            if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
             {
-                if (expandedLeaves.ContainsKey(expandParent.FullName))
-                {
-                    expandParent = null;
-                    continue;
-                }
-
-                // Auto-expand the existing parent. Prefer PE so expansion state is persisted when
-                // running in the app; fall back to IsExpanded for headless/unit-test hosts.
-                if (projectExplorer != null)
-                {
-                    projectExplorer.NotifyDirectoryExpanded(expandParent);
-                }
-                else if (expandParent.IsDirectory && !expandParent.IsExpanded)
-                {
-                    expandParent.IsExpanded = true;
-                }
-
-                expandedLeaves[expandParent.FullName] = expandParent;
-                expandParent = expandParent.Parent;
+                parentModel = currentModel;
+                continue;
             }
+
+            // Make the new directory.
+            current.Create();
+            var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
+
+            // Make the new model for that directory, auto-expanded.
+            var newCurrentModel = new FileSystemModel(
+                parentModel,
+                current.Name, currentRawRelativePath,
+                true,
+                true
+            );
+
+            parentModel.Children.Add(newCurrentModel);
+            _fileLookup.TryAdd(current.FullName, newCurrentModel);
+            batch.Add(newCurrentModel);
+            ExpandAllParents(parentModel, expandedLeaves, projectExplorer);
+            parentModel = newCurrentModel;
+        }
+
+        if (!_fileLookup.ContainsKey(fullPath))
+        {
+            var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
+            batch.Add(newFileModel);
+            parentModel.Children.Add(newFileModel);
+            _fileLookup.TryAdd(fullPath, newFileModel);
+        }
+    }
+
+    private static void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves, ProjectExplorerViewModel? projectExplorer)
+    {
+        FileSystemModel? expandParent = parent;
+
+        while (expandParent != null)
+        {
+            if (expandedLeaves.ContainsKey(expandParent.FullName))
+            {
+                expandParent = null;
+                continue;
+            }
+
+            // Auto-expand the existing parent. Prefer PE so expansion state is persisted when
+            // running in the app; fall back to IsExpanded for headless/unit-test hosts.
+            if (projectExplorer != null)
+            {
+                projectExplorer.NotifyDirectoryExpanded(expandParent);
+            }
+            else if (expandParent.IsDirectory && !expandParent.IsExpanded)
+            {
+                expandParent.IsExpanded = true;
+            }
+
+            expandedLeaves[expandParent.FullName] = expandParent;
+            expandParent = expandParent.Parent;
         }
     }
 

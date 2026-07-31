@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -40,10 +46,8 @@ public class WatcherServiceGameArchiveIntegrationTests : IDisposable
 {
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
-    private readonly ProjectExplorerViewModel.WatcherService _watcher;
+    private readonly ProjectExplorerViewModel _watcher;
     private readonly string _tempProjectDir;
-
-    private static bool NoOp(string rawRelativePath) => false;
 
     // === Real game archive loading for realistic large-project tests ===
     private static readonly Lazy<IArchiveManager> s_archiveManager = new(() =>
@@ -100,7 +104,21 @@ public class WatcherServiceGameArchiveIntegrationTests : IDisposable
     {
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
-        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents);
+        _watcher = new ProjectExplorerViewModel(
+            (AppViewModel)RuntimeHelpers.GetUninitializedObject(typeof(AppViewModel)),
+            new Mock<IProjectManager>().Object,
+            _loggerMock.Object,
+            new Mock<INotificationService>().Object,
+            new Mock<IProgressService<double>>().Object,
+            new Mock<IModTools>().Object,
+            new Mock<IGameControllerFactory>().Object,
+            new Mock<IPluginService>().Object,
+            new Mock<ISettingsManager>().Object,
+            new Mock<IModifierViewStateService>().Object,
+            new Mock<IArchiveManager>().Object,
+            (ProjectResourceTools)RuntimeHelpers.GetUninitializedObject(typeof(ProjectResourceTools)),
+            (ImportExportHelper)RuntimeHelpers.GetUninitializedObject(typeof(ImportExportHelper)),
+            _projectEvents);
 
         _tempProjectDir = Path.Combine(Path.GetTempPath(), "WatcherServiceGameArchive_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectDir);
