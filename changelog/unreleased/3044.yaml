@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3044
+      author: "gistya"
+      description: "Updates WolvenKit to .NET SDK 10 targeting Windows 11. Includes security-related NuGet dependency changes."
