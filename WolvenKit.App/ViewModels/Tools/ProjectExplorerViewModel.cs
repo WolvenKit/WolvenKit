@@ -312,7 +312,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
         else
         {
-            throw new WolvenKitException(0x01a3e717,
+            _loggerService.Warning(
                 $"Loading the project has seemed to fail. Please restart WolvenKit and try again. If this issue persists, please contact support on the WolvenKit discord.");
         }
     }
