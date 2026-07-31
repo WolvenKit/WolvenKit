@@ -5,7 +5,7 @@
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <Platforms>x64</Platforms>
-    <TargetFramewor>net10.0-windows10.0.26100.0</TargetFramewor>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
