@@ -300,11 +300,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         OnSetLoading?.Invoke(this, (CurrentLoadingMode));
         _projectWatcher.ProgressIndicatorCancellationToken = Guid.Empty;
 
-        // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
-        // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from
-        // any mode, so this can't strand the guard if the load took an unusual path.
-
-        _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
+        if (ActiveProject != null)
+        {
+            _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
+        }
+        else
+        {
+            throw new WolvenKitException(0x01a3e717,
+                $"Loading the project has seemed to fail. Please restart WolvenKit and try again. If this issue persists, please contact support on the WolvenKit discord.");
+        }
     }
 
     /// <summary>
