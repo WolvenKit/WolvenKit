@@ -42,7 +42,7 @@ namespace WolvenKit.IntegrationTests.App.ViewModels.Tools;
 /// Tests in the same area that use synthetic <c>FakeGameFile</c> data stay in
 /// WolvenKit.UnitTests/App/ViewModels/Tools/WatcherServiceTests.cs.
 /// </summary>
-public class WatcherServiceGameArchiveIntegrationTests : IDisposable
+public class ProjectExplorerWatcherGameArchiveIntegrationTests : IDisposable
 {
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
@@ -100,7 +100,7 @@ public class WatcherServiceGameArchiveIntegrationTests : IDisposable
             .ToList();
     }
 
-    public WatcherServiceGameArchiveIntegrationTests()
+    public ProjectExplorerWatcherGameArchiveIntegrationTests()
     {
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
