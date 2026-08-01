@@ -1315,10 +1315,7 @@ public partial class ProjectExplorerViewModel
         var parentDirInfo = Directory.GetParent(fullPath);
         var parentPath = parentDirInfo!.FullName;
         var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
-        // Optional: unit tests and headless hosts have no AppViewModel in the Splat locator.
-        // Expansion still works via ExpandParents; persistence goes through PE when available.
-        var projectExplorer = Locator.Current.GetService<AppViewModel>()
-            ?.GetToolViewModel<ProjectExplorerViewModel>();
+
         Dictionary<string, FileSystemModel> expandedLeaves = new();
 
         if (_fileLookup.TryGetValue(parentPath, out var parent))
@@ -1330,7 +1327,7 @@ public partial class ProjectExplorerViewModel
                 _fileLookup.TryAdd(fullPath, fileSystemModel);
                 batch.Add(fileSystemModel);
 
-                ExpandAllParents(parent, expandedLeaves, projectExplorer);
+                ExpandAllParents(parent, expandedLeaves);
             }
             return;
         }
@@ -1380,7 +1377,7 @@ public partial class ProjectExplorerViewModel
             parentModel.Children.Add(newCurrentModel);
             _fileLookup.TryAdd(current.FullName, newCurrentModel);
             batch.Add(newCurrentModel);
-            ExpandAllParents(parentModel, expandedLeaves, projectExplorer);
+            ExpandAllParents(parentModel, expandedLeaves);
             parentModel = newCurrentModel;
         }
 
@@ -1393,7 +1390,7 @@ public partial class ProjectExplorerViewModel
         }
     }
 
-    private static void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves, ProjectExplorerViewModel? projectExplorer)
+    private void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves)
     {
         FileSystemModel? expandParent = parent;
 
@@ -1405,17 +1402,7 @@ public partial class ProjectExplorerViewModel
                 continue;
             }
 
-            // Auto-expand the existing parent. Prefer PE so expansion state is persisted when
-            // running in the app; fall back to IsExpanded for headless/unit-test hosts.
-            if (projectExplorer != null)
-            {
-                projectExplorer.NotifyDirectoryExpanded(expandParent);
-            }
-            else if (expandParent.IsDirectory && !expandParent.IsExpanded)
-            {
-                expandParent.IsExpanded = true;
-            }
-
+            NotifyDirectoryExpanded(expandParent);
             expandedLeaves[expandParent.FullName] = expandParent;
             expandParent = expandParent.Parent;
         }
