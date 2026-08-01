@@ -47,6 +47,8 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
     {
+        #region fields
+
         /// <summary>Identifies the <see cref="TreeItemSource"/> dependency property.</summary>
         public static readonly DependencyProperty TreeItemSourceProperty =
             DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileSystemModel>),
@@ -69,7 +71,7 @@ namespace WolvenKit.Views.Tools
         }
 
         private string _currentFolderQuery = "";
-
+        private bool _automatic;
         private HashSet<string> _searchVisiblePaths;
 
         private readonly DispatcherTimer _searchDebounceTimer;
@@ -90,7 +92,11 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private bool _searchMutatedExpansion;
 
-        #region Constructors
+        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
+
+        #endregion fields
+
+        #region Constructor
 
         public ProjectExplorerView()
         {
@@ -292,8 +298,6 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
-
         #region Project_Loading
 
         private bool ShouldStartLoadingProject(ProjectExplorerViewModel.LoadingMode mode)
@@ -370,25 +374,6 @@ namespace WolvenKit.Views.Tools
             _loadingMode = mode;
         }
 
-        private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
-        {
-            var dialog = new RenameDialog(showCheckbox);
-            if (dialog.ViewModel is not null)
-            {
-                dialog.ViewModel.Text = input;
-                dialog.ViewModel.Title = "Enter new file name";
-            }
-
-            if (dialog.ViewModel is not RenameDialogViewModel innerVm
-                || dialog.ShowDialog(Application.Current.MainWindow) != true)
-            {
-                return (string.Empty, false);
-            }
-
-            return (innerVm.Text, innerVm.EnableRefactoring == true);
-        }
-
-
         private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
         {
             Console.WriteLine("IndicateProjectLoading");
@@ -413,6 +398,10 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        #endregion Project_Loading
+
+        #region refresh
+
         private void RefreshFlatViewIfNeeded()
         {
             if (TreeGridFlat.IsVisible)
@@ -422,23 +411,12 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void RefreshTreeViewIfNeeded()
-        {
-            if (TreeGrid.IsVisible)
-            {
-                TreeGrid.View.Filter = IsFileIn;
-                TreeGrid.View.Refresh();
-            }
-        }
-
         private void ResetCurrentFolderQuerySearchFilter()
         {
             _currentFolderQuery = "";
             _searchVisiblePaths = null;
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
         }
-
-        #endregion Project_Loading
 
         private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
@@ -508,27 +486,51 @@ namespace WolvenKit.Views.Tools
             panel.InvalidateMeasureInfo();
             panel.InvalidateMeasure();
             panel.InvalidateArrange();
+
+            return;
+
+            T FindVisualDescendant<T>(DependencyObject root) where T : DependencyObject
+            {
+                var count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
+                for (var i = 0; i < count; i++)
+                {
+                    var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+                    if (child is T match)
+                    {
+                        return match;
+                    }
+
+                    var nested = FindVisualDescendant<T>(child);
+                    if (nested != null)
+                    {
+                        return nested;
+                    }
+                }
+
+                return default;
+            }
         }
 
-        private static T FindVisualDescendant<T>(DependencyObject root) where T : DependencyObject
-        {
-            var count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
-            for (var i = 0; i < count; i++)
-            {
-                var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
-                if (child is T match)
-                {
-                    return match;
-                }
+        #endregion refresh
 
-                var nested = FindVisualDescendant<T>(child);
-                if (nested != null)
-                {
-                    return nested;
-                }
+        #region menus & toggles
+
+        private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
+        {
+            var dialog = new RenameDialog(showCheckbox);
+            if (dialog.ViewModel is not null)
+            {
+                dialog.ViewModel.Text = input;
+                dialog.ViewModel.Title = "Enter new file name";
             }
 
-            return default;
+            if (dialog.ViewModel is not RenameDialogViewModel innerVm
+                || dialog.ShowDialog(Application.Current.MainWindow) != true)
+            {
+                return (string.Empty, false);
+            }
+
+            return (innerVm.Text, innerVm.EnableRefactoring == true);
         }
 
         private void OnToggleFlatMode(object sender, EventArgs e)
@@ -552,6 +554,15 @@ namespace WolvenKit.Views.Tools
 
             ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
+
+        private void OnContextMenuOpen(object sender, ContextMenuEventArgs e)
+        {
+            ViewModel?.ModifierStateService.RefreshModifierStates();
+        }
+
+        #endregion
+
+        #region expand/collapse
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
@@ -625,8 +636,6 @@ namespace WolvenKit.Views.Tools
             ViewModel.NotifyDirectoryExpanded(fileSystemModel);
         }
 
-        private bool _automatic;
-
         private void TreeGrid_OnNodeCollapsing(object sender, NodeCollapsingEventArgs e)
         {
             if (ViewModel is null || _automatic)
@@ -695,64 +704,145 @@ namespace WolvenKit.Views.Tools
             ViewModel.NotifyDirectoryCollapsed(fileSystemModel);
         }
 
-        private void AddKeyUpEvent()
+        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is null || ViewModel.IsKeyUpEventAssigned)
+            if (ViewModel is null)
             {
                 return;
             }
 
-            // register to KeyUp because KeyDown doesn't forward "F2"
-            KeyUp += OnKeyUp;
-            ViewModel.IsKeyUpEventAssigned = true;
+            var model = ViewModel.SelectedItem;
+            var node = TreeGrid.View.Nodes.GetNode(model);
+            ExpandAllNodes(node);
         }
 
-        private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
+        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
         {
-            if (e.Node.Item is not FileSystemModel model)
+            if (ViewModel is null)
             {
                 return;
             }
 
-            if (!model.IsDirectory)
-            {
-                ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
-                return;
-            }
+            var model = ViewModel.SelectedItem;
+            var node = TreeGrid.View.Nodes.GetNode(model);
+            CollapseAllNodes(node);
+            TreeGrid.ExpandNode(node);
+        }
 
-            if (sender is not SfTreeGrid { Name: nameof(TreeGrid) })
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            foreach (var viewNode in TreeGrid.View.Nodes)
             {
-                return;
-            }
-
-            if (e.Node.IsExpanded)
-            {
-                TreeGrid.CollapseNode(e.Node);
-            }
-            else
-            {
-                TreeGrid.ExpandNode(e.Node);
+                if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
+                {
+                    ExpandAllNodes(viewNode);
+                }
             }
         }
 
-        /// <summary>
-        /// Called from view on key down event. Handles search bar and rename/delete commands.
-        /// </summary>
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e)
         {
-            if (PESearchBar.IsFocused)
+            foreach (var viewNode in TreeGrid.View.Nodes)
             {
-                return;
+                if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
+                {
+                    CollapseAllNodes(viewNode);
+                }
             }
-            if (e.Key == Key.F2)
+        }
+
+        private void RestoreExpansionRecursive(IEnumerable<TreeNode> nodes)
+        {
+            if (ViewModel is null || nodes is null)
             {
-                ViewModel?.RenameFileCommand.SafeExecute(null);
                 return;
             }
 
-            if (e.Key == Key.Delete)
+            foreach (var node in nodes)
             {
-                ViewModel?.DeleteFileCommand.SafeExecute(null);
+                if (node.Item is not FileSystemModel { IsDirectory: true } model)
+                {
+                    continue;
+                }
+
+                // Depth-first: fix children before this node so collapsing a parent
+                // does not leave child model/view state inconsistent.
+                if (node.ChildNodes is { Count: > 0 })
+                {
+                    RestoreExpansionRecursive(node.ChildNodes);
+                }
+
+                // Paths never recorded stay collapsed after search (search may have opened them).
+                var desired = ViewModel.GetExpansionStateOrNull(model.RawRelativePath) is true;
+
+                if (desired)
+                {
+                    if (!node.IsExpanded)
+                    {
+                        TreeGrid.ExpandNode(node);
+                    }
+                }
+                else if (node.IsExpanded)
+                {
+                    TreeGrid.CollapseNode(node);
+                }
+            }
+        }
+
+        private void ExpandParent(TreeNode activeFileNode)
+        {
+            if (activeFileNode.ParentNode is null)
+            {
+                TreeGrid?.ExpandNode(activeFileNode);
+                return;
+            }
+
+            ExpandParent(activeFileNode.ParentNode);
+            TreeGrid?.ExpandNode(activeFileNode.ParentNode);
+        }
+
+        #endregion expand/collapse
+
+        #region grid responders
+
+        private void ScrollToOpenFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            var activeFileNode =
+                TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath);
+            activeFileNode ??= GetTreeNode(activeFile.FilePath, TreeGrid.View.Nodes.FirstOrDefault());
+
+            if (activeFileNode is null)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            ExpandParent(activeFileNode);
+
+            TreeGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfGridBase.SelectedItemProperty, activeFileNode);
+
+            ViewModel.SelectedItem = activeFileNode.Item as FileSystemModel;
+
+            var rowIndex = TreeGrid.ResolveToRowIndex(activeFileNode);
+            var columnIndex = TreeGrid.ResolveToStartColumnIndex();
+            TreeGrid.ScrollInView(new RowColumnIndex(rowIndex, columnIndex));
+            TreeGrid.View.MoveCurrentToPosition(rowIndex);
+
+            TreeNode GetTreeNode(string filePath, TreeNode node)
+            {
+                if (node.Item is FileSystemModel model && model.FullName == filePath)
+                {
+                    return node;
+                }
+
+                return node.ChildNodes.Aggregate<TreeNode, TreeNode>(null,
+                    (current, nodeChildNode) => current ?? GetTreeNode(filePath, nodeChildNode));
             }
         }
 
@@ -832,6 +922,49 @@ namespace WolvenKit.Views.Tools
 
             RefreshFlatViewIfNeeded();
         }
+
+        private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
+        {
+            if (e.Node.Item is not FileSystemModel model)
+            {
+                return;
+            }
+
+            if (!model.IsDirectory)
+            {
+                ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
+                return;
+            }
+
+            if (sender is not SfTreeGrid { Name: nameof(TreeGrid) })
+            {
+                return;
+            }
+
+            if (e.Node.IsExpanded)
+            {
+                TreeGrid.CollapseNode(e.Node);
+            }
+            else
+            {
+                TreeGrid.ExpandNode(e.Node);
+            }
+        }
+
+        private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
+        {
+            // NOTE: Margin="0" is not applied using XAML. This is likely due
+            //       to the use of virtualization and DataTemplate. This
+            //       workaround to define expected values after view is loaded.
+            var view = sender as IconBox;
+
+            view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
+            view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
+        }
+
+        #endregion grid responders
+
+        #region search/filter
 
         private bool IsFileIn(object o)
         {
@@ -936,53 +1069,6 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            var model = ViewModel.SelectedItem;
-            var node = TreeGrid.View.Nodes.GetNode(model);
-            ExpandAllNodes(node);
-        }
-
-        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            var model = ViewModel.SelectedItem;
-            var node = TreeGrid.View.Nodes.GetNode(model);
-            CollapseAllNodes(node);
-            TreeGrid.ExpandNode(node);
-        }
-
-        private void ExpandAll_OnClick(object sender, RoutedEventArgs e)
-        {
-            foreach (var viewNode in TreeGrid.View.Nodes)
-            {
-                if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
-                {
-                    ExpandAllNodes(viewNode);
-                }
-            }
-        }
-
-        private void CollapseAll_OnClick(object sender, RoutedEventArgs e)
-        {
-            foreach (var viewNode in TreeGrid.View.Nodes)
-            {
-                if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
-                {
-                    CollapseAllNodes(viewNode);
-                }
-            }
-        }
-
         private void SearchDebounceTimer_Tick(object sender, EventArgs e)
         {
             _searchDebounceTimer.Stop();
@@ -1001,13 +1087,6 @@ namespace WolvenKit.Views.Tools
 
             _searchDebounceTimer.Stop();
             _searchDebounceTimer.Start();
-        }
-
-        private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
-        {
-            _searchDebounceTimer.Stop();
-            _currentFolderQuery = e?.Info ?? PESearchBar?.Text ?? string.Empty;
-            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
 
         private void ReapplyCurrentSearchFilter(bool expandAllForSearch)
@@ -1176,43 +1255,9 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void RestoreExpansionRecursive(IEnumerable<TreeNode> nodes)
-        {
-            if (ViewModel is null || nodes is null)
-            {
-                return;
-            }
+        #endregion search/filter
 
-            foreach (var node in nodes)
-            {
-                if (node.Item is not FileSystemModel { IsDirectory: true } model)
-                {
-                    continue;
-                }
-
-                // Depth-first: fix children before this node so collapsing a parent
-                // does not leave child model/view state inconsistent.
-                if (node.ChildNodes is { Count: > 0 })
-                {
-                    RestoreExpansionRecursive(node.ChildNodes);
-                }
-
-                // Paths never recorded stay collapsed after search (search may have opened them).
-                var desired = ViewModel.GetExpansionStateOrNull(model.RawRelativePath) is true;
-
-                if (desired)
-                {
-                    if (!node.IsExpanded)
-                    {
-                        TreeGrid.ExpandNode(node);
-                    }
-                }
-                else if (node.IsExpanded)
-                {
-                    TreeGrid.CollapseNode(node);
-                }
-            }
-        }
+        #region drag & drop
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
         {
@@ -1321,59 +1366,44 @@ namespace WolvenKit.Views.Tools
         private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
             _isDragging = false;
 
-        private static TreeNode GetTreeNode(string filePath, TreeNode node)
+        #endregion drag & drop
+
+        #region keyboard responders
+
+        private void Main_OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.OnKeyStateChanged(e);
+
+        /// <summary>
+        /// Called from view on key down event. Handles search bar and rename/delete commands.
+        /// </summary>
+        private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (node.Item is FileSystemModel model && model.FullName == filePath)
+            if (PESearchBar.IsFocused)
             {
-                return node;
+                return;
             }
-
-            return node.ChildNodes.Aggregate<TreeNode, TreeNode>(null,
-                (current, nodeChildNode) => current ?? GetTreeNode(filePath, nodeChildNode));
-        }
-
-        private void ScrollToOpenFile_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
+            if (e.Key == Key.F2)
             {
-                e.Handled = true;
+                ViewModel?.RenameFileCommand.SafeExecute(null);
                 return;
             }
 
-            var activeFileNode =
-                TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath);
-            activeFileNode ??= GetTreeNode(activeFile.FilePath, TreeGrid.View.Nodes.FirstOrDefault());
-
-            if (activeFileNode is null)
+            if (e.Key == Key.Delete)
             {
-                e.Handled = true;
-                return;
+                ViewModel?.DeleteFileCommand.SafeExecute(null);
             }
-
-            ExpandParent(activeFileNode);
-
-            TreeGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfGridBase.SelectedItemProperty, activeFileNode);
-
-            ViewModel.SelectedItem = activeFileNode.Item as FileSystemModel;
-
-            var rowIndex = TreeGrid.ResolveToRowIndex(activeFileNode);
-            var columnIndex = TreeGrid.ResolveToStartColumnIndex();
-            TreeGrid.ScrollInView(new RowColumnIndex(rowIndex, columnIndex));
-            TreeGrid.View.MoveCurrentToPosition(rowIndex);
         }
 
-        private void ExpandParent(TreeNode activeFileNode)
+        private void AddKeyUpEvent()
         {
-            if (activeFileNode.ParentNode is null)
+            if (ViewModel is null || ViewModel.IsKeyUpEventAssigned)
             {
-                TreeGrid?.ExpandNode(activeFileNode);
                 return;
             }
 
-            ExpandParent(activeFileNode.ParentNode);
-            TreeGrid?.ExpandNode(activeFileNode.ParentNode);
+            // register to KeyUp because KeyDown doesn't forward "F2"
+            KeyUp += OnKeyUp;
+            ViewModel.IsKeyUpEventAssigned = true;
         }
-
 
         private void ContextMenu_OnKeyStateChanged(object sender, KeyEventArgs e)
         {
@@ -1381,22 +1411,6 @@ namespace WolvenKit.Views.Tools
             ViewModel?.ModifierStateService.RefreshModifierStates();
         }
 
-        private void OnContextMenuOpen(object sender, ContextMenuEventArgs e)
-        {
-            ViewModel?.ModifierStateService.RefreshModifierStates();
-        }
-
-        private void Main_OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.OnKeyStateChanged(e);
-
-        private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
-        {
-            // NOTE: Margin="0" is not applied using XAML. This is likely due
-            //       to the use of virtualization and DataTemplate. This
-            //       workaround to define expected values after view is loaded.
-            var view = sender as IconBox;
-
-            view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
-            view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
-        }
+        #endregion keyboard responders
     }
 }

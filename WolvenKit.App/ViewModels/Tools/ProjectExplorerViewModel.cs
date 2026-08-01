@@ -63,6 +63,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private const string s_toolTitle = "Project Explorer";
 
+    public const string LoadProjectPurpose = "ProjectExplorer load project";
+
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
     private readonly IProjectManager _projectManager;
@@ -73,9 +75,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public readonly IModifierViewStateService ModifierStateService;
     private readonly IProjectEvents _projectEvents;
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
-    private IPluginService _pluginService;
     private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
     private object _progressLock = new();
     private DispatcherHelper.RepeatingActionHandle? _autoSaveCancelToken;
@@ -110,6 +109,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public bool IsKeyUpEventAssigned { get; set; }
 
     #endregion fields
+
+    #region constructor
 
     private static ProjectExplorerViewModel? s_instance;
     public ProjectExplorerViewModel(
@@ -166,301 +167,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
-    /// <summary>
-    /// Announces that a different project is about to load: flushes the outgoing project's state
-    /// and arms the loading chrome. Must be called before the project manager swaps its active
-    /// project, or the outgoing state is saved against the incoming one.
-    ///
-    /// Idempotent — the welcome page arms the chrome on click for responsiveness and the load path
-    /// announces the same load again; only the first call flushes.
-    /// </summary>
-    public void ProjectWillLoad(string projectPath)
-    {
-        if (CurrentLoadingMode == LoadingMode.LoadingNewProject)
-        {
-            return;
-        }
-
-        if (ActiveProject != null)
-        {
-            if (IsSameProjectPath(ActiveProject, projectPath))
-            {
-                return;
-            }
-
-            SaveProjectState();
-        }
-
-        EnableLoadingMode(LoadingMode.LoadingNewProject);
-    }
-
-    /// <summary>
-    /// Clears project-load loading chrome without reporting a successful load.
-    /// Use on cancel / failed open / same-project no-op after ProjectWillLoad armed the UI.
-    /// </summary>
-    public void CancelProjectLoad() => DisableLoadingMode(reportResult: false);
-
-    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
-    {
-        _loggerService.Debug($"Initiating project load.");
-        DispatcherHelper.PostOnMainThread(() =>
-        {
-            var activeProject = _projectManager.ActiveProject;
-            if (activeProject == null || activeProject.Equals(ActiveProject))
-            {
-                CancelProjectLoad();
-                return;
-            }
-
-            StartWatcher_AndLoadProject(activeProject, false);
-        });
-    }
-
-    private static bool IsSameProjectPath(Cp77Project activeProject, string projectPath)
-    {
-        if (string.IsNullOrWhiteSpace(projectPath))
-        {
-            return false;
-        }
-
-        try
-        {
-            var requested = Path.GetFullPath(projectPath);
-            var location = Path.GetFullPath(activeProject.Location);
-            if (string.Equals(requested, location, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            var projectDirectory = Path.GetFullPath(activeProject.ProjectDirectory);
-            return string.Equals(requested, projectDirectory, StringComparison.OrdinalIgnoreCase)
-                   || requested.StartsWith(projectDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
-                   || requested.StartsWith(projectDirectory + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
-        }
-        catch (Exception)
-        {
-            return string.Equals(activeProject.Location, projectPath, StringComparison.OrdinalIgnoreCase);
-        }
-    }
-
-    private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
-    {
-        SaveProjectExplorerExpansionStateIfDirty();
-        SaveProjectExplorerTabIfDirty();
-    }
-
-    /// <summary>
-    /// Set status of "scroll to open file" button (disable if we don't have one open)
-    /// </summary>
-    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
-        CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
-
-    #region Project_Loading
-
-    /// <summary>
-    /// Loads a project and starts watching it.
-    /// If isReload is true then we won't show `Loading` in the files pane.
-    /// </summary>
-    /// <param name="activeProject"></param>
-    /// <param name="isReload"></param>
-    public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
-    {
-        EnableLoadingMode(isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject);
-
-        RefreshAfter(() =>
-        {
-            try
-            {
-                if (ActiveProject != null && _autoSaveCancelToken is { } cancelToken)
-                {
-                    DispatcherHelper.StopRepeatingAction(cancelToken);
-                    _autoSaveCancelToken = null;
-                    SaveProjectState();
-                    ActiveProject = null;
-                    UnwatchProject();
-                }
-
-                LoadExpansionStateDictionary(activeProject);
-                ActiveProject = activeProject;
-                StartWatcher_AndLoadProject(activeProject);
-
-                DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
-                _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
-                    purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
-                    TimeSpan.FromSeconds(10));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error($"Error refreshing project: {e.Message}. Try reloading the app. If this error persists, please reach out on the WolvenKit discord.");
-
-                CancelProjectLoad();
-            }
-            finally
-            {
-                if (!isReload)
-                {
-                    RestoreProjectState(ActiveProject!);
-                    CheckForOneDriveInPath();
-                    // Don't run DisableLoadingMode here
-                }
-            }
-        });
-    }
-
-    /// <summary>
-    /// Reload the active project from disk to ensure consistency.
-    /// </summary>
-    public void ResumeWatcher_AndReloadProject()
-    {
-        if (ActiveProject is null) return;
-        StartWatcher_AndLoadProject(ActiveProject, true);
-    }
-
-    public enum LoadingMode
-    {
-        Ready,
-        LoadingNewProject,
-        ReloadingSameProject,
-        ShowLoadingDuringOperation
-    }
-
-    public const string LoadProjectPurpose = "ProjectExplorer load project";
-
-    private void EnableLoadingMode(LoadingMode mode)
-    {
-        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject && mode != LoadingMode.ShowLoadingDuringOperation)
-        {
-            return;
-        }
-
-        if (mode != CurrentLoadingMode)
-        {
-            OnSetLoading?.Invoke(this, mode);
-            CurrentLoadingMode = mode;
-        }
-
-        if (_loadingIndicatorHandle is not null)
-        {
-            return;
-        }
-
-        _loadingIndicatorHandle = DispatcherHelper.StartRepeatingAction(
-            purpose: LoadProjectPurpose,
-            () =>
-            {
-                _progressService.IsIndeterminate = true;
-                _progressService.Status = EStatus.Running;
-            },
-            _projectLoadPollingInterval
-        );
-    }
-
-    public void DisableLoadingMode() => DisableLoadingMode(reportResult: true);
-
-    private void DisableLoadingMode(bool reportResult)
-    {
-        if (CurrentLoadingMode == LoadingMode.Ready)
-        {
-            return;
-        }
-
-        var completedMode = CurrentLoadingMode;
-
-        _progressService.IsIndeterminate = false;
-        _progressService.Status = EStatus.Ready;
-        CurrentLoadingMode = LoadingMode.Ready;
-        OnSetLoading?.Invoke(this, CurrentLoadingMode);
-
-        DispatcherHelper.StopRepeatingAction(_loadingIndicatorHandle);
-        _loadingIndicatorHandle = null;
-
-        if (!reportResult)
-        {
-            return;
-        }
-
-        if (completedMode is not (LoadingMode.LoadingNewProject or LoadingMode.ReloadingSameProject))
-        {
-            return;
-        }
-
-        if (ActiveProject != null)
-        {
-            _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
-        }
-        else
-        {
-            _loggerService.Warning(
-                $"Loading the project has seemed to fail. Please restart WolvenKit and try again. If this issue persists, please contact support on the WolvenKit discord.");
-        }
-    }
-
-    /// <summary>
-    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file
-    /// </summary>
-    private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
-
-    private void SaveProjectState()
-    {
-        if (ActiveProject != null)
-        {
-            _hasUnsavedFileTreeChanges = true;
-            SaveOpenFilePaths();
-            SaveProjectExplorerExpansionStateIfDirty();
-            SaveProjectExplorerTabIfDirty();
-            _hasUnsavedFileTreeChanges = false;
-        }
-    }
-
-    private void CheckForOneDriveInPath()
-    {
-        if (_projectManager.ActiveProject is null ||
-            !FilePathHelper.IsOneDrivePath(_projectManager.ActiveProject.Location))
-        {
-            return;
-        }
-
-        List<string> warningText =
-        [
-            "Hey, choom!",
-            "",
-            "Don't store Wolvenkit projects inside your OneDrive folder!",
-            "This can cause all kinds of issues!"
-        ];
-
-        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
-            string.Join('\n', warningText),
-            "OneDrive Warning",
-            WMessageBoxImage.Warning,
-            WMessageBoxButtons.Ok
-        )));
-    }
-
-    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
-
-    #endregion Project_Loading
-
-    /// <summary>
-    /// Enable ConvertTo and ConvertFrom
-    /// If the item is in the archive folder, it can be converted to json
-    /// If the item is in the raw folder, it can be converted from json
-    /// </summary>
-    partial void OnSelectedItemChanged(FileSystemModel? value)
-    {
-        HasSelectedItem = value is not null;
-        CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
-        if (value is null)
-        {
-            return;
-        }
-
-        _appViewModel.SelectFileCommand.SafeExecute(value);
-    }
+    #endregion constructor
 
     #region properties
 
     [ObservableProperty]
     private LoadingMode _currentLoadingMode;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
+    private IPluginService _pluginService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
@@ -1976,36 +1692,327 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region Methods
 
+    #region accessors
+
+    public IDocumentViewModel? GetActiveEditorFile() => _appViewModel.ActiveDocument;
+
     public AppViewModel GetAppViewModel() => _appViewModel;
+
+    #endregion
+
+    #region responders
+
+    /// <summary>
+    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file
+    /// </summary>
+    private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(State) when State == DockState.Hidden:
+                IsVisible = false;
+                break;
+            case nameof(SelectedTabIndex) when ActiveProject is not null:
+                ActiveProject.ActiveTab = SelectedTabIndex;
+                _projectExplorerTabChanged = true;
+                break;
+        }
+
+        base.OnPropertyChanged(e);
+    }
+
+    /// <summary>
+    /// Set status of "scroll to open file" button (disable if we don't have one open)
+    /// </summary>
+    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+        CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
+
+    /// <summary>
+    /// Enable ConvertTo and ConvertFrom
+    /// If the item is in the archive folder, it can be converted to json
+    /// If the item is in the raw folder, it can be converted from json
+    /// </summary>
+    partial void OnSelectedItemChanged(FileSystemModel? value)
+    {
+        HasSelectedItem = value is not null;
+        CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
+        if (value is null)
+        {
+            return;
+        }
+
+        _appViewModel.SelectFileCommand.SafeExecute(value);
+    }
+
+    #endregion
+
+    #region Project_Loading
+
+    /// <summary>
+    /// Loads a project and starts watching it.
+    /// If isReload is true then we won't show `Loading` in the files pane.
+    /// </summary>
+    /// <param name="activeProject"></param>
+    /// <param name="isReload"></param>
+    public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
+    {
+        EnableLoadingMode(isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject);
+
+        RefreshAfter(() =>
+        {
+            try
+            {
+                if (ActiveProject != null && _autoSaveCancelToken is { } cancelToken)
+                {
+                    DispatcherHelper.StopRepeatingAction(cancelToken);
+                    _autoSaveCancelToken = null;
+                    SaveProjectState();
+                    ActiveProject = null;
+                    UnwatchProject();
+                }
+
+                LoadExpansionStateDictionary(activeProject);
+                ActiveProject = activeProject;
+                StartWatcher_AndLoadProject(activeProject);
+
+                DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
+                _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
+                    purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+                    TimeSpan.FromSeconds(10));
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Error refreshing project: {e.Message}. Try reloading the app. If this error persists, please reach out on the WolvenKit discord.");
+
+                CancelProjectLoad();
+            }
+            finally
+            {
+                if (!isReload)
+                {
+                    RestoreProjectState(ActiveProject!);
+                    CheckForOneDriveInPath();
+                    // Don't run DisableLoadingMode here
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Reload the active project from disk to ensure consistency.
+    /// </summary>
+    public void ResumeWatcher_AndReloadProject()
+    {
+        if (ActiveProject is null) return;
+        StartWatcher_AndLoadProject(ActiveProject, true);
+    }
+
+    /// <summary>
+    /// Announces that a different project is about to load: flushes the outgoing project's state
+    /// and arms the loading chrome. Must be called before the project manager swaps its active
+    /// project, or the outgoing state is saved against the incoming one.
+    ///
+    /// Idempotent — the welcome page arms the chrome on click for responsiveness and the load path
+    /// announces the same load again; only the first call flushes.
+    /// </summary>
+    public void ProjectWillLoad(string projectPath)
+    {
+        if (CurrentLoadingMode == LoadingMode.LoadingNewProject)
+        {
+            return;
+        }
+
+        if (ActiveProject != null)
+        {
+            if (IsSameProjectPath(ActiveProject, projectPath))
+            {
+                return;
+            }
+
+            SaveProjectState();
+        }
+
+        EnableLoadingMode(LoadingMode.LoadingNewProject);
+    }
+
+    /// <summary>
+    /// Clears project-load loading chrome without reporting a successful load.
+    /// Use on cancel / failed open / same-project no-op after ProjectWillLoad armed the UI.
+    /// </summary>
+    public void CancelProjectLoad() => DisableLoadingMode(reportResult: false);
+
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        _loggerService.Debug($"Initiating project load.");
+        DispatcherHelper.PostOnMainThread(() =>
+        {
+            var activeProject = _projectManager.ActiveProject;
+            if (activeProject == null || activeProject.Equals(ActiveProject))
+            {
+                CancelProjectLoad();
+                return;
+            }
+
+            StartWatcher_AndLoadProject(activeProject, false);
+        });
+    }
+
+    private static bool IsSameProjectPath(Cp77Project activeProject, string projectPath)
+    {
+        if (string.IsNullOrWhiteSpace(projectPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            var requested = Path.GetFullPath(projectPath);
+            var location = Path.GetFullPath(activeProject.Location);
+            if (string.Equals(requested, location, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            var projectDirectory = Path.GetFullPath(activeProject.ProjectDirectory);
+            return string.Equals(requested, projectDirectory, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return string.Equals(activeProject.Location, projectPath, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    public enum LoadingMode
+    {
+        Ready,
+        LoadingNewProject,
+        ReloadingSameProject,
+        ShowLoadingDuringOperation
+    }
+
+    private void EnableLoadingMode(LoadingMode mode)
+    {
+        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject && mode != LoadingMode.ShowLoadingDuringOperation)
+        {
+            return;
+        }
+
+        if (mode != CurrentLoadingMode)
+        {
+            OnSetLoading?.Invoke(this, mode);
+            CurrentLoadingMode = mode;
+        }
+
+        if (_loadingIndicatorHandle is not null)
+        {
+            return;
+        }
+
+        _loadingIndicatorHandle = DispatcherHelper.StartRepeatingAction(
+            purpose: LoadProjectPurpose,
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            _projectLoadPollingInterval
+        );
+    }
+
+    public void DisableLoadingMode() => DisableLoadingMode(reportResult: true);
+
+    private void DisableLoadingMode(bool reportResult)
+    {
+        if (CurrentLoadingMode == LoadingMode.Ready)
+        {
+            return;
+        }
+
+        var completedMode = CurrentLoadingMode;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
+        CurrentLoadingMode = LoadingMode.Ready;
+        OnSetLoading?.Invoke(this, CurrentLoadingMode);
+
+        DispatcherHelper.StopRepeatingAction(_loadingIndicatorHandle);
+        _loadingIndicatorHandle = null;
+
+        if (!reportResult)
+        {
+            return;
+        }
+
+        if (completedMode is not (LoadingMode.LoadingNewProject or LoadingMode.ReloadingSameProject))
+        {
+            return;
+        }
+
+        if (ActiveProject != null)
+        {
+            _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
+        }
+        else
+        {
+            _loggerService.Warning(
+                $"Loading the project has seemed to fail. Please restart WolvenKit and try again. If this issue persists, please contact support on the WolvenKit discord.");
+        }
+    }
 
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.
     /// </summary>
     private void SetupToolDefaults() =>
         ContentId = s_toolContentId;
-    // Define a unique contentId for this toolwindow
-    //BitmapImage bi = new BitmapImage();
-    // Define an icon for this toolwindow
-    // bi.BeginInit();
-    // bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-    // bi.EndInit();
-    // IconSource = bi;
 
-
-    private void LoadExpansionStateDictionary(Cp77Project project)
+    private void CheckForOneDriveInPath()
     {
-        var projectName = Path.GetFileNameWithoutExtension(project.Location);
-        if (File.Exists(project.InterfaceProjectTreeStatePath))
+        if (_projectManager.ActiveProject is null ||
+            !FilePathHelper.IsOneDrivePath(_projectManager.ActiveProject.Location))
         {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom!",
+            "",
+            "Don't store Wolvenkit projects inside your OneDrive folder!",
+            "This can cause all kinds of issues!"
+        ];
+
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+            string.Join('\n', warningText),
+            "OneDrive Warning",
+            WMessageBoxImage.Warning,
+            WMessageBoxButtons.Ok
+        )));
+    }
+
+    #endregion Project_Loading
+
+    #region save/restore
+
+    private void SaveProjectState()
+    {
+        if (ActiveProject != null)
+        {
+            _hasUnsavedFileTreeChanges = true;
+            SaveOpenFilePaths();
+            SaveProjectExplorerExpansionStateIfDirty();
+            SaveProjectExplorerTabIfDirty();
             _hasUnsavedFileTreeChanges = false;
-            ExpansionStateDictionary =
-                JsonSerializer.Deserialize<Dictionary<string, bool>>(
-                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
         }
-        else
-        {
-            ExpansionStateDictionary = [];
-        }
+    }
+
+    private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
+    {
+        SaveProjectExplorerExpansionStateIfDirty();
+        SaveProjectExplorerTabIfDirty();
     }
 
     private void RestoreProjectState(Cp77Project project)
@@ -2074,6 +2081,34 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectExplorerTabChanged = false;
     }
 
+    #endregion
+
+    #region expansion state
+
+    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
+
+    private void LoadExpansionStateDictionary(Cp77Project project)
+    {
+        var projectName = Path.GetFileNameWithoutExtension(project.Location);
+        if (File.Exists(project.InterfaceProjectTreeStatePath))
+        {
+            _hasUnsavedFileTreeChanges = false;
+            ExpansionStateDictionary =
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
+        }
+        else
+        {
+            ExpansionStateDictionary = [];
+        }
+    }
+
+    public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
+    {
+        ExpansionStateDictionary[rawRelativePath] = expansionState;
+        _hasUnsavedFileTreeChanges = true;
+    }
+
     private void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
 
     private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
@@ -2088,58 +2123,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(State) when State == DockState.Hidden:
-                IsVisible = false;
-                break;
-            case nameof(SelectedTabIndex) when ActiveProject is not null:
-                ActiveProject.ActiveTab = SelectedTabIndex;
-                _projectExplorerTabChanged = true;
-                break;
-        }
-
-        base.OnPropertyChanged(e);
-    }
-
-    #endregion Methods
-
-    #region ModifierStateAwareness
-
-    /// <summary>
-    /// Reacts to ModifierViewStatesModel's emitted events
-    /// </summary>
-    private void OnModifierUpdateEvent()
-    {
-        IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed
-                                        && IsInArchiveFolder(SelectedItem);
-
-        IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed
-                                            && IsInRawFolder(SelectedItem);
-
-        IsShowAbsolutePathToCurrentFile = ModifierStateService.IsShiftKeyPressedOnly;
-
-        IsShowAbsolutePathToCurrentFolder = ModifierStateService.IsCtrlKeyPressedOnly;
-
-        IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
-                               IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
-                             ModifierViewStateService.IsNoModifierBeingHeld;
-
-        IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
-    }
-
-    public IDocumentViewModel? GetActiveEditorFile() => _appViewModel.ActiveDocument;
-
-    #endregion
-
-    public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
-    {
-        ExpansionStateDictionary[rawRelativePath] = expansionState;
-        _hasUnsavedFileTreeChanges = true;
     }
 
     /// <summary>
@@ -2186,6 +2169,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
+    #endregion expansion state
+
+    #region ModifierStateAwareness
+
+    /// <summary>
+    /// Reacts to ModifierViewStatesModel's emitted events
+    /// </summary>
+    private void OnModifierUpdateEvent()
+    {
+        IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed
+                                        && IsInArchiveFolder(SelectedItem);
+
+        IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed
+                                            && IsInRawFolder(SelectedItem);
+
+        IsShowAbsolutePathToCurrentFile = ModifierStateService.IsShiftKeyPressedOnly;
+
+        IsShowAbsolutePathToCurrentFolder = ModifierStateService.IsCtrlKeyPressedOnly;
+
+        IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
+                               IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
+                             ModifierViewStateService.IsNoModifierBeingHeld;
+
+        IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
+    }
+
     public void OnKeyStateChanged(KeyEventArgs e)
     {
         if (e.Key == Key.W && (e.KeyboardDevice.Modifiers & ModifierKeys.Control) != 0)
@@ -2196,6 +2205,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         ModifierStateService.OnKeystateChanged(e);
     }
+
+    #endregion
+
+    #region grid consistency
 
     /// <summary>
     /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
@@ -2462,4 +2475,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         payload.AddRange(addedPaths.Select(a => (string.Empty, a)));
         ApplyGridMutationLive(() => _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload)));
     }
+
+    #endregion
+
+    #endregion Methods
 }
