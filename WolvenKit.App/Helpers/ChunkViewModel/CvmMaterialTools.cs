@@ -777,16 +777,6 @@ public class CvmMaterialTools
         return ret;
     }
 
-    public static int FindHighestMaterialIndex(ChunkViewModel? materialDefinitionArray, bool isLocalMaterial)
-    {
-        if (materialDefinitionArray?.ResolvedData is not CArray<CMeshMaterialEntry> array || array.Count == 0 )
-        {
-            return -1;
-        }
-
-        return FindHighestMaterialIndex(array, isLocalMaterial);
-    }
-
     public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
     {
         if (matDefArray.Count == 0)
@@ -967,14 +957,14 @@ public class CvmMaterialTools
                         {
                             continue;
                         }
-                        properties.TryAdd(matParam.Chunk.ParameterName!, CKeyValuePairFactory.Create(matParam.Chunk));
+                        properties.TryAdd(name, CKeyValuePairFactory.Create(matParam.Chunk));
                     }
 
                     goto breakOuter;
                 }
                 default:
                 {
-                    Console.WriteLine($"Material {currentMat} is not a material instance or material template!");
+                    _loggerService.Info($"Material {currentMat} is not a material instance or material template!");
                     goto breakOuter;
                 }
             }
