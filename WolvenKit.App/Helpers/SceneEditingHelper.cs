@@ -198,5 +198,30 @@ namespace WolvenKit.App.Helpers
 
 #endregion
 
+        public static string? GetPropNameByPerformerId(CUInt32 propPerformerId, scnSceneResource scene)
+        {
+            var propId = scnSceneResource.CalculatePropIdFromPerformerId((uint)propPerformerId);
+            if ( scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s && !string.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+
+            // try resolving it against the game
+            propId = 256 - (propPerformerId % 256);
+            if ( scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s2 && !string.IsNullOrEmpty(s2))
+            {
+                return s2;
+            }
+
+            return null;
+        }
+        public static string? GetPropNameById(CUInt32 propId, scnSceneResource scene)
+        {
+            if ( scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s && !string.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            return null;
+        }
     }
 }

@@ -728,6 +728,10 @@ public partial class ChunkViewModel
                 {
                     Value = $"{Value}: {s2}";
                 }
+                if (StringHelper.StringifyOrNull(idleEvt.AnimName) is string s1)
+                {
+                    Value = $"{Value} ({s1})";
+                } else
                 if (StringHelper.StringifyOrNull(idleEvt.BakedFacialTransition.ToIdleFemale) is string s3)
                 {
                     Value = $"{Value} ({s3})";
@@ -1114,6 +1118,21 @@ public partial class ChunkViewModel
                 Value = sceneEventSymbol.OriginNodeId.Id.ToString();
                 IsValueExtrapolated = sceneEventSymbol.OriginNodeId.Id != 0;
                 break;
+            case scneventsAttachPropToPerformer attProp when  Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(attProp.PerformerId.Id, scene)}";
+                if (SceneEditingHelper.GetPropNameById(attProp.PropId.Id, scene) is string attachedProp)
+                {
+                    Value = $"{Value}: {attachedProp}";
+                }
+
+                IsValueExtrapolated = true;
+                return;
+            case scneventsAttachPropToWorld attProp
+                when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene
+                     && SceneEditingHelper.GetPropNameById(attProp.PropId.Id, scene) is string attachedProp2:
+                Value = $"{attachedProp2}";
+                IsValueExtrapolated = true;
+                return;
             case scnWorkspotSymbol scnWorkspotSymbol:
                 Value = scnWorkspotSymbol.WsEditorEventId.ToString();
                 IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
@@ -1265,10 +1284,18 @@ public partial class ChunkViewModel
                 Value = $"{StringHelper.Stringify(socketIds.Select(s => s.NodeId.Id.ToString()).ToArray())}";
                 IsValueExtrapolated = Value != string.Empty;
                 return;
-            case scnChoiceNodeOption scnChoiceNodeOption:
-                Value =
-                    $"{scnChoiceNodeOption.ScreenplayOptionId}"; // TODO: Check how this is resolved in scnChoiceNodeWrapper or ask Chedda
-                IsValueExtrapolated = Value != "";
+            case scnChoiceNodeOption scnChoiceNodeOption when StringHelper.StringifyOrNull( scnChoiceNodeOption.Caption) is string choiceText:
+                Value = $"{scnChoiceNodeOption.Caption.GetResolvedText()}";
+                IsValueExtrapolated = true;
+                return;
+            case scnPoseCorrectionEvent poseCorrection when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(poseCorrection.PerformerId.Id, scene)}";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                return;
+            case scneventsEquipItemToPerformer equipItemEvent
+                when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
+                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(equipItemEvent.PerformerId.Id, scene)}: {equipItemEvent.ItemId.GetResolvedText()}";
+                IsValueExtrapolated = true;
                 return;
             case scnscreenplayOptionUsage screenplayOptionUsage:
                 Value = $"{screenplayOptionUsage.PlayerGenderMask.Mask}";

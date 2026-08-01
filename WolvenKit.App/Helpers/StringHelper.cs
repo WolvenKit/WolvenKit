@@ -168,9 +168,17 @@ public abstract partial class StringHelper
     public static string Stringify(scnAnimTargetBasicData animEvtData, scnSceneResource scene)
     {
         var performerName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.PerformerId.Id, scene) ?? $"{animEvtData.PerformerId.Id}";
-        var targetName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.TargetPerformerId.Id, scene)
+        var targetName = "";
+        if (SceneEditingHelper.GetPropNameByPerformerId(animEvtData.TargetPropId.Id, scene) is string propName)
+        {
+            targetName = propName;
+        }
+        else
+        {
+         targetName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.TargetPerformerId.Id, scene)
                          ?? SceneEditingHelper.GetActorNameById(animEvtData.TargetActorId.Id, scene)
                          ?? $"{animEvtData.TargetActorId.Id}";
+        }
         return $"{performerName} => {targetName}";
     }
 
@@ -202,7 +210,7 @@ public abstract partial class StringHelper
 
     public static string? StringifyOrNull(CName cname)
     {
-        if (cname.GetResolvedText() is not string value || string.IsNullOrWhiteSpace(value))
+        if (cname.GetResolvedText() is not string value || string.IsNullOrWhiteSpace(value) || value == "None")
         {
             return null;
         }
