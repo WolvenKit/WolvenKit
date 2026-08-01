@@ -15,14 +15,17 @@ public class CvmMaterialTools
 {
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
+    private readonly  IAppArchiveManager _archiveManager;
 
     public CvmMaterialTools(
         ILoggerService loggerService,
-        INotificationService notificationService
+        INotificationService notificationService,
+        IAppArchiveManager archiveManager
     )
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
+        _archiveManager = archiveManager;
     }
 
     #region convert between preload and regular
@@ -909,7 +912,7 @@ public class CvmMaterialTools
     }
 
     private record FlatMaterial(string BaseMaterial, Dictionary<string, CKeyValuePair> Properties);
-    private FlatMaterial GetFlattenedMaterial(IMaterial material, string basePath, IAppArchiveManager archiveManager)
+    private FlatMaterial GetFlattenedMaterial(IMaterial material, string basePath)
     {
         var baseMaterial = basePath;
         Dictionary<string, CKeyValuePair> properties = new();
@@ -937,7 +940,7 @@ public class CvmMaterialTools
                         goto breakOuter;
                     }
 
-                    var baseMatRc = archiveManager.GetCR2WFile(baseMaterialPath)?.RootChunk;
+                    var baseMatRc = _archiveManager.GetCR2WFile(baseMaterialPath)?.RootChunk;
 
                     if (baseMatRc is not IMaterial baseMat)
                     {
@@ -978,9 +981,9 @@ public class CvmMaterialTools
         return new FlatMaterial(baseMaterial, properties);
     }
 
-    private void FlattenMaterial(CMaterialInstance material, IAppArchiveManager archiveManager)
+    private void FlattenMaterial(CMaterialInstance material)
     {
-        var flatMaterial = GetFlattenedMaterial(material, material.BaseMaterial.DepotPath.GetString() ?? "", archiveManager);
+        var flatMaterial = GetFlattenedMaterial(material, material.BaseMaterial.DepotPath.GetString() ?? "");
         material.BaseMaterial = new CResourceReference<IMaterial>(flatMaterial.BaseMaterial, InternalEnums.EImportFlags.Default);
         material.Values.Clear();
         foreach (var cKeyValuePair in flatMaterial.Properties.Values)
@@ -989,11 +992,11 @@ public class CvmMaterialTools
         }
     }
 
-    public void FlattenMiChain(CMesh mesh, IAppArchiveManager archiveManager)
+    public void FlattenMiChain(CMesh mesh)
     {
         foreach (var material in mesh.LocalMaterialBuffer.Materials.OfType<CMaterialInstance>())
         {
-            FlattenMaterial(material, archiveManager);
+            FlattenMaterial(material);
         }
         foreach (var matHandle in mesh.PreloadLocalMaterialInstances)
         {
@@ -1002,7 +1005,7 @@ public class CvmMaterialTools
                 continue;
             }
 
-            FlattenMaterial(material, archiveManager);
+            FlattenMaterial(material);
         }
     }
 
@@ -1011,15 +1014,15 @@ public class CvmMaterialTools
         switch (cvm?.ResolvedData)
         {
             case CMesh mesh:
-                FlattenMiChain(mesh, archiveManager);
+                FlattenMiChain(mesh);
                 break;
             case CMaterialInstance matInstance:
-                FlattenMaterial(matInstance, archiveManager);
+                FlattenMaterial(matInstance);
                 cvm.RecalculateProperties();
                 break;
             case CArray<IRedHandle<IMaterial>> preloadLocalMaterials:
                 var preMats = preloadLocalMaterials.Select(h => h.GetValue()).OfType<CMaterialInstance>().ToList();
-                preMats.ForEach(mat => FlattenMaterial(mat, archiveManager));
+                preMats.ForEach(mat => FlattenMaterial(mat));
                 preloadLocalMaterials.Clear();
                 foreach (var newPreloadMaterial in preMats)
                 {
@@ -1035,7 +1038,7 @@ public class CvmMaterialTools
                 break;
             case CArray<IMaterial> materials:
                 var newMaterials = materials.OfType<CMaterialInstance>().ToList();
-                newMaterials.ForEach(mat => FlattenMaterial(mat, archiveManager));
+                newMaterials.ForEach(mat => FlattenMaterial(mat));
                 materials.Clear();
                 foreach (var mat in newMaterials)
                 {
@@ -1044,6 +1047,10 @@ public class CvmMaterialTools
                 cvm.RecalculateProperties();
                 break;
             default:
+                if (cvm?.GetRootModel() is { ResolvedData: CMesh rootMesh })
+                {
+                    FlattenMiChain(rootMesh);
+                }
                 break;
         }
     }

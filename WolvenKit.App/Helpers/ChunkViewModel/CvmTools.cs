@@ -12,9 +12,9 @@ public class CvmTools : ICvmTools
     private readonly CvmMaterialTools _cvmMaterialTools;
     private readonly CvmDependencyTools _cvmDependencyTools;
 
-    public CvmTools(ILoggerService loggerService, INotificationService notificationService)
+    public CvmTools(ILoggerService loggerService, INotificationService notificationService, IAppArchiveManager archiveManager)
     {
-        _cvmMaterialTools = new CvmMaterialTools(loggerService, notificationService);
+        _cvmMaterialTools = new CvmMaterialTools(loggerService, notificationService, archiveManager);
         _cvmDependencyTools = new CvmDependencyTools(loggerService, notificationService);
     }
 
