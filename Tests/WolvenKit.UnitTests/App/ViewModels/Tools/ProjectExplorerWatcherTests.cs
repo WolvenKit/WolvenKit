@@ -34,7 +34,7 @@ namespace Wolvenkit.Test.App.ViewModels.Tools;
 /// These tests deliberately avoid the real FileSystemWatcher where possible and drive the service
 /// through its public surface + the new publish mechanism.
 /// </summary>
-public class WatcherServiceTests : IDisposable
+public class ProjectExplorerWatcherTests : IDisposable
 {
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
@@ -47,7 +47,7 @@ public class WatcherServiceTests : IDisposable
     // Everything in this class must run on a machine with no game installed, so it uses only
     // synthetic FakeGameFile data.
 
-    public WatcherServiceTests()
+    public ProjectExplorerWatcherTests()
     {
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();

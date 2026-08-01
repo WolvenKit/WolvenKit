@@ -473,8 +473,7 @@ public partial class ProjectExplorerViewModel
 
             if (_fileLookup.TryRemove(e.FullPath, out var item))
             {
-                Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>()
-                    .RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
+                RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
             }
             else
             {
