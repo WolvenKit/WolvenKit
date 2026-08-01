@@ -564,10 +564,9 @@ public class CvmMaterialTools
         }
     }
 
-    public Dictionary<string, List<string>> ExpandMeshAppearances(ChunkViewModel? cvm,
-        out Dictionary<string, List<string>> templatesAndValues, bool preserveDynamicChunks = false)
+    public Dictionary<string, List<string>> ExpandMeshAppearances(ChunkViewModel? cvm, bool preserveDynamicChunks = false)
     {
-        templatesAndValues = [];
+        Dictionary<string, List<string>> templatesAndValues = [];
 
         if (cvm?.ResolvedData is not CMesh mesh ||
             cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
@@ -605,7 +604,7 @@ public class CvmMaterialTools
             return;
         }
 
-        ExpandMeshAppearances(cvm, out var templatesAndValues);
+        var templatesAndValues = ExpandMeshAppearances(cvm);
 
         cvm.GetPropertyChild("materials")?.CalculateProperties();
         cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
