@@ -168,34 +168,7 @@ public partial class TimelineEvent : ObservableObject
             return "";
         }
 
-        if (performerId == 0)
-        {
-            var playerActor = _sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == 0);
-            if (playerActor != null)
-            {
-                return string.IsNullOrEmpty(playerActor.PlayerName) ? "Player" : playerActor.PlayerName;
-            }
-            return "Player";
-        }
-
-        if (performerId >= 1 && (performerId % 256 == 1))
-        {
-            uint actorIndex = (performerId - 1) / 256;
-
-            var playerActor = _sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorIndex);
-            if (playerActor != null)
-            {
-                return string.IsNullOrEmpty(playerActor.PlayerName) ? "Player" : playerActor.PlayerName;
-            }
-
-            if (_sceneResource.Actors != null && actorIndex < _sceneResource.Actors.Count)
-            {
-                var actorDef = _sceneResource.Actors[(int)actorIndex];
-                return actorDef?.ActorName ?? $"Actor{actorIndex}";
-            }
-        }
-
-        return "";
+        return SceneEditingHelper.GetPerformerNameById(performerId, _sceneResource) ?? "";
     }
 
     private string ResolveTargetFromAnimData(scnAnimTargetBasicData basicData)

@@ -596,9 +596,9 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = scnActorId.Id != 0;
                 break;
             case scnPerformerId scnPerformerId when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
-                var performer = SceneEditingHelper.GetActorNameByPerformerId(scnPerformerId.Id, scene) ??
-                                "no actor found";
-                                Value = $"{scnPerformerId.Id} ({performer})" ;
+                var performer = SceneEditingHelper.GetPerformerNameById(scnPerformerId.Id, scene) ??
+                                "no performer found";
+                Value = $"{scnPerformerId.Id} ({performer})";
                 break;
             case scnlocLocStoreEmbeddedVariantDescriptorEntry locstoreEntry when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
                 Value = $"{SceneEditingHelper.GetLocstringValueById(locstoreEntry.LocstringId.Ruid, scene)}";
@@ -719,9 +719,9 @@ public partial class ChunkViewModel
 
             case scnChangeIdleAnimEvent idleEvt when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
 
-                if (SceneEditingHelper.GetActorNameByPerformerId(idleEvt.Performer.Id, scene) is string actorName)
+                if (SceneEditingHelper.GetPerformerNameById(idleEvt.Performer.Id, scene) is string performerName)
                 {
-                    Value = $"{actorName}";
+                    Value = performerName;
                 }
 
                 if (StringHelper.StringifyOrNull(idleEvt.ActorComponent) is string s2)
@@ -1119,7 +1119,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = sceneEventSymbol.OriginNodeId.Id != 0;
                 break;
             case scneventsAttachPropToPerformer attProp when  Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
-                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(attProp.PerformerId.Id, scene)}";
+                Value = $"{SceneEditingHelper.GetPerformerNameById(attProp.PerformerId.Id, scene)}";
                 if (SceneEditingHelper.GetPropNameById(attProp.PropId.Id, scene) is string attachedProp)
                 {
                     Value = $"{Value}: {attachedProp}";
@@ -1289,12 +1289,12 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 return;
             case scnPoseCorrectionEvent poseCorrection when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
-                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(poseCorrection.PerformerId.Id, scene)}";
+                Value = $"{SceneEditingHelper.GetPerformerNameById(poseCorrection.PerformerId.Id, scene)}";
                 IsValueExtrapolated = !string.IsNullOrEmpty(Value);
                 return;
             case scneventsEquipItemToPerformer equipItemEvent
                 when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
-                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(equipItemEvent.PerformerId.Id, scene)}: {equipItemEvent.ItemId.GetResolvedText()}";
+                Value = $"{SceneEditingHelper.GetPerformerNameById(equipItemEvent.PerformerId.Id, scene)}: {equipItemEvent.ItemId.GetResolvedText()}";
                 IsValueExtrapolated = true;
                 return;
             case scnscreenplayOptionUsage screenplayOptionUsage:
@@ -1341,12 +1341,12 @@ public partial class ChunkViewModel
                 return;
             case scnUnmountEvent unmountEvent
                 when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
-                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(unmountEvent.Performer.Id, scene)}";
+                Value = $"{SceneEditingHelper.GetPerformerNameById(unmountEvent.Performer.Id, scene)}";
                 IsValueExtrapolated = true;
                 return;
             case scnGameplayTransitionEvent transitionEvent
                 when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource scene:
-                Value = $"{SceneEditingHelper.GetActorNameByPerformerId(transitionEvent.Performer.Id, scene)} ({transitionEvent.VehState.ToEnumString()})";
+                Value = $"{SceneEditingHelper.GetPerformerNameById(transitionEvent.Performer.Id, scene)} ({transitionEvent.VehState.ToEnumString()})";
                 IsValueExtrapolated = true;
                 return;
             case scneventsSocket { OsockStamp: { } oSock }:

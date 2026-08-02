@@ -8,6 +8,7 @@ using System.Windows.Media;
 using DynamicData;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.App.Helpers;
 
@@ -168,20 +169,32 @@ public abstract partial class StringHelper
     }
     public static string Stringify(scnAnimTargetBasicData animEvtData, scnSceneResource scene)
     {
-        var performerName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.PerformerId.Id, scene) ?? $"{animEvtData.PerformerId.Id}";
-        string targetName;
-        if ((WolvenKit.RED4.Types.Enums.scnLookAtTargetType)animEvtData.TargetType ==
-            WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop)
+        var performerName = SceneEditingHelper.GetPerformerNameById(animEvtData.PerformerId.Id, scene)
+                            ?? $"{animEvtData.PerformerId.Id}";
+        if (!animEvtData.IsStart)
         {
-            targetName = SceneEditingHelper.GetPropNameByPerformerId(animEvtData.TargetPropId.Id, scene)
-                         ?? $"{animEvtData.TargetPropId.Id}";
+            return $"{performerName} stop";
         }
-        else
+
+        var targetName = SceneEditingHelper.GetPerformerNameById(animEvtData.TargetPerformerId.Id, scene);
+        var targetType = (scnLookAtTargetType)animEvtData.TargetType;
+        if (targetName is null && targetType == scnLookAtTargetType.Prop)
         {
-            targetName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.TargetPerformerId.Id, scene)
-                         ?? SceneEditingHelper.GetActorNameById(animEvtData.TargetActorId.Id, scene)
-                         ?? $"{animEvtData.TargetActorId.Id}";
+            targetName = SceneEditingHelper.GetPropNameById(animEvtData.TargetPropId.Id, scene);
         }
+
+        if (targetName is null && targetType == scnLookAtTargetType.Actor)
+        {
+            targetName = SceneEditingHelper.GetActorNameById(animEvtData.TargetActorId.Id, scene);
+        }
+
+        if (targetName is null &&
+            (animEvtData.StaticTarget.X != 0 || animEvtData.StaticTarget.Y != 0 || animEvtData.StaticTarget.Z != 0))
+        {
+            targetName = $"Position ({Stringify(animEvtData.StaticTarget)})";
+        }
+
+        targetName ??= "None";
         return $"{performerName} => {targetName}";
     }
 

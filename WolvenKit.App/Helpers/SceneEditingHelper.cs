@@ -137,6 +137,10 @@ namespace WolvenKit.App.Helpers
             return GetActorNameById(actorId, sceneResource);
         }
 
+        public static string? GetPerformerNameById(uint performerId, scnSceneResource sceneResource) =>
+            GetActorNameByPerformerId(performerId, sceneResource)
+            ?? GetPropNameByPerformerId(performerId, sceneResource);
+
 
         #region voicelines
 
@@ -198,26 +202,19 @@ namespace WolvenKit.App.Helpers
 
 #endregion
 
-        public static string? GetPropNameByPerformerId(CUInt32 propPerformerId, scnSceneResource scene)
+        public static string? GetPropNameByPerformerId(uint propPerformerId, scnSceneResource scene)
         {
-            var propId = scnSceneResource.CalculatePropIdFromPerformerId((uint)propPerformerId);
-            if ( scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s && !string.IsNullOrEmpty(s))
+            if (propPerformerId < 2 || (propPerformerId - 2) % 256 != 0)
             {
-                return s;
+                return null;
             }
 
-            // try resolving it against the game
-            propId = 256 - (propPerformerId % 256);
-            if ( scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s2 && !string.IsNullOrEmpty(s2))
-            {
-                return s2;
-            }
-
-            return null;
+            return GetPropNameById(scnSceneResource.CalculatePropIdFromPerformerId(propPerformerId), scene);
         }
-        public static string? GetPropNameById(CUInt32 propId, scnSceneResource scene)
+
+        public static string? GetPropNameById(uint propId, scnSceneResource scene)
         {
-            if ( scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s && !string.IsNullOrEmpty(s))
+            if (scene.Props.FirstOrDefault(p => p.PropId?.Id == propId)?.PropName is CString s && !string.IsNullOrEmpty(s))
             {
                 return s;
             }
