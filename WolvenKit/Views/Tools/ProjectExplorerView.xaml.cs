@@ -469,13 +469,30 @@ namespace WolvenKit.Views.Tools
             // Only update layout on the visible tree.
             if (TreeGrid.IsVisible)
             {
+                RefreshColumnWidths(TreeGrid);
                 TreeGrid.UpdateLayout();
             }
 
             if (TreeGridFlat.IsVisible)
             {
+                RefreshColumnWidths(TreeGridFlat);
                 TreeGridFlat.UpdateLayout();
             }
+        }
+
+        /// <summary>
+        /// Needed to prevent a mysterious gray bar from
+        /// hiding part of the view.
+        /// </summary>
+        /// <param name="grid"></param>
+        private static void RefreshColumnWidths(SfTreeGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+            {
+                return;
+            }
+
+            grid.TreeGridColumnSizer?.Refresh();
         }
 
         /// <summary>
