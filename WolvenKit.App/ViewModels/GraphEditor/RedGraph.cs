@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -39,7 +40,29 @@ public partial class RedGraph : IDisposable
     private IRedType _data;
 
     private uint _currentSceneNodeId;
+    private readonly object _currentQuestLock = new();
     private ushort _currentQuestNodeId;
+
+    private ushort CurrentQuestNodeId
+    {
+        get { lock (_currentQuestLock) { return _currentQuestNodeId; } }
+        set { lock (_currentQuestLock) { _currentQuestNodeId = value; } }
+    }
+
+    /// <summary>
+    /// Atomically raises the node-id high-water mark.
+    /// Callers in parallel loops must use this.
+    /// </summary>
+    private void RaiseCurrentQuestNodeId(ushort candidate)
+    {
+        lock (_currentQuestLock)
+        {
+            if (candidate > _currentQuestNodeId)
+            {
+                _currentQuestNodeId = candidate;
+            }
+        }
+    }
 
     private bool _allowGraphSave = false;
 
@@ -594,7 +617,32 @@ public partial class RedGraph : IDisposable
         RebuildCanvasItems();
     }
 
-    private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
+    private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        // Apply just the delta.
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add when e.NewItems is not null:
+                foreach (var item in e.NewItems)
+                {
+                    CanvasItems.Add(item);
+                }
+
+                return;
+
+            case NotifyCollectionChangedAction.Remove when e.OldItems is not null:
+                foreach (var item in e.OldItems)
+                {
+                    CanvasItems.Remove(item);
+                }
+
+                return;
+
+            default:
+                RebuildCanvasItems();
+                return;
+        }
+    }
 
     private void RebuildCanvasItems()
     {
@@ -660,6 +708,12 @@ public partial class RedGraph : IDisposable
                 {
                     var jsonData = JObject.Parse(File.ReadAllText(statePath));
                     var nodesArray = jsonData.SelectTokens("Nodes.[*]");
+                    var nodesById = new Dictionary<uint, NodeViewModel>(Nodes.Count);
+
+                    foreach (var node in Nodes)
+                    {
+                        nodesById[node.UniqueId] = node;
+                    }
 
                     foreach (var nodeToken in nodesArray)
                     {
@@ -667,8 +721,8 @@ public partial class RedGraph : IDisposable
                         if (nodeIDValue == null) continue;
 
                         var nodeId = nodeIDValue.ToObject<uint>();
-                        var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
-                        if (targetNode == null) continue;
+                        if (!nodesById.TryGetValue(nodeId, out var targetNode))
+                            continue;
 
                         // Load Location
                         var nodeX = nodeToken.SelectToken("X") as JValue;

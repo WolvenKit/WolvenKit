@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
@@ -17,6 +19,7 @@ public partial class RedGraph
     private static Dictionary<Type, Type> s_questWrapperMap = new();
 
     private static List<Type>? s_questNodeTypes;
+    private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
 
     private INodeWrapperFactory? _nodeWrapperFactory;
 
@@ -144,7 +147,7 @@ public partial class RedGraph
 
         if (instance is questNodeDefinition nodeDefinition)
         {
-            nodeDefinition.Id = ++_currentQuestNodeId;
+            nodeDefinition.Id = ++CurrentQuestNodeId;
 
             // Special initialization for certain quest node types
             if (nodeDefinition is questFactsDBManagerNodeDefinition factsDBNode)
@@ -637,7 +640,7 @@ public partial class RedGraph
 
         var newNodeId = GetNextAvailableQuestNodeId();
         duplicatedData.Id = newNodeId;
-        _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+        CurrentQuestNodeId = Math.Max(CurrentQuestNodeId, newNodeId);
 
         foreach (var socket in duplicatedData.Sockets)
         {
@@ -708,7 +711,7 @@ public partial class RedGraph
 
         var newNodeId = GetNextAvailableQuestNodeId();
         duplicatedData.Id = newNodeId;
-        _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+        CurrentQuestNodeId = Math.Max(CurrentQuestNodeId, newNodeId);
 
         foreach (var socket in duplicatedData.Sockets)
         {
@@ -870,7 +873,7 @@ public partial class RedGraph
     {
         var questGraph = (graphGraphDefinition)_data;
 
-        ushort candidateId = (ushort)(_currentQuestNodeId + 1);
+        ushort candidateId = (ushort)(CurrentQuestNodeId + 1);
 
         if (candidateId != ushort.MaxValue && !IsQuestNodeIdInUse(candidateId, questGraph))
         {
@@ -1088,7 +1091,7 @@ public partial class RedGraph
             {
                 var newNodeId = GetNextAvailableQuestNodeId();
                 idMap[nodeDef.Id] = newNodeId;
-                _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+                CurrentQuestNodeId = Math.Max(CurrentQuestNodeId, newNodeId);
             }
         }
 
@@ -1464,11 +1467,14 @@ public partial class RedGraph
         var graph = new RedGraph(title, questGraph);
         graph._nodeWrapperFactory = nodeWrapperFactory;
 
-        var socketNodeLookup = new Dictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
+        var socketNodeLookup = new ConcurrentDictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
+        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDoP };
+        var nodeHandles = questGraph.Nodes.ToArray();
+        var wrappedNodes = new BaseQuestViewModel[nodeHandles.Length];
 
-        var nodeCache = new Dictionary<uint, BaseQuestViewModel>();
-        foreach (var nodeHandle in questGraph.Nodes)
+        Parallel.For(0, nodeHandles.Length, options, i =>
         {
+            var nodeHandle = nodeHandles[i];
             var node = nodeHandle.GetValue();
             if (node is null)
             {
@@ -1477,7 +1483,7 @@ public partial class RedGraph
 
             if (node is questNodeDefinition nodeDefinition)
             {
-                graph._currentQuestNodeId = Math.Max(graph._currentQuestNodeId, nodeDefinition.Id);
+                graph.RaiseCurrentQuestNodeId(nodeDefinition.Id);
             }
 
             var nvm = node switch
@@ -1487,19 +1493,27 @@ public partial class RedGraph
                 _ => throw new Exception($"Node of type \"{node.GetType()}\" isn't supported!")
             };
 
-            nodeCache.Add(nvm.UniqueId, nvm);
-            graph.Nodes.Add(nvm);
+            wrappedNodes[i] = nvm;
 
             foreach (var inputConnector in nvm.Input)
             {
                 var questInputConnector = (QuestInputConnectorViewModel)inputConnector;
-                socketNodeLookup.Add(questInputConnector.Data, questInputConnector);
+                socketNodeLookup.TryAdd(questInputConnector.Data, questInputConnector);
             }
+        });
+
+        // Makes sure this is done on the main thread sequentially, in source order.
+        foreach (var nvm in wrappedNodes)
+        {
+            graph.Nodes.Add(nvm);
         }
 
-        foreach (var node in graph.Nodes)
+        var connectionsPerNode = new List<QuestConnectionViewModel>[wrappedNodes.Length];
+
+        Parallel.For(0, wrappedNodes.Length, options, i =>
         {
-            var questNode = (BaseQuestViewModel)node;
+            var questNode = wrappedNodes[i];
+            var nodeConnections = new List<QuestConnectionViewModel>();
 
             foreach (var outputConnector in questNode.Output)
             {
@@ -1510,9 +1524,20 @@ public partial class RedGraph
                     var connection = connectionHandle.Chunk;
                     if (connection?.Destination?.Chunk != null && socketNodeLookup.TryGetValue(connection.Destination.Chunk, out var targetInput))
                     {
-                        graph.Connections.Add(new QuestConnectionViewModel(questOutputConnector, targetInput, connection));
+                        nodeConnections.Add(new QuestConnectionViewModel(questOutputConnector, targetInput, connection));
                     }
                 }
+            }
+
+            connectionsPerNode[i] = nodeConnections;
+        });
+
+        // Makes sure this is done on the main thread sequentially, in source order.
+        foreach (var nodeConnections in connectionsPerNode)
+        {
+            foreach (var connection in nodeConnections)
+            {
+                graph.Connections.Add(connection);
             }
         }
 

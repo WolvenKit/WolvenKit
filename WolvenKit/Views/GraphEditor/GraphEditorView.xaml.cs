@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Nodify;
+using Syncfusion.SfSkinManager;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services;
@@ -147,6 +148,7 @@ public partial class GraphEditorView : UserControl
     public GraphEditorView()
     {
         InitializeComponent();
+        SfSkinManager.SetTheme(Editor, new Theme("Default"));
 
         _appViewModel = Locator.Current.GetService<AppViewModel>();
 
