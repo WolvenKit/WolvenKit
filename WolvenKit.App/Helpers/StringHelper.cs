@@ -169,14 +169,16 @@ public abstract partial class StringHelper
     public static string Stringify(scnAnimTargetBasicData animEvtData, scnSceneResource scene)
     {
         var performerName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.PerformerId.Id, scene) ?? $"{animEvtData.PerformerId.Id}";
-        var targetName = "";
-        if (SceneEditingHelper.GetPropNameByPerformerId(animEvtData.TargetPropId.Id, scene) is string propName)
+        string targetName;
+        if ((WolvenKit.RED4.Types.Enums.scnLookAtTargetType)animEvtData.TargetType ==
+            WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop)
         {
-            targetName = propName;
+            targetName = SceneEditingHelper.GetPropNameByPerformerId(animEvtData.TargetPropId.Id, scene)
+                         ?? $"{animEvtData.TargetPropId.Id}";
         }
         else
         {
-         targetName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.TargetPerformerId.Id, scene)
+            targetName = SceneEditingHelper.GetActorNameByPerformerId(animEvtData.TargetPerformerId.Id, scene)
                          ?? SceneEditingHelper.GetActorNameById(animEvtData.TargetActorId.Id, scene)
                          ?? $"{animEvtData.TargetActorId.Id}";
         }
