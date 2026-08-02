@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +34,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.GraphEditor;
@@ -50,6 +52,10 @@ public partial class GraphEditorView : UserControl
     private RedTypeTemplateDropdownViewModel _nodeTemplateOptions;
     private System.Windows.Point _actionPaletteGraphPosition;
     private double _actionPalettePopupHorizontalOffset;
+    private readonly IProgressService<double> _progressService = Locator.Current.GetService<IProgressService<double>>();
+
+    /// <summary>Cancels the in-flight batched canvas realization when the graph is swapped or closed.</summary>
+    private CancellationTokenSource _canvasRealizationCts;
 
     private static readonly (string Name, string Color)[] s_commentColorPresets =
     [
@@ -78,6 +84,7 @@ public partial class GraphEditorView : UserControl
             return;
         }
 
+        view.CancelCanvasRealization();
         view.SourceChanged?.Invoke(view, e.NewValue as RedGraph);
 
         if (view.Source is null)
@@ -86,6 +93,7 @@ public partial class GraphEditorView : UserControl
         }
 
         view.ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+
         view.Dispatcher.BeginInvoke(new Action(() =>
         {
             UpdateView(view);
@@ -99,9 +107,99 @@ public partial class GraphEditorView : UserControl
         {
             return;
         }
-        view.Source.Editor = view.Editor;
-        view.Source.GraphStateLoad();
-        //view.Editor.FitToScreen();
+
+        // Take the canvas back before WPF gets a chance to realize it in one go, then hand it out
+        // again in batches below. Safe to do here whichever order the DP callback and the
+        // ItemsSource binding transfer run in - CanvasItems is the same instance either way.
+        view.Source.DeferCanvasRealization();
+
+        var cts = new CancellationTokenSource();
+        view._canvasRealizationCts = cts;
+        _ = view.RealizeCanvasAsync(view.Source, cts);
+    }
+
+    private void CancelCanvasRealization()
+    {
+        var cts = _canvasRealizationCts;
+        _canvasRealizationCts = null;
+
+        if (cts is null)
+        {
+            return;
+        }
+
+        cts.Cancel();
+        cts.Dispose();
+    }
+
+    /// <summary>
+    /// Brings a graph on screen without freezing the window.
+    /// </summary>
+    /// <remarks>
+    /// Nodify has no virtualization, so a few hundred nodes bound at once inflate every node
+    /// template inside a single measure pass. The batched realization below does the same total
+    /// work but yields between batches, so the graph draws itself in and the status bar can show
+    /// how far along it is instead of the app looking hung.
+    /// </remarks>
+    private async Task RealizeCanvasAsync(RedGraph graph, CancellationTokenSource cts)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var progress = _progressService;
+
+        try
+        {
+            graph.Editor = Editor;
+
+            // Position the nodes before they are realized, so each one is drawn where it belongs
+            // rather than at the origin with the whole graph snapping into place at the end.
+            var hasSavedLayout = graph.GraphStateLoadLayout();
+
+            if (progress is not null)
+            {
+                progress.IsIndeterminate = false;
+                progress.Status = EStatus.Running;
+            }
+
+            var realized = await graph.RealizeCanvasAsync(progress, cts.Token);
+
+            // Superseded by another document or cancelled by a close: leave the progress bar to
+            // whoever took over rather than reporting this run's abandoned state.
+            if (!realized || !ReferenceEquals(_canvasRealizationCts, cts))
+            {
+                return;
+            }
+
+            // Let the last batch measure before the auto-arrange reads the node sizes.
+            await Dispatcher.Yield(DispatcherPriority.ContextIdle);
+
+            if (!ReferenceEquals(_canvasRealizationCts, cts))
+            {
+                return;
+            }
+
+            graph.GraphStateLoadFinish(hasSavedLayout);
+
+            _canvasRealizationCts = null;
+            cts.Dispose();
+            progress?.Completed();
+
+            Console.WriteLine(
+                $"[GraphPerf] '{graph.Title}' canvas realized in {sw.ElapsedMilliseconds}ms " +
+                $"({graph.CanvasItems.Count} items)");
+        }
+        catch (Exception ex)
+        {
+            // Nothing awaits this task, so an escaping exception would be swallowed and leave the
+            // status bar stuck at whatever fraction it reached.
+            if (ReferenceEquals(_canvasRealizationCts, cts))
+            {
+                _canvasRealizationCts = null;
+                cts.Dispose();
+                progress?.Completed();
+            }
+
+            _loggerService?.Error($"Failed to display graph '{graph.Title}': {ex.Message}");
+        }
     }
 
     public RedGraph Source
@@ -207,6 +305,7 @@ public partial class GraphEditorView : UserControl
         var graph = Source;
 
         CloseActionPalette();
+        CancelCanvasRealization();
         SelectedNode = null;
         SelectedNodes.Clear();
 
