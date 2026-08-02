@@ -94,6 +94,8 @@ namespace WolvenKit.Views.Tools
 
         private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
 
+        private bool _isShowingLoadingIndicator = true;
+
         #endregion fields
 
         #region Constructor
@@ -291,6 +293,10 @@ namespace WolvenKit.Views.Tools
                 ViewModel.WhenAnyValue(x => x.FileList)
                     .Subscribe(_ => RefreshFlatViewIfNeeded())
                     .DisposeWith(disposables);
+
+                ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled)
+                    .Subscribe(_ => UpdatePaneVisibility())
+                    .DisposeWith(disposables);
             });
 
             this.ExecuteWhenLoaded(() => IndicateProjectLoading());
@@ -360,11 +366,11 @@ namespace WolvenKit.Views.Tools
             }
             else if (ShouldStopLoading(mode) && AlreadyLoadingProject())
             {
-                IndicateProjectNotLoading(ViewModel.IsFlatModeEnabled);
+                IndicateProjectNotLoading();
             }
             else if (ShouldStopTemporaryLoading(mode) && AlreadyTemporaryLoading())
             {
-                IndicateProjectNotLoading(ViewModel.IsFlatModeEnabled);
+                IndicateProjectNotLoading();
             }
             else if (ShouldStartTemporaryLoading(mode) && Ready())
             {
@@ -376,27 +382,31 @@ namespace WolvenKit.Views.Tools
 
         private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
         {
-            Console.WriteLine("IndicateProjectLoading");
-
-            TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            _isShowingLoadingIndicator = true;
+            UpdatePaneVisibility();
         });
 
-        private void IndicateProjectNotLoading(bool isFlatModeEnabled)
+        private void IndicateProjectNotLoading()
         {
-            Console.WriteLine("IndicateProjectNotLoading");
-            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-
-            if (isFlatModeEnabled)
-            {
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            }
-            else
-            {
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            }
+            _isShowingLoadingIndicator = false;
+            UpdatePaneVisibility();
+            ScheduleGhostRowCleanup();
         }
+
+        private void UpdatePaneVisibility()
+        {
+            var isFlat = ViewModel?.IsFlatModeEnabled ?? false;
+            var isLoading = _isShowingLoadingIndicator;
+
+            LoadingText.SetCurrentValue(VisibilityProperty, ToVisibility(isLoading));
+            TreeGrid.SetCurrentValue(VisibilityProperty, ToVisibility(!isLoading && !isFlat));
+            TreeGridFlat.SetCurrentValue(VisibilityProperty, ToVisibility(!isLoading && isFlat));
+
+            static Visibility ToVisibility(bool isVisible) => isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void ScheduleGhostRowCleanup() =>
+            Dispatcher.BeginInvoke(InvalidateLayout, DispatcherPriority.Loaded);
 
         #endregion Project_Loading
 
@@ -420,20 +430,21 @@ namespace WolvenKit.Views.Tools
 
         private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
-            // The refresh below disposes every TreeNode; a pending drag-hover auto-expand
-            // would fire on a disposed node afterwards.
             _rowDragDropController.CancelPendingAutoExpand();
+            CompositeDisposable disposables = [];
 
-            CompositeDisposable disposables =
-            [
-                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
-                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
-            ];
+            if (TreeGridFlat.View is { } flatView)
+            {
+                disposables.Add(flatView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
+            }
+
+            if (TreeGrid.View is { } treeView)
+            {
+                disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
+            }
 
             using (disposables)
             {
-                // Structural mutations only under DeferRefresh.
-                // Do not call any methods on views/grids/filters/refreshes here.
                 await doBeforeRefresh();
             }
 
@@ -445,8 +456,6 @@ namespace WolvenKit.Views.Tools
                 }
 
                 InvalidateLayout();
-
-                // We need a second Invalidate here because of AsyncRelay commands like Delete.
                 Dispatcher.BeginInvoke(InvalidateLayout, DispatcherPriority.Render);
             });
         }
@@ -460,13 +469,30 @@ namespace WolvenKit.Views.Tools
             // Only update layout on the visible tree.
             if (TreeGrid.IsVisible)
             {
+                RefreshColumnWidths(TreeGrid);
                 TreeGrid.UpdateLayout();
             }
 
             if (TreeGridFlat.IsVisible)
             {
+                RefreshColumnWidths(TreeGridFlat);
                 TreeGridFlat.UpdateLayout();
             }
+        }
+
+        /// <summary>
+        /// Needed to prevent a mysterious gray bar from
+        /// hiding part of the view.
+        /// </summary>
+        /// <param name="grid"></param>
+        private static void RefreshColumnWidths(SfTreeGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+            {
+                return;
+            }
+
+            grid.TreeGridColumnSizer?.Refresh();
         }
 
         /// <summary>
@@ -540,16 +566,12 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            UpdatePaneVisibility();
+            ScheduleGhostRowCleanup();
+
             if (model.IsFlatModeEnabled)
             {
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 RefreshFlatViewIfNeeded();
-            }
-            else
-            {
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
 
             ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
