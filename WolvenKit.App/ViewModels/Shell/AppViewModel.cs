@@ -20,7 +20,6 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -318,20 +317,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public event EventHandler? OnAppLoaded;
 
-    /// <summary>
-    /// One-time application startup work. Call once, from the shell, after its bindings are in
-    /// place.
-    /// </summary>
-    /// <remarks>
-    /// This used to hang off the <c>Status</c> property setter as a side effect, which meant it
-    /// could not be awaited, could not be ordered relative to the shell's own setup, and turned
-    /// any failure into an exception escaping a property assignment. Being an explicit awaitable
-    /// call also removes the need to branch on <c>TestHelper.InActiveTest</c> - tests simply await
-    /// it.
-    ///
-    /// Never throws: a discarded task's exception would otherwise go unobserved, and none of this
-    /// work is worth failing a launch over.
-    /// </remarks>
     public async Task InitializeAsync()
     {
         try
@@ -343,6 +328,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _pluginService.Init();
+
+        if (TestHelper.InActiveTest)
+        {
+            _archiveManagerLoader.LoadArchiveManagerAsync().GetAwaiter().GetResult();
+        }
+        else if (Application.Current is { } app )
+        {
+            app.Dispatcher.Invoke(_archiveManagerLoader.LoadArchiveManagerAsync, DispatcherPriority.ApplicationIdle);
+        }
 
         if (!OpenFileFromLaunchArgs())
         {
@@ -863,7 +857,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await _archiveManagerLoader.LoadArchiveManagerAsync().ContinueWith(_ =>
+        DispatcherHelper.DelayOnMainThread(() =>
         {
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
@@ -874,7 +868,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
 
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
-        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+        }, 1000);
     }
 
     private static bool ProjectLocationsMatch(string loadedLocation, string requestedLocation)
