@@ -54,7 +54,7 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         SelectedRedTypeTemplate = ((List<RedTypeTemplateSelectionOption>)CurrentRedTypeTemplates.Source).First();
 
         RequestedType = typeof(object);
-        _ = Refresh();
+        RefreshFromRegistry();
     }
 
     partial void OnRequestedTypeChanged(Type value)
@@ -66,17 +66,21 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         ApplyTemplateCustomSort(CurrentRedTypeTemplates);
     }
 
+    public void RefreshFromRegistry()
+    {
+        IndexRedTypeTemplates();
+        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : _defaultList;
+        SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
+        CurrentRedTypeTemplates.View.Refresh();
+        ApplyTemplateCustomSort(CurrentRedTypeTemplates);
+    }
+
     [RelayCommand]
     private async Task Refresh()
     {
         await Task.Run(() => RedTypeTemplateServiceHelper.UpdateSystemTemplatesFromRemote(_loggerService));
         _redTypeTemplateService.LoadTemplates();
-
-        IndexRedTypeTemplates();
-        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : _defaultList;
-        SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
-        CurrentRedTypeTemplates?.View.Refresh();
-        ApplyTemplateCustomSort(CurrentRedTypeTemplates);
+        RefreshFromRegistry();
 
         PostRefresh?.Invoke(this, EventArgs.Empty);
     }
@@ -85,8 +89,9 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     {
         TemplatesByType.Clear();
 
-        IndexTemplates(_redTypeTemplateService.UserTemplates, RedTypeTemplateSelectionOptionSource.User);
-        IndexTemplates(_redTypeTemplateService.SystemTemplates, RedTypeTemplateSelectionOptionSource.System);
+        var templates = _redTypeTemplateService.GetTemplateRegistrySnapshot();
+        IndexTemplates(templates.User, RedTypeTemplateSelectionOptionSource.User);
+        IndexTemplates(templates.System, RedTypeTemplateSelectionOptionSource.System);
 
         foreach (var kvp in TemplatesByType)
         {

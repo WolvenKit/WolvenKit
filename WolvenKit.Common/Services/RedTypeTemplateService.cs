@@ -58,6 +58,15 @@ public class RedTypeTemplateService
         }
     }
 
+    public (IReadOnlyList<RedTypeTemplateDescriptor> User, IReadOnlyList<RedTypeTemplateDescriptor> System)
+        GetTemplateRegistrySnapshot()
+    {
+        lock (_lock)
+        {
+            return (UserTemplates.ToList(), SystemTemplates.ToList());
+        }
+    }
+
     private void LoadTemplatesFromDirectory(string dir, List<RedTypeTemplateDescriptor> templates)
     {
         foreach (var f in new DirectoryInfo(dir).EnumerateFiles("*", SearchOption.TopDirectoryOnly))
