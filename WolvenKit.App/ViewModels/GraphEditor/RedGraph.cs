@@ -925,6 +925,9 @@ public partial class RedGraph : IDisposable
         {
             if (disposing)
             {
+                Comments.CollectionChanged -= CommentsOnCollectionChanged;
+                Nodes.CollectionChanged -= NodesOnCollectionChanged;
+
                 foreach (var node in Nodes)
                 {
                     node.Dispose();

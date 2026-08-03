@@ -65,9 +65,21 @@ public partial class GraphEditorView : UserControl
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
         nameof(Source), typeof(RedGraph), typeof(GraphEditorView), new PropertyMetadata(null, OnSourceChanged));
 
+    /// <summary>
+    /// Raised when the graph displayed by the editor changes, including when it is cleared.
+    /// </summary>
+    public event EventHandler<RedGraph> SourceChanged;
+
     private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is not GraphEditorView { Source: not null } view)
+        if (d is not GraphEditorView view)
+        {
+            return;
+        }
+
+        view.SourceChanged?.Invoke(view, e.NewValue as RedGraph);
+
+        if (view.Source is null)
         {
             return;
         }

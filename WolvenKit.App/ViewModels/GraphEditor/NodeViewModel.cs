@@ -307,6 +307,7 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
                 
                 // Unsubscribe from property update service
                 NodePropertyUpdateService.NodePropertyUpdated -= OnNodePropertyUpdated;
+                Output.CollectionChanged -= OnOutputCollectionChanged;
             }
 
             _disposedValue = true;

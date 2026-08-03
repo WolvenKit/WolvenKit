@@ -232,6 +232,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
             DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+
+            if (dockElement is RedDocumentViewModel redDocument)
+            {
+                redDocument.Dispose();
+            }
         }
 
         foreach (var dockElement in (e.NewItems ?? Array.Empty<object>()).OfType<IDockElement>())
