@@ -450,11 +450,6 @@ namespace WolvenKit.Views.Tools
 
             DispatcherHelper.RunOnMainThread(() =>
             {
-                if (!_currentFolderQuery.IsNullOrEmpty())
-                {
-                    ReapplyCurrentSearchFilter(expandAllForSearch: true);
-                }
-
                 InvalidateLayout();
                 Dispatcher.BeginInvoke(InvalidateLayout, DispatcherPriority.Render);
             });
@@ -478,6 +473,8 @@ namespace WolvenKit.Views.Tools
                 RefreshColumnWidths(TreeGridFlat);
                 TreeGridFlat.UpdateLayout();
             }
+
+            Dispatcher.BeginInvoke(() => PESearchBar.AppendText(""), DispatcherPriority.ApplicationIdle);
         }
 
         /// <summary>
