@@ -333,6 +333,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 #endif
 
         CheckForScriptUpdatesCommand.SafeExecute();
+        CheckForTemplateUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
     }
@@ -640,6 +641,23 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         await File.WriteAllTextAsync(hashPath.FullName, remoteHash);
         _scriptService.RefreshUIScripts();
+    }
+
+    [RelayCommand]
+    private async Task CheckForTemplateUpdates()
+    {
+        try
+        {
+            if (await RedTypeTemplateServiceHelper.UpdateSystemTemplatesFromRemote(_loggerService))
+            {
+                _redTypeTemplateService.LoadTemplates();
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Warning("Failed to update system templates");
+            _loggerService.Warning(ex.Message);
+        }
     }
 
     [RelayCommand]
