@@ -34,7 +34,7 @@ public enum ERedDocumentItemType
     Editor
 }
 
-public partial class RedDocumentViewModel : DocumentViewModel
+public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
 {
     private readonly IDocumentTabViewmodelFactory _documentTabViewmodelFactory;
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
@@ -55,6 +55,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     private readonly string _path;
     private bool _suppressNextReload;
+    private bool _disposed;
 
     public RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel,
         IDocumentTabViewmodelFactory documentTabViewmodelFactory,
@@ -395,7 +396,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public void PopulateItems(bool keepRootTab = false)
     {
-        foreach (var tab in TabItemViewModels)
+        var previousTabs = TabItemViewModels.ToList();
+        foreach (var tab in previousTabs)
         {
             switch (tab)
             {
@@ -425,6 +427,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
 
         TabItemViewModels.Clear();
+
+        if (ReferenceEquals(NodeSelectionService.Instance.SelectedNode?.DocumentViewModel, this))
+        {
+            NodeSelectionService.Instance.SelectedNode = null;
+        }
+
+        foreach (var disposableTab in previousTabs.OfType<IDisposable>())
+        {
+            if (!ReferenceEquals(disposableTab, rootTab))
+            {
+                disposableTab.Dispose();
+            }
+        }
 
         TabItemViewModels.Add(rootTab);
         AddTabForRedType(Cr2wFile.RootChunk);
@@ -649,6 +664,26 @@ public partial class RedDocumentViewModel : DocumentViewModel
         var tab = _documentTabViewmodelFactory.RDTDataViewModel(hash.ToString(), file.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
         TabItemViewModels.Add(tab);
         return tab;
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (ReferenceEquals(NodeSelectionService.Instance.SelectedNode?.DocumentViewModel, this))
+        {
+            NodeSelectionService.Instance.SelectedNode = null;
+        }
+
+        foreach (var disposableTab in TabItemViewModels.OfType<IDisposable>().ToList())
+        {
+            disposableTab.Dispose();
+        }
     }
 
 

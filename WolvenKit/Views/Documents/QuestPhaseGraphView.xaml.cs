@@ -63,6 +63,7 @@ namespace WolvenKit.Views.Documents
         private IDocumentViewModel? _lastActiveDocument;
         private bool _disposed = false;
         private IDocumentViewModel? _currentDocument; // Track current document for disposal detection
+        private RedGraph? _subscribedGraph;
 
         // Node selection persistence across document switches
         private static readonly Dictionary<string, (uint nodeId, int graphLevel)> s_documentNodeSelections = new();
@@ -72,8 +73,27 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
 
+            QuestPhaseGraphEditor.SourceChanged += OnEditorSourceChanged;
+
             // Add keyboard shortcut for subgraph navigation (Tab key)
             KeyDown += OnKeyDown;
+        }
+
+        private void OnEditorSourceChanged(object? sender, RedGraph? graph)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (graph is null)
+            {
+                UnsubscribeFromGraph();
+                return;
+            }
+
+            SubscribeToGraph(graph);
+            UpdateConnectionPathTypes(graph);
         }
 
         /// <summary>
@@ -209,6 +229,9 @@ namespace WolvenKit.Views.Documents
                     viewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
                 }
 
+                UnsubscribeFromGraph();
+
+                QuestPhaseGraphEditor.SourceChanged -= OnEditorSourceChanged;
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
 
@@ -259,13 +282,9 @@ namespace WolvenKit.Views.Documents
             // Monitor document closing by watching DockedViews collection
             MonitorDocumentClosing();
 
-            viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-            viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 SetupConnectionTemplate();
-                UpdateConnectionPathTypes(viewModel.MainGraph);
                 BuildBreadcrumb(); // Initialize breadcrumb navigation
 
                 // Add a small delay to ensure smooth loading experience
@@ -274,6 +293,39 @@ namespace WolvenKit.Views.Documents
                     viewModel.SetGraphLoaded();
                 }), DispatcherPriority.Background);
             }), DispatcherPriority.Loaded);
+        }
+
+        private void SubscribeToGraph(RedGraph graph)
+        {
+            if (ReferenceEquals(_subscribedGraph, graph))
+            {
+                return;
+            }
+
+            UnsubscribeFromGraph();
+            _subscribedGraph = graph;
+            graph.Connections.CollectionChanged += OnGraphCollectionChanged;
+            graph.Nodes.CollectionChanged += OnGraphCollectionChanged;
+        }
+
+        private void UnsubscribeFromGraph()
+        {
+            if (_subscribedGraph == null)
+            {
+                return;
+            }
+
+            _subscribedGraph.Connections.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph.Nodes.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph = null;
+        }
+
+        private void OnGraphCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_subscribedGraph != null)
+            {
+                UpdateConnectionPathTypes(_subscribedGraph);
+            }
         }
 
 

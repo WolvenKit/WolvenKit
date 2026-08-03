@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
@@ -167,6 +169,64 @@ public class GraphDocumentIntegrationTests
         Assert.AreEqual(0, notifications);
     }
 
+    [TestMethod]
+    public void RemovingQuestNodeUnsubscribesFromNodePropertyUpdates()
+    {
+        using var fixture = new GraphDocumentTestFixture("mod\\test.questphase");
+        var graphData = GraphTestHelpers.CreateQuestGraph(new questStartNodeDefinition { Id = 1 });
+        using var graph = RedGraph.GenerateQuestGraph("test.questphase", graphData, Mock.Of<INodeWrapperFactory>());
+        AttachDocument(graph, fixture.Document);
+        var wrapper = graph.Nodes.Single();
+
+        AssertMutationUnsubscribesNode(wrapper, () => graph.RemoveNode(wrapper));
+    }
+
+    [TestMethod]
+    public void RemovingSceneNodeUnsubscribesFromNodePropertyUpdates()
+    {
+        using var fixture = new GraphDocumentTestFixture();
+        var resource = GraphTestHelpers.CreateSceneResource(new scnStartNode { NodeId = new scnNodeId { Id = 1 } });
+        using var graph = RedGraph.GenerateSceneGraph("test.scene", resource, fixture.Document);
+        var wrapper = graph.Nodes.Single();
+
+        AssertMutationUnsubscribesNode(wrapper, () => graph.RemoveNode(wrapper));
+    }
+
+    [TestMethod]
+    public void ReplacingQuestNodeUnsubscribesOriginalWrapperFromNodePropertyUpdates()
+    {
+        using var fixture = new GraphDocumentTestFixture("mod\\test.questphase");
+        var graphData = GraphTestHelpers.CreateQuestGraph(new questSwitchNodeDefinition { Id = 1 });
+        using var graph = RedGraph.GenerateQuestGraph("test.questphase", graphData, Mock.Of<INodeWrapperFactory>());
+        AttachDocument(graph, fixture.Document);
+        var wrapper = graph.Nodes.OfType<BaseQuestViewModel>().Single();
+
+        AssertMutationUnsubscribesNode(wrapper, () => graph.ReplaceNodeWithQuestDeletionMarker(wrapper));
+    }
+
+    [TestMethod]
+    public void ReplacingSceneNodeUnsubscribesOriginalWrapperFromNodePropertyUpdates()
+    {
+        using var fixture = new GraphDocumentTestFixture();
+        var resource = GraphTestHelpers.CreateSceneResource(new scnAndNode { NodeId = new scnNodeId { Id = 1 } });
+        using var graph = RedGraph.GenerateSceneGraph("test.scene", resource, fixture.Document);
+        var wrapper = graph.Nodes.OfType<BaseSceneViewModel>().Single();
+
+        AssertMutationUnsubscribesNode(wrapper, () => graph.ReplaceNodeWithDeletionMarker(wrapper));
+    }
+
+    [TestMethod]
+    public void DisposingDocumentDisposesOwnedGraphTabs()
+    {
+        using var fixture = new GraphDocumentTestFixture();
+        var tab = new DisposableGraphTab(fixture.Document);
+        fixture.Document.TabItemViewModels.Add(tab);
+
+        fixture.Document.Dispose();
+
+        Assert.IsTrue(tab.IsDisposed);
+    }
+
     private static void AttachDocument(RedGraph graph, WolvenKit.App.ViewModels.Documents.RedDocumentViewModel document)
     {
         graph.DocumentViewModel = document;
@@ -174,6 +234,21 @@ public class GraphDocumentIntegrationTests
         {
             node.DocumentViewModel = document;
         }
+    }
+
+    private static void AssertMutationUnsubscribesNode(WolvenKit.App.ViewModels.GraphEditor.NodeViewModel wrapper, Action mutation)
+    {
+        var notifications = 0;
+        wrapper.PropertyChanged += (_, _) => notifications++;
+
+        NodePropertyUpdateService.NotifyPropertyUpdated(wrapper.Data);
+        Assert.IsTrue(notifications > 0);
+
+        mutation();
+        notifications = 0;
+        NodePropertyUpdateService.NotifyPropertyUpdated(wrapper.Data);
+
+        Assert.AreEqual(0, notifications);
     }
 
     private static void SaveGraphLocation(GraphDocumentTestFixture fixture, string stateParents, Point location)
@@ -197,6 +272,15 @@ public class GraphDocumentIntegrationTests
         graph.StateParents = stateParents;
         graph.GraphStateLoad();
         return graph.Nodes.Single().Location;
+    }
+
+    private sealed class DisposableGraphTab(RedDocumentViewModel parent) : RedDocumentTabViewModel(parent, "Graph"), IDisposable
+    {
+        public bool IsDisposed { get; private set; }
+
+        public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.Editor;
+
+        public void Dispose() => IsDisposed = true;
     }
 
 }

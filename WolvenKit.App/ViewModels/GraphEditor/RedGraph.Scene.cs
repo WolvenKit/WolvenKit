@@ -571,6 +571,7 @@ public partial class RedGraph
 
         // 10. Remove the original node from UI
         Nodes.Remove(node);
+        node.Dispose();
 
         // 11. Add the deletion marker wrapper to UI
         Nodes.Add(markerWrapper);
@@ -656,7 +657,10 @@ public partial class RedGraph
             }
         }
 
-        Nodes.Remove(node);
+        if (Nodes.Remove(node))
+        {
+            node.Dispose();
+        }
     }
 
     private BaseSceneViewModel WrapSceneNode(scnSceneGraphNode node)
