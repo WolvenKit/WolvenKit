@@ -75,8 +75,27 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
 
+            QuestPhaseGraphEditor.SourceChanged += OnEditorSourceChanged;
+
             // Add keyboard shortcut for subgraph navigation (Tab key)
             KeyDown += OnKeyDown;
+        }
+
+        private void OnEditorSourceChanged(object? sender, RedGraph? graph)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (graph is null)
+            {
+                UnsubscribeFromGraph();
+                return;
+            }
+
+            SubscribeToGraph(graph);
+            UpdateConnectionPathTypes(graph);
         }
 
         /// <summary>
@@ -214,6 +233,7 @@ namespace WolvenKit.Views.Documents
 
                 UnsubscribeFromGraph();
 
+                QuestPhaseGraphEditor.SourceChanged -= OnEditorSourceChanged;
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
 
@@ -252,8 +272,6 @@ namespace WolvenKit.Views.Documents
                 CleanupEventSubscription();
             }
 
-            UnsubscribeFromGraph();
-
             if (e.NewValue is not QuestPhaseGraphViewModel viewModel)
             {
                 return;
@@ -266,12 +284,9 @@ namespace WolvenKit.Views.Documents
             // Monitor document closing by watching DockedViews collection
             MonitorDocumentClosing();
 
-            SubscribeToGraph(viewModel.MainGraph);
-
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 SetupConnectionTemplate();
-                UpdateConnectionPathTypes(viewModel.MainGraph);
                 BuildBreadcrumb(); // Initialize breadcrumb navigation
 
                 // Add a small delay to ensure smooth loading experience
