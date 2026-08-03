@@ -37,14 +37,7 @@ public partial class RedGraph
     /// <summary>
     /// Get quest node types that can be embedded in scene graphs via scnQuestNode
     /// </summary>
-    public List<Type> GetQuestNodeTypesForScene()
-    {
-        // Get all quest node types that inherit from questNodeDefinition
-        return AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(x => x.GetTypes())
-            .Where(x => typeof(questNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
-            .ToList();
-    }
+    public List<Type> GetQuestNodeTypesForScene() => GetQuestNodeTypes();
 
     public uint CreateSceneNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
@@ -115,8 +108,19 @@ public partial class RedGraph
             throw new Exception($"Failed to create scene node of type {type.Name}");
         }
 
+        if (templateDesc != null)
+        {
+            foreach (var outputSocket in sceneNode.OutputSockets)
+            {
+                outputSocket.Destinations.Clear();
+            }
+        }
+
         sceneNode.NodeId = new scnNodeId { Id = ++_currentSceneNodeId };
-        sceneNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        if (sceneNode.OutputSockets.Count == 0)
+        {
+            sceneNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        }
 
         if (sceneNode is scnChoiceNode choiceNode)
         {
@@ -250,11 +254,23 @@ public partial class RedGraph
             throw new Exception($"Failed to create quest node of type {questNodeType.Name}");
         }
 
+        if (templateDesc != null)
+        {
+            foreach (var socket in questNode.Sockets)
+            {
+                if (socket.Chunk is questSocketDefinition socketDefinition)
+                {
+                    socketDefinition.Connections.Clear();
+                }
+            }
+        }
+
         // Special initialization for certain quest node types
         if (questNode is questFactsDBManagerNodeDefinition factsDBNode)
         {
             // Initialize the Type property with questSetVar_NodeType (the only implementation)
-            factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
+            factsDBNode.Type ??= new CHandle<questIFactsDBManagerNodeType>();
+            factsDBNode.Type.Chunk ??= new questSetVar_NodeType();
         }
 
         // Create the wrapper scene node and get its ID
