@@ -78,6 +78,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool _isLoading = false;
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
     private ProjectExplorerViewModel.LoadingMode _projectLoadingMode;
+    private readonly IArchiveManagerLoader _archiveManagerLoader;
 
     #endregion fields
 
@@ -93,7 +94,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        ProjectResourceTools projectResourceTools) : base(ToolTitle)
+        ProjectResourceTools projectResourceTools,
+        IArchiveManagerLoader archiveManagerLoader) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -105,6 +107,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _loggerService = loggerService;
         _appViewModel = appViewModel;
         _projectResourceTools = projectResourceTools;
+        _archiveManagerLoader = archiveManagerLoader;
 
         ContentId = ToolContentId;
 
@@ -326,7 +329,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _isLoading = true;
         UpdateLoadArchiveButtonVisibility();
         UpdateLoadingIndicatorVisibility();
-        await _gameController.GetRed4Controller().HandleStartup();
+        await _archiveManagerLoader.LoadArchiveManagerAsync();
     }
 
     [RelayCommand]

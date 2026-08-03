@@ -44,7 +44,6 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IAppArchiveManager _archiveManager;
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
-    private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
     private readonly IProjectEvents _projectEvents;
 
@@ -61,7 +60,6 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService,
         IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
@@ -74,144 +72,7 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService = progressService;
         _pluginService = pluginService;
         _modifierService = modifierService;
-        _parserService = parserService;
         _projectEvents = projectEvents;
-    }
-
-    public async Task HandleStartup()
-    {
-        await LoadArchiveManagerAsync();
-    }
-
-    // TODO: Move this somewhere else
-    private void LoadCustomHashes()
-    {
-        ResourcePath physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
-        ResourcePath presetPath = "engine\\physics\\collision_presets.json";
-
-        var physMatLib = _archiveManager.Lookup(physMatLibPath);
-        if (physMatLib.HasValue)
-        {
-            using MemoryStream ms = new();
-            physMatLib.Value.Extract(ms);
-            ms.Position = 0;
-
-            if (_parserService.TryReadRed4File(ms, out var file))
-            {
-                var root = (physicsMaterialLibraryResource)file.RootChunk;
-
-                foreach (var physMat in root.MaterialNames)
-                {
-                    if (!physMat.IsResolvable)
-                    {
-                        continue;
-                    }
-
-                    CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
-                }
-            }
-        }
-
-        var preset = _archiveManager.Lookup(presetPath);
-        if (preset.HasValue)
-        {
-            using MemoryStream ms = new();
-            preset.Value.Extract(ms);
-            ms.Position = 0;
-
-            if (_parserService.TryReadRed4File(ms, out var file))
-            {
-                var root = (JsonResource)file.RootChunk;
-                var res = (physicsCollisionPresetsResource)root.Root.Chunk.NotNull();
-
-                foreach (var presetEntry in res.Presets)
-                {
-                    if (presetEntry is not { Name: { IsResolvable: true } name })
-                    {
-                        continue;
-                    }
-
-                    CNamePool.AddOrGetHash(name.GetResolvedText()!);
-                }
-            }
-        }
-    }
-
-    public const string ArchiveLoadingPurpose = "RED4Controller archive loading";
-
-    /// <summary>
-    /// Starts the archive-loading progress heartbeat and returns a scope that releases it.
-    ///
-    /// The heartbeat is reference counted on <see cref="ArchiveLoadingPurpose"/>, so overlapping
-    /// loads — RED4Controller is registered transient, so the app view model, the asset browser
-    /// and the materials dialog each hold their own instance — share a single timer. The
-    /// indicator is only reset to Ready once the last loader disposes its scope, rather than
-    /// whichever loader happens to finish first.
-    /// </summary>
-    private IDisposable BeginLoadingIndicator() =>
-        DispatcherHelper.StartRepeatingAction(
-            purpose: ArchiveLoadingPurpose,
-            () =>
-            {
-                _progressService.IsIndeterminate = true;
-                _progressService.Status = EStatus.Running;
-            },
-            TimeSpan.FromMilliseconds(100),
-            onCancelled: () =>
-            {
-                _progressService.IsIndeterminate = false;
-                _progressService.Status = EStatus.Ready;
-            }
-        );
-
-    /// <summary>
-    /// Loads the basegame + EP1 archives on a background thread.
-    /// While loading, a 100ms repeating timer forces the global ProgressService
-    /// into Running/Indeterminate state. This mitigates the problem that there is
-    /// only a single global "Ready/Running" state — other code can (and does)
-    /// call Completed() or set IsIndeterminate=false while this long job is still
-    /// in progress.
-    /// </summary>
-    private async Task LoadArchiveManagerAsync()
-    {
-        // Fast path checks — do NOT start the loading indicator if there's nothing to do.
-        if (_archiveManager.IsManagerLoaded)
-        {
-            return;
-        }
-
-        if (_settingsManager.CP77ExecutablePath is null)
-        {
-            _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");
-            return;
-        }
-
-        using var loadingIndicator = BeginLoadingIndicator();
-
-        try
-        {
-            await Task.Run(() =>
-            {
-                // Keep priority low so the UI stays responsive during the (potentially long)
-                // first-time scan of dozens of large .archive files.
-                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
-                Thread.CurrentThread.IsBackground = true;
-
-                _loggerService.Info("Loading Archive Manager ... ");
-
-                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                // Custom hash population needs the archives to be loaded, so do it here on the same thread.
-                LoadCustomHashes();
-            });
-
-            _loggerService.Success("Finished loading Archive Manager.");
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error(e);
-            throw;
-        }
     }
 
     #region Packing

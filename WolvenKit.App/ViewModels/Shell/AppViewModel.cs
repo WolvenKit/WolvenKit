@@ -20,7 +20,6 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -93,6 +92,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
+    private IArchiveManagerLoader _archiveManagerLoader;
 
     /// <summary>
     /// Class constructor
@@ -123,7 +123,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
         IProjectEvents projectEvents,
-        RedTypeTemplateService redTypeTemplateService
+        RedTypeTemplateService redTypeTemplateService,
+        IArchiveManagerLoader archiveManagerLoader
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -152,6 +153,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
         _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
         _redTypeTemplateService = redTypeTemplateService;
+        _archiveManagerLoader = archiveManagerLoader;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -325,6 +327,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _pluginService.Init();
+
+        if (TestHelper.InActiveTest)
+        {
+            _archiveManagerLoader.LoadArchiveManagerAsync().GetAwaiter().GetResult();
+        }
+        else if (Application.Current is { } app )
+        {
+            app.Dispatcher.Invoke(_archiveManagerLoader.LoadArchiveManagerAsync, DispatcherPriority.ApplicationIdle);
+        }
+
         if (!OpenFileFromLaunchArgs())
         {
             ShowHomePageSync();
@@ -817,24 +829,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        try
+        DispatcherHelper.DelayOnMainThread(() =>
         {
-            await _gameControllerFactory.GetController().HandleStartup();
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error(ex);
-        }
+            UpdateTitle();
+            _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+            // https://github.com/WolvenKit/WolvenKit/issues/1962
+            if (!FilepathValidationTools.IsOsFilePathValid(location))
+            {
+                _notificationService.Warning($"Project path {location} contains invalid characters!");
+            }
 
-        UpdateTitle();
-        _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-        // https://github.com/WolvenKit/WolvenKit/issues/1962
-        if (!FilepathValidationTools.IsOsFilePathValid(location))
-        {
-            _notificationService.Warning($"Project path {location} contains invalid characters!");
-        }
-
-        OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+        }, 1000);
     }
 
     private static bool ProjectLocationsMatch(string loadedLocation, string requestedLocation)
@@ -2806,9 +2812,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitGridScale"] = gridScale;
     }
 
-    #endregion methods
-
-    # region file_and_document_handling
+    #region Document Open/Close/Save
 
     /// <param name="absolutePath">Absolute path of the file</param>
     /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
@@ -3340,6 +3344,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return true;
     }
 
-    #endregion
+    #endregion Document Open/Close/Save
 
+    #endregion methods
 }
