@@ -20,7 +20,6 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -93,6 +92,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
+    private IArchiveManagerLoader _archiveManagerLoader;
 
     /// <summary>
     /// Class constructor
@@ -123,7 +123,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
         RedTypeTemplateService redTypeTemplateService,
-        IProjectEvents projectEvents
+        IProjectEvents projectEvents,
+        IArchiveManagerLoader archiveManagerLoader
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -152,6 +153,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _projectEvents = projectEvents;
         _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
         _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
+        _archiveManagerLoader = archiveManagerLoader;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -325,6 +327,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _pluginService.Init();
+
+        if (TestHelper.InActiveTest)
+        {
+            _archiveManagerLoader.LoadArchiveManagerAsync().GetAwaiter().GetResult();
+        }
+        else if (Application.Current is { } app )
+        {
+            app.Dispatcher.Invoke(_archiveManagerLoader.LoadArchiveManagerAsync, DispatcherPriority.ApplicationIdle);
+        }
+
         if (!OpenFileFromLaunchArgs())
         {
             ShowHomePageSync();
@@ -817,24 +829,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        try
+        DispatcherHelper.DelayOnMainThread(() =>
         {
-            await _gameControllerFactory.GetController().HandleStartup();
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error(ex);
-        }
+            UpdateTitle();
+            _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+            // https://github.com/WolvenKit/WolvenKit/issues/1962
+            if (!FilepathValidationTools.IsOsFilePathValid(location))
+            {
+                _notificationService.Warning($"Project path {location} contains invalid characters!");
+            }
 
-        UpdateTitle();
-        _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-        // https://github.com/WolvenKit/WolvenKit/issues/1962
-        if (!FilepathValidationTools.IsOsFilePathValid(location))
-        {
-            _notificationService.Warning($"Project path {location} contains invalid characters!");
-        }
-
-        OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+        }, 1000);
     }
 
     private static bool ProjectLocationsMatch(string loadedLocation, string requestedLocation)
@@ -970,15 +976,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Any();
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
-    private void SaveAll()
+    private void SaveAll(bool onlyProjectFiles = false)
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not { } activeProject)
         {
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
 
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>()
+                     .Where(f => f.IsDirty)
+                     .Where(f => !onlyProjectFiles || activeProject.ModFiles
+                         .Select(relPath => Path.Join(activeProject.ModDirectory, relPath).ToLower())
+                         .Contains(f.FilePath?.ToLower())))
         {
             Save(file);
         }
@@ -986,7 +996,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
     {
-        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>()
+            .Where(tab => tab.IsDirty)
+            .Where(tab =>
+            {
+                if (_projectManager.ActiveProject is not { } project || string.IsNullOrEmpty(tab.FilePath))
+                {
+                    return true;
+                }
+
+                var filePath = project.GetGameRelativePath(tab.FilePath) ?? tab.FilePath;
+                return project.ModFiles.Contains(filePath, StringComparer.InvariantCultureIgnoreCase);
+            }).ToList();
+
         if (dirtyFiles.Count == 0)
         {
             return true;
@@ -1007,7 +1029,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case WMessageBoxResult.OK:
             case WMessageBoxResult.Yes:
             default:
-                SaveAll();
+                SaveAll(true);
                 break;
         }
 
