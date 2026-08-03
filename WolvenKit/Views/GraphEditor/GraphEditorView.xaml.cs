@@ -318,260 +318,28 @@ public partial class GraphEditorView : UserControl
         }
 
         node.ContextMenu ??= new ContextMenu();
+        node.ContextMenu.Style = (Style)Resources["GraphContextMenuStyle"];
 
-        node.ContextMenu.Items.Clear();
+        var menu = new GraphContextMenuBuilder(
+            node.ContextMenu,
+            (Style)Resources["GraphContextMenuItemStyle"],
+            (Style)Resources["GraphContextMenuSeparatorStyle"]);
+        var selectedGraphNodes = SelectedNodes.OfType<NodeViewModel>().ToList();
 
         if (Source.GraphType == RedGraphType.Behavior)
         {
-            if (nvm is BehaviorNodeViewModel behaviorNode && Source.CanAddBehaviorChild(behaviorNode))
-            {
-                var addChildMenu = CreateCategoryMenuItem("Add Child");
-                AddBehaviorNodeCreationItems(addChildMenu, type =>
-                {
-                    var nodeId = Source.AddBehaviorChild(behaviorNode, type.Type, type.RedTypeTemplateSelectionOption);
-                    SelectNodeById(nodeId);
-                });
-
-                node.ContextMenu.Items.Add(addChildMenu);
-                node.ContextMenu.Items.Add(new Separator());
-            }
-
-            var toggleBehaviorSlotsText = nvm.ShowUnusedSockets ? "Hide Structural Slots" : "Show Structural Slots";
-            node.ContextMenu.Items.Add(CreateMenuItem(toggleBehaviorSlotsText, "Eye", "WolvenKitYellow", () =>
-            {
-                nvm.ShowUnusedSockets = !nvm.ShowUnusedSockets;
-                Source.GraphStateSave();
-            }));
-
-            node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
-            e.Handled = true;
-            return;
+            BuildBehaviorNodeContextMenu(menu, nvm);
+        }
+        else if (selectedGraphNodes.Count > 1)
+        {
+            BuildMultiNodeContextMenu(menu, selectedGraphNodes);
+        }
+        else
+        {
+            BuildSingleNodeContextMenu(menu, nvm);
         }
 
-        var selectedGraphNodes = SelectedNodes.OfType<NodeViewModel>().Cast<object>().ToList();
-        if (selectedGraphNodes.Count > 1)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(selectedGraphNodes)));
-            if (Source.GraphType == RedGraphType.Quest)
-            {
-                node.ContextMenu.Items.Add(CreateMenuItem("Convert to Phase", "FolderOutline", "WolvenKitRed", () => Source.CreatePhaseFromSelection(selectedGraphNodes)));
-            }
-            node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
-
-            e.Handled = true;
-            return;
-        }
-
-        if (node.DataContext is IDynamicInputNode dynamicInputNode)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Input", "PlusCircle", () => dynamicInputNode.AddInput()));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (node.DataContext is IDynamicOutputNode dynamicOutputNode)
-        {
-            // Check if it's a section node for specific labeling
-            string addLabel = dynamicOutputNode is scnSectionNodeWrapper ? "Add Event Socket" : "Add Output";
-
-            node.ContextMenu.Items.Add(CreateMenuItem(addLabel, "PlusCircle", () => dynamicOutputNode.AddOutput()));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (node.DataContext is scnChoiceNodeWrapper choice)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Choice", "PlusCircle", () => choice.AddChoice()));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (node.DataContext is questSwitchNodeDefinitionWrapper switchNode)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Case", "PlusCircle", () => switchNode.AddCondition()));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (node.DataContext is IGraphProvider graphProvider)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", "Play", "WolvenKitGreen", () => Source.RecalculateSockets(graphProvider)));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (node.DataContext is questPhaseNodeDefinitionWrapper phaseNode)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Unpack phase", "PackageUp", "WolvenKitRed", () => Source.UnpackPhase(phaseNode)));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        var toggleSocketsText = nvm.ShowUnusedSockets ? "Hide Unused Sockets" : "Show Unused Sockets";
-        node.ContextMenu.Items.Add(CreateMenuItem(toggleSocketsText, "Eye", "WolvenKitYellow",() =>
-        {
-            nvm.ShowUnusedSockets = !nvm.ShowUnusedSockets;
-            Source.GraphStateSave();
-        }));
-
-        if (node.DataContext is questSceneNodeDefinitionWrapper sceneNode)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem(
-                "Add Scene To Project",
-                "ArrowLeftCircle",
-                "WolvenKitYellow",
-                () => sceneNode.AddSceneToProject()));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        node.ContextMenu.Items.Add(CreateMenuItem("Duplicate Node", "ContentDuplicate", "WolvenKitYellow", () => Source.DuplicateNode(nvm)));
-        node.ContextMenu.Items.Add(CreateMenuItem("Copy Node", "ContentCopy", "WolvenKitYellow", () => GraphClipboardManager.CopyNode(nvm, Source.GraphType)));
-
-        var templateData = GetTemplateData(nvm);
-        if (templateData != null && RedTypeTemplateService.IsTypeTemplatable(templateData.GetType()))
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem(
-                "Create Template from Node",
-                "ContentSaveOutline",
-                "WolvenKitPurple",
-                async () => await _appViewModel.SetActiveDialog(
-                    new CreateTemplateFromChunkDialogViewModel(templateData, _redTypeTemplateService, _appViewModel))));
-        }
-
-        if (Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel sceneViewModel)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem(
-                "Detach Node",
-                "LinkOff",
-                "WolvenKitYellow",
-                () => DetachNode(sceneViewModel)));
-
-            if (!(sceneViewModel is scnStartNodeWrapper || sceneViewModel is scnEndNodeWrapper))
-            {
-                // Check if this node type should use a deletion marker
-                bool shouldUseDeletionMarker = ShouldSceneNodeUseDeletionMarker(sceneViewModel);
-
-                if (sceneViewModel is scnDeletionMarkerNodeWrapper)
-                {
-                    // Deletion markers can always be destroyed
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Destroy Deletion Marker",
-                        "CloseBoxOutline",
-                        "WolvenKitRed",
-                        () => Source.RemoveNode(sceneViewModel)));
-                }
-                else if (shouldUseDeletionMarker)
-                {
-                    // Critical scene nodes: show both Delete (soft) and Destroy (hard)
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Delete Node",
-                        "Delete",
-                        "WolvenKitRed",
-                        () => Source.ReplaceNodeWithDeletionMarker(sceneViewModel)));
-
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Destroy Node",
-                        "CloseBoxOutline",
-                        "WolvenKitRed",
-                        () => Source.RemoveNode(sceneViewModel)));
-                }
-                else
-                {
-                    // Non-critical scene nodes: only show Destroy
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Destroy Node",
-                        "CloseBoxOutline",
-                        "WolvenKitRed",
-                        () => Source.RemoveNode(sceneViewModel)));
-                }
-            }
-
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (Source.GraphType == RedGraphType.Quest && node.DataContext is BaseQuestViewModel questViewModel)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem(
-                "Detach Node",
-                "LinkOff",
-                "WolvenKitYellow",
-                () => DetachQuestNode(questViewModel)));
-
-            if (!(questViewModel is questStartNodeDefinitionWrapper || questViewModel is questEndNodeDefinitionWrapper))
-            {
-                // Check if this node type should use a deletion marker
-                bool shouldUseDeletionMarker = questViewModel.Data is questSignalStoppingNodeDefinition
-                    || questViewModel.Data.GetType() == typeof(questSwitchNodeDefinition)
-                    || questViewModel.Data.GetType() == typeof(questFlowControlNodeDefinition);
-
-                if (questViewModel is questDeletionMarkerNodeDefinitionWrapper)
-                {
-                    // Deletion markers can always be destroyed
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Destroy Deletion Marker",
-                        "CloseBoxOutline",
-                        "WolvenKitRed",
-                        () => Source.RemoveNode(questViewModel)));
-                }
-                else if (shouldUseDeletionMarker)
-                {
-                    // Signal-stopping nodes: show both Delete (soft) and Destroy (hard)
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Delete Node",
-                        "Delete",
-                        "WolvenKitRed",
-                        () => Source.ReplaceNodeWithQuestDeletionMarker(questViewModel)));
-
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Destroy Node",
-                        "CloseBoxOutline",
-                        "WolvenKitRed",
-                        () => Source.RemoveNode(questViewModel)));
-                }
-                else
-                {
-                    // Non-signal-stopping nodes: only show Destroy
-                    node.ContextMenu.Items.Add(CreateMenuItem(
-                        "Destroy Node",
-                        "CloseBoxOutline",
-                        "WolvenKitRed",
-                        () => Source.RemoveNode(questViewModel)));
-                }
-            }
-
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        // For other node types that aren't scene or quest specific, show destroy option
-        if (!(Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel) &&
-            !(Source.GraphType == RedGraphType.Quest && node.DataContext is BaseQuestViewModel))
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
-        }
-
-        // Add deletion markers info for scene graphs for now
-        if (Source.GraphType == RedGraphType.Scene)
-        {
-            node.ContextMenu.Items.Add(new Separator());
-
-            // Create help item using XAML-defined style
-            var infoItem = new MenuItem
-            {
-                Header = "What do these mean?",
-                Style = (Style)Resources["HelpMenuItemStyle"]
-            };
-
-            infoItem.Click += (_, _) => {
-                try
-                {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://wiki.redmodding.org/wolvenkit/wolvenkit-app/editor/scene-editor") { UseShellExecute = true });
-                }
-                catch (Exception)
-                {
-                    // Silently handle any exceptions when opening the link
-                }
-            };
-
-            node.ContextMenu.Items.Add(infoItem);
-        }
-
-        node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
-
-        e.Handled = true;
+        menu.Open(e);
     }
 
     private static IRedType GetTemplateData(NodeViewModel node)
@@ -1065,33 +833,8 @@ public partial class GraphEditorView : UserControl
 
     private static MenuItem CreateMenuItem(string header, string iconKind, Action click) => CreateMenuItem(header, iconKind, "", click);
 
-    private static MenuItem CreateMenuItem(string header, string iconKind, string iconColor, Action click)
-    {
-        var item = new MenuItem
-        {
-            Header = header,
-            Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
-        };
-
-        if (iconKind != null)
-        {
-            var icon = new IconBox
-            {
-                IconPack = (iconKind == "Empty") ? IconPackType.Empty : IconPackType.Material,
-                Kind = (iconKind == "Empty") ? "" : iconKind,
-                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
-                Size = (double)Application.Current.Resources["WolvenKitIconMicro"]!
-            };
-
-            if (iconColor != null)
-            {
-                icon.Foreground = (Brush)Application.Current.Resources[iconColor] ?? Brushes.White;
-            }
-            item.Icon = icon;
-        }
-        item.Click += (_, _) => click();
-        return item;
-    }
+    private static MenuItem CreateMenuItem(string header, string iconKind, string iconColor, Action click) =>
+        GraphContextMenuBuilder.CreateMenuItem(header, iconKind, iconColor, click);
 
     /// <summary>
     /// Create a menu item with emoji in the text and no additional icon
@@ -1110,20 +853,7 @@ public partial class GraphEditorView : UserControl
     }
 
     private static MenuItem CreateCategoryMenuItem(string categoryName)
-    {
-        return new MenuItem
-        {
-            Header = categoryName,
-            Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
-            Icon = new IconBox
-            {
-                IconPack = IconPackType.Material,
-                Kind = "FolderOutline",
-                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
-                Size = (double)Application.Current.Resources["WolvenKitIconMicro"]!
-            }
-        };
-    }
+        => GraphContextMenuBuilder.CreateMenuItem(categoryName, "FolderOutline", null, null);
 
     private static readonly string[] s_commonBehaviorNodeTypeNames =
     {
