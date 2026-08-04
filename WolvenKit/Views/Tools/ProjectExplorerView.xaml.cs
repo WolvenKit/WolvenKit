@@ -295,21 +295,18 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            UpdatePaneVisibility();
+            ScheduleGhostRowCleanup();
+
             if (model.IsFlatModeEnabled)
             {
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                RefreshFlatViewIfNeeded();
             }
-            else
-            {
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            }
-        }
-
 
             ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
+
+        #region refresh
 
         // TODO: remove ResetUiElements after we're sure the refactor is stable
 
@@ -442,12 +439,24 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void RefreshFlatViewIfNeeded()
+        {
+            if (TreeGridFlat.IsVisible)
+            {
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.Refresh();
+            }
+        }
+
         private void ResetCurrentFolderQuerySearchFilter()
         {
             _currentFolderQuery = "";
             _searchVisiblePaths = null;
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
         }
+
+        #endregion refresh
+
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
             if (ViewModel is null || _automatic || !ModifierViewStateService.IsCtrlBeingHeld)
@@ -672,7 +681,21 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
+            if (e.Action is NotifyCollectionChangedAction.Reset)
+            {
+                var shouldAutoExpand = _settingsManager.AutoExpandAllFoldersOnLaunch;
+                var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
+
+                // TODO: Check if this can ever be true here. Otherwise find a way to pass "isFirstLoad" to here.
+                var isFreshProject = ViewModel.ExpansionStateDictionary.AreKeysNull();
+
+                if (isFreshProject && nodeCount != 0 && shouldAutoExpand)
+                {
+                    TreeGrid.ExpandAllNodes();
+                }
+            }
+
+            if (e.Action is NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
                 foreach (var item in e.NewItems)
                 {
@@ -681,7 +704,7 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
@@ -711,8 +734,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            TreeGridFlat.View.Filter = IsFileInFlat;
-            TreeGridFlat.View.RefreshFilter();
+            RefreshFlatViewIfNeeded();
         }
 
         private bool IsFileIn(object o)
