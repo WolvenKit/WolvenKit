@@ -267,6 +267,8 @@ namespace WolvenKit.Views.Tools
             this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
+        #endregion Constructors
+
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
         {
             var dialog = new RenameDialog(showCheckbox);
@@ -321,6 +323,8 @@ namespace WolvenKit.Views.Tools
                 TreeGridFlat.ClearFilters();
                 TreeGridFlat.ClearSelections(false);
             }
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
+        }
 
             if (TreeGrid.View is not null)
             {
@@ -328,35 +332,118 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.ClearSelections(false);
             }
         });
+
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
             _rowDragDropController.CancelPendingAutoExpand();
 
-            CompositeDisposable disposables =
-            [
-                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
-                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
-            ];
+            if (TreeGridFlat.View is { } flatView)
+            {
+                disposables.Add(flatView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
+            }
+
+            if (TreeGrid.View is { } treeView)
+            {
+                disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
+            }
 
             using (disposables)
             {
-                await doBeforeRefresh;
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
-                {
-                    TreeGridFlat.View.Filter = IsFileInFlat;
-                    TreeGridFlat.View.Refresh();
+                await doBeforeRefresh();
+            }
 
-                    Task.Run(() =>
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                InvalidateLayout();
+                Dispatcher.BeginInvoke(InvalidateLayout, DispatcherPriority.Render);
+            });
+        }
+
+        private void InvalidateLayout()
+        {
+            // Always invalidate both grids, not just the visible one.
+            InvalidateVirtualizedRows(TreeGrid);
+            InvalidateVirtualizedRows(TreeGridFlat);
+
+            // Only update layout on the visible tree.
+            if (TreeGrid.IsVisible)
+            {
+                RefreshColumnWidths(TreeGrid);
+                TreeGrid.UpdateLayout();
+            }
+
+            if (TreeGridFlat.IsVisible)
+            {
+                RefreshColumnWidths(TreeGridFlat);
+                TreeGridFlat.UpdateLayout();
+            }
+
+            Dispatcher.BeginInvoke(() => PESearchBar.AppendText(""), DispatcherPriority.ApplicationIdle);
+        }
+
+        /// <summary>
+        /// Needed to prevent a mysterious gray bar from
+        /// hiding part of the view.
+        /// </summary>
+        /// <param name="grid"></param>
+        private static void RefreshColumnWidths(SfTreeGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+            {
+                return;
+            }
+
+            grid.TreeGridColumnSizer?.Refresh();
+        }
+
+        /// <summary>
+        /// Forces a Syncfusion SfTreeGrid to re-measure its virtualized rows, clearing the "rows drawn
+        /// over each other" artifact that appears when the bound data changes while the grid is scrolled.
+        /// Safe no-op if the panel isn't in the visual tree yet.
+        /// </summary>
+        private static void InvalidateVirtualizedRows(DependencyObject grid)
+        {
+            var panel = FindVisualDescendant<TreeGridPanel>(grid);
+            if (panel == null)
+            {
+                return;
+            }
+
+            // Fixes the appearance of a double "ghost table."
+            panel.InvalidateMeasureInfo();
+            panel.InvalidateMeasure();
+            panel.InvalidateArrange();
+
+            return;
+
+            T FindVisualDescendant<T>(DependencyObject root) where T : DependencyObject
+            {
+                var count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
+                for (var i = 0; i < count; i++)
+                {
+                    var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+                    if (child is T match)
                     {
-                        DispatcherHelper.DelayOnMainThread(() =>
-                        {
-                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
-                        }, 10);
-                    });
-                });
+                        return match;
+                    }
+
+                    var nested = FindVisualDescendant<T>(child);
+                    if (nested != null)
+                    {
+                        return nested;
+                    }
+                }
+
+                return default;
             }
         }
 
+        private void ResetCurrentFolderQuerySearchFilter()
+        {
+            _currentFolderQuery = "";
+            _searchVisiblePaths = null;
+            PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
+        }
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
             if (ViewModel is null || _automatic || !ModifierViewStateService.IsCtrlBeingHeld)
@@ -418,12 +505,15 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeExpanded(object sender, NodeExpandedEventArgs e)
         {
-            if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
+            if (ViewModel is null
+                || _suppressExpansionPersistence
+                || !string.IsNullOrEmpty(_currentFolderQuery)
+                || e.Node.Item is not FileSystemModel fileSystemModel)
             {
                 return;
             }
 
-            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, true);
+            ViewModel.NotifyDirectoryExpanded(fileSystemModel);
         }
 
         private bool _automatic;
@@ -485,12 +575,15 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeCollapsed(object sender, NodeCollapsedEventArgs e)
         {
-            if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
+            if (ViewModel is null
+                || _suppressExpansionPersistence
+                || !string.IsNullOrEmpty(_currentFolderQuery)
+                || e.Node.Item is not FileSystemModel fileSystemModel)
             {
                 return;
             }
 
-            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, false);
+            ViewModel.NotifyDirectoryCollapsed(fileSystemModel);
         }
 
         private void AddKeyUpEvent()
@@ -563,6 +656,7 @@ namespace WolvenKit.Views.Tools
 
             TreeGrid.View.NodeCollectionChanged += View_OnNodeCollectionChanged;
 
+            RebuildSearchVisiblePaths();
             TreeGrid.View.Filter = IsFileIn;
             TreeGrid.View.RefreshFilter();
         }
@@ -624,8 +718,10 @@ namespace WolvenKit.Views.Tools
                 return false;
             }
 
-            // Filtered by search
-            if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !fm.Name.Contains(_currentFolderQuery))
+            // Search filter: keep the node if it is a match or an ancestor of a match.
+            // Without this, matching leaves under non-matching folders are unreachable.
+            if (_searchVisiblePaths is not null
+                && !_searchVisiblePaths.Contains(fm.RawRelativePath))
             {
                 return false;
             }
@@ -667,7 +763,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        #endregion Constructors
+        #region expand/collapse
 
         private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
         {
@@ -716,23 +812,276 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
+        private void RestoreExpansionRecursive(IEnumerable<TreeNode> nodes)
         {
-            _currentFolderQuery = e.Info;
-
-            if (ViewModel?.IsFlatModeEnabled == true)
+            if (ViewModel is null || nodes is null)
             {
-                TreeGridFlat.View.RefreshFilter();
+                return;
             }
-            else
-            {
-                // expand all
-                TreeGrid.ExpandAllNodes();
 
-                // filter programmatically
-                TreeGrid.View.RefreshFilter();
+            foreach (var node in nodes)
+            {
+                if (node.Item is not FileSystemModel { IsDirectory: true } model)
+                {
+                    continue;
+                }
+
+                // Depth-first: fix children before this node so collapsing a parent
+                // does not leave child model/view state inconsistent.
+                if (node.ChildNodes is { Count: > 0 })
+                {
+                    RestoreExpansionRecursive(node.ChildNodes);
+                }
+
+                // Paths never recorded stay collapsed after search (search may have opened them).
+                var desired = ViewModel.GetExpansionStateOrNull(model.RawRelativePath) is true;
+
+                if (desired)
+                {
+                    if (!node.IsExpanded)
+                    {
+                        TreeGrid.ExpandNode(node);
+                    }
+                }
+                else if (node.IsExpanded)
+                {
+                    TreeGrid.CollapseNode(node);
+                }
             }
         }
+
+        #endregion expand/collapse
+
+        #region search/filter
+
+        private void PESearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (PESearchBar == null)
+                return;
+
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Start();
+        }
+
+        private void ReapplyCurrentSearchFilter(bool expandAllForSearch)
+        {
+            bool searchBarHadFocus = PESearchBar != null && PESearchBar.IsKeyboardFocused;
+            var hasQuery = !string.IsNullOrWhiteSpace(_currentFolderQuery);
+
+            // Must run before RefreshFilter so IsFileIn sees the up-to-date ancestor set.
+            RebuildSearchVisiblePaths();
+
+            if (TreeGridFlat?.View is not null)
+            {
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.RefreshFilter();
+            }
+
+            if (TreeGrid?.View is not null)
+            {
+                TreeGrid.View.Filter = IsFileIn;
+                // Filter first so only relevant hierarchy is considered for expand.
+                TreeGrid.View.RefreshFilter();
+
+                if (expandAllForSearch && hasQuery)
+                {
+                    ExpandAncestorsOfSearchMatches();
+                }
+                else if (!hasQuery && _searchMutatedExpansion)
+                {
+                    RestoreExpansionStateAfterSearch();
+                    _searchMutatedExpansion = false;
+                }
+            }
+
+            if (searchBarHadFocus)
+            {
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (PESearchBar == null || PESearchBar.IsKeyboardFocused)
+                        return;
+
+                    Keyboard.Focus(PESearchBar);
+                    PESearchBar.Focus();
+                    PESearchBar.CaretIndex = PESearchBar.Text?.Length ?? 0;
+                }, DispatcherPriority.ContextIdle);
+            }
+        }
+
+        /// <summary>
+        /// Expands only directory ancestors of nodes that match the current search
+        /// (and matching directories themselves). Avoids ExpandAllNodes, which walks the
+        /// entire project and storms IsExpanded / expansion persistence.
+        /// </summary>
+        private void ExpandAncestorsOfSearchMatches()
+        {
+            if (ViewModel is null || TreeGrid?.View is null || string.IsNullOrWhiteSpace(_currentFolderQuery))
+            {
+                return;
+            }
+
+            // Collect unique directory models that must be expanded for hits to be visible.
+            var parentsToExpand = new HashSet<FileSystemModel>();
+
+            foreach (var fm in ViewModel.FileList)
+            {
+                // Only actual matches — ancestors are already in the visible set via RebuildSearchVisiblePaths.
+                if (!MatchesSearchQuery(fm))
+                {
+                    continue;
+                }
+
+                // Matching directories need to be open so filtered children can show.
+                for (var p = fm.IsDirectory ? fm : fm.Parent; p != null; p = p.Parent)
+                {
+                    parentsToExpand.Add(p);
+                }
+            }
+
+            if (parentsToExpand.Count == 0)
+            {
+                return;
+            }
+
+            _suppressExpansionPersistence = true;
+
+            try
+            {
+                foreach (var dir in parentsToExpand
+                             .OrderBy(d => d.RawRelativePath.Length)
+                             .ThenBy(d => d.RawRelativePath, StringComparer.OrdinalIgnoreCase))
+                {
+                    var node = FindNodeIgnoringFilter(dir);
+                    if (node is { IsExpanded: false })
+                    {
+                        TreeGrid.ExpandNode(node);
+                    }
+                }
+
+                _searchMutatedExpansion = true;
+            }
+            finally
+            {
+                _suppressExpansionPersistence = false;
+            }
+        }
+
+        /// <summary>
+        /// Resolves the TreeNode for a model by walking parent-to-child from the root nodes.
+        /// <see cref="TreeNodeCollection.GetNode"/> only returns visible (unfiltered) nodes,
+        /// so right after a full view rebuild — where every recreated node starts out
+        /// filtered — it returns null for everything and no ancestor chain can be expanded.
+        /// Expanding shallowest-first keeps each parent's ChildNodes populated before its
+        /// children are looked up.
+        /// </summary>
+        private TreeNode FindNodeIgnoringFilter(FileSystemModel model)
+        {
+            var chain = new Stack<FileSystemModel>();
+            for (var p = model; p is not null; p = p.Parent)
+            {
+                chain.Push(p);
+            }
+
+            var level = TreeGrid.View.Nodes.RootNodes;
+            TreeNode node = null;
+            while (chain.Count > 0)
+            {
+                var check = chain.Pop();
+
+                // If we hit "source" directory then keep going.
+                if (check.Name == FileSystemModel.ProjectDirName)
+                {
+                    continue;
+                }
+
+                node = level.GetNode(check);
+
+                if (node is null)
+                {
+                    return null;
+                }
+
+                level = node.ChildNodes;
+            }
+
+            return node;
+        }
+
+        /// <summary>
+        /// After clearing search, put expansion back to ExpansionStateDictionary so
+        /// folders that were only opened to reveal hits do not stay permanently open.
+        /// </summary>
+        private void RestoreExpansionStateAfterSearch()
+        {
+            if (ViewModel is null || TreeGrid?.View is null)
+            {
+                return;
+            }
+
+            _suppressExpansionPersistence = true;
+            try
+            {
+                RestoreExpansionRecursive(TreeGrid.View.Nodes);
+            }
+            finally
+            {
+                _suppressExpansionPersistence = false;
+            }
+        }
+
+        private void SearchDebounceTimer_Tick(object sender, EventArgs e)
+        {
+            _searchDebounceTimer.Stop();
+
+            if (PESearchBar == null)
+                return;
+
+            _currentFolderQuery = PESearchBar.Text ?? string.Empty;
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
+        }
+
+        private void RebuildSearchVisiblePaths()
+        {
+            if (string.IsNullOrWhiteSpace(_currentFolderQuery) || ViewModel is null)
+            {
+                _searchVisiblePaths = null;
+                return;
+            }
+
+            var visible = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var fm in ViewModel.FileList)
+            {
+                if (!MatchesSearchQuery(fm))
+                {
+                    continue;
+                }
+
+                for (var p = fm; p is not null; p = p.Parent)
+                {
+                    // Once an ancestor is already present, higher ones are too — stop walking.
+                    if (!visible.Add(p.RawRelativePath))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            _searchVisiblePaths = visible;
+        }
+
+        private bool MatchesSearchQuery(FileSystemModel fm)
+        {
+            if (string.IsNullOrWhiteSpace(_currentFolderQuery))
+            {
+                return true;
+            }
+
+            return fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase)
+                   || fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase);
+        }
+
+        #endregion search/filter
 
         #region drag & drop
 
