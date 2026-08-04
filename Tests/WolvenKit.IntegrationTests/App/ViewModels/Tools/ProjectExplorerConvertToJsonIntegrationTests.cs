@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -255,22 +255,16 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         projectWizard.ProjectPath = _tempProjectRoot;
         await appViewModel.NewProjectTask(projectWizard);
 
+        Assert.True(
+            await AsyncWait.UntilAsync(
+                () => _projectExplorerVm.ActiveProject is not null,
+                TimeSpan.FromSeconds(30)),
+            "Project explorer never adopted the new project.");
+
         // Verify the project propagated to the right places
         Assert.NotNull(projectManager.ActiveProject);
         Assert.NotNull(_projectExplorerVm.ActiveProject);
 
-        // Grab the ProgressService
-        var progress = _host?.Services.GetRequiredService<IProgressService<double>>();
-
-        Assert.NotNull(progress);
-
-        var state = progress.Status;
-
-        // Wait until the Archives have loaded
-        while (state != EStatus.Ready)
-        {
-            state = progress.Status;
-            await Task.Delay(100);
-        }
+        await _host!.Services.GetRequiredService<IArchiveManagerLoader>().LoadArchiveManagerAsync();
     }
 }

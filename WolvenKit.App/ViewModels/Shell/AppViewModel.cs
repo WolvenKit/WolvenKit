@@ -313,46 +313,93 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         OnAppLoaded?.Invoke(this, EventArgs.Empty);
-        HandleActivation();
     }
 
     public event EventHandler? OnAppLoaded;
 
-    private void HandleActivation()
+    /// <summary>
+    /// One-time application startup work. Call once, from the shell, after its bindings are in
+    /// place.
+    /// </summary>
+    /// <remarks>
+    /// This used to hang off the <c>Status</c> property setter as a side effect, which meant it
+    /// could not be awaited, could not be ordered relative to the shell's own setup, and turned
+    /// any failure into an exception escaping a property assignment. Being an explicit awaitable
+    /// call also removes the need to branch on <c>TestHelper.InActiveTest</c> - tests simply await
+    /// it.
+    ///
+    /// Never throws: a discarded task's exception would otherwise go unobserved, and none of this
+    /// work is worth failing a launch over.
+    /// </remarks>
+    public async Task InitializeAsync()
     {
-        var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
-        if (thisVersion.ToString().Contains("nightly") && SettingsManager.UpdateChannel != EUpdateChannel.Nightly)
+        try
         {
-            SettingsManager.UpdateChannel = EUpdateChannel.Nightly;
-        }
+            var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
+            if (thisVersion.ToString().Contains("nightly") && SettingsManager.UpdateChannel != EUpdateChannel.Nightly)
+            {
+                SettingsManager.UpdateChannel = EUpdateChannel.Nightly;
+            }
 
-        _pluginService.Init();
+            _pluginService.Init();
 
-        if (TestHelper.InActiveTest)
-        {
-            _archiveManagerLoader.LoadArchiveManagerAsync().GetAwaiter().GetResult();
-        }
-        else if (Application.Current is { } app )
-        {
-            app.Dispatcher.Invoke(_archiveManagerLoader.LoadArchiveManagerAsync, DispatcherPriority.ApplicationIdle);
-        }
-
-        if (!OpenFileFromLaunchArgs())
-        {
-            ShowHomePageSync();
-        }
+            if (!OpenFileFromLaunchArgs())
+            {
+                ShowHomePageSync();
+            }
 
 #if !DEBUG
-        if (SettingsManager.AutoUpdateOnStartup)
-        {
-            CheckForUpdatesCommand.SafeExecute(true);
-        }
+            if (SettingsManager.AutoUpdateOnStartup)
+            {
+                CheckForUpdatesCommand.SafeExecute(true);
+            }
 #endif
 
-        CheckForScriptUpdatesCommand.SafeExecute();
-        CheckForTemplateUpdatesCommand.SafeExecute();
-        CheckForLongPathSupport();
-        CheckForOneDrivePath();
+            CheckForScriptUpdatesCommand.SafeExecute();
+            CheckForTemplateUpdatesCommand.SafeExecute();
+            CheckForLongPathSupport();
+            CheckForOneDrivePath();
+
+            // Archives load last, and only once the shell has gone idle. The scan allocates
+            // heavily on a background thread, and GC pauses hit the UI thread too - starting it
+            // any earlier visibly stalls the window as it is still drawing itself.
+            if (Application.Current is { } app)
+            {
+                await app.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+            }
+
+            await LoadArchivesSafelyAsync();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
+    }
+
+    /// <summary>
+    /// Loads the archive manager, logging rather than propagating a failure.
+    /// </summary>
+    /// <remarks>
+    /// A corrupt, locked or missing archive should cost the user the asset browser, not the whole
+    /// application: before archive loading moved here it ran inside LoadProjectFromPathAsync
+    /// behind exactly this try/catch, and ArchiveManagerLoader still rethrows after logging.
+    /// Without the guard the fault escapes HandleActivation, then OnStatusChanged, then the
+    /// Status setter, and takes startup down with it.
+    ///
+    /// The catch has to live inside the async method rather than around the dispatcher call:
+    /// Dispatcher.Invoke(Func&lt;Task&gt;, ...) hands back the Task and drops it, so anything
+    /// thrown after the first await would be swallowed unobserved instead of logged.
+    /// </remarks>
+    private async Task LoadArchivesSafelyAsync()
+    {
+        try
+        {
+            await _archiveManagerLoader.LoadArchiveManagerAsync();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
     }
 
     public bool AddDockedPane(string paneString)
