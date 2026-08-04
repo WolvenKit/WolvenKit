@@ -2009,23 +2009,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // bi.EndInit();
     // IconSource = bi;
 
+    #region save/restore
 
     private void RestoreProjectState(Cp77Project project)
     {
-
-        // read tree state from file
-        if (File.Exists(project.InterfaceProjectTreeStatePath))
-        {
-            _hasUnsavedFileTreeChanges = false;
-            ExpansionStateDictionary =
-                JsonSerializer.Deserialize<Dictionary<string, bool>>(
-                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
-        }
-        else
-        {
-            ExpansionStateDictionary = [];
-        }
-
         // Abort if user doesn't want to reopen any files
         if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
@@ -2061,7 +2048,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Where(x => x.FilePath is not null)
                 .OrderBy(x => x.OpenedAt)
                 .DistinctBy(x => x.FilePath)
-                .ToDictionary(x => x.OpenedAt, x => project.GetRelativePath(x.FilePath!));
+                .ToDictionary(x => x.OpenedAt, x => project.GetGameRelativePath(x.FilePath!));
 
             // only write if we had a change
             if (project.OpenProjectFiles.Equals(openProjectFiles))
@@ -2106,11 +2093,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = false;
     }
 
-    /// <summary>
-    /// Used by the internal WatcherService when rebuilding the tree to restore previous expansion state onto new model instances.
-    /// </summary>
-    internal bool GetDesiredExpansionState(string rawRelativePath)
-        => ExpansionStateDictionary.TryGetValue(rawRelativePath, out var state) ? state : false;
+    private void SaveProjectState()
+    {
+        if (ActiveProject != null)
+        {
+            _hasUnsavedFileTreeChanges = true;
+            SaveOpenFilePaths();
+            SaveProjectExplorerExpansionStateIfDirty();
+            SaveProjectExplorerTabIfDirty();
+            _hasUnsavedFileTreeChanges = false;
+        }
+    }
+
+    #endregion
 
     public void StopWatcher() => _projectWatcher.ForceStop();
 
@@ -2195,6 +2190,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .ToDictionary(m => m.RawRelativePath, m => m.IsExpanded, StringComparer.OrdinalIgnoreCase);
         _hasUnsavedFileTreeChanges = true;
     }
+
+    /// <summary>
+    /// Used by the internal WatcherService when rebuilding the tree to restore previous expansion state onto new model instances.
+    /// </summary>
+    internal bool GetDesiredExpansionState(string rawRelativePath)
+        => ExpansionStateDictionary.TryGetValue(rawRelativePath, out var state) ? state : false;
 
     /// <summary>
     /// Called by the View when the user expands a directory node.
