@@ -90,14 +90,41 @@ public partial class ProjectExplorerViewModel
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
     }
+    
+    #region Start / Resume / Watch / Unwatch Methods
 
-    public void WatchProject(Cp77Project project)
+    public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+        ResumeWatcher_AndLoadProject();
+    }
 
-        WatchLocation();
-        Refresh();
+    private void ResumeWatcher_AndLoadProject()
+    {
+        switch (_watcherState)
+        {
+            case WatcherState.NoProject:
+                _loggerService?.Debug("Loading new project.");
+                _suspendQueue.Clear();
+                _suspendQueue.Enqueue(new SuspendToken());
+                break;
+            case WatcherState.Suspended:
+                _loggerService?.Debug("Reloading existing project.");
+                break;
+            case WatcherState.Active:
+                throw new WolvenKitException(0xBADB01,
+                    $"Resuming from a non-suspended state with {_suspendQueue.Count} suspends in the queue.");
+            case WatcherState.Error:
+                _loggerService?.Debug("Reloading project to recover from error.");
+                break;
+            case WatcherState.Loading:
+                _loggerService?.Debug("Ignoring resume attempt while already reloading project.");
+                return;
+        }
+
+        _watcherState = WatcherState.Loading;
+        Locked_LoadModProjectFileStructure();
     }
 
     public void Resume()
@@ -169,19 +196,7 @@ public partial class ProjectExplorerViewModel
         UnwatchLocation();
     }
 
-    private void WatchLocation()
-    {
-        _modsWatcher.Path = _projectDirectory;
-        _modsWatcher.EnableRaisingEvents = true;
-    }
-
-    private void UnwatchLocation()
-    {
-        _modsWatcher.EnableRaisingEvents = false;
-
-        ForceStop();
-        Clear();
-    }
+    #endregion
 
     private static readonly List<string> s_backupFilePartials =
     [
@@ -593,14 +608,6 @@ public partial class ProjectExplorerViewModel
         }
     }
 
-    public void Refresh()
-    {
-        lock (_refreshLock)
-        {
-            InternalRefresh();
-        }
-    }
-
     private void Clear()
     {
         _loggerService?.Debug("Clearing all file changes and project data sources.");
@@ -610,29 +617,6 @@ public partial class ProjectExplorerViewModel
         _fileLookup.Clear();
         FileTree.Clear();
         FileList.Clear();
-    }
-
-    private void InternalRefresh()
-    {
-        if (string.IsNullOrEmpty(_projectDirectory))
-        {
-            return;
-        }
-
-        ForceStop();
-        Clear();
-
-        var allFiles = new DirectoryInfo(_projectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
-        foreach (var fileSystemInfo in allFiles)
-        {
-            var name = fileSystemInfo.FullName[(_projectDirectory.Length + 1)..];
-            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
-        }
-
-        _updateThreadCancellationTokenSource = new CancellationTokenSource();
-        _updateTask = Task.Factory.StartNew(() => Update(_updateThreadCancellationTokenSource.Token), _updateThreadCancellationTokenSource.Token);
-
-        _modsWatcher.EnableRaisingEvents = true;
     }
 
     /// <summary>
