@@ -260,7 +260,9 @@ public partial class ProjectExplorerViewModel
         }
     }
 
-    #endregion
+    #endregion Start / Resume / Watch / Unwatch Methods
+
+    #region file watching
 
     /// <summary>
     /// Processes file system events saved to the _fileChanges queue.
@@ -737,8 +739,6 @@ public partial class ProjectExplorerViewModel
         }
     }
 
-    #region file watching
-
     /// <summary>
     /// Logs a large number of added files in the background.
     /// Chunks the list, logs alphabetically, uses a low-priority background task with light debouncing,
@@ -1099,8 +1099,6 @@ public partial class ProjectExplorerViewModel
         /// </summary>
         public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
-
-    #region filesystem loading
 
     private void Locked_LoadModProjectFileStructure()
     {
