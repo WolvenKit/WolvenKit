@@ -553,7 +553,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// Add File to Project
     /// </summary>
     ///
-    private bool CanAddToProject() => ProjectLoaded;
+    private bool CanAddToProject() => ProjectLoaded && RightItems.Any(x => x.IsChecked);
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
     internal async Task AddSelectedAsync()
@@ -646,10 +646,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
-        await _gameController.GetController().AddToModAsync(files);
+        await _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()
+            .RefreshAfter(async () => await _gameController.GetController().AddToModAsync(files));
         _loggerService.Success($"Added {files.Count} files to the project.");
-        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.ResumeFileWatcher();
     }
 
     /// <summary>
