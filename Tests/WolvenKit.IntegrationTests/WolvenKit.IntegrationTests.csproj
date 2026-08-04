@@ -24,6 +24,10 @@
     <PackageReference Include="System.Reflection.Metadata" />
     <PackageReference Include="xunit" />
     <PackageReference Include="Xunit.StaFact" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
