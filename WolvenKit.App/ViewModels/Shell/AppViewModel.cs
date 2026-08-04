@@ -957,7 +957,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveFile() => Save(ActiveDocument.NotNull());
+    private void SaveFile()
+    {
+        if (ActiveDocument is not IDocumentViewModel document)
+        {
+            return;
+        }
+
+        Save(document);
+    }
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
@@ -1529,16 +1537,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.Suspend();
-        try
-        {
-            _archiveXlItemService.CreateEquipmentItem(item);
-        }
-        finally
-        {
-            _watcherService.Resume();
-            _watcherService.Refresh();
-        }
+
+        GetToolViewModel<ProjectExplorerViewModel>()?
+            .RefreshAfter(() => _archiveXlItemService.CreateEquipmentItem(item));
     }
 
     private async Task OpenFromNewFile(NewFileViewModel? file)
@@ -1705,8 +1706,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
+            // Clean tab: nothing to lose, so refresh silently to show the new on-disk content.
+            if (!documentViewModel.IsDirty)
+            {
+                documentViewModel.Reload(true);
+                continue;
+            }
+
+            // Dirty tab: the user has unsaved edits — let them choose rather than discarding them.
             var result = Interactions.ShowConfirmation((
-                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                $"The file {documentViewModel.FilePath} has been modified on disk, but you have unsaved changes. " +
+                "Reload and discard your changes?",
                 "File Modified",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
@@ -2021,6 +2031,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    private async Task ExecuteDeferredAsync(Func<Task> asyncAction)
+    {
+        try
+        {
+            await asyncAction();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+        }
+    }
 
     private readonly Queue<Action> _pendingAfterModalCloseActions = new();
     private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
@@ -3140,6 +3161,132 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         catch
         {
             _loggerService.Error($"Failed to reload {project.GetRelativePath(absolutePath)}");
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an authoritative set of file moves/renames (from
+    /// <see cref="IProjectEvents.FilesMoved"/>). A tab whose file was relocated is retargeted to the
+    /// new path and reloaded; a tab already open at a move's destination (i.e. it was overwritten) is
+    /// reloaded in place.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterMoves(FilesMovedMessage msg)
+    {
+        if (!DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return; // nothing open to refresh (fast path for large directory moves)
+        }
+
+        foreach (var (from, to) in msg.Moves)
+        {
+            // A real relocation (rename/move): follow the open tab from its old path to the new one.
+            var handledMovedTab = !string.IsNullOrEmpty(from)
+                                  && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                                  && TryRefreshOpenDocument(from, to);
+
+            // Otherwise a document already open at the destination had its content replaced.
+            if (!handledMovedTab)
+            {
+                TryRefreshOpenDocument(to);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an authoritative set of imported/created files (from
+    /// <see cref="IProjectEvents.FilesImported"/>, e.g. import, convert, overwrite-with-game-file).
+    /// Any open tab whose file was overwritten is reloaded in place.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterImports(FilesImportedMessage msg)
+    {
+        if (_projectManager.ActiveProject is not { } project
+            || !DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return;
+        }
+
+        switch (msg)
+        {
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var gameFile in files)
+                {
+                    // FileName is a resource path and may use '/'; normalize to an OS path so it matches the
+                    // document's FilePath (which the watcher builds via FileInfo).
+                    TryRefreshOpenDocument(Path.GetFullPath(Path.Combine(project.ModDirectory, gameFile.FileName)));
+                }
+
+                break;
+
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var rawFile in files)
+                {
+                    TryRefreshOpenDocument(rawFile.FullName);
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// If a document is open at <paramref name="currentFilePath"/>, refresh it from disk, optionally
+    /// retargeting it to <paramref name="newFilePath"/> first (for a rename/move). Clean documents are
+    /// reloaded silently; documents with unsaved changes are skipped with a warning so edits aren't
+    /// lost. Returns true if a matching open document was found.
+    /// </summary>
+    private bool TryRefreshOpenDocument(string currentFilePath, string? newFilePath = null)
+    {
+        var targetPath = newFilePath ?? currentFilePath;
+
+        if (string.IsNullOrEmpty(currentFilePath) || !File.Exists(targetPath))
+        {
+            return false;
+        }
+
+        if (DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(doc =>
+                currentFilePath.Equals(doc.FilePath, StringComparison.OrdinalIgnoreCase)) is not { } openDocument)
+        {
+            return false;
+        }
+
+        if (openDocument.IsDirty)
+        {
+            _loggerService.Warning(
+                $"\"{Path.GetFileName(targetPath)}\" changed on disk but has unsaved changes; its editor was not refreshed.");
+            return true;
+        }
+
+        if (!targetPath.Equals(openDocument.FilePath, StringComparison.OrdinalIgnoreCase))
+        {
+            openDocument.FilePath = targetPath; // follow the rename/move so Reload reads the new file
+        }
+
+        try
+        {
+            openDocument.Reload(true);
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to refresh \"{Path.GetFileName(targetPath)}\" after it changed on disk.");
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Runs an open-document refresh on the UI thread, swallowing and logging any error. The
+    /// FilesMoved/FilesImported subscriptions run synchronously on the publishing thread, so a throw
+    /// here would escape into the publisher (e.g. MoveAndRefactorAsync mid-rename) and strand the
+    /// file watcher / guard. Refreshing documents is best-effort and must never do that.
+    /// </summary>
+    private void SafeRefreshOpenDocuments(Action refresh)
+    {
+        try
+        {
+            DispatcherHelper.RunOnMainThread(refresh);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to refresh open documents after a file change: {ex.Message}");
         }
     }
 
