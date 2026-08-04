@@ -141,6 +141,7 @@ namespace WolvenKit.Views.Shell
             var projectLayout = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
             if (!File.Exists(projectLayout))
             {
+                LoadDefaultLayout();
                 return;
             }
 
