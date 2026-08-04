@@ -629,20 +629,25 @@ public partial class ProjectExplorerViewModel
         _modsWatcher.EnableRaisingEvents = true;
     }
 
-    public void ForceStop()
+    /// <summary>
+    ///  Does the following:
+    ///     1. Suspend the OS file watcher & batch update monitor.
+    ///     2. Sets _watcherState to `noProject`
+    ///     3. Clears the project references.
+    ///
+    /// This must be called before performing anything that sends a Reset for
+    /// FileList or FileTree collections.
+    /// </summary>
+    public void UnwatchProject()
     {
-        _modsWatcher.EnableRaisingEvents = false;
-
-        if (_updateTask != null)
-        {
-            _updateThreadCancellationTokenSource.Cancel();
-            if (!_updateTask.IsCanceled && !_updateTask.Wait(1000))
-            {
-                throw new Exception();
-            }
-        }
+        Suspend();
+        StopBackgroundPolling();
+        _watcherState = WatcherState.NoProject;
+        _projectDirectory = "";
+        _projectFileSystemModel = null;
+        _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
     }
-
+    
     public void Suspend()
     {
         // See Resume() for why this is locked.
