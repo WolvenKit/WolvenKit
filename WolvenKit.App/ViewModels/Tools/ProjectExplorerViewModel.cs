@@ -2099,9 +2099,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        // Rebuild from live models in FileList — this is cheap and survives ReplaceAll rebuilds
+        RebuildExpansionStateFromFileList();
+
         File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
+
+    /// <summary>
+    /// Used by the internal WatcherService when rebuilding the tree to restore previous expansion state onto new model instances.
+    /// </summary>
+    internal bool GetDesiredExpansionState(string rawRelativePath)
+        => ExpansionStateDictionary.TryGetValue(rawRelativePath, out var state) ? state : false;
 
     public void StopWatcher() => _projectWatcher.ForceStop();
 
@@ -2151,11 +2160,69 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #endregion
 
+    #region expansion state
+
+    private void LoadExpansionStateDictionary(Cp77Project project)
+    {
+        var projectName = Path.GetFileNameWithoutExtension(project.Location);
+        if (File.Exists(project.InterfaceProjectTreeStatePath))
+        {
+            _hasUnsavedFileTreeChanges = false;
+            ExpansionStateDictionary =
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
+        }
+        else
+        {
+            ExpansionStateDictionary = [];
+        }
+    }
+
     public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
     {
         ExpansionStateDictionary[rawRelativePath] = expansionState;
         _hasUnsavedFileTreeChanges = true;
     }
+
+    /// <summary>
+    /// Rebuilds the expansion state dictionary directly from the current models in FileList.
+    /// This is robust after tree rebuilds because FileList holds references to the live FileSystemModel instances.
+    /// </summary>
+    internal void RebuildExpansionStateFromFileList()
+    {
+        ExpansionStateDictionary = FileList
+            .Where(m => m.IsDirectory)
+            .ToDictionary(m => m.RawRelativePath, m => m.IsExpanded, StringComparer.OrdinalIgnoreCase);
+        _hasUnsavedFileTreeChanges = true;
+    }
+
+    /// <summary>
+    /// Called by the View when the user expands a directory node.
+    /// This is the primary path for dirty tracking expansion state.
+    /// </summary>
+    public void NotifyDirectoryExpanded(FileSystemModel model)
+    {
+        if (model is { IsDirectory: true })
+        {
+            model.IsExpanded = true;
+            SaveNodeExpansionState(model.RawRelativePath, true);
+        }
+    }
+
+    /// <summary>
+    /// Called by the View when the user collapses a directory node.
+    /// This is the primary path for dirty tracking expansion state.
+    /// </summary>
+    public void NotifyDirectoryCollapsed(FileSystemModel model)
+    {
+        if (model is { IsDirectory: true })
+        {
+            model.IsExpanded = false;
+            SaveNodeExpansionState(model.RawRelativePath, model.IsExpanded);
+        }
+    }
+
+    #endregion expansion state
 
     public void OnKeyStateChanged(KeyEventArgs e)
     {
