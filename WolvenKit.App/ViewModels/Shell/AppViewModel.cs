@@ -84,7 +84,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     public readonly TemplateFileTools TemplateFileTools;
-    private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     private readonly RedTypeTemplateService _redTypeTemplateService;
