@@ -77,6 +77,17 @@ public partial class GraphEditorView : UserControl
     /// </summary>
     public event EventHandler<RedGraph> SourceChanged;
 
+    /// <summary>
+    /// Raised once every node of the current graph is on the canvas and laid out.
+    /// </summary>
+    /// <remarks>
+    /// Realization is batched across dispatcher frames, so <see cref="SourceChanged"/> fires long
+    /// before there is anything to look at. Hosts that show a "loading" overlay must keep it up
+    /// until this fires, otherwise they uncover a half-drawn graph the user can click on.
+    /// Not raised for a realization that was cancelled or superseded by a newer graph.
+    /// </remarks>
+    public event EventHandler<RedGraph> CanvasRealized;
+
     private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is not GraphEditorView view)
@@ -93,6 +104,7 @@ public partial class GraphEditorView : UserControl
         }
 
         view.ActionPalettePopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+        view.Source.DeferCanvasRealization();
 
         view.Dispatcher.BeginInvoke(new Action(() =>
         {
@@ -107,11 +119,6 @@ public partial class GraphEditorView : UserControl
         {
             return;
         }
-
-        // Take the canvas back before WPF gets a chance to realize it in one go, then hand it out
-        // again in batches below. Safe to do here whichever order the DP callback and the
-        // ItemsSource binding transfer run in - CanvasItems is the same instance either way.
-        view.Source.DeferCanvasRealization();
 
         var cts = new CancellationTokenSource();
         view._canvasRealizationCts = cts;
@@ -182,10 +189,7 @@ public partial class GraphEditorView : UserControl
             _canvasRealizationCts = null;
             cts.Dispose();
             progress?.Completed();
-
-            Console.WriteLine(
-                $"[GraphPerf] '{graph.Title}' canvas realized in {sw.ElapsedMilliseconds}ms " +
-                $"({graph.CanvasItems.Count} items)");
+            CanvasRealized?.Invoke(this, graph);
         }
         catch (Exception ex)
         {
