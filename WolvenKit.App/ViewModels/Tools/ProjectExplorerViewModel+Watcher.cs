@@ -28,9 +28,14 @@ public partial class ProjectExplorerViewModel
 
     private Task? _updateTask;
     private CancellationTokenSource _updateThreadCancellationTokenSource = new();
+    private Task? _batchUpdateTask;
+    private CancellationTokenSource _batchUpdateThreadCancellationTokenSource = new();
+
+    private CancellationTokenSource? _fileLoggingCts;
 
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
+    private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
 
     public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
@@ -443,7 +448,7 @@ public partial class ProjectExplorerViewModel
                 RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
             }
             else
-                {
+            {
                 _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
             }
         }
@@ -592,6 +597,8 @@ public partial class ProjectExplorerViewModel
 
     private void Clear()
     {
+        _loggerService?.Debug("Clearing all file changes and project data sources.");
+
         _fileChanges.Clear();
         _batchFileChanges.Clear();
         _fileLookup.Clear();
@@ -675,6 +682,156 @@ public partial class ProjectExplorerViewModel
             _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
         }
     }
+
+    #region file watching
+
+    /// <summary>
+    /// Logs a large number of added files in the background.
+    /// Chunks the list, logs alphabetically, uses a low-priority background task with light debouncing,
+    /// and ends with a summary count.
+    /// </summary>
+    private void LogBatchAddedFiles(List<FileSystemModel> addedFiles)
+    {
+        if (_loggerService == null || addedFiles.Count == 0)
+            return;
+
+        // Capture the token at the start to avoid races if the CTS is replaced mid-operation
+        var token = _fileLoggingCts?.Token ?? CancellationToken.None;
+
+        Task.Factory.StartNew(async () =>
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+
+                // Sort alphabetically for consistent logging order
+                var sortedNames = addedFiles
+                    .Where(file => !file.IsDirectory)
+                    .Select(f => f.FullName)
+                    .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                const int chunkSize = 100;
+                int total = sortedNames.Count;
+
+                for (int i = 0; i < sortedNames.Count; i += chunkSize)
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    var chunk = sortedNames.Skip(i).Take(chunkSize);
+                    var message = string.Join(Environment.NewLine,
+                        chunk.Select(name => $"Added file to project: {name}"));
+
+                    _loggerService.Info(message);
+
+                    // Light debouncing / pacing so we don't flood the logger during very large imports
+                    await Task.Delay(60, token);
+                }
+
+                token.ThrowIfCancellationRequested();
+                _loggerService.Info($"Added {total} files to the project via batch import.");
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected when project is unwatched during a large batch import
+            }
+            catch (Exception ex)
+            {
+                _loggerService?.Warning($"Error while logging batch import details: {ex.Message}");
+            }
+        },
+        token,
+        TaskCreationOptions.LongRunning,
+        TaskScheduler.Default);
+    }
+
+    private void CancelFileLoggingToken()
+    {
+        _fileLoggingCts?.Cancel();
+        _fileLoggingCts?.Dispose();
+        _fileLoggingCts = null;
+    }
+
+    private void StartBackgroundPolling()
+    {
+        // Always ensure any previous polling tasks are fully stopped first.
+        // This is the single choke point that prevents duplicate long-running tasks.
+        StopBackgroundPollingInternal();
+
+        _updateThreadCancellationTokenSource = new CancellationTokenSource();
+        _updateTask = Task.Factory.StartNew(
+            () => Update(_updateThreadCancellationTokenSource.Token),
+            _updateThreadCancellationTokenSource.Token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+
+        _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
+        _batchUpdateTask = Task.Factory.StartNew(
+            () => BatchUpdate(_batchUpdateThreadCancellationTokenSource.Token),
+            _batchUpdateThreadCancellationTokenSource.Token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+
+        ResetFileLoggingToken();
+    }
+
+    private void ResetFileLoggingToken()
+    {
+        _fileLoggingCts?.Cancel();
+        _fileLoggingCts?.Dispose();
+        _fileLoggingCts = new CancellationTokenSource();
+    }
+
+    private void StopBackgroundPolling()
+    {
+        _loggerService?.Debug("Suspending file system watcher and cancelling file tree update listeners.");
+        StopBackgroundPollingInternal();
+        CancelFileLoggingToken();
+    }
+
+    /// <summary>
+    /// Internal implementation that actually cancels and waits for the background tasks.
+    /// Called from both public Stop and defensively from Start.
+    /// </summary>
+    private void StopBackgroundPollingInternal()
+    {
+        // Cancel update task
+        if (_updateTask != null)
+        {
+            try
+            {
+                _updateThreadCancellationTokenSource.Cancel();
+                // Best-effort wait so the loop can exit its Sleep and observe the token.
+                _updateTask.Wait(TimeSpan.FromMilliseconds(250));
+            }
+            catch (AggregateException) { /* task cancelled, expected */ }
+            finally
+            {
+                _updateTask = null;
+                _updateThreadCancellationTokenSource.Dispose();
+                _updateThreadCancellationTokenSource = new CancellationTokenSource();
+            }
+        }
+
+        // Cancel batch update task
+        if (_batchUpdateTask != null)
+        {
+            try
+            {
+                _batchUpdateThreadCancellationTokenSource.Cancel();
+                _batchUpdateTask.Wait(TimeSpan.FromMilliseconds(250));
+            }
+            catch (AggregateException) { /* task cancelled, expected */ }
+            finally
+            {
+                _batchUpdateTask = null;
+                _batchUpdateThreadCancellationTokenSource.Dispose();
+                _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
+            }
+        }
+    }
+
+    #endregion file watching
 
     private class FileSystemEventArgsWrapper
     {
