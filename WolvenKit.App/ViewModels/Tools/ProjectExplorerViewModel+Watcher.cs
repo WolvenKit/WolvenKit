@@ -11,12 +11,9 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
-namespace WolvenKit.App.Services;
+namespace WolvenKit.App.ViewModels.Tools;
 
-/// <summary>
-/// This service watches certain locations in the game files and notifies changes
-/// </summary>
-public partial class WatcherService : ObservableObject, IWatcherService
+public partial class ProjectExplorerViewModel
 {
     #region fields
 
