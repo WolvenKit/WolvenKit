@@ -228,6 +228,47 @@ namespace WolvenKit.Modkit.RED4.Animation
                 ((List<JointsScalesAtTimes>)[incomingAnimBufferData.Scales, incomingAnimBufferData.ConstScales]).All(_ =>
                     _.All(_ => _.Value.All(_ => EqWithEpsilon(_.Value, Scale1to1))));
 
+            // Sort Keys by Bone->Time->KeyType (pos->rot->sca)
+            animKeys.Sort((a, b) =>
+            {
+                int cmp = a!.Idx.CompareTo(b!.Idx);
+                if (cmp != 0) return cmp;
+            
+                cmp = a.Time.CompareTo(b.Time);
+                if (cmp != 0) return cmp;
+            
+                return string.Compare(
+                    a.GetType().Name,
+                    b.GetType().Name,
+                    StringComparison.Ordinal);
+            });
+            animKeysRaw.Sort((a, b) =>
+            {
+                int cmp = a!.Idx.CompareTo(b!.Idx);
+                if (cmp != 0) return cmp;
+            
+                cmp = a.Time.CompareTo(b.Time);
+                if (cmp != 0) return cmp;
+            
+                return string.Compare(
+                    a.GetType().Name,
+                    b.GetType().Name,
+                    StringComparison.Ordinal);
+            });
+            constAnimKeys.Sort((a, b) =>
+            {
+                int cmp = a!.Idx.CompareTo(b!.Idx);
+                if (cmp != 0) return cmp;
+            
+                cmp = a.Time.CompareTo(b.Time);
+                if (cmp != 0) return cmp;
+            
+                return string.Compare(
+                    a.GetType().Name,
+                    b.GetType().Name,
+                    StringComparison.Ordinal);
+            });
+    
             newCompressedBuffer = new animAnimationBufferCompressed()
             {
                 Duration = incomingAnimBufferData.Duration,
