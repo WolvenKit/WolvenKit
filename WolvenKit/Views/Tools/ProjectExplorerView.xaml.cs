@@ -307,31 +307,35 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        // Run inside Dispatcher to avoid exception on startup
-        private void ResetUiElements() => Dispatcher.Invoke(() =>
-        {
-            // Hide loading text
-            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
-            _currentFolderQuery = "";
-            // Set search bar to empty if it wasn't
-            PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
-
-            // now handle the grids
-            if (TreeGridFlat.View is not null)
-            {
-                TreeGridFlat.ClearFilters();
-                TreeGridFlat.ClearSelections(false);
-            }
             ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
 
-            if (TreeGrid.View is not null)
-            {
-                TreeGrid.ClearFilters();
-                TreeGrid.ClearSelections(false);
-            }
-        });
+        // TODO: remove ResetUiElements after we're sure the refactor is stable
+
+        // // Run inside Dispatcher to avoid exception on startup
+        // private void ResetUiElements() => Dispatcher.Invoke(() =>
+        // {
+        //     // Hide loading text
+        //     LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        //
+        //     _currentFolderQuery = "";
+        //     // Set search bar to empty if it wasn't
+        //     PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
+        //
+        //     // now handle the grids
+        //     if (TreeGridFlat.View is not null)
+        //     {
+        //         TreeGridFlat.ClearFilters();
+        //         TreeGridFlat.ClearSelections(false);
+        //     }
+        //
+        //     if (TreeGrid.View is not null)
+        //     {
+        //         TreeGrid.ClearFilters();
+        //         TreeGrid.ClearSelections(false);
+        //     }
+        // });
 
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
