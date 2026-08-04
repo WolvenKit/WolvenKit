@@ -205,7 +205,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool _shouldShowExecutablePathWarning = true;
 
     [ObservableProperty]
-    private ObservableCollection<RedFileSystemModel> _leftItems = new();
+    internal ObservableCollection<RedFileSystemModel> _leftItems = new();
 
     [ObservableProperty]
     private object? _leftSelectedItem;
@@ -494,7 +494,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanAddToProject() => ProjectLoaded;
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private async Task AddSelectedAsync()
+    internal async Task AddSelectedAsync()
     {
         // get all selected files
         Dictionary<ulong, IGameFile> filesToAdd = new();
@@ -570,7 +570,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         await InternalAddFiles(finalFilesToAdd);
     }
 
-    private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
+    internal void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
     {
         foreach (var (_, model) in directory.Directories)
         {
@@ -731,9 +731,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     #region methods
 
-    private void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
+    internal void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
 
-    private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
+    internal void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
     /// <summary>
     /// Navigates the Asset Browser to the existing file.
