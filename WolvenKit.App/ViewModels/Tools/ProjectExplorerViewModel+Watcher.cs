@@ -176,6 +176,14 @@ public partial class ProjectExplorerViewModel
         "_tmp", ".bak", ".bkp"
     ];
 
+    /// <summary>
+    /// Processes file system events saved to the _fileChanges queue.
+    /// The only ones Update cares about in that queue are change/rename/remove.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="Exception"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="TodoException"></exception>
     private void Update(CancellationToken cancellationToken)
     {
         while (true)
@@ -240,7 +248,7 @@ public partial class ProjectExplorerViewModel
             }
 
             // Check if delay has passed
-            if (e.Ticks > timestamp)
+            if (e.NextRetryTime > timestamp)
             {
                 _fileChanges.Enqueue(e);
                 return;
@@ -258,7 +266,7 @@ public partial class ProjectExplorerViewModel
             // Create event was sent but file doesn't exist yet?!?! Don't know why. Just requeue with delay
             if (!File.Exists(e.FullPath) && !Directory.Exists(e.FullPath))
             {
-                e.Ticks = timestamp + 100;
+                e.NextRetryTime = timestamp + 100;
                 e.RetryCount++;
 
                 _fileChanges.Enqueue(e);
@@ -352,9 +360,9 @@ public partial class ProjectExplorerViewModel
                 throw new TodoException();
             }
 
-            if (!_fileLookup.TryGetValue(e.Name, out var item))
+            if (!_fileLookup.TryGetValue(e.FullPath, out var item))
             {
-                if (!_isWatcherStopped)
+                if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                 {
                     _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
                 }
@@ -389,18 +397,30 @@ public partial class ProjectExplorerViewModel
 
             foreach (var key in _fileLookup.Keys)
             {
-                if (!key.StartsWith(renamedEventArgs.OldName))
+                var oldFullPathNormalized = (!Directory.Exists(renamedEventArgs.FullPath))
+                    ? renamedEventArgs.OldFullPath
+                    : Path.GetFullPath(renamedEventArgs.OldFullPath)
+                        .TrimEnd(Path.DirectorySeparatorChar,
+                            Path.AltDirectorySeparatorChar);
+
+                if (!key.StartsWith(oldFullPathNormalized))
                 {
                     continue;
                 }
 
-                var newKey = renamedEventArgs.Name + key.Substring(renamedEventArgs.OldName.Length);
+                if (key != oldFullPathNormalized && !key[oldFullPathNormalized.Length..].StartsWith('\\'))
+                {
+                    // we've matched \my\dir to \my\dir2 because it has substring "\my\dir" so continue
+                    continue;
+                }
+
+                var newKey = renamedEventArgs.FullPath + key[oldFullPathNormalized.Length..];
                 if (!_fileLookup.TryRemove(key, out var item) || !_fileLookup.TryAdd(newKey, item))
                 {
                     throw new Exception();
                 }
 
-                if (key != renamedEventArgs.OldName)
+                if (key != oldFullPathNormalized)
                 {
                     continue;
                 }
@@ -412,32 +432,18 @@ public partial class ProjectExplorerViewModel
 
         void Delete(FileSystemEventArgsWrapper e)
         {
-            if (string.IsNullOrEmpty(e.Name))
+            if (string.IsNullOrEmpty(e.FullPath))
             {
                 throw new TodoException();
             }
 
-            if (_fileLookup.TryRemove(e.Name, out var item))
+            if (_fileLookup.TryRemove(e.FullPath, out var item))
             {
-                FileTree.Remove(item);
-                FileList.Remove(item);
-
-                ClearChildren(item);
-
-                item.Parent?.Children.Remove(item);
+                RefreshAfter(() => RemoveModel(item, e.EventAddedAt), false);
             }
-
-            _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
-
-            void ClearChildren(FileSystemModel model)
-            {
-                foreach (var subModel in model.Children)
+            else
                 {
-                    ClearChildren(subModel);
-
-                    _fileLookup.Remove(subModel.RawRelativePath, out _);
-                    FileList.Remove(subModel);
-                }
+                _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
             }
         }
     }
@@ -542,15 +548,37 @@ public partial class ProjectExplorerViewModel
             Args = fileSystemEventArgs;
         }
 
+        public uint MaxRetryCount => 5;
+
+        /// <summary>
+        /// Delay in milliseconds between retries.
+        /// </summary>
+        public uint RetryDelay => 100;
+
         public FileSystemEventArgs Args { get; }
 
         public string? Name => Args.Name;
         public string FullPath => Args.FullPath;
         public WatcherChangeTypes ChangeType => Args.ChangeType;
 
+        /// <summary>
+        /// The number of times that a Create event has been checked
+        /// to see if we received a corresponding Delete event that
+        /// would indicate the Create event should be discarded.
+        /// </summary>
         public int RetryCount { get; set; }
-        public long Ticks { get; set; }
 
+        /// <summary>
+        /// We will not recheck for a corresponding Delete event until
+        /// the `NextRetryTime`, at which point, we'll check and set a
+        /// future `NextRetryTime` unless at the `MaxRetryCount`.
+        /// </summary>
+        public long NextRetryTime { get; set; }
+
+        /// <summary>
+        /// The timestamp in milliseconds at which the app received
+        /// the wrapped event from Windows File System.
+        /// </summary>
         public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
 }
