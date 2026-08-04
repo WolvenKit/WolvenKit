@@ -765,7 +765,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var activeItemPath = relativePath.Replace('/', Path.DirectorySeparatorChar);
             if (!isAbsolute)
             {
-                activeItemPath = ActiveProject!.GetRelativePath(activeItemPath);
+                activeItemPath = ActiveProject!.GetGameRelativePath(activeItemPath);
             }
 
             if (switchToRaw)
@@ -928,7 +928,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // add from AB
             foreach (var material in materials)
             {
-                var relPath = ActiveProject!.GetRelativePath(material);
+                var relPath = ActiveProject!.GetGameRelativePath(material);
                 var hash = FNV1A64HashAlgorithm.HashString(relPath);
                 await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
@@ -973,7 +973,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             var files = Directory.GetFiles(currentItem.FullName, "*", SearchOption.AllDirectories).ToList();
             foreach (var hash in files
-                         .Select(file => ActiveProject!.GetRelativePath(file))
+                         .Select(file => ActiveProject!.GetGameRelativePath(file))
                          .Select(FNV1A64HashAlgorithm.HashString))
             {
                 selectedItems.Add(hash);
@@ -1017,16 +1017,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanDeleteFile() => ActiveProject != null && SelectedItems != null;
     [RelayCommand(CanExecute = nameof(CanDeleteFile))]
-    private void DeleteFile()
+    private async Task DeleteFile()
     {
         var selected = SelectedItems.NotNull().OfType<FileSystemModel>().ToList();
         var delete = Interactions.DeleteFiles(selected.Select(d => d.Name));
+
         if (!delete)
         {
             return;
         }
 
-        // Delete from file structure
+        await RefreshAfter(() => DeleteRecursively(selected));
+    }
+
+    private void DeleteRecursively(List<FileSystemModel> selected)
+    {
         foreach (var item in selected)
         {
             var fullPath = item.FullName;
@@ -1034,11 +1039,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 if (item.IsDirectory)
                 {
+                    if (
+                        item.FullName == ActiveProject!.ModDirectory ||
+                        item.FullName == ActiveProject!.RawDirectory ||
+                        item.FullName == ActiveProject!.ResourcesDirectory
+                    )
+                    {
+                        var children = item.Children.ToList();
+                        DeleteRecursively(children);
+                        continue;
+                    }
+
                     FileSystem.DeleteDirectory(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    _projectEvents.PublishDirectoryDeleted(fullPath);
                 }
                 else
                 {
                     FileSystem.DeleteFile(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    _projectEvents.PublishFileDeleted(fullPath);
                 }
             }
             catch (Exception)
@@ -1170,36 +1188,51 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
     private async Task RenameFile()
     {
-        if (_projectManager.ActiveProject is null || SelectedItem?.FullName is not string absolutePath)
+        if (SelectedItem == null || ActiveProject == null || SelectedItem?.FullName is not string absolutePath)
         {
             return;
         }
 
-        var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
+        var (prefixPath, gameRelativePath) = ActiveProject.SplitFilePathIntoAbsoluteAndGameRelativePaths(absolutePath);
 
-        if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
+        if (absolutePath.StartsWith(ActiveProject.ModDirectory))
         {
-            relativePath = absolutePath[(_projectManager.ActiveProject.ModDirectory.Length + 1)..];
+            gameRelativePath = absolutePath[(ActiveProject.ModDirectory.Length + 1)..];
         }
 
-        var (newRelativePath, refactor) = Interactions.RenameAndRefactor((
-            relativePath,
-            absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory)
+        var (newGameRelativePath, refactor) = Interactions.RenameAndRefactor((
+            gameRelativePath,
+            absolutePath.StartsWith(ActiveProject.ModDirectory)
         ));
 
-        if (string.IsNullOrEmpty(newRelativePath) || newRelativePath == relativePath)
+        if (string.IsNullOrEmpty(newGameRelativePath) || newGameRelativePath == gameRelativePath)
         {
             return;
         }
 
-        StopWatcher();
-
-        await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
-        _appViewModel.ReloadChangedFiles();
-
-        ResumeFileWatcher();
+        await RefreshAfter(async () => await InternalRenameFile(gameRelativePath, newGameRelativePath, prefixPath, refactor));
     }
 
+    // add sanitizer to ensure moves can't cross file scope boundary
+
+    /// <summary>
+    /// Renames the supplied FileSystemModel.
+    /// You must pass in the old GameRelativePath and new GameRelativePath as well as the path to /source.
+    /// 'Refactor' checkbox makes the name change effected in references to that file in the mod.
+    /// </summary>
+    /// <param name="selectedItem"></param>
+    /// <param name="gameRelativePath"></param>
+    /// <param name="newGameRelativePath"></param>
+    /// <param name="prefixPath"></param>
+    /// <param name="refactor"></param>
+    private async Task InternalRenameFile(string gameRelativePath, string newGameRelativePath, string prefixPath, bool refactor)
+    {
+        await _projectResourceTools.MoveAndRefactorAsync(gameRelativePath, newGameRelativePath, prefixPath, refactor);
+        _appViewModel.ReloadChangedFiles();
+    }
+
+
+    public void CloseProject() => UnwatchProject();
 
     #endregion general commands
 
@@ -1236,7 +1269,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
-    private async Task ConvertArchiveFile()
+    internal async Task ConvertArchiveFile()
     {
         if (SelectedItems is null)
         {
@@ -1247,15 +1280,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            _deferredRefreshCts = new CancellationTokenSource();
-            if (BeginDeferredRefreshContext == null)
-            {
-                await ConvertToJsonInternal(selection);
-                return;
-            }
-
-            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
-
+            await RefreshAfter(async () => await ConvertToJsonInternal(selection));
             return;
         }
 
@@ -1267,20 +1292,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        _deferredRefreshCts = new CancellationTokenSource();
-        if (BeginDeferredRefreshContext == null)
-        {
-            await ConvertToJsonInternal(selection);
-            return;
-        }
-
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+        await RefreshAfter(async () => await ConvertToJsonInternal(convertSelection));
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        var createdJsonFiles = new ConcurrentBag<FileInfo>();
-
         await Task.Run(async () =>
         {
             var allFiles = selection
@@ -1304,6 +1320,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+            var createdJsonFiles = new ConcurrentBag<FileInfo>();
 
             int progress = 0;
             _progressService.Report(0);
@@ -1332,7 +1349,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     {
                         var rawOutPath = Path.Combine(
                             ActiveProject.NotNull().RawDirectory,
-                            ActiveProject.NotNull().GetRelativePath(file));
+                            ActiveProject.NotNull().GetGameRelativePath(file));
 
                         var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
 
@@ -1350,7 +1367,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                             {
                                 var jsonFileInfo = new FileInfo(jsonFilePath);
 
-                                if (_projectWatcher.FileLookup.ContainsKey(jsonFilePath))
+                                if (FileLookup.ContainsKey(jsonFilePath))
                                 {
                                     // don't add a duplicate file to the trees
                                     return;
@@ -1372,22 +1389,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 });
 
             _progressService.Completed();
-        });
+            // Return list of created JSON files
+            _projectEvents.PublishFilesImported(new FilesImportedMessage.RawFiles([.. createdJsonFiles.ToList()]));
 
-        _ = Task.Run(() =>
-        {
-            var logMsg = "";
-
-            createdJsonFiles.ToList().ForEach(file =>
+            // Ensure any ObserveOn-scheduled handler + ProjectAdd dispatches have run to completion
+            // (so FileList/FileTree clones are updated) before unblocking awaiters/tests.
+            try
             {
-                logMsg += $"JSON file converted: ${file.FullName}.\r\n";
-            });
-
-            _loggerService.Info(logMsg);
+                System.Windows.Application.Current?.Dispatcher?.Invoke(
+                    () => { },
+                    System.Windows.Threading.DispatcherPriority.ContextIdle);
+            }
+            catch { /* best effort for tests/headless */ }
         });
-
-        await _deferredRefreshCts.CancelAsync();
-        _deferredRefreshCts.Dispose();
     }
 
     /// <summary>
@@ -1787,13 +1801,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                             (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertRawFile))]
-    private async Task ConvertRawFile()
+    internal async Task ConvertRawFile()
     {
         if (!IsShiftKeyPressed)
         {
-            _deferredRefreshCts = new CancellationTokenSource();
-            await BeginDeferredRefreshContext!(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
-
+            var items = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder);
+            EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+            await RefreshAfter(async () => await ConvertFromJsonInternal(items));
+            DisableLoadingMode();
             return;
         }
 
@@ -1804,17 +1819,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        _deferredRefreshCts = new CancellationTokenSource();
-        if (BeginDeferredRefreshContext == null)
-        {
-            throw new Exception("Rendering context does not exist.");
-        }
-
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
+        EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+        await RefreshAfter(async () => await ConvertFromJsonInternal(convertSelection));
+        DisableLoadingMode();
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
     {
+        Resume();
+
         var progress = 0;
         _progressService.Report(0);
 
@@ -1833,42 +1846,93 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        // convert files
-        foreach (var file in files)
-        {
-            await ConvertFromJsonAsync(file);
+        ConcurrentBag<FileInfo> fileInfos = new();
 
-            progress++;
-            _progressService.Report(progress / (float)files.Count);
+        // convert files
+        await Parallel.ForEachAsync(files,new ParallelOptions
+        {
+            MaxDegreeOfParallelism = _maxDoP,
+        }, async (file, __ /* add a cancel token here */) =>
+        {
+            try
+            {
+                var convertedFilePath = await ConvertFromJsonAsync(file);
+
+                if (convertedFilePath != null)
+                {
+                    fileInfos.Add(new FileInfo(convertedFilePath));
+                }
+            }
+            catch (JsonException err)
+            {
+                if (err.Message.Contains(" | LineNumber"))
+                {
+                    _loggerService.Error($"Failed to parse JSON in {file}.");
+                    _loggerService.Error(
+                        $"The error is in LineNumber{err.Message.Split(" | LineNumber").LastOrDefault()}");
+                }
+                else
+                {
+                    _loggerService.Error($"Something went _really_ wrong when trying to parse {file}:");
+                    throw;
+                }
+            }
+
+            await ReportProgress();
+        });
+
+
+        Task ReportProgress()
+        {
+            lock (_progressLock)
+            {
+                progress++;
+                _progressService.Report(progress / (float)files.Count);
+            }
+
+            return Task.CompletedTask;
         }
 
+        DispatcherHelper.RunOnMainThread(() => _appViewModel.ReloadChangedFiles());
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.ArchiveFiles(fileInfos.ToList()));
         _progressService.Completed();
+        var report = "";
+        files.ForEach((file) => { report += $"Converted ${file}\r\n"; });
+        _loggerService.Info(report);
+        _loggerService.Info($"Converted ${files.Count} files.");
     }
 
-    private async Task ConvertFromJsonAsync(string file)
+    private async Task<string?> ConvertFromJsonAsync(string file)
     {
         if (!File.Exists(file))
         {
-            return;
+            return null;
         }
 
         if (Path.GetExtension(file).TrimStart('.').ToLower() != ETextConvertFormat.json.ToString())
         {
-            return;
+            return null;
         }
 
-        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetRelativePath(file));
+        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetGameRelativePath(file));
         var outDirectoryPath = Path.GetDirectoryName(modPath);
         if (outDirectoryPath is null)
         {
-            return;
+            return null;
         }
 
         Directory.CreateDirectory(outDirectoryPath);
 
         try
         {
-            await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+            var success = await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+            if (success)
+            {
+                var withoutExtension = Path.GetFileNameWithoutExtension(file);
+                var fileName = Path.GetFileName(withoutExtension);
+                var newFullPath = Path.Combine(outDirectoryPath, fileName);
+                return newFullPath;
+            }
         }
         catch (JsonException err)
         {
@@ -1884,8 +1948,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        _appViewModel.ReloadChangedFiles();
-
+        return null;
     }
 
     /// <summary>
