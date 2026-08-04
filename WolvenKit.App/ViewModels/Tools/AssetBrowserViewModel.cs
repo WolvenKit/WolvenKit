@@ -74,10 +74,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
-
+    private bool _isLoading = false;
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
+    private ProjectExplorerViewModel.LoadingMode _projectLoadingMode;
 
-    private bool _manuallyLoading;
     private readonly IArchiveManagerLoader _archiveManagerLoader;
 
     #endregion fields
@@ -126,10 +126,68 @@ public partial class AssetBrowserViewModel : ToolViewModel
             _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
         }
 
+        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().PropertyChanged += OnProjectLoadingModeUpdated;
+
         ProjectLoaded = _projectManager.IsProjectLoaded;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
 
+        // Subscribe to _rightItems so dependent commands (e.g. AddSelected) can be re-evaluated
+        // when the list is repopulated (folder nav, search results) or items added/removed.
+        // Uses reactive Switch() so that when RightItems is replaced (e.g. ToggleModBrowser),
+        // we automatically unsubscribe from the old collection's events and subscribe the new one.
+        this.WhenAnyValue(x => x.LeftItems)
+            .Subscribe(_ =>
+            {
+                _isLoading = false;
+                UpdateLoadArchiveButtonVisibility();
+                UpdateLoadingIndicatorVisibility();
+            });
+
         CheckView();
+    }
+
+    private void OnProjectLoadingModeUpdated(object? _, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ProjectExplorerViewModel.CurrentLoadingMode))
+        {
+            _projectLoadingMode = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>().CurrentLoadingMode;
+
+            switch (_projectLoadingMode)
+            {
+                case ProjectExplorerViewModel.LoadingMode.LoadingNewProject:
+                    if (ShouldShowLoadArchivesButton)
+                    {
+                        _isLoading = true;
+                    }
+
+                    CheckView();
+                    break;
+            }
+        }
+    }
+
+    private void UpdateLoadArchiveButtonVisibility()
+    {
+        if (LeftItems.Count == 0 && _archiveManager.ProjectArchive == null && !_isLoading && !_archiveManager.IsManagerLoaded)
+        {
+            ShouldShowLoadArchivesButton = true;
+        } else
+        {
+            ShouldShowLoadArchivesButton = false;
+        }
+
+        DispatcherHelper.RunOnMainThread(UpdateLoadingIndicatorVisibility);
+    }
+
+    private void UpdateLoadingIndicatorVisibility()
+    {
+        if (LeftItems.Count > 0 && !_isLoading && LoadingIndicatorVisibility != Visibility.Collapsed)
+        {
+            LoadingIndicatorVisibility = Visibility.Collapsed;
+        } else if (LeftItems.Count == 0 && !IsModBrowserEnabled && LoadingIndicatorVisibility != Visibility.Visible)
+        {
+            LoadingIndicatorVisibility = Visibility.Visible;
+        }
     }
 
     private string[] IgnoredArchives =>
@@ -142,11 +200,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void CheckView()
     {
-        ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
-        LoadVisibility = _archiveManager.IsManagerLoaded ? Visibility.Collapsed : Visibility.Visible;
-
-        ShouldShowExecutablePathWarning = ArchiveDirNotFound;
-        ShouldShowLoadButton = !_manuallyLoading && _archiveManager is { IsManagerLoaded: false, IsManagerLoading: false };
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
+            UpdateLoadArchiveButtonVisibility();
+            UpdateLoadingIndicatorVisibility();
+            ShouldShowExecutablePathWarning = ArchiveDirNotFound;
+        });
     }
 
     // if the game exe path changes
@@ -172,6 +232,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (e.PropertyName is nameof(IArchiveManager.IsManagerLoading) or nameof(IArchiveManager.IsManagerLoaded))
         {
+            if (_archiveManager.IsManagerLoading)
+            {
+                _isLoading = true;
+            }
+
             CheckView();
         }
 
@@ -196,10 +261,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private GridLength _previewWidth = new(0, GridUnitType.Pixel);
 
     [ObservableProperty]
-    private Visibility _loadVisibility = Visibility.Visible;
+    private Visibility _loadingIndicatorVisibility = Visibility.Visible;
 
     [ObservableProperty]
-    private bool _shouldShowLoadButton;
+    private bool _shouldShowLoadArchivesButton;
 
     [ObservableProperty]
     private bool _shouldShowExecutablePathWarning = true;
@@ -261,8 +326,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     internal async Task LoadAssetBrowser()
     {
-        _manuallyLoading = true;
-        ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+        _isLoading = true;
+        UpdateLoadArchiveButtonVisibility();
+        UpdateLoadingIndicatorVisibility();
         await _archiveManagerLoader.LoadArchiveManagerAsync();
     }
 
