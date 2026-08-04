@@ -46,6 +46,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
+    private readonly IProjectEvents _projectEvents;
 
     #endregion
 
@@ -60,7 +61,8 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService)
+        Red4ParserService parserService,
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -73,6 +75,7 @@ public class RED4Controller : ObservableObject, IGameController
         _pluginService = pluginService;
         _modifierService = modifierService;
         _parserService = parserService;
+        _projectEvents = projectEvents;
     }
 
     public async Task HandleStartup()
@@ -1068,7 +1071,9 @@ public class RED4Controller : ObservableObject, IGameController
                 (file, token) =>
                 {
                     token.ThrowIfCancellationRequested();
-                    AddToMod(file);
+                    // publish:false — we emit ONE FilesImported batch after the loop (below) instead
+                    // of thousands of per-file events, which is the whole point of the bulk path.
+                    AddToMod(file, bulkScope, publish: false);
                     var current = Interlocked.Increment(ref progress);
                     var reportInterval = Math.Max(1, total / 50);
 
@@ -1091,6 +1096,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles([.. files]));
     }
 
 
@@ -1116,7 +1122,7 @@ public class RED4Controller : ObservableObject, IGameController
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, bool publish = true)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -1160,6 +1166,13 @@ public class RED4Controller : ObservableObject, IGameController
                 _loggerService.Error(ex);
             }
 
+        }
+
+        // Announce the single add to the project explorer (only if the write actually landed). Bulk
+        // callers pass publish:false and emit one FilesImported batch instead — see AddToModAsync.
+        if (publish && File.Exists(diskPathInfo.FullName))
+        {
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
 
         return true;

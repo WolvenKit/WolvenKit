@@ -106,6 +106,32 @@ public partial class ProjectExplorerViewModel
         _modsWatcher.Changed += OnChanged;
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
+
+        // Capture the UI dispatcher now (this ctor runs on the UI thread). Prefer the application's
+        // dispatcher when available and fall back to the current thread's so this also works in
+        // headless/STA test hosts where Application.Current may be null.
+        var uiDispatcher = System.Windows.Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
+        IScheduler projectEventScheduler = new MainThreadInlineScheduler(RxApp.MainThreadScheduler, uiDispatcher);
+
+        projectEvents.FilesImported
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFilesImported)
+            .DisposeWith(_disposables);
+
+        projectEvents.FilesMoved
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFilesMoved)
+            .DisposeWith(_disposables);
+
+        projectEvents.FilesDeleted
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFilesOrDirectoriesDeleted)
+            .DisposeWith(_disposables);
+
+        projectEvents.FileChanged
+            .ObserveOn(projectEventScheduler)
+            .Subscribe(OnFileChanged)
+            .DisposeWith(_disposables);
     }
 
     #endregion
@@ -846,6 +872,176 @@ public partial class ProjectExplorerViewModel
     }
 
     #endregion file watching
+
+    #region project events handlers
+
+    /// <summary>
+    /// Subscriber to published lists of files being added by other objects.
+    /// Bypasses the need for monitoring file system events for performance.
+    /// </summary>
+    /// <param name="msg"></param>
+    private void OnFilesImported(FilesImportedMessage msg)
+    {
+        var batch = new List<FileSystemModel>();
+
+        switch (msg)
+        {
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var file in files)
+                {
+                    var gameRelativePath = file.FileName;
+                    var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
+                    var fileInfo = new FileInfo(fullPath);
+                    CreateFileAndAllNeededDirectories(FileDestination.Archive, fileInfo, batch);
+                }
+
+                break;
+            case FilesImportedMessage.ArchiveFiles(var files):
+                foreach (var file in files)
+                {
+                    CreateFileAndAllNeededDirectories(FileDestination.Archive, file, batch);
+                }
+
+                break;
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var file in files)
+                {
+                    CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
+                }
+
+                break;
+
+        }
+
+        FileList.AddRange(batch);
+        Resume();
+
+        // Log added files in the background to avoid hanging the UI on very large imports.
+        LogBatchAddedFiles(batch);
+    }
+
+    /// <summary>
+    /// Applies an authoritative, already-completed set of file moves (see
+    /// <see cref="IProjectEvents.PublishFilesMoved"/>) to the domain models and. This is the
+    /// replacement for optimistic handlers: the tree is only ever changed to match what actually
+    /// happened on disk, so declining an overwrite prompt can no longer leave it out of sync.
+    /// Runs on the UI thread and is idempotent, so racing with a live OS watcher event (or a
+    /// duplicate publish) is a no-op.
+    /// </summary>
+    private void OnFilesMoved(FilesMovedMessage msg)
+    {
+        if (msg.Moves.Count == 0)
+        {
+            return;
+        }
+
+        var sourceParents = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var batch = new List<FileSystemModel>();
+
+        foreach (var (from, to) in msg.Moves)
+        {
+            if (string.IsNullOrEmpty(to))
+            {
+                continue;
+            }
+
+            if (!string.IsNullOrEmpty(from)
+                && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                && PathsShareParent(from, to)
+                && _fileLookup.TryGetValue(from, out var renameModel)
+                && !renameModel.IsDirectory)
+            {
+                if (_fileLookup.TryGetValue(to, out var overwritten) && !ReferenceEquals(overwritten, renameModel))
+                {
+                    RemoveModel(overwritten);
+                }
+
+                RenameModelInPlace(renameModel, from, to);
+                continue;
+            }
+
+            // Otherwise remove the source model, then add the destination.
+            if (!string.IsNullOrEmpty(from))
+            {
+                var parent = Path.GetDirectoryName(from);
+                if (!string.IsNullOrEmpty(parent))
+                {
+                    sourceParents.Add(parent);
+                }
+
+                if (_fileLookup.TryGetValue(from, out var model))
+                {
+                    RemoveModel(model);
+                }
+            }
+
+            EnsureModelForPath(to, batch);
+        }
+
+        if (batch.Count > 0)
+        {
+            batch.ForEach(ExpandParents);
+            FileList.AddRange(batch);
+        }
+
+        // Prune source directory models whose backing folder no longer exists (an empty folder
+        // left behind by the move was deleted on disk). Walk upward so nested empties go too.
+        foreach (var parent in sourceParents)
+        {
+            PruneVanishedDirectories(parent);
+        }
+
+        void ExpandParents(FileSystemModel? model)
+        {
+            var current = model;
+            while (current != null)
+            {
+                if (current is { IsDirectory: true, IsExpanded: false })
+                {
+                    current.IsExpanded = true;
+                }
+
+                current = current.Parent;
+            }
+        }
+    }
+
+    private void OnFileChanged(FileChangedMessage msg)
+    {
+        switch (msg)
+        {
+            case FileChangedMessage.Document(var file):
+                if (file.FilePath is not string fullPath)
+                {
+                    break;
+                }
+
+                if (_fileLookup.TryGetValue(fullPath, out var model))
+                {
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Applies an authoritative set of deletions (see <see cref="IProjectEvents.PublishFileDeleted"/>
+    /// / <see cref="IProjectEvents.PublishDirectoryDeleted"/>) to the domain models. Handles BOTH
+    /// files and directories: RemoveModel recurses into children, so a deleted directory path drops
+    /// its whole subtree. Idempotent: a path the tree doesn't know is a no-op. Must run on the UI thread.
+    /// </summary>
+    private void OnFilesOrDirectoriesDeleted(FilesDeletedMessage msg)
+    {
+        foreach (var path in msg.AbsolutePaths)
+        {
+            if (!string.IsNullOrEmpty(path) && _fileLookup.TryGetValue(path, out var model))
+            {
+                RemoveModel(model);
+            }
+        }
+    }
+
+    #endregion project events handlers
 
     private class FileSystemEventArgsWrapper
     {

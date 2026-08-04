@@ -71,6 +71,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
+    private readonly IProjectEvents _projectEvents;
     private readonly IGameControllerFactory _gameControllerFactory;
     private readonly INotificationService _notificationService;
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -120,7 +121,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
-        RedTypeTemplateService redTypeTemplateService
+        RedTypeTemplateService redTypeTemplateService,
+        IProjectEvents projectEvents
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -147,6 +149,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
         _redTypeTemplateService = redTypeTemplateService;
+        _projectEvents = projectEvents;
+        _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
+        _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -1053,7 +1058,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
+    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService, _projectEvents);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void DeleteEmptyMeshes()
