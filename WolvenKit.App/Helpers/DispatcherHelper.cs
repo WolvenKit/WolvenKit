@@ -52,6 +52,59 @@ public static class DispatcherHelper
         }
     }
 
+    public static async Task RunOnMainThreadAsync(Func<Task> action, DispatcherPriority priority = DispatcherPriority.Normal) => await Application.Current.RunOnUIThreadAsync(action, priority);
+
+    private static async Task RunOnUIThreadAsync(this DispatcherObject? d, Func<Task> action, DispatcherPriority priority = DispatcherPriority.Normal)
+    {
+        // In a unit test / headless context there is no WPF Application and no Dispatcher.
+        // Run the action synchronously so code paths that rely on DispatcherHelper
+        // (DispatchedObservableCollection, etc.) continue to work.
+        if (d == null && Application.Current == null)
+        {
+            await action();
+            return;
+        }
+
+        if (d is not { Dispatcher: { } dispatcher })
+        {
+            return;
+        }
+
+        if (dispatcher.CheckAccess())
+        {
+            await action();
+        }
+        else
+        {
+            try
+            {
+                await dispatcher.InvokeAsync(action, priority);
+            }
+            catch (Exception)
+            {
+                // TODO: Add logger here?
+                throw;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Queues the action to a fresh dispatcher frame, even when already on the UI thread
+    /// (unlike "RunOnMainThread", which runs inline in that case). Use when the
+    /// action must not run inside the currently executing event handler's stack.
+    /// </summary>
+    public static void PostOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+    {
+        if (Application.Current is not { Dispatcher: { } dispatcher })
+        {
+            // Headless / unit-test context: run synchronously, matching the other helpers.
+            action();
+            return;
+        }
+
+        dispatcher.BeginInvoke(action, priority);
+    }
+
     /// <summary>
     /// Runs `action` on the main thread after specified delay, without blocking.
     /// </summary>
