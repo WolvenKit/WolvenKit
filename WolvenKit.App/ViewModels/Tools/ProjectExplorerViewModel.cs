@@ -146,6 +146,245 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         s_instance = this;
     }
 
+    #region Project_Loading
+
+    /// <summary>
+    /// Loads a project and starts watching it.
+    /// If isReload is true then we won't show `Loading` in the files pane.
+    /// </summary>
+    /// <param name="activeProject"></param>
+    /// <param name="isReload"></param>
+    public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
+    {
+        EnableLoadingMode(isReload ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject);
+
+        RefreshAfter(() =>
+        {
+            try
+            {
+                if (ActiveProject != null && _autoSaveCancelToken is { } cancelToken)
+                {
+                    DispatcherHelper.StopRepeatingAction(cancelToken);
+                    _autoSaveCancelToken = null;
+                    SaveProjectState();
+                    ActiveProject = null;
+                    UnwatchProject();
+                }
+
+                LoadExpansionStateDictionary(activeProject);
+                ActiveProject = activeProject;
+                StartWatcher_AndLoadProject(activeProject);
+
+                DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
+                _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
+                    purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+                    TimeSpan.FromSeconds(10));
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Error refreshing project: {e.Message}. Try reloading the app. If this error persists, please reach out on the WolvenKit discord.");
+
+                CancelProjectLoad();
+            }
+            finally
+            {
+                if (!isReload)
+                {
+                    RestoreProjectState(ActiveProject!);
+                    CheckForOneDriveInPath();
+                    // Don't run DisableLoadingMode here
+                }
+            }
+        });
+    }
+
+
+    /// <summary>
+    /// Announces that a different project is about to load: flushes the outgoing project's state
+    /// and arms the loading chrome. Must be called before the project manager swaps its active
+    /// project, or the outgoing state is saved against the incoming one.
+    ///
+    /// Idempotent — the welcome page arms the chrome on click for responsiveness and the load path
+    /// announces the same load again; only the first call flushes.
+    /// </summary>
+    public void ProjectWillLoad(string projectPath)
+    {
+        if (CurrentLoadingMode == LoadingMode.LoadingNewProject)
+        {
+            return;
+        }
+
+        if (ActiveProject != null)
+        {
+            if (IsSameProjectPath(ActiveProject, projectPath))
+            {
+                return;
+            }
+
+            SaveProjectState();
+        }
+
+        EnableLoadingMode(LoadingMode.LoadingNewProject);
+    }
+
+    /// <summary>
+    /// Clears project-load loading chrome without reporting a successful load.
+    /// Use on cancel / failed open / same-project no-op after ProjectWillLoad armed the UI.
+    /// </summary>
+    public void CancelProjectLoad() => DisableLoadingMode(reportResult: false);
+
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        _loggerService.Debug($"Initiating project load.");
+        DispatcherHelper.PostOnMainThread(() =>
+        {
+            var activeProject = _projectManager.ActiveProject;
+            if (activeProject == null || activeProject.Equals(ActiveProject))
+            {
+                CancelProjectLoad();
+                return;
+            }
+
+            StartWatcher_AndLoadProject(activeProject, false);
+        });
+    }
+
+    private static bool IsSameProjectPath(Cp77Project activeProject, string projectPath)
+    {
+        if (string.IsNullOrWhiteSpace(projectPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            var requested = Path.GetFullPath(projectPath);
+            var location = Path.GetFullPath(activeProject.Location);
+            if (string.Equals(requested, location, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            var projectDirectory = Path.GetFullPath(activeProject.ProjectDirectory);
+            return string.Equals(requested, projectDirectory, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return string.Equals(activeProject.Location, projectPath, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    public enum LoadingMode
+    {
+        Ready,
+        LoadingNewProject,
+        ReloadingSameProject,
+        ShowLoadingDuringOperation
+    }
+
+    private void EnableLoadingMode(LoadingMode mode)
+    {
+        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject && mode != LoadingMode.ShowLoadingDuringOperation)
+        {
+            return;
+        }
+
+        if (mode != CurrentLoadingMode)
+        {
+            OnSetLoading?.Invoke(this, mode);
+            CurrentLoadingMode = mode;
+        }
+
+        if (_loadingIndicatorHandle is not null)
+        {
+            return;
+        }
+
+        _loadingIndicatorHandle = DispatcherHelper.StartRepeatingAction(
+            purpose: LoadProjectPurpose,
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            _projectLoadPollingInterval
+        );
+    }
+
+    public void DisableLoadingMode() => DisableLoadingMode(reportResult: true);
+
+    private void DisableLoadingMode(bool reportResult)
+    {
+        if (CurrentLoadingMode == LoadingMode.Ready)
+        {
+            return;
+        }
+
+        var completedMode = CurrentLoadingMode;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
+        CurrentLoadingMode = LoadingMode.Ready;
+        OnSetLoading?.Invoke(this, CurrentLoadingMode);
+
+        DispatcherHelper.StopRepeatingAction(_loadingIndicatorHandle);
+        _loadingIndicatorHandle = null;
+
+        if (!reportResult)
+        {
+            return;
+        }
+
+        if (completedMode is not (LoadingMode.LoadingNewProject or LoadingMode.ReloadingSameProject))
+        {
+            return;
+        }
+
+        if (ActiveProject != null)
+        {
+            _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
+        }
+        else
+        {
+            _loggerService.Warning(
+                $"Loading the project has seemed to fail. Please restart WolvenKit and try again. If this issue persists, please contact support on the WolvenKit discord.");
+        }
+    }
+
+    /// <summary>
+    /// Initialize Avalondock specific defaults that are specific to this tool window.
+    /// </summary>
+    private void SetupToolDefaults() =>
+        ContentId = s_toolContentId;
+
+    private void CheckForOneDriveInPath()
+    {
+        if (_projectManager.ActiveProject is null ||
+            !FilePathHelper.IsOneDrivePath(_projectManager.ActiveProject.Location))
+        {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom!",
+            "",
+            "Don't store Wolvenkit projects inside your OneDrive folder!",
+            "This can cause all kinds of issues!"
+        ];
+
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+            string.Join('\n', warningText),
+            "OneDrive Warning",
+            WMessageBoxImage.Warning,
+            WMessageBoxButtons.Ok
+        )));
+    }
+
+    #endregion Project_Loading
+
     /// <summary>
     /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file
     /// </summary>
@@ -357,17 +596,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh()
-    {
-        if (_projectWatcher.IsWatcherStopped)
-        {
-            ResumeFileWatcher();
-        }
-        else
-        {
-            _projectWatcher.Refresh();
-        }
-    }
+    private void Refresh() => ResumeWatcher_AndReloadProject();
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
     {
@@ -1905,47 +2134,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = true;
     }
 
-    public void SuspendFileWatcher()
-    {
-        if (ActiveProject is not Cp77Project project)
-        {
-            return;
-        }
-
-        try
-        {
-            _projectWatcher.UnwatchProject(project);
-            _projectWatcher.ForceStop();
-        }
-        catch
-        {
-            _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
-        }
-    }
-
-    public static void SuspendFileWatcherStatic() => s_instance?.SuspendFileWatcher();
-    public static void ResumeFileWatcherStatic() => s_instance?.ResumeFileWatcher();
-
-    public void ResumeFileWatcher()
-    {
-        if (ActiveProject is not Cp77Project project)
-        {
-            return;
-        }
-
-        try
-        {
-            _projectWatcher.WatchProject(project);
-        }
-        catch
-        {
-            _loggerService.Error(
-                "Failed to resume file watcher. Please hit the refresh button in the project browser.");
-            _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
-        }
-
-    }
-
     public void OnKeyStateChanged(KeyEventArgs e)
     {
         if (e.Key == Key.W && (e.KeyboardDevice.Modifiers & ModifierKeys.Control) != 0)
@@ -1956,4 +2144,274 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         ModifierStateService.OnKeystateChanged(e);
     }
+
+    #region grid consistency
+
+    /// <summary>
+    /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
+    /// <returns></returns>
+    public Task RefreshAfter(Action action, bool shouldSuspend = true)
+    {
+        return RefreshAfter(() =>
+        {
+            action();
+            return Task.CompletedTask;
+        });
+    }
+
+    /// <summary>
+    /// Submit a task to mutate the structure of the file grids in a DeferredRefresh.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="shouldSuspend"></param>If the watcher should be suspended during this refresh. (Unless you know what you're doing, leave this as false.)
+    /// <returns>Task</returns>
+    public async Task RefreshAfter(Func<Task> action, bool shouldSuspend = true)
+    {
+        await DispatcherHelper.RunOnMainThreadAsync(async () =>
+        {
+            if (shouldSuspend)
+            {
+                Suspend();
+            }
+
+            if (_inFlight)
+            {
+                await action();
+                Resume();
+                return;
+            }
+
+            _inFlight = true;
+
+            if (BeginDeferredRefreshContext == null)
+            {
+                await action();
+                _inFlight = false;
+                Resume();
+                return;
+            }
+
+            try
+            {
+                await BeginDeferredRefreshContext(
+                    action
+                );
+            }
+            catch (WolvenKitException e)
+            {
+                _loggerService.Debug($"Exception caught while refreshing: ${e}.");
+            }
+            finally
+            {
+                DispatcherHelper.DelayOnMainThread(() =>
+                {
+                    _inFlight = false;
+
+                    if (shouldSuspend)
+                    {
+                        Resume();
+                    }
+                }, 1);
+            }
+        });
+    }
+
+    public void ApplyGridMutationLive(Action mutate)
+    {
+        DispatcherHelper.PostOnMainThread(() =>
+        {
+            Suspend();
+            OnLiveGridMutationStarting?.Invoke();
+            try
+            {
+                mutate();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Debug($"Exception caught during live grid mutation: {e}.");
+            }
+            finally
+            {
+                // Completed must run even on failure so the View can resume suspended grids.
+                OnLiveGridMutationCompleted?.Invoke();
+                Resume();
+            }
+        });
+    }
+
+    public void ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory) {
+        var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
+
+        // Abort if a directory is dragged on itself or its parent
+        if (!isCopy && sourceFiles.Count == 1 &&
+            (sourceFiles[0] == targetDirectory || Path.GetDirectoryName(sourceFiles[0]) == targetDirectory))
+        {
+            return;
+        }
+
+        // Split files and directories apart for cleaner handling
+        var directories = sourceFiles.Where(s => File.GetAttributes(s).HasFlag(FileAttributes.Directory)).ToList();
+
+        // Create a dictionary to map source files to target files
+        var fileMap = new Dictionary<string, string>();
+
+        // Add files directly under the source directories to the map
+        foreach (var sourceFile in sourceFiles.Where(s => !directories.Contains(s)))
+        {
+            var targetFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
+            fileMap[sourceFile] = targetFile;
+        }
+
+        // Add files under the subdirectories of the source directories to the map
+        foreach (var directory in directories.Where(Directory.Exists))
+        {
+            var directoryParent = Path.GetDirectoryName(directory) ?? directory;
+            foreach (var sourceFile in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
+            {
+                // we don't care about directories, just about files
+                if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
+                {
+                    continue;
+                }
+
+                var relativePath = sourceFile.Substring(directoryParent.Length).TrimStart(Path.DirectorySeparatorChar);
+                var targetFile = Path.Combine(targetDirectory, relativePath);
+                if (targetFile == sourceFile && isCopy)
+                {
+                    var directoryName = Path.GetFileName(Path.GetDirectoryName(sourceFile)) ?? "INVALID";
+                    relativePath = relativePath.Replace(directoryName, $"{directoryName}_copy");
+                    targetFile = Path.Combine(targetDirectory, relativePath);
+                }
+
+                fileMap[sourceFile] = targetFile;
+            }
+        }
+
+        var existingFiles = fileMap.Values.Where(File.Exists)
+            .Select(s => s.Replace(targetDirectory, "").TrimStart(Path.DirectorySeparatorChar)).OrderBy(s => s).Distinct()
+            .ToList();
+
+        // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
+        var isOverwrite = existingFiles.Count == 0;
+        var isAskIndividually = existingFiles.Count > 10;
+        var skipDialogue = false;
+
+        // We're copying or moving a file on itself - offer rename operation
+        if (fileMap.Count == 1 && existingFiles.Count == 1 &&
+            ActiveProject is Cp77Project project &&
+            targetDirectory == Path.GetDirectoryName(fileMap.Keys.First()))
+        {
+            var filePath = fileMap.Keys.First();
+            var relativePath = filePath.Replace($"{project.ModDirectory}{Path.DirectorySeparatorChar}", "");
+            var destPath = Interactions.Rename(relativePath);
+            if (string.IsNullOrEmpty(destPath))
+            {
+                // user cancelled dialogue
+                return;
+            }
+
+            if (destPath != relativePath)
+            {
+                fileMap[filePath] = filePath.Replace(relativePath, destPath);
+                existingFiles.Clear();
+            }
+            else
+            {
+                // we can't overwrite a file with itself, so we'll create a copy
+                isCopy = true;
+                skipDialogue = true;
+            }
+        }
+
+
+        // 1 - 10 files: Show a single dialogue that asks for confirmation
+        if (existingFiles.Count is < 10 and > 0)
+        {
+            var messageBoxResult = Interactions.ShowMessageBox(
+                $"Overwrite the following files? \n\n  {string.Join("\n  ", existingFiles)}",
+                "File Overwrite Confirmation", WMessageBoxButtons.YesNoCancel);
+
+            if (messageBoxResult == WMessageBoxResult.Cancel)
+            {
+                return;
+            }
+
+            isOverwrite = messageBoxResult == WMessageBoxResult.Yes;
+        }
+
+        // Track what actually happened on disk so we can hand the project explorer an
+        // authoritative reconciliation afterwards, rather than relying on (flaky) FS events.
+        var movedPairs = new List<(string From, string To)>();
+        var addedPaths = new List<string>();
+
+        foreach (var copyMe in fileMap)
+        {
+            var targetFile = copyMe.Value ?? "";
+
+            var canWriteToTargetFile =
+                !File.Exists(targetFile)
+                || isOverwrite
+                || (!skipDialogue && isAskIndividually && Interactions.ShowMessageBox(
+                    $"Overwrite the following file? {targetFile}",
+                    "File Overwrite Confirmation",
+                    WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
+            if (!canWriteToTargetFile)
+            {
+                if (!isCopy)
+                {
+                    continue;
+                }
+
+                var filenameWithoutExtension = Path.GetFileNameWithoutExtension(targetFile);
+                targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension}_copy");
+            }
+
+            var containingDirectory = Path.GetDirectoryName(targetFile) ?? "";
+            if (!Directory.Exists(containingDirectory))
+            {
+                Directory.CreateDirectory(containingDirectory);
+            }
+
+            if (isCopy)
+            {
+                File.Copy(copyMe.Key, targetFile, true);
+                addedPaths.Add(targetFile);
+            }
+            else
+            {
+                File.Move(copyMe.Key, targetFile, true);
+                movedPairs.Add((copyMe.Key, targetFile));
+            }
+        }
+
+        // Moves leave behind emptied source folders — delete them BEFORE reconciling so the
+        // watcher prunes their now-vanished models. Copies leave the source in place.
+        if (!isCopy)
+        {
+            foreach (var directory in directories.OrderByDescending(dir => dir.Length).ToList())
+            {
+                if (Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Any())
+                {
+                    continue;
+                }
+
+                Directory.Delete(directory, true);
+            }
+        }
+
+        if (movedPairs.Count == 0 && addedPaths.Count == 0)
+        {
+            return;
+        }
+
+        var payload = new List<(string From, string To)>(movedPairs.Count + addedPaths.Count);
+        payload.AddRange(movedPairs);
+        payload.AddRange(addedPaths.Select(a => (string.Empty, a)));
+        ApplyGridMutationLive(() => _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload)));
+    }
+
+    #endregion
 }
