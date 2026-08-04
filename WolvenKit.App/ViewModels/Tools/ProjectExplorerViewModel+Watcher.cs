@@ -1083,7 +1083,441 @@ public partial class ProjectExplorerViewModel
         /// </summary>
         public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
-    
+
+    #region filesystem loading
+
+    private void Locked_LoadModProjectFileStructure()
+    {
+        lock (_modLoadingLock)
+        {
+            LoadModProjectFileStructure();
+        }
+    }
+
+    private void LoadModProjectFileStructure()
+    {
+        if (_projectFileSystemModel == null)
+        {
+            // On first app launch, there's no project yet.
+            return;
+        }
+
+        _watcherState = WatcherState.Loading;
+
+
+
+        Clear();
+
+        Task.Run(() =>
+        {
+            var succeeded = false;
+            try
+            {
+                var (flatListReturn, treeRoot) = BuildFullFileStructure();
+
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (flatListReturn.Count != 0)
+                    {
+                        FileList.AddRange(flatListReturn);
+                    }
+
+                    FileTree.AddRange((treeRoot != null)
+                        ? treeRoot.Children
+                        : Array.Empty<FileSystemModel>());
+
+                    _loggerService?.Info($"Loaded {FileList.Count} project files.");
+                    StartBackgroundPolling();
+                    Resume();
+                });
+
+                succeeded = true;
+            }
+            catch (Exception e)
+            {
+                _loggerService?.Error($"Failed to load project files: {e.Message}");
+            }
+            finally
+            {
+                DispatcherHelper.RunOnMainThread(() => DisableLoadingMode(reportResult: succeeded));
+            }
+        });
+    }
+
+    private (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
+    {
+        var flatList = new List<FileSystemModel>(10000);
+        var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+        var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
+        stack.Push((new DirectoryInfo(rootModel.FullName), rootModel));
+
+        while (stack.Count > 0)
+        {
+            var (dir, parent) = stack.Pop();
+
+            try
+            {
+                // dir
+                foreach (var subDir in dir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
+                {
+                    if (IsIgnoredPath(subDir.FullName))
+                        continue;
+
+                    var wrapper = new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created,
+                        subDir.Parent?.FullName ?? "", subDir.Name));
+
+                    var dirModel = CreateFromScratch(parent, wrapper);
+
+                    if (dirModel != null)
+                    {
+                        if (dirModel.FullName != rootModel.FullName)
+                            flatList.Add(dirModel);
+                        parent.Children.Add(dirModel);
+                        _fileLookup.TryAdd(dirModel.FullName, dirModel);
+                        stack.Push((subDir, dirModel));
+                    }
+                }
+
+                // file
+                foreach (var file in dir.EnumerateFiles("*", SearchOption.TopDirectoryOnly))
+                {
+                    if (IsIgnoredPath(file.FullName))
+                        continue;
+
+                    var fileModel = CreateFromScratch(parent, new FileSystemEventArgsWrapper(new FileSystemEventArgs(
+                        WatcherChangeTypes.Created,
+                        file.DirectoryName ?? "", file.Name)));
+
+                    if (fileModel != null)
+                    {
+                        flatList.Add(fileModel);
+                        parent.Children.Add(fileModel);
+                        _fileLookup[fileModel.FullName] = fileModel;
+                    }
+                }
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                _loggerService?.Warning($"Access denied on {dir.FullName}");
+            }
+        }
+
+        return (flatList, rootModel);
+    }
+
+    /// <summary>
+    /// Creates a FileSystemMoodel from a FileSystemEventArgsWrapper and parent.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private FileSystemModel? CreateFromScratch(FileSystemModel? parent, FileSystemEventArgsWrapper e)
+    {
+        if (parent == null && e.Name != _projectDirectory && e.Name != "archive" && e.Name != "raw" && e.Name != "resources")
+        {
+            return null;
+        }
+
+        if (string.IsNullOrEmpty(e.FullPath))
+            return null;
+
+        var fullPath = e.FullPath;
+
+        if (IsIgnoredPath(fullPath))
+            return null;
+
+        try
+        {
+            var isDirectory = Directory.Exists(fullPath);
+            var relativePath = fullPath[(_projectDirectory.Length + 1)..];
+            var name = Path.GetFileName(e.FullPath);
+
+            bool desiredExpansion = isDirectory && GetDesiredExpansionState(relativePath);
+            var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion);
+            return model;
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Warning($"Failed to create FileSystemModel for {fullPath}: {ex.Message}");
+            return null;
+        }
+    }
+
+    #endregion
+
+    #region helpers
+
+    private void RemoveModel(FileSystemModel model, long removedAt = 0)
+    {
+        _fileLookup.TryRemove(model.FullName, out _);
+
+        if (FileTree.Contains(model))
+            FileTree.Remove(model);
+        if (FileList.Contains(model))
+            FileList.Remove(model);
+
+        RemoveChildModels(model);
+
+        if (model.Parent != null && model.Parent.Children.Contains(model))
+            model.Parent.Children.Remove(model);
+
+        if (removedAt != 0)
+            _removedFiles.TryAdd(model.FullName, removedAt);
+    }
+
+    private void RemoveChildModels(FileSystemModel model)
+    {
+        var children = model.Children.ToList();
+        foreach (var subModel in children)
+        {
+            RemoveChildModels(subModel);
+
+            _fileLookup.Remove(subModel.FullName, out _);
+            if (FileList.Contains(subModel))
+                FileList.Remove(subModel);
+        }
+    }
+
+    internal void RemoveItems(IEnumerable<FileSystemModel> items)
+    {
+        foreach (var item in items)
+        {
+            var domain = _fileLookup.TryGetValue(item.FullName, out var d) ? d : item;
+            RemoveModel(domain, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
+        }
+    }
+
+    private bool IsIgnoredPath(string fullPath)
+    {
+        if (string.IsNullOrWhiteSpace(fullPath)) return true;
+
+        var fileName = Path.GetFileName(fullPath);
+        return HasIgnoredExtension(fileName)
+               || s_backupFilePartials.Any(p => fileName.Contains(p, StringComparison.OrdinalIgnoreCase))
+               || fileName.StartsWith(".");
+    }
+
+    private static bool PathsShareParent(string a, string b) =>
+        string.Equals(Path.GetDirectoryName(a), Path.GetDirectoryName(b), StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Renames a file model in place preserving node identity so the grid keeps its selection/expansion.
+    /// Re-keys the lookup rather than a remove-then-add. Must be called on the UI thread.
+    /// </summary>
+    private void RenameModelInPlace(FileSystemModel model, string oldFullName, string newFullName)
+    {
+        _fileLookup.TryRemove(oldFullName, out _);
+        model.Rename(Path.GetFileName(newFullName)); // recomputes FullName; keeps the same parent
+        _fileLookup.TryAdd(newFullName, model);
+    }
+
+    /// <summary>
+    /// Removes directory models whose backing directory no longer exists on disk, walking upward
+    /// from <paramref name="directoryAbsPath"/> so a chain of emptied parents is cleaned. Never
+    /// removes the archive/raw/resources roots. Must be called on the UI thread.
+    /// </summary>
+    private void PruneVanishedDirectories(string directoryAbsPath)
+    {
+        var dir = directoryAbsPath;
+        while (!string.IsNullOrEmpty(dir)
+               && dir.Length > _projectDirectory.Length
+               && _fileLookup.TryGetValue(dir, out var dirModel))
+        {
+            // Never prune the archive/raw/resources roots (parent is the invisible project root).
+            if (dirModel.Parent is null || dirModel.Parent.Name == FileSystemModel.ProjectDirName)
+            {
+                break;
+            }
+
+            // Keep any directory that still exists on disk (it may hold files we did not move).
+            if (Directory.Exists(dir))
+            {
+                break;
+            }
+
+            var parent = Path.GetDirectoryName(dir);
+            RemoveModel(dirModel);
+            dir = parent;
+        }
+    }
+
+    /// <summary>
+    /// Ensures a <see cref="FileSystemModel"/> exists for the given absolute path, creating it
+    /// and any missing ancestor directory models up to the project root. Returns the existing
+    /// model when one is already present (keeping the apply idempotent). New models are appended
+    /// to <paramref name="batch"/> so the caller can add them to the flat list in
+    /// one shot. Must be called on the UI thread.
+    /// </summary>
+    private FileSystemModel? EnsureModelForPath(string absolutePath, List<FileSystemModel> batch)
+    {
+        if (string.IsNullOrEmpty(absolutePath) || _projectFileSystemModel is null)
+        {
+            return null;
+        }
+
+        if (_fileLookup.TryGetValue(absolutePath, out var existing))
+        {
+            return existing;
+        }
+
+        // The project root itself is the base of every FullName but is not stored in _fileLookup.
+        if (string.Equals(absolutePath, _projectDirectory, StringComparison.OrdinalIgnoreCase))
+        {
+            return _projectFileSystemModel;
+        }
+
+        if (!absolutePath.StartsWith(_projectDirectory, StringComparison.OrdinalIgnoreCase)
+            || IsIgnoredPath(absolutePath))
+        {
+            return null;
+        }
+
+        var parentPath = Path.GetDirectoryName(absolutePath);
+        if (string.IsNullOrEmpty(parentPath))
+        {
+            return null;
+        }
+
+        var parentModel = EnsureModelForPath(parentPath, batch);
+        if (parentModel is null)
+        {
+            return null;
+        }
+
+        var isDirectory = Directory.Exists(absolutePath);
+        var relativePath = absolutePath[(_projectDirectory.Length + 1)..];
+        var name = Path.GetFileName(absolutePath);
+        var desiredExpansion = isDirectory && GetDesiredExpansionState(relativePath);
+
+        var model = new FileSystemModel(parentModel, name, relativePath, isDirectory, desiredExpansion);
+
+        if (!parentModel.Children.Contains(model))
+        {
+            parentModel.Children.Add(model);
+        }
+
+        _fileLookup.TryAdd(absolutePath, model);
+        batch.Add(model);
+        return model;
+    }
+
+    private void CreateFileAndAllNeededDirectories(FileDestination fileDestination, FileInfo file, List<FileSystemModel> batch)
+    {
+        var destination = "";
+
+        switch (fileDestination)
+        {
+            case FileDestination.Archive:
+                destination = "archive";
+                break;
+            case FileDestination.Raw:
+                destination = "raw";
+                break;
+            default:
+                destination = "";
+                break;
+        }
+
+        var fullPath = file.FullName;
+        var fileName = file.Name;
+        var parentDirInfo = Directory.GetParent(fullPath);
+        var parentPath = parentDirInfo!.FullName;
+        var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
+
+        Dictionary<string, FileSystemModel> expandedLeaves = new();
+
+        if (_fileLookup.TryGetValue(parentPath, out var parent))
+        {
+            if (!_fileLookup.ContainsKey(fullPath))
+            {
+                var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
+                parent.Children.Add(fileSystemModel);
+                _fileLookup.TryAdd(fullPath, fileSystemModel);
+                batch.Add(fileSystemModel);
+
+                ExpandAllParents(parent, expandedLeaves);
+            }
+            return;
+        }
+
+        var parentDirs = new Stack<DirectoryInfo>();
+        var currentLevel = Directory.GetParent(fullPath)!;
+
+        while (currentLevel.Name != destination)
+        {
+            parentDirs.Push(currentLevel);
+            currentLevel = currentLevel.Parent!;
+        }
+
+        var lookupKey = Path.Combine(_projectDirectory, destination);
+
+        if (!_fileLookup.TryGetValue(lookupKey, out var parentModel))
+        {
+            throw new WolvenKitException(987, $"Failed to find needed directory ${lookupKey}. " +
+                                              "This means the file system is in an inconsistent state. " +
+                                              "Please close and reload WolvenKit. ");
+
+        }
+
+        while (parentDirs.Count > 0)
+        {
+            var current = parentDirs.Pop();
+
+            // If the directory already exists in our tree...
+            if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
+            {
+                parentModel = currentModel;
+                continue;
+            }
+
+            // Make the new directory.
+            current.Create();
+            var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
+
+            // Make the new model for that directory, auto-expanded.
+            var newCurrentModel = new FileSystemModel(
+                parentModel,
+                current.Name, currentRawRelativePath,
+                true,
+                true
+            );
+
+            parentModel.Children.Add(newCurrentModel);
+            _fileLookup.TryAdd(current.FullName, newCurrentModel);
+            batch.Add(newCurrentModel);
+            ExpandAllParents(parentModel, expandedLeaves);
+            parentModel = newCurrentModel;
+        }
+
+        if (!_fileLookup.ContainsKey(fullPath))
+        {
+            var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
+            batch.Add(newFileModel);
+            parentModel.Children.Add(newFileModel);
+            _fileLookup.TryAdd(fullPath, newFileModel);
+        }
+    }
+
+    private void ExpandAllParents(FileSystemModel parent, Dictionary<string, FileSystemModel> expandedLeaves)
+    {
+        FileSystemModel? expandParent = parent;
+
+        while (expandParent != null)
+        {
+            if (expandedLeaves.ContainsKey(expandParent.FullName))
+            {
+                expandParent = null;
+                continue;
+            }
+
+            NotifyDirectoryExpanded(expandParent);
+            expandedLeaves[expandParent.FullName] = expandParent;
+            expandParent = expandParent.Parent;
+        }
+    }
+
+    #endregion helpers
+
     /// <summary>
     /// NoProject: there is no active mod loaded up.
     /// Suspended: there is a mod loaded up, but Windows file system events are being ignored.
