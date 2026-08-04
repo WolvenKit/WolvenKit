@@ -174,7 +174,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
     /// <summary>
-    /// Absolute path to /source/archive
+    /// Absolute path to /source/archive.
+    /// (Returns 'Mod' instead for legacy project compatibility.)
     /// </summary>
     public string ModDirectory
     {
@@ -516,7 +517,14 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         _ = ResourcesDirectory;
     }
 
-    public (string, string) SplitFilePath(string fullPath) =>
+    /// <summary>
+    /// Splits the supplied `fullPath` into two paths divided after archive/raw/resource.
+    /// E.g. for "C:\path\to\my\mod\source\archive\my\kleppiin\choom.ent":
+    /// returns ("C:\path\to\my\mod\source\archive", "my\kleppiin\choom.ent")
+    /// </summary>
+    /// <param name="fullPath"></param>
+    /// <returns>(AbsolutePathToGameRelativeRoot, GameRelativePath)</returns>
+    public (string, string) SplitFilePathIntoAbsoluteAndGameRelativePaths(string fullPath) =>
         (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
 
     /// <returns>The absolute path to the subdirectory containing the file, e.g. C:\CyberpunkFiles\...\source\archive</returns>
@@ -564,28 +572,33 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             _ => ResourceFiles.Contains(fileNameOrPath) || ResourceFiles.Any(f => f.EndsWith(fileNameOrPath)),
         };
 
-
-    public string GetAbsolutePath(string relativeOrAbsolutePath)
+    /// <summary>
+    /// Resolves a path to its absolute form: an already-absolute path is returned unchanged;
+    /// a GAME-relative path is resolved under the appropriate source subdirectory.
+    /// </summary>
+    /// <param name="relativeOrAbsolutePath"></param>
+    /// <returns>The absolute path on disk.</returns>
+    public string GetAbsolutePath(string gameRelativeOrAbsolutePath)
     {
-        if (Path.IsPathRooted(relativeOrAbsolutePath))
+        if (Path.IsPathRooted(gameRelativeOrAbsolutePath))
         {
-            return relativeOrAbsolutePath;
+            return gameRelativeOrAbsolutePath;
         }
 
-        var (prefix, relativePath) = SplitFilePath(relativeOrAbsolutePath);
+        var (prefix, gameRelativePath) = SplitFilePathIntoAbsoluteAndGameRelativePaths(gameRelativeOrAbsolutePath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
-        if (relativePath == relativeOrAbsolutePath)
+        if (gameRelativePath == gameRelativeOrAbsolutePath)
         {
-            return Path.Join(ModDirectory, prefix, relativePath);
+            return Path.Join(ModDirectory, prefix, gameRelativePath);
         }
 
         if (prefix != "")
         {
-            return Path.Join(FileDirectory, prefix, relativePath);
+            return Path.Join(FileDirectory, prefix, gameRelativePath);
         }
 
-        return Path.Join(prefix, relativePath);
+        return Path.Join(prefix, gameRelativePath);
     }
 
 
@@ -618,6 +631,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     private const string s_relativeRawDir = "wkitrawdir";
     private const string s_relativePackedDir = "wkitpackeddir";
 
+    /// <summary>
+    /// Get the game relative path from an absolute path.
+    /// </summary>
+    /// <param name="absolutePath"></param>
+    /// <returns>GameRelativePath</returns>
     public string GetRelativePath(string absolutePath)
     {
         if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
