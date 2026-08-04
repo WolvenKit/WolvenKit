@@ -1518,6 +1518,20 @@ public partial class ProjectExplorerViewModel
 
     #endregion helpers
 
+    #region types
+
+    private enum FileDestination
+    {
+        Archive,
+        Raw,
+        Resources
+    }
+
+    private static readonly List<string> s_backupFilePartials =
+    [
+        "_tmp", ".bak", ".bkp"
+    ];
+
     /// <summary>
     /// NoProject: there is no active mod loaded up.
     /// Suspended: there is a mod loaded up, but Windows file system events are being ignored.
@@ -1531,4 +1545,6 @@ public partial class ProjectExplorerViewModel
         Loading,
         Error
     }
+
+    #endregion types
 }
