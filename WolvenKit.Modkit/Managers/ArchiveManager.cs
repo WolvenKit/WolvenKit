@@ -150,7 +150,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             baseFiles.Sort(CompareArchives);
 
             var totalCnt = baseFiles.Count;
-            var loadedArchives = new StringBuilder();
 
             var ep1Dir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "ep1");
             if (Directory.Exists(ep1Dir))
@@ -161,6 +160,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 ep1Files.Sort(CompareArchives);
 
                 totalCnt += ep1Files.Count;
+                var archivePaths = "";
 
                 foreach (var file in ep1Files)
                 {
@@ -169,9 +169,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                     LoadArchive(file, EArchiveSource.EP1);
                     cnt++;
 
-                    loadedArchives.AppendLine(
-                        $"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms");
+                    archivePaths +=
+                        $"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms\r\n";
                 }
+
+                _logger.Debug(archivePaths);
             }
 
             foreach (var file in baseFiles)
@@ -181,13 +183,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 LoadArchive(file, EArchiveSource.Base);
                 cnt++;
 
-                loadedArchives.AppendLine(
-                    $"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms");
-            }
-
-            if (loadedArchives.Length > 0)
-            {
-                _logger.Debug(loadedArchives.ToString().TrimEnd());
+                _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms");
             }
 
             sw.Stop();
