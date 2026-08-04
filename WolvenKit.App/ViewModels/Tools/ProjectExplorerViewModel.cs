@@ -2042,6 +2042,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public event EventHandler? OnToggleFlatMode;
 
+    /// <summary>
+    /// Event for `isLoading` and `isReload`.
+    /// The latter will be true if the user clicked the "reload" button.
+    /// It will be false if the user has loaded a fresh project or changed projects.
+    /// </summary>
+    public event EventHandler<LoadingMode>? OnSetLoading;
+
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
 
