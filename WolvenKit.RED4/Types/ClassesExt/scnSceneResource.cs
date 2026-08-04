@@ -17,7 +17,7 @@ public partial class scnSceneResource
 
         // Initialize the actor with automatic ID and performer symbol
         actor.InitializeInScene(this);
-        
+
         // Add to actors collection
         Actors.Add(actor);
     }
@@ -59,7 +59,7 @@ public partial class scnSceneResource
             }
         }
     }
-    
+
     /// <summary>
     /// Adds a player actor to the scene with automatic ID calculation and performer debug symbol creation
     /// </summary>
@@ -67,14 +67,14 @@ public partial class scnSceneResource
     public void AddPlayerActor(scnPlayerActorDef playerActor)
     {
         if (playerActor == null) return;
-        
+
         // Initialize the player actor with automatic ID and performer symbol
         playerActor.InitializeInScene(this);
-        
+
         // Add to player actors collection
         PlayerActors.Add(playerActor);
     }
-    
+
     /// <summary>
     /// Gets the next available actor ID
     /// </summary>
@@ -83,7 +83,7 @@ public partial class scnSceneResource
     {
         return (uint)(Actors.Count + PlayerActors.Count);
     }
-    
+
     /// <summary>
     /// Adds a prop to the scene with automatic ID calculation and performer debug symbol creation
     /// </summary>
@@ -91,13 +91,13 @@ public partial class scnSceneResource
     public void AddProp(scnPropDef prop)
     {
         if (prop == null) return;
-        
+
         // Set prop ID
         prop.PropId.Id = (uint)Props.Count;
-        
+
         // Add to props collection
         Props.Add(prop);
-        
+
         // Create performer debug symbol for the prop
         DebugSymbols ??= new scnDebugSymbols();
         var performerSymbol = new scnPerformerSymbol
@@ -108,7 +108,7 @@ public partial class scnSceneResource
         };
         DebugSymbols.PerformersDebugSymbols.Add(performerSymbol);
     }
-    
+
     /// <summary>
     /// Gets the next available prop ID
     /// </summary>
@@ -117,7 +117,7 @@ public partial class scnSceneResource
     {
         return (uint)Props.Count;
     }
-    
+
     /// <summary>
     /// Calculates the performer ID for a given actor index
     /// </summary>
@@ -127,7 +127,7 @@ public partial class scnSceneResource
     {
         return 1 + actorIndex * 256;
     }
-    
+
     /// <summary>
     /// Calculates the performer ID for a given prop index
     /// </summary>
@@ -137,7 +137,17 @@ public partial class scnSceneResource
     {
         return 2 + propIndex * 256;
     }
-    
+
+    /// <summary>
+        /// The inverse function of <see cref="CalculatePropPerformerId"/>
+    /// </summary>
+    /// <param name="performerId">The performerId (2, 258, 514, etc.)</param>
+    /// <returns>The corresponding prop ID (0, 1, 2, etc.)</returns>
+    public static uint CalculatePropIdFromPerformerId(uint performerId)
+    {
+        return (performerId - 2) / 256;
+    }
+
     /// <summary>
     /// Resolves an actor ID to actor name using direct index lookup
     /// </summary>
@@ -146,7 +156,7 @@ public partial class scnSceneResource
     public string ResolveActorName(uint actorId)
     {
         if (actorId == uint.MaxValue) return "None";
-        
+
         // Check player actors first
         var playerActor = PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorId);
         if (playerActor != null)
@@ -155,7 +165,7 @@ public partial class scnSceneResource
             if (string.IsNullOrEmpty(playerName)) playerName = "Player";
             return $"{playerName} [{actorId}]";
         }
-        
+
         // Check regular actors by index
         if (Actors != null && actorId < Actors.Count)
         {
@@ -166,7 +176,7 @@ public partial class scnSceneResource
                 return $"{actorName ?? "Unnamed"} [{actorId}]";
             }
         }
-        
+
         return $"Unknown Actor [{actorId}]";
     }
 
@@ -184,7 +194,7 @@ public partial class scnSceneResource
         }
 
         var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
-        var vdEntryPreferred = LocStore.VdEntries.FirstOrDefault(vd => 
+        var vdEntryPreferred = LocStore.VdEntries.FirstOrDefault(vd =>
             vd.LocstringId?.Ruid == locStringId && vd.LocaleId == preferredLocaleId);
 
         if (vdEntryPreferred != null && vdEntryPreferred.VariantId != null)
@@ -201,9 +211,9 @@ public partial class scnSceneResource
             }
         }
 
-        var vdEntryFallback = LocStore.VdEntries.FirstOrDefault(vd => 
+        var vdEntryFallback = LocStore.VdEntries.FirstOrDefault(vd =>
             vd.LocstringId?.Ruid == locStringId && vd.LocaleId != preferredLocaleId);
-        
+
         if (vdEntryFallback != null && vdEntryFallback.VariantId != null)
         {
             var fallbackVariantRuid = vdEntryFallback.VariantId.Ruid;
