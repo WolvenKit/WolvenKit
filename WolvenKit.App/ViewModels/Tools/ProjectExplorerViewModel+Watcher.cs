@@ -88,8 +88,68 @@ public partial class ProjectExplorerViewModel
         Refresh();
     }
 
+    public void Resume()
+    {
+        lock (_watcherStateLock)
+        {
+            switch (_watcherState, _suspendQueue.Count)
+            {
+                // happy path
+                case (WatcherState.Suspended, > 0):
+                    _ = _suspendQueue.TryDequeue(out _);
 
-    public void Resume() => _modsWatcher.EnableRaisingEvents = true;
+                    if (_suspendQueue.Count == 0)
+                    {
+                        InternalResume();
+                    }
+
+                    return;
+
+                case (WatcherState.Loading, > 0):
+                    _ = _suspendQueue.TryDequeue(out _);
+
+                    if (_suspendQueue.Count == 0)
+                    {
+                        InternalResume();
+                    }
+                    else
+                    {
+                        _watcherState = WatcherState.Suspended;
+                        _modsWatcher.EnableRaisingEvents = false;
+                        _loggerService?.Debug(
+                            $"Load finished with {_suspendQueue.Count} suspend token(s) remaining; staying suspended.");
+                    }
+
+                    return;
+
+                // resuming while active has no effect
+                case (WatcherState.Active, 0):
+                    _loggerService?.Debug(
+                        $"FileWatcher confirmed active with no pending operations.");
+                    return;
+
+                default:
+                    _loggerService?.Debug(
+                        $"Ignoring unbalanced resume: watcher state was {_watcherState} with {_suspendQueue.Count} suspends on the queue.");
+                    return;
+            }
+        }
+
+
+        void InternalResume()
+        {
+            if (_projectDirectory == "")
+            {
+                throw new Exception("No project directory to resume watching!.");
+            }
+
+            _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
+            _modsWatcher.Path = _projectDirectory;
+            _modsWatcher.IncludeSubdirectories = true;
+            _modsWatcher.EnableRaisingEvents = true;
+            _watcherState = WatcherState.Active;
+        }
+    }
 
     public void UnwatchProject(Cp77Project? project)
     {
@@ -435,11 +495,45 @@ public partial class ProjectExplorerViewModel
         }
     }
 
-    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
+    public void Suspend()
+    {
+        // See Resume() for why this is locked.
+        lock (_watcherStateLock)
+        {
+            if (_suspendQueue.IsEmpty)
+            {
+                _suspendQueue.Enqueue(new SuspendToken());
+                _loggerService?.Debug("Stopping file system watcher in mod folder.");
+                _modsWatcher.EnableRaisingEvents = false;
+                _watcherState = WatcherState.Suspended;
+                return;
+            }
+
+            // Nested suspend (including while Loading): keep existing load/suspend tokens and
+            // add another so a later Resume (or load-completion Resume) does not go Active until
+            // every suspend is balanced. Always reflect Suspended to callers.
+            _modsWatcher.EnableRaisingEvents = false;
+            _suspendQueue.Enqueue(new SuspendToken());
+            if (_watcherState is WatcherState.Loading or WatcherState.Active or WatcherState.Error)
+            {
+                _watcherState = WatcherState.Suspended;
+            }
+        }
+    }
 
     private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 
-    private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+    private void OnChanged(object sender, FileSystemEventArgs e)
+    {
+        if (e.ChangeType == WatcherChangeTypes.Created)
+        {
+            _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+        }
+        else
+        {
+            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+        }
+    }
 
     private class FileSystemEventArgsWrapper
     {
