@@ -443,15 +443,15 @@ public partial class ProjectResourceTools
 
         try
         {
-            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
-            destAbsPath = ToAbsolutePath(destRelPath);
+            destGameRelPath = FilepathValidationTools.SanitizeOsFilePath(destGameRelPath);
+            destAbsPath = ToAbsolutePath(destGameRelPath);
 
-            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
-            sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
+            sourceGameRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceGameRelPath);
+            sourceFileOrDirAbsPath = ToAbsolutePath(sourceGameRelPath);
         }
         catch (Exception e)
         {
-            _loggerService.Error($"Failed to move \"{sourcePath}\" to \"{destPath}\": {e.Message}");
+            _loggerService.Error($"Failed to move \"{sourceGameRelativeOrAbsolutePath}\" to \"{destGameRelativeOrAbsolutePath}\": {e.Message}");
             return;
         }
 
@@ -558,14 +558,24 @@ public partial class ProjectResourceTools
                 continue;
             }
 
-            var relativeSourcePath = activeProject.GetRelativePath(sourceAbsPath);
+            // The absolute path the project explorer currently knows this file by. Normally that is
+            // just the source; for the case-only-rename three-way move we relocated via a temp dir,
+            // so map the temp source back onto the original (rooted) path the tree still holds.
+            var fromAbsPath = sourceAbsPath;
+            if (originalSourceGameRelativeOrAbsolutePath != sourceFileOrDirAbsPath && Path.IsPathRooted(originalSourceGameRelativeOrAbsolutePath))
+            {
+                fromAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, originalSourceGameRelativeOrAbsolutePath);
+            }
+
             publishedMoves.Add((fromAbsPath, targetAbsPath));
 
+            var relativeSourcePath = activeProject.GetRelativePath(sourceAbsPath);
+
             // We've been moving across temp directories
-            if (originalSourcePath != sourceFileOrDirAbsPath)
+            if (originalSourceGameRelativeOrAbsolutePath != sourceFileOrDirAbsPath)
             {
                 var relativeTempPath = activeProject.GetRelativePath(sourceFileOrDirAbsPath);
-                var relativePath = activeProject.GetRelativePath(originalSourcePath);
+                var relativePath = activeProject.GetRelativePath(originalSourceGameRelativeOrAbsolutePath);
                 relativeSourcePath = relativeSourcePath.Replace(relativeTempPath, relativePath);
             }
 
