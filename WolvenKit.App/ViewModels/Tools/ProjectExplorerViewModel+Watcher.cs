@@ -21,25 +21,33 @@ public partial class ProjectExplorerViewModel
 
     private string _projectDirectory = string.Empty;
     private FileSystemModel? _projectFileSystemModel;
-
     private readonly FileSystemWatcher _modsWatcher;
 
     private readonly object _refreshLock = new();
+    private readonly object _modLoadingLock = new();
+    private readonly object _batchLock = new();
+
+    /// <summary>
+    /// Keeps track of in-flight suspends so we don't over-resume.
+    /// </summary>
+    private readonly ConcurrentQueue<SuspendToken> _suspendQueue = new();
 
     private Task? _updateTask;
     private CancellationTokenSource _updateThreadCancellationTokenSource = new();
     private Task? _batchUpdateTask;
     private CancellationTokenSource _batchUpdateThreadCancellationTokenSource = new();
-
     private CancellationTokenSource? _fileLoggingCts;
 
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
     private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
-
-    public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
+
+    /// <summary>
+    /// List of files currently known to the ProjectExplorerViewModel.
+    /// </summary>
+    public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
 
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileList = new();
@@ -63,6 +71,8 @@ public partial class ProjectExplorerViewModel
             fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
     }
 
+    private readonly CompositeDisposable _disposables = new();
+
     /// <summary>
     /// Guards the (_watcherState, _suspendQueue) pair. Suspend/Resume must observe and mutate
     /// them as one unit — see Resume() for the interleaving this prevents.
@@ -73,12 +83,19 @@ public partial class ProjectExplorerViewModel
 
     public WatcherState CurrentWatcherState => _watcherState;
 
+    private sealed record SuspendToken;
+
     #endregion
 
-    public WatcherService(ILoggerService? loggerService)
-    {
-        _loggerService = loggerService;
+    #region Constructor
 
+    /// <summary>
+    /// Wires up the file system watcher and the IProjectEvents subscriptions.
+    /// Called from the constructor; split out only to keep the two halves of the view model
+    /// readable.
+    /// </summary>
+    private void InitializeProjectWatcher(IProjectEvents projectEvents)
+    {
         _modsWatcher = new FileSystemWatcher
         {
             Filter = "*",
@@ -90,7 +107,9 @@ public partial class ProjectExplorerViewModel
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
     }
-    
+
+    #endregion
+
     #region Start / Resume / Watch / Unwatch Methods
 
     public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
