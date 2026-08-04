@@ -471,7 +471,7 @@ namespace WolvenKit.Views.Tools
 
             if (!model.IsDirectory)
             {
-                ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
+                ViewModel?.OpenFileCommand.SafeExecute(model);
                 return;
             }
 
