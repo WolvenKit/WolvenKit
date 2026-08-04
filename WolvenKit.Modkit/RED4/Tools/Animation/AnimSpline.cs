@@ -227,7 +227,25 @@ namespace WolvenKit.Modkit.RED4.Animation
             var allScalesUniform1to1 =
                 ((List<JointsScalesAtTimes>)[incomingAnimBufferData.Scales, incomingAnimBufferData.ConstScales]).All(_ =>
                     _.All(_ => _.Value.All(_ => EqWithEpsilon(_.Value, Scale1to1))));
+        // TODO: migrate this to animAnimationBufferCompressed and refactor to use it 
+        public static ushort ComponentOf(animKey animKey) => animKey switch
+        {
+            animKeyPosition => 0,
+            animKeyRotation => 1,
+            animKeyScale => 2,
+            _ => 0,
+        };
 
+        private static readonly Comparison<animKey?> AnimKeyBufferOrder = (a, b) =>
+        {
+              int cmp = a!.Idx.CompareTo(b!.Idx);
+              if (cmp != 0) return cmp;
+          
+              cmp = a.Time.CompareTo(b.Time);
+              if (cmp != 0) return cmp;
+          
+              return ComponentOf(a).CompareTo(ComponentOf(b));
+         };
             // Sort Keys by Bone->Time->KeyType (pos->rot->sca)
             animKeys.Sort(AnimKeyBufferOrder);
             animKeysRaw.Sort(AnimKeyBufferOrder);
