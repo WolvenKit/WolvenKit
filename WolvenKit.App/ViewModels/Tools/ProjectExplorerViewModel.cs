@@ -221,6 +221,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
+    /// <summary>
+    /// Reload the active project from disk to ensure consistency.
+    /// </summary>
+    public void ResumeWatcher_AndReloadProject()
+    {
+        if (ActiveProject is null) return;
+        StartWatcher_AndLoadProject(ActiveProject, true);
+    }
 
     /// <summary>
     /// Announces that a different project is about to load: flushes the outgoing project's state
@@ -376,36 +384,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    /// <summary>
-    /// Initialize Avalondock specific defaults that are specific to this tool window.
-    /// </summary>
-    private void SetupToolDefaults() =>
-        ContentId = s_toolContentId;
-
-    private void CheckForOneDriveInPath()
-    {
-        if (_projectManager.ActiveProject is null ||
-            !FilePathHelper.IsOneDrivePath(_projectManager.ActiveProject.Location))
-        {
-            return;
-        }
-
-        List<string> warningText =
-        [
-            "Hey, choom!",
-            "",
-            "Don't store Wolvenkit projects inside your OneDrive folder!",
-            "This can cause all kinds of issues!"
-        ];
-
-        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
-            string.Join('\n', warningText),
-            "OneDrive Warning",
-            WMessageBoxImage.Warning,
-            WMessageBoxButtons.Ok
-        )));
-    }
-
     #endregion Project_Loading
 
     /// <summary>
@@ -418,22 +396,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         SaveProjectExplorerExpansionStateIfDirty();
         SaveProjectExplorerTabIfDirty();
     }
-
-    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
-    {
-        RefreshProjectData();
-
-        CheckForOneDriveInPath();
-
-        // On first project load, we're already initialized, so this won't fire
-        Refresh();
-        OnProjectChanged?.Invoke();
-    }
-
-    /// <summary>
-    /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
-    /// </summary>
-    public Dictionary<string, bool> ExpansionStateDictionary = [];
 
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
@@ -454,47 +416,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(_loading)));
         }
     }
-    public event Action? OnProjectChanged;
-
-    private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(ProjectManager.ActiveProject))
-        {
-            return;
-        }
-
-        RefreshProjectData();
-    }
-
-    // When opening projects from launch args, change detection for dependent objects isn't working yet.
-    private void RefreshProjectData()
-    {
-        // Save changes in active project
-        if (ActiveProject != null)
-        {
-            _hasUnsavedFileTreeChanges = true;
-            SaveProjectExplorerExpansionStateIfDirty();
-            _projectWatcher.UnwatchProject(ActiveProject);
-        }
-
-        OnProjectChanged?.Invoke();
-
-        DispatcherHelper.RunOnMainThread(() =>
-        {
-            if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
-            {
-                return;
-            }
-            ActiveProject = _projectManager.ActiveProject;
-            if (ActiveProject is not null)
-            {
-                RestoreProjectState(ActiveProject);
-                _projectWatcher.WatchProject(ActiveProject);
-            }
-
-            OnProjectChanged?.Invoke();
-        }, DispatcherPriority.ContextIdle);
-    }
 
     private void CheckForOneDriveInPath()
     {
@@ -519,9 +440,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             WMessageBoxButtons.Ok
         )));
     }
-
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
 
     /// <summary>
     /// Enable ConvertTo and ConvertFrom
@@ -613,6 +531,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region general commands
 
+    /// <summary>
+    /// Refreshes all files in the Grid
+    /// </summary>
+    private bool CanRefresh() => ActiveProject != null;
+
+    [RelayCommand(CanExecute = nameof(CanRefresh))]
+    private void Refresh() => ResumeWatcher_AndReloadProject();
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
     {
@@ -2168,8 +2093,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     #endregion
-
-    public void StopWatcher() => _projectWatcher.ForceStop();
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {

@@ -44,11 +44,9 @@ public partial class ProjectExplorerViewModel
 
     #region fields
 
-    private readonly ILoggerService? _loggerService;
-
     private string _projectDirectory = string.Empty;
     private FileSystemModel? _projectFileSystemModel;
-    private readonly FileSystemWatcher _modsWatcher;
+    private FileSystemWatcher _modsWatcher = null!;
 
     private readonly object _refreshLock = new();
     private readonly object _modLoadingLock = new();
@@ -262,18 +260,7 @@ public partial class ProjectExplorerViewModel
         }
     }
 
-    public void UnwatchProject(Cp77Project? project)
-    {
-        _isWatcherStopped = true;
-        UnwatchLocation();
-    }
-
     #endregion
-
-    private static readonly List<string> s_backupFilePartials =
-    [
-        "_tmp", ".bak", ".bkp"
-    ];
 
     /// <summary>
     /// Processes file system events saved to the _fileChanges queue.
@@ -709,7 +696,7 @@ public partial class ProjectExplorerViewModel
         _projectFileSystemModel = null;
         _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
     }
-    
+
     public void Suspend()
     {
         // See Resume() for why this is locked.
