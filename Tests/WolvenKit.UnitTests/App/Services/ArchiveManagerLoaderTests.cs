@@ -2,36 +2,35 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Moq;
-using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Services;
 using Wolvenkit.Test.App.Helpers;
 using Xunit;
 
-namespace Wolvenkit.Test.App.Controllers;
+namespace Wolvenkit.Test.App.Services;
 
 /// <summary>
-/// Covers the RED4Controller archive-loading heartbeat.
+/// Covers the archive-loading heartbeat, which lives on <see cref="ArchiveManagerLoader"/>.
 ///
-/// RED4Controller is registered transient, so the app view model, asset browser and materials
-/// dialog each own an instance and can load archives concurrently. These tests pin the sharing
-/// contract between those instances, which the previous depth-counter implementation got wrong.
+/// The loader is registered transient, so the app view model, asset browser and materials dialog
+/// each own an instance and can load archives concurrently. These tests pin the sharing contract
+/// between those instances, which the previous depth-counter implementation got wrong.
 ///
 /// Every scope is held with <c>using</c> so a failed assertion cannot leak a claim on the shared
 /// purpose into the next test in this collection.
 /// </summary>
 [Collection(ArchiveLoadHeartbeatCollection.Name)]
-public class Red4ControllerLoadingModeTests
+public class ArchiveManagerLoaderTests
 {
     private const string Purpose = IArchiveManagerLoader.ArchiveLoadingPurpose;
 
     [Fact]
     public void BeginLoadingIndicator_ArmsHeartbeat_AndReleasesOnDispose()
     {
-        var controller = CreateUninitializedController(out var progress);
+        var loader = CreateUninitializedLoader(out var progress);
 
-        using (var scope = BeginLoadingIndicator(controller))
+        using (var scope = BeginLoadingIndicator(loader))
         {
             Assert.True(DispatcherHelper.IsRepeatingActionRunning(Purpose));
         }
@@ -42,12 +41,12 @@ public class Red4ControllerLoadingModeTests
     }
 
     [Fact]
-    public void BeginLoadingIndicator_NestedOnSameController_StaysArmedUntilOuterScopeCloses()
+    public void BeginLoadingIndicator_NestedOnSameLoader_StaysArmedUntilOuterScopeCloses()
     {
-        var controller = CreateUninitializedController(out _);
+        var loader = CreateUninitializedLoader(out _);
 
-        using var outer = BeginLoadingIndicator(controller);
-        using (var inner = BeginLoadingIndicator(controller))
+        using var outer = BeginLoadingIndicator(loader);
+        using (var inner = BeginLoadingIndicator(loader))
         {
             Assert.Equal(2, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
         }
@@ -57,10 +56,10 @@ public class Red4ControllerLoadingModeTests
     }
 
     [Fact]
-    public void BeginLoadingIndicator_SecondControllerFinishingFirst_DoesNotStopTheFirstControllersHeartbeat()
+    public void BeginLoadingIndicator_SecondLoaderFinishingFirst_DoesNotStopTheFirstLoadersHeartbeat()
     {
-        var first = CreateUninitializedController(out var firstProgress);
-        var second = CreateUninitializedController(out _);
+        var first = CreateUninitializedLoader(out var firstProgress);
+        var second = CreateUninitializedLoader(out _);
 
         using (var firstScope = BeginLoadingIndicator(first))
         {
@@ -80,9 +79,9 @@ public class Red4ControllerLoadingModeTests
     [Fact]
     public void BeginLoadingIndicator_ScopeDisposeIsIdempotent()
     {
-        var controller = CreateUninitializedController(out _);
+        var loader = CreateUninitializedLoader(out _);
 
-        using var scope = BeginLoadingIndicator(controller);
+        using var scope = BeginLoadingIndicator(loader);
         scope.Dispose();
         scope.Dispose();
 
@@ -90,26 +89,30 @@ public class Red4ControllerLoadingModeTests
         Assert.Equal(0, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
     }
 
-    private static IDisposable BeginLoadingIndicator(RED4Controller controller)
+    private static IDisposable BeginLoadingIndicator(ArchiveManagerLoader loader)
     {
-        var method = typeof(RED4Controller).GetMethod(
+        var method = typeof(ArchiveManagerLoader).GetMethod(
             "BeginLoadingIndicator",
             BindingFlags.Instance | BindingFlags.NonPublic);
         Assert.NotNull(method);
 
-        var scope = method!.Invoke(controller, null) as IDisposable;
+        var scope = method!.Invoke(loader, null) as IDisposable;
         Assert.NotNull(scope);
         return scope!;
     }
 
-    private static RED4Controller CreateUninitializedController(out Mock<IProgressService<double>> progress)
+    /// <summary>
+    /// Built without running the constructor: the heartbeat only reads _progressService, and the
+    /// real constructor would drag in the archive manager and parser for no benefit here.
+    /// </summary>
+    private static ArchiveManagerLoader CreateUninitializedLoader(out Mock<IProgressService<double>> progress)
     {
         progress = new Mock<IProgressService<double>>();
         progress.SetupAllProperties();
 
-        var controller = (RED4Controller)RuntimeHelpers.GetUninitializedObject(typeof(RED4Controller));
-        SetField(controller, "_progressService", progress.Object);
-        return controller;
+        var loader = (ArchiveManagerLoader)RuntimeHelpers.GetUninitializedObject(typeof(ArchiveManagerLoader));
+        SetField(loader, "_progressService", progress.Object);
+        return loader;
     }
 
     private static void SetField(object target, string name, object? value)

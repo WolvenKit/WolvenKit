@@ -341,16 +341,15 @@ public class ProjectExplorerConvertFromJsonIntegrationTests : IDisposable
         projectWizard.ProjectPath = _tempProjectRoot;
         await appViewModel.NewProjectTask(projectWizard);
 
+        Assert.True(
+            await AsyncWait.UntilAsync(
+                () => _projectExplorerVm.ActiveProject is not null,
+                TimeSpan.FromSeconds(30)),
+            "Project explorer never adopted the new project.");
+
         Assert.NotNull(projectManager.ActiveProject);
         Assert.NotNull(_projectExplorerVm.ActiveProject);
 
-        var progress = _host.Services.GetRequiredService<IProgressService<double>>();
-        var state = progress.Status;
-
-        while (state != EStatus.Ready)
-        {
-            state = progress.Status;
-            await Task.Delay(100);
-        }
+        await _host!.Services.GetRequiredService<IArchiveManagerLoader>().LoadArchiveManagerAsync();
     }
 }

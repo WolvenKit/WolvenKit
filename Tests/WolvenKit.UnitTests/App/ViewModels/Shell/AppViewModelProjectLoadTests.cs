@@ -3,7 +3,10 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Moq;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
@@ -24,9 +27,13 @@ using Xunit;
 namespace Wolvenkit.Test.App.ViewModels.Shell;
 
 /// <summary>
-/// Covers AppViewModel.LoadProjectFromPathAsync lifecycle (review issues 2 and 4):
-/// HandleStartup faults still raise OnInitialProjectLoaded; failed loads cancel PE chrome;
-/// location mismatch vs ProjectManager previous project cancels loading.
+/// Covers AppViewModel.LoadProjectFromPathAsync lifecycle: failed loads cancel PE chrome;
+/// location mismatch vs ProjectManager previous project cancels loading; a successful load
+/// eventually raises OnInitialProjectLoaded.
+///
+/// Note that the success path finishes on a delayed dispatcher callback
+/// (DispatcherHelper.DelayOnMainThread), so awaiting LoadProjectFromPathAsync won't
+/// work... the tests would have to "pump" (see PumpUntil).
 /// </summary>
 [Collection(ProjectLoadHeartbeatCollection.Name)]
 public class AppViewModelProjectLoadTests : IDisposable
@@ -64,6 +71,7 @@ public class AppViewModelProjectLoadTests : IDisposable
         SetField(_app, "_loggerService", _logger.Object);
         SetField(_app, "_notificationService", _notifications.Object);
         SetField(_app, "_gameControllerFactory", _gameControllerFactory.Object);
+        SetField(_app, "_archiveManagerLoader", _archiveLoader.Object);
         SetProperty(_app, nameof(AppViewModel.SettingsManager), _settings.Object);
 
         // DockedViews is initialized by the field initializer; with GetUninitializedObject it is null.
@@ -107,6 +115,68 @@ public class AppViewModelProjectLoadTests : IDisposable
         TempProjectDirectory.Delete(_tempRoot);
     }
 
+    /// <summary>
+    /// A failing archive load must not escape startup. ArchiveManagerLoader logs and rethrows, and
+    /// HandleActivation is reached from the Status setter, so an unguarded fault would propagate
+    /// out of OnStatusChanged and take the launch down. Before archive loading moved to
+    /// HandleActivation this was guarded inside LoadProjectFromPathAsync; these two pin the
+    /// replacement guard.
+    /// </summary>
+    [Fact]
+    public async Task LoadArchivesSafely_LoaderFaults_IsLoggedAndSwallowed()
+    {
+        _archiveLoader.Setup(c => c.LoadArchiveManagerAsync())
+            .ThrowsAsync(new InvalidOperationException("archive boom"));
+
+        await InvokeLoadArchivesSafely();
+
+        _archiveLoader.Verify(c => c.LoadArchiveManagerAsync(), Times.Once);
+        _logger.Verify(l => l.Error(It.IsAny<Exception>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task LoadArchivesSafely_LoaderSucceeds_LogsNoError()
+    {
+        _archiveLoader.Setup(c => c.LoadArchiveManagerAsync()).Returns(Task.CompletedTask);
+
+        await InvokeLoadArchivesSafely();
+
+        _archiveLoader.Verify(c => c.LoadArchiveManagerAsync(), Times.Once);
+        _logger.Verify(l => l.Error(It.IsAny<Exception>()), Times.Never);
+    }
+
+    /// <summary>
+    /// HandleActivation itself is not reachable from these tests - it also inits plugins, opens
+    /// the home page and fires update commands, none of which exist on a
+    /// GetUninitializedObject AppViewModel - so the guard is exercised directly.
+    /// </summary>
+    private Task InvokeLoadArchivesSafely()
+    {
+        var method = typeof(AppViewModel).GetMethod(
+            "LoadArchivesSafelyAsync",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(method);
+
+        return (Task)method!.Invoke(_app, null)!;
+    }
+
+    /// <summary>
+    /// Drains the dispatcher queue until <paramref name="condition"/> holds or we time out.
+    /// Nothing runs a dispatcher frame in a unit test, so callbacks posted by
+    /// DispatcherHelper.DelayOnMainThread would otherwise never execute.
+    /// </summary>
+    private static void PumpUntil(Func<bool> condition, TimeSpan timeout)
+    {
+        var dispatcher = Dispatcher.CurrentDispatcher;
+        var stopwatch = Stopwatch.StartNew();
+
+        while (!condition() && stopwatch.Elapsed < timeout)
+        {
+            dispatcher.Invoke(() => { }, DispatcherPriority.Background);
+            Thread.Sleep(1);
+        }
+    }
+
     private Cp77Project CreateProject(string name)
     {
         var dir = Path.Combine(_tempRoot, name);
@@ -118,8 +188,14 @@ public class AppViewModelProjectLoadTests : IDisposable
         return project;
     }
 
+    /// <summary>
+    /// Archive loading moved out of the project-load path and into AppViewModel.HandleActivation,
+    /// so a broken archive load can no longer affect opening a project. This test checks
+    /// that these are now decoupled: the archive loader is not consulted here at all,
+    /// and the project still loads.
+    /// </summary>
     [Fact]
-    public async Task LoadProjectFromPathAsync_HandleStartupFault_StillRaisesOnInitialProjectLoaded()
+    public async Task LoadProjectFromPathAsync_DoesNotLoadArchives()
     {
         var project = CreateProject("ModA");
         _projectManager.Setup(m => m.LoadAsync(project.Location)).ReturnsAsync(project);
@@ -131,8 +207,10 @@ public class AppViewModelProjectLoadTests : IDisposable
 
         await _app.LoadProjectFromPathAsync(project.Location);
 
+        _archiveLoader.Verify(c => c.LoadArchiveManagerAsync(), Times.Never);
+
+        PumpUntil(() => raised, TimeSpan.FromSeconds(10));
         Assert.True(raised);
-        _logger.Verify(l => l.Error(It.IsAny<Exception>()), Times.AtLeastOnce);
         _notifications.Verify(n => n.Success(It.Is<string>(s => s.Contains("loaded", StringComparison.OrdinalIgnoreCase))), Times.Once);
     }
 
@@ -191,15 +269,18 @@ public class AppViewModelProjectLoadTests : IDisposable
         var project = CreateProject("ModA");
         _projectManager.Setup(m => m.LoadAsync(project.Location)).ReturnsAsync(project);
         _projectManager.SetupGet(m => m.ActiveProject).Returns(project);
-        _archiveLoader.Setup(c => c.LoadArchiveManagerAsync()).Returns(Task.CompletedTask);
 
         var raised = false;
         _app.OnInitialProjectLoaded += (_, _) => raised = true;
 
         await _app.LoadProjectFromPathAsync(project.Location);
 
-        Assert.True(raised);
+        // ActiveProject is set synchronously; the event is not. The success lane runs on a
+        // DelayOnMainThread callback, so it needs a dispatcher frame and more than that delay.
         Assert.Equal(project, _app.ActiveProject);
+
+        PumpUntil(() => raised, TimeSpan.FromSeconds(10));
+        Assert.True(raised);
     }
 
     [Fact]
