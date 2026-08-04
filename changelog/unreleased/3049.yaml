@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3049
+      author: "gistya"
+      description: "Added Live Search by CHASE_81. Added much faster search performance on large projects. Various other bugfixes and improvements under the hood."
