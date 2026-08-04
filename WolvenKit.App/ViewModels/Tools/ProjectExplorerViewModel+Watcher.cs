@@ -63,9 +63,15 @@ public partial class ProjectExplorerViewModel
             fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
     }
 
-    private bool _isWatcherStopped;
+    /// <summary>
+    /// Guards the (_watcherState, _suspendQueue) pair. Suspend/Resume must observe and mutate
+    /// them as one unit — see Resume() for the interleaving this prevents.
+    /// </summary>
+    private readonly object _watcherStateLock = new();
 
-    public bool IsWatcherStopped => _isWatcherStopped;
+    public WatcherState _watcherState = WatcherState.NoProject;
+
+    public WatcherState CurrentWatcherState => _watcherState;
 
     #endregion
 
@@ -877,5 +883,19 @@ public partial class ProjectExplorerViewModel
         /// the wrapped event from Windows File System.
         /// </summary>
         public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+    
+    /// <summary>
+    /// NoProject: there is no active mod loaded up.
+    /// Suspended: there is a mod loaded up, but Windows file system events are being ignored.
+    /// Active: there is a mod loaded up, and the Watcher is monitoring for file system events.
+    /// </summary>
+    public enum WatcherState
+    {
+        NoProject,
+        Suspended,
+        Active,
+        Loading,
+        Error
     }
 }
