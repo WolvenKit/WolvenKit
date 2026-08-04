@@ -14,9 +14,17 @@ public static class DispatcherHelper
 
     public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
 
-    private static void RunOnUIThread(this DispatcherObject? d, Action action,
-        DispatcherPriority priority = DispatcherPriority.Normal)
+    private static void RunOnUIThread(this DispatcherObject? d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
     {
+        // In a unit test / headless context there is no WPF Application and no Dispatcher.
+        // Run the action synchronously so code paths that rely on DispatcherHelper
+        // (DispatchedObservableCollection, etc.) continue to work.
+        if (d == null && Application.Current == null)
+        {
+            action();
+            return;
+        }
+
         if (d is not { Dispatcher: { } dispatcher })
         {
             return;
