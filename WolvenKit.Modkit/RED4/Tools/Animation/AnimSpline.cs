@@ -249,19 +249,6 @@ namespace WolvenKit.Modkit.RED4.Animation
             // Sort Keys by Bone->Time->KeyType (pos->rot->sca)
             animKeys.Sort(AnimKeyBufferOrder);
             animKeysRaw.Sort(AnimKeyBufferOrder);
-            animKeysRaw.Sort((a, b) =>
-            {
-                int cmp = a!.Idx.CompareTo(b!.Idx);
-                if (cmp != 0) return cmp;
-            
-                cmp = a.Time.CompareTo(b.Time);
-                if (cmp != 0) return cmp;
-            
-                return string.Compare(
-                    a.GetType().Name,
-                    b.GetType().Name,
-                    StringComparison.Ordinal);
-            });
             constAnimKeys.Sort((a, b) =>
             {
                 int cmp = a!.Idx.CompareTo(b!.Idx);
