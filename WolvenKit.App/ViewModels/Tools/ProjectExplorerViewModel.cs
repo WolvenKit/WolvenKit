@@ -757,7 +757,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var activeItemPath = relativePath.Replace('/', Path.DirectorySeparatorChar);
             if (!isAbsolute)
             {
-                activeItemPath = ActiveProject!.GetGameRelativePath(activeItemPath);
+                activeItemPath = ActiveProject!.GetRelativePath(activeItemPath);
             }
 
             if (switchToRaw)
@@ -920,7 +920,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // add from AB
             foreach (var material in materials)
             {
-                var relPath = ActiveProject!.GetGameRelativePath(material);
+                var relPath = ActiveProject!.GetRelativePath(material);
                 var hash = FNV1A64HashAlgorithm.HashString(relPath);
                 await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
@@ -965,7 +965,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             var files = Directory.GetFiles(currentItem.FullName, "*", SearchOption.AllDirectories).ToList();
             foreach (var hash in files
-                         .Select(file => ActiveProject!.GetGameRelativePath(file))
+                         .Select(file => ActiveProject!.GetRelativePath(file))
                          .Select(FNV1A64HashAlgorithm.HashString))
             {
                 selectedItems.Add(hash);
@@ -1341,7 +1341,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     {
                         var rawOutPath = Path.Combine(
                             ActiveProject.NotNull().RawDirectory,
-                            ActiveProject.NotNull().GetGameRelativePath(file));
+                            ActiveProject.NotNull().GetRelativePath(file));
 
                         var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
 
@@ -1906,7 +1906,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return null;
         }
 
-        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetGameRelativePath(file));
+        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetRelativePath(file));
         var outDirectoryPath = Path.GetDirectoryName(modPath);
         if (outDirectoryPath is null)
         {
@@ -2110,7 +2110,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Where(x => x.FilePath is not null)
                 .OrderBy(x => x.OpenedAt)
                 .DistinctBy(x => x.FilePath)
-                .ToDictionary(x => x.OpenedAt, x => project.GetGameRelativePath(x.FilePath!));
+                .ToDictionary(x => x.OpenedAt, x => project.GetRelativePath(x.FilePath!));
 
             // only write if we had a change
             if (project.OpenProjectFiles.Equals(openProjectFiles))
