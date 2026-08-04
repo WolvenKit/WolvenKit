@@ -542,7 +542,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region properties
 
-    public bool IsKeyUpEventAssigned { get; set; }
+    [ObservableProperty]
+    private LoadingMode _currentLoadingMode;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
+    private IPluginService _pluginService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
