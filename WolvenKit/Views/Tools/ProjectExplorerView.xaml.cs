@@ -67,6 +67,17 @@ namespace WolvenKit.Views.Tools
         public ProjectExplorerView()
         {
             InitializeComponent();
+
+            _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
+
+            // Debounce for live search
+            _searchDebounceTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(350)
+            };
+
+            _searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
+
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController = _rowDragDropController;
@@ -78,14 +89,15 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
-            TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
-            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
+            TreeGrid.SortComparers.Add(new() { Comparer = new FileComparer.Paths(), PropertyName = "GameRelativePath" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Paths(), PropertyName = "GameRelativePath" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Sizes(), PropertyName = "FileSizeStr" });
 
             TreeGrid.NodeExpanding += TreeGrid_OnNodeExpanding;
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
+            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
 
             _rowDragDropController = new CancellableRowDragDropController();
 
@@ -94,7 +106,6 @@ namespace WolvenKit.Views.Tools
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    vm.OnProjectChanged += ResetUiElements;
                 }
 
                 AddKeyUpEvent();
@@ -113,7 +124,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowDeleteOrMoveFilesList = (args) =>
                 {
-                    var list = args.files.Order(new FilePathStringComparer());
+                    var list = args.files.Order(new FileComparer.PathStrings());
                     var dialog = new DeleteOrMoveFilesListDialogView(args.title, list.ToList(), args.currentProject);
 
                     if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
@@ -127,7 +138,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowDictionaryAsCopyableList = (args) =>
                 {
-                    var comparer = new FilePathComparer();
+                    var comparer = new FileComparer.Paths();
                     var dialog = new ShowDictionaryForCopyDialogView(args);
                     return dialog.ShowDialog(Application.Current.MainWindow) == true;
                 };
@@ -223,9 +234,37 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
-                ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
+                ViewModel.OnSetLoading += SetLoading;
+                // Assign, do NOT '+=': WhenActivated re-runs on every re-activation of this view
+                ViewModel.BeginDeferredRefreshContext = BeginDeferredRefreshContext;
 
+                ViewModel.OnLiveGridMutationStarting = () =>
+                {
+                    // Prevents Null Dereferences in FlatView
+                    TreeGridFlat.View?.Suspend();
+                };
+
+                ViewModel.OnLiveGridMutationCompleted = () =>
+                {
+                    TreeGridFlat.View?.Resume();
+                    RefreshFlatViewIfNeeded(); // no-op while hidden
+
+                    if (!_currentFolderQuery.IsNullOrEmpty())
+                    {
+                        ReapplyCurrentSearchFilter(expandAllForSearch: true);
+                    }
+                };
+
+                ViewModel.WhenAnyValue(x => x.FileList)
+                    .Subscribe(_ => RefreshFlatViewIfNeeded())
+                    .DisposeWith(disposables);
+
+                ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled)
+                    .Subscribe(_ => UpdatePaneVisibility())
+                    .DisposeWith(disposables);
             });
+
+            this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
