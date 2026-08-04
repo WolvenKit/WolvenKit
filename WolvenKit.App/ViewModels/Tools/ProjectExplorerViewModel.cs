@@ -2,23 +2,22 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
-
+using ReactiveUI;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -74,7 +73,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
-    private readonly IWatcherService _projectWatcher;
+    private readonly IProjectEvents _projectEvents;
+
+    private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
+    private object _progressLock = new();
     private DispatcherHelper.RepeatingActionHandle? _autoSaveCancelToken;
 
     /// <summary>
@@ -84,19 +86,31 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private readonly string _autoSavePurpose = $"ProjectExplorer autosave {Guid.NewGuid():N}";
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
-    private IPluginService _pluginService;
+    /// <summary>
+    /// Live claim on the project-load progress heartbeat, or null when no load is in flight.
+    /// Owned here rather than on the watcher: the view model is what arms and disarms it.
+    /// </summary>
+    private DispatcherHelper.RepeatingActionHandle? _loadingIndicatorHandle;
 
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
-
-    private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
+    private readonly TimeSpan _projectLoadPollingInterval = TimeSpan.FromMilliseconds(50);
+    private bool _inFlight = false;
 
-    public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
+    // FileTree / FileList are declared in the file-watching half of this class
+    // (ProjectExplorerViewModel+Watcher.cs) and are the grids' single source of truth.
+    public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
+    public Action? OnLiveGridMutationStarting { get; set; }
+    public Action? OnLiveGridMutationCompleted { get; set; }
+
+    public Dictionary<string, bool> ExpansionStateDictionary = [];
+    public bool IsKeyUpEventAssigned { get; set; }
+
     #endregion fields
+
+    #region constructor
 
     private static ProjectExplorerViewModel? s_instance;
     public ProjectExplorerViewModel(
@@ -113,7 +127,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
         ImportExportHelper importExportHelper,
-        IWatcherService projectWatcher
+        IProjectEvents projectEvents
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -128,10 +142,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectResourceTools = projectResourceTools;
         _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
+        _projectEvents = projectEvents;
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = projectWatcher;
+        InitializeProjectWatcher(projectEvents);
 
         SideInDockedMode = DockSide.Left;
 
@@ -143,20 +158,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
         _appViewModel.OpenDocumentChanged += OnOpenDocumentChanged;
 
-        _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
-
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
         _autoSaveCancelToken = null;
-        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
-
-        DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
-        _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
-            purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
-            TimeSpan.FromSeconds(10));
 
         s_instance = this;
+
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
+
+    #endregion constructor
 
     #region Project_Loading
 
