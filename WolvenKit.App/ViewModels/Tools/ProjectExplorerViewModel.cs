@@ -601,30 +601,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private bool _hasSelectedItem;
 
-    #endregion properties
 
-    #region commands
 
-    #region general commands
 
-    //[RelayCommand]
-    //private void ExpandAll() {  }
 
-    //[RelayCommand]
-    //private void CollapseAll() { }
 
-    //[RelayCommand]
-    //private void CollapseChildren() { }
 
-    //[RelayCommand]
-    //private void ExpandChildren() { }
-
-    /// <summary>
-    /// Refreshes all files in the Grid
-    /// </summary>
-    private bool CanRefresh() => ActiveProject != null;
-    [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh() => ResumeWatcher_AndReloadProject();
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
     {
@@ -728,7 +710,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
-
 
     /// <summary>
     /// Copies the path to an item in clipboard
