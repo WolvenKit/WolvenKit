@@ -72,7 +72,7 @@ public partial class ProjectExplorerViewModel
     /// <summary>
     /// List of files currently known to the ProjectExplorerViewModel.
     /// </summary>
-    public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
+    public ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
 
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileList = new();
@@ -1056,6 +1056,8 @@ public partial class ProjectExplorerViewModel
     }
 
     #endregion project events handlers
+
+    #region filesystem loading
 
     private class FileSystemEventArgsWrapper
     {

@@ -44,7 +44,7 @@ public class Cp77ProjectTest
         Assert.Equal(expectedGameRelativePath, rel);
         Assert.Equal(absolutePrefix, prefix);
 
-        Assert.Equal(expectedGameRelativePath, testProject.GetGameRelativePath(absolutePath));
+        Assert.Equal(expectedGameRelativePath, testProject.GetRelativePath(absolutePath));
         Assert.Equal(absolutePrefix, testProject.GetAbsoluteSubDirPath(absolutePath));
     }
 }
