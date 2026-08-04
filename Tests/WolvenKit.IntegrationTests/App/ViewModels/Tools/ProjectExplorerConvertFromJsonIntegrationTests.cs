@@ -202,7 +202,7 @@ public class ProjectExplorerConvertFromJsonIntegrationTests : IDisposable
         Assert.NotNull(_projectExplorerVm?.ActiveProject);
         return Path.Combine(
                    _projectExplorerVm.ActiveProject.RawDirectory,
-                   _projectExplorerVm.ActiveProject.GetGameRelativePath(archiveFullPath))
+                   _projectExplorerVm.ActiveProject.GetRelativePath(archiveFullPath))
                + ".json";
     }
 
