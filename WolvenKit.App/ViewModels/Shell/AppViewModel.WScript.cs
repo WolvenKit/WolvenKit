@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Semver;
 using Microsoft.VisualBasic.FileIO;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
