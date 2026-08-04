@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Moq;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.Core.Services;
 using Wolvenkit.Test.App.Helpers;
 using Xunit;
@@ -23,7 +24,7 @@ namespace Wolvenkit.Test.App.Controllers;
 [Collection(ArchiveLoadHeartbeatCollection.Name)]
 public class Red4ControllerLoadingModeTests
 {
-    private const string Purpose = RED4Controller.ArchiveLoadingPurpose;
+    private const string Purpose = IArchiveManagerLoader.ArchiveLoadingPurpose;
 
     [Fact]
     public void BeginLoadingIndicator_ArmsHeartbeat_AndReleasesOnDispose()

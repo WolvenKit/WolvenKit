@@ -43,6 +43,7 @@ public class AppViewModelProjectLoadTests : IDisposable
     private readonly Mock<ISettingsManager> _settings = new();
     private readonly Mock<IModifierViewStateService> _modifiers = new();
     private readonly Mock<IArchiveManager> _archives = new();
+    private readonly Mock<IArchiveManagerLoader> _archiveLoader = new();
     private readonly ProjectEvents _projectEvents = new();
     private readonly AppViewModel _app;
     private readonly ProjectExplorerViewModel _pe;
@@ -123,7 +124,7 @@ public class AppViewModelProjectLoadTests : IDisposable
         var project = CreateProject("ModA");
         _projectManager.Setup(m => m.LoadAsync(project.Location)).ReturnsAsync(project);
         _projectManager.SetupGet(m => m.ActiveProject).Returns(project);
-        _gameController.Setup(c => c.HandleStartup()).ThrowsAsync(new InvalidOperationException("archive boom"));
+        _archiveLoader.Setup(c => c.LoadArchiveManagerAsync()).ThrowsAsync(new InvalidOperationException("archive boom"));
 
         var raised = false;
         _app.OnInitialProjectLoaded += (_, _) => raised = true;
@@ -149,7 +150,7 @@ public class AppViewModelProjectLoadTests : IDisposable
         await _app.LoadProjectFromPathAsync(project.Location);
 
         Assert.True(raised);
-        _gameController.Verify(c => c.HandleStartup(), Times.Never);
+        _archiveLoader.Verify(c => c.LoadArchiveManagerAsync(), Times.Never);
     }
 
     [Fact]
@@ -181,7 +182,7 @@ public class AppViewModelProjectLoadTests : IDisposable
         await _app.LoadProjectFromPathAsync(requested);
 
         Assert.Equal(ProjectExplorerViewModel.LoadingMode.Ready, _pe.CurrentLoadingMode);
-        _gameController.Verify(c => c.HandleStartup(), Times.Never);
+        _archiveLoader.Verify(c => c.LoadArchiveManagerAsync(), Times.Never);
     }
 
     [Fact]
@@ -190,7 +191,7 @@ public class AppViewModelProjectLoadTests : IDisposable
         var project = CreateProject("ModA");
         _projectManager.Setup(m => m.LoadAsync(project.Location)).ReturnsAsync(project);
         _projectManager.SetupGet(m => m.ActiveProject).Returns(project);
-        _gameController.Setup(c => c.HandleStartup()).Returns(Task.CompletedTask);
+        _archiveLoader.Setup(c => c.LoadArchiveManagerAsync()).Returns(Task.CompletedTask);
 
         var raised = false;
         _app.OnInitialProjectLoaded += (_, _) => raised = true;
@@ -211,7 +212,7 @@ public class AppViewModelProjectLoadTests : IDisposable
             .Callback(() => modeWhenLoadAsyncRan = _pe.CurrentLoadingMode)
             .ReturnsAsync(project);
         _projectManager.SetupGet(m => m.ActiveProject).Returns(project);
-        _gameController.Setup(c => c.HandleStartup()).Returns(Task.CompletedTask);
+        _archiveLoader.Setup(c => c.LoadArchiveManagerAsync()).Returns(Task.CompletedTask);
 
         await _app.LoadProjectFromPathAsync(project.Location);
 
