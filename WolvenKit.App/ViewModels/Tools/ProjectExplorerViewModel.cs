@@ -601,11 +601,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private bool _hasSelectedItem;
 
+    #region INotifyCollectionChanged
 
+    public NotifyCollectionChangedEventHandler? NotifyCollectionChangedEventHandler { get; set; }
 
+    #endregion INotifyCollectionChanged
 
+    #endregion properties
 
+    #region commands
 
+    #region general commands
 
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
