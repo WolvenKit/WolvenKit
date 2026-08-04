@@ -15,6 +15,22 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public partial class ProjectExplorerViewModel
 {
+    // ==========================================================================================
+    // Project file watching.
+    //
+    // This half of the view model:
+    //   1. Owns FileList and FileTree, including building and populating them on project load.
+    //   2. While not "suspended", monitors OS file system events from _modsWatcher and queues them.
+    //   3. Subscribes to IProjectEvents change sets published by other parts of the app, to bypass
+    //      the need to rely on file system events for large batches of changes.
+    //   4. Runs the Update and BatchUpdate background jobs that drain those queues into the models.
+    //        * Update processes individual Changed, Renamed and Deleted events one at a time.
+    //        * BatchUpdate processes batches of Add events in groups, for performance.
+    //
+    // Due to flakiness with file system events, various parts of the app suspend monitoring in
+    // order to make broad changes in the mod directory, then reload the whole project from disk.
+    // ==========================================================================================
+
     #region fields
 
     private readonly ILoggerService? _loggerService;
