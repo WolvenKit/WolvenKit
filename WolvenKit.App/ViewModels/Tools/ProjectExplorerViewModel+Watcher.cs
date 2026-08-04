@@ -30,6 +30,7 @@ public partial class ProjectExplorerViewModel
     private CancellationTokenSource _updateThreadCancellationTokenSource = new();
 
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
+    private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
 
     public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
@@ -391,7 +392,7 @@ public partial class ProjectExplorerViewModel
 
             if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
             {
-                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
+                _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
                 return;
             }
 
@@ -448,6 +449,139 @@ public partial class ProjectExplorerViewModel
         }
     }
 
+    private void BatchUpdate(CancellationToken cancellationToken)
+    {
+        var batch = new List<FileSystemEventArgsWrapper>();
+        var stopwatch = Stopwatch .StartNew();
+
+        while (true)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
+            while (_batchFileChanges.TryDequeue(out var e))
+            {
+                // temporary until we support batch ops for others
+                if (e.ChangeType != WatcherChangeTypes.Created)
+                {
+                    break;
+                }
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                _fileProcessing.TryAdd(e.FullPath, e);
+                var extension = Path.GetExtension(e.Name);
+
+                if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
+                {
+                    continue;
+                }
+
+                batch.Add(e);
+            }
+
+            if (batch.Count == 0)
+            {
+                _removedFiles.Clear();
+                Thread.Sleep(50);
+                continue;
+            }
+
+            try
+            {
+                ApplyBatch(batch, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _loggerService?.Error($"ProjectExplorer: batch processing failed. {ex.Message}");
+            }
+            finally
+            {
+                if (stopwatch.ElapsedMilliseconds > 500)
+                {
+                    stopwatch.Restart();
+                }
+                batch.Clear();
+            }
+        }
+
+        void ApplyBatch(List<FileSystemEventArgsWrapper> batch, CancellationToken ct)
+        {
+            var created = new List<FileSystemModel>();
+            //var deleted = new List<string>();
+            //var changed = new List<FileSystemModel>();
+
+            foreach (var e in batch)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                try
+                {
+                    switch (e.ChangeType)
+                    {
+                        case WatcherChangeTypes.Created:
+                            DispatcherHelper.RunOnMainThread(() =>
+                            {
+                                lock (_batchLock)
+                                {
+                                    var parent = FindParentModel(e.FullPath);
+                                    var newItem = CreateFromScratch(parent, e);
+                                    if (newItem != null)
+                                    {
+                                        if (parent != null && !parent.Children.Contains(newItem) && !_fileLookup.ContainsKey(e.FullPath))
+                                        {
+                                            parent.Children.Add(newItem);
+                                            created.Add(newItem);
+                                            _fileLookup.TryAdd(e.FullPath, newItem);
+                                        }
+                                        _fileProcessing.TryRemove(e.FullPath, out _);
+                                    }
+                                }
+                            });
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (e.Name is not null && !s_backupFilePartials.Any(p => e.Name.Contains(p)))
+                    {
+                        _loggerService?.Error($"Project Explorer: error processing {e.Name}: {ex.Message}");
+                    }
+                }
+
+                FileSystemModel? FindParentModel(string fullPath)
+                {
+                    if (string.IsNullOrEmpty(fullPath))
+                        return null;
+
+                    var parentPath = Path.GetDirectoryName(fullPath);
+                    if (string.IsNullOrEmpty(parentPath))
+                        return null;
+
+                    return _fileLookup.TryGetValue(parentPath, out var parent)
+                        ? parent
+                        : null;
+                }
+            }
+
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                FileList.AddRange(created);
+                if (FileTree.Count < 3)
+                {
+                    FileTree.AddRange(created);
+                }
+
+
+            }, DispatcherPriority.Background);
+        }
+    }
+
     public void Refresh()
     {
         lock (_refreshLock)
@@ -459,6 +593,7 @@ public partial class ProjectExplorerViewModel
     private void Clear()
     {
         _fileChanges.Clear();
+        _batchFileChanges.Clear();
         _fileLookup.Clear();
         FileTree.Clear();
         FileList.Clear();
