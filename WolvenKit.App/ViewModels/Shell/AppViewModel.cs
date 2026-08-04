@@ -317,6 +317,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public event EventHandler? OnAppLoaded;
 
+    /// <summary>
+    /// One-time application startup work. Call once, from the shell, after its bindings are in
+    /// place.
+    /// </summary>
     public async Task InitializeAsync()
     {
         try
@@ -327,27 +331,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             SettingsManager.UpdateChannel = EUpdateChannel.Nightly;
         }
 
-        _pluginService.Init();
+            _pluginService.Init();
 
-        if (TestHelper.InActiveTest)
-        {
-            _archiveManagerLoader.LoadArchiveManagerAsync().GetAwaiter().GetResult();
-        }
-        else if (Application.Current is { } app )
-        {
-            app.Dispatcher.Invoke(_archiveManagerLoader.LoadArchiveManagerAsync, DispatcherPriority.ApplicationIdle);
-        }
-
-        if (!OpenFileFromLaunchArgs())
-        {
-            ShowHomePageSync();
-        }
+            if (!OpenFileFromLaunchArgs())
+            {
+                ShowHomePageSync();
+            }
 
 #if !DEBUG
-        if (SettingsManager.AutoUpdateOnStartup)
-        {
-            CheckForUpdatesCommand.SafeExecute(true);
-        }
+            if (SettingsManager.AutoUpdateOnStartup)
+            {
+                CheckForUpdatesCommand.SafeExecute(true);
+            }
 #endif
 
         CheckForScriptUpdatesCommand.SafeExecute();
@@ -1004,15 +999,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Any();
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
-    private void SaveAll()
+    private void SaveAll(bool onlyProjectFiles = false)
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not { } activeProject)
         {
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
 
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>()
+                     .Where(f => f.IsDirty)
+                     .Where(f => !onlyProjectFiles || activeProject.ModFiles
+                         .Select(relPath => Path.Join(activeProject.ModDirectory, relPath).ToLower())
+                         .Contains(f.FilePath?.ToLower())))
         {
             Save(file);
         }
@@ -1020,7 +1019,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
     {
-        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>()
+            .Where(tab => tab.IsDirty)
+            .Where(tab =>
+            {
+                if (_projectManager.ActiveProject is not { } project || string.IsNullOrEmpty(tab.FilePath))
+                {
+                    return true;
+                }
+
+                var filePath = project.GetGameRelativePath(tab.FilePath) ?? tab.FilePath;
+                return project.ModFiles.Contains(filePath, StringComparer.InvariantCultureIgnoreCase);
+            }).ToList();
+
         if (dirtyFiles.Count == 0)
         {
             return true;
@@ -1041,7 +1052,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case WMessageBoxResult.OK:
             case WMessageBoxResult.Yes:
             default:
-                SaveAll();
+                SaveAll(true);
                 break;
         }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,15 +11,12 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
-using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using WolvenKit.IntegrationTests.Helpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -279,16 +276,16 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         projectWizard.ProjectPath = _tempProjectRoot;
         await appViewModel.NewProjectTask(projectWizard);
 
+        Assert.True(
+            await AsyncWait.UntilAsync(
+                () => _pe!.ActiveProject is not null,
+                TimeSpan.FromSeconds(30)),
+            "Project explorer never adopted the new project.");
+
         Assert.NotNull(projectManager.ActiveProject);
         Assert.NotNull(_pe!.ActiveProject);
 
-        var progress = _host.Services.GetRequiredService<IProgressService<double>>();
-        var state = progress.Status;
-        while (state != EStatus.Ready)
-        {
-            state = progress.Status;
-            await Task.Delay(100);
-        }
+        await _host!.Services.GetRequiredService<IArchiveManagerLoader>().LoadArchiveManagerAsync();
     }
 
     private static void PumpDispatcher()
