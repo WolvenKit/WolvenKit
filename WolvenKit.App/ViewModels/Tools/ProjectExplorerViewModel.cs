@@ -2189,6 +2189,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #endregion Methods
 
+    public IDocumentViewModel? GetActiveEditorFile() => _appViewModel.ActiveDocument;
+
     #region ModifierStateAwareness
 
     /// <summary>
@@ -2213,7 +2215,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
     }
 
-    public IDocumentViewModel? GetActiveEditorFile() => _appViewModel.ActiveDocument;
+    public void OnKeyStateChanged(KeyEventArgs e)
+    {
+        if (e.Key == Key.W && (e.KeyboardDevice.Modifiers & ModifierKeys.Control) != 0)
+        {
+            _appViewModel.CloseLastActiveDocument();
+            return;
+        }
+
+        ModifierStateService.OnKeystateChanged(e);
+    }
 
     #endregion
 
@@ -2286,17 +2297,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     #endregion expansion state
-
-    public void OnKeyStateChanged(KeyEventArgs e)
-    {
-        if (e.Key == Key.W && (e.KeyboardDevice.Modifiers & ModifierKeys.Control) != 0)
-        {
-            _appViewModel.CloseLastActiveDocument();
-            return;
-        }
-
-        ModifierStateService.OnKeystateChanged(e);
-    }
 
     #region grid consistency
 
