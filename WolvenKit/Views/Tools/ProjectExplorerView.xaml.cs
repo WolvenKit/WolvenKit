@@ -60,7 +60,7 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
-        private CancellationTokenSource _deferRefreshTokenSource = new();
+        private readonly CancellableRowDragDropController _rowDragDropController;
 
         #region Constructors
 
@@ -69,6 +69,7 @@ namespace WolvenKit.Views.Tools
             InitializeComponent();
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
+            TreeGrid.RowDragDropController = _rowDragDropController;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
@@ -86,6 +87,7 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
 
+            _rowDragDropController = new CancellableRowDragDropController();
 
             this.WhenActivated(disposables =>
             {
@@ -289,6 +291,8 @@ namespace WolvenKit.Views.Tools
         });
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
+            _rowDragDropController.CancelPendingAutoExpand();
+
             CompositeDisposable disposables =
             [
                 TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
@@ -691,16 +695,32 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
+        #region drag & drop
+
+        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
+        {
+            if (ViewModel is not ProjectExplorerViewModel vm)
+            {
+                return;
+            }
+
+            // Don't drag stuff you're not freakin' draggin' choom... gosh.
+            var draggedItems = e.DraggingNodes.ToList();
+            var selectedItems = vm.SelectedItems?.ToList() ?? [];
+            var nonDraggedSelections = selectedItems.Where(x => !draggedItems.Contains(x)).ToList();
+            vm.SelectedItems?.RemoveMany(nonDraggedSelections);
+
             _isDragging = true;
+        }
 
         private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
         {
             if (!e.Data.GetDataPresent("Nodes") ||
                 e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes ||
                 treeNodes[0].Item is not FileSystemModel sourceFile ||
-                e.TargetNode.Item is not FileSystemModel targetFile)
+                e.TargetNode?.Item is not FileSystemModel targetFile)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -716,17 +736,22 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
+        private void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
-            // this should all be somewhere else, right?
             try
             {
-                e.Handled = _isDragging; // which should be true at this point
-                if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
+                // ProcessOnDrop re-arms the hover auto-expand timer via GetDropPosition after
+                // stopping it; kill it here or it fires ExpandNode on a node the deferred
+                // refresh has already disposed (NRE in TreeGridNestedView.RequestTreeItems).
+                _rowDragDropController.CancelPendingAutoExpand();
+
+                e.Handled = _isDragging;
+
+                if (e.TargetNode?.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
+                    e.Handled = true;
                     return;
                 }
-
 
                 var selectedFilePaths =
                     vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? [];
@@ -752,17 +777,24 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // if dragged on file, use file's parent directory as target dir
-                var targetDirectory = Directory.Exists(targetFile.FullName)
+                var targetDirectory = (Directory.Exists(targetFile.FullName)
                     ? targetFile.FullName
-                    : Path.GetDirectoryName(targetFile.FullName);
+                    : Path.GetDirectoryName(targetFile.FullName)) ?? string.Empty;
+
+                if (targetFile.Parent is { } parent && parent.FullName == targetDirectory)
+                {
+                    e.Handled = true;
+                    return;
+                }
 
                 // 1146: addresses "prevent self-drag-and-drop"
                 if (files.Count == 0 || files[0] == targetDirectory)
                 {
+                    e.Handled = true;
                     return;
                 }
 
-                await ProcessFileAction(files, targetDirectory);
+                ViewModel.ProcessFileAction(files, targetDirectory);
             }
             catch (Exception error)
             {
@@ -771,6 +803,8 @@ namespace WolvenKit.Views.Tools
         }
         private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
             _isDragging = false;
+
+        #endregion drag & drop
 
         private static TreeNode GetTreeNode(string filePath, TreeNode node)
         {
@@ -787,6 +821,7 @@ namespace WolvenKit.Views.Tools
         {
             if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -796,6 +831,7 @@ namespace WolvenKit.Views.Tools
 
             if (activeFileNode is null)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -822,7 +858,6 @@ namespace WolvenKit.Views.Tools
             ExpandParent(activeFileNode.ParentNode);
             TreeGrid?.ExpandNode(activeFileNode.ParentNode);
         }
-
 
         private void ContextMenu_OnKeyStateChanged(object sender, KeyEventArgs e)
         {
