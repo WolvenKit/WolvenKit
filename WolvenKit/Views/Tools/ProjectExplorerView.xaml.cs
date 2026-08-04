@@ -70,8 +70,6 @@ namespace WolvenKit.Views.Tools
             set => SetValue(FlatItemSourceProperty, value);
         }
 
-        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
-
         private string _currentFolderQuery = "";
         private readonly DispatcherTimer _searchDebounceTimer;
         private bool _automatic;
@@ -79,8 +77,6 @@ namespace WolvenKit.Views.Tools
 
         private bool _isDragging;
         private readonly CancellableRowDragDropController _rowDragDropController;
-
-        private bool _isShowingLoadingIndicator = true;
 
         private ISettingsManager _settingsManager;
 
@@ -96,6 +92,10 @@ namespace WolvenKit.Views.Tools
         /// ExpansionStateDictionary without re-touching an untouched tree.
         /// </summary>
         private bool _searchMutatedExpansion;
+
+        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
+
+        private bool _isShowingLoadingIndicator = true;
 
         #endregion fields
 
@@ -304,7 +304,113 @@ namespace WolvenKit.Views.Tools
             this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
-        #endregion Constructors
+        #endregion
+
+        #region Project_Loading
+
+        private bool ShouldStartLoadingProject(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject
+                   || mode == ProjectExplorerViewModel.LoadingMode.ReloadingSameProject;
+        }
+
+        private bool ShouldStopLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        private bool ShouldStopTemporaryLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        private bool ShouldStartTemporaryLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation;
+        }
+
+        private bool IsFreshLoad(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject;
+        }
+
+        private bool AlreadyLoadingProject()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject
+                   || _loadingMode == ProjectExplorerViewModel.LoadingMode.ReloadingSameProject;
+        }
+
+        private bool AlreadyTemporaryLoading()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation;
+        }
+
+        private bool Ready()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        /// <summary>
+        /// Called by the ViewModel when the View should show "Loading" on the file pane.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetLoading(object sender, ProjectExplorerViewModel.LoadingMode mode)
+        {
+            if (ShouldStartLoadingProject(mode) && Ready())
+            {
+                ResetCurrentFolderQuerySearchFilter();
+
+                if (IsFreshLoad(mode))
+                {
+                    IndicateProjectLoading();
+                }
+            }
+            else if (ShouldStopLoading(mode) && AlreadyLoadingProject())
+            {
+                IndicateProjectNotLoading();
+            }
+            else if (ShouldStopTemporaryLoading(mode) && AlreadyTemporaryLoading())
+            {
+                IndicateProjectNotLoading();
+            }
+            else if (ShouldStartTemporaryLoading(mode) && Ready())
+            {
+                IndicateProjectLoading();
+            }
+
+            _loadingMode = mode;
+        }
+
+        private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
+        {
+            _isShowingLoadingIndicator = true;
+            UpdatePaneVisibility();
+        });
+
+        private void IndicateProjectNotLoading()
+        {
+            _isShowingLoadingIndicator = false;
+            UpdatePaneVisibility();
+            ScheduleGhostRowCleanup();
+        }
+
+        private void UpdatePaneVisibility()
+        {
+            var isFlat = ViewModel?.IsFlatModeEnabled ?? false;
+            var isLoading = _isShowingLoadingIndicator;
+
+            LoadingText.SetCurrentValue(VisibilityProperty, ToVisibility(isLoading));
+            TreeGrid.SetCurrentValue(VisibilityProperty, ToVisibility(!isLoading && !isFlat));
+            TreeGridFlat.SetCurrentValue(VisibilityProperty, ToVisibility(!isLoading && isFlat));
+
+            static Visibility ToVisibility(bool isVisible) => isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void ScheduleGhostRowCleanup() =>
+            Dispatcher.BeginInvoke(InvalidateLayout, DispatcherPriority.Loaded);
+
+        #endregion Project_Loading
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
         {
@@ -371,9 +477,10 @@ namespace WolvenKit.Views.Tools
         //     }
         // });
 
-        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
+        private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
             _rowDragDropController.CancelPendingAutoExpand();
+            CompositeDisposable disposables = [];
 
             if (TreeGridFlat.View is { } flatView)
             {
@@ -565,8 +672,6 @@ namespace WolvenKit.Views.Tools
 
             ViewModel.NotifyDirectoryExpanded(fileSystemModel);
         }
-
-        private bool _automatic;
 
         private void TreeGrid_OnNodeCollapsing(object sender, NodeCollapsingEventArgs e)
         {
