@@ -12,8 +12,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
+using DynamicData;
+using DynamicData.Binding;
 using HandyControl.Data;
+using HandyControl.Tools.Extension;
+using MahApps.Metro.Controls;
+using Octokit;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
@@ -27,8 +34,11 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Others;
 using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
+using WolvenKit.Helpers;
+using Application = System.Windows.Application;
 
 namespace WolvenKit.Views.Tools
 {
@@ -37,6 +47,8 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
     {
+        #region fields
+
         /// <summary>Identifies the <see cref="TreeItemSource"/> dependency property.</summary>
         public static readonly DependencyProperty TreeItemSourceProperty =
             DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileSystemModel>),
@@ -58,9 +70,34 @@ namespace WolvenKit.Views.Tools
             set => SetValue(FlatItemSourceProperty, value);
         }
 
+        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
+
         private string _currentFolderQuery = "";
+        private readonly DispatcherTimer _searchDebounceTimer;
+        private bool _automatic;
+        private HashSet<string> _searchVisiblePaths;
+
         private bool _isDragging;
         private readonly CancellableRowDragDropController _rowDragDropController;
+
+        private bool _isShowingLoadingIndicator = true;
+
+        private ISettingsManager _settingsManager;
+
+        /// <summary>
+        /// When true, NodeExpanded/NodeCollapsed must not persist expansion state or write
+        /// FileSystemModel.IsExpanded via the ViewModel. Used for search-driven expand/restore
+        /// so bulk view operations do not dirtily rewrite the project tree state.
+        /// </summary>
+        private bool _suppressExpansionPersistence;
+
+        /// <summary>
+        /// True after search auto-expanded ancestors so clearing the query can restore
+        /// ExpansionStateDictionary without re-touching an untouched tree.
+        /// </summary>
+        private bool _searchMutatedExpansion;
+
+        #endregion fields
 
         #region Constructors
 
