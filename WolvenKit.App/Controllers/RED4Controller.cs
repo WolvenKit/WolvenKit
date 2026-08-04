@@ -137,27 +137,32 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private Guid _loadingCompletion = Guid.NewGuid();
+    public const string ArchiveLoadingPurpose = "RED4Controller archive loading";
 
-    private void EnableLoadingMode()
-    {
-        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+    /// <summary>
+    /// Starts the archive-loading progress heartbeat and returns a scope that releases it.
+    ///
+    /// The heartbeat is reference counted on <see cref="ArchiveLoadingPurpose"/>, so overlapping
+    /// loads — RED4Controller is registered transient, so the app view model, the asset browser
+    /// and the materials dialog each hold their own instance — share a single timer. The
+    /// indicator is only reset to Ready once the last loader disposes its scope, rather than
+    /// whichever loader happens to finish first.
+    /// </summary>
+    private IDisposable BeginLoadingIndicator() =>
+        DispatcherHelper.StartRepeatingAction(
+            purpose: ArchiveLoadingPurpose,
             () =>
             {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
             },
             TimeSpan.FromMilliseconds(100),
-            DisableLoadingMode
+            onCancelled: () =>
+            {
+                _progressService.IsIndeterminate = false;
+                _progressService.Status = EStatus.Ready;
+            }
         );
-    }
-
-    private void DisableLoadingMode()
-    {
-        _progressService.IsIndeterminate = false;
-        _progressService.Status = EStatus.Ready;
-        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
-    }
 
     /// <summary>
     /// Loads the basegame + EP1 archives on a background thread.
@@ -181,7 +186,7 @@ public class RED4Controller : ObservableObject, IGameController
             return;
         }
 
-        EnableLoadingMode();
+        using var loadingIndicator = BeginLoadingIndicator();
 
         try
         {
@@ -206,12 +211,6 @@ public class RED4Controller : ObservableObject, IGameController
         {
             _loggerService.Error(e);
             throw;
-        }
-        finally
-        {
-            // Always stop the heartbeat timer and release the progress indicator.
-            DisableLoadingMode();
-            LoadCustomHashes();
         }
     }
 
@@ -1065,6 +1064,8 @@ public class RED4Controller : ObservableObject, IGameController
             // often saturates the disk and ends up slower + spams the UI thread.
             var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
 
+            var bulkScope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+
             await Parallel.ForEachAsync(
                 files,
                 new ParallelOptions { MaxDegreeOfParallelism = dop },
@@ -1085,14 +1086,6 @@ public class RED4Controller : ObservableObject, IGameController
                     return ValueTask.CompletedTask;
                 });
 
-            var report = "";
-
-            foreach (var file in files)
-            {
-                report += $"Added game file to project: {file.Name}\r\n";
-            }
-
-            _loggerService.Info(report);
         }
 
         _progressService.Completed();
