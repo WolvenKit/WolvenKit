@@ -62,6 +62,7 @@ namespace WolvenKit
                 .ConfigureServices((hostContext, services) =>
                 {
                     // services
+                    services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<IHashService, HashServiceExt>();                                      // can this be transient?
                     services.AddSingleton<CRUIDService>(x => new CRUIDService(false));    // can this be transient?
