@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.ViewModels.Controls;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -34,12 +35,12 @@ public partial class TypeSelectorDialogViewModel : DialogViewModel
     [ObservableProperty]
     private RedTypeTemplateDropdownViewModel _redTypeTemplateDropdownViewModel;
 
-    public TypeSelectorDialogViewModel(RedTypeTemplateService redTypeTemplateService, List<TypeEntry> entries, bool allowCreating = false)
+    public TypeSelectorDialogViewModel(RedTypeTemplateService redTypeTemplateService, ILoggerService loggerService, List<TypeEntry> entries, bool allowCreating = false)
     {
         _entries = new ObservableCollection<TypeEntry>(entries);
         _allowCreating = allowCreating;
 
-        _redTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(redTypeTemplateService);
+        _redTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(redTypeTemplateService, loggerService);
     }
 
     private bool CanExecuteOk()

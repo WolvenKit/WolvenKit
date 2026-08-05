@@ -1309,7 +1309,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         await _appViewModel.SetActiveDialog(
-            new TypeSelectorDialogViewModel(_redTypeTemplateService, types, allowCreating) { DialogHandler = HandlePointer });
+            new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types, allowCreating) { DialogHandler = HandlePointer });
     }
 
     private bool CanAddItemToArray() =>
@@ -1364,7 +1364,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 types = TypeHelper.GetCKeyValueEntryTypes();
                 await _appViewModel.SetActiveDialog(
-                    new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+                    new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
                     {
                         DialogHandler = HandleCKeyValuePair
                     });
@@ -1400,7 +1400,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
         {
             DialogHandler = handler
         });
@@ -1595,7 +1595,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
             {
                 DialogHandler = HandleNewDynamicProperty
             });
@@ -1707,7 +1707,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     $"You can't create new items for {Data.RedType} yet. Please create a ticket and tell us what you need here.");
             }
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types) { DialogHandler = HandleChunk });
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types) { DialogHandler = HandleChunk });
         }
     }
 

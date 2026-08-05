@@ -71,6 +71,7 @@
     <Thickness x:Key="WolvenKitMarginMicroHorizontal">2,0</Thickness>
     <Thickness x:Key="WolvenKitMarginMicroVertical">0,2</Thickness>
 
+    <CornerRadius x:Key="WolvenKitTinyRadius">2</CornerRadius>
     <CornerRadius x:Key="WolvenKitSmallRadius">5</CornerRadius>
     <CornerRadius x:Key="WolvenKitRadius">10</CornerRadius>
 

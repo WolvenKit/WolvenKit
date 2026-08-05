@@ -273,17 +273,11 @@ namespace WolvenKit.App.ViewModels.Documents
             UpdateTabContent(value);
         }
 
-        // Override Unload to ensure disposal when tab is closed
-        public override void Unload()
-        {
-            Dispose();
-            base.Unload();
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed && disposing)
             {
+                MainGraph.Dispose();
                 _disposed = true;
             }
         }

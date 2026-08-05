@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3019
+      author: "manavortex"
+      description: "Fixed an exception when trying to display a root entity preview with dynamic substitution."

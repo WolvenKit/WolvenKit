@@ -232,6 +232,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
             DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+
+            if (dockElement is RedDocumentViewModel redDocument)
+            {
+                redDocument.Dispose();
+            }
         }
 
         foreach (var dockElement in (e.NewItems ?? Array.Empty<object>()).OfType<IDockElement>())
@@ -328,6 +333,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 #endif
 
         CheckForScriptUpdatesCommand.SafeExecute();
+        CheckForTemplateUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
     }
@@ -635,6 +641,23 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         await File.WriteAllTextAsync(hashPath.FullName, remoteHash);
         _scriptService.RefreshUIScripts();
+    }
+
+    [RelayCommand]
+    private async Task CheckForTemplateUpdates()
+    {
+        try
+        {
+            if (await RedTypeTemplateServiceHelper.UpdateSystemTemplatesFromRemote(_loggerService))
+            {
+                _redTypeTemplateService.LoadTemplates();
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Warning("Failed to update system templates");
+            _loggerService.Warning(ex.Message);
+        }
     }
 
     [RelayCommand]
@@ -2624,6 +2647,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginMicroHorizontal"] = new Thickness(2, 0, 2, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginMicroVertical"] = new Thickness(0, 2, 0, 2).Mul(_uiScalePercentage).Round();
 
+        resources["WolvenKitTinyRadius"] = new CornerRadius(2).Mul(_uiScalePercentage).Round();
         resources["WolvenKitSmallRadius"] = new CornerRadius(5).Mul(_uiScalePercentage).Round();
         resources["WolvenKitRadius"] = new CornerRadius(10).Mul(_uiScalePercentage).Round();
 

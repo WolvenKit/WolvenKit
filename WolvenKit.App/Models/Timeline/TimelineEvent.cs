@@ -12,9 +12,9 @@ public partial class TimelineEvent : ObservableObject
     private readonly scnSceneEvent _event;
     private readonly Action _onChanged;
     private readonly scnSceneResource? _sceneResource;
-    
+
     private const uint InvalidPerformerId = 4294967040;
-    
+
     public int EventIndex { get; set; }
 
     public TimelineEvent(scnSceneEvent sceneEvent, Action onChanged, scnSceneResource? sceneResource = null, int eventIndex = 0)
@@ -23,7 +23,7 @@ public partial class TimelineEvent : ObservableObject
         _onChanged = onChanged;
         _sceneResource = sceneResource;
         EventIndex = eventIndex;
-        
+
         _startTime = _event.StartTime;
         _duration = _event.Duration;
     }
@@ -69,46 +69,46 @@ public partial class TimelineEvent : ObservableObject
         get
         {
             var prefix = $"#{EventIndex}";
-            
+
             switch (_event)
             {
                 case scnDialogLineEvent dialogLine:
                     var speaker = GetDialogSpeaker(dialogLine);
                     return $"{prefix} Dialog ({speaker})";
-                
+
                 case scnPlaySkAnimEvent skAnim:
                     var skAnimPerformer = ResolvePerformerName(skAnim.Performer?.Id ?? uint.MaxValue);
                     return $"{prefix} Sk Anim ({skAnimPerformer})";
-                
+
                 case scnLookAtEvent:
                     return $"{prefix} LookAt";
-                
+
                 case scnLookAtAdvancedEvent:
                     return $"{prefix} LookAt+";
-                
+
                 case scnAudioEvent audio:
                     var audioPerformer = ResolvePerformerName(audio.Performer?.Id ?? uint.MaxValue);
                     return string.IsNullOrEmpty(audioPerformer) ? $"{prefix} Audio" : $"{prefix} Audio ({audioPerformer})";
-                
+
                 case scnChangeIdleAnimEvent idleAnim:
                     var idlePerformer = ResolvePerformerName(idleAnim.Performer?.Id ?? uint.MaxValue);
                     return string.IsNullOrEmpty(idlePerformer) ? $"{prefix} Idle" : $"{prefix} Idle ({idlePerformer})";
-                
+
                 case scneventsVFXEvent vfx:
                     var vfxPerformer = ResolvePerformerName(vfx.PerformerId?.Id ?? uint.MaxValue);
                     return string.IsNullOrEmpty(vfxPerformer) ? $"{prefix} VFX" : $"{prefix} VFX ({vfxPerformer})";
-                
+
                 case scneventsVFXDurationEvent vfxDur:
                     var vfxDurPerformer = ResolvePerformerName(vfxDur.PerformerId?.Id ?? uint.MaxValue);
                     return string.IsNullOrEmpty(vfxDurPerformer) ? $"{prefix} VFX Duration" : $"{prefix} VFX Duration ({vfxDurPerformer})";
-                
+
                 case scnIKEvent ik:
                     var ikPerformer = ResolvePerformerName(ik.IkData?.Basic?.PerformerId?.Id ?? uint.MaxValue);
                     return string.IsNullOrEmpty(ikPerformer) ? $"{prefix} IK" : $"{prefix} IK ({ikPerformer})";
-                
+
                 case scneventsSocket:
                     return $"{prefix} Socket";
-                
+
                 default:
                     return $"{prefix} {TypeName}";
             }
@@ -123,40 +123,40 @@ public partial class TimelineEvent : ObservableObject
             {
                 case scnDialogLineEvent dialogLine:
                     return GetDialogText(dialogLine);
-                
+
                 case scnPlaySkAnimEvent skAnim:
                     return GetAnimName(skAnim);
-                
+
                 case scnLookAtEvent lookAt:
                     return GetLookAtDetails(lookAt);
-                
+
                 case scnLookAtAdvancedEvent lookAtAdv:
                     return GetLookAtAdvancedDetails(lookAtAdv);
-                
+
                 case scnAudioEvent audio:
                     return audio.AudioEventName != CName.Empty ? audio.AudioEventName.GetResolvedText() ?? "" : "";
-                
+
                 case scnChangeIdleAnimEvent idleAnim:
                     return GetIdleAnimDetails(idleAnim);
-                
+
                 case scneventsVFXEvent vfx:
                     return GetVfxDetails(vfx);
-                
+
                 case scneventsVFXDurationEvent vfxDur:
                     return GetVfxDurationDetails(vfxDur);
-                
+
                 case scnIKEvent ik:
                     return GetIkDetails(ik);
-                
+
                 case scneventsSocket socket:
                     return GetSocketDetails(socket);
-                
+
                 default:
                     return "";
             }
         }
     }
-    
+
     private string ResolvePerformerName(uint performerId)
     {
         if (_sceneResource == null)
@@ -167,46 +167,19 @@ public partial class TimelineEvent : ObservableObject
         {
             return "";
         }
-        
-        if (performerId == 0)
-        {
-            var playerActor = _sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == 0);
-            if (playerActor != null)
-            {
-                return string.IsNullOrEmpty(playerActor.PlayerName) ? "Player" : playerActor.PlayerName;
-            }
-            return "Player";
-        }
-        
-        if (performerId >= 1 && (performerId % 256 == 1))
-        {
-            uint actorIndex = (performerId - 1) / 256;
-            
-            var playerActor = _sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorIndex);
-            if (playerActor != null)
-            {
-                return string.IsNullOrEmpty(playerActor.PlayerName) ? "Player" : playerActor.PlayerName;
-            }
 
-            if (_sceneResource.Actors != null && actorIndex < _sceneResource.Actors.Count)
-            {
-                var actorDef = _sceneResource.Actors[(int)actorIndex];
-                return actorDef?.ActorName ?? $"Actor{actorIndex}";
-            }
-        }
-        
-        return "";
+        return SceneEditingHelper.GetPerformerNameById(performerId, _sceneResource) ?? "";
     }
-    
+
     private string ResolveTargetFromAnimData(scnAnimTargetBasicData basicData)
     {
-        if (_sceneResource == null) 
+        if (_sceneResource == null)
         {
             return "Target";
         }
-        
+
         var targetType = (WolvenKit.RED4.Types.Enums.scnLookAtTargetType)basicData.TargetType;
-        
+
         switch (targetType)
         {
             case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Actor:
@@ -219,7 +192,7 @@ public partial class TimelineEvent : ObservableObject
                     return $"Pos({basicData.StaticTarget.X:F0},{basicData.StaticTarget.Y:F0},{basicData.StaticTarget.Z:F0})";
                 }
                 return "None";
-                
+
             case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop:
                 if (basicData.TargetPropId != null)
                 {
@@ -227,7 +200,7 @@ public partial class TimelineEvent : ObservableObject
                     return propDef?.PropName ?? $"Prop[{basicData.TargetPropId.Id}]";
                 }
                 return "Prop";
-                
+
             default:
                 if (basicData.StaticTarget.X != 0 || basicData.StaticTarget.Y != 0 || basicData.StaticTarget.Z != 0)
                 {
@@ -244,7 +217,7 @@ public partial class TimelineEvent : ObservableObject
                 return $"Unknown({targetType})";
         }
     }
-    
+
     private string GetDialogSpeaker(scnDialogLineEvent dialogLine)
     {
         if (dialogLine.ScreenplayLineId != null && _sceneResource != null)
@@ -258,7 +231,7 @@ public partial class TimelineEvent : ObservableObject
         }
         return "";
     }
-    
+
     private string GetDialogText(scnDialogLineEvent dialogLine)
     {
         if (dialogLine.ScreenplayLineId == null || _sceneResource == null)
@@ -266,45 +239,19 @@ public partial class TimelineEvent : ObservableObject
             return "";
         }
 
-        CUInt32 screenplayId = dialogLine.ScreenplayLineId.Id;
-        var screenplayLine = _sceneResource.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
-
-        if (screenplayLine?.LocstringId == null ||
-            _sceneResource.LocStore?.VdEntries == null ||
-            _sceneResource.LocStore?.VpEntries == null)
-        {
-            return "";
-        }
-
-        CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
-        var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
-        var vdEntry = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => 
-            vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
-
-        if (vdEntry?.VariantId == null)
-        {
-            return "";
-        }
-
-        var vpEntry = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == vdEntry.VariantId.Ruid);
-        if (vpEntry?.Content == null)
-        {
-            return "";
-        }
-
-        return StringHelper.Truncate(vpEntry.Content.ToString() ?? "", 40);
+        return SceneEditingHelper.GetScreenplayLineById(dialogLine.ScreenplayLineId.Id, _sceneResource) ?? "";
     }
-    
+
     private string GetAnimName(scnPlaySkAnimEvent skAnim)
     {
-        if (skAnim.AnimName?.GetValue() is scnAnimName animNameObj 
+        if (skAnim.AnimName?.GetValue() is scnAnimName animNameObj
             && animNameObj.Unk1 != null && animNameObj.Unk1.Count > 0)
         {
             return StringHelper.Truncate(animNameObj.Unk1[0].GetResolvedText() ?? "", 35);
         }
         return "";
     }
-    
+
     private string GetLookAtDetails(scnLookAtEvent lookAt)
     {
         if (lookAt.BasicData?.Basic != null && _sceneResource != null)
@@ -312,12 +259,12 @@ public partial class TimelineEvent : ObservableObject
             var basicData = lookAt.BasicData.Basic;
             string performerName = ResolvePerformerName(basicData.PerformerId?.Id ?? uint.MaxValue);
             string targetName = ResolveTargetFromAnimData(basicData);
-            
+
             return basicData.IsStart ? $"{performerName} → {targetName}" : $"{performerName} stop";
         }
         return "";
     }
-    
+
     private string GetLookAtAdvancedDetails(scnLookAtAdvancedEvent lookAtAdv)
     {
         if (lookAtAdv.AdvancedData?.Basic != null && _sceneResource != null)
@@ -325,16 +272,16 @@ public partial class TimelineEvent : ObservableObject
             var basicData = lookAtAdv.AdvancedData.Basic;
             string performerName = ResolvePerformerName(basicData.PerformerId?.Id ?? uint.MaxValue);
             string targetName = ResolveTargetFromAnimData(basicData);
-            
+
             return basicData.IsStart ? $"{performerName} → {targetName}" : $"{performerName} stop";
         }
         return "";
     }
-    
+
     private string GetIdleAnimDetails(scnChangeIdleAnimEvent idleAnim)
     {
         var parts = new List<string>();
-        
+
         if (idleAnim.IdleAnimName != CName.Empty)
         {
             var name = idleAnim.IdleAnimName.GetResolvedText() ?? "";
@@ -359,7 +306,7 @@ public partial class TimelineEvent : ObservableObject
                 parts.Add(StringHelper.Truncate(name, 30));
             }
         }
-        
+
         if (idleAnim.BakedFacialTransition != null)
         {
             CName facialCName = CName.Empty;
@@ -371,7 +318,7 @@ public partial class TimelineEvent : ObservableObject
             {
                 facialCName = idleAnim.BakedFacialTransition.ToIdleMale;
             }
-                
+
             if (facialCName != CName.Empty)
             {
                 var facialName = facialCName.GetResolvedText() ?? "";
@@ -381,15 +328,15 @@ public partial class TimelineEvent : ObservableObject
                 }
             }
         }
-        
+
         return string.Join(", ", parts);
     }
-    
+
     private string GetVfxDetails(scneventsVFXEvent vfx)
     {
         var parts = new List<string>();
         parts.Add(vfx.Action.ToString());
-        
+
         if (vfx.EffectEntry?.EffectName != null && vfx.EffectEntry.EffectName != CName.Empty)
         {
             var effectName = vfx.EffectEntry.EffectName.GetResolvedText() ?? "";
@@ -398,15 +345,15 @@ public partial class TimelineEvent : ObservableObject
                 parts.Add(StringHelper.Truncate(effectName, 25));
             }
         }
-        
+
         return string.Join(": ", parts);
     }
-    
+
     private string GetVfxDurationDetails(scneventsVFXDurationEvent vfxDur)
     {
         var parts = new List<string>();
         parts.Add($"{vfxDur.StartAction}→{vfxDur.EndAction}");
-        
+
         if (vfxDur.EffectEntry?.EffectName != null && vfxDur.EffectEntry.EffectName != CName.Empty)
         {
             var effectName = vfxDur.EffectEntry.EffectName.GetResolvedText() ?? "";
@@ -415,10 +362,10 @@ public partial class TimelineEvent : ObservableObject
                 parts.Add(StringHelper.Truncate(effectName, 20));
             }
         }
-        
+
         return string.Join(": ", parts);
     }
-    
+
     private string GetIkDetails(scnIKEvent ik)
     {
         if (ik.IkData?.ChainName != null && ik.IkData.ChainName != CName.Empty)
@@ -431,17 +378,17 @@ public partial class TimelineEvent : ObservableObject
         }
         return "";
     }
-    
+
     private string GetSocketDetails(scneventsSocket socket)
     {
         if (socket.OsockStamp == null)
         {
             return "";
         }
-        
+
         var name = (ushort)socket.OsockStamp.Name;
         var ordinal = (ushort)socket.OsockStamp.Ordinal;
-        
+
         if (name != ushort.MaxValue && ordinal != ushort.MaxValue)
         {
             return $"({name}, {ordinal})";
