@@ -811,7 +811,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             catch (WolvenKitException ex)
             {
-                _loggerService.Error($"File type could not be determined for a Tweak. Exception: ${ex.Message}");
+                try
+                {
+                    _loggerService.Error(
+                        $"File type could not be determined for a Tweak with name: {PropertyType.Name}. Exception: {ex.Message}.");
+                }
+                catch (WolvenKitException ex2)
+                {
+                    _loggerService.Error(
+                        $"File type could not be determined for a Tweak whose name could not be determined. Exceptions: {Environment.NewLine}1. {ex.Message}{Environment.NewLine}2, {ex2.Message}.");
+                }
+
                 return "";
             }
         }
