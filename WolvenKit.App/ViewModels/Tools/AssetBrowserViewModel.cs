@@ -694,7 +694,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private void ToggleModBrowser()
     {
-        if (!_archiveManager.IsModBrowserActive)
+        var enteringModBrowser = !_archiveManager.IsModBrowserActive;
+        _archiveManager.IsModBrowserActive = enteringModBrowser;
+        IsModBrowserEnabled = enteringModBrowser;
+
+        if (enteringModBrowser)
         {
             ScanModArchives(_settings.AnalyzeModArchives);
             LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
@@ -705,8 +709,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         RightItems = new ObservableCollectionEx<IFileSystemViewModel>();
-        _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
-        IsModBrowserEnabled = _archiveManager.IsModBrowserActive;
     }
 
     [RelayCommand]
