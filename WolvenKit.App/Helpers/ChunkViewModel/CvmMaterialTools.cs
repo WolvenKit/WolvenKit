@@ -1007,22 +1007,29 @@ public class CvmMaterialTools
         return new FlatMaterial(baseMaterial, properties);
     }
 
-    private void FlattenMaterial(CMaterialInstance material)
+    private bool FlattenMaterial(CMaterialInstance material)
     {
         var flatMaterial = GetFlattenedMaterial(material, material.BaseMaterial.DepotPath.GetString() ?? "");
+        if (material.BaseMaterial.DepotPath.GetResolvedText() == flatMaterial.BaseMaterial && material.Values.Count == flatMaterial.Properties.Count)
+        {
+            return false;
+        }
         material.BaseMaterial = new CResourceReference<IMaterial>(flatMaterial.BaseMaterial, InternalEnums.EImportFlags.Default);
         material.Values.Clear();
         foreach (var cKeyValuePair in flatMaterial.Properties.Values)
         {
             material.Values.Add(cKeyValuePair);
         }
+
+        return true;
     }
 
-    public void FlattenMiChain(CMesh mesh)
+    public bool FlattenMiChain(CMesh mesh)
     {
+        var ret = false;
         foreach (var material in mesh.LocalMaterialBuffer.Materials.OfType<CMaterialInstance>())
         {
-            FlattenMaterial(material);
+            ret = FlattenMaterial(material) || ret;
         }
         foreach (var matHandle in mesh.PreloadLocalMaterialInstances)
         {
@@ -1031,24 +1038,32 @@ public class CvmMaterialTools
                 continue;
             }
 
-            FlattenMaterial(material);
+            ret = FlattenMaterial(material) || ret;
         }
+
+        return ret;
     }
 
-    public void FlattenMiChain(ChunkViewModel? cvm)
+    public bool FlattenMiChain(ChunkViewModel? cvm)
     {
+        var ret = false;
         switch (cvm?.ResolvedData)
         {
             case CMesh mesh:
                 FlattenMiChain(mesh);
-                break;
+                cvm.RecalculateProperties();
+                return true;
             case CMaterialInstance matInstance:
                 FlattenMaterial(matInstance);
                 cvm.RecalculateProperties();
-                break;
+                return true;
             case CArray<IRedHandle<IMaterial>> preloadLocalMaterials:
                 var preMats = preloadLocalMaterials.Select(h => h.GetValue()).OfType<CMaterialInstance>().ToList();
-                preMats.ForEach(FlattenMaterial);
+
+                preMats.ForEach((mat) =>
+                {
+                    ret = FlattenMaterial(mat) || ret;
+                });
                 preloadLocalMaterials.Clear();
                 foreach (var newPreloadMaterial in preMats)
                 {
@@ -1058,35 +1073,49 @@ public class CvmMaterialTools
                 {
                     child.RecalculateProperties();
                 }
-                break;
+
+                return ret;
             case meshMeshMaterialBuffer:
-                FlattenMiChain(cvm.GetPropertyChild("materials"));
+                ret = FlattenMiChain(cvm.GetPropertyChild("materials"));
                 break;
             case CArray<IMaterial> materials:
                 var newMaterials = materials.OfType<CMaterialInstance>().ToList();
-                newMaterials.ForEach(FlattenMaterial);
+                newMaterials.ForEach((mat) =>
+                {
+                    ret =  FlattenMaterial(mat) || ret;
+                });
                 materials.Clear();
                 foreach (var mat in newMaterials)
                 {
                     materials.Add(mat);
                 }
-                cvm.RecalculateProperties();
+
                 break;
             default:
                 if (cvm?.GetRootModel() is { ResolvedData: CMesh rootMesh } rootModel)
                 {
-                    FlattenMiChain(rootMesh);
+                    ret = FlattenMiChain(rootMesh);
                     rootModel.RecalculateProperties();
                     RecalculateMaterialProperties(rootModel, true);
                 }
                 break;
         }
+
+        if (ret)
+        {
+            cvm?.RecalculateProperties();
+        }
+
+        return ret;
     }
     public void FlattenMiChain(List<ChunkViewModel> cvmSelection)
     {
+        var ret = false;
         foreach (var chunkViewModel in cvmSelection)
         {
-            FlattenMiChain(chunkViewModel);
+            ret = FlattenMiChain(chunkViewModel) || ret;
         }
+
+        cvmSelection.FirstOrDefault()?.Tab?.Parent.SetIsDirty(ret);
     }
 }
