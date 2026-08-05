@@ -410,8 +410,10 @@
                                 x:Name="PinnedHeader"
                                 Grid.Row="0"
                                 Panel.ZIndex="1"
+                                HorizontalAlignment="Stretch"
+                                CornerRadius="3"
                                 Padding="{DynamicResource WolvenKitMarginSmall}"
-                                Background="{StaticResource ContentBackground}">
+                                Background="{StaticResource ContentBackgroundAlt}">
                                 <Border.RenderTransform>
                                     <TranslateTransform x:Name="PinnedHeaderTransform" />
                                 </Border.RenderTransform>
@@ -520,8 +522,10 @@
                                 x:Name="RecentHeader"
                                 Grid.Row="0"
                                 Panel.ZIndex="1"
+                                HorizontalAlignment="Stretch"
+                                CornerRadius="3"
                                 Padding="{DynamicResource WolvenKitMarginSmall}"
-                                Background="{StaticResource ContentBackground}">
+                                Background="{StaticResource ContentBackgroundAlt}">
                                 <Border.RenderTransform>
                                     <TranslateTransform x:Name="RecentHeaderTransform" />
                                 </Border.RenderTransform>
