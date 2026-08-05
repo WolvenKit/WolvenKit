@@ -397,7 +397,7 @@
                             x:Name="PinnedSection"
                             Grid.Row="0"
                             ClipToBounds="False"
-                            Margin="0,8,6,8"
+                            Margin="0,0,0,8"
                             Visibility="{Binding ShowPinned,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.RowDefinitions>
