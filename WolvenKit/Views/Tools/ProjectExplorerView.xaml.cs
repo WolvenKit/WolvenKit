@@ -115,6 +115,8 @@ namespace WolvenKit.Views.Tools
 
             _searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
 
+            _rowDragDropController = new CancellableRowDragDropController();
+
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController = _rowDragDropController;
@@ -135,8 +137,6 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
             TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
-
-            _rowDragDropController = new CancellableRowDragDropController();
 
             this.WhenActivated(disposables =>
             {
