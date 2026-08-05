@@ -809,14 +809,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var redName = GetRedTypeFromCSType(PropertyType, Flags);
                 return redName != "" ? redName : PropertyType.Name;
             }
-            catch (WolvenKitException ex)
+            catch (Exception ex)
             {
                 try
                 {
                     _loggerService.Error(
                         $"File type could not be determined for a Tweak with name: {PropertyType.Name}. Exception: {ex.Message}.");
                 }
-                catch (WolvenKitException ex2)
+                catch (Exception ex2)
                 {
                     _loggerService.Error(
                         $"File type could not be determined for a Tweak whose name could not be determined. Exceptions: {Environment.NewLine}1. {ex.Message}{Environment.NewLine}2, {ex2.Message}.");
