@@ -1009,7 +1009,7 @@ public class CvmMaterialTools
         }
     }
 
-    public void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager)
+    public void FlattenMiChain(ChunkViewModel? cvm)
     {
         switch (cvm?.ResolvedData)
         {
@@ -1022,7 +1022,7 @@ public class CvmMaterialTools
                 break;
             case CArray<IRedHandle<IMaterial>> preloadLocalMaterials:
                 var preMats = preloadLocalMaterials.Select(h => h.GetValue()).OfType<CMaterialInstance>().ToList();
-                preMats.ForEach(mat => FlattenMaterial(mat));
+                preMats.ForEach(FlattenMaterial);
                 preloadLocalMaterials.Clear();
                 foreach (var newPreloadMaterial in preMats)
                 {
@@ -1034,11 +1034,11 @@ public class CvmMaterialTools
                 }
                 break;
             case meshMeshMaterialBuffer:
-                FlattenMiChain(cvm.GetPropertyChild("materials"), archiveManager);
+                FlattenMiChain(cvm.GetPropertyChild("materials"));
                 break;
             case CArray<IMaterial> materials:
                 var newMaterials = materials.OfType<CMaterialInstance>().ToList();
-                newMaterials.ForEach(mat => FlattenMaterial(mat));
+                newMaterials.ForEach(FlattenMaterial);
                 materials.Clear();
                 foreach (var mat in newMaterials)
                 {
@@ -1047,18 +1047,20 @@ public class CvmMaterialTools
                 cvm.RecalculateProperties();
                 break;
             default:
-                if (cvm?.GetRootModel() is { ResolvedData: CMesh rootMesh })
+                if (cvm?.GetRootModel() is { ResolvedData: CMesh rootMesh } rootModel)
                 {
                     FlattenMiChain(rootMesh);
+                    rootModel.RecalculateProperties();
+                    RecalculateMaterialProperties(rootModel, true);
                 }
                 break;
         }
     }
-    public void FlattenMiChain(List<ChunkViewModel> cvmSelection, IAppArchiveManager archiveManager)
+    public void FlattenMiChain(List<ChunkViewModel> cvmSelection)
     {
         foreach (var chunkViewModel in cvmSelection)
         {
-            FlattenMiChain(chunkViewModel, archiveManager);
+            FlattenMiChain(chunkViewModel);
         }
     }
 }
