@@ -822,7 +822,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         $"File type could not be determined for a Tweak whose name could not be determined. Exceptions: {Environment.NewLine}1. {ex.Message}{Environment.NewLine}2, {ex2.Message}.");
                 }
 
-                return "";
+                return $"{PropertyType.Name}";
             }
         }
     }
