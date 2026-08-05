@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -10,9 +12,9 @@ public class CvmTools : ICvmTools
     private readonly CvmMaterialTools _cvmMaterialTools;
     private readonly CvmDependencyTools _cvmDependencyTools;
 
-    public CvmTools(ILoggerService loggerService, INotificationService notificationService)
+    public CvmTools(ILoggerService loggerService, INotificationService notificationService, IAppArchiveManager archiveManager)
     {
-        _cvmMaterialTools = new CvmMaterialTools(loggerService, notificationService);
+        _cvmMaterialTools = new CvmMaterialTools(loggerService, notificationService, archiveManager);
         _cvmDependencyTools = new CvmDependencyTools(loggerService, notificationService);
     }
 
@@ -42,6 +44,12 @@ public class CvmTools : ICvmTools
 
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList) =>
         _cvmMaterialTools.AddTagsToMeshAppearances(chunks, tagList);
+
+    public void FlattenMiChain(ChunkViewModel? cvm) =>
+        _cvmMaterialTools.FlattenMiChain(cvm);
+
+    public void FlattenMiChain(List<ChunkViewModel> cvmSelection)
+        => _cvmMaterialTools.FlattenMiChain(cvmSelection);
 
     #endregion
 

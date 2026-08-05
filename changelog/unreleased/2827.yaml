@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 2827
+      author: "manavortex"
+      description: "Implemented 'flatten mi chain' feature: pull all properties into the current material, then set baseMaterial to root of chain"

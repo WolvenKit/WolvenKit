@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.Helpers;
@@ -23,6 +25,7 @@ public interface ICvmTools
     void AddMaterialAndDefinition(ChunkViewModel cvm, string newName);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
+    void FlattenMiChain(List<ChunkViewModel> cvmSelection);
     #endregion
 
     #region CvmDependencyTools
