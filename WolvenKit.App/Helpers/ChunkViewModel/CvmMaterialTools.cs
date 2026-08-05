@@ -1050,13 +1050,19 @@ public class CvmMaterialTools
         switch (cvm?.ResolvedData)
         {
             case CMesh mesh:
-                FlattenMiChain(mesh);
-                cvm.RecalculateProperties();
-                return true;
+                ret = FlattenMiChain(mesh);
+                if (ret)
+                {
+                    cvm.RecalculateProperties();
+                }
+                return ret;
             case CMaterialInstance matInstance:
                 FlattenMaterial(matInstance);
-                cvm.RecalculateProperties();
-                return true;
+                if (ret)
+                {
+                    cvm.RecalculateProperties();
+                }
+                return ret;
             case CArray<IRedHandle<IMaterial>> preloadLocalMaterials:
                 var preMats = preloadLocalMaterials.Select(h => h.GetValue()).OfType<CMaterialInstance>().ToList();
 
@@ -1064,6 +1070,10 @@ public class CvmMaterialTools
                 {
                     ret = FlattenMaterial(mat) || ret;
                 });
+                if (!ret)
+                {
+                    return false;
+                }
                 preloadLocalMaterials.Clear();
                 foreach (var newPreloadMaterial in preMats)
                 {
@@ -1084,12 +1094,15 @@ public class CvmMaterialTools
                 {
                     ret =  FlattenMaterial(mat) || ret;
                 });
+                if (!ret)
+                {
+                    return false;
+                }
                 materials.Clear();
                 foreach (var mat in newMaterials)
                 {
                     materials.Add(mat);
                 }
-
                 break;
             default:
                 if (cvm?.GetRootModel() is { ResolvedData: CMesh rootMesh } rootModel)
