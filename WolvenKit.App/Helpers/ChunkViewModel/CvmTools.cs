@@ -45,11 +45,11 @@ public class CvmTools : ICvmTools
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList) =>
         _cvmMaterialTools.AddTagsToMeshAppearances(chunks, tagList);
 
-    public void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager) =>
-        _cvmMaterialTools.FlattenMiChain(cvm, archiveManager);
+    public void FlattenMiChain(ChunkViewModel? cvm) =>
+        _cvmMaterialTools.FlattenMiChain(cvm);
 
-    public void FlattenMiChain(List<ChunkViewModel> cvmSelection, IAppArchiveManager archiveManager)
-        => _cvmMaterialTools.FlattenMiChain(cvmSelection, archiveManager);
+    public void FlattenMiChain(List<ChunkViewModel> cvmSelection)
+        => _cvmMaterialTools.FlattenMiChain(cvmSelection);
 
     #endregion
 

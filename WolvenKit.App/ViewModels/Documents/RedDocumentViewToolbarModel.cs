@@ -680,7 +680,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             selection.Add(chunk);
         }
 
-        _cvmTools.FlattenMiChain(SelectedChunks, _archiveManager);
+        _cvmTools.FlattenMiChain(SelectedChunks);
     }
 
 
