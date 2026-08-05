@@ -8,5 +8,13 @@ public partial class Quaternion
     public static implicit operator System.Numerics.Quaternion(Quaternion q) =>
         new System.Numerics.Quaternion { X = q.I, Y = q.J, Z = q.K, W = q.R };
 
+    public Quaternion(Quaternion other)
+    {
+        I = other.I;
+        J = other.J;
+        K = other.K;
+        R = other.R;
+    }
+
     public override string ToString() => $"Quaternion, i = {I}, j = {J}, k = {K}, r = {R}";
 }
