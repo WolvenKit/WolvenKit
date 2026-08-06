@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.CR2W
         /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
         /// <param name="redFile">The resulting <see cref="CR2WFile">CR2WFile</see></param>
         /// <returns>Returns true if successful, otherwise false</returns>
-        public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile) => 
+        public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile) =>
             TryReadRed4File(br, true, out redFile);
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.CR2W
             }
 
             var word = new byte[4];
-            stream.Read(word, 0, 4);
+            stream.ReadExactly(word, 0, 4);
             var magic = BitConverter.ToUInt32(word, 0);
 
             stream.Seek(-4, SeekOrigin.Current);

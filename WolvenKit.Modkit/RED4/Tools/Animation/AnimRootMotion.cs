@@ -25,7 +25,6 @@ using TranslationsAtTimes = System.Collections.Generic.Dictionary<float, System.
 using RotationsAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Quaternion>;
 using ScalesAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>;
 using WolvenKit.Core.Extensions;
-using ICSharpCode.SharpZipLib;
 
 
 namespace WolvenKit.Modkit.RED4.Animation
@@ -164,7 +163,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
                             if (transform.JointIndex != RootJointIndex)
                             {
-                                throw new ValueOutOfRangeException($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
+                                throw new Exception($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
                             }
 
                             var x = transform.TRS.t;
@@ -195,7 +194,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
                             if (transform.JointIndex != RootJointIndex)
                             {
-                                throw new ValueOutOfRangeException($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
+                                throw new Exception($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
                             }
 
                             rotations[RootJointIndex].Add(transform.TimePercent, ((RGQuat)transform.TRS.r)._);
@@ -349,17 +348,6 @@ namespace WolvenKit.Modkit.RED4.Animation
                     throw new ArgumentOutOfRangeException(nameof(incomingType), "Should never get here, invalid incoming RM type");
             }
 
-            if (incomingType is not RootMotionType.None or RootMotionType.Unknown)
-            {
-                _loggerService.Debug($"{animName}: Root Motion: Root Motion present, clearing regular transforms for root joint index {RootJointIndex}");
-
-                incomingAnimData.Translations.Remove(RootJointIndex);
-                incomingAnimData.Rotations.Remove(RootJointIndex);
-                incomingAnimData.Scales.Remove(RootJointIndex);
-
-                return (incomingType, true);
-            }
-
             return (RootMotionType.Unknown, false);
         }
 #endregion import
@@ -418,7 +406,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             float x = q.X / dotWeight;
             float y = q.Y / dotWeight;
-            float z = q.Z / dotWeight; 
+            float z = q.Z / dotWeight;
 
             return (new Vec3(x, y, z), wSign);
         }

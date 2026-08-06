@@ -164,7 +164,7 @@ public static class Oodle
             var size = inStream.ReadStruct<uint>();
 
             var compressedData = new byte[inStream.Length - 8];
-            inStream.Read(compressedData, 0, compressedData.Length);
+            inStream.ReadExactly(compressedData, 0, compressedData.Length);
             rawBuf = new byte[size];
 
             Decompress(compressedData, rawBuf);
@@ -256,7 +256,7 @@ public static class Oodle
 
         return result;
     }
-    
+
     public static unsafe long Decompress(byte* inputBuffer, long inputBufferSize, byte* outputBuffer, long outputBufferSize)
     {
         int result;

@@ -11,29 +11,29 @@
 
 > ⚠️ This repository focuses on REDengine 4 for Cyberpunk 2077. For WolvenKit for <em>The Witcher 3: Wild Hunt</em> please see: https://github.com/WolvenKit/WolvenKit-7
 
-WolvenKit is an open-source modding tool for <em>Cyberpunk 2077</em>. Our vision is to develop a standalone software which is capable of reading and writing all REDengine file formats. Additionally the WolvenKit application is designed to simplify and accelerate modding workflows. 
-This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDengine</strong></a> reads and writes file formats. 
+WolvenKit is an open-source modding tool for <em>Cyberpunk 2077</em>. Our vision is to develop a standalone software which is capable of reading and writing all REDengine file formats. Additionally the WolvenKit application is designed to simplify and accelerate modding workflows.
+This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDengine</strong></a> reads and writes file formats.
 
 This toolkit is being made solely for research and educational purposes, and the dev team is in no way responsible for any malfunctions that occur from its use.
 It's completely open source, licensed under the <a href="https://github.com/WolvenKit/WolvenKit/blob/main/LICENSE">GPL-3.0</a>, and in no way is it made to generate revenue.
-  
+
 ---
-  
+
 <h3 align="center">
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
   <a href="#contributing">Contributing</a> •
   <a href="#screenshots">Screenshots</a> •
-  <a href="#credits">Credits</a> • 
+  <a href="#credits">Credits</a> •
   <a href="#license">License</a>
 </h3>
-  
+
 ## Installation
 
-Wolvenkit requires the latest .NET 8.0 runtime:
+Wolvenkit requires the latest .NET 10.0 runtime:
 
-1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-2. Find the ".NET Desktop Runtime 8.0.x" section and download the installer for your architecture (x64)
+1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+2. Find the ".NET Desktop Runtime 10.0.x" section and download the installer for your architecture (x64)
 3. Run the downloaded installer
 
 ----------
@@ -47,7 +47,7 @@ Download either the latest stable version or the current nightly (beta) version 
 | Package | Latest Release | Checks  |
 | ------- | ------------ | ----------------- |
 | [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/nightly.yml) |
-| [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/check-only.yml) | 
+| [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/check-only.yml) |
 
 To install the app quickly download `WolvenKitSetup-x.x.x.exe` and double click to run the installer.
 
@@ -77,8 +77,8 @@ It's a good idea to create an issue when implementing a feature so people don't 
 For any questions:
 Developer | Role | Email
 ------------ | ------------- | -------------
-[spirit (sprt_)](https://github.com/notaspirit) | Project Lead / Core Development | 
-[Traderain](https://github.com/Traderain) | Project Lead | [Email](mailto:hambalko.bence@gmail.com) 
+[spirit (sprt_)](https://github.com/notaspirit) | Project Lead / Core Development |
+[Traderain](https://github.com/Traderain) | Project Lead | [Email](mailto:hambalko.bence@gmail.com)
 
 ## Screenshots
 
