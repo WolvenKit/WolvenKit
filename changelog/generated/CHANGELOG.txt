@@ -1,33 +1,37 @@
-[b]8.19.0 — 2026-07-03[/b]
+[b]8.20.0 — 2026-08-06[/b]
 
 [b]App[/b]
 
-[*] [i]Added[/i]: entAnimatedComponent: rig and animgraph now have dropdown support. by @manavortex
-[*] [i]Added[/i]: .mesh import can now add bones to meshes correctly by @DoctorPresto
-[*] [i]Added[/i]: Added a graph editor for .behavior files with basic tree editing actions. by @misterchedda
-[*] [i]Fixed[/i]: .ent preview fix (index out of bounds) by @Ametis81
-[*] [i]Fixed[/i]: Archive file path being incorrectly read from modlist.txt by @manavortex
-[*] [i]Fixed[/i]: .mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices. Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb. by @DoctorPresto
-[*] [i]Fixed[/i]: Fixed the search function for quest and scene editor. The editor will now navigate through matching graph nodes. by @misterchedda
-[*] [i]Fixed[/i]: Prompt before opening external quest phase resources from phase nodes in the quest phase editor. by @misterchedda
-[*] [i]Fixed[/i]: 'clear all materials' will now properly refresh the view by @manavortex
-[*] [i]Fixed[/i]: 'Add items to atelier' will no longer break the atelier by @manavortex
-[*] [i]Fixed[/i]: Added missing quest graph node details for item, reward, and some condition and journal nodes. by @misterchedda
-[*] [i]Changed[/i]: Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling) by @Ametis81
-[*] [i]Changed[/i]: Inkatlas generator will now reliably overwrite already-existing files by @manavortex
-[*] [i]Changed[/i]: copy material from other mesh: will now set default filter if multiple meshes are in the same folder, and select textbox content if saved from previous run by @manavortex
-[*] [i]Changed[/i]: Project-wide scans will now ignore .tmp file extension by @manavortex
-
-[b]CLI[/b]
-
-[*] [i]Added[/i]: .mesh import can now add bones to meshes correctly by @DoctorPresto
-[*] [i]Fixed[/i]: Archive file path being incorrectly read from modlist.txt by @manavortex
-[*] [i]Fixed[/i]: .mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices. Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb. by @DoctorPresto
-[*] [i]Changed[/i]: Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling) by @Ametis81
+[*] [i]Added[/i]: Implemented 'flatten mi chain' feature: pull all properties into the current material, then set baseMaterial to root of chain by @manavortex
+[*] [i]Added[/i]: added option to expand mesh appearances (ArchiveXL undymanify) by @manavortex
+[*] [i]Added[/i]: A templater is now available which fixes insensible default values for some created types,
+ and enables the use of custom templates improving reusability. by @notaspirit
+[*] [i]Added[/i]: Added comment boxes to quest and scene editors by @misterchedda
+[*] [i]Added[/i]: Quest and scene graphs now use a searchable action palette for graph actions, categorized node creation, and template selection by @misterchedda
+[*] [i]Added[/i]: Mesh preview now includes a disclaimer about the possibility of incorrect materials during preview. by @notaspirit
+[*] [i]Fixed[/i]: Populate className and fileEntryIndex automatically from journal's realPath dropdown by @misterchedda
+[*] [i]Fixed[/i]: Recalculating sockets on questScene nodes now generates INT and RET socket pairs from scene interruption scenario names and preserves existing Prefetch sockets by @misterchedda
+[*] [i]Fixed[/i]: UseWorkspot nodes now generate function appropriate sockets in questphase and scene graphs by @misterchedda
+[*] [i]Fixed[/i]: Add actor button in scene editor will now recalculate all instances of the player's scnActorId and scnPerformerId automatically by @misterchedda
+[*] [i]Fixed[/i]: Arrange Items preserves node placement within comment boxes, and nested comments can be selected correctly by @misterchedda
+[*] [i]Fixed[/i]: Scene section durations are no longer adjusted automatically when selecting sections or moving timeline events, and can now be changed explicitly using the timeline marker or Extend to event end action by @misterchedda
+[*] [i]Fixed[/i]: Fixed an exception when trying to display a root entity preview with dynamic substitution. by @manavortex
+[*] [i]Fixed[/i]: Improved long-session quest and scene graph performance by cleaning up graph resources when they are no longer in use by @misterchedda
+[*] [i]Fixed[/i]: Fixed incorrect handling of visibility tag by generated ArchiveXL items. by @manavortex
+[*] [i]Fixed[/i]: Fixed an issue where mousewheel scrolling would not work with the cursor inside the pinned projects area. Now you can see more pinned projects and scroll all projects independently of the rest of the welcome screen. by @gistya
+[*] [i]Fixed[/i]: Fixed an issue where previously open documents would not reopen for projects that use the default layout. by @gistya
+[*] [i]Changed[/i]: Re-named 'add files' to 'generate files' by @manavortex
+[*] [i]Changed[/i]: Removed obsolete checkbox from prop generator by @manavortex
+[*] [i]Changed[/i]: Updated wiki link in prop generator by @manavortex
+[*] [i]Changed[/i]: Improved quest phase graph loading performance by avoiding eager loading of external phase resources by @misterchedda
+[*] [i]Changed[/i]: Improved quest and scene graph document closing performance by @misterchedda
+[*] [i]Changed[/i]: More node graph details for Combat, MovePuppet, VoicesetManager. Output node also correctly shows its type now by @misterchedda
+[*] [i]Changed[/i]: EventManager and InteractiveObjectManager graph nodes now show additional node details by @misterchedda
+[*] [i]Change[/i]: parametersBuffer will no longer be hidden if it's not empty by @manavortex
+[*] [i]Change[/i]: partsMasks will now be hidden if it's empty by @manavortex
 
 [b]Nuget Packages[/b]
 
-[*] [i]Added[/i]: .mesh import can now add bones to meshes correctly by @DoctorPresto
-[*] [i]Fixed[/i]: Archive file path being incorrectly read from modlist.txt by @manavortex
-[*] [i]Fixed[/i]: .mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices. Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb. by @DoctorPresto
-[*] [i]Changed[/i]: Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling) by @Ametis81
+[*] [i]Deprecated[/i]: All functionality of ModKit.RED4.RedTypeFactory has been moved to RED4.Types.RedTypeManager. by @notaspirit
+[*] [i]Added[/i]: A templater is now available which fixes insensible default values for some created types,
+ and enables the use of custom templates improving reusability. by @notaspirit

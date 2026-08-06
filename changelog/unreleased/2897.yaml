@@ -1,7 +1,0 @@
-
-changes:
-    - type: "added"
-      packages: ["App"]
-      pr-number: 2897
-      author: "manavortex"
-      description: "added option to expand mesh appearances (ArchiveXL undymanify)"

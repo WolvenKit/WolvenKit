@@ -1,6 +1,0 @@
-changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 3080
-      author: "gistya"
-      description: "Fixed an issue where previously open documents would not reopen for projects that use the default layout."

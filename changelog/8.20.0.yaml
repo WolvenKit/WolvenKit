@@ -1,0 +1,163 @@
+Template changelog entry:
+- type: security | deprecated | removed | added | fixed | changed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 0
+  author: ''
+  description: ''
+changes:
+- type: added
+  packages: [App]
+  pr-number: 2827
+  author: manavortex
+  description: 'Implemented ''flatten mi chain'' feature: pull all properties into
+    the current material, then set baseMaterial to root of chain'
+- type: added
+  packages: [App]
+  pr-number: 2897
+  author: manavortex
+  description: added option to expand mesh appearances (ArchiveXL undymanify)
+- type: added
+  packages: [App, Nuget Packages]
+  pr-number: 2979
+  author: notaspirit
+  description: "A templater is now available which fixes insensible default values\
+    \ for some created types,\n and enables the use of custom templates improving\
+    \ reusability."
+- type: deprecated
+  packages: [Nuget Packages]
+  pr-number: 2984
+  author: notaspirit
+  description: All functionality of ModKit.RED4.RedTypeFactory has been moved to RED4.Types.RedTypeManager.
+- type: changed
+  packages: [App]
+  pr-number: 2985
+  author: manavortex
+  description: Re-named 'add files' to 'generate files'
+- type: changed
+  packages: [App]
+  pr-number: 2986
+  author: manavortex
+  description: Removed obsolete checkbox from prop generator
+- type: changed
+  packages: [App]
+  pr-number: 2986
+  author: manavortex
+  description: Updated wiki link in prop generator
+- type: added
+  packages: [App]
+  pr-number: 2997
+  author: misterchedda
+  description: Added comment boxes to quest and scene editors
+- type: fixed
+  packages: [App]
+  pr-number: 3001
+  author: misterchedda
+  description: Populate className and fileEntryIndex automatically from journal's
+    realPath dropdown
+- type: changed
+  packages: [App]
+  pr-number: 3002
+  author: misterchedda
+  description: Improved quest phase graph loading performance by avoiding eager loading
+    of external phase resources
+- type: changed
+  packages: [App]
+  pr-number: 3002
+  author: misterchedda
+  description: Improved quest and scene graph document closing performance
+- type: change
+  packages: [App]
+  pr-number: 3003
+  author: manavortex
+  description: parametersBuffer will no longer be hidden if it's not empty
+- type: change
+  packages: [App]
+  pr-number: 3003
+  author: manavortex
+  description: partsMasks will now be hidden if it's empty
+- type: fixed
+  packages: [App]
+  pr-number: 3004
+  author: misterchedda
+  description: Recalculating sockets on questScene nodes now generates INT and RET
+    socket pairs from scene interruption scenario names and preserves existing Prefetch
+    sockets
+- type: fixed
+  packages: [App]
+  pr-number: 3005
+  author: misterchedda
+  description: UseWorkspot nodes now generate function appropriate sockets in questphase
+    and scene graphs
+- type: fixed
+  packages: [App]
+  pr-number: 3008
+  author: misterchedda
+  description: Add actor button in scene editor will now recalculate all instances
+    of the player's scnActorId and scnPerformerId automatically
+- type: changed
+  packages: [App]
+  pr-number: 3009
+  author: misterchedda
+  description: More node graph details for Combat, MovePuppet, VoicesetManager. Output
+    node also correctly shows its type now
+- type: fixed
+  packages: [App]
+  pr-number: 3010
+  author: misterchedda
+  description: Arrange Items preserves node placement within comment boxes, and nested
+    comments can be selected correctly
+- type: fixed
+  packages: [App]
+  pr-number: 3011
+  author: misterchedda
+  description: Scene section durations are no longer adjusted automatically when selecting
+    sections or moving timeline events, and can now be changed explicitly using the
+    timeline marker or Extend to event end action
+- type: added
+  packages: [App]
+  pr-number: 3016
+  author: misterchedda
+  description: Quest and scene graphs now use a searchable action palette for graph
+    actions, categorized node creation, and template selection
+- type: changed
+  packages: [App]
+  pr-number: 3016
+  author: misterchedda
+  description: EventManager and InteractiveObjectManager graph nodes now show additional
+    node details
+- type: fixed
+  packages: [App]
+  pr-number: 3019
+  author: manavortex
+  description: Fixed an exception when trying to display a root entity preview with
+    dynamic substitution.
+- type: fixed
+  packages: [App]
+  pr-number: 3037
+  author: misterchedda
+  description: Improved long-session quest and scene graph performance by cleaning
+    up graph resources when they are no longer in use
+- type: added
+  packages: [App]
+  pr-number: 3038
+  author: notaspirit
+  description: Mesh preview now includes a disclaimer about the possibility of incorrect
+    materials during preview.
+- type: fixed
+  packages: [App]
+  pr-number: 3047
+  author: manavortex
+  description: Fixed incorrect handling of visibility tag by generated ArchiveXL items.
+- type: fixed
+  packages: [App]
+  pr-number: 3077
+  author: gistya
+  description: Fixed an issue where mousewheel scrolling would not work with the cursor
+    inside the pinned projects area. Now you can see more pinned projects and scroll
+    all projects independently of the rest of the welcome screen.
+- type: fixed
+  packages: [App]
+  pr-number: 3080
+  author: gistya
+  description: Fixed an issue where previously open documents would not reopen for
+    projects that use the default layout.

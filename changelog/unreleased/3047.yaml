@@ -1,6 +1,0 @@
-changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 3047
-      author: "manavortex"
-      description: "Fixed incorrect handling of visibility tag by generated ArchiveXL items."

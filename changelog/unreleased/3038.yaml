@@ -1,6 +1,0 @@
-changes:
-    - type: "added"
-      packages: ["App"]
-      pr-number: 3038
-      author: "notaspirit"
-      description: "Mesh preview now includes a disclaimer about the possibility of incorrect materials during preview."
