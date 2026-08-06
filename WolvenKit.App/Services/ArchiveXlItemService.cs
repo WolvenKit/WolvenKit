@@ -898,24 +898,57 @@ public partial class ArchiveXlItemService
     }
 
     /// <summary>
+    /// Make sure that we have a valid root entity. If one already exists in the project, check
+    /// if we can re-use it (e.g. if the user adds a new item with 'force_Hair', don't re-use one that
+    /// doesn't have it.
+    /// </summary>
+    private CR2WFile? CheckRootEntityPath(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
+    {
+        var rootEntityAbsPath = Path.Combine(activeProject.ModDirectory, clothingItemData.RootEntityPath);
+        if (!File.Exists(rootEntityAbsPath))
+        {
+            if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is not CR2WFile defaultFile)
+            {
+                return null;
+            }
+            ((entEntityTemplate)defaultFile.RootChunk).Appearances.Clear();
+            return defaultFile;
+        }
+
+        // file already exists
+        if (_cr2WTools.ReadCr2W(rootEntityAbsPath) is not { RootChunk: entEntityTemplate rootEntity } f)
+        {
+            return null;
+        }
+
+        var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
+        tags.VisualTags ??= new redTagList();
+        var tagsArray = tags.VisualTags.Tags ?? [];
+
+        if (!clothingItemData.TagsForceHair || tagsArray.Contains("force_Hair"))
+        {
+            return f;
+        }
+
+        // We can't use this root entity - update relative path
+        clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_{clothingItemData.ItemName}_root_entity.ent").ToArchiveFilePath();
+
+        if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is not CR2WFile f2)
+        {
+            return null;
+        }
+        ((entEntityTemplate)f2.RootChunk).Appearances.Clear();
+        return f2;
+    }
+
+    /// <summary>
     /// Creates root entity from base game file and adjusts path and tags
     /// </summary>
     private void AddRootEntity(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
     {
+        var cr2W =  CheckRootEntityPath(clothingItemData, activeProject);
         var rootEntityAbsPath = Path.Combine(activeProject.ModDirectory, clothingItemData.RootEntityPath);
-
-        CR2WFile? cr2W = null;
-
-        if (File.Exists(rootEntityAbsPath) && _cr2WTools.ReadCr2W(rootEntityAbsPath) is CR2WFile f)
-        {
-            cr2W = f;
-        }
-        else if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is
-                 CR2WFile f2)
-        {
-            ((entEntityTemplate)f2.RootChunk).Appearances.Clear();
-            cr2W = f2;
-        }
 
         if (cr2W?.RootChunk is not entEntityTemplate rootEntity)
         {
@@ -957,16 +990,6 @@ public partial class ArchiveXlItemService
         if (!tagsArray.Contains("DynamicAppearance"))
         {
             tagsArray.Add("DynamicAppearance");
-        }
-
-        if (clothingItemData.TagsHideInFpp && !tagsArray.Contains("EmptyAppearance:FPP"))
-        {
-            tagsArray.Add("EmptyAppearance:FPP");
-        }
-
-        if (clothingItemData.TagsForceHair && !tagsArray.Contains("force_Hair"))
-        {
-            tagsArray.Add("force_Hair");
         }
 
         tags.VisualTags.Tags = tagsArray;
@@ -1017,7 +1040,9 @@ public partial class ArchiveXlItemService
 
             CArray<CName> tags = [.. clothingItemData.HidingTags.Select(t => (CName)t.ToString()).ToArray()];
 
-            appAppearance.Name = name;
+            var suffix = clothingItemData.TagsHideInFpp ? "&camera=tpp" : "";
+            appAppearance.Name = $"{name}{suffix}";
+
             appAppearance.PartsValues = new CArray<appearanceAppearancePart>([
                 new appearanceAppearancePart()
                 {
@@ -1031,7 +1056,7 @@ public partial class ArchiveXlItemService
             if (clothingItemData.Toggles.Count > 0 && appAppearance.PartsOverrides.Count == 0)
             {
                 CArray<appearancePartComponentOverrides> componentOverrides = [];
-                foreach (var toggle in clothingItemData.Toggles)
+                foreach (var _ in clothingItemData.Toggles)
                 {
                     componentOverrides.Add(new appearancePartComponentOverrides());
                 }
@@ -1042,6 +1067,7 @@ public partial class ArchiveXlItemService
             }
             appAppearance.VisualTags = new redTagList() { Tags = tags };
 
+            // Appearance already exists and we're just recreating it
             if (isAdding)
             {
                 app.Appearances.Add(appHandle);
