@@ -811,16 +811,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             catch (Exception ex)
             {
-                try
-                {
-                    _loggerService.Error(
-                        $"File type could not be determined for a Tweak with name: {PropertyType.Name}. Exception: {ex.Message}.");
-                }
-                catch (Exception ex2)
-                {
-                    _loggerService.Error(
-                        $"File type could not be determined for a Tweak whose name could not be determined. Exceptions: {Environment.NewLine}1. {ex.Message}{Environment.NewLine}2, {ex2.Message}.");
-                }
+                _loggerService.Error(
+                    $"Redtype could not be determined for {Name} with C# type: {PropertyType.Name}. Exception: {ex.Message}.");
 
                 return PropertyType.Name;
             }
