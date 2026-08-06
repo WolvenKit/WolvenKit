@@ -1,37 +1,3 @@
 [b]8.20.0 — 2026-08-06[/b]
 
-[b]App[/b]
-
-[*] [i]Added[/i]: Implemented 'flatten mi chain' feature: pull all properties into the current material, then set baseMaterial to root of chain by @manavortex
-[*] [i]Added[/i]: added option to expand mesh appearances (ArchiveXL undymanify) by @manavortex
-[*] [i]Added[/i]: A templater is now available which fixes insensible default values for some created types,
- and enables the use of custom templates improving reusability. by @notaspirit
-[*] [i]Added[/i]: Added comment boxes to quest and scene editors by @misterchedda
-[*] [i]Added[/i]: Quest and scene graphs now use a searchable action palette for graph actions, categorized node creation, and template selection by @misterchedda
-[*] [i]Added[/i]: Mesh preview now includes a disclaimer about the possibility of incorrect materials during preview. by @notaspirit
-[*] [i]Fixed[/i]: Populate className and fileEntryIndex automatically from journal's realPath dropdown by @misterchedda
-[*] [i]Fixed[/i]: Recalculating sockets on questScene nodes now generates INT and RET socket pairs from scene interruption scenario names and preserves existing Prefetch sockets by @misterchedda
-[*] [i]Fixed[/i]: UseWorkspot nodes now generate function appropriate sockets in questphase and scene graphs by @misterchedda
-[*] [i]Fixed[/i]: Add actor button in scene editor will now recalculate all instances of the player's scnActorId and scnPerformerId automatically by @misterchedda
-[*] [i]Fixed[/i]: Arrange Items preserves node placement within comment boxes, and nested comments can be selected correctly by @misterchedda
-[*] [i]Fixed[/i]: Scene section durations are no longer adjusted automatically when selecting sections or moving timeline events, and can now be changed explicitly using the timeline marker or Extend to event end action by @misterchedda
-[*] [i]Fixed[/i]: Fixed an exception when trying to display a root entity preview with dynamic substitution. by @manavortex
-[*] [i]Fixed[/i]: Improved long-session quest and scene graph performance by cleaning up graph resources when they are no longer in use by @misterchedda
-[*] [i]Fixed[/i]: Fixed incorrect handling of visibility tag by generated ArchiveXL items. by @manavortex
-[*] [i]Fixed[/i]: Fixed an issue where mousewheel scrolling would not work with the cursor inside the pinned projects area. Now you can see more pinned projects and scroll all projects independently of the rest of the welcome screen. by @gistya
-[*] [i]Fixed[/i]: Fixed an issue where previously open documents would not reopen for projects that use the default layout. by @gistya
-[*] [i]Changed[/i]: Re-named 'add files' to 'generate files' by @manavortex
-[*] [i]Changed[/i]: Removed obsolete checkbox from prop generator by @manavortex
-[*] [i]Changed[/i]: Updated wiki link in prop generator by @manavortex
-[*] [i]Changed[/i]: Improved quest phase graph loading performance by avoiding eager loading of external phase resources by @misterchedda
-[*] [i]Changed[/i]: Improved quest and scene graph document closing performance by @misterchedda
-[*] [i]Changed[/i]: More node graph details for Combat, MovePuppet, VoicesetManager. Output node also correctly shows its type now by @misterchedda
-[*] [i]Changed[/i]: EventManager and InteractiveObjectManager graph nodes now show additional node details by @misterchedda
-[*] [i]Change[/i]: parametersBuffer will no longer be hidden if it's not empty by @manavortex
-[*] [i]Change[/i]: partsMasks will now be hidden if it's empty by @manavortex
-
-[b]Nuget Packages[/b]
-
-[*] [i]Deprecated[/i]: All functionality of ModKit.RED4.RedTypeFactory has been moved to RED4.Types.RedTypeManager. by @notaspirit
-[*] [i]Added[/i]: A templater is now available which fixes insensible default values for some created types,
- and enables the use of custom templates improving reusability. by @notaspirit
+The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/8.20.0]GitHub releases page[/url]

@@ -2,10 +2,10 @@
 
 **App**
 
+* *Added*: A templater is now available which fixes insensible default values for some created types,
+  and enables the use of user defined templates improving reusability. Documentation can be found [here](https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/template-system) by @notaspirit
 * *Added*: Implemented 'flatten mi chain' feature: pull all properties into the current material, then set baseMaterial to root of chain by @manavortex
 * *Added*: added option to expand mesh appearances (ArchiveXL undymanify) by @manavortex
-* *Added*: A templater is now available which fixes insensible default values for some created types,
- and enables the use of custom templates improving reusability. by @notaspirit
 * *Added*: Added comment boxes to quest and scene editors by @misterchedda
 * *Added*: Quest and scene graphs now use a searchable action palette for graph actions, categorized node creation, and template selection by @misterchedda
 * *Added*: Mesh preview now includes a disclaimer about the possibility of incorrect materials during preview. by @notaspirit
@@ -27,11 +27,11 @@
 * *Changed*: Improved quest and scene graph document closing performance by @misterchedda
 * *Changed*: More node graph details for Combat, MovePuppet, VoicesetManager. Output node also correctly shows its type now by @misterchedda
 * *Changed*: EventManager and InteractiveObjectManager graph nodes now show additional node details by @misterchedda
-* *Change*: parametersBuffer will no longer be hidden if it's not empty by @manavortex
-* *Change*: partsMasks will now be hidden if it's empty by @manavortex
+* *Changed*: parametersBuffer will no longer be hidden if it's not empty by @manavortex
+* *Changed*: partsMasks will now be hidden if it's empty by @manavortex
 
 **Nuget Packages**
 
 * *Deprecated*: All functionality of ModKit.RED4.RedTypeFactory has been moved to RED4.Types.RedTypeManager. by @notaspirit
 * *Added*: A templater is now available which fixes insensible default values for some created types,
- and enables the use of custom templates improving reusability. by @notaspirit
+  and enables the use of user defined templates improving reusability. Documentation can be found [here](https://wolvenkit.github.io/WolvenKit/code-documentation/Subprojects/WolvenKit.Common/RedTypeTemplateService.html) by @notaspirit
