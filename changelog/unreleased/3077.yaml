@@ -1,6 +1,0 @@
-changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 3077
-      author: "gistya"
-      description: "Fixed an issue where mousewheel scrolling would not work with the cursor inside the pinned projects area. Now you can see more pinned projects and scroll all projects independently of the rest of the welcome screen."

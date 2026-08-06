@@ -1,6 +1,0 @@
-changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 3037
-      author: "misterchedda"
-      description: "Improved long-session quest and scene graph performance by cleaning up graph resources when they are no longer in use"
