@@ -152,4 +152,14 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
         CreateSocket("Default INT", Enums.questSocketType.Output);
         CreateSocket("Default RET", Enums.questSocketType.Output);
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _graph?.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
 }

@@ -63,8 +63,7 @@ namespace WolvenKit.Views.Documents
         private IDocumentViewModel? _lastActiveDocument;
         private bool _disposed = false;
         private IDocumentViewModel? _currentDocument; // Track current document for disposal detection
-
-        private ILoggerService _loggerService = Locator.Current.GetService<ILoggerService>()!;
+        private RedGraph? _subscribedGraph;
 
         // Node selection persistence across document switches
         private static readonly Dictionary<string, (uint nodeId, int graphLevel)> s_documentNodeSelections = new();
@@ -74,8 +73,27 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
 
+            QuestPhaseGraphEditor.SourceChanged += OnEditorSourceChanged;
+
             // Add keyboard shortcut for subgraph navigation (Tab key)
             KeyDown += OnKeyDown;
+        }
+
+        private void OnEditorSourceChanged(object? sender, RedGraph? graph)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (graph is null)
+            {
+                UnsubscribeFromGraph();
+                return;
+            }
+
+            SubscribeToGraph(graph);
+            UpdateConnectionPathTypes(graph);
         }
 
         /// <summary>
@@ -211,6 +229,9 @@ namespace WolvenKit.Views.Documents
                     viewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
                 }
 
+                UnsubscribeFromGraph();
+
+                QuestPhaseGraphEditor.SourceChanged -= OnEditorSourceChanged;
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
 
@@ -261,13 +282,9 @@ namespace WolvenKit.Views.Documents
             // Monitor document closing by watching DockedViews collection
             MonitorDocumentClosing();
 
-            viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-            viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 SetupConnectionTemplate();
-                UpdateConnectionPathTypes(viewModel.MainGraph);
                 BuildBreadcrumb(); // Initialize breadcrumb navigation
 
                 // Add a small delay to ensure smooth loading experience
@@ -276,6 +293,39 @@ namespace WolvenKit.Views.Documents
                     viewModel.SetGraphLoaded();
                 }), DispatcherPriority.Background);
             }), DispatcherPriority.Loaded);
+        }
+
+        private void SubscribeToGraph(RedGraph graph)
+        {
+            if (ReferenceEquals(_subscribedGraph, graph))
+            {
+                return;
+            }
+
+            UnsubscribeFromGraph();
+            _subscribedGraph = graph;
+            graph.Connections.CollectionChanged += OnGraphCollectionChanged;
+            graph.Nodes.CollectionChanged += OnGraphCollectionChanged;
+        }
+
+        private void UnsubscribeFromGraph()
+        {
+            if (_subscribedGraph == null)
+            {
+                return;
+            }
+
+            _subscribedGraph.Connections.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph.Nodes.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph = null;
+        }
+
+        private void OnGraphCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_subscribedGraph != null)
+            {
+                UpdateConnectionPathTypes(_subscribedGraph);
+            }
         }
 
 
@@ -1166,7 +1216,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                OpenNewNodeDialog(currentGraph);
+                QuestPhaseGraphEditor?.OpenActionPaletteAtViewportCenter();
                 e.Handled = true;
             }
 
@@ -1219,73 +1269,6 @@ namespace WolvenKit.Views.Documents
                     e.Handled = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Open the new node type selector dialog
-        /// </summary>
-        private async void OpenNewNodeDialog(RedGraph? graph)
-        {
-            if (graph?.GraphType != RedGraphType.Quest)
-            {
-                return;
-            }
-
-            try
-            {
-                if (Locator.Current.GetService<AppViewModel>() is not { } appViewModel)
-                {
-                    return;
-                }
-
-                // Get quest node types
-                var questNodeTypes = graph.GetQuestNodeTypes();
-
-                var questTypes = questNodeTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Quest", x))
-                    .OrderBy(x => x.Name)
-                    .ToList();
-
-                // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, _loggerService, questTypes)
-                {
-                    DialogHandler = model =>
-                    {
-                        appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
-                        {
-                            return;
-                        }
-
-                        // Create new node at current viewport center
-                        var viewportCenter = GetViewportCenter();
-                        graph.CreateQuestNode(selectedType, viewportCenter, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
-                    }
-                });
-            }
-            catch (Exception)
-            {
-                // Silently handle any dialog creation errors
-            }
-        }
-
-        /// <summary>
-        /// Get the center point of the current viewport for placing new nodes
-        /// </summary>
-        private System.Windows.Point GetViewportCenter()
-        {
-            if (QuestPhaseGraphEditor?.Editor == null)
-            {
-                return new System.Windows.Point(0, 0);
-            }
-
-            var viewport = QuestPhaseGraphEditor.Editor.ViewportLocation;
-            var size = QuestPhaseGraphEditor.Editor.ViewportSize;
-
-            return new System.Windows.Point(
-                viewport.X + size.Width / 2,
-                viewport.Y + size.Height / 2
-            );
         }
 
         /// <summary>

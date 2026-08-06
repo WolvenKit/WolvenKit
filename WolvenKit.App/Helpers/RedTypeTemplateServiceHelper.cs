@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -15,6 +16,7 @@ namespace WolvenKit.App.Helpers;
 public static class RedTypeTemplateServiceHelper
 {
     private static readonly HttpClient s_httpClient = new();
+    private static readonly SemaphoreSlim s_updateLock = new(1, 1);
 
     /// <summary>
     /// This is a helper method to correctly handle the Raw option when using RedTypeTemplateSelectionOption
@@ -41,6 +43,19 @@ public static class RedTypeTemplateServiceHelper
     /// <remarks>Does not trigger the template service to load them from disk</remarks>
     public static async Task<bool> UpdateSystemTemplatesFromRemote(ILoggerService? loggerService = null)
     {
+        await s_updateLock.WaitAsync();
+        try
+        {
+            return await UpdateSystemTemplatesFromRemoteInternal(loggerService);
+        }
+        finally
+        {
+            s_updateLock.Release();
+        }
+    }
+
+    private static async Task<bool> UpdateSystemTemplatesFromRemoteInternal(ILoggerService? loggerService)
+    {
         // check remote version (no github API call)
         var hashUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/templatehash.txt";
         var response = await s_httpClient.GetAsync(new Uri(hashUrl));
@@ -57,8 +72,9 @@ public static class RedTypeTemplateServiceHelper
         }
 
         var localHash = "";
-        var templatesDir = new DirectoryInfo(Path.Combine("Resources", "Templates"));
-        FileInfo hashPath = new(Path.Combine("Resources", "templatehash.txt"));
+        var resourcesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+        var templatesDir = new DirectoryInfo(Path.Combine(resourcesDir, "Templates"));
+        FileInfo hashPath = new(Path.Combine(resourcesDir, "templatehash.txt"));
         if (hashPath.Exists)
         {
             localHash = await File.ReadAllTextAsync(hashPath.FullName);

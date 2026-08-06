@@ -22,6 +22,7 @@ public partial class TimelineService : ObservableObject, IDisposable
         Tracks = new ObservableCollection<TimelineTrack>();
         NodeSelectionService.Instance.PropertyChanged += OnNodeSelectionChanged;
         NodePropertyUpdateService.NodePropertyUpdated += OnNodePropertyUpdated;
+        UpdateSelectedNode(NodeSelectionService.Instance.SelectedNode);
     }
 
     public ObservableCollection<TimelineTrack> Tracks { get; }
@@ -66,8 +67,11 @@ public partial class TimelineService : ObservableObject, IDisposable
             return;
         }
 
-        var selectedNode = NodeSelectionService.Instance.SelectedNode;
-        
+        UpdateSelectedNode(NodeSelectionService.Instance.SelectedNode);
+    }
+
+    private void UpdateSelectedNode(object? selectedNode)
+    {
         if (selectedNode is scnSectionNodeWrapper sectionWrapper)
         {
             LoadSectionNode(sectionWrapper);

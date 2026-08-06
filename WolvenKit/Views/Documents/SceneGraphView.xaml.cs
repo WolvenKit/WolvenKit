@@ -37,14 +37,13 @@ namespace WolvenKit.Views.Documents
         // Navigation memory: tracks which child was last visited from each node in each direction
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
+        private RedGraph? _subscribedGraph;
 
         // Selection persistence across document switches
         private static readonly Dictionary<string, uint> s_documentNodeSelections = new();
         private static AppViewModel? s_globalAppViewModel;
         private static IDocumentViewModel? s_lastActiveDocument;
         private static bool s_selectionManagerInitialized = false;
-
-        private readonly ILoggerService _loggerService = Locator.Current.GetService<ILoggerService>()!;
 
         private bool _disposed = false;
 
@@ -53,12 +52,18 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             Loaded += OnViewLoaded;
+            Unloaded += OnViewUnloaded;
         }
 
         private void OnViewLoaded(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as SceneGraphViewModel;
             var document = viewModel?.Parent;
+
+            if (viewModel != null)
+            {
+                SubscribeToGraph(viewModel.MainGraph);
+            }
 
             if (document != null)
             {
@@ -69,12 +74,15 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        private void OnViewUnloaded(object sender, RoutedEventArgs e) => UnsubscribeFromGraph();
+
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            UnsubscribeFromGraph();
+
             if (e.NewValue is not SceneGraphViewModel viewModel) return;
 
-            viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
-            viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
+            SubscribeToGraph(viewModel.MainGraph);
 
             // Initialize centralized selection manager
             InitializeGlobalSelectionManager();
@@ -93,6 +101,39 @@ namespace WolvenKit.Views.Documents
                     RestoreSelectionIfReady(viewModel.Parent);
                 }), System.Windows.Threading.DispatcherPriority.Background);
             }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private void SubscribeToGraph(RedGraph graph)
+        {
+            if (ReferenceEquals(_subscribedGraph, graph))
+            {
+                return;
+            }
+
+            UnsubscribeFromGraph();
+            _subscribedGraph = graph;
+            graph.Connections.CollectionChanged += OnGraphCollectionChanged;
+            graph.Nodes.CollectionChanged += OnGraphCollectionChanged;
+        }
+
+        private void UnsubscribeFromGraph()
+        {
+            if (_subscribedGraph == null)
+            {
+                return;
+            }
+
+            _subscribedGraph.Connections.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph.Nodes.CollectionChanged -= OnGraphCollectionChanged;
+            _subscribedGraph = null;
+        }
+
+        private void OnGraphCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_subscribedGraph != null)
+            {
+                UpdateConnectionPathTypes(_subscribedGraph);
+            }
         }
 
         private void SetupConnectionTemplate()
@@ -645,7 +686,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                OpenNewNodeDialog(viewModel.MainGraph);
+                SceneGraphEditor?.OpenActionPaletteAtViewportCenter();
                 e.Handled = true;
             }
 
@@ -699,89 +740,6 @@ namespace WolvenKit.Views.Documents
                     e.Handled = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Open the new node type selector dialog
-        /// </summary>
-        private async void OpenNewNodeDialog(RedGraph graph)
-        {
-            if (graph?.GraphType != RedGraphType.Scene) return;
-
-            try
-            {
-                var appViewModel = Locator.Current.GetService<AppViewModel>();
-                if (appViewModel == null) return;
-
-                // Get scene node types
-                var sceneNodeTypes = graph.GetSceneNodeTypes();
-
-                // Separate DynamicSceneGraph from regular scene types (move to end)
-                var regularSceneTypes = sceneNodeTypes.Where(x => x.Name != "DynamicSceneGraphNode").ToList();
-                var dynamicSceneTypes = sceneNodeTypes.Where(x => x.Name == "DynamicSceneGraphNode").ToList();
-
-                var sceneTypes = regularSceneTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x))
-                    .OrderBy(x => x.Name)
-                    .ToList();
-
-                // Get quest node types that can be embedded in scene graphs
-                var questNodeTypes = graph.GetQuestNodeTypesForScene();
-                var questTypes = questNodeTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Quest", x))
-                    .OrderBy(x => x.Name)
-                    .ToList();
-
-                // Combine both types
-                var allTypes = new List<TypeEntry>();
-                allTypes.AddRange(sceneTypes);
-                allTypes.AddRange(questTypes);
-
-                // Add DynamicSceneGraph at the end
-                allTypes.AddRange(dynamicSceneTypes
-                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x)));
-
-                // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(((SceneGraphViewModel)DataContext).RedTypeTemplateService, _loggerService, allTypes)
-                {
-                    DialogHandler = model =>
-                    {
-                        appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
-                        {
-                            return;
-                        }
-
-                        // Create new node at current viewport center
-                        var viewportCenter = GetViewportCenter();
-                        var nodeId = graph.CreateSceneNode(selectedType, viewportCenter, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
-                        SelectNodeById(nodeId);
-                    }
-                });
-            }
-            catch (Exception)
-            {
-                // Silently handle any dialog creation errors
-            }
-        }
-
-
-
-        /// <summary>
-        /// Get the center point of the current viewport for placing new nodes
-        /// </summary>
-        private Point GetViewportCenter()
-        {
-            if (SceneGraphEditor?.Editor == null)
-                return new Point(0, 0);
-
-            var viewport = SceneGraphEditor.Editor.ViewportLocation;
-            var size = SceneGraphEditor.Editor.ViewportSize;
-
-            return new Point(
-                viewport.X + size.Width / 2,
-                viewport.Y + size.Height / 2
-            );
         }
 
         /// <summary>
@@ -1042,6 +1000,10 @@ namespace WolvenKit.Views.Documents
             }
 
             _disposed = true;
+            UnsubscribeFromGraph();
+            DataContextChanged -= OnDataContextChanged;
+            Loaded -= OnViewLoaded;
+            Unloaded -= OnViewUnloaded;
         }
 
         #endregion

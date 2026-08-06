@@ -51,11 +51,8 @@ public partial class SectionTimelineView : UserControl
     {
         InitializeComponent();
         
-        _viewModel = new SectionTimelineViewModel();
-        DataContext = _viewModel;
-        _viewModel.PropertyChanged += ViewModel_PropertyChanged;
-        
         Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
         SizeChanged += OnSizeChanged;
         
         PreviewKeyDown += OnPreviewKeyDown;
@@ -99,8 +96,34 @@ public partial class SectionTimelineView : UserControl
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        CreateViewModel();
         UpdateViewportWidth();
         QueueRenderTimeline();
+    }
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        if (_viewModel == null)
+        {
+            return;
+        }
+
+        _viewModel.PropertyChanged -= ViewModel_PropertyChanged;
+        _viewModel.Dispose();
+        _viewModel = null;
+        DataContext = null;
+    }
+
+    private void CreateViewModel()
+    {
+        if (_viewModel != null)
+        {
+            return;
+        }
+
+        _viewModel = new SectionTimelineViewModel();
+        _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        DataContext = _viewModel;
     }
 
     private void OnSizeChanged(object sender, SizeChangedEventArgs e)

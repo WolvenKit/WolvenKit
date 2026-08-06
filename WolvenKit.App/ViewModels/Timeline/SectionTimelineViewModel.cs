@@ -120,5 +120,9 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private void ExtendSectionDurationToEvents() => _service.ExtendSectionDurationToEvents();
 
-    public void Dispose() => _service.Dispose();
+    public void Dispose()
+    {
+        _service.PropertyChanged -= OnServicePropertyChanged;
+        _service.Dispose();
+    }
 }

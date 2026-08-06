@@ -804,8 +804,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var redName = GetRedTypeFromCSType(PropertyType, Flags);
-            return redName != "" ? redName : PropertyType.Name;
+            try
+            {
+                var redName = GetRedTypeFromCSType(PropertyType, Flags);
+                return redName != "" ? redName : PropertyType.Name;
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error(
+                    $"Redtype could not be determined for {Name} with C# type: {PropertyType.Name}. Exception: {ex.Message}.");
+
+                return PropertyType.Name;
+            }
         }
     }
 
