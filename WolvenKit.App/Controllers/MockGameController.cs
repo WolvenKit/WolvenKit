@@ -22,7 +22,7 @@ public class MockGameController : IGameController
 
     public bool AddToMod(ulong hash, ArchiveManagerScope searchScope) => throw new NotImplementedException();
 
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope) => throw new NotImplementedException();
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, bool publish = true) => throw new NotImplementedException();
     public Task AddToModAsync(IList<IGameFile> files) => throw new NotImplementedException();
 
     public bool AddToMod(ulong hash) => throw new NotImplementedException();
