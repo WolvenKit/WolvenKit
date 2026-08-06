@@ -901,45 +901,55 @@ public partial class ArchiveXlItemService
     /// Make sure that we have a valid root entity. If one already exists in the project, check
     /// if we can re-use it (e.g. if the user adds a new item with 'force_Hair', don't re-use one that
     /// doesn't have it.
+    ///
+    /// Calling this may change `ArchiveXlClothingItem.RootEntityPath`...
+    /// so call this first, then set the path.
     /// </summary>
     private CR2WFile? CheckRootEntityPath(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
     {
-        var rootEntityAbsPath = Path.Combine(activeProject.ModDirectory, clothingItemData.RootEntityPath);
-        if (!File.Exists(rootEntityAbsPath))
+        if (ReadRootEntityIfCompatible(clothingItemData, activeProject) is CR2WFile existing)
         {
-            if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is not CR2WFile defaultFile)
-            {
-                return null;
-            }
-            ((entEntityTemplate)defaultFile.RootChunk).Appearances.Clear();
-            return defaultFile;
+            return existing;
         }
 
-        // file already exists
-        if (_cr2WTools.ReadCr2W(rootEntityAbsPath) is not { RootChunk: entEntityTemplate rootEntity } f)
-        {
-            return null;
-        }
-
-        var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
-        tags.VisualTags ??= new redTagList();
-        var tagsArray = tags.VisualTags.Tags ?? [];
-
-        if (!clothingItemData.TagsForceHair || tagsArray.Contains("force_Hair"))
-        {
-            return f;
-        }
-
-        // We can't use this root entity - update relative path
+        // Tags don't match - this item needs a root entity of its own
         clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_{clothingItemData.ItemName}_root_entity.ent").ToArchiveFilePath();
+            $"_{clothingItemData.ItemFileName}_root_entity.ent").ToArchiveFilePath();
 
-        if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is not CR2WFile f2)
+        // ...which may already exist from an earlier run. Re-use it instead of blanking it.
+        if (ReadRootEntityIfCompatible(clothingItemData, activeProject) is CR2WFile perItem)
+        {
+            return perItem;
+        }
+
+        if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is not CR2WFile defaultFile)
         {
             return null;
         }
-        ((entEntityTemplate)f2.RootChunk).Appearances.Clear();
-        return f2;
+
+        ((entEntityTemplate)defaultFile.RootChunk).Appearances.Clear();
+        return defaultFile;
+    }
+
+    /// <summary>
+    /// Reads the root entity at `ArchiveXlClothingItem.RootEntityPath`, or returns null if
+    /// it doesn't exist (or its visual tags don't match what the item asks for).
+    /// </summary>
+    private CR2WFile? ReadRootEntityIfCompatible(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
+    {
+        var rootEntityAbsPath = Path.Combine(activeProject.ModDirectory, clothingItemData.RootEntityPath);
+
+        if (!File.Exists(rootEntityAbsPath) ||
+            _cr2WTools.ReadCr2W(rootEntityAbsPath) is not { RootChunk: entEntityTemplate rootEntity } f)
+        {
+            return null;
+        }
+
+        // force_Hair applies to the whole entity, so it has to match in both directions: an item that
+        // wants it can't go into an entity without it, and one that doesn't can't go into one with it.
+        var hasForceHair = rootEntity.VisualTagsSchema?.Chunk?.VisualTags?.Tags?.Contains("force_Hair") == true;
+
+        return hasForceHair == clothingItemData.TagsForceHair ? f : null;
     }
 
     /// <summary>
@@ -947,7 +957,8 @@ public partial class ArchiveXlItemService
     /// </summary>
     private void AddRootEntity(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
     {
-        var cr2W =  CheckRootEntityPath(clothingItemData, activeProject);
+        // Check that the root entity path is correct.
+        var cr2W = CheckRootEntityPath(clothingItemData, activeProject);
         var rootEntityAbsPath = Path.Combine(activeProject.ModDirectory, clothingItemData.RootEntityPath);
 
         if (cr2W?.RootChunk is not entEntityTemplate rootEntity)
@@ -983,13 +994,20 @@ public partial class ArchiveXlItemService
         rootEntity.VisualTagsSchema ??= new CHandle<entVisualTagsSchema>() { Chunk = new entVisualTagsSchema() };
         rootEntity.DefaultAppearance = "default"; // checked with psiberx
 
-        var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
+        // Make sure if the chunk comes back null,
+        // we don't drop any tags.
+        var tags = rootEntity.VisualTagsSchema.Chunk ??= new entVisualTagsSchema();
         tags.VisualTags ??= new redTagList();
         var tagsArray = tags.VisualTags.Tags ?? [];
 
         if (!tagsArray.Contains("DynamicAppearance"))
         {
             tagsArray.Add("DynamicAppearance");
+        }
+
+        if (clothingItemData.TagsForceHair && !tagsArray.Contains("force_Hair"))
+        {
+            tagsArray.Add("force_Hair");
         }
 
         tags.VisualTags.Tags = tagsArray;
@@ -1022,14 +1040,22 @@ public partial class ArchiveXlItemService
 
         var appearanceNames = clothingItemData.GetAppearanceNames();
 
+        // ArchiveXL resolves only looks at the part before '&'..
+        // so match on that and ignore conditional suffixes.
+        // (Otherwise toggling "hide in FPP" can result in
+        // appearances getting double-appended.)
+        var suffix = clothingItemData.TagsHideInFpp ? "&camera=tpp" : "";
+
         foreach (var name in appearanceNames)
         {
             var appAppearance = new appearanceAppearanceDefinition();
             var appHandle = new CHandle<appearanceAppearanceDefinition>(appAppearance);
             var isAdding = true;
 
+            var baseName = name.GetResolvedText();
+
             if (app.Appearances.FirstOrDefault(a =>
-                    a.Chunk?.Name.GetResolvedText() is string s && appearanceNames.Contains(s)) is
+                    a.Chunk?.Name.GetResolvedText()?.Split('&')[0] == baseName) is
                 CHandle<appearanceAppearanceDefinition> existingHandle)
             {
                 existingHandle.Chunk ??= appAppearance;
@@ -1040,7 +1066,6 @@ public partial class ArchiveXlItemService
 
             CArray<CName> tags = [.. clothingItemData.HidingTags.Select(t => (CName)t.ToString()).ToArray()];
 
-            var suffix = clothingItemData.TagsHideInFpp ? "&camera=tpp" : "";
             appAppearance.Name = $"{name}{suffix}";
 
             appAppearance.PartsValues = new CArray<appearanceAppearancePart>([
