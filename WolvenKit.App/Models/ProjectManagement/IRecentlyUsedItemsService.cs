@@ -14,4 +14,7 @@ public interface IRecentlyUsedItemsService
     void PinItem(string key);
     void UnpinItem(string key);
     void Save();
+
+    /// <summary>Existing group names (trimmed, distinct, case-insensitive, sorted).</summary>
+    IReadOnlyList<string> GetGroups();
 }

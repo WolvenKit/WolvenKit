@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
@@ -23,6 +24,9 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     private readonly ISettingsManager _settingsManager;
 
+    // Recent-projects service (used to list the existing groups).
+    private readonly IRecentlyUsedItemsService? _recentlyUsedItemsService;
+
     public delegate Task ReturnHandler(ProjectWizardViewModel? project);
     public ReturnHandler? FileHandler;
 
@@ -33,13 +37,24 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     #region Constructors
 
-    public ProjectWizardViewModel(ISettingsManager settingsManager)
+    public ProjectWizardViewModel(ISettingsManager settingsManager,
+        IRecentlyUsedItemsService? recentlyUsedItemsService = null)
     {
         _settingsManager = settingsManager;
+        _recentlyUsedItemsService = recentlyUsedItemsService;
 
         Title = "Project Wizard";
 
         _projectType = ["Cyberpunk 2077"];
+
+        // Load the existing groups (single source of truth) so they can be offered in the dropdown.
+        if (_recentlyUsedItemsService is not null)
+        {
+            foreach (var g in _recentlyUsedItemsService.GetGroups())
+            {
+                _availableGroups.Add(g);
+            }
+        }
 
         string? lastProjectPath;
         if (_settingsManager.LastUsedProjectPath is not null &&
@@ -86,6 +101,12 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     [ObservableProperty] private ObservableCollection<string> _projectType;
 
     [ObservableProperty] private string? _whyNotCreate;
+
+    // Group chosen at creation time (null/empty = "Ungrouped").
+    [ObservableProperty] private string? _selectedGroup;
+
+    // Existing groups offered in the dropdown.
+    [ObservableProperty] private ObservableCollection<string> _availableGroups = new();
 
     #endregion Properties
 

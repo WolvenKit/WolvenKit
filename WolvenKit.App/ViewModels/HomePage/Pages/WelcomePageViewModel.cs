@@ -31,6 +31,12 @@ public partial class WelcomePageViewModel : PageViewModel
 
     private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
+    // Default group name for projects that have no group.
+    public const string UngroupedName = "Ungrouped";
+
+    // Names of collapsed groups (kept in memory for the current session).
+    private readonly HashSet<string> _collapsedGroups = new();
+
     private Dictionary<string, int> _sortMode = new()
     {
         {"Last opened", 0},
@@ -88,6 +94,14 @@ public partial class WelcomePageViewModel : PageViewModel
 
     [ObservableProperty]
     private ObservableCollection<FancyProjectObject> _fancyProjects = new();
+
+    // Recent projects grouped by "Group", for display as sections.
+    [ObservableProperty]
+    private ObservableCollection<ProjectGroup> _groupedProjects = new();
+
+    // Names of existing groups (for the "Move to existing group" submenu).
+    [ObservableProperty]
+    private ObservableCollection<string> _availableGroups = new();
 
     [ObservableProperty]
     private List<RecentlyUsedItemModel> _pinnedItems = new();
@@ -173,6 +187,78 @@ public partial class WelcomePageViewModel : PageViewModel
     {
         //Argument.IsNotNullOrWhitespace(() => parameter);
         //_recentlyUsedItemsService.UnpinItem(parameter);
+    }
+
+    // Assign (or change) a project's group via an input box.
+    [RelayCommand]
+    private async Task SetProjectGroup(FancyProjectObject? project)
+    {
+        if (project is null)
+        {
+            return;
+        }
+
+        var name = await Interactions.ShowInputBoxAsync("Move project to group", project.Group);
+
+        // The user typed a name -> assign it. Empty -> remove from the group.
+        // (Note: this API does not clearly distinguish "Cancel" from an emptied field;
+        //  to keep the group on cancel, replace the next line with:
+        //  if (string.IsNullOrWhiteSpace(name)) return;)
+        project.Group = string.IsNullOrWhiteSpace(name) ? "" : name.Trim();
+
+        RefreshRecentProjects();
+    }
+
+    // Remove a project from its group (it goes back under "Ungrouped").
+    [RelayCommand]
+    private void RemoveProjectGroup(FancyProjectObject? project)
+    {
+        if (project is null)
+        {
+            return;
+        }
+
+        project.Group = "";
+        RefreshRecentProjects();
+    }
+
+    // Assign a project to an existing group (called from the code-behind submenu).
+    public void MoveProjectToGroup(FancyProjectObject? project, string group)
+    {
+        if (project is null)
+        {
+            return;
+        }
+
+        project.Group = string.IsNullOrWhiteSpace(group) ? "" : group.Trim();
+        RefreshRecentProjects();
+    }
+    // Delete a group (after confirmation). Projects are NOT deleted: they simply
+    // go back under "Ungrouped".
+    [RelayCommand]
+    private async Task DeleteGroup(ProjectGroup? group)
+    {
+        if (group is null || group.Name == UngroupedName)
+        {
+            return;
+        }
+
+        var result = await Interactions.ShowMessageBoxAsync(
+            $"Delete the group \"{group.Name}\"? Its {group.Projects.Count} project(s) will move back to \"{UngroupedName}\". No project is deleted from disk.",
+            "Delete group",
+            WMessageBoxButtons.YesNo);
+
+        if (result != WMessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        foreach (var project in group.Projects.ToList())
+        {
+            project.Group = "";
+        }
+
+        RefreshRecentProjects();
     }
 
     #endregion
@@ -269,8 +355,60 @@ public partial class WelcomePageViewModel : PageViewModel
         {
             _settingsManager.RecentOrder = SelectedRecentOrder;
 
+            var items = GetSortedItems(false, SelectedRecentOrder, RecentFilter);
+
             FancyProjects.Clear();
-            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
+            FancyProjects.AddRange(items);
+
+            // Group by "Group". Projects without a group go into "Ungrouped",
+            // placed last; the other groups are sorted by name.
+            var groups = items
+                .GroupBy(p => string.IsNullOrWhiteSpace(p.Group) ? UngroupedName : p.Group.Trim(),
+                         StringComparer.InvariantCultureIgnoreCase)
+                .OrderBy(g => g.Key == UngroupedName ? 1 : 0)
+                .ThenBy(g => g.Key, StringComparer.InvariantCultureIgnoreCase)
+                .Select(g =>
+                {
+                    // Restore the collapsed/expanded state remembered for this session.
+                    var group = new ProjectGroup(g.Key, g)
+                    {
+                        IsExpanded = !_collapsedGroups.Contains(g.Key)
+                    };
+
+                    // Remember collapse/expand changes (without persisting to disk).
+                    group.PropertyChanged += (_, e) =>
+                    {
+                        if (e.PropertyName != nameof(ProjectGroup.IsExpanded))
+                        {
+                            return;
+                        }
+
+                        if (group.IsExpanded)
+                        {
+                            _collapsedGroups.Remove(group.Name);
+                        }
+                        else
+                        {
+                            _collapsedGroups.Add(group.Name);
+                        }
+                    };
+
+                    return group;
+                })
+                .ToList();
+
+            GroupedProjects.Clear();
+            foreach (var g in groups)
+            {
+                GroupedProjects.Add(g);
+            }
+
+            // Existing groups for the submenu — single source of truth (RecentlyUsedItemsService).
+            AvailableGroups.Clear();
+            foreach (var n in _recentlyUsedItemsService.GetGroups())
+            {
+                AvailableGroups.Add(n);
+            }
         });
 
     private List<FancyProjectObject> GetSortedItems(bool isPinned, int order, string filter)

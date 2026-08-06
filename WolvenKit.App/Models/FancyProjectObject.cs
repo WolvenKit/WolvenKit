@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement;
@@ -41,8 +41,15 @@ public partial class WelcomePageViewModel
 
         public bool IsPinned
         {
-            get => Item.IsPinned; 
+            get => Item.IsPinned;
             set => Item.IsPinned = value;
+        }
+
+        // Passthrough to the model. Writing here triggers the auto-save + refresh.
+        public string Group
+        {
+            get => Item.Group;
+            set => Item.Group = value;
         }
 
         #endregion Properties

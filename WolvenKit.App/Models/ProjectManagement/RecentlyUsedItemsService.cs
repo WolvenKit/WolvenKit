@@ -16,6 +16,16 @@ public class RecentlyUsedItemsService : IRecentlyUsedItemsService
     public IObservableCache<RecentlyUsedItemModel, string> Items => _recentlyUsedItems;
     public List<RecentlyUsedItemModel> PinnedItems => _recentlyUsedItems.Items.Where(_ => _.IsPinned).ToList();
 
+    // Existing group names (trimmed, distinct, case-insensitive, sorted). Single source of truth.
+    public IReadOnlyList<string> GetGroups() =>
+        _recentlyUsedItems.Items
+            .Select(i => i.Group)
+            .Where(g => !string.IsNullOrWhiteSpace(g))
+            .Select(g => g.Trim())
+            .Distinct(StringComparer.InvariantCultureIgnoreCase)
+            .OrderBy(g => g, StringComparer.InvariantCultureIgnoreCase)
+            .ToList();
+
     public RecentlyUsedItemsService()
     {
         // load on start
