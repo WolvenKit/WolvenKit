@@ -64,6 +64,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private const string s_toolTitle = "Project Explorer";
 
+    public const string LoadProjectPurpose = "ProjectExplorer load project";
+
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
     private readonly IProjectManager _projectManager;
@@ -73,6 +75,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
     private readonly IWatcherService _projectWatcher;
+    private DispatcherHelper.RepeatingActionHandle? _autoSaveCancelToken;
+
+    /// <summary>
+    /// Autosave is per view model, so it gets a purpose unique to this instance. A shared
+    /// purpose would let a second Project Explorer either collide with, or silently inherit,
+    /// the first instance's autosave callback.
+    /// </summary>
+    private readonly string _autoSavePurpose = $"ProjectExplorer autosave {Guid.NewGuid():N}";
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -137,10 +147,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
+        _autoSaveCancelToken = null;
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
 
-        DispatcherHelper.StartRepeatingAction(
-            () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+        DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
+        _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
+            purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
             TimeSpan.FromSeconds(10));
 
         s_instance = this;
