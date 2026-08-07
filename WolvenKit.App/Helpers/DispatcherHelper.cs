@@ -16,21 +16,19 @@ public static class DispatcherHelper
 
     private static readonly object s_repeatingActionsLock = new();
 
-    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
+
+    private static void RunOnUIThread(this DispatcherObject? d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
     {
-        // If in a unit test there is no current application, so use the current dispatcher.
-        if (TestHelper.InActiveTest)
+        // In a unit test / headless context there is no WPF Application and no Dispatcher.
+        // Run the action synchronously so code paths that rely on DispatcherHelper
+        // (DispatchedObservableCollection, etc.) continue to work.
+        if (d == null && Application.Current == null)
         {
-            Task.Run(action);
+            action();
             return;
         }
 
-        Application.Current.RunOnUIThread(action, priority);
-    }
-
-    private static void RunOnUIThread(this DispatcherObject? d, Action action,
-        DispatcherPriority priority = DispatcherPriority.Normal)
-    {
         if (d is not { Dispatcher: { } dispatcher })
         {
             return;
