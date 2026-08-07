@@ -1,0 +1,6 @@
+changes:
+    - type: "improved"
+      packages: ["App"]
+      pr-number: 3091
+      author: "gistya"
+      description: "Improved threadsafety of loading/saving timers and added new internal APIs to support async threadsafety for future improvements to UI responsiveness."
