@@ -125,7 +125,7 @@ public sealed class WolvenKitTestFixture : IDisposable
                 Path.Combine(assemblyDir,
                     "..", "..", "..", "..", "..", "..",    // Tests/WolvenKit.UITests/bin/<config>/net…  →  repo root
                     "WolvenKit", "bin", "x64", config,
-                    "net8.0-windows10.0.17763", "win-x64",
+                    "net10.0-windows10.0.26100.0", "win-x64",
                     "WolvenKit.exe"));
 
             if (File.Exists(candidate))
