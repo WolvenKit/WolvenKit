@@ -74,8 +74,6 @@ public interface IGameController
     /// <returns>bool success</returns>
     Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope);
 
-    public Task HandleStartup();
-
     Task<bool> LaunchProjectAsync(LaunchProfile profile);
     Task<bool> InstallProjectHotAsync();
     bool CleanAll(bool isPostBuild = false);
