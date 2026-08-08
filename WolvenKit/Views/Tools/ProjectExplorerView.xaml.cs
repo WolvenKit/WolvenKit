@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -22,6 +23,7 @@ using Octokit;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Data;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -278,12 +280,12 @@ namespace WolvenKit.Views.Tools
                 ViewModel.OnLiveGridMutationStarting = () =>
                 {
                     // Prevents Null Dereferences in FlatView
-                    TreeGridFlat.View?.Suspend();
+                    TreeGridFlat.View?.BeginInit();
                 };
 
                 ViewModel.OnLiveGridMutationCompleted = () =>
                 {
-                    TreeGridFlat.View?.Resume();
+                    TreeGridFlat.View?.EndInit();
                     RefreshFlatViewIfNeeded(); // no-op while hidden
 
                     if (!_currentFolderQuery.IsNullOrEmpty())
@@ -482,11 +484,6 @@ namespace WolvenKit.Views.Tools
             _rowDragDropController.CancelPendingAutoExpand();
             CompositeDisposable disposables = [];
 
-            if (TreeGridFlat.View is { } flatView)
-            {
-                disposables.Add(flatView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
-            }
-
             if (TreeGrid.View is { } treeView)
             {
                 disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
@@ -519,7 +516,6 @@ namespace WolvenKit.Views.Tools
 
             if (TreeGridFlat.IsVisible)
             {
-                RefreshColumnWidths(TreeGridFlat);
                 TreeGridFlat.UpdateLayout();
             }
 
@@ -869,7 +865,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void TreeGridFlat_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
+        private void TreeGridFlat_ItemsSourceChanged(object sender, GridItemsSourceChangedEventArgs e)
         {
             if (TreeGridFlat?.View is null)
             {
