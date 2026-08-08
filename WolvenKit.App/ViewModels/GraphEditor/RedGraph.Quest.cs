@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Helpers;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
@@ -100,13 +101,7 @@ public partial class RedGraph
 
     public List<Type> GetQuestNodeTypes()
     {
-        if (s_questNodeTypes == null)
-        {
-            s_questNodeTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => typeof(questNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
-                .ToList();
-        }
+        s_questNodeTypes ??= AssemblyTypeIndex.GetConcreteTypesAssignableTo(typeof(questNodeDefinition)).ToList();
 
         return s_questNodeTypes;
     }
