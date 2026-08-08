@@ -30,7 +30,12 @@ public interface ICvmTools
 
     #region CvmDependencyTools
 
-    public void RegenerateVisualControllers(ChunkViewModel? cvm);
+    /// <summary>
+    /// Regenerates the visual controllers for the given ChunkViewModel and its dependencies.
+    /// </summary>
+    /// <param name="cvm">The chunk view model to regenerate for</param>
+    /// <returns>The total number of changes (for success notification)</returns>
+    public int RegenerateVisualControllers(ChunkViewModel? cvm);
 
     #endregion
 }
