@@ -73,19 +73,7 @@ public partial class RedPackageWriter
                 }
                 else
                 {
-                    if (chunkList[i] is entMeshComponent meshComponent)
-                    {
-                        cruids.Add(meshComponent.Id);
-                    }
-                    else if (chunkList[i] is entSkinnedMeshComponent skinnedMeshComponent)
-                    {
-                        cruids.Add(skinnedMeshComponent.Id);
-                    }
-                    else if (chunkList[i] is entExternalComponent externalComponent)
-                    {
-                        cruids.Add(externalComponent.Id);
-                    }
-                    else if (chunkList[i] is entIComponent iComp)
+                    if (chunkList[i] is entIComponent iComp)
                     {
                         // entMeshComponent or entSkinnedMeshComponent or entExternalComponent keeps their value, even if its 0
                         if (iComp is entMeshComponent or entSkinnedMeshComponent or entExternalComponent || iComp.Id != 0)
