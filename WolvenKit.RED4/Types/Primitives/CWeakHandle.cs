@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace WolvenKit.RED4.Types;
 
@@ -31,6 +32,9 @@ public static class CWeakHandle
 [RED("whandle")]
 public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> where T : RedBaseClass
 {
+    [ThreadStatic]
+    private static HashSet<(object, object)>? s_visitedPairs;
+
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
     public T? Chunk { get; set; }
 
@@ -86,12 +90,38 @@ public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> wher
             return true;
         }
 
-        if (!Equals(Chunk, other.Chunk))
+        // Initialize visited set if this is the root call
+        var isRootCall = s_visitedPairs == null;
+        if (isRootCall)
         {
-            return false;
+            s_visitedPairs = [];
         }
 
-        return true;
+        try
+        {
+            // Check if we've already visited this pair
+            var pair = (RuntimeHelpers.GetHashCode(this), RuntimeHelpers.GetHashCode(other));
+            if (!s_visitedPairs!.Add(pair))
+            {
+                // We've seen this pair before - assume equal to break cycle
+                return true;
+            }
+
+            if (!Equals(Chunk, other.Chunk))
+            {
+                return false;
+            }
+
+            return true;
+        }
+        finally
+        {
+            // Clean up if this was the root call
+            if (isRootCall)
+            {
+                s_visitedPairs = null;
+            }
+        }
     }
 
     public override bool Equals(object? obj)
