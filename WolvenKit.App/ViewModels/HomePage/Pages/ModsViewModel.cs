@@ -22,6 +22,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4;
 
 namespace WolvenKit.App.ViewModels.HomePage.Pages;
 

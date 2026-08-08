@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Moq;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 
