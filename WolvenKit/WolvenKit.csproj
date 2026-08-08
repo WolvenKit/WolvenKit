@@ -26,6 +26,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+      <ServerGarbageCollection>true</ServerGarbageCollection>
+      <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <VersionPrefix>8.20.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <InformationalVersion>8.20.1</InformationalVersion>
