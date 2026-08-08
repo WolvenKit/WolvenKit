@@ -134,11 +134,13 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private Guid _loadingCompletion = Guid.NewGuid();
+    private DispatcherHelper.RepeatingActionHandle _loadingCompletion = new DispatcherHelper.RepeatingActionHandle(_purpose);
+    private static string _purpose = "project_loading_red4";
 
     private void EnableLoadingMode()
     {
         _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            purpose: _purpose,
             () =>
             {
                 _progressService.IsIndeterminate = true;
