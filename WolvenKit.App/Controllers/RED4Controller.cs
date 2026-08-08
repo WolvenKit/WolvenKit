@@ -44,8 +44,8 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IAppArchiveManager _archiveManager;
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
-    private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
+    private readonly IProjectEvents _projectEvents;
 
     #endregion
 
@@ -60,7 +60,7 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService)
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -72,144 +72,7 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService = progressService;
         _pluginService = pluginService;
         _modifierService = modifierService;
-        _parserService = parserService;
-    }
-
-    public async Task HandleStartup()
-    {
-        await LoadArchiveManagerAsync();
-    }
-
-    // TODO: Move this somewhere else
-    private void LoadCustomHashes()
-    {
-        ResourcePath physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
-        ResourcePath presetPath = "engine\\physics\\collision_presets.json";
-
-        var physMatLib = _archiveManager.Lookup(physMatLibPath);
-        if (physMatLib.HasValue)
-        {
-            using MemoryStream ms = new();
-            physMatLib.Value.Extract(ms);
-            ms.Position = 0;
-
-            if (_parserService.TryReadRed4File(ms, out var file))
-            {
-                var root = (physicsMaterialLibraryResource)file.RootChunk;
-
-                foreach (var physMat in root.MaterialNames)
-                {
-                    if (!physMat.IsResolvable)
-                    {
-                        continue;
-                    }
-
-                    CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
-                }
-            }
-        }
-
-        var preset = _archiveManager.Lookup(presetPath);
-        if (preset.HasValue)
-        {
-            using MemoryStream ms = new();
-            preset.Value.Extract(ms);
-            ms.Position = 0;
-
-            if (_parserService.TryReadRed4File(ms, out var file))
-            {
-                var root = (JsonResource)file.RootChunk;
-                var res = (physicsCollisionPresetsResource)root.Root.Chunk.NotNull();
-
-                foreach (var presetEntry in res.Presets)
-                {
-                    if (presetEntry is not { Name: { IsResolvable: true } name })
-                    {
-                        continue;
-                    }
-
-                    CNamePool.AddOrGetHash(name.GetResolvedText()!);
-                }
-            }
-        }
-    }
-
-    private Guid _loadingCompletion = Guid.NewGuid();
-
-    private void EnableLoadingMode()
-    {
-        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-            () =>
-            {
-                _progressService.IsIndeterminate = true;
-                _progressService.Status = EStatus.Running;
-            },
-            TimeSpan.FromMilliseconds(100),
-            DisableLoadingMode
-        );
-    }
-
-    private void DisableLoadingMode()
-    {
-        _progressService.IsIndeterminate = false;
-        _progressService.Status = EStatus.Ready;
-        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
-    }
-
-    /// <summary>
-    /// Loads the basegame + EP1 archives on a background thread.
-    /// While loading, a 100ms repeating timer forces the global ProgressService
-    /// into Running/Indeterminate state. This mitigates the problem that there is
-    /// only a single global "Ready/Running" state — other code can (and does)
-    /// call Completed() or set IsIndeterminate=false while this long job is still
-    /// in progress.
-    /// </summary>
-    private async Task LoadArchiveManagerAsync()
-    {
-        // Fast path checks — do NOT start the loading indicator if there's nothing to do.
-        if (_archiveManager.IsManagerLoaded)
-        {
-            return;
-        }
-
-        if (_settingsManager.CP77ExecutablePath is null)
-        {
-            _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");
-            return;
-        }
-
-        EnableLoadingMode();
-
-        try
-        {
-            await Task.Run(() =>
-            {
-                // Keep priority low so the UI stays responsive during the (potentially long)
-                // first-time scan of dozens of large .archive files.
-                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
-                Thread.CurrentThread.IsBackground = true;
-
-                _loggerService.Info("Loading Archive Manager ... ");
-
-                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                // Custom hash population needs the archives to be loaded, so do it here on the same thread.
-                LoadCustomHashes();
-            });
-
-            _loggerService.Success("Finished loading Archive Manager.");
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error(e);
-            throw;
-        }
-        finally
-        {
-            // Always stop the heartbeat timer and release the progress indicator.
-            DisableLoadingMode();
-            LoadCustomHashes();
-        }
+        _projectEvents = projectEvents;
     }
 
     #region Packing
@@ -1062,13 +925,17 @@ public class RED4Controller : ObservableObject, IGameController
             // often saturates the disk and ends up slower + spams the UI thread.
             var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
 
+            var bulkScope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+
             await Parallel.ForEachAsync(
                 files,
                 new ParallelOptions { MaxDegreeOfParallelism = dop },
                 (file, token) =>
                 {
                     token.ThrowIfCancellationRequested();
-                    AddToMod(file);
+                    // publish:false — we emit ONE FilesImported batch after the loop (below) instead
+                    // of thousands of per-file events, which is the whole point of the bulk path.
+                    AddToMod(file, bulkScope, publish: false);
                     var current = Interlocked.Increment(ref progress);
                     var reportInterval = Math.Max(1, total / 50);
 
@@ -1080,17 +947,22 @@ public class RED4Controller : ObservableObject, IGameController
                     return ValueTask.CompletedTask;
                 });
 
-            var report = "";
-
-            foreach (var file in files)
-            {
-                report += $"Added game file to project: {file.Name}\r\n";
-            }
-
-            _loggerService.Info(report);
         }
 
         _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles([.. files]));
+
+        // Ensure projection of the imported files onto FileList/FileTree has completed before
+        // returning to awaiters (e.g. tests asserting counts, or UI code). The publish is observed
+        // via ObserveOn main and the adds are dispatched; Invoke to ContextIdle drains the queue
+        // so callers see the updated collections synchronously.
+        try
+        {
+            System.Windows.Application.Current?.Dispatcher?.Invoke(
+                () => { },
+                System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* test/headless/no dispatcher or cross-thread invoke not available; best effort */ }
     }
 
 
@@ -1116,7 +988,7 @@ public class RED4Controller : ObservableObject, IGameController
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, bool publish = true)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -1160,6 +1032,13 @@ public class RED4Controller : ObservableObject, IGameController
                 _loggerService.Error(ex);
             }
 
+        }
+
+        // Announce the single add to the project explorer (only if the write actually landed). Bulk
+        // callers pass publish:false and emit one FilesImported batch instead — see AddToModAsync.
+        if (publish && File.Exists(diskPathInfo.FullName))
+        {
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
 
         return true;

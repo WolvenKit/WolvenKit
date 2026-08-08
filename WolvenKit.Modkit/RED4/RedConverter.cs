@@ -186,13 +186,10 @@ namespace WolvenKit.Modkit.RED4
                 writer.Close();
             }
 
-            _loggerService.Success($"Imported {fileInfo.Name} to {outPath}");
-
             if (destFileName is not null)
             {
                 File.Move(outPath, Path.Join(outPath, destFileName));
             }
-
 
             return true;
         }

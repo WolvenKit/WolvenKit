@@ -17,6 +17,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.HomePage.Pages;
 
@@ -116,6 +117,7 @@ public partial class WelcomePageViewModel : PageViewModel
     [RelayCommand]
     private void OpenProject(string s)
     {
+        _mainViewModel.GetToolViewModel<ProjectExplorerViewModel>().ProjectWillLoad(s);
         _mainViewModel.OpenProjectCommand.Execute(s);
 
         // clear filters
