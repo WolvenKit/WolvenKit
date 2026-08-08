@@ -1563,6 +1563,9 @@ public partial class RedGraph
             }
         }
 
+        var inputs = graph.Nodes.Sum(n => n.Input.Count);
+        var outputs = graph.Nodes.Sum(n => n.Output.Count);
+        var connectedSockets = graph.Nodes.Sum(n => n.Input.Count(c => c.IsConnected) + n.Output.Count(c => c.IsConnected));
         return graph;
     }
 }

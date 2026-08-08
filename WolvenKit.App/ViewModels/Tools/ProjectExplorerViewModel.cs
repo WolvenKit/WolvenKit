@@ -822,13 +822,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand]
     private async Task OpenFile(FileSystemModel? value)
     {
-        var model = value ?? SelectedItem;
-        if (model is null)
+        if ((value ?? SelectedItem) is not { } model)
         {
             return;
         }
 
-        await _appViewModel.OpenFileAsync(model);
+        try
+        {
+            await _appViewModel.OpenFileAsync(model);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Error opening file: {ex.Message}.");
+        }
+        finally
+        {
+            SaveOpenFilePaths();
+        }
     }
 
     /// <summary>
