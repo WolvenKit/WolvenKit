@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,6 +34,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
@@ -1288,9 +1289,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+        var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(handle.InnerType)
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
         var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
@@ -1360,9 +1359,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = innerType.GetGenericTypeDefinition();
         }
 
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+        var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(innerType)
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
 
@@ -1599,9 +1596,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             //    .DistinctBy(x => x.Name)
             //    .ToList();
 
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+            var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(typeof(inkWidgetReference))
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
 
