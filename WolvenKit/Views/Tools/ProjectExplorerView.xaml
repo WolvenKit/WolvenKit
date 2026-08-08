@@ -1127,6 +1127,7 @@
             FilterLevel="Extended"
             NodeExpanded="TreeGrid_OnNodeExpanded"
             NodeCollapsed="TreeGrid_OnNodeCollapsed"
+            SizeChanged="OnTreeGridSizeChanged"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"

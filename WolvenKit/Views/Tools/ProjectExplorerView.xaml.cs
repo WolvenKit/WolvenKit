@@ -980,6 +980,12 @@ namespace WolvenKit.Views.Tools
             view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
         }
 
+        private void OnTreeGridSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!e.WidthChanged) return;
+            RefreshColumnWidths(TreeGrid);
+        }
+
         #endregion grid responders
 
         #region search/filter
