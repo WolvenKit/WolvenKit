@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -24,6 +24,15 @@ public class HashServiceExt : HashService
     }
 
     #endregion Constructors
+
+    /// <summary>
+    /// Directory holding the global <c>custom_refs.txt</c> / <c>custom_tweaks.txt</c> caches.
+    /// </summary>
+    /// <remarks>
+    /// Exists purely as a test hook.
+    /// Production behaviour is identical.
+    /// </remarks>
+    protected virtual string GetGlobalCacheDirectory() => ISettingsManager.GetAppData();
 
     public bool AddResourcePath(string resourcePath)
     {
@@ -53,7 +62,7 @@ public class HashServiceExt : HashService
 
     private void MigrateLegacyGlobalCache()
     {
-        var customRefsFile = Path.Combine(ISettingsManager.GetAppData(), "user_hashes.txt");
+        var customRefsFile = Path.Combine(GetGlobalCacheDirectory(), "user_hashes.txt");
         if (File.Exists(customRefsFile))
         {
             var paths = File.ReadAllLines(customRefsFile);
@@ -74,7 +83,7 @@ public class HashServiceExt : HashService
 
         MigrateLegacyGlobalCache();
 
-        var customRefsFile = Path.Combine(ISettingsManager.GetAppData(), "custom_refs.txt");
+        var customRefsFile = Path.Combine(GetGlobalCacheDirectory(), "custom_refs.txt");
         if (File.Exists(customRefsFile))
         {
             var paths = File.ReadAllLines(customRefsFile);
@@ -85,7 +94,7 @@ public class HashServiceExt : HashService
             }
         }
 
-        var customTweaksFile = Path.Combine(ISettingsManager.GetAppData(), "custom_tweaks.txt");
+        var customTweaksFile = Path.Combine(GetGlobalCacheDirectory(), "custom_tweaks.txt");
         if (File.Exists(customTweaksFile))
         {
             var paths = File.ReadAllLines(customTweaksFile);
@@ -104,7 +113,7 @@ public class HashServiceExt : HashService
             var list = _globalRefCache.Keys.ToList();
             list.Sort();
 
-            File.WriteAllLines(Path.Combine(ISettingsManager.GetAppData(), "custom_refs.txt"), list);
+            File.WriteAllLines(Path.Combine(GetGlobalCacheDirectory(), "custom_refs.txt"), list);
         }
 
         if (!_globalTweakCache.IsEmpty)
@@ -112,7 +121,7 @@ public class HashServiceExt : HashService
             var list = _globalTweakCache.Keys.ToList();
             list.Sort();
 
-            File.WriteAllLines(Path.Combine(ISettingsManager.GetAppData(), "custom_tweaks.txt"), list);
+            File.WriteAllLines(Path.Combine(GetGlobalCacheDirectory(), "custom_tweaks.txt"), list);
         }
     }
 
