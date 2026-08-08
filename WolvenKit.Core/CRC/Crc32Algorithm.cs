@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -120,6 +121,28 @@ namespace WolvenKit.Core.CRC
         /// <param name="input">Input buffer containing data to be checksummed.</param>
         /// <returns>CRC-32 of the buffer.</returns>
         public static uint Compute(byte[] input) => Append(0, input);
+
+        /// <summary>
+        /// Computes CRC-32 over a span, without allocating a per-call array.
+        /// </summary>
+        public static uint Compute(ReadOnlySpan<byte> input)
+        {
+            if (input.Length == 0)
+            {
+                return 0;
+            }
+
+            var rented = ArrayPool<byte>.Shared.Rent(input.Length);
+            try
+            {
+                input.CopyTo(rented);
+                return Append(0, rented, 0, input.Length);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(rented);
+            }
+        }
 
         /// <summary>
         /// Resets internal state of the algorithm. Used internally.

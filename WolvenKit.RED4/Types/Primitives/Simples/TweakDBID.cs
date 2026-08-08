@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using WolvenKit.Core.CRC;
 using WolvenKit.RED4.Types.Pools;
 
@@ -29,6 +30,14 @@ public readonly struct TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
     }
 
     public static ulong CalculateHash(string tweakName) => Crc32Algorithm.Compute(tweakName) + ((ulong)tweakName.Length << 32);
+
+    /// <summary>
+    /// Hashes a tweak name straight from its UTF-8 bytes, allocating nothing.
+    /// </summary>
+    public static ulong CalculateHashUtf8(ReadOnlySpan<byte> utf8) =>
+        Ascii.IsValid(utf8)
+            ? Crc32Algorithm.Compute(utf8) + ((ulong)utf8.Length << 32)
+            : CalculateHash(Encoding.UTF8.GetString(utf8));
 
     public static implicit operator TweakDBID(string value) => new(TweakDBIDPool.AddOrGetHash(value));
     public static implicit operator string?(TweakDBID value) => value.GetResolvedText();
