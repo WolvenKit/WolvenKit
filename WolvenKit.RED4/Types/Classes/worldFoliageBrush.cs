@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldFoliageBrush()
 		{
-			Items = new() { null };
+			Items = new() { new worldFoliageBrushItem() };
 
 			PostConstruct();
 		}

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public communitySpawnEntry()
 		{
-			Phases = new() { null };
+			Phases = new() { new communitySpawnPhase() };
 			Initializers = new();
 
 			PostConstruct();
