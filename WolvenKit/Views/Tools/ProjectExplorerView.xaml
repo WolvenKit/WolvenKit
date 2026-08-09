@@ -974,7 +974,7 @@
                     hc:InfoElement.Placeholder="Search"
                     hc:InfoElement.ShowClearButton="True"
                     FlowDirection="LeftToRight"
-                    TextChanged="PESearchBar_TextChanged"/>
+                    TextChanged="PESearchBar_TextChanged" />
 
                 <StackPanel
                     Grid.Row="1"
@@ -982,9 +982,9 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
-                        AutomationProperties.AutomationId="ExpandAllButton"
                         Height="Auto"
                         Padding="0"
+                        AutomationProperties.AutomationId="ExpandAllButton"
                         Click="ExpandAll_OnClick"
                         ToolTip="Expand All">
                         <templates:IconBox
@@ -1105,7 +1105,6 @@
         <!-- Hierarchical Tree View -->
         <others:InspectableTreeGrid
             x:Name="TreeGrid"
-            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1113,6 +1112,7 @@
             HeaderRowHeight="3"
             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="Star"
+            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             AllowDraggingRows="True"
             AllowDrop="True"
             AllowEditing="False"
@@ -1205,21 +1205,26 @@
             VirtualizingPanel.VirtualizationMode="Recycling">
 
             <syncfusion:SfDataGrid.Resources>
-                <Style TargetType="syncfusion:TreeGridCell">
+                <Style TargetType="syncfusion:GridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 </Style>
 
-                <Style TargetType="syncfusion:TreeGridExpanderCell">
+                <Style TargetType="syncfusion:GridHeaderCellControl">
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Foreground" Value="#CCCCCC" />
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Padding" Value="6,3" />
                 </Style>
 
-                <Style TargetType="syncfusion:TreeGridHeaderRowControl">
+                <Style TargetType="syncfusion:HeaderRowControl">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="Margin" Value="0,0,0,3" />
+                    <Setter Property="BorderThickness" Value="0" />
                 </Style>
             </syncfusion:SfDataGrid.Resources>
 
@@ -1244,6 +1249,7 @@
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn
                     Width="220"
+                    MinimumWidth="160"
                     CellTemplate="{StaticResource TreeGridCellTemplateSimple}"
                     HeaderText="File Name"
                     ImmediateUpdateColumnFilter="True"
@@ -1258,14 +1264,16 @@
                     TextTrimming="CharacterEllipsis" />
 
                 <syncfusion:GridTextColumn
-                    Width="70"
+                    Width="75"
+                    MinimumWidth="65"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
 
                 <syncfusion:GridTextColumn
-                    Width="70"
+                    Width="75"
+                    MinimumWidth="65"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
