@@ -1,5 +1,14 @@
 # Pull Requests
 
+## Procedure
+It is preferred to open an issue before starting the work on a pull request.
+If the pull request closes an issue self assign to the ticket before starting to work on it to ensure no two contributors are accidentally working on the same thing.
+
+After requested changes have been made you as the reviewee are expected to request a rereview from the reviewer.
+This can be done incremenatlly, however in that case the reviewer should be informed of what aspects have been addressed.
+
+After approval the pull request will be merged by the reviewer.
+
 ## Target Branch
 All pull requests should be targeting the main branch.
 Changes to dev without an associated pull request towards main should be avoided.^[The pull request towards main can be a draft]
@@ -32,6 +41,10 @@ Screenshots of UI changes if applicable.
 **Additional Info** <br>
 Anything else that is relevant to the review or organizational process, e.g. request merging into dev, conditions for merging, or a specific merge procedure (merge vs squash merge etc.)
 
+**Nice to have** <br>
+*The entries in this section are entirely optional and not generally expected, however in certain cases they can be useful.*
+- Graphs visualizing e.g. the control flow
+
 ## Code Content
 Pull requests should follow the [code of conduct](../CODE_OF_CONDUCT) as well as the [developer guide](../DEVELOPER%20GUIDE).
 
@@ -40,7 +53,7 @@ Each pull request should be limited to a reasonably small set of coherent change
 Pull requests addressing a small scope are faster and easier to review and ensure unrelated changes don't block each other. The impact of this scales with change size.
 
 **Functionality** <br>
-Pull requests or pull request stacks should contain complete changes that address the entire issue they are solving and should not introduce any new issues. If the changes in a pull request uncover or exadurate an exisitng issue it should be resolved as part of the pull request or pull request stack.
+Pull requests or pull request stacks should contain complete changes that address the entire issue they are solving and should not introduce any new issues. If the changes in a pull request uncover or exaggerate an exisitng issue it should be resolved as part of the pull request or pull request stack.
 ::: info
 Exceptions can be made in coordination with the reviewer.
 :::
