@@ -58,15 +58,26 @@ public partial class ChunkViewModel
     /// If we need a node to be fully initialized (e.g. if we run a search on it)
     /// Cap it off arbitrarily at recursion level 8 (because why not)
     /// </summary>
-    public void CalculatePropertiesRecursive(int recursionLevel = 0, int countLimit = 20)
+    /// <param name="recursionLevel">Current recursion level (don't go too deep)</param>
+    /// <param name="countLimit">Do not recalculate for more than X children</param>
+    /// <param name="forceRecalculate">Always recalculate properties regardless of initialization status</param>
+    /// <param name="recursionLimit">Maximum recursion depth</param>
+    public void CalculatePropertiesRecursive(
+        int recursionLevel = 0,
+        int countLimit = 20,
+        bool forceRecalculate = false,
+        int recursionLimit = 8
+    )
     {
-        if (_isPropertiesInitialized || recursionLevel > 8)
+        _propertiesLoaded = _propertiesLoaded && !forceRecalculate;
+        if ((_isPropertiesInitialized && !forceRecalculate) || recursionLevel > recursionLimit)
         {
             return;
         }
 
-        _isPropertiesInitialized = true;
         CalculateProperties();
+        _isPropertiesInitialized = true;
+
         if (TVProperties.Count > countLimit)
         {
             return;
@@ -74,7 +85,7 @@ public partial class ChunkViewModel
 
         foreach (var child in TVProperties)
         {
-            child.CalculatePropertiesRecursive(recursionLevel + 1, countLimit);
+            child.CalculatePropertiesRecursive(recursionLevel + 1, countLimit, forceRecalculate, recursionLimit);
         }
     }
 

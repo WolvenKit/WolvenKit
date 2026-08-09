@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3093
+      author: "manavortex"
+      description: "CVM: restored forced search initialization on shift+enter"

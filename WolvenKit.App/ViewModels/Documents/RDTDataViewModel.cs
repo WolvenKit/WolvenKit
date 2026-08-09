@@ -557,6 +557,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             return;
         }
 
+        // expand parent nodes if necessary
+        var parent = selectedNode.Parent;
+        while (parent is not null)
+        {
+            parent.IsExpanded = true;
+            parent = parent.Parent;
+        }
+
         SetSelection(selectedNode, addToSelection);
     }
 
@@ -573,6 +581,12 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public void OnSearchChanged(string searchBoxText)
     {
         HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
+
+        if (ModifierViewStateService.IsShiftBeingHeld)
+        {
+            GetRootChunk()?.CalculatePropertiesRecursive(0, 1024, true, 10);
+        }
+
         foreach (var chunkViewModel in Chunks)
         {
             chunkViewModel.CalculatePropertiesRecursive(0, 1024);
