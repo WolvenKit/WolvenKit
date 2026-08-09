@@ -1,13 +1,12 @@
 # Pull Requests
 
 ## Target Branch
-All pull requests should be branching off of and targeting the main branch.
+All pull requests should be targeting the main branch.
 Changes to dev without an associated pull request towards main should be avoided.^[The pull request towards main can be a draft]
 
-Any PR branch may be merged into the dev branch (nightly) at any time without a separate pull request or review, when this is done the 'nightly' tag should be applied.
-If you don't have the permissions to do so request a maintainer to merge it for you. <br>
+Any PR branch may be merged into the dev branch (nightly) at any time by a maintainer without a separate pull request or review, when this is done the 'nightly' tag should be applied. <br>
 Subsequent changes should be added to the pull request targeting main and merged or cherry picked into dev. <br>
-Once the pull request has been reviewed and merged into the main branch it will be automatically synced into the dev branch^[When there are no merge conflicts].
+Once the pull request has been reviewed and merged into the main branch it will be automatically synced into the dev branch.^[When there are no merge conflicts]
 
 ## Description
 The description is for the communication between the reviewee and the reviewers. <br>
