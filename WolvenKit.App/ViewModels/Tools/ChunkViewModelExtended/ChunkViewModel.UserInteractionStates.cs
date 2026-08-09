@@ -54,7 +54,6 @@ public partial class ChunkViewModel
 
     private bool _isPropertiesInitialized;
 
-    ///
     /// <summary>
     /// If we need a node to be fully initialized (e.g. if we run a search on it)
     /// Cap it off arbitrarily at recursion level 8 (because why not)
