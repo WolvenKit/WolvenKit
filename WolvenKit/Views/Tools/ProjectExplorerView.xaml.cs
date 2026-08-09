@@ -115,6 +115,10 @@ namespace WolvenKit.Views.Tools
 
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
+
+            TreeGridFlat.SizeChanged += TreeGridFlat_SizeChanged;
+
+            TreeGrid.RowDragDropController = _rowDragDropController;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
@@ -358,7 +362,15 @@ namespace WolvenKit.Views.Tools
                     {
                         DispatcherHelper.DelayOnMainThread(() =>
                         {
-                            Dispatcher.BeginInvoke(() => PESearchBar.AppendText(""), DispatcherPriority.ApplicationIdle);
+                            Dispatcher.BeginInvoke(() =>
+                            {
+                                if (TreeGridFlat.IsVisible)
+                                {
+                                    RefreshFlatColumnWidths(TreeGridFlat);
+                                }
+
+                                PESearchBar.AppendText("");
+                            }, DispatcherPriority.ApplicationIdle);
                         }, 10);
                     });
                 }, DispatcherPriority.ContextIdle);
