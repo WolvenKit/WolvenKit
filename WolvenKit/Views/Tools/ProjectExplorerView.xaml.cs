@@ -118,6 +118,9 @@ namespace WolvenKit.Views.Tools
 
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
+
+            TreeGridFlat.SizeChanged += TreeGridFlat_SizeChanged;
+
             TreeGrid.RowDragDropController = _rowDragDropController;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
@@ -470,6 +473,7 @@ namespace WolvenKit.Views.Tools
 
             if (TreeGridFlat.IsVisible)
             {
+                RefreshFlatColumnWidths(TreeGridFlat);
                 TreeGridFlat.UpdateLayout();
             }
 
@@ -489,6 +493,20 @@ namespace WolvenKit.Views.Tools
             }
 
             grid.TreeGridColumnSizer?.Refresh();
+        }
+        private static void RefreshFlatColumnWidths(SfDataGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+                return;
+            grid.GridColumnSizer?.Refresh();
+        }
+
+        private void TreeGridFlat_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (TreeGridFlat.IsVisible)
+            {
+                RefreshFlatColumnWidths(TreeGridFlat);
+            }
         }
 
         /// <summary>
