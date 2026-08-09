@@ -61,7 +61,7 @@ public partial class AppScriptService : ScriptService
 
     private ProjectExplorerViewModel? GetProjectExplorerViewModel()
     {
-        _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
+        _projectExplorerViewModel ??= Locator.Current.GetService<AppViewModel>()?.GetToolViewModel<ProjectExplorerViewModel>();
         return _projectExplorerViewModel;
     }
 
