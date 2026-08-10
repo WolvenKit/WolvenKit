@@ -225,7 +225,7 @@
                         </Grid.Resources>
 
                         <!-- Folder Tree -->
-                        <syncfusion:SfTreeGrid
+                        <others:InspectableTreeGrid
                             x:Name="LeftNavigation"
                             AutomationProperties.AutomationId="LeftNavigation"
                             Margin="0"
@@ -347,7 +347,7 @@
                                     </MenuItem>
                                 </ContextMenu>
                             </syncfusion:SfTreeGrid.ExpanderContextMenu>
-                        </syncfusion:SfTreeGrid>
+                        </others:InspectableTreeGrid>
                     </Grid>
 
                     <syncfusion:SfGridSplitter
@@ -652,7 +652,7 @@
             Background="{StaticResource ContentBackgroundAlt3}"
             BorderBrush="Black"
             BorderThickness="0"
-            Visibility="{Binding Path=LoadVisibility,
+            Visibility="{Binding Path=LoadingIndicatorVisibility,
                                  Mode=OneWay,
                                  UpdateSourceTrigger=PropertyChanged}">
             <Grid>
@@ -673,7 +673,7 @@
             x:Name="NoProjectBorder"
             Grid.RowSpan="3"
             Background="{StaticResource ContentBackgroundAlt2}"
-            Visibility="{Binding Path=ShouldShowLoadButton,
+            Visibility="{Binding Path=ShouldShowLoadArchivesButton,
                                  Mode=OneWay,
                                  Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>

@@ -66,8 +66,13 @@ public sealed class ArchiveManagerLoader: IArchiveManagerLoader
 
         try
         {
-            _ = Task.Run(() =>
+            await Task.Run(() =>
             {
+                // Keep priority low so the UI stays responsive during the (potentially long)
+                // first-time scan of dozens of large .archive files.
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                Thread.CurrentThread.IsBackground = true;
+
                 _loggerService.Info("Loading Archive Manager ... ");
 
                 _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
