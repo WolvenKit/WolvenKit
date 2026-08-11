@@ -40,10 +40,11 @@ public sealed class ProjectExplorerUiActions
         _waitForElement = waitForElement ?? throw new ArgumentNullException(nameof(waitForElement));
     }
 
-    public AutomationElement? DragSingleFileToBaseDirectory()
+    public double DragSingleFileToBaseDirectory()
     {
         var clickTarget = _grids.GetTargetByName(_grids.ProjectExplorerTreeGrid, "crowd_bumps.csv");
         var target = _grids.GetTargetByName(_grids.ProjectExplorerTreeGrid, "adam_smasher_weapons.csv");
+        var targetY = target.BoundingRectangle.Center().Y;
         var dragTarget = _grids.GetTargetByName(_grids.ProjectExplorerTreeGrid, "base");
         Mouse.MoveTo(clickTarget.BoundingRectangle.Center());
         Task.Delay(50).Wait();
@@ -59,7 +60,8 @@ public sealed class ProjectExplorerUiActions
         Task.Delay(100).Wait();
         Mouse.Up();
         Task.Delay(2000).Wait();
-        var updatedDragTarget = _grids.GetTargetByName(_grids.ProjectExplorerTreeGrid, "adam_smasher_weapons.csv");
-        return updatedDragTarget;
+        var updatedTarget = _grids.GetTargetByName(_grids.ProjectExplorerTreeGrid, "adam_smasher_weapons.csv");
+        var delta = updatedTarget.BoundingRectangle.Center().Y - targetY;
+        return delta;
     }
 }

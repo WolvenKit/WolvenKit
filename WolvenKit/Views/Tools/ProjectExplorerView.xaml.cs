@@ -118,7 +118,11 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
 
-            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "RawRelativePath" });
+            // PropertyName has to match the MappingName of the sorted column, or the comparer is never
+            // consulted and the grid falls back to a plain string sort on the cell value.
+            TreeGrid.SortComparers.Clear();
+            TreeGrid.SortComparers.Add(new() { Comparer = new FileSystemNodeComparer(), PropertyName = "Name" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSystemNodeComparer(), PropertyName = "Name" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
 
@@ -128,7 +132,12 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
 
             TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
-            TreeGrid.LiveNodeUpdateMode = LiveNodeUpdateMode.Default;
+
+            // AllowDataShaping makes nodes added at runtime (drag & drop, paste, import, watcher events)
+            // land in their sorted position instead of being appended to the end of their parent.
+            // Bulk project loading is not affected: it runs inside the DeferRefresh bracket opened by
+            // Receive(WillStartLoadingProjectFiles), which suppresses shaping until the load finishes.
+            TreeGrid.LiveNodeUpdateMode = LiveNodeUpdateMode.AllowDataShaping;
 
             this.WhenActivated(disposables =>
             {
@@ -1298,6 +1307,44 @@ namespace WolvenKit.Views.Tools
 
         #endregion search/filter
 
+        /// <summary>
+        /// Sorts the "Name" column of the project explorer grids. Files always sort above directories,
+        /// deliberately independent of <see cref="SortDirection"/> - flipping the sort direction only
+        /// reverses the name order inside each of the two groups.
+        /// </summary>
+        public class FileSystemNodeComparer : IComparer<object>, ISortDirection
+        {
+            public int Compare(object x, object y)
+            {
+                if (x is not FileSystemModel item1)
+                {
+                    return y is FileSystemModel ? 1 : 0;
+                }
+
+                if (y is not FileSystemModel item2)
+                {
+                    return -1;
+                }
+
+                // Group before direction is applied, so files stay on top in both directions.
+                if (item1.IsDirectory != item2.IsDirectory)
+                {
+                    return item1.IsDirectory ? 1 : -1;
+                }
+
+                var c = string.Compare(item1.Name, item2.Name, StringComparison.OrdinalIgnoreCase);
+                if (c == 0)
+                {
+                    // Same name except for casing: keep the order stable rather than arbitrary.
+                    c = string.CompareOrdinal(item1.Name, item2.Name);
+                }
+
+                return SortDirection == ListSortDirection.Descending ? -c : c;
+            }
+
+            public ListSortDirection SortDirection { get; set; }
+        }
+
         public class FilePathComparer : IComparer<object>, ISortDirection
         {
             public int Compare(object x, object y)
@@ -1316,24 +1363,16 @@ namespace WolvenKit.Views.Tools
                 }
                 else if (item1 != null)
                 {
-                    switch (item1.IsDirectory)
+                    // Files above directories, in both sort directions - see FileSystemNodeComparer.
+                    if (item1.IsDirectory != item2.IsDirectory)
                     {
-                        case true when !item2.IsDirectory:
-                            c = 1;
-                            break;
-                        case false when item2.IsDirectory:
-                            c = -1;
-                            break;
-                        default:
-                        {
-                            c = CompareParts();
-                            if (c == 0)
-                            {
-                                c = string.CompareOrdinal(item1.GameRelativePath, item2.GameRelativePath);
-                            }
+                        return item1.IsDirectory ? 1 : -1;
+                    }
 
-                            break;
-                        }
+                    c = CompareParts();
+                    if (c == 0)
+                    {
+                        c = string.CompareOrdinal(item1.GameRelativePath, item2.GameRelativePath);
                     }
                 }
 
