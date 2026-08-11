@@ -1,0 +1,6 @@
+changes:
+    - type: "removed"
+      packages: ["Nuget Packages"]
+      pr-number: 3116
+      author: "notaspirit"
+      description: "Removed previously deprecated file path validaton methods, use FilePathValidationTools or the equivalent StringPathExtnesions methods instead"
