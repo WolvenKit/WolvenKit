@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -59,8 +59,9 @@ public class AppScriptFunctions : ScriptFunctions
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
-        ISettingsManager settingsManager)
-        : base(loggerService, archiveManager, parserService)
+        ISettingsManager settingsManager,
+        RedTypeTemplateService templateService)
+        : base(loggerService, archiveManager, parserService, templateService)
     {
         _projectManager = projectManager;
         _modTools = modTools;
