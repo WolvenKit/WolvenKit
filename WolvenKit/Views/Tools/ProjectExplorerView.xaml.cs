@@ -1329,7 +1329,7 @@ namespace WolvenKit.Views.Tools
                 // Group before direction is applied, so files stay on top in both directions.
                 if (item1.IsDirectory != item2.IsDirectory)
                 {
-                    return item1.IsDirectory ? 1 : -1;
+                    return item1.IsDirectory ? -1 : 1;
                 }
 
                 var c = string.Compare(item1.Name, item2.Name, StringComparison.OrdinalIgnoreCase);

@@ -26,7 +26,13 @@ public class ProjectExplorerFileOperationsTest : WolvenKitUiTestBase
     {
         int selectedCount = SeedProjectWithAnimMotionDatabaseFiles();
         Assert.IsTrue(Grids.CountProjectExplorerFiles() >= selectedCount);
-        var delta = ProjectExplorer.DragSingleFileToBaseDirectory();
-        Assert.AreEqual(-140, delta);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+        {
+            ProjectExplorer.DragSingleFileToBaseDirectory();
+        });
+
+        Assert.AreEqual("Timed out waiting for tree node 'adam_smasher_weapons.csv' to appear (waited 30 s).",
+            exception.Message);
     }
 }
