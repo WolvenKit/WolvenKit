@@ -858,7 +858,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await _archiveManagerLoader.LoadArchiveManagerAsync().ContinueWith(_ =>
+        DispatcherHelper.DelayOnMainThread(() =>
         {
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
@@ -869,7 +869,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
 
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
-        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+        }, 1000);
     }
 
     [RelayCommand]
