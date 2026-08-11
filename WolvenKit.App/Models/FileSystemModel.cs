@@ -184,24 +184,8 @@ public class FileSystemModel : INotifyPropertyChanged
             else if (Parent != null)
             {
                 Extension = Parent.Extension;
-
-                switch (Extension)
-                {
-                    case Constants.ModDirectoryTop:
-                        GameRelativePath = RawRelativePath[8..];
-                        break;
-                    case Constants.RawDirectoryTop:
-                        GameRelativePath = RawRelativePath[4..];
-                        break;
-                    case Constants.ResourceDirectoryTop:
-                        GameRelativePath = RawRelativePath[10..];
-                        break;
-                    default:
-                        var split =
-                            RawRelativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[1..];
-                        GameRelativePath = Path.Combine(split);
-                        break;
-                }
+                var split = RawRelativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[1..];
+                GameRelativePath = string.Join(ResourcePath.DirectorySeparatorChar, split);
             }
         }
         else
