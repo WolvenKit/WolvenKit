@@ -1,6 +1,6 @@
 changes:
     - type: "fixed"
-      packages: ["App", "CLI", "Nuget Packages"]
+      packages: ["App"]
       pr-number: 3112
       author: "gistya"
       description: "Fixed an issue where items added to the Project Explorer tree would not appear in proper order until project reload. Now, items will sort instantly, and files will be displayed above folders for ease of use."
