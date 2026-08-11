@@ -93,6 +93,32 @@ public sealed class FileSystemModelTests : IDisposable
     private string AbsolutePath(params string[] parts) =>
         Path.Combine(_projectDirectory, Path.Combine(parts));
 
+    /// <summary>
+    /// Builds a node whose <c>RawRelativePath</c> is spelled with forward slashes - the way
+    /// <c>Path.Combine</c> would spell it on Linux, and the way <c>WatcherService</c> would then
+    /// feed it in. Windows still resolves the physical path, because '/' is
+    /// <see cref="Path.AltDirectorySeparatorChar"/> there.
+    /// </summary>
+    private FileSystemModel NewNodeWithPosixRawPath(FileSystemModel parent, string name, bool isDirectory)
+    {
+        var relativePath = parent.Parent == null ? name : $"{parent.RawRelativePath}/{name}";
+        var physicalPath = Path.Combine(_projectDirectory, relativePath);
+
+        if (isDirectory)
+        {
+            Directory.CreateDirectory(physicalPath);
+        }
+        else
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(physicalPath)!);
+            WriteBytes(physicalPath, 0);
+        }
+
+        var model = new FileSystemModel(parent, name, relativePath, isDirectory);
+        AddChild(parent, model);
+        return model;
+    }
+
     #endregion
 
     #region constructor
@@ -263,6 +289,124 @@ public sealed class FileSystemModelTests : IDisposable
 
         // the marker check is on the whole relative path ("raw\archive"), not the name
         Assert.Equal(AppConstants.RawDirectoryTop, nested.Extension);
+    }
+
+    #endregion
+
+    #region game path separator is platform independent
+
+    // GameRelativePath feeds ResourcePath hashing and every game-facing path lookup, so it must be
+    // backslash-joined on every OS - a '/' would silently produce a different hash and a broken mod.
+    //
+    // Two things make that true, and these tests pin both:
+    //   1. GetMetadata joins with ResourcePath.DirectorySeparatorChar, a hardcoded '\', never with
+    //      Path.DirectorySeparatorChar.
+    //   2. It joins the Name of each ancestor - single segments - never RawRelativePath or any
+    //      Path.Combine output, which is where the platform separator would leak in.
+    //
+    // Caveat, stated plainly: this assembly targets net10.0-windows and depends on WPF, so none of
+    // it can execute on Linux. (2) is fully provable here, because feeding forward-slash raw paths
+    // exercises the exact input shape Linux would produce. (1) is only pinned as a constant - if
+    // someone swapped it for Path.DirectorySeparatorChar, Windows could not tell the difference.
+
+    [Fact]
+    public void GameRelativePath_JoinsWithAHardcodedBackslashNotThePlatformSeparator()
+    {
+        // pins the constant GetMetadata joins with; on Linux Path.DirectorySeparatorChar is '/'
+        Assert.Equal('\\', ResourcePath.DirectorySeparatorChar);
+    }
+
+    [Fact]
+    public void GameRelativePath_IsDerivedFromNameSegments_NotFromTheCombinedRawPath()
+    {
+        var root = NewRoot();
+        var archive = NewNodeWithPosixRawPath(root, "archive", true);
+        var baseDir = NewNodeWithPosixRawPath(archive, "base", true);
+
+        var file = NewNodeWithPosixRawPath(baseDir, "foo.mesh", false);
+
+        // the raw path carries the platform's spelling...
+        Assert.Equal("archive/base/foo.mesh", file.RawRelativePath);
+
+        // ...and the game path does not. This is the test that would fail if GameRelativePath were
+        // ever refactored to be derived from RawRelativePath instead of from the Name chain.
+        Assert.Equal(@"base\foo.mesh", file.GameRelativePath);
+    }
+
+    [Fact]
+    public void GameRelativePath_FromPosixShapedInput_ContainsNoForwardSlashAtAnyDepth()
+    {
+        var root = NewRoot();
+        var archive = NewNodeWithPosixRawPath(root, "archive", true);
+        var baseDir = NewNodeWithPosixRawPath(archive, "base", true);
+        var characters = NewNodeWithPosixRawPath(baseDir, "characters", true);
+        var common = NewNodeWithPosixRawPath(characters, "common", true);
+
+        var file = NewNodeWithPosixRawPath(common, "foo.mesh", false);
+
+        Assert.Equal(@"base\characters\common\foo.mesh", file.GameRelativePath);
+        Assert.DoesNotContain("/", file.GameRelativePath);
+        Assert.DoesNotContain("/", common.GameRelativePath);
+    }
+
+    [Fact]
+    public void GameRelativePath_FromPosixShapedInput_StillHashesToTheSameValueAsOnWindows()
+    {
+        var root = NewRoot();
+        var archive = NewNodeWithPosixRawPath(root, "archive", true);
+        var baseDir = NewNodeWithPosixRawPath(archive, "base", true);
+
+        var file = NewNodeWithPosixRawPath(baseDir, "foo.mesh", false);
+
+        // the payoff: a '/' leaking into the game path would change this hash and break the mod
+        Assert.Equal(ResourcePath.CalculateHash(@"base\foo.mesh"), file.Hash);
+    }
+
+    [Fact]
+    public void GameRelativePath_AfterRename_IsStillBackslashJoined()
+    {
+        var root = NewRoot();
+        var archive = NewNodeWithPosixRawPath(root, "archive", true);
+        var oldDir = NewNodeWithPosixRawPath(archive, "old", true);
+        var file = NewNodeWithPosixRawPath(oldDir, "foo.mesh", false);
+
+        // Rename rebuilds RawRelativePath with Path.Combine - so from here on the raw path mixes
+        // separators. The game path must be unaffected.
+        Directory.Move(oldDir.FullName, AbsolutePath("archive", "new"));
+        oldDir.Rename("new");
+
+        Assert.Equal(@"new\foo.mesh", file.GameRelativePath);
+        Assert.DoesNotContain("/", file.GameRelativePath);
+    }
+
+    [Fact]
+    public void GameRelativePath_JoinsEveryDepthWithTheSameSeparator()
+    {
+        var root = NewRoot();
+        var node = (FileSystemModel)NewNodeWithPosixRawPath(root, "archive", true);
+        var names = new[] { "a", "b", "c", "d", "e" };
+
+        foreach (var name in names)
+        {
+            node = NewNodeWithPosixRawPath(node, name, true);
+        }
+
+        Assert.Equal(string.Join('\\', names), node.GameRelativePath);
+    }
+
+    [Fact]
+    public void GameRelativePath_EmitsSegmentNamesVerbatim_SoABackslashInALinuxFileNameIsAmbiguous()
+    {
+        var root = NewRoot();
+        var archive = NewDirectory(root, "archive");
+
+        // '\' is a legal character in a Linux file name. GetMetadata joins Names without escaping
+        // them, so such a name is indistinguishable from two nested segments in the game path.
+        // Directory nodes never touch disk, which is the only reason this name is constructible on
+        // Windows at all. Documents current behaviour - it is not reachable from a Windows project.
+        var oddlyNamed = new FileSystemModel(archive, @"odd\name", @"archive\odd\name", true);
+
+        Assert.Equal(@"odd\name", oddlyNamed.GameRelativePath);
     }
 
     #endregion
