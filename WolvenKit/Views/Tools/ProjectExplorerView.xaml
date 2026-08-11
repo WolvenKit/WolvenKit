@@ -1269,7 +1269,7 @@
                 <syncfusion:GridTextColumn
                     Width="75"
                     MinimumWidth="65"
-                    AllowResizing="False"
+                    AllowResizing="True"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
@@ -1277,7 +1277,7 @@
                 <syncfusion:GridTextColumn
                     Width="75"
                     MinimumWidth="65"
-                    AllowResizing="False"
+                    AllowResizing="True"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
                     MappingName="FileSizeStr" />

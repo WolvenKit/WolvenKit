@@ -115,10 +115,7 @@ namespace WolvenKit.Views.Tools
 
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
-
             TreeGridFlat.SizeChanged += TreeGridFlat_SizeChanged;
-
-            TreeGrid.RowDragDropController = _rowDragDropController;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
@@ -147,6 +144,7 @@ namespace WolvenKit.Views.Tools
             // Bulk project loading is not affected: it runs inside the DeferRefresh bracket opened by
             // Receive(WillStartLoadingProjectFiles), which suppresses shaping until the load finishes.
             TreeGrid.LiveNodeUpdateMode = LiveNodeUpdateMode.AllowDataShaping;
+            TreeGridFlat.LiveDataUpdateMode = LiveDataUpdateMode.AllowDataShaping;
 
             this.WhenActivated(disposables =>
             {
@@ -375,6 +373,13 @@ namespace WolvenKit.Views.Tools
                     });
                 }, DispatcherPriority.ContextIdle);
             }
+        }
+
+        private static void RefreshFlatColumnWidths(SfDataGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+                return;
+            grid.GridColumnSizer?.Refresh();
         }
 
         #endregion refresh
@@ -769,6 +774,14 @@ namespace WolvenKit.Views.Tools
 
             TreeGridFlat.View.Filter = IsFileInFlat;
             TreeGridFlat.View.RefreshFilter();
+        }
+
+        private void TreeGridFlat_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (TreeGridFlat.IsVisible)
+            {
+                RefreshFlatColumnWidths(TreeGridFlat);
+            }
         }
 
         private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
