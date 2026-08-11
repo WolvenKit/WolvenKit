@@ -49,8 +49,9 @@ Anything else that is relevant to the review or organizational process, e.g. req
 Pull requests should follow the [code of conduct](../CODE_OF_CONDUCT) as well as the [developer guide](../DEVELOPER%20GUIDE).
 
 **Change scope** <br>
-Each pull request should be limited to a reasonably small set of coherent changes. If changes depend on each other a [stacked pull requests](https://docs.github.com/en/pull-requests/how-tos/stacked-pull-requests) can be used. <br>
-Pull requests addressing a small scope are faster and easier to review and ensure unrelated changes don't block each other. The impact of this scales with change size.
+Each pull request should be limited to changes that fall within a well-defined scope. Whenever feasible, use multiple smaller PRs rather than one larger PR. [Stacked pull requests](https://docs.github.com/en/pull-requests/how-tos/stacked-pull-requests) may be used to group related changes.<br>
+
+Nonetheless, a PR that meets all the acceptance criteria (tests, improves code quality, etc.) should not be rejected solely on the basis of size or difficulty of review.
 
 **Functionality** <br>
 Pull requests or pull request stacks should contain complete changes that address the entire issue they are solving and should not introduce any new issues. If the changes in a pull request uncover or exaggerate an exisitng issue it should be resolved as part of the pull request or pull request stack.

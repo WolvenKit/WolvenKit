@@ -6,9 +6,12 @@ Pull requests are not required to contain a dedicated point for each aspect on t
 :::
 
 ## Procedure
-When reviewing a pull request assign yourself as the reviewer, that way it is clear to the reviewee who is handling the review and to other maintainers that the given pull request is already in review.
+When reviewing a pull request assign yourself as the reviewer, that way it is clear to the reviewee who is handling the review and to other maintainers that the given pull request is already in review. <br>
 
-After a pull request has been approved it is your responsbility to merge the pull request. <br>
+Change requests should be detailed, specific and scope aware, for larger non blocking changes consider a follow up pull request. <br>
+To reduce unproductive back and forth suggestions should be used for small localized changes, if you have specific larger changes in mind that would be difficult to communicate consider adding a pull request to the stack.
+
+After a pull request has been approved it is the responsbility of the reviewer to merge the pull request. <br>
 Prefer a regular merge when the commit history is structured and contains relevant information (e.g. "Implemented XYZ service" "Adjusted consumers to use XYZ service" "Fixed Y bug") and prefer squash merge for commit histories which add little value (e.g. "Updated XYZ.cs" "fix" "changes" "review").
 
 ## Content Verification
