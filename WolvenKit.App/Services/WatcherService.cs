@@ -65,6 +65,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         "blend1", // Blender temp files
     ];
 
+    private static readonly List<string> s_backupFilePartials =
+    [
+        "_tmp", ".bak", ".bkp"
+    ];
+
     private static bool HasIgnoredExtension(string? fileName)
     {
         var fileExtension = Path.GetExtension(fileName)?.ToUpper();
@@ -77,6 +82,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
     public bool IsWatcherStopped => _isWatcherStopped;
 
     #endregion
+
+    #region Constructor
 
     public WatcherService(ILoggerService? loggerService)
     {
@@ -93,6 +100,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
     }
+
+    #endregion
+
+    #region Start / Resume / Watch / Unwatch Methods
 
     public void WatchProject(Cp77Project project)
     {
@@ -114,6 +125,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Refresh();
     }
 
+    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
 
     public void Resume() => _modsWatcher.EnableRaisingEvents = true;
 
@@ -137,10 +149,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Clear();
     }
 
-    private static readonly List<string> s_backupFilePartials =
-    [
-        "_tmp", ".bak", ".bkp"
-    ];
+    #endregion
+
+    #region file watching
 
     private void Update(CancellationToken cancellationToken)
     {
@@ -409,20 +420,53 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
+    public void ForceStop()
+    {
+        _modsWatcher.EnableRaisingEvents = false;
+
+        if (_updateTask != null)
+        {
+            _updateThreadCancellationTokenSource.Cancel();
+            if (!_updateTask.IsCanceled && !_updateTask.Wait(1000))
+            {
+                throw new Exception();
+            }
+        }
+    }
+
+    private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+
+    private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+
+    #endregion file watching
+
+    #region filesystem loading
+
+    private class FileSystemEventArgsWrapper
+    {
+        public FileSystemEventArgsWrapper(FileSystemEventArgs fileSystemEventArgs)
+        {
+            Args = fileSystemEventArgs;
+        }
+
+        public FileSystemEventArgs Args { get; }
+
+        public string? Name => Args.Name;
+        public string FullPath => Args.FullPath;
+        public WatcherChangeTypes ChangeType => Args.ChangeType;
+
+        public int RetryCount { get; set; }
+        public long Ticks { get; set; }
+
+        public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+
     public void Refresh()
     {
         lock (_refreshLock)
         {
             InternalRefresh();
         }
-    }
-
-    private void Clear()
-    {
-        _fileChanges.Clear();
-        _fileLookup.Clear();
-        FileTree.Clear();
-        FileList.Clear();
     }
 
     private void InternalRefresh()
@@ -440,6 +484,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _updateTask = Task.Factory.StartNew(() => Update(_updateThreadCancellationTokenSource.Token), _updateThreadCancellationTokenSource.Token);
 
         _modsWatcher.EnableRaisingEvents = true;
+    }
+
+    private void Clear()
+    {
+        _fileChanges.Clear();
+        _fileLookup.Clear();
+        FileTree.Clear();
+        FileList.Clear();
     }
 
     private void PopulateFiles()
@@ -519,44 +571,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
+    #endregion
+
+    #region helpers
+
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
-    public void ForceStop()
-    {
-        _modsWatcher.EnableRaisingEvents = false;
-
-        if (_updateTask != null)
-        {
-            _updateThreadCancellationTokenSource.Cancel();
-            if (!_updateTask.IsCanceled && !_updateTask.Wait(1000))
-            {
-                throw new Exception();
-            }
-        }
-    }
-
-    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
-
-    private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
-
-    private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
-
-    private class FileSystemEventArgsWrapper
-    {
-        public FileSystemEventArgsWrapper(FileSystemEventArgs fileSystemEventArgs)
-        {
-            Args = fileSystemEventArgs;
-        }
-
-        public FileSystemEventArgs Args { get; }
-
-        public string? Name => Args.Name;
-        public string FullPath => Args.FullPath;
-        public WatcherChangeTypes ChangeType => Args.ChangeType;
-
-        public int RetryCount { get; set; }
-        public long Ticks { get; set; }
-
-        public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-    }
+    #endregion helpers
 }
