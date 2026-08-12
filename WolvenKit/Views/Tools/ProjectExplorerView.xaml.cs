@@ -1293,19 +1293,41 @@ namespace WolvenKit.Views.Tools
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
         {
-            if (ViewModel is not ProjectExplorerViewModel vm)
+            _isDragging = true;
+
+            if (ViewModel is not { } vm)
             {
                 return;
             }
 
-            // Don't drag stuff you're not freakin' draggin' choom... gosh.
-            var draggedItems = e.DraggingNodes.ToList();
-            var selectedItems = vm.SelectedItems?.ToList() ?? [];
-            var nonDraggedSelections = selectedItems.Where(x => !draggedItems.Contains(x)).ToList();
-            vm.SelectedItems?.RemoveMany(nonDraggedSelections);
+            vm.IsDragging = true;
 
-            _isDragging = true;
+            var draggingItems = e.DraggingNodes.Select(x => x.Item as FileSystemModel).ToList();
+
+            if (vm.SelectedItems is { } selectedItems
+                && draggingItems.Select(x => !selectedItems.Contains(x)).ToList().Count > 0)
+            {
+                vm.SelectedItems.Clear();
+                vm.SelectedItems.AddRange(draggingItems);
+
+                if (draggingItems.Count == 1)
+                {
+                    vm.SelectedItem = draggingItems[0];
+                }
+
+                return;
+            }
+
+            if (vm.SelectedItem is { } selectedItem && draggingItems.FirstOrDefault() is { } draggingItem)
+            {
+                if (selectedItem.RawRelativePath != draggingItem.RawRelativePath)
+                {
+                    vm.SelectedItem = draggingItem;
+                }
+            }
         }
+
+
 
         private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
         {
@@ -1395,8 +1417,17 @@ namespace WolvenKit.Views.Tools
                 Console.WriteLine(error.Message);
             }
         }
-        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e)
+        {
             _isDragging = false;
+
+            if (ViewModel is not { } vm)
+            {
+                return;
+            }
+
+            vm.IsDragging = false;
+        }
 
         #endregion drag & drop
 

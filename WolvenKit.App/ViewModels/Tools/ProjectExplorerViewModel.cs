@@ -63,6 +63,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private const string s_toolTitle = "Project Explorer";
 
+    public bool IsDragging { get; set; } = false;
+
     public const string LoadProjectPurpose = "ProjectExplorer load project";
 
     private readonly ILoggerService _loggerService;
@@ -1717,6 +1719,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             case nameof(SelectedTabIndex) when ActiveProject is not null:
                 ActiveProject.ActiveTab = SelectedTabIndex;
                 _projectExplorerTabChanged = true;
+                break;
+            case nameof(SelectedItem) when ActiveProject is not null:
+            case nameof(SelectedItems) when ActiveProject is not null:
+                if (IsDragging)
+                {
+                    return;
+                }
+
                 break;
         }
 
