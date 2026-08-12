@@ -16,10 +16,6 @@ public static class DispatcherHelper
 
     private static readonly object s_repeatingActionsLock = new();
 
-    private static readonly Dictionary<string, RepeatingActionState> s_repeatingActions =
-        new(StringComparer.Ordinal);
-    private static readonly object s_repeatingActionsLock = new();
-
     public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
 
     private static void RunOnUIThread(this DispatcherObject? d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)

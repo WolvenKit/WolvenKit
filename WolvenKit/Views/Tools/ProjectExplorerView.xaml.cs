@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -12,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using DynamicData.Binding;
 using HandyControl.Data;
@@ -45,9 +49,16 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for ProjectExplorerView.xaml
     /// </summary>
-    public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
+    public partial class ProjectExplorerView /*:
+        IRecipient<ChalkboardService.WillStartLoadingProjectFiles>,
+        IRecipient<ChalkboardService.DidFinishLoadingProjectFiles> */
     {
+
         #region fields
+
+        private readonly IMessenger _messenger;
+
+        private List<IDisposable> _disposables = [];
 
         /// <summary>Identifies the <see cref="TreeItemSource"/> dependency property.</summary>
         public static readonly DependencyProperty TreeItemSourceProperty =
@@ -104,6 +115,9 @@ namespace WolvenKit.Views.Tools
         {
             InitializeComponent();
 
+            _messenger = WeakReferenceMessenger.Default;
+            _messenger.RegisterAll(this);
+
             _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
 
             // Debounce for live search
@@ -130,7 +144,11 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            TreeGrid.SortComparers.Add(new() { Comparer = new FileComparer.Paths(), PropertyName = "GameRelativePath" });
+            // PropertyName has to match the MappingName of the sorted column, or the comparer is never
+            // consulted and the grid falls back to a plain string sort on the cell value.
+            TreeGrid.SortComparers.Clear();
+            TreeGrid.SortComparers.Add(new() { Comparer = new FileComparer.Nodes(), PropertyName = "Name" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Nodes(), PropertyName = "Name" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Paths(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileComparer.Sizes(), PropertyName = "FileSizeStr" });
 
@@ -409,6 +427,31 @@ namespace WolvenKit.Views.Tools
         #endregion Project_Loading
 
         #region refresh
+
+        /*
+        public void Receive(ChalkboardService.WillStartLoadingProjectFiles msg)
+        {
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                if (TreeGridFlat.View is { } flatView)
+                {
+                    _disposables.Add(flatView.DeferRefresh());
+                }
+
+                if (TreeGrid.View is { } treeView)
+                {
+                    _disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
+                }
+            });
+        }
+
+        public void Receive(ChalkboardService.DidFinishLoadingProjectFiles msg) =>
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                _disposables.ForEach(d => d.Dispose());
+                _disposables.Clear();
+            });
+        */
 
         private void RefreshFlatViewIfNeeded()
         {

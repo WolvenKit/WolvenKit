@@ -72,6 +72,7 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService = progressService;
         _pluginService = pluginService;
         _modifierService = modifierService;
+        _projectEvents = projectEvents;
     }
 
     #region Packing

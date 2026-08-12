@@ -58,13 +58,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private const string s_toolContentId = "ProjectExplorer_Tool";
 
+    public bool IsDragging { get; set; } = false;
+
     /// <summary>
     /// Identifies the caption string used for this tool window.
     /// </summary>
     private const string s_toolTitle = "Project Explorer";
-
-    public bool IsDragging { get; set; } = false;
-
     public const string LoadProjectPurpose = "ProjectExplorer load project";
 
     private readonly ILoggerService _loggerService;
@@ -108,6 +107,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public Action? OnLiveGridMutationCompleted { get; set; }
 
     public Dictionary<string, bool> ExpansionStateDictionary = [];
+
     public bool IsKeyUpEventAssigned { get; set; }
 
     #endregion fields
@@ -167,6 +167,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         s_instance = this;
 
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
+
+        DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
+        _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
+            purpose: _autoSavePurpose, () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+            TimeSpan.FromSeconds(10));
+
+        s_instance = this;
     }
 
     #endregion constructor
@@ -1760,6 +1767,38 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region Project_Loading
 
+    /*
+    // When opening projects from launch args, change detection for dependent objects isn't working yet.
+    private void RefreshProjectData()
+    {
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            // Save changes in active project
+            if (ActiveProject != null)
+            {
+                _hasUnsavedFileTreeChanges = true;
+                SaveProjectExplorerExpansionStateIfDirty();
+                _projectWatcher.UnwatchProject(ActiveProject);
+            }
+
+            if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
+            {
+                OnProjectChanged?.Invoke();
+
+                return;
+            }
+            ActiveProject = _projectManager.ActiveProject;
+            if (ActiveProject is not null)
+            {
+                RestoreProjectState(ActiveProject);
+                _projectWatcher.WatchProject(ActiveProject);
+            }
+
+            OnProjectChanged?.Invoke();
+            _progressService.IsIndeterminate = false;
+        }, DispatcherPriority.ContextIdle);
+    }*/
+
     /// <summary>
     /// Loads a project and starts watching it.
     /// If isReload is true then we won't show `Loading` in the files pane.
@@ -1856,6 +1895,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         _loggerService.Debug($"Initiating project load.");
+
         DispatcherHelper.PostOnMainThread(() =>
         {
             var activeProject = _projectManager.ActiveProject;
@@ -1868,6 +1908,52 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             StartWatcher_AndLoadProject(activeProject, false);
         });
     }
+
+    /*
+    public void StopWatcher() => _projectWatcher.ForceStop();
+
+    public void SuspendFileWatcher()
+    {
+        if (ActiveProject is not Cp77Project project)
+        {
+            return;
+        }
+
+        try
+        {
+            _projectWatcher.UnwatchProject(project);
+            _projectWatcher.ForceStop();
+        }
+        catch
+        {
+            _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
+        }
+    }
+
+    public static void SuspendFileWatcherStatic() => s_instance?.SuspendFileWatcher();
+    public static void ResumeFileWatcherStatic() => s_instance?.ResumeFileWatcher();
+
+    public void ResumeFileWatcher()
+    {
+        if (ActiveProject is not Cp77Project project)
+        {
+            return;
+        }
+
+        try
+        {
+            _projectWatcher.WatchProject(project);
+            _hasUnsavedFileTreeChanges = false;
+        }
+        catch
+        {
+            _loggerService.Error(
+                "Failed to resume file watcher. Please hit the refresh button in the project browser.");
+            _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
+        }
+
+    }
+     */
 
     private static bool IsSameProjectPath(Cp77Project activeProject, string projectPath)
     {
@@ -2113,7 +2199,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
+   public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
     {
         ExpansionStateDictionary[rawRelativePath] = expansionState;
         _hasUnsavedFileTreeChanges = true;

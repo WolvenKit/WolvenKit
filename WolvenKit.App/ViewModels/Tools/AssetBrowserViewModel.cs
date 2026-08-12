@@ -80,8 +80,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private ProjectExplorerViewModel.LoadingMode _projectLoadingMode;
     private readonly IArchiveManagerLoader _archiveManagerLoader;
 
-    private readonly IArchiveManagerLoader _archiveManagerLoader;
-
     #endregion fields
 
     #region ctor
