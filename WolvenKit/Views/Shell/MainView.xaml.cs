@@ -260,11 +260,6 @@ namespace WolvenKit.Views.Shell
 
                 //set ready status
                 ViewModel.SetStatusReady();
-
-                // Not awaited -
-                // WhenActivated is synchronous and startup must not block on archive
-                // loading. InitializeAsync handles own failures, so discard is safe.
-                _ = ViewModel.InitializeAsync();
             });
         }
 
@@ -392,7 +387,7 @@ namespace WolvenKit.Views.Shell
             if (ViewModel?.GetToolViewModel<ProjectExplorerViewModel>() is { } pe)
             {
                 pe.SaveProjectExplorerTabIfDirty();
-                pe.CloseProject();
+                pe.StopWatcher();
             }
 
             if (ViewModel?.GetToolViewModel<PropertiesViewModel>() is { } p)

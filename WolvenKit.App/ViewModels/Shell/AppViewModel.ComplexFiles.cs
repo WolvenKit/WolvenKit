@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Octokit;
-using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Interaction.Options;
@@ -52,11 +51,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             : dialogModel.InkatlasFileName;
         var relativeInkatlasFilePath = GetRelativeDestPath(inkatlasFileName);
 
-        GetToolViewModel<ProjectExplorerViewModel>().RefreshAfter(() =>
+        ProjectExplorerViewModel.SuspendFileWatcherStatic();
+
+        /*
+         * Copy and connect .app and .ent file
+         */
+        try
         {
-            /*
-             * Copy and connect .app and .ent file
-             */
             TemplateFileTools.CreatePhotoModeAppAndEnt(new PhotomodeEntAppOptions()
                 {
                     AppSourceRelPath = dialogModel.SelectedApp,
@@ -175,7 +176,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             }
 
             _loggerService.Success("Done! Your photo mode NPV should now work!");
-        });
+        }
+        finally
+        {
+            ProjectExplorerViewModel.ResumeFileWatcherStatic();
+        }
 
         return;
 

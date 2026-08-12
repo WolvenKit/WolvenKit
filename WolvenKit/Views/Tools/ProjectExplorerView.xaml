@@ -974,7 +974,7 @@
                     hc:InfoElement.Placeholder="Search"
                     hc:InfoElement.ShowClearButton="True"
                     FlowDirection="LeftToRight"
-                    TextChanged="PESearchBar_TextChanged"/>
+                    SearchStarted="PESearchBar_OnSearchStarted" />
 
                 <StackPanel
                     Grid.Row="1"
@@ -1109,7 +1109,8 @@
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
-            Visibility="Visible"
+            Visibility="{Binding IsFlatModeEnabled,
+                                 Converter={StaticResource BoolInvertConverter}}"
             HeaderRowHeight="3"
             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="Star"
@@ -1120,7 +1121,6 @@
             AllowResizingColumns="False"
             AutoGenerateColumns="False"
             ChildPropertyName="Children"
-            ExpandStateMappingName="IsExpanded"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
@@ -1180,7 +1180,8 @@
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
-            Visibility="Visible"
+            Visibility="{Binding IsFlatModeEnabled,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="Star"

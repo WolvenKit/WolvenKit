@@ -179,11 +179,6 @@ namespace WolvenKit.Services
 
         private static void ShowNotificationInApp(string message, ENotificationType type, bool staysOpen = false)
         {
-            if (TestHelper.InActiveTest)
-            {
-                return;
-            }
-
             Action action = type switch
             {
                 ENotificationType.Success => () =>

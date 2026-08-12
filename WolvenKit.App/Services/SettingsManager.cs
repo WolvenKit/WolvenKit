@@ -70,7 +70,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(TreeViewGroupSize),
             nameof(DefaultEditorDifficultyLevel),
             nameof(TreeViewIgnoredExtensions),
-            nameof(AutoExpandAllFoldersOnLaunch),
 
             // General
             nameof(AutoUpdateOnStartup),
@@ -283,10 +282,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
     private string? _treeViewIgnoredExtensions = "";
-
-    [Display(Name = "Auto-Open All Mod Folders When Opening a Project (May CausesSlower Opening for Very Large Projects)", GroupName = "File Editor")]
-    [ObservableProperty]
-    private bool _autoExpandAllFoldersOnLaunch = true;
 
     #endregion
 

@@ -297,7 +297,6 @@ namespace WolvenKit.Views.Tools
             }
 
             vm.UpdateSearchInArchives();
-            vm.AddSelectedCommand.NotifyCanExecuteChanged();
         }
 
         private void RightFileView_MouseDoubleClick(object sender, MouseButtonEventArgs e)

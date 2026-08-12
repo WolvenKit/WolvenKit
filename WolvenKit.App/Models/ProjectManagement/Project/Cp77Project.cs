@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
@@ -175,8 +174,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
     /// <summary>
-    /// Absolute path to /source/archive.
-    /// (Returns 'Mod' instead for legacy project compatibility.)
+    /// Absolute path to /source/archive
     /// </summary>
     public string ModDirectory
     {
@@ -518,14 +516,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         _ = ResourcesDirectory;
     }
 
-    /// <summary>
-    /// Splits the supplied `fullPath` into two paths divided after archive/raw/resource.
-    /// E.g. for "C:\path\to\my\mod\source\archive\my\kleppiin\choom.ent":
-    /// returns ("C:\path\to\my\mod\source\archive", "my\kleppiin\choom.ent")
-    /// </summary>
-    /// <param name="fullPath"></param>
-    /// <returns>(AbsolutePathToGameRelativeRoot, GameRelativePath)</returns>
-    public (string, string) SplitFilePathIntoAbsoluteAndGameRelativePaths(string fullPath) =>
+    public (string, string) SplitFilePath(string fullPath) =>
         (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
 
     /// <returns>The absolute path to the subdirectory containing the file, e.g. C:\CyberpunkFiles\...\source\archive</returns>
@@ -573,33 +564,28 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             _ => ResourceFiles.Contains(fileNameOrPath) || ResourceFiles.Any(f => f.EndsWith(fileNameOrPath)),
         };
 
-    /// <summary>
-    /// Resolves a path to its absolute form: an already-absolute path is returned unchanged;
-    /// a GAME-relative path is resolved under the appropriate source subdirectory.
-    /// </summary>
-    /// <param name="relativeOrAbsolutePath"></param>
-    /// <returns>The absolute path on disk.</returns>
-    public string GetAbsolutePath(string gameRelativeOrAbsolutePath)
+
+    public string GetAbsolutePath(string relativeOrAbsolutePath)
     {
-        if (Path.IsPathRooted(gameRelativeOrAbsolutePath))
+        if (Path.IsPathRooted(relativeOrAbsolutePath))
         {
-            return gameRelativeOrAbsolutePath;
+            return relativeOrAbsolutePath;
         }
 
-        var (prefix, gameRelativePath) = SplitFilePathIntoAbsoluteAndGameRelativePaths(gameRelativeOrAbsolutePath);
+        var (prefix, relativePath) = SplitFilePath(relativeOrAbsolutePath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
-        if (gameRelativePath == gameRelativeOrAbsolutePath)
+        if (relativePath == relativeOrAbsolutePath)
         {
-            return Path.Join(ModDirectory, prefix, gameRelativePath);
+            return Path.Join(ModDirectory, prefix, relativePath);
         }
 
         if (prefix != "")
         {
-            return Path.Join(FileDirectory, prefix, gameRelativePath);
+            return Path.Join(FileDirectory, prefix, relativePath);
         }
 
-        return Path.Join(prefix, gameRelativePath);
+        return Path.Join(prefix, relativePath);
     }
 
 
@@ -632,11 +618,6 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     private const string s_relativeRawDir = "wkitrawdir";
     private const string s_relativePackedDir = "wkitpackeddir";
 
-    /// <summary>
-    /// Get the game relative path from an absolute path.
-    /// </summary>
-    /// <param name="absolutePath"></param>
-    /// <returns>GameRelativePath</returns>
     public string GetRelativePath(string absolutePath)
     {
         if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
@@ -996,38 +977,32 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     [GeneratedRegex(@"(((\w+\/)|(\w+\\\\?))+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
 
-    public void DeleteEmptyFolders(ILoggerService loggerService, IProjectEvents? projectEvents = null)
+    public void DeleteEmptyFolders(ILoggerService loggerService)
     {
-        var deletedFolders = new List<string>();
-        DeleteEmptyFolders(ModDirectory, deletedFolders);
-        if (deletedFolders.Count > 0)
+        var numEmptyFolders = DeleteEmptyFolders(ModDirectory);
+        if (numEmptyFolders > 0)
         {
-            loggerService.Success($"Deleted {deletedFolders.Count} empty folders");
-
-            // Announce the removed folders so the project explorer prunes their nodes; without this the
-            // tree keeps showing folders that no longer exist on disk. Idempotent, so callers that also
-            // trigger a full reload (or pass null) are unaffected.
-            foreach (var folder in deletedFolders)
-            {
-                projectEvents?.PublishDirectoryDeleted(folder);
-            }
+            loggerService.Success($"Deleted {numEmptyFolders} empty folders");
         }
     }
 
-    private static void DeleteEmptyFolders(string directory, List<string> deletedFolders)
+    private static int DeleteEmptyFolders(string directory)
     {
+        var numEmptyFolders = 0;
         foreach (var subdirectory in Directory.GetDirectories(directory))
         {
-            DeleteEmptyFolders(subdirectory, deletedFolders);
+            DeleteEmptyFolders(subdirectory);
 
             if (Directory.GetFiles(subdirectory).Length != 0 || Directory.GetDirectories(subdirectory).Length != 0)
             {
                 continue;
             }
 
+            numEmptyFolders += 1;
             Directory.Delete(subdirectory);
-            deletedFolders.Add(subdirectory);
         }
+
+        return numEmptyFolders;
     }
 
     /// <summary>

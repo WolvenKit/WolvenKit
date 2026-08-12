@@ -83,7 +83,7 @@ public static partial class ArchiveXlHelper
         return openBracesCount;
     }
 
-    private static IEnumerable<string> Substitute(string depotPath, List<string> modFiles)
+    private static IEnumerable<string> Substitute(string depotPath, Cp77Project? activeProject = null)
     {
         // Base case: if the string does not contain '{', return the string as the only element in a list
         if (!depotPath.Contains('{'))
@@ -93,14 +93,15 @@ public static partial class ArchiveXlHelper
 
         // For {body}: If we get meshes from active project, we'll use these instead of substituting.
         // The list will only hold "base_body" anyway.
-        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is { Length: 2 } parts)
+        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is { Length: 2 } parts &&
+            activeProject is not null)
         {
             if (!s_keysAndValues.TryGetValue("{body}", out var bodyValues))
             {
                 bodyValues = [];
             }
 
-            var bodiesFromProject = modFiles
+            var bodiesFromProject = activeProject.ModFiles
                 .Where(f => f.StartsWith(parts[0]) && f.EndsWith(parts[1]))
                 .Select(f => f.Replace(parts[0], "").Replace(parts[1], ""))
                 .ToList();
@@ -123,7 +124,7 @@ public static partial class ArchiveXlHelper
             // If the key is not in the dictionary, return early. Empty array will result in a warning.
             if (key.Contains("variant") || !s_keysAndValues.TryGetValue(key, out var substitutionList))
             {
-                if (placeholders.Count == 1)
+                if (placeholders.Count == 1 && activeProject is not null)
                 {
                     results.AddRange(ExtractVariants());
                 }
@@ -135,7 +136,7 @@ public static partial class ArchiveXlHelper
             foreach (var substitution in substitutionList)
             {
                 var newPath = depotPath.Replace(key, substitution);
-                results.AddRange(Substitute(newPath, modFiles));
+                results.AddRange(Substitute(newPath, activeProject));
             }
         }
 
@@ -158,7 +159,7 @@ public static partial class ArchiveXlHelper
             var pathStart = parts1[0];
             HashSet<string> variantMatches = [];
 
-            foreach (var path in modFiles)
+            foreach (var path in activeProject.ModFiles)
             {
                 if (!string.IsNullOrEmpty(pathStart) && path.StartsWith(pathStart) &&
                     path.Replace(pathStart, "").Split(Path.DirectorySeparatorChar) is
@@ -230,14 +231,7 @@ public static partial class ArchiveXlHelper
             return [depotPath];
         }
 
-        if (activeProject == null)
-        {
-            throw new WolvenKitException(2342, $"There is no active project to add files to. Aborting.");
-        }
-
-        var modFiles = activeProject.ModFiles;
-
-        return Substitute(depotPath, modFiles);
+        return Substitute(depotPath, activeProject);
     }
 
     /// <summary>

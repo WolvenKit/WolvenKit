@@ -28,7 +28,6 @@ public sealed class WolvenKitTestFixture : IDisposable
 
     private Application? _application;
     private UIA3Automation? _automation;
-    private int? _previousUiScale;
 
     public Application Application => _application ?? throw new InvalidOperationException("Fixture not started.");
     public UIA3Automation Automation => _automation ?? throw new InvalidOperationException("Fixture not started.");
@@ -54,10 +53,6 @@ public sealed class WolvenKitTestFixture : IDisposable
     /// </param>
     public Window Start(int startupTimeoutSeconds = 400)
     {
-        // Magnification above 100% enlarges chrome enough to hide action buttons
-        // that FlaUI needs (copy path, open explorer, etc.). Force 100% for the run.
-        _previousUiScale = UiScaleTestSetup.ForceTo100Percent();
-
         var exePath = ResolveExePath();
         _automation = new UIA3Automation();
         _application = Application.Launch(exePath);
@@ -174,42 +169,9 @@ public sealed class WolvenKitTestFixture : IDisposable
 
     public void Dispose()
     {
-        // Shut down the app fully before editing recentItems.json, or a late Save can restore the entry.
         try { _application?.Close(); } catch { /* best effort */ }
-
-        try
-        {
-            if (_application is { HasExited: false })
-            {
-                // Give the process a short window to exit cleanly, then force-kill.
-                WaitUntil(() => _application.HasExited, timeoutMs: 15_000, pollIntervalMs: 200);
-            }
-
-            if (_application is { HasExited: false })
-            {
-                _application.Kill();
-                WaitUntil(() => _application.HasExited, timeoutMs: 5_000, pollIntervalMs: 100);
-            }
-        }
-        catch { /* best effort */ }
-
         try { _application?.Dispose(); } catch { /* best effort */ }
         try { _automation?.Dispose(); } catch { /* best effort */ }
-
-        // Drop this run's projects from Welcome page recent/pinned before deleting files.
-        try
-        {
-            RecentProjectsTestCleanup.RemoveProjectsUnder(TempRoot);
-        }
-        catch { /* best effort */ }
-
-        // Put the developer's UI scale back after the process has fully exited.
-        try
-        {
-            UiScaleTestSetup.Restore(_previousUiScale);
-        }
-        catch { /* best effort */ }
-        _previousUiScale = null;
 
         // Clean up temp projects created by this run.
         try

@@ -39,8 +39,6 @@ public partial class ProjectResourceTools
 
     private readonly Cr2WTools _crwWTools;
 
-    private readonly IProjectEvents _projectEvents;
-
 
     private static readonly List<string> s_ignoredDependencyPartials =
     [
@@ -109,15 +107,13 @@ public partial class ProjectResourceTools
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
-        ILoggerService loggerService, ISettingsManager settingsServiceManager, Cr2WTools cr2WTools,
-        IProjectEvents projectEvents)
+        ILoggerService loggerService, ISettingsManager settingsServiceManager, Cr2WTools cr2WTools)
     {
         _projectManager = projectManager;
         _archiveManager = archiveManager;
         _loggerService = loggerService;
         _settingsService = settingsServiceManager;
         _crwWTools = cr2WTools;
-        _projectEvents = projectEvents;
     }
 
     private RED4Controller? _red4Controller = null;
@@ -281,7 +277,7 @@ public partial class ProjectResourceTools
         }
         finally
         {
-            currentProject.DeleteEmptyFolders(_loggerService, _projectEvents);
+            currentProject.DeleteEmptyFolders(_loggerService);
             _semaphore.Release();
         }
     }
@@ -403,27 +399,14 @@ public partial class ProjectResourceTools
 
         File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
 
-        // AddToMod published the file at its extracted (source) path; it has now been relocated into the
-        // target folder. Announce the move so the tree drops the source node and shows the file at its
-        // final path. If we overwrote a pre-existing target, its node simply stays (the move re-adds it),
-        // and the To-path notification refreshes any open tab for it.
-        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(sourceAbsolutePath, targetAbsoluteFile)]));
-
         // pop it into our map
         pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, fileName));
     }
 
     private const string s_tempDirSuffix = "_wolvenkit_tempdir";
 
-    /// <summary>
-    /// Carries out the action of moving the file from the source to the destination.
-    /// </summary>
-    /// <param name="sourceGameRelativeOrAbsolutePath"></param>
-    /// <param name="destGameRelativeOrAbsolutePath"></param>
-    /// <param name="absoluteFolderPrefix"></param>
-    /// <param name="refactor"></param>
-    /// <exception cref="InvalidDataException"></exception>
-    public async Task MoveAndRefactorAsync(string sourceGameRelativeOrAbsolutePath, string destGameRelativeOrAbsolutePath, string absoluteFolderPrefix,
+    // TODO: Remove stupid AbsoluteFolderPrefix
+    public async Task MoveAndRefactorAsync(string sourcePath, string destPath, string absoluteFolderPrefix,
         bool refactor)
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
@@ -431,9 +414,10 @@ public partial class ProjectResourceTools
             return;
         }
 
-        var originalSourceGameRelativeOrAbsolutePath = sourceGameRelativeOrAbsolutePath;
-        var sourceGameRelPath = sourceGameRelativeOrAbsolutePath;
-        var destGameRelPath = destGameRelativeOrAbsolutePath;
+        var originalSourcePath = sourcePath;
+
+        var sourceRelPath = sourcePath;
+        var destRelPath = destPath;
 
         var projectRootPath = string.Join(Path.DirectorySeparatorChar,
             absoluteFolderPrefix.ToLower().Split(Path.DirectorySeparatorChar)[..^1]);
@@ -443,15 +427,15 @@ public partial class ProjectResourceTools
 
         try
         {
-            destGameRelPath = FilepathValidationTools.SanitizeOsFilePath(destGameRelPath);
-            destAbsPath = ToAbsolutePath(destGameRelPath);
+            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
+            destAbsPath = ToAbsolutePath(destRelPath);
 
-            sourceGameRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceGameRelPath);
-            sourceFileOrDirAbsPath = ToAbsolutePath(sourceGameRelPath);
+            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
+            sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
         {
-            _loggerService.Error($"Failed to move \"{sourceGameRelativeOrAbsolutePath}\" to \"{destGameRelativeOrAbsolutePath}\": {e.Message}");
+            _loggerService.Error($"Failed to move \"{sourcePath}\" to \"{destPath}\": {e.Message}");
             return;
         }
 
@@ -488,24 +472,9 @@ public partial class ProjectResourceTools
         // the user is moving an empty directory
         if (files.Count == 0 && sourceIsDirectory)
         {
-            // This will fail if a file or directory already exists at the destination.
             Directory.Move(sourceFileOrDirAbsPath, destAbsPath);
-
-            var didMoveSucceed = Directory.Exists(destAbsPath) // a dir exists at the destination
-                                 && !destAbsPath.Contains(s_tempDirSuffix) // it's not the temp dir
-                                 && !Directory.Exists(sourceFileOrDirAbsPath); // and the source dir got deleted/moved
-
-            // Notify the project explorer that the move succeeded so the file grids can be updated.
-            if (didMoveSucceed)
-            {
-                _projectEvents.PublishFilesMoved(
-                    new FilesMovedMessage([(sourceFileOrDirAbsPath, destAbsPath)]));
-            }
-
             return;
         }
-
-        // Below we prepare to merge the files being moved with any files at the destination.
 
         files = files.Distinct().ToList();
 
@@ -536,10 +505,6 @@ public partial class ProjectResourceTools
 
         var fileReplacements = new Dictionary<string, string>();
 
-        // Authoritative (from -> to) pairs to announce to the project explorer once the move has
-        // actually completed on disk. Absolute paths, keyed by the path the tree currently knows.
-        var publishedMoves = new List<(string From, string To)>();
-
         foreach (var sourceAbsPath in files)
         {
             // If the file is not a folder, this is just the dest path
@@ -558,24 +523,13 @@ public partial class ProjectResourceTools
                 continue;
             }
 
-            // The absolute path the project explorer currently knows this file by. Normally that is
-            // just the source; for the case-only-rename three-way move we relocated via a temp dir,
-            // so map the temp source back onto the original (rooted) path the tree still holds.
-            var fromAbsPath = sourceAbsPath;
-            if (originalSourceGameRelativeOrAbsolutePath != sourceFileOrDirAbsPath && Path.IsPathRooted(originalSourceGameRelativeOrAbsolutePath))
-            {
-                fromAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, originalSourceGameRelativeOrAbsolutePath);
-            }
-
-            publishedMoves.Add((fromAbsPath, targetAbsPath));
-
             var relativeSourcePath = activeProject.GetRelativePath(sourceAbsPath);
 
             // We've been moving across temp directories
-            if (originalSourceGameRelativeOrAbsolutePath != sourceFileOrDirAbsPath)
+            if (originalSourcePath != sourceFileOrDirAbsPath)
             {
                 var relativeTempPath = activeProject.GetRelativePath(sourceFileOrDirAbsPath);
-                var relativePath = activeProject.GetRelativePath(originalSourceGameRelativeOrAbsolutePath);
+                var relativePath = activeProject.GetRelativePath(originalSourcePath);
                 relativeSourcePath = relativeSourcePath.Replace(relativeTempPath, relativePath);
             }
 
@@ -596,12 +550,6 @@ public partial class ProjectResourceTools
         if (successfulReplacements.Count > 0)
         {
             DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
-        }
-
-        var confirmedMoves = publishedMoves.Where(m => File.Exists(m.To)).ToList();
-        if (confirmedMoves.Count > 0)
-        {
-            _projectEvents.PublishFilesMoved(new FilesMovedMessage(confirmedMoves));
         }
 
         if (!refactor)
@@ -1048,8 +996,7 @@ public partial class ProjectResourceTools
     /// </summary>
     /// <param name="absolutePath">Absolute path to file or folder</param>
     /// <param name="activeProject">Current Wolvenkit project (so we don't delete too many folders)</param>
-    /// <param name="projectEvents">Optional: when supplied, each deleted folder is announced to the project explorer.</param>
-    public static void DeleteEmptyParents(string? absolutePath, Cp77Project activeProject, IProjectEvents? projectEvents = null)
+    public static void DeleteEmptyParents(string? absolutePath, Cp77Project activeProject)
     {
         var absoluteFolderPath = absolutePath;
 
@@ -1079,8 +1026,7 @@ public partial class ProjectResourceTools
         }
 
         Directory.Delete(absoluteFolderPath);
-        projectEvents?.PublishDirectoryDeleted(absoluteFolderPath);
-        DeleteEmptyParents(absoluteFolderPath, activeProject, projectEvents);
+        DeleteEmptyParents(absoluteFolderPath, activeProject);
     }
 
     public void ScanModArchives(bool? executeScan = null, string? archiveName = null)
@@ -1426,7 +1372,6 @@ public partial class ProjectResourceTools
             try
             {
                 File.Delete(absolutePath);
-                _projectEvents.PublishFileDeleted(absolutePath);
             }
             catch
             {
@@ -1434,7 +1379,7 @@ public partial class ProjectResourceTools
             }
         }
 
-        activeProject.DeleteEmptyFolders(_loggerService, _projectEvents);
+        activeProject.DeleteEmptyFolders(_loggerService);
     }
 
     # region meshFiles
