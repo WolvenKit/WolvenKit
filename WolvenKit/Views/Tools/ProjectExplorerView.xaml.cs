@@ -745,8 +745,41 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
+        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
+        {
             _isDragging = true;
+
+            if (ViewModel is not { } vm)
+            {
+                return;
+            }
+
+            vm.IsDragging = true;
+
+            var draggingItems = e.DraggingNodes.Select(x => x.Item as FileSystemModel).ToList();
+
+            if (vm.SelectedItems is { } selectedItems
+                && draggingItems.Select(x => !selectedItems.Contains(x)).ToList().Count > 0)
+            {
+                vm.SelectedItems.Clear();
+                vm.SelectedItems.AddRange(draggingItems);
+
+                if (draggingItems.Count == 1)
+                {
+                    vm.SelectedItem = draggingItems[0];
+                }
+
+                return;
+            }
+
+            if (vm.SelectedItem is { } selectedItem && draggingItems.FirstOrDefault() is { } draggingItem)
+            {
+                if (selectedItem.RawRelativePath != draggingItem.RawRelativePath)
+                {
+                    vm.SelectedItem = draggingItem;
+                }
+            }
+        }
 
         private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
         {
@@ -778,9 +811,9 @@ namespace WolvenKit.Views.Tools
                 e.Handled = _isDragging; // which should be true at this point
                 if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
+                    e.Handled = true;
                     return;
                 }
-
 
                 var selectedFilePaths =
                     vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? [];
@@ -813,6 +846,7 @@ namespace WolvenKit.Views.Tools
                 // 1146: addresses "prevent self-drag-and-drop"
                 if (files.Count == 0 || files[0] == targetDirectory)
                 {
+                    e.Handled = true;
                     return;
                 }
 
@@ -820,11 +854,22 @@ namespace WolvenKit.Views.Tools
             }
             catch (Exception error)
             {
+                e.Handled = true;
                 Console.WriteLine(error.Message);
             }
         }
-        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
+
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e)
+        {
             _isDragging = false;
+
+            if (ViewModel is not { } vm)
+            {
+                return;
+            }
+
+            vm.IsDragging = false;
+        }
 
         /// <summary>
         ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
@@ -1252,6 +1297,7 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion search/filter
+
         public class FilePathComparer : IComparer<object>, ISortDirection
         {
             public int Compare(object x, object y)

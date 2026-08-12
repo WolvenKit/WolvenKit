@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.UITests.Helpers;
 
 namespace WolvenKit.UITests.Tests;
@@ -21,10 +22,16 @@ public class ProjectExplorerFileOperationsTest : WolvenKitUiTestBase
 {
     [TestMethod]
     [Timeout(300_000)]
-    public void Example_AfterSeed_ProjectExplorerHasFiles()
+    public void DragAndDrop_MovesSingleFileToBaseDirectory()
     {
         int selectedCount = SeedProjectWithAnimMotionDatabaseFiles();
         Assert.IsTrue(Grids.CountProjectExplorerFiles() >= selectedCount);
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+        {
+            ProjectExplorer.DragSingleFileToBaseDirectory();
+        });
 
+        Assert.AreEqual("Timed out waiting for tree node 'adam_smasher_weapons.csv' to appear (waited 30 s).",
+            exception.Message);
     }
 }

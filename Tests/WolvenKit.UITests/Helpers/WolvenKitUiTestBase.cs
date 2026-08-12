@@ -22,6 +22,7 @@ public abstract class WolvenKitUiTestBase
     protected string ProjectDir { get; private set; } = null!;
     protected InspectableGridHelpers Grids { get; private set; } = null!;
     protected AssetBrowserUiActions AssetBrowser { get; private set; } = null!;
+    protected ProjectExplorerUiActions ProjectExplorer { get; private set; } = null!;
 
     protected ConditionFactory Cf => Fixture.Automation.ConditionFactory;
 
@@ -37,6 +38,7 @@ public abstract class WolvenKitUiTestBase
 
         Grids = new InspectableGridHelpers(MainWindow, Cf, WaitForElement);
         AssetBrowser = new AssetBrowserUiActions(Fixture, MainWindow, Grids, WaitForElement);
+        ProjectExplorer = new ProjectExplorerUiActions(Fixture, MainWindow, Grids, WaitForElement);
     }
 
     [TestCleanup]

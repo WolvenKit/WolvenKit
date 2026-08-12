@@ -78,45 +78,8 @@ public sealed class AssetBrowserUiActions
     /// Each element in <paramref name="pathSegments"/> is matched against the
     /// displayed Name of tree items (case-insensitive).
     /// </summary>
-    public void NavigateLeftTree(AutomationElement treeRoot, string[] pathSegments)
-    {
-        var cf = _fixture.Automation.ConditionFactory;
-        AutomationElement current = treeRoot;
-
-        foreach (var segment in pathSegments)
-        {
-            // Tree items inside Syncfusion SfTreeGrid are typically exposed as
-            // ControlType.DataItem or ControlType.TreeItem depending on the UIA provider.
-            var target = _waitForElement(() =>
-            {
-                var byName = current.FindFirstDescendant(cf.ByName(segment));
-                if (byName != null)
-                {
-                    return byName;
-                }
-
-                var allItems = current.FindAllDescendants(
-                    cf.ByControlType(ControlType.DataItem)
-                    .Or(cf.ByControlType(ControlType.TreeItem)));
-
-                return allItems.FirstOrDefault(el =>
-                    string.Equals(el.Name, segment, StringComparison.OrdinalIgnoreCase));
-            }, label: $"tree node '{segment}'");
-
-            target.Click();
-            Task.Delay(50).Wait();
-            Keyboard.Pressing(VirtualKeyShort.RIGHT);
-            Task.Delay(50).Wait();
-            Keyboard.Release(VirtualKeyShort.RIGHT);
-            Task.Delay(50).Wait();
-
-            WolvenKitTestFixture.WaitUntil(
-                () => current.FindAllDescendants(
-                          cf.ByControlType(ControlType.DataItem)
-                          .Or(cf.ByControlType(ControlType.TreeItem))).Length > 1,
-                timeoutMs: 5_000);
-        }
-    }
+    public void NavigateLeftTree(AutomationElement treeRoot, string[] pathSegments) =>
+        _grids.NavigateFileTree(treeRoot, pathSegments);
 
     public void ClickSelectAllHeader()
     {

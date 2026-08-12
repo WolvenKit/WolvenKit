@@ -59,6 +59,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private const string s_toolContentId = "ProjectExplorer_Tool";
 
+    public bool IsDragging { get; set; } = false;
+
     /// <summary>
     /// Identifies the caption string used for this tool window.
     /// </summary>
@@ -1854,6 +1856,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             case nameof(SelectedTabIndex) when ActiveProject is not null:
                 ActiveProject.ActiveTab = SelectedTabIndex;
                 _projectExplorerTabChanged = true;
+                break;
+            case nameof(SelectedItem) when ActiveProject is not null:
+            case nameof(SelectedItems) when ActiveProject is not null:
+                if (IsDragging)
+                {
+                    return;
+                }
+
                 break;
         }
 

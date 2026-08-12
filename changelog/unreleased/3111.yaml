@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3111
+      author: "gistya"
+      description: "Fixed an issue where drag-and-drop would fail to work when dragging a single unselected file. Now the file with become selected by the action before you drop it."
