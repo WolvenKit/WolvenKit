@@ -254,7 +254,7 @@ namespace WolvenKit.Views.Tools
 
                 Observable
                     .FromEventPattern(TreeGridFlat, nameof(TreeGridFlat.CellDoubleTapped))
-                    .Subscribe(p => OnCellDoubleTapped(p.Sender, p.EventArgs as TreeGridCellDoubleTappedEventArgs))
+                    .Subscribe(p => OnFlatCellDoubleTapped(p.Sender, p.EventArgs as GridCellDoubleTappedEventArgs))
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
@@ -786,7 +786,7 @@ namespace WolvenKit.Views.Tools
 
         private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
         {
-            if (e.Node.Item is not FileSystemModel model)
+            if (e?.Node?.Item is not FileSystemModel model)
             {
                 return;
             }
@@ -810,6 +810,16 @@ namespace WolvenKit.Views.Tools
             {
                 TreeGrid.ExpandNode(e.Node);
             }
+        }
+
+        private void OnFlatCellDoubleTapped(object sender, GridCellDoubleTappedEventArgs e)
+        {
+            if (e?.Record is not FileSystemModel model || model.IsDirectory)
+            {
+                return;
+            }
+
+            ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
         }
 
         private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
