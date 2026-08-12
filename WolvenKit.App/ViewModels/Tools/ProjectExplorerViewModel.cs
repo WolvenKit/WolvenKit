@@ -92,10 +92,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
 
-    private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
 
-    public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
+    public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
     #endregion fields
 
     private static ProjectExplorerViewModel? s_instance;
@@ -143,8 +142,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
         _appViewModel.OpenDocumentChanged += OnOpenDocumentChanged;
 
-        _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
-
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
         _autoSaveCancelToken = null;
@@ -171,21 +168,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
-        RefreshProjectData();
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            RefreshProjectData();
 
-        CheckForOneDriveInPath();
-
-        // On first project load, we're already initialized, so this won't fire
-        Refresh();
-        OnProjectChanged?.Invoke();
+            CheckForOneDriveInPath();
+        });
     }
 
     /// <summary>
     /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
     /// </summary>
-    public Dictionary<string, bool> ExpansionStateDictionary = [];
+    public Dictionary<string, bool> ExpansionStateDictionary
+    {
+        get => _projectWatcher.ExpansionStateDictionary;
+        set => _projectWatcher.ExpansionStateDictionary = value;
+    }
 
-    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
+    public bool? GetExpansionStateOrNull(string relPath) => _projectWatcher.GetExpansionStateOrNull(relPath);
 
     /// <summary>
     /// Set status of "scroll to open file" button (disable if we don't have one open)
@@ -204,35 +204,26 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(_loading)));
         }
     }
+
     public event Action? OnProjectChanged;
-
-    private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(ProjectManager.ActiveProject))
-        {
-            return;
-        }
-
-        RefreshProjectData();
-    }
 
     // When opening projects from launch args, change detection for dependent objects isn't working yet.
     private void RefreshProjectData()
     {
-        // Save changes in active project
-        if (ActiveProject != null)
-        {
-            _hasUnsavedFileTreeChanges = true;
-            SaveProjectExplorerExpansionStateIfDirty();
-            _projectWatcher.UnwatchProject(ActiveProject);
-        }
-
-        OnProjectChanged?.Invoke();
-
         DispatcherHelper.RunOnMainThread(() =>
         {
+            // Save changes in active project
+            if (ActiveProject != null)
+            {
+                _hasUnsavedFileTreeChanges = true;
+                SaveProjectExplorerExpansionStateIfDirty();
+                _projectWatcher.UnwatchProject(ActiveProject);
+            }
+
             if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
             {
+                OnProjectChanged?.Invoke();
+
                 return;
             }
             ActiveProject = _projectManager.ActiveProject;
@@ -243,6 +234,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
 
             OnProjectChanged?.Invoke();
+            _progressService.IsIndeterminate = false;
         }, DispatcherPriority.ContextIdle);
     }
 
@@ -1007,14 +999,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            _deferredRefreshCts = new CancellationTokenSource();
             if (BeginDeferredRefreshContext == null)
             {
                 await ConvertToJsonInternal(selection);
                 return;
             }
 
-            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
+            await BeginDeferredRefreshContext(() => ConvertToJsonInternal(selection));
 
             return;
         }
@@ -1027,14 +1018,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        _deferredRefreshCts = new CancellationTokenSource();
         if (BeginDeferredRefreshContext == null)
         {
             await ConvertToJsonInternal(selection);
             return;
         }
 
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+        await BeginDeferredRefreshContext(() => ConvertToJsonInternal(convertSelection));
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1145,9 +1135,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             _loggerService.Info(logMsg);
         });
-
-        await _deferredRefreshCts.CancelAsync();
-        _deferredRefreshCts.Dispose();
     }
 
     /// <summary>
@@ -1551,9 +1538,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (!IsShiftKeyPressed)
         {
-            _deferredRefreshCts = new CancellationTokenSource();
-            await BeginDeferredRefreshContext!(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+            var selection = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder).ToList();
 
+            if (BeginDeferredRefreshContext == null)
+            {
+                await ConvertFromJsonInternal(selection);
+                return;
+            }
+
+            await BeginDeferredRefreshContext(() => ConvertFromJsonInternal(selection));
             return;
         }
 
@@ -1564,13 +1557,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        _deferredRefreshCts = new CancellationTokenSource();
         if (BeginDeferredRefreshContext == null)
         {
-            throw new Exception("Rendering context does not exist.");
+            await ConvertFromJsonInternal(convertSelection);
+            return;
         }
 
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
+        await BeginDeferredRefreshContext(() => ConvertFromJsonInternal(convertSelection));
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1772,20 +1765,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void RestoreProjectState(Cp77Project project)
     {
-
-        // read tree state from file
-        if (File.Exists(project.InterfaceProjectTreeStatePath))
-        {
-            _hasUnsavedFileTreeChanges = false;
-            ExpansionStateDictionary =
-                JsonSerializer.Deserialize<Dictionary<string, bool>>(
-                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
-        }
-        else
-        {
-            ExpansionStateDictionary = [];
-        }
-
         // Abort if user doesn't want to reopen any files
         if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
@@ -1948,6 +1927,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         try
         {
             _projectWatcher.WatchProject(project);
+            _hasUnsavedFileTreeChanges = false;
         }
         catch
         {

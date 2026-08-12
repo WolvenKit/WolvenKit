@@ -92,6 +92,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     public ProjectResourceTools ProjectResourceTools { get; init; }
     private IArchiveManagerLoader _archiveManagerLoader;
 
+    private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
+
     /// <summary>
     /// Class constructor
     /// </summary>
@@ -794,7 +796,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-            await LoadProjectFromPathAsync(location);
+            await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
 
@@ -918,7 +920,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await LoadProjectFromPathAsync(projectLocation);
+            await RunAfterModalClosed(async () =>
+            {
+                await LoadProjectFromPathAsync(projectLocation);
+            });
         }
         catch (Exception ex)
         {
@@ -1973,6 +1978,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             IsOverlayShown = false;
         }
+
+        while (_pendingAfterModalCloseAsyncActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            _ = _pendingAfterModalCloseAsyncActions.Dequeue()();
+        }
     }
 
     private bool CanCloseOverlay() => IsOverlayShown;
@@ -2147,6 +2157,43 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             IsDialogShown = true;
             ShouldDialogShow = true;
         }, DispatcherPriority.Render);
+
+    /// <summary>
+    /// Runs <paramref name="asyncAction"/> once every modal and overlay has finished closing.
+    /// The returned task completes when the action does — whether it ran immediately or was deferred.
+    /// </summary>
+    public Task RunAfterModalClosed(Func<Task> asyncAction)
+    {
+        ArgumentNullException.ThrowIfNull(asyncAction);
+
+        _progressService.Status = EStatus.Running;
+        _progressService.IsIndeterminate = true;
+
+        // Nothing is fading out, so there is nothing to wait for. Hand the caller the real task.
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            return asyncAction();
+        }
+
+        // FadeOut_Completed -> FinishedClosingModal() drains this queue.
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        _pendingAfterModalCloseAsyncActions.Enqueue(async () =>
+        {
+            try
+            {
+                await asyncAction();
+                tcs.TrySetResult();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred post-modal action: {ex.Message}");
+                tcs.TrySetException(ex);
+            }
+        });
+
+        return tcs.Task;
+    }
 
     [MemberNotNull(nameof(Title))]
     public void UpdateTitle()

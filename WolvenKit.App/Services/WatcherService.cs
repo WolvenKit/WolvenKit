@@ -3,9 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core.Interfaces;
@@ -35,6 +37,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
 
     public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
+
+    public Dictionary<string, bool> ExpansionStateDictionary { get; set; } = [];
+
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
@@ -43,6 +48,13 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
+
+    private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
+
+    private readonly ParallelOptions _parallelOptions = new()
+    {
+        MaxDegreeOfParallelism = _maxDoP,
+    };
 
     private static readonly List<string> s_ignoredExtensions =
     [
@@ -86,6 +98,17 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+
+        if (File.Exists(project.InterfaceProjectTreeStatePath))
+        {
+            ExpansionStateDictionary =
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
+        }
+        else
+        {
+            ExpansionStateDictionary = [];
+        }
 
         WatchLocation();
         Refresh();
@@ -172,7 +195,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 }
             }
         }
-
         void Create(FileSystemEventArgsWrapper e)
         {
             var timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -249,7 +271,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     isDirectory = attr.HasFlag(FileAttributes.Directory);
                 }
 
-                current = new FileSystemModel(parent, part, tmpPath, isDirectory);
+                var isExpanded = GetExpansionStateOrNull(tmpPath) ?? false;
+                current = new FileSystemModel(parent, part, tmpPath, isDirectory, isExpanded);
+
                 if (!current.IsDirectory)
                 {
                     FileList.Add(current);
@@ -410,19 +434,92 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
         ForceStop();
         Clear();
-
-        var allFiles = new DirectoryInfo(_projectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
-        foreach (var fileSystemInfo in allFiles)
-        {
-            var name = fileSystemInfo.FullName[(_projectDirectory.Length + 1)..];
-            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
-        }
+        PopulateFiles();
 
         _updateThreadCancellationTokenSource = new CancellationTokenSource();
         _updateTask = Task.Factory.StartNew(() => Update(_updateThreadCancellationTokenSource.Token), _updateThreadCancellationTokenSource.Token);
 
         _modsWatcher.EnableRaisingEvents = true;
     }
+
+    private void PopulateFiles()
+    {
+        var allFiles = new DirectoryInfo(_projectDirectory)
+            .GetFileSystemInfos("*", SearchOption.AllDirectories)
+            .ToList();
+
+        var entries = allFiles
+            .Select(info => new Entry(
+                info.FullName[(_projectDirectory.Length + 1)..],
+                info.Attributes.HasFlag(FileAttributes.Directory)))
+            .ToList();
+
+        // Shortest-first guarantees a node's parent is already in _fileLookup when we reach it.
+        entries.Sort((a, b) => a.RawRelPath.Length.CompareTo(b.RawRelPath.Length));
+        FileList.SuppressNotification = true;
+        WeakReferenceMessenger.Default.Send(new ChalkboardService.WillStartLoadingProjectFiles());
+
+        try
+        {
+            foreach (var entry in entries)
+            {
+                LinkNode(entry);
+            }
+        }
+        finally
+        {
+            FileList.SuppressNotification = false;
+            WeakReferenceMessenger.Default.Send(new ChalkboardService.DidFinishLoadingProjectFiles());
+        }
+    }
+
+    private readonly record struct Entry(string RawRelPath, bool IsDirectory);
+
+    /// <summary>
+    /// Make a FileSystemModel and put it in the tree. Must run single-threaded.
+    /// </summary>
+    private void LinkNode(Entry entry)
+    {
+        if (_fileLookup.ContainsKey(entry.RawRelPath))
+        {
+            return;
+        }
+
+        var parentPath = Path.GetDirectoryName(entry.RawRelPath);
+        var parent = string.IsNullOrEmpty(parentPath)
+            ? _projectFileSystemModel
+            : _fileLookup[parentPath];
+
+        var model = new FileSystemModel(
+            parent,
+            Path.GetFileName(entry.RawRelPath),
+            entry.RawRelPath,
+            entry.IsDirectory,
+            GetExpansionStateOrNull(entry.RawRelPath) ?? false);
+
+        if (!_fileLookup.TryAdd(entry.RawRelPath, model))
+        {
+            return;
+        }
+
+        if (!entry.IsDirectory)
+        {
+            FileList.Add(model);
+        }
+
+        if (string.IsNullOrEmpty(parentPath))
+        {
+            FileTree.Add(model);
+        }
+        else if (parent is { } parentModel)
+        {
+            parentModel.Children.SuppressNotification = true;
+            parentModel.Children.Add(model);
+            parentModel.Children.SuppressNotification = false;
+        }
+    }
+
+    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     public void ForceStop()
     {

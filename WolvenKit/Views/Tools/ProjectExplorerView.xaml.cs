@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -12,9 +14,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using HandyControl.Data;
 using ReactiveUI;
 using Syncfusion.Data;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -25,6 +30,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Services;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Templates;
@@ -35,8 +41,14 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for ProjectExplorerView.xaml
     /// </summary>
-    public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
+    public partial class ProjectExplorerView :
+        IRecipient<ChalkboardService.WillStartLoadingProjectFiles>,
+        IRecipient<ChalkboardService.DidFinishLoadingProjectFiles>
     {
+        private readonly IMessenger _messenger;
+
+        private List<IDisposable> _disposables = [];
+
         /// <summary>Identifies the <see cref="TreeItemSource"/> dependency property.</summary>
         public static readonly DependencyProperty TreeItemSourceProperty =
             DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileSystemModel>),
@@ -67,6 +79,10 @@ namespace WolvenKit.Views.Tools
         public ProjectExplorerView()
         {
             InitializeComponent();
+
+            _messenger = WeakReferenceMessenger.Default;
+            _messenger.RegisterAll(this);
+
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
@@ -75,9 +91,9 @@ namespace WolvenKit.Views.Tools
             TreeGrid.RowDragDropController.Dropped += RowDragDropController_Dropped;
             TreeGrid.RowDragDropController.CanAutoExpand = true;
 
-            tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
 
-            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
+            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "RawRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
 
@@ -86,6 +102,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
 
+            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
+            TreeGrid.LiveNodeUpdateMode = LiveNodeUpdateMode.Default;
 
             this.WhenActivated(disposables =>
             {
@@ -226,6 +244,31 @@ namespace WolvenKit.Views.Tools
             });
         }
 
+        #endregion Constructors
+
+        public void Receive(ChalkboardService.WillStartLoadingProjectFiles msg)
+        {
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                if (TreeGridFlat.View is { } flatView)
+                {
+                    _disposables.Add(flatView.DeferRefresh());
+                }
+
+                if (TreeGrid.View is { } treeView)
+                {
+                    _disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
+                }
+            });
+        }
+
+        public void Receive(ChalkboardService.DidFinishLoadingProjectFiles msg) =>
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                _disposables.ForEach(d => d.Dispose());
+                _disposables.Clear();
+            });
+
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
         {
             var dialog = new RenameDialog(showCheckbox);
@@ -287,18 +330,18 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.ClearSelections(false);
             }
         });
-        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
+        private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
             CompositeDisposable disposables =
             [
-                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
+                TreeGridFlat.View.DeferRefresh(),
                 TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
             ];
 
             using (disposables)
             {
-                await doBeforeRefresh;
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
+                await doBeforeRefresh();
+                DispatcherHelper.PostOnMainThread(() =>
                 {
                     TreeGridFlat.View.Filter = IsFileInFlat;
                     TreeGridFlat.View.Refresh();
@@ -310,7 +353,7 @@ namespace WolvenKit.Views.Tools
                             PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
                         }, 10);
                     });
-                });
+                }, DispatcherPriority.ContextIdle);
             }
         }
 
@@ -563,7 +606,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void TreeGridFlat_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
+        private void TreeGridFlat_ItemsSourceChanged(object sender, GridItemsSourceChangedEventArgs e)
         {
             if (TreeGridFlat?.View is null)
             {
@@ -605,7 +648,7 @@ namespace WolvenKit.Views.Tools
 
         private bool IsFileInFlat(object o) => tabControl != null && o is FileSystemModel fm && IsFileIn(o) && !fm.IsDirectory;
 
-        private void tabControl_SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void TabControl_SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (TreeGrid?.View is null)
             {
@@ -623,8 +666,6 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.View.RefreshFilter();
             }
         }
-
-        #endregion Constructors
 
         private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
         {
@@ -952,10 +993,10 @@ namespace WolvenKit.Views.Tools
                     switch (item1.IsDirectory)
                     {
                         case true when !item2.IsDirectory:
-                            c = -1;
+                            c = 1;
                             break;
                         case false when item2.IsDirectory:
-                            c = 1;
+                            c = -1;
                             break;
                         default:
                         {

@@ -1118,9 +1118,11 @@
             AllowDrop="True"
             AllowEditing="False"
             AllowFiltering="False"
+            AllowSorting="True"
             AllowResizingColumns="False"
             AutoGenerateColumns="False"
             ChildPropertyName="Children"
+            ExpandStateMappingName="IsExpanded"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
@@ -1170,13 +1172,14 @@
                     HeaderText=""
                     HorizontalHeaderContentAlignment="Left"
                     ImmediateUpdateColumnFilter="True"
+                    AllowSorting="True"
                     MappingName="Name" />
             </syncfusion:SfTreeGrid.Columns>
         </others:InspectableTreeGrid>
 
         <!-- Flat Tree View -->
-        <syncfusion:SfTreeGrid
-            Name="TreeGridFlat"
+        <others:InspectableDataGrid
+            x:Name="TreeGridFlat"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1189,29 +1192,22 @@
             AllowFiltering="True"
             AllowResizingColumns="True"
             AllowSorting="True"
-            AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             ContextMenuOpening="OnContextMenuOpen"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
-            ExpandStateMappingName="IsExpanded"
-            ExpanderColumn="False"
-            FilterLevel="Extended"
             IsReadOnly="True"
-            LiveNodeUpdateMode="AllowDataShaping"
-            ParentPropertyName="Hash"
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems,
                                     UpdateSourceTrigger=PropertyChanged,
                                     Mode=TwoWay}"
             SelectionMode="Extended"
-            SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling">
 
-            <syncfusion:SfTreeGrid.Resources>
+            <syncfusion:SfDataGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
@@ -1228,9 +1224,9 @@
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Margin" Value="0,0,0,3" />
                 </Style>
-            </syncfusion:SfTreeGrid.Resources>
+            </syncfusion:SfDataGrid.Resources>
 
-            <syncfusion:SfTreeGrid.SortColumnDescriptions>
+            <syncfusion:SfDataGrid.SortColumnDescriptions>
                 <syncfusion:SortColumnDescription
                     ColumnName="Name"
                     SortDirection="Ascending" />
@@ -1246,10 +1242,10 @@
                 <syncfusion:SortColumnDescription
                     ColumnName="FileSizeStr"
                     SortDirection="Ascending" />
-            </syncfusion:SfTreeGrid.SortColumnDescriptions>
+            </syncfusion:SfDataGrid.SortColumnDescriptions>
 
-            <syncfusion:SfTreeGrid.Columns>
-                <syncfusion:TreeGridTextColumn
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn
                     Width="220"
                     CellTemplate="{StaticResource TreeGridCellTemplateSimple}"
                     HeaderText="File Name"
@@ -1257,28 +1253,28 @@
                     MappingName="Name"
                     TextTrimming="CharacterEllipsis" />
 
-                <syncfusion:TreeGridTextColumn
+                <syncfusion:GridTextColumn
                     HeaderText="Path"
                     MappingName="GameRelativePath"
                     ImmediateUpdateColumnFilter="True"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
 
-                <syncfusion:TreeGridTextColumn
+                <syncfusion:GridTextColumn
                     Width="70"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
 
-                <syncfusion:TreeGridTextColumn
+                <syncfusion:GridTextColumn
                     Width="70"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
                     MappingName="FileSizeStr" />
-            </syncfusion:SfTreeGrid.Columns>
-        </syncfusion:SfTreeGrid>
+            </syncfusion:SfDataGrid.Columns>
+        </others:InspectableDataGrid>
 
         <!-- Loading text, visibility is controlled from xaml.cs -->
         <TextBlock
