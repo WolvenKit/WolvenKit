@@ -1175,8 +1175,8 @@
         </others:InspectableTreeGrid>
 
         <!-- Flat Tree View -->
-        <others:InspectableDataGrid
-            x:Name="TreeGridFlat"
+        <syncfusion:SfTreeGrid
+            Name="TreeGridFlat"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1188,22 +1188,29 @@
             AllowFiltering="True"
             AllowResizingColumns="True"
             AllowSorting="True"
+            AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             ContextMenuOpening="OnContextMenuOpen"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
+            ExpandStateMappingName="IsExpanded"
+            ExpanderColumn="False"
+            FilterLevel="Extended"
             IsReadOnly="True"
+            LiveNodeUpdateMode="AllowDataShaping"
+            ParentPropertyName="Hash"
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems,
                                     UpdateSourceTrigger=PropertyChanged,
                                     Mode=TwoWay}"
             SelectionMode="Extended"
+            SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling">
 
-            <syncfusion:SfDataGrid.Resources>
+            <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
@@ -1220,9 +1227,9 @@
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Margin" Value="0,0,0,3" />
                 </Style>
-            </syncfusion:SfDataGrid.Resources>
+            </syncfusion:SfTreeGrid.Resources>
 
-            <syncfusion:SfDataGrid.SortColumnDescriptions>
+            <syncfusion:SfTreeGrid.SortColumnDescriptions>
                 <syncfusion:SortColumnDescription
                     ColumnName="Name"
                     SortDirection="Ascending" />
@@ -1238,10 +1245,10 @@
                 <syncfusion:SortColumnDescription
                     ColumnName="FileSizeStr"
                     SortDirection="Ascending" />
-            </syncfusion:SfDataGrid.SortColumnDescriptions>
+            </syncfusion:SfTreeGrid.SortColumnDescriptions>
 
-            <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridTextColumn
+            <syncfusion:SfTreeGrid.Columns>
+                <syncfusion:TreeGridTextColumn
                     Width="220"
                     CellTemplate="{StaticResource TreeGridCellTemplateSimple}"
                     HeaderText="File Name"
@@ -1249,28 +1256,28 @@
                     MappingName="Name"
                     TextTrimming="CharacterEllipsis" />
 
-                <syncfusion:GridTextColumn
+                <syncfusion:TreeGridTextColumn
                     HeaderText="Path"
                     MappingName="GameRelativePath"
                     ImmediateUpdateColumnFilter="True"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
 
-                <syncfusion:GridTextColumn
+                <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
 
-                <syncfusion:GridTextColumn
+                <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
                     MappingName="FileSizeStr" />
-            </syncfusion:SfDataGrid.Columns>
-        </others:InspectableDataGrid>
+            </syncfusion:SfTreeGrid.Columns>
+        </syncfusion:SfTreeGrid>
 
         <!-- Loading text, visibility is controlled from xaml.cs -->
         <TextBlock
