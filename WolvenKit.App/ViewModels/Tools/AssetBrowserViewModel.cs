@@ -494,7 +494,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanAddToProject() => ProjectLoaded;
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private async Task AddSelectedAsync()
+    internal async Task AddSelectedAsync()
     {
         // get all selected files
         Dictionary<ulong, IGameFile> filesToAdd = new();

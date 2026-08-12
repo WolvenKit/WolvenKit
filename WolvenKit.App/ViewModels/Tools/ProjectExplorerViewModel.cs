@@ -988,7 +988,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
-    private async Task ConvertArchiveFile()
+    internal async Task ConvertArchiveFile()
     {
         if (SelectedItems is null)
         {
@@ -1534,7 +1534,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                             (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertRawFile))]
-    private async Task ConvertRawFile()
+    internal async Task ConvertRawFile()
     {
         if (!IsShiftKeyPressed)
         {
