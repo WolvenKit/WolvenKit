@@ -32,14 +32,15 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
         _progressService = progressService;
         _settings = settings;
     }
-    
+
     #region Fields
 
     private readonly IHashService _hashService;
     private readonly ILoggerService _logger;
     private readonly IProgressService<double> _progressService;
     private readonly ISettingsManager _settings;
-    
+    private readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
+
     private readonly SourceList<RedFileSystemModel> _rootCache = new();
 
     private readonly SourceList<RedFileSystemModel> _modCache = new();
@@ -108,7 +109,9 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
             .GroupBy(x => x.Key)
             .Select(x => x.First());
 
-        Parallel.ForEach(allFiles, (file) =>
+        var options = new ParallelOptions { MaxDegreeOfParallelism = _maxDoP };
+
+        Parallel.ForEach(allFiles, options, (file) =>
         {
             var path = hashService.Get(file.Key);
             if (path == null)
@@ -218,11 +221,17 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 
         var progress = -1;
         var numTotalArchives = (float)GetModArchives().Count();
-        
+        var reportEvery = Math.Max(1, (int)(numTotalArchives / 100));
+
         foreach (var archive in GetModArchives())
         {
             progress++;
-            _progressService.Report(progress / numTotalArchives);
+
+            if (progress % reportEvery == 0)
+            {
+                _progressService.Report(progress / numTotalArchives);
+            }
+
             ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath,
                 $"{nameof(archive.ArchiveRelativePath)}, archive name: ${archive.Name}");
 
@@ -261,7 +270,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
         _progressService.Completed();
     }
 
-    public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() => 
+    public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
         GetGroupedFiles(IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame);
 
     #endregion Methods

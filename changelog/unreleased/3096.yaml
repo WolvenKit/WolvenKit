@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3096
+      author: "gistya"
+      description: "Archive loading now starts at app launch and finishes much faster, speeding up the time to start working on a project."

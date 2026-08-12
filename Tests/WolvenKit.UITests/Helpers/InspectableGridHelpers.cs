@@ -1,6 +1,12 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Conditions;
+using FlaUI.Core.Definitions;
+using FlaUI.Core.Input;
+using FlaUI.Core.Tools;
+using FlaUI.Core.WindowsAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WolvenKit.UITests.Helpers;
@@ -30,6 +36,51 @@ public sealed class InspectableGridHelpers
         _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
         _cf = cf ?? throw new ArgumentNullException(nameof(cf));
         _waitForElement = waitForElement ?? throw new ArgumentNullException(nameof(waitForElement));
+    }
+
+    public void NavigateFileTree(AutomationElement treeRoot, string[] pathSegments)
+    {
+        AutomationElement current = treeRoot;
+
+        foreach (var segment in pathSegments)
+        {
+            // Tree items inside Syncfusion SfTreeGrid are typically exposed as
+            // ControlType.DataItem or ControlType.TreeItem depending on the UIA provider.
+            var target = GetTargetByName(current, segment);
+            target.Click();
+            Task.Delay(50).Wait();
+            Keyboard.Pressing(VirtualKeyShort.RIGHT);
+            Task.Delay(50).Wait();
+            Keyboard.Release(VirtualKeyShort.RIGHT);
+            Task.Delay(50).Wait();
+
+            WolvenKitTestFixture.WaitUntil(
+                () => current.FindAllDescendants(
+                    _cf.ByControlType(ControlType.DataItem)
+                        .Or(_cf.ByControlType(ControlType.TreeItem))).Length > 1,
+                timeoutMs: 5_000);
+        }
+    }
+
+    public AutomationElement GetTargetByName(AutomationElement treeRoot, string segment)
+    {
+        var current = treeRoot;
+
+        return _waitForElement(() =>
+            {
+                var byName = current.FindFirstDescendant(_cf.ByName(segment));
+                if (byName != null)
+                {
+                    return byName;
+                }
+
+                var allItems = current.FindAllDescendants(
+                    _cf.ByControlType(ControlType.DataItem)
+                        .Or(_cf.ByControlType(ControlType.TreeItem)));
+
+                return allItems.FirstOrDefault(el =>
+                    string.Equals(el.Name, segment, StringComparison.OrdinalIgnoreCase));
+            }, label: $"tree node '{segment}'");
     }
 
     /// <summary>

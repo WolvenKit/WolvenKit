@@ -67,7 +67,7 @@ namespace WolvenKit.Views.Documents
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
-            _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
+            _projectExplorer = Locator.Current.GetService<AppViewModel>()!.GetToolViewModel<ProjectExplorerViewModel>();
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;

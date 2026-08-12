@@ -1,0 +1,6 @@
+changes:
+    - type: "feature"
+      packages: ["App"]
+      pr-number: 3049
+      author: "Ametis81"
+      description: "Typing in the filter field of ProjectExplorer now updates automatically when stop typing instead of requiring return to be pressed."

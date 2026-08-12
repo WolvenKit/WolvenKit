@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -122,9 +123,42 @@ namespace WolvenKit.Core.Extensions
             }
 
             // The character width is determined by the sign of the prefix
-            return prefix > 0
-                ? Encoding.Unicode.GetString(br.ReadBytes(length * 2))
-                : Encoding.UTF8.GetString(br.ReadBytes(length));
+            var byteCount = prefix > 0 ? length * 2 : length;
+
+            byte[]? rented = null;
+            Span<byte> buffer = byteCount <= 256
+                ? stackalloc byte[256]
+                : (rented = ArrayPool<byte>.Shared.Rent(byteCount)).AsSpan();
+
+            try
+            {
+                buffer = buffer[..byteCount];
+                var read = 0;
+                
+                while (read < byteCount)
+                {
+                    var chunk = br.Read(buffer[read..]);
+                    if (chunk == 0)
+                    {
+                        break;
+                    }
+
+                    read += chunk;
+                }
+
+                var payload = buffer[..read];
+
+                return prefix > 0
+                    ? Encoding.Unicode.GetString(payload)
+                    : Encoding.UTF8.GetString(payload);
+            }
+            finally
+            {
+                if (rented is not null)
+                {
+                    ArrayPool<byte>.Shared.Return(rented);
+                }
+            }
         }
 
         /// <summary>

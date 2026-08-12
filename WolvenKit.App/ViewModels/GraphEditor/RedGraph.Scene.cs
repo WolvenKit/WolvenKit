@@ -8,6 +8,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Model;
@@ -23,13 +24,7 @@ public partial class RedGraph
 
     public List<Type> GetSceneNodeTypes()
     {
-        if (s_sceneNodeTypes == null)
-        {
-            s_sceneNodeTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => typeof(scnSceneGraphNode).IsAssignableFrom(x) && !x.IsAbstract)
-                .ToList();
-        }
+        s_sceneNodeTypes ??= AssemblyTypeIndex.GetConcreteTypesAssignableTo(typeof(scnSceneGraphNode)).ToList();
 
         return s_sceneNodeTypes;
     }

@@ -78,6 +78,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     private bool _manuallyLoading;
+    private readonly IArchiveManagerLoader _archiveManagerLoader;
 
     #endregion fields
 
@@ -93,7 +94,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        ProjectResourceTools projectResourceTools) : base(ToolTitle)
+        ProjectResourceTools projectResourceTools,
+        IArchiveManagerLoader archiveManagerLoader) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -105,6 +107,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _loggerService = loggerService;
         _appViewModel = appViewModel;
         _projectResourceTools = projectResourceTools;
+        _archiveManagerLoader = archiveManagerLoader;
 
         ContentId = ToolContentId;
 
@@ -260,7 +263,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         _manuallyLoading = true;
         ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
-        await _gameController.GetRed4Controller().HandleStartup();
+        await _archiveManagerLoader.LoadArchiveManagerAsync();
     }
 
     [RelayCommand]
@@ -491,7 +494,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanAddToProject() => ProjectLoaded;
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private async Task AddSelectedAsync()
+    internal async Task AddSelectedAsync()
     {
         // get all selected files
         Dictionary<ulong, IGameFile> filesToAdd = new();

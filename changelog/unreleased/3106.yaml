@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3106
+      author: "gistya"
+      description: "Fixed an issue where very large projects would freeze the app on loading. Vastly improved project loading speeds."
