@@ -87,7 +87,7 @@ public class HashServiceExt : HashService
         return true;
     }
 
-    private void MigrateLegacyGlobalCache(string appData)
+    private void MigrateLegacyGlobalCache()
     {
         var customRefsFile = Path.Combine(GetGlobalCacheDirectory(), "user_hashes.txt");
         if (!File.Exists(customRefsFile))
@@ -113,9 +113,8 @@ public class HashServiceExt : HashService
 
     private void LoadGlobalCacheCore()
     {
-        var appData = ISettingsManager.GetAppData();
         var customRefsFile = Path.Combine(GetGlobalCacheDirectory(), "custom_refs.txt");
-        var customTweaksFile = Path.Combine(appData, "custom_tweaks.txt");
+        var customTweaksFile = Path.Combine(GetGlobalCacheDirectory(), "custom_tweaks.txt");
 
         // Replace rather than Clear() so the dictionaries start at roughly their final size.
         _globalRefCache = new ConcurrentDictionary<string, byte>(
@@ -123,7 +122,7 @@ public class HashServiceExt : HashService
         _globalTweakCache = new ConcurrentDictionary<string, byte>(
             System.Environment.ProcessorCount, EstimateLineCount(customTweaksFile));
 
-        MigrateLegacyGlobalCache(appData);
+        MigrateLegacyGlobalCache();
 
         if (File.Exists(customRefsFile))
         {

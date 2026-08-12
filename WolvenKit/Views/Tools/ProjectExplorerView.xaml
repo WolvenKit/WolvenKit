@@ -974,7 +974,7 @@
                     hc:InfoElement.Placeholder="Search"
                     hc:InfoElement.ShowClearButton="True"
                     FlowDirection="LeftToRight"
-                    SearchStarted="PESearchBar_OnSearchStarted" />
+                    TextChanged="PESearchBar_TextChanged" />
 
                 <StackPanel
                     Grid.Row="1"
@@ -982,9 +982,9 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
-                        AutomationProperties.AutomationId="ExpandAllButton"
                         Height="Auto"
                         Padding="0"
+                        AutomationProperties.AutomationId="ExpandAllButton"
                         Click="ExpandAll_OnClick"
                         ToolTip="Expand All">
                         <templates:IconBox
@@ -1105,7 +1105,6 @@
         <!-- Hierarchical Tree View -->
         <others:InspectableTreeGrid
             x:Name="TreeGrid"
-            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1114,13 +1113,16 @@
             HeaderRowHeight="3"
             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="Star"
+            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             AllowDraggingRows="True"
             AllowDrop="True"
             AllowEditing="False"
             AllowFiltering="False"
+            AllowSorting="True"
             AllowResizingColumns="False"
             AutoGenerateColumns="False"
             ChildPropertyName="Children"
+            ExpandStateMappingName="IsExpanded"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
@@ -1170,13 +1172,14 @@
                     HeaderText=""
                     HorizontalHeaderContentAlignment="Left"
                     ImmediateUpdateColumnFilter="True"
+                    AllowSorting="True"
                     MappingName="Name" />
             </syncfusion:SfTreeGrid.Columns>
         </others:InspectableTreeGrid>
 
         <!-- Flat Tree View -->
-        <syncfusion:SfTreeGrid
-            Name="TreeGridFlat"
+        <others:InspectableDataGrid
+            x:Name="TreeGridFlat"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1189,48 +1192,46 @@
             AllowFiltering="True"
             AllowResizingColumns="True"
             AllowSorting="True"
-            AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             ContextMenuOpening="OnContextMenuOpen"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
-            ExpandStateMappingName="IsExpanded"
-            ExpanderColumn="False"
-            FilterLevel="Extended"
             IsReadOnly="True"
-            LiveNodeUpdateMode="AllowDataShaping"
-            ParentPropertyName="Hash"
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems,
                                     UpdateSourceTrigger=PropertyChanged,
                                     Mode=TwoWay}"
             SelectionMode="Extended"
-            SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling">
 
-            <syncfusion:SfTreeGrid.Resources>
-                <Style TargetType="syncfusion:TreeGridCell">
+            <syncfusion:SfDataGrid.Resources>
+                <Style TargetType="syncfusion:GridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 </Style>
 
-                <Style TargetType="syncfusion:TreeGridExpanderCell">
+                <Style TargetType="syncfusion:GridHeaderCellControl">
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Foreground" Value="#CCCCCC" />
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Padding" Value="6,3" />
+                </Style>
+
+                <Style TargetType="syncfusion:HeaderRowControl">
+                    <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
+            </syncfusion:SfDataGrid.Resources>
 
-                <Style TargetType="syncfusion:TreeGridHeaderRowControl">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="Margin" Value="0,0,0,3" />
-                </Style>
-            </syncfusion:SfTreeGrid.Resources>
-
-            <syncfusion:SfTreeGrid.SortColumnDescriptions>
+            <syncfusion:SfDataGrid.SortColumnDescriptions>
                 <syncfusion:SortColumnDescription
                     ColumnName="Name"
                     SortDirection="Ascending" />
@@ -1246,39 +1247,42 @@
                 <syncfusion:SortColumnDescription
                     ColumnName="FileSizeStr"
                     SortDirection="Ascending" />
-            </syncfusion:SfTreeGrid.SortColumnDescriptions>
+            </syncfusion:SfDataGrid.SortColumnDescriptions>
 
-            <syncfusion:SfTreeGrid.Columns>
-                <syncfusion:TreeGridTextColumn
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn
                     Width="220"
+                    MinimumWidth="160"
                     CellTemplate="{StaticResource TreeGridCellTemplateSimple}"
                     HeaderText="File Name"
                     ImmediateUpdateColumnFilter="True"
                     MappingName="Name"
                     TextTrimming="CharacterEllipsis" />
 
-                <syncfusion:TreeGridTextColumn
+                <syncfusion:GridTextColumn
                     HeaderText="Path"
                     MappingName="GameRelativePath"
                     ImmediateUpdateColumnFilter="True"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
 
-                <syncfusion:TreeGridTextColumn
-                    Width="70"
-                    AllowResizing="False"
+                <syncfusion:GridTextColumn
+                    Width="75"
+                    MinimumWidth="65"
+                    AllowResizing="True"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
 
-                <syncfusion:TreeGridTextColumn
-                    Width="70"
-                    AllowResizing="False"
+                <syncfusion:GridTextColumn
+                    Width="75"
+                    MinimumWidth="65"
+                    AllowResizing="True"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
                     MappingName="FileSizeStr" />
-            </syncfusion:SfTreeGrid.Columns>
-        </syncfusion:SfTreeGrid>
+            </syncfusion:SfDataGrid.Columns>
+        </others:InspectableDataGrid>
 
         <!-- Loading text, visibility is controlled from xaml.cs -->
         <TextBlock

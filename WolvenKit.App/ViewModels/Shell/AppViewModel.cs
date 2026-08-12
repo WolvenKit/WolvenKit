@@ -90,6 +90,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
+    private IArchiveManagerLoader _archiveManagerLoader;
+
+    private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
 
     /// <summary>
     /// Class constructor
@@ -120,7 +123,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
         IUpdateService updateService,
-        RedTypeTemplateService redTypeTemplateService
+        RedTypeTemplateService redTypeTemplateService,
+        IArchiveManagerLoader archiveManagerLoader
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -147,6 +151,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
         _redTypeTemplateService = redTypeTemplateService;
+        _archiveManagerLoader = archiveManagerLoader;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -306,13 +311,28 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         OnAppLoaded?.Invoke(this, EventArgs.Empty);
-        HandleActivation();
     }
 
     public event EventHandler? OnAppLoaded;
 
-    private void HandleActivation()
+    /// <summary>
+    /// One-time application startup work. Call once, from the shell, after its bindings are in
+    /// place.
+    /// </summary>
+    /// <remarks>
+    /// This used to hang off the <c>Status</c> property setter as a side effect, which meant it
+    /// could not be awaited, could not be ordered relative to the shell's own setup, and turned
+    /// any failure into an exception escaping a property assignment. Being an explicit awaitable
+    /// call also removes the need to branch on <c>TestHelper.InActiveTest</c> - tests simply await
+    /// it.
+    ///
+    /// Never throws: a discarded task's exception would otherwise go unobserved, and none of this
+    /// work is worth failing a launch over.
+    /// </remarks>
+    public async Task InitializeAsync()
     {
+        try
+        {
         var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
         if (thisVersion.ToString().Contains("nightly") && SettingsManager.UpdateChannel != EUpdateChannel.Nightly)
         {
@@ -320,6 +340,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _pluginService.Init();
+
         if (!OpenFileFromLaunchArgs())
         {
             ShowHomePageSync();
@@ -336,6 +357,47 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         CheckForTemplateUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
+
+            // Archives load last, and only once the shell has gone idle. The scan allocates
+            // heavily on a background thread, and GC pauses hit the UI thread too - starting it
+            // any earlier visibly stalls the window as it is still drawing itself.
+            if (Application.Current is { } app)
+            {
+                await app.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+            }
+
+            await LoadArchivesSafelyAsync();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
+    }
+
+    /// <summary>
+    /// Loads the archive manager, logging rather than propagating a failure.
+    /// </summary>
+    /// <remarks>
+    /// A corrupt, locked or missing archive should cost the user the asset browser, not the whole
+    /// application: before archive loading moved here it ran inside LoadProjectFromPathAsync
+    /// behind exactly this try/catch, and ArchiveManagerLoader still rethrows after logging.
+    /// Without the guard the fault escapes HandleActivation, then OnStatusChanged, then the
+    /// Status setter, and takes startup down with it.
+    ///
+    /// The catch has to live inside the async method rather than around the dispatcher call:
+    /// Dispatcher.Invoke(Func&lt;Task&gt;, ...) hands back the Task and drops it, so anything
+    /// thrown after the first await would be swallowed unobserved instead of logged.
+    /// </remarks>
+    private async Task LoadArchivesSafelyAsync()
+    {
+        try
+        {
+            await _archiveManagerLoader.LoadArchiveManagerAsync();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
     }
 
     public bool AddDockedPane(string paneString)
@@ -734,7 +796,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-            await LoadProjectFromPathAsync(location);
+            await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
 
@@ -798,7 +860,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+        DispatcherHelper.DelayOnMainThread(() =>
         {
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
@@ -809,7 +871,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
 
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
-        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+        }, 1000);
     }
 
     [RelayCommand]
@@ -858,7 +920,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await LoadProjectFromPathAsync(projectLocation);
+            await RunAfterModalClosed(async () =>
+            {
+                await LoadProjectFromPathAsync(projectLocation);
+            });
         }
         catch (Exception ex)
         {
@@ -1913,6 +1978,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             IsOverlayShown = false;
         }
+
+        while (_pendingAfterModalCloseAsyncActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            _ = _pendingAfterModalCloseAsyncActions.Dequeue()();
+        }
     }
 
     private bool CanCloseOverlay() => IsOverlayShown;
@@ -2087,6 +2157,43 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             IsDialogShown = true;
             ShouldDialogShow = true;
         }, DispatcherPriority.Render);
+
+    /// <summary>
+    /// Runs <paramref name="asyncAction"/> once every modal and overlay has finished closing.
+    /// The returned task completes when the action does — whether it ran immediately or was deferred.
+    /// </summary>
+    public Task RunAfterModalClosed(Func<Task> asyncAction)
+    {
+        ArgumentNullException.ThrowIfNull(asyncAction);
+
+        _progressService.Status = EStatus.Running;
+        _progressService.IsIndeterminate = true;
+
+        // Nothing is fading out, so there is nothing to wait for. Hand the caller the real task.
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            return asyncAction();
+        }
+
+        // FadeOut_Completed -> FinishedClosingModal() drains this queue.
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        _pendingAfterModalCloseAsyncActions.Enqueue(async () =>
+        {
+            try
+            {
+                await asyncAction();
+                tcs.TrySetResult();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred post-modal action: {ex.Message}");
+                tcs.TrySetException(ex);
+            }
+        });
+
+        return tcs.Task;
+    }
 
     [MemberNotNull(nameof(Title))]
     public void UpdateTitle()

@@ -1,0 +1,11 @@
+changes:
+  - type: "added"
+    packages: ["App", "Nuget Packages"]
+    pr-number: 2998
+    author: "notaspirit"
+    description: "Template Service is now exposed to the WScript environment"
+  - type: "breaking"
+    packages: [ "Nuget Packages" ]
+    pr-number: 2998
+    author: "notaspirit"
+    description: "WolvenKit.Modkit: ScriptFunctions now depends on RedTypeTemplateService"
