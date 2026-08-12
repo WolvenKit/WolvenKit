@@ -59,12 +59,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private const string s_toolContentId = "ProjectExplorer_Tool";
 
-    public bool IsDragging { get; set; } = false;
-
     /// <summary>
     /// Identifies the caption string used for this tool window.
     /// </summary>
     private const string s_toolTitle = "Project Explorer";
+
+    public bool IsDragging { get; set; } = false;
 
     public const string LoadProjectPurpose = "ProjectExplorer load project";
 
@@ -1753,6 +1753,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
+        _loggerService.Debug($"Initiating project load.");
+
         DispatcherHelper.RunOnMainThread(() =>
         {
             RefreshProjectData();
@@ -1810,13 +1812,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void SetupToolDefaults() =>
         ContentId = s_toolContentId;
-    // Define a unique contentId for this toolwindow
-    //BitmapImage bi = new BitmapImage();
-    // Define an icon for this toolwindow
-    // bi.BeginInit();
-    // bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-    // bi.EndInit();
-    // IconSource = bi;
 
     private void CheckForOneDriveInPath()
     {
@@ -1923,6 +1918,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #region expansion state
 
     public bool? GetExpansionStateOrNull(string relPath) => _projectWatcher.GetExpansionStateOrNull(relPath);
+
+    public void LoadExpansionStateDictionary(Cp77Project project)
+    {
+        var projectName = Path.GetFileNameWithoutExtension(project.Location);
+        if (File.Exists(project.InterfaceProjectTreeStatePath))
+        {
+            _hasUnsavedFileTreeChanges = false;
+            ExpansionStateDictionary =
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
+        }
+        else
+        {
+            ExpansionStateDictionary = [];
+        }
+    }
 
     public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
     {

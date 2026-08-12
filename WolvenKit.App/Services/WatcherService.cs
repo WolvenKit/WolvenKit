@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -23,7 +24,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     #region fields
 
     private readonly ILoggerService? _loggerService;
-
+    private readonly ProjectExplorerViewModel? _vm;
     private string _projectDirectory = string.Empty;
     private FileSystemModel? _projectFileSystemModel;
 
@@ -85,9 +86,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     #region Constructor
 
-    public WatcherService(ILoggerService? loggerService)
+    public WatcherService(ILoggerService? loggerService, ProjectExplorerViewModel? vm = null)
     {
         _loggerService = loggerService;
+        _vm = vm;
 
         _modsWatcher = new FileSystemWatcher
         {
@@ -109,18 +111,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-
-        if (File.Exists(project.InterfaceProjectTreeStatePath))
-        {
-            ExpansionStateDictionary =
-                JsonSerializer.Deserialize<Dictionary<string, bool>>(
-                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
-        }
-        else
-        {
-            ExpansionStateDictionary = [];
-        }
-
+        _vm?.LoadExpansionStateDictionary(project);
         WatchLocation();
         Refresh();
     }
@@ -575,7 +566,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     #region helpers
 
+    #endregion helpers
+
+    #region expansion state
+
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
-    #endregion helpers
+    #endregion expansion state
 }

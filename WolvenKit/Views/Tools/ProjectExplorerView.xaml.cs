@@ -48,6 +48,16 @@ namespace WolvenKit.Views.Tools
     {
         #region fields
 
+        /// <summary>
+        /// Identifies the <see ref="ContentId"/> of this tool window.
+        /// </summary>
+        private const string s_toolContentId = "ProjectExplorer_Tool";
+
+        /// <summary>
+        /// Identifies the caption string used for this tool window.
+        /// </summary>
+        private const string s_toolTitle = "Project Explorer";
+
         private readonly IMessenger _messenger;
 
         private List<IDisposable> _disposables = [];
@@ -302,12 +312,15 @@ namespace WolvenKit.Views.Tools
                 {
                     _disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
                 }
+
+                LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             });
         }
 
         public void Receive(ChalkboardService.DidFinishLoadingProjectFiles msg) =>
             DispatcherHelper.RunOnMainThread(() =>
             {
+                LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 _disposables.ForEach(d => d.Dispose());
                 _disposables.Clear();
             });
