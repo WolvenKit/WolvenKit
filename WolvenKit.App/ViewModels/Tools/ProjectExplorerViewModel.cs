@@ -86,11 +86,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private readonly string _autoSavePurpose = $"ProjectExplorer autosave {Guid.NewGuid():N}";
 
+    /// <summary>
+    /// Live claim on the project-load progress heartbeat, or null when no load is in flight.
+    /// Owned here rather than on the watcher: the view model is what arms and disarms it.
+    /// </summary>
+    private DispatcherHelper.RepeatingActionHandle? _loadingIndicatorHandle;
+
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
 
     private readonly ImportExportHelper _importExportHelper;
+    private readonly TimeSpan _projectLoadPollingInterval = TimeSpan.FromMilliseconds(50);
+    //private bool _inFlight = false;
 
     // FileTree / FileList are owned by the watcher service and are the grids' single source of truth.
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
@@ -174,6 +182,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #endregion constructor
 
     #region properties
+
+    [ObservableProperty]
+    private LoadingMode _currentLoadingMode;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -1444,6 +1455,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (!IsShiftKeyPressed)
         {
             var selection = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder).ToList();
+            EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
 
             if (BeginDeferredRefreshContext == null)
             {
@@ -1452,6 +1464,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
 
             await BeginDeferredRefreshContext(() => ConvertFromJsonInternal(selection));
+            DisableLoadingMode();
             return;
         }
 
@@ -1462,6 +1475,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
+        EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
+
         if (BeginDeferredRefreshContext == null)
         {
             await ConvertFromJsonInternal(convertSelection);
@@ -1469,6 +1484,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         await BeginDeferredRefreshContext(() => ConvertFromJsonInternal(convertSelection));
+        DisableLoadingMode();
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1647,6 +1663,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public event Action? OnProjectChanged;
 
+    /// <summary>
+    /// Event for `isLoading` and `isReload`.
+    /// The latter will be true if the user clicked the "reload" button.
+    /// It will be false if the user has loaded a fresh project or changed projects.
+    /// </summary>
+    public event EventHandler<LoadingMode>? OnSetLoading;
+
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
 
@@ -1751,13 +1774,64 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }, DispatcherPriority.ContextIdle);
     }
 
+    /// <summary>
+    /// Announces that a different project is about to load: flushes the outgoing project's state
+    /// and arms the loading chrome. Must be called before the project manager swaps its active
+    /// project, or the outgoing state is saved against the incoming one.
+    ///
+    /// Idempotent — the welcome page arms the chrome on click for responsiveness and the load path
+    /// announces the same load again; only the first call flushes.
+    /// </summary>
+    public void ProjectWillLoad(string projectPath)
+    {
+        if (CurrentLoadingMode == LoadingMode.LoadingNewProject)
+        {
+            return;
+        }
+
+        if (ActiveProject != null)
+        {
+            if (IsSameProjectPath(ActiveProject, projectPath))
+            {
+                return;
+            }
+
+            SaveProjectState();
+        }
+
+        EnableLoadingMode(LoadingMode.LoadingNewProject);
+    }
+
+    /// <summary>
+    /// Clears project-load loading chrome without reporting a successful load.
+    /// Use on cancel / failed open / same-project no-op after ProjectWillLoad armed the UI.
+    /// </summary>
+    public void CancelProjectLoad() => DisableLoadingMode(reportResult: false);
+
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         DispatcherHelper.RunOnMainThread(() =>
         {
-            RefreshProjectData();
+            try
+            {
+                EnableLoadingMode(false ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject);
 
-            CheckForOneDriveInPath();
+                RefreshProjectData();
+
+                CheckForOneDriveInPath();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Error refreshing project: {e.Message}. Try reloading the app. If this error persists, please reach out on the WolvenKit discord.");
+
+                CancelProjectLoad();
+            }
+            finally
+            {
+                RestoreProjectState(ActiveProject!);
+                CheckForOneDriveInPath();
+                DisableLoadingMode();
+            }
         });
     }
 
@@ -1805,18 +1879,115 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     }
 
+    private static bool IsSameProjectPath(Cp77Project activeProject, string projectPath)
+    {
+        if (string.IsNullOrWhiteSpace(projectPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            var requested = Path.GetFullPath(projectPath);
+            var location = Path.GetFullPath(activeProject.Location);
+            if (string.Equals(requested, location, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            var projectDirectory = Path.GetFullPath(activeProject.ProjectDirectory);
+            return string.Equals(requested, projectDirectory, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                   || requested.StartsWith(projectDirectory + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return string.Equals(activeProject.Location, projectPath, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    public enum LoadingMode
+    {
+        Ready,
+        LoadingNewProject,
+        ReloadingSameProject,
+        ShowLoadingDuringOperation
+    }
+
+    private void EnableLoadingMode(LoadingMode mode)
+    {
+        if (mode != LoadingMode.LoadingNewProject && mode != LoadingMode.ReloadingSameProject && mode != LoadingMode.ShowLoadingDuringOperation)
+        {
+            return;
+        }
+
+        if (mode != CurrentLoadingMode)
+        {
+            OnSetLoading?.Invoke(this, mode);
+            CurrentLoadingMode = mode;
+        }
+
+        if (_loadingIndicatorHandle is not null)
+        {
+            return;
+        }
+
+        _loadingIndicatorHandle = DispatcherHelper.StartRepeatingAction(
+            purpose: LoadProjectPurpose,
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            _projectLoadPollingInterval
+        );
+    }
+
+    public void DisableLoadingMode() => DisableLoadingMode(reportResult: true);
+
+    private void DisableLoadingMode(bool reportResult)
+    {
+        if (CurrentLoadingMode == LoadingMode.Ready)
+        {
+            return;
+        }
+
+        var completedMode = CurrentLoadingMode;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
+        CurrentLoadingMode = LoadingMode.Ready;
+        OnSetLoading?.Invoke(this, CurrentLoadingMode);
+
+        DispatcherHelper.StopRepeatingAction(_loadingIndicatorHandle);
+        _loadingIndicatorHandle = null;
+
+        if (!reportResult)
+        {
+            return;
+        }
+
+        if (completedMode is not (LoadingMode.LoadingNewProject or LoadingMode.ReloadingSameProject))
+        {
+            return;
+        }
+
+        if (ActiveProject != null)
+        {
+            _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
+        }
+        else
+        {
+            _loggerService.Warning(
+                $"Loading the project has seemed to fail. Please restart WolvenKit and try again. If this issue persists, please contact support on the WolvenKit discord.");
+        }
+    }
+
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.
     /// </summary>
     private void SetupToolDefaults() =>
         ContentId = s_toolContentId;
-    // Define a unique contentId for this toolwindow
-    //BitmapImage bi = new BitmapImage();
-    // Define an icon for this toolwindow
-    // bi.BeginInit();
-    // bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-    // bi.EndInit();
-    // IconSource = bi;
 
     private void CheckForOneDriveInPath()
     {
@@ -1845,6 +2016,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #endregion Project_Loading
 
     #region save/restore
+
+    private void SaveProjectState()
+    {
+        if (ActiveProject != null)
+        {
+            _hasUnsavedFileTreeChanges = true;
+            SaveOpenFilePaths();
+            SaveProjectExplorerExpansionStateIfDirty();
+            SaveProjectExplorerTabIfDirty();
+            _hasUnsavedFileTreeChanges = false;
+        }
+    }
 
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
     {
