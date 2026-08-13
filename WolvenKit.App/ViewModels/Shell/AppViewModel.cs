@@ -319,16 +319,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// One-time application startup work. Call once, from the shell, after its bindings are in
     /// place.
     /// </summary>
-    /// <remarks>
-    /// This used to hang off the <c>Status</c> property setter as a side effect, which meant it
-    /// could not be awaited, could not be ordered relative to the shell's own setup, and turned
-    /// any failure into an exception escaping a property assignment. Being an explicit awaitable
-    /// call also removes the need to branch on <c>TestHelper.InActiveTest</c> - tests simply await
-    /// it.
-    ///
-    /// Never throws: a discarded task's exception would otherwise go unobserved, and none of this
-    /// work is worth failing a launch over.
-    /// </remarks>
     public async Task InitializeAsync()
     {
         try
@@ -358,9 +348,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         CheckForLongPathSupport();
         CheckForOneDrivePath();
 
-            // Archives load last, and only once the shell has gone idle. The scan allocates
-            // heavily on a background thread, and GC pauses hit the UI thread too - starting it
-            // any earlier visibly stalls the window as it is still drawing itself.
             if (Application.Current is { } app)
             {
                 await app.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
@@ -377,17 +364,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <summary>
     /// Loads the archive manager, logging rather than propagating a failure.
     /// </summary>
-    /// <remarks>
-    /// A corrupt, locked or missing archive should cost the user the asset browser, not the whole
-    /// application: before archive loading moved here it ran inside LoadProjectFromPathAsync
-    /// behind exactly this try/catch, and ArchiveManagerLoader still rethrows after logging.
-    /// Without the guard the fault escapes HandleActivation, then OnStatusChanged, then the
-    /// Status setter, and takes startup down with it.
-    ///
-    /// The catch has to live inside the async method rather than around the dispatcher call:
-    /// Dispatcher.Invoke(Func&lt;Task&gt;, ...) hands back the Task and drops it, so anything
-    /// thrown after the first await would be swallowed unobserved instead of logged.
-    /// </remarks>
     private async Task LoadArchivesSafelyAsync()
     {
         try
@@ -768,7 +744,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task OpenProjectAsync(string location)
     {
-        // "Open Project" button was pushed
+        var projectExplorer = GetToolViewModel<ProjectExplorerViewModel>();
+
         if (string.IsNullOrWhiteSpace(location))
         {
             var dlg = new OpenFileDialog
@@ -781,6 +758,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             if (dlg.ShowDialog() != true || dlg.FileName is not string result || string.IsNullOrEmpty(result))
             {
+                projectExplorer.CancelProjectLoad();
                 return;
             }
 
@@ -789,6 +767,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (_projectManager.ActiveProject?.Location == location)
         {
+            projectExplorer.CancelProjectLoad();
             CloseModal();
             return;
         }
@@ -803,6 +782,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // file was moved or deleted
         if (_recentlyUsedItemsService.Items.Items.All(x => x.Name != location))
         {
+            projectExplorer.CancelProjectLoad();
             throw new WolvenKitException(0x5002,
                 "Failed to load project. Please open a github issue and attach a zip so that we can fix it!");
         }
@@ -814,6 +794,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (res is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
         {
+            projectExplorer.CancelProjectLoad();
             return;
         }
 
@@ -827,6 +808,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (dlg2.ShowDialog() != true || dlg2.FileName is not string filePath || string.IsNullOrEmpty(filePath))
         {
+            projectExplorer.CancelProjectLoad();
             return;
         }
 
@@ -836,7 +818,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(filePath))
         {
             CloseModal();
-            await _projectManager.LoadAsync(filePath);
+            await LoadProjectFromPathAsync(filePath);
+        }
+        else
+        {
+            projectExplorer.CancelProjectLoad();
         }
     }
 
@@ -844,34 +830,68 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     internal async Task LoadProjectFromPathAsync(string location)
     {
-        var p = await _projectManager.LoadAsync(location);
-        if (p is null)
-        {
-            return;
-        }
+        var projectExplorer = GetToolViewModel<ProjectExplorerViewModel>();
+        projectExplorer.ProjectWillLoad(location);
 
-        ActiveProject = p;
-
-        // If the assets can't be found, stop here and notify the user in the log
-        if (!File.Exists(SettingsManager.CP77ExecutablePath))
+        try
         {
-            UpdateTitle();
-            _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
-            return;
-        }
+            var p = await _projectManager.LoadAsync(location);
 
-        DispatcherHelper.DelayOnMainThread(() =>
-        {
-            UpdateTitle();
-            _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-            // https://github.com/WolvenKit/WolvenKit/issues/1962
-            if (!FilepathValidationTools.IsOsFilePathValid(location))
+            if (p is null || !ProjectLocationsMatch(p.Location, location))
             {
-                _notificationService.Warning($"Project path {location} contains invalid characters!");
+                throw (new WolvenKitException(0x0b20f001, $"Project location to be loaded {location} {Environment.NewLine}did not match actual project location {p?.Location}{Environment.NewLine}. This is a bug, please report to the WolvenKit discord."));
             }
 
-            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
-        }, 1000);
+            ActiveProject = p;
+
+            // If the assets can't be found, stop here and notify the user in the log
+            if (!File.Exists(SettingsManager.CP77ExecutablePath))
+            {
+                UpdateTitle();
+                _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+                // Still load the project even if there's no CP77 path.
+                OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+
+            DispatcherHelper.DelayOnMainThread(() =>
+            {
+                UpdateTitle();
+                _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+                // https://github.com/WolvenKit/WolvenKit/issues/1962
+                if (!FilepathValidationTools.IsOsFilePathValid(location))
+                {
+                    _notificationService.Warning($"Project path {location} contains invalid characters!");
+                }
+
+                OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+            }, 1000);
+        }
+        catch (Exception ex)
+        {
+            projectExplorer.CancelProjectLoad();
+            _loggerService.Error($"Error loading project: {ex}.");
+        }
+    }
+
+    private static bool ProjectLocationsMatch(string loadedLocation, string requestedLocation)
+    {
+        if (string.IsNullOrWhiteSpace(loadedLocation) || string.IsNullOrWhiteSpace(requestedLocation))
+        {
+            return false;
+        }
+
+        try
+        {
+            return string.Equals(
+                Path.GetFullPath(loadedLocation),
+                Path.GetFullPath(requestedLocation),
+                StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return string.Equals(loadedLocation, requestedLocation, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     [RelayCommand]
@@ -929,6 +949,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             _loggerService.Error("Failed to create a new project!");
             _loggerService.Error(ex);
+            GetToolViewModel<ProjectExplorerViewModel>().CancelProjectLoad();
         }
     }
 
