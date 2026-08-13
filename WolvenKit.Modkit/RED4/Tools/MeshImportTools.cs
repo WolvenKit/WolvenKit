@@ -418,62 +418,6 @@ namespace WolvenKit.Modkit.RED4
             return -1;
         }
 
-        private static bool IsNearlyIdentityRotation(Quat rotation, float epsilon = 1e-5f)
-        {
-            var lengthSquared =
-                (rotation.X * rotation.X) +
-                (rotation.Y * rotation.Y) +
-                (rotation.Z * rotation.Z) +
-                (rotation.W * rotation.W);
-
-            if (lengthSquared == 0.0f)
-            {
-                return false;
-            }
-
-            var q = Quat.Normalize(rotation);
-
-            // q and -q represent the same rotation, so test |W| against 1.
-            return Math.Abs(q.X) <= epsilon &&
-                   Math.Abs(q.Y) <= epsilon &&
-                   Math.Abs(q.Z) <= epsilon &&
-                   Math.Abs(Math.Abs(q.W) - 1.0f) <= epsilon;
-        }
-
-        private static bool ImportedOrphanRigLooksLegacyIdentityRotated(CMesh root, Node[] jointArray, float epsilon = 1e-5f)
-        {
-            if (jointArray.Length == 0 || root.BoneNames.Count == 0)
-            {
-                return false;
-            }
-
-            var matched = 0;
-
-            foreach (var boneNameValue in root.BoneNames)
-            {
-                var boneName = boneNameValue.ToString();
-                if (string.IsNullOrEmpty(boneName))
-                {
-                    continue;
-                }
-
-                var joint = jointArray.FirstOrDefault(x => x.Name == boneName);
-                if (joint is null)
-                {
-                    continue;
-                }
-
-                matched++;
-
-                if (!IsNearlyIdentityRotation(joint.LocalTransform.Rotation, epsilon))
-                {
-                    return false;
-                }
-            }
-
-            return matched > 0;
-        }
-
         private static void AddMissingMeshBonesFromGltfJoints(CMesh root, rendRenderMeshBlob rendBlob, Node[] jointArray)
         {
             foreach (var joint in jointArray)
@@ -635,44 +579,24 @@ namespace WolvenKit.Modkit.RED4
 
                 if (jointArray.Length > 0)
                 {
-                    var legacyIdentityOrphanRig = ImportedOrphanRigLooksLegacyIdentityRotated(rootForBoneMatrices, jointArray);
+                    // Corrected orphan mesh exports contain per-bone rotations, so the mesh orphan skeleton
+                    // can be grown and BoneRigMatrices/BonePositions can be rebuilt from the glTF joints.
+                    AddMissingMeshBonesFromGltfJoints(rootForBoneMatrices, rendBlob, jointArray);
 
-                    if (legacyIdentityOrphanRig)
+                    for (var i = 0; i < rootForBoneMatrices.BoneNames.Count; i++)
                     {
-                        // Compatibility path for meshes exported before orphan bone rotations were preserved.
-                        //
-                        // Legacy orphan mesh exports wrote every joint rotation as identity. Those GLBs do not
-                        // contain enough information to reconstruct BoneRigMatrices or BonePositions, and the
-                        // legacy importer reused the destination .mesh values instead. Preserve that behavior:
-                        // do not update transform tables and do not add missing orphan bones from identity-only data.
-                        if (args.ShowVerboseLogOutput)
+                        var boneName = rootForBoneMatrices.BoneNames[i].ToString().NotNull();
+                        var foundBone = jointArray.FirstOrDefault(x => x.Name == boneName);
+
+                        if (foundBone is null)
                         {
-                            _loggerService.Warning(
-                                "Imported mesh has identity rotations for all matching bones. " +
-                                "Treating this as a legacy export and preserving existing BoneRigMatrices and BonePositions.");
+                            continue;
                         }
-                    }
-                    else
-                    {
-                        // Corrected orphan mesh exports contain per-bone rotations, so the mesh orphan skeleton
-                        // can be grown and BoneRigMatrices/BonePositions can be rebuilt from the glTF joints.
-                        AddMissingMeshBonesFromGltfJoints(rootForBoneMatrices, rendBlob, jointArray);
 
-                        for (var i = 0; i < rootForBoneMatrices.BoneNames.Count; i++)
+                        if (TryCreateBoneRigMatrixFromExportedJoint(foundBone, out var boneRigMatrix, out var rawInverseTranslation))
                         {
-                            var boneName = rootForBoneMatrices.BoneNames[i].ToString().NotNull();
-                            var foundBone = jointArray.FirstOrDefault(x => x.Name == boneName);
-
-                            if (foundBone is null)
-                            {
-                                continue;
-                            }
-
-                            if (TryCreateBoneRigMatrixFromExportedJoint(foundBone, out var boneRigMatrix, out var rawInverseTranslation))
-                            {
-                                rootForBoneMatrices.BoneRigMatrices[i] = boneRigMatrix;
-                                ApplyBonePosition(rendBlob, i, rawInverseTranslation);
-                            }
+                            rootForBoneMatrices.BoneRigMatrices[i] = boneRigMatrix;
+                            ApplyBonePosition(rendBlob, i, rawInverseTranslation);
                         }
                     }
                 }
