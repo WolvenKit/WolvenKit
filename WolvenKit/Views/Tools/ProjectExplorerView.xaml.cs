@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using HandyControl.Data;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
