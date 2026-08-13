@@ -282,7 +282,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     isDirectory = attr.HasFlag(FileAttributes.Directory);
                 }
 
-                var isExpanded = GetExpansionStateOrNull(tmpPath) ?? false;
+                var isExpanded = GetExpansionStateOrNull(tmpPath) ?? true;
                 current = new FileSystemModel(parent, part, tmpPath, isDirectory, isExpanded);
 
                 if (!current.IsDirectory)
