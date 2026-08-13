@@ -1814,7 +1814,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             try
             {
-                EnableLoadingMode(false ? LoadingMode.ReloadingSameProject : LoadingMode.LoadingNewProject);
+                // Enable Loading... indicator if the project dir has changed and the
+                // indicator is not already being shown.
+                if (_projectManager.ActiveProject?.ProjectDirectory is { } newProjectDir
+                    && newProjectDir != ActiveProject?.ProjectDirectory
+                    && CurrentLoadingMode != LoadingMode.LoadingNewProject)
+                {
+                    EnableLoadingMode(LoadingMode.LoadingNewProject);
+                }
 
                 RefreshProjectData();
 
