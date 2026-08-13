@@ -491,6 +491,21 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        /// <summary>
+        /// Needed to prevent a mysterious gray bar from
+        /// hiding part of the view.
+        /// </summary>
+        /// <param name="grid"></param>
+        private static void RefreshColumnWidths(SfTreeGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+            {
+                return;
+            }
+
+            grid.TreeGridColumnSizer?.Refresh();
+        }
+
         private static void RefreshFlatColumnWidths(SfDataGrid grid)
         {
             if (grid.ActualWidth <= 0)
@@ -520,7 +535,6 @@ namespace WolvenKit.Views.Tools
             return (innerVm.Text, innerVm.EnableRefactoring == true);
         }
 
-        // Not sure why the property binding broke, but it did. This fixes it.
         private void OnToggleFlatMode(object sender, EventArgs e)
         {
             if (sender is not ProjectExplorerViewModel model)
@@ -951,6 +965,12 @@ namespace WolvenKit.Views.Tools
 
             view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
             view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
+        }
+
+        private void OnTreeGridSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!e.WidthChanged) return;
+            RefreshColumnWidths(TreeGrid);
         }
 
         #endregion grid responders
