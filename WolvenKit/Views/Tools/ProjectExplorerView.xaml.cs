@@ -384,7 +384,6 @@ namespace WolvenKit.Views.Tools
         {
             _isShowingLoadingIndicator = false;
             UpdatePaneVisibility();
-            //ScheduleGhostRowCleanup();
         }
 
         private void UpdatePaneVisibility()
