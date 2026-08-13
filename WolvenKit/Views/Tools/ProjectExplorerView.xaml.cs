@@ -862,7 +862,7 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
