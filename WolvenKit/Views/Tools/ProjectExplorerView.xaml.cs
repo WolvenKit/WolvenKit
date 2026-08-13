@@ -422,6 +422,8 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
+
+            ReapplyCurrentSearchFilter(expandAllForSearch: !string.IsNullOrWhiteSpace(_currentFolderQuery));
         }
 
         private void OnContextMenuOpen(object sender, ContextMenuEventArgs e)
