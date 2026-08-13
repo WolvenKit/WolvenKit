@@ -104,7 +104,8 @@ public class FileSystemModel : INotifyPropertyChanged
     /// <param name="name"></param><remark>Name of the file with extension but no paths.</remark>
     /// <param name="rawRelativePath"></param><remark>Path above 'source' to the file. E.g. archive/worlds/myfile.ent</remark>
     /// <param name="isDirectory"></param>
-    public FileSystemModel(FileSystemModel? parent, string name, string rawRelativePath, bool isDirectory, bool isExpanded = false)
+    /// <param name="isExpanded"></param>
+    public FileSystemModel(FileSystemModel? parent, string name, string rawRelativePath, bool isDirectory, bool isExpanded = true)
     {
         Parent = parent;
 
