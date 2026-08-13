@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3123
+      author: "Akiway"
+      description: "Scene Editor has a new 'Import Dialogue' button and popup in the Dialogue tab. It reads a json from the clipboard or a .json file, to import lines with all their properties, matching each line's speaker and addressee to the scene's actors by name. For use with CET mod Dialogue Browser."

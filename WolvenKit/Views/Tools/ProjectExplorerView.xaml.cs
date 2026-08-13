@@ -217,6 +217,13 @@ namespace WolvenKit.Views.Tools
                     return result == true ? (dialog.PrimaryInput, dialog.EnableSecondaryInput, dialog.SecondaryInput, dialog.DropdownValue) : (null, false, null, null);
                 };
 
+                Interactions.ShowDialogueImport = (parameters) =>
+                {
+                    var dialog = new DialogueImportDialogView(parameters);
+
+                    return dialog.ShowDialog(Application.Current.MainWindow) == true ? dialog.ViewModel : null;
+                };
+
                 Interactions.AskForFolderPathInput = (args) =>
                 {
                     var dialog = new FolderPathInputDialogView(args.Item2, args.Item1);

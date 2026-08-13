@@ -66,13 +66,15 @@ namespace WolvenKit.App.ViewModels.Documents
 
         public bool IsOptionCreationVisible => SelectedTab?.Header == "Dialogue";
 
+        public bool IsDialogueImportVisible => SelectedTab?.Header == "Dialogue";
+
         public bool IsWorkspotCreationVisible => SelectedTab?.Header == "Asset Library";
 
         public bool IsEffectCreationVisible => SelectedTab?.Header == "Asset Library";
 
         public bool IsAnimationCreationVisible => SelectedTab?.Header == "Asset Library";
 
-        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible || IsEffectCreationVisible || IsAnimationCreationVisible;
+        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsDialogueImportVisible || IsWorkspotCreationVisible || IsEffectCreationVisible || IsAnimationCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
@@ -247,6 +249,7 @@ namespace WolvenKit.App.ViewModels.Documents
             OnPropertyChanged(nameof(IsPropCreationVisible));
             OnPropertyChanged(nameof(IsDialogueCreationVisible));
             OnPropertyChanged(nameof(IsOptionCreationVisible));
+            OnPropertyChanged(nameof(IsDialogueImportVisible));
             OnPropertyChanged(nameof(IsWorkspotCreationVisible));
             OnPropertyChanged(nameof(IsEffectCreationVisible));
             OnPropertyChanged(nameof(IsAnimationCreationVisible));
@@ -582,6 +585,274 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 _logger?.Error($"Failed to create new choice option: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Takes a dialogue export written by another tool - the Dialogue Browser CET mod writes
+        /// one from its conversation panel - and adds its lines to the screenplay store, with
+        /// their embedded text and lipsync animations.
+        /// </summary>
+        [RelayCommand]
+        private void ImportDialogue()
+        {
+            try
+            {
+                var screenplayStore = _sceneData.ScreenplayStore;
+                if (screenplayStore == null)
+                {
+                    _logger?.Warning("Dialogue import: this scene has no screenplay store.");
+                    return;
+                }
+
+                var screenplayLines = screenplayStore.Lines;
+                var screenplayOptions = screenplayStore.Options;
+
+                var existingLineLocStrings = GetLocStringIds(screenplayLines.Select(line => line.LocstringId));
+                var existingOptionLocStrings = GetLocStringIds(screenplayOptions.Select(option => option.LocstringId));
+
+                var dialog = Interactions.ShowDialogueImport(new DialogueImportDialogOptions(
+                    FileName,
+                    existingLineLocStrings,
+                    existingOptionLocStrings,
+                    GetSceneActorOptions()));
+
+                // Cancelled.
+                if (dialog == null)
+                {
+                    return;
+                }
+
+                var importedLines = dialog.GetLinesToImport();
+                if (importedLines.Count == 0)
+                {
+                    return;
+                }
+
+                var createEmbeddedText = dialog.CreateEmbeddedText;
+                var random = new Random();
+
+                // Item ids run in steps of 256, as the game's own scenes do, and both halves of the
+                // screenplay store number themselves independently.
+                var nextLineItemId = (uint)1;
+                if (screenplayLines.Count > 0)
+                {
+                    nextLineItemId = screenplayLines[^1].ItemId.Id + 256;
+                }
+
+                var nextOptionItemId = (uint)2;
+                if (screenplayOptions.Count > 0)
+                {
+                    nextOptionItemId = screenplayOptions[^1].ItemId.Id + 256;
+                }
+
+                var addedLines = 0;
+                var addedOptions = 0;
+                var addedTexts = 0;
+                var addedActors = 0;
+                var skipped = 0;
+
+                foreach (var selection in importedLines)
+                {
+                    var line = selection.Line;
+
+                    // Checked again here rather than trusted from the dialog: its list was built
+                    // when it opened, and the same locstring must never end up with two screenplay
+                    // entries pointing at it.
+                    var known = line.IsChoiceOption ? existingOptionLocStrings : existingLineLocStrings;
+
+                    if (!known.Add(line.LocStringId))
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    if (line.IsChoiceOption)
+                    {
+                        screenplayOptions.Add(new scnscreenplayChoiceOption
+                        {
+                            ItemId = new scnscreenplayItemId { Id = nextOptionItemId },
+                            LocstringId = new scnlocLocstringId { Ruid = (CRUID)line.LocStringId },
+                            Usage = new scnscreenplayOptionUsage { PlayerGenderMask = new scnGenderMask { Mask = 3 } }
+                        });
+
+                        nextOptionItemId += 256;
+                        addedOptions++;
+                    }
+                    else
+                    {
+                        var dialogueLine = new scnscreenplayDialogLine
+                        {
+                            ItemId = new scnscreenplayItemId { Id = nextLineItemId },
+                            LocstringId = new scnlocLocstringId { Ruid = (CRUID)line.LocStringId },
+                            Usage = new scnscreenplayLineUsage { PlayerGenderMask = new scnGenderMask { Mask = 3 } }
+                        };
+
+                        // Who says the line and who it is said to, as the dialog left them: matched
+                        // against the scene's cast by name, then whatever the user picked instead.
+                        // A line they left unassigned keeps the default, which is the same "no
+                        // actor" a line added by hand starts out with.
+                        if (selection.SpeakerActorId is { } speakerActorId)
+                        {
+                            dialogueLine.Speaker = new scnActorId { Id = speakerActorId };
+                            addedActors++;
+                        }
+
+                        if (selection.AddresseeActorId is { } addresseeActorId)
+                        {
+                            dialogueLine.Addressee = new scnActorId { Id = addresseeActorId };
+                            addedActors++;
+                        }
+
+                        // The index knows a female animation for nearly every line and a male one
+                        // for only a few, so an empty name is left as the default rather than
+                        // written as one.
+                        if (!string.IsNullOrEmpty(line.FemaleLipsyncAnim))
+                        {
+                            dialogueLine.FemaleLipsyncAnimationName = line.FemaleLipsyncAnim;
+                        }
+
+                        if (!string.IsNullOrEmpty(line.MaleLipsyncAnim))
+                        {
+                            dialogueLine.MaleLipsyncAnimationName = line.MaleLipsyncAnim;
+                        }
+
+                        screenplayLines.Add(dialogueLine);
+
+                        nextLineItemId += 256;
+                        addedLines++;
+                    }
+
+                    if (createEmbeddedText && AddEmbeddedText(line.LocStringId, line.Text, random))
+                    {
+                        addedTexts++;
+                    }
+                }
+
+                if (addedLines == 0 && addedOptions == 0)
+                {
+                    _logger?.Warning("Dialogue import: every line was already in the scene.");
+                    return;
+                }
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties to pick up the imported lines
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show what came in
+                ExpandToNewEntry("screenplayStore", addedLines > 0 ? "lines" : "options", 0);
+
+                // Update dialogue and choice counts in the UI
+                OnPropertyChanged(nameof(TotalDialogues));
+                OnPropertyChanged(nameof(TotalChoices));
+
+                _logger?.Success(
+                    $"Imported {addedLines} dialogue line(s)" +
+                    (addedOptions > 0 ? $" and {addedOptions} choice option(s)" : "") +
+                    (createEmbeddedText ? $", {addedTexts} with embedded text" : "") +
+                    (addedActors > 0 ? $", {addedActors} speaker/addressee assignment(s)" : "") +
+                    (skipped > 0 ? $". Skipped {skipped} already in the scene" : ""));
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to import dialogue: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// The scene's cast, as the import dialog offers it: what speaker and addressee names are
+        /// matched against, and what the user picks from. Player actors are listed too, flagged as
+        /// such, because the first of them is what an export's "V" always means.
+        /// </summary>
+        private List<SceneActorOption> GetSceneActorOptions()
+        {
+            var actors = new List<SceneActorOption>();
+
+            foreach (var actor in _sceneData.Actors)
+            {
+                if (actor.ActorId is null)
+                {
+                    continue;
+                }
+
+                string actorName = actor.ActorName;
+                actors.Add(new SceneActorOption((uint)actor.ActorId.Id, actorName));
+            }
+
+            foreach (var playerActor in _sceneData.PlayerActors)
+            {
+                if (playerActor.ActorId is null)
+                {
+                    continue;
+                }
+
+                string playerName = playerActor.PlayerName;
+                actors.Add(new SceneActorOption((uint)playerActor.ActorId.Id, playerName, isPlayer: true));
+            }
+
+            return actors;
+        }
+
+        /// <summary>
+        /// Locstring ids of a screenplay collection, as something an import can be checked against.
+        /// </summary>
+        private static HashSet<ulong> GetLocStringIds(IEnumerable<scnlocLocstringId?>? locStringIds) =>
+            locStringIds?
+                .Where(locStringId => locStringId != null)
+                .Select(locStringId => (ulong)locStringId!.Ruid)
+                .ToHashSet() ?? [];
+
+        /// <summary>
+        /// Embeds a line's text into the scene's locStore, as a payload entry plus the descriptor
+        /// that points a locstring at it.
+        /// </summary>
+        /// <returns>False when there was nothing to embed, or the locStore already describes this locstring.</returns>
+        private bool AddEmbeddedText(ulong locStringId, string text, Random random)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return false;
+            }
+
+            // A locstring the scene already carries text for keeps the text it has: two descriptors
+            // for one locstring and locale is what the game reads as a broken locStore.
+            if (_sceneData.LocStore.VdEntries.Any(entry =>
+                    entry.LocstringId != null && (ulong)entry.LocstringId.Ruid == locStringId))
+            {
+                return false;
+            }
+
+            var variantCruid = (CRUID)random.NextCRUID();
+
+            // Create VpEntry (payload entry) with the embedded text
+            _sceneData.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
+            {
+                Content = text,
+                VariantId = new scnlocVariantId { Ruid = variantCruid }
+            });
+
+            // Create VdEntry (descriptor entry) linking locStringId to the payload with en_us locale
+            _sceneData.LocStore.VdEntries.Add(new scnlocLocStoreEmbeddedVariantDescriptorEntry
+            {
+                LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringId },
+                VariantId = new scnlocVariantId { Ruid = variantCruid },
+                VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
+                Signature = new scnlocSignature { Val = 3 }, // en_us locale signature
+                LocaleId = Enums.scnlocLocaleId.en_us
+            });
+
+            return true;
         }
 
         [RelayCommand]

@@ -1,0 +1,478 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.DialogueImportDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
+    Title="{Binding Title}"
+    Width="1280"
+    Height="700"
+    MinWidth="{DynamicResource WolvenKitDialogWidth}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightMedium}"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}"
+    WindowStartupLocation="CenterScreen">
+
+    <Grid
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
+                <!-- Column headers, and the muted secondary columns of a row -->
+                <Style
+                    x:Key="ImportColumnHeaderStyle"
+                    TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+                </Style>
+
+                <Style
+                    x:Key="ImportCellStyle"
+                    TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                </Style>
+
+                <!-- The rows of an open dropdown, as the Archive XL dialog dresses them: the
+                     window's own theme leaves them light, which is unreadable in this one -->
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="SnapsToDevicePixels" Value="true" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                <Border
+                                    x:Name="Border"
+                                    Padding="4,3"
+                                    Background="Transparent"
+                                    CornerRadius="4"
+                                    SnapsToDevicePixels="true">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="SelectionStates">
+                                            <VisualState x:Name="Unselected" />
+                                            <VisualState x:Name="Selected">
+                                                <Storyboard>
+                                                    <ColorAnimationUsingKeyFrames
+                                                        Storyboard.TargetName="Border"
+                                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                        <EasingColorKeyFrame
+                                                            KeyTime="0"
+                                                            Value="{StaticResource WolvenKitCyanColor}" />
+                                                    </ColorAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <!-- Who a line is said by and said to: the same cast in every row, so the list
+                     comes off the row itself rather than being rebuilt per column -->
+                <Style
+                    x:Key="ImportActorSelectorStyle"
+                    BasedOn="{StaticResource {x:Type ComboBox}}"
+                    TargetType="ComboBox">
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+                    <Setter Property="Padding" Value="4,1" />
+                    <Setter Property="ItemsSource" Value="{Binding ActorOptions}" />
+                    <Setter Property="DisplayMemberPath" Value="DisplayName" />
+                    <Setter Property="IsEnabled" Value="{Binding CanSetActors}" />
+                </Style>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
+            <syncfusion:WizardPage
+                BackVisibility="Collapsed"
+                CancelVisibility="Visible"
+                FinishVisibility="Visible"
+                HelpVisibility="Collapsed"
+                NextVisibility="Collapsed"
+                PageType="Exterior"
+                FinishEnabled="{Binding CanImport,
+                                        UpdateSourceTrigger=PropertyChanged}">
+
+                <Grid
+                    Grid.IsSharedSizeScope="True"
+                    Margin="{DynamicResource WolvenKitMarginSmallHeader}">
+                    <Grid.RowDefinitions>
+                        <!-- Where the payload comes from -->
+                        <RowDefinition Height="Auto" />
+                        <!-- What was read of it -->
+                        <RowDefinition Height="Auto" />
+                        <!-- The payload itself, folded away -->
+                        <RowDefinition Height="Auto" />
+                        <!-- What the Dialogue Browser is, until there is an import to look at -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Column headers -->
+                        <RowDefinition Height="Auto" />
+                        <!-- The lines -->
+                        <RowDefinition Height="*" />
+                        <!-- Selection and import options -->
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- ============================================ source row -->
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Content="Paste from clipboard"
+                            ToolTip="Read an export off the clipboard - the Dialogue Browser puts one there every time you export"
+                            Command="{Binding PasteFromClipboardCommand}" />
+
+                        <Button
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Content="Load file..."
+                            ToolTip="Open a .json export, e.g. from the mod's data/exports folder"
+                            Click="OnLoadFileClick" />
+
+                        <Button
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Content="Clear"
+                            Visibility="{Binding HasEntries,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Click="OnClearClick" />
+                    </StackPanel>
+
+                    <!-- ============================================ status line -->
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="{Binding StatusMessage}"
+                        TextWrapping="Wrap">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="Gray" />
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsStatusError}"
+                                        Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <!-- =========================================== raw payload -->
+                    <Expander
+                        Grid.Row="2"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Foreground="Gray"
+                        Header="Payload (JSON)">
+                        <TextBox
+                            Height="90"
+                            Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontFamily="Consolas"
+                            FontSize="{DynamicResource WolvenKitFontAltTitle}"
+                            AcceptsReturn="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto"
+                            Text="{Binding JsonText,
+                                           UpdateSourceTrigger=PropertyChanged}" />
+                    </Expander>
+
+                    <!-- ============================== what all this is, for a
+                                                        user meeting it for the first time. Gone as
+                                                        soon as there is an import to look at -->
+                    <Border
+                        Grid.Row="3"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Padding="10,8"
+                        Background="#14FFFFFF"
+                        BorderBrush="#33FFFFFF"
+                        BorderThickness="1"
+                        Visibility="{Binding HasEntries,
+                                             Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock
+                                Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                FontWeight="Bold"
+                                Foreground="{StaticResource WolvenKitCyan}"
+                                Text="What is the Dialogue Browser?" />
+
+                            <TextBlock
+                                Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Foreground="{DynamicResource PrimaryTextBrush}"
+                                TextWrapping="Wrap"><Run Text="A Cyber Engine Tweaks mod that lets you browse the game's vanilla conversations while it runs, and export the lines you pick. Dialogue Browser is available on Nexus Mods and on GitHub : " /><Hyperlink
+                                    Foreground="{StaticResource WolvenKitCyan}"
+                                    NavigateUri="https://github.com/Akiway/Dialogue-Browser"
+                                    RequestNavigate="OnHyperlinkRequestNavigate"
+                                    ToolTip="Opens in your browser">https://github.com/Akiway/Dialogue-Browser</Hyperlink></TextBlock>
+
+                            <TextBlock
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Foreground="Gray"
+                                TextWrapping="Wrap"
+                                Text="Export from the mod: it puts the JSON on your clipboard, and writes a copy to the folder below." />
+
+                            <TextBlock
+                                Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                                FontFamily="Consolas"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Foreground="Gray"
+                                TextWrapping="Wrap"
+                                Text="{Binding ExportFolderPath}"
+                                ToolTip="Where 'Load file...' opens" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ======================================= column headers -->
+                    <Border
+                        Grid.Row="4"
+                        Margin="{DynamicResource WolvenKitMarginSmallTop}"
+                        Padding="4,2"
+                        BorderBrush="#33FFFFFF"
+                        BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Check" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="LocString" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Speaker" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Addressee" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Lipsync" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Status" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Grid.Column="0"
+                                Width="24"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Width="150"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="LocString" />
+                            <TextBlock
+                                Grid.Column="2"
+                                Width="180"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="Speaker" />
+                            <TextBlock
+                                Grid.Column="3"
+                                Width="180"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="Addressee" />
+                            <TextBlock
+                                Grid.Column="4"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="Text" />
+                            <TextBlock
+                                Grid.Column="5"
+                                Width="190"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="Lipsync animation" />
+                            <TextBlock
+                                Grid.Column="6"
+                                Width="110"
+                                Style="{StaticResource ImportColumnHeaderStyle}"
+                                Text="Status" />
+                        </Grid>
+                    </Border>
+
+                    <!-- ============================================== the lines -->
+                    <ListBox
+                        Grid.Row="5"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemsSource="{Binding Entries}"
+                        HorizontalContentAlignment="Stretch"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Focusable" Value="False" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="4,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Check" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="LocString" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Speaker" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Addressee" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Lipsync" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Status" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- A duplicate cannot be taken, so its box is locked rather
+                                         than merely cleared -->
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        Width="24"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding IsSelected,
+                                                            Mode=TwoWay,
+                                                            UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding CanImport}" />
+
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Width="150"
+                                        Style="{StaticResource ImportCellStyle}"
+                                        FontFamily="Consolas"
+                                        Text="{Binding LocStringId}"
+                                        ToolTip="{Binding LocStringId}" />
+
+                                    <!-- Matched from the export's own name, and the user's to
+                                         change. A choice option has neither, so both are locked -->
+                                    <ComboBox
+                                        Grid.Column="2"
+                                        Width="180"
+                                        Style="{StaticResource ImportActorSelectorStyle}"
+                                        SelectedItem="{Binding SpeakerActor,
+                                                               Mode=TwoWay,
+                                                               UpdateSourceTrigger=PropertyChanged}"
+                                        ToolTip="{Binding SpeakerToolTip}" />
+
+                                    <ComboBox
+                                        Grid.Column="3"
+                                        Width="180"
+                                        Style="{StaticResource ImportActorSelectorStyle}"
+                                        SelectedItem="{Binding AddresseeActor,
+                                                               Mode=TwoWay,
+                                                               UpdateSourceTrigger=PropertyChanged}"
+                                        ToolTip="{Binding AddresseeToolTip}" />
+
+                                    <TextBlock
+                                        Grid.Column="4"
+                                        Style="{StaticResource ImportCellStyle}"
+                                        Text="{Binding Text}"
+                                        ToolTip="{Binding Text}" />
+
+                                    <TextBlock
+                                        Grid.Column="5"
+                                        Width="190"
+                                        Style="{StaticResource ImportCellStyle}"
+                                        Foreground="Gray"
+                                        Text="{Binding LipsyncAnimNames}"
+                                        ToolTip="{Binding LipsyncAnimNames}" />
+
+                                    <TextBlock
+                                        Grid.Column="6"
+                                        Width="110"
+                                        Text="{Binding Status}">
+                                        <TextBlock.Style>
+                                            <Style
+                                                BasedOn="{StaticResource ImportCellStyle}"
+                                                TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitGreen}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger
+                                                        Binding="{Binding IsDuplicate}"
+                                                        Value="True">
+                                                        <Setter Property="Foreground" Value="{StaticResource WolvenKitYellow}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- ==================================== selection + options -->
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Grid.Column="0"
+                            Orientation="Horizontal"
+                            Visibility="{Binding HasEntries,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Button
+                                Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Content="Select all"
+                                Command="{Binding SelectAllCommand}" />
+                            <Button
+                                Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Content="Select none"
+                                Command="{Binding SelectNoneCommand}" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Foreground="Gray"
+                            Visibility="{Binding HasEntries,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Run Text="{Binding SelectedCount, Mode=OneWay}" />
+                            <Run Text="of" />
+                            <Run Text="{Binding EntryCount, Mode=OneWay}" />
+                            <Run Text="selected," />
+                            <Run Text="{Binding DuplicateCount, Mode=OneWay}" />
+                            <Run Text="already in the scene" />
+                        </TextBlock>
+
+                        <CheckBox
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Content="Embed the text into the scene"
+                            ToolTip="Writes each line's subtitle into the scene's locStore, the way the Add Dialogue button does"
+                            IsChecked="{Binding CreateEmbeddedText}" />
+                    </Grid>
+                </Grid>
+            </syncfusion:WizardPage>
+        </syncfusion:WizardControl>
+    </Grid>
+</Window>
