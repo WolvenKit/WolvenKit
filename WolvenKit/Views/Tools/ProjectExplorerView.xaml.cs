@@ -1,3 +1,4 @@
+using DynamicData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +20,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using HandyControl.Data;
 using MahApps.Metro.Controls;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
@@ -31,10 +33,14 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Services;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Helpers;
+using WolvenKit.RED4.Types;
+using WolvenKit.Views.Others;
 using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
 
@@ -50,6 +56,8 @@ namespace WolvenKit.Views.Tools
         #region fields
 
         private readonly IMessenger _messenger;
+
+        private readonly ILoggerService _loggerService;
 
         private List<IDisposable> _disposables = [];
 
@@ -81,6 +89,7 @@ namespace WolvenKit.Views.Tools
         private readonly DispatcherTimer _searchDebounceTimer;
         private bool _isDragging;
         private CancellationTokenSource _deferRefreshTokenSource = new();
+        private readonly CancellableRowDragDropController _rowDragDropController;
 
         /// <summary>
         /// When true, NodeExpanded/NodeCollapsed must not persist expansion state or write
@@ -110,6 +119,8 @@ namespace WolvenKit.Views.Tools
             _messenger = WeakReferenceMessenger.Default;
             _messenger.RegisterAll(this);
 
+            _loggerService = Locator.Current.GetService<ILoggerService>();
+
             // Debounce for live search
             _searchDebounceTimer = new DispatcherTimer
             {
@@ -118,9 +129,12 @@ namespace WolvenKit.Views.Tools
 
             _searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
 
+            _rowDragDropController = new CancellableRowDragDropController();
+
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
-            TreeGridFlat.SizeChanged += TreeGridFlat_SizeChanged;
+
+            TreeGrid.RowDragDropController = _rowDragDropController;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
@@ -812,6 +826,7 @@ namespace WolvenKit.Views.Tools
         {
             if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -821,6 +836,7 @@ namespace WolvenKit.Views.Tools
 
             if (activeFileNode is null)
             {
+                e.Handled = true;
                 return;
             }
 
@@ -1271,106 +1287,110 @@ namespace WolvenKit.Views.Tools
 
             vm.IsDragging = true;
 
-            var draggingItems = e.DraggingNodes.Select(x => x.Item as FileSystemModel).ToList();
+            var draggingItems = e.DraggingNodes.Select(node => node.Item).OfType<FileSystemModel>().ToList();
 
-            if (vm.SelectedItems is { } selectedItems
-                && draggingItems.Select(x => !selectedItems.Contains(x)).ToList().Count > 0)
+            if (draggingItems.Count == 0)
             {
-                vm.SelectedItems.Clear();
-                vm.SelectedItems.AddRange(draggingItems);
-
-                if (draggingItems.Count == 1)
-                {
-                    vm.SelectedItem = draggingItems[0];
-                }
-
                 return;
             }
 
-            if (vm.SelectedItem is { } selectedItem && draggingItems.FirstOrDefault() is { } draggingItem)
+            // Whatever is dragged becomes the selection.
+            vm.TreeSelectedItems ??= [];
+
+            if (!IsSameSelection(vm.TreeSelectedItems, draggingItems))
             {
-                if (selectedItem.RawRelativePath != draggingItem.RawRelativePath)
-                {
-                    vm.SelectedItem = draggingItem;
-                }
+                vm.TreeSelectedItems.Clear();
+                vm.TreeSelectedItems.AddRange(draggingItems);
+            }
+
+            // keep the current item as the primary one if it is part of the drag
+            if (vm.SelectedItem is not { } selectedItem || !draggingItems.Contains(selectedItem))
+            {
+                vm.SelectedItem = draggingItems[0];
             }
         }
 
+        private static bool IsSameSelection(ICollection<object> selection, List<FileSystemModel> draggingItems) =>
+            selection.Count == draggingItems.Count && draggingItems.All(selection.Contains);
+
+        /// <summary>
+        /// Shows the drop indicator only where the drop would actually do something.
+        /// </summary>
         private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
         {
-            if (!e.Data.GetDataPresent("Nodes") ||
-                e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes ||
-                treeNodes[0].Item is not FileSystemModel sourceFile ||
-                e.TargetNode.Item is not FileSystemModel targetFile)
+            if (ViewModel is not { } vm || e.TargetNode?.Item is not FileSystemModel targetItem)
             {
+                e.Handled = true;
                 return;
             }
 
-            if (targetFile == sourceFile)
-            {
-                e.ShowDragUI = false;
-                e.Handled = true;
-            }
-            else
-            {
-                e.ShowDragUI = true;
-                e.Handled = false;
-            }
+            var plan = PlanDrop(vm, e.Data, targetItem);
+
+            e.ShowDragUI = plan.IsActionable;
+
+            // A drop that does nothing  has to stay unhandled,
+            // or CanAutoExpand never gets to open that folder up.
+            e.Handled = plan.Rejection is ProjectExplorerDropHelper.DropRejection.ProjectRoot
+                or ProjectExplorerDropHelper.DropRejection.DirectoryIntoOwnDescendant;
         }
+
+        /// <summary>
+        /// Drag and drop only exists on the tree grid, so always read that grid's selection.
+        /// </summary>
+        private static ProjectExplorerDropHelper.DropPlan PlanDrop(
+            ProjectExplorerViewModel vm, IDataObject dropData, FileSystemModel targetItem) =>
+            ProjectExplorerDropHelper.PlanDrop(
+                targetItem,
+                ProjectExplorerDropHelper.GetDroppedPayload<TreeNode>(dropData, node => node.Item),
+                vm.TreeSelectedItems?.OfType<FileSystemModel>().ToList() ?? [],
+                ModifierViewStateService.IsCtrlBeingHeld);
 
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
-            // this should all be somewhere else, right?
             try
             {
-                e.Handled = _isDragging; // which should be true at this point
-                if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
+                _rowDragDropController.CancelPendingAutoExpand();
+                e.Handled = _isDragging;
+
+                if (e.TargetNode?.Item is not FileSystemModel targetItem || ViewModel is not { } vm)
                 {
                     e.Handled = true;
                     return;
                 }
 
-                var selectedFilePaths =
-                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? [];
+                var plan = PlanDrop(vm, e.Data, targetItem);
 
-                var files = new List<string>();
+                ReportRefusals(plan);
 
-                if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
-                    e.Data.GetData(DataFormats.FileDrop) is string[] fileDropData
-                   )
-                {
-                    files.AddRange(fileDropData);
-                }
-                else if (e.Data.GetDataPresent("Nodes") &&
-                         e.Data.GetData("Nodes") is ObservableCollection<TreeNode> treeNodes)
-                {
-                    files.AddRange(treeNodes.Select(n => n.Item).OfType<FileSystemModel>().Select(fsm => fsm.FullName));
-                }
-
-                // If items are selected: ignore anything that isn't
-                if (selectedFilePaths.Count > 0)
-                {
-                    files = files.Where(p => selectedFilePaths.Contains(p, StringComparer.OrdinalIgnoreCase)).ToList();
-                }
-
-                // if dragged on file, use file's parent directory as target dir
-                var targetDirectory = Directory.Exists(targetFile.FullName)
-                    ? targetFile.FullName
-                    : Path.GetDirectoryName(targetFile.FullName);
-
-                // 1146: addresses "prevent self-drag-and-drop"
-                if (files.Count == 0 || files[0] == targetDirectory)
+                if (plan is not { IsActionable: true, TargetDirectory: { } targetDirectory })
                 {
                     e.Handled = true;
                     return;
                 }
 
-                await vm.ProcessFileAction(files, targetDirectory);
+                DispatcherHelper.PostOnMainThread(() => vm.ProcessFileAction(plan.Files, targetDirectory));
             }
             catch (Exception error)
             {
                 e.Handled = true;
-                Console.WriteLine(error.Message);
+                _loggerService?.Error($"Drag and drop failed: {error.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Tell the user in logs about any attempted drag-and-drop that got refused.
+        /// </summary>
+        private void ReportRefusals(ProjectExplorerDropHelper.DropPlan plan)
+        {
+            foreach (var refused in plan.RefusedDirectories)
+            {
+                _loggerService?.Warning($"Can't move {refused} inside itself - skipped.");
+            }
+
+            if (plan.Rejection == ProjectExplorerDropHelper.DropRejection.ProjectRoot)
+            {
+                _loggerService?.Warning(
+                    "Can't drop files in the project root, choombatta. Use the archive, raw, or resources folder.");
             }
         }
 
