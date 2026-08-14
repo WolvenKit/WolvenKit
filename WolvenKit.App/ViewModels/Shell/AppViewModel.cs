@@ -83,7 +83,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     public readonly TemplateFileTools TemplateFileTools;
-    private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     private readonly RedTypeTemplateService _redTypeTemplateService;
@@ -114,7 +113,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         ArchiveXlItemService archiveXlItemService,
         AppScriptService scriptService,
         IModTools modTools,
@@ -142,7 +140,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _watcherService = watcherService;
         _archiveXlItemService = archiveXlItemService;
         _scriptService = scriptService;
         _documentTools = documentTools;
@@ -1530,15 +1527,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.Suspend();
+        GetToolViewModel<ProjectExplorerViewModel>().Suspend();
         try
         {
             _archiveXlItemService.CreateEquipmentItem(item);
         }
         finally
         {
-            _watcherService.Resume();
-            _watcherService.Refresh();
+            GetToolViewModel<ProjectExplorerViewModel>().Resume();
+            GetToolViewModel<ProjectExplorerViewModel>().RefreshWatcher();
         }
     }
 
