@@ -34,8 +34,10 @@ public interface IGameController
     /// </summary>
     /// <param name="file">the file in question</param>
     /// <param name="searchScope">Search scope. Defaults to ArchiveManagerScope.Basegame</param>
+    /// <param name="publish">Announce the add to the project explorer. Pass false for bulk callers
+    /// that publish a single batch afterwards (e.g. AddToModAsync).</param>
     /// <returns>bool success</returns>
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope);
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, bool publish = true);
 
     /// <summary>
     /// Adds file to the mod's directory, creating the necessary folders. Will pass the currently active scope.

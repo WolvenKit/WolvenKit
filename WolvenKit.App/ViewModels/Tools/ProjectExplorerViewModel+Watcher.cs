@@ -110,7 +110,7 @@ public partial class ProjectExplorerViewModel
 
     public void Resume() => _modsWatcher.EnableRaisingEvents = true;
 
-    private void UnwatchProject(Cp77Project? project)
+    internal void UnwatchProject(Cp77Project? project)
     {
         _isWatcherStopped = true;
         UnwatchLocation();
