@@ -1,12 +1,13 @@
 ﻿#nullable enable
 
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Helpers;
 
 namespace WolvenKit.App.Models;
 
-public class DispatchedObservableCollection<T> : ObservableCollectionEx<T> where T : FileSystemModel
+public class DispatchedObservableCollection<T> : ObservableCollectionEx<T>
 {
     private sealed record Batch
     {
@@ -72,4 +73,14 @@ public class DispatchedObservableCollection<T> : ObservableCollectionEx<T> where
         _batch.Clear();
         base.Clear();
     });
+
+    public void AddRange(IEnumerable<T> items)
+    {
+        SuppressNotification = true;
+        foreach (var item in items)
+        {
+            Add(item);
+        }
+        SuppressNotification = false;
+    }
 }

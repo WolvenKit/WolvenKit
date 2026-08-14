@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
@@ -45,6 +46,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
     private readonly IModifierViewStateService _modifierService;
+    private readonly IProjectEvents _projectEvents;
 
     #endregion
 
@@ -58,7 +60,8 @@ public class RED4Controller : ObservableObject, IGameController
         IAppArchiveManager gameArchiveManager,
         IProgressService<double> progressService,
         IPluginService pluginService,
-        IModifierViewStateService modifierService)
+        IModifierViewStateService modifierService,
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -70,6 +73,7 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService = progressService;
         _pluginService = pluginService;
         _modifierService = modifierService;
+        _projectEvents = projectEvents;
     }
 
     #region Packing
@@ -922,13 +926,17 @@ public class RED4Controller : ObservableObject, IGameController
             // often saturates the disk and ends up slower + spams the UI thread.
             var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
 
+            var bulkScope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+
             await Parallel.ForEachAsync(
                 files,
                 new ParallelOptions { MaxDegreeOfParallelism = dop },
                 (file, token) =>
                 {
                     token.ThrowIfCancellationRequested();
-                    AddToMod(file);
+                    // publish:false — we emit ONE FilesImported batch after the loop (below) instead
+                    // of thousands of per-file events, which is the whole point of the bulk path.
+                    AddToMod(file, bulkScope, publish: false);
                     var current = Interlocked.Increment(ref progress);
                     var reportInterval = Math.Max(1, total / 50);
 
@@ -951,6 +959,10 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles([.. files]));
+        DispatcherHelper.DrainTheQueue();
+        // Note: draining the queue here to ensure that any side effects of publishing, such
+        // as updating of data models, completes synchronously before returning from this method.
     }
 
 
@@ -976,7 +988,7 @@ public class RED4Controller : ObservableObject, IGameController
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, bool publish = true)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -1020,6 +1032,13 @@ public class RED4Controller : ObservableObject, IGameController
                 _loggerService.Error(ex);
             }
 
+        }
+
+        // Announce the single add to the project explorer (only if the write actually landed). Bulk
+        // callers pass publish:false and emit one FilesImported batch instead — see AddToModAsync.
+        if (publish && File.Exists(diskPathInfo.FullName))
+        {
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
 
         return true;
