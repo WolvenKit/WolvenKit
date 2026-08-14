@@ -76,6 +76,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
+    private readonly IProjectEvents _projectEvents;
 
     private DispatcherHelper.RepeatingActionHandle? _autoSaveCancelToken;
 
@@ -126,7 +127,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModifierViewStateService modifierSvc,
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
-        ImportExportHelper importExportHelper
+        ImportExportHelper importExportHelper,
+        IProjectEvents projectEvents
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -141,6 +143,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectResourceTools = projectResourceTools;
         _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
+        _projectEvents = projectEvents;
 
         _appViewModel = appViewModel;
 
