@@ -16,6 +16,8 @@ public static class DispatcherHelper
 
     private static readonly object s_repeatingActionsLock = new();
 
+    #region main thread helpers
+
     public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
 
     private static void RunOnUIThread(this DispatcherObject? d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
@@ -116,6 +118,33 @@ public static class DispatcherHelper
             .ContinueWith(_ => RunOnMainThread(action), TaskScheduler.Default);
     }
 
+    #endregion main thread helpers
+
+    #region scheduling helpers
+
+    /// <summary>
+    /// Synchronously drains the current WPF dispatcher queue through
+    /// <see cref="System.Windows.Threading.DispatcherPriority.ContextIdle"/>,
+    /// ensuring that previously queued work at higher priorities is processed
+    /// before this method returns. This is a best-effort operation and is a no-op
+    /// when no application dispatcher is available or dispatcher invocation fails.
+    /// </summary>
+    /// <param name="dispatcher">
+    /// Dispatcher to drain. Defaults to the application's (WPF UI dispatcher), which
+    /// is null in a headless or unit-test context. So for tests, pass one explicitly
+    /// to drain a dispatcher the caller owns.
+    /// </param>
+    public static void DrainTheQueue(Dispatcher? dispatcher = null)
+    {
+        try
+        {
+            (dispatcher ?? System.Windows.Application.Current?.Dispatcher)?.Invoke(
+                () => { },
+                System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* test/headless/no dispatcher or cross-thread invoke not available; best effort */ }
+    }
+
     public static void WaitUntilCancelled(CancellationToken token, Action onCancelled)
     {
         if (token.IsCancellationRequested)
@@ -143,6 +172,8 @@ public static class DispatcherHelper
         // Start the polling loop
         dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
     }
+
+    #endregion
 
     #region repeating actions
 
