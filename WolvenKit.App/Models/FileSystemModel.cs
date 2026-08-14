@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using WolvenKit.Common;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -213,6 +214,50 @@ public class FileSystemModel : INotifyPropertyChanged
         }
 
         return string.Format(CultureInfo.InvariantCulture, "{0:0.##} {1}", len, sizes[order]);
+    }
+
+    /// <summary>
+    /// Returns true if the supplied model is an ancestor of this model.
+    /// </summary>
+    /// <param name="ancestorDir"></param>
+    /// <returns></returns>
+    public bool HasAncestorDir(FileSystemModel ancestorDir)
+    {
+        if (Parent == null)
+        {
+            return false;
+        }
+
+        if (Parent.FullName == ancestorDir.FullName)
+        {
+            return true;
+        }
+
+        return Parent.HasAncestorDir(ancestorDir);
+    }
+
+    /// <summary>
+    /// Returns its parent if it's a file, otherwise returns itself.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="WolvenKitException"></exception>
+    public FileSystemModel TargetDir
+    {
+        get
+        {
+            if (IsDirectory)
+            {
+                return this;
+            }
+
+            if (Parent is { } parent)
+            {
+                return parent;
+            }
+
+            throw new WolvenKitException(0x4025a73,
+                $"No directory model exists for drag and drop operation. Target file path: ${FullName}.");
+        }
     }
 
     #region INotifyPropertyChanged

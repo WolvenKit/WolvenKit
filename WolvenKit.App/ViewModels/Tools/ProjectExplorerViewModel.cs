@@ -232,9 +232,40 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ImportRawFileCommand))]
-    private ObservableCollection<object>? _selectedItems = new();
+    private ObservableCollection<object>? _treeSelectedItems = new();
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportRawFileCommand))]
+    private ObservableCollection<object>? _flatSelectedItems = new();
+
+    /// <summary>
+    /// The selection of whichever grid is on screen.
+    /// </summary>
+    public ObservableCollection<object>? SelectedItems => IsFlatModeEnabled ? FlatSelectedItems : TreeSelectedItems;
+
+    partial void OnTreeSelectedItemsChanged(ObservableCollection<object>? value) =>
+        OnPropertyChanged(nameof(SelectedItems));
+
+    partial void OnFlatSelectedItemsChanged(ObservableCollection<object>? value) =>
+        OnPropertyChanged(nameof(SelectedItems));
 
     [ObservableProperty] private bool _isFlatModeEnabled;
+
+    partial void OnIsFlatModeEnabledChanged(bool value)
+    {
+        // SelectedItems resolves to the other grid's collection
+        OnPropertyChanged(nameof(SelectedItems));
+
+        DeleteFileCommand.NotifyCanExecuteChanged();
+        ConvertArchiveFileCommand.NotifyCanExecuteChanged();
+        ConvertRawFileCommand.NotifyCanExecuteChanged();
+        ExportArchiveFileCommand.NotifyCanExecuteChanged();
+        ImportRawFileCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty] private int _selectedTabIndex;
 
@@ -694,7 +725,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        // Delete from file structure
+        DeleteRecursively(selected);
+    }
+
+    private void DeleteRecursively(List<FileSystemModel> selected)
+    {
         foreach (var item in selected)
         {
             var fullPath = item.FullName;
@@ -702,6 +737,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 if (item.IsDirectory)
                 {
+                    if (
+                        item.FullName == ActiveProject!.ModDirectory ||
+                        item.FullName == ActiveProject!.RawDirectory ||
+                        item.FullName == ActiveProject!.ResourcesDirectory
+                    )
+                    {
+                        var children = item.Children.ToList();
+                        DeleteRecursively(children);
+                        continue;
+                    }
+
                     FileSystem.DeleteDirectory(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
                 else
@@ -2176,7 +2222,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
     /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
     /// </summary>
-    public async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
+    public void ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
     {
         var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
 
@@ -2264,7 +2310,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // 1 - 10 files: Show a single dialogue that asks for confirmation
         if (existingFiles.Count is < 10 and > 0)
         {
-            var messageBoxResult = await Interactions.ShowMessageBoxAsync(
+            var messageBoxResult = Interactions.ShowMessageBox(
                 $"Overwrite the following files? \n\n  {string.Join("\n  ", existingFiles)}",
                 "File Overwrite Confirmation", WMessageBoxButtons.YesNoCancel);
 
@@ -2283,7 +2329,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var canWriteToTargetFile =
                 !File.Exists(targetFile)
                 || isOverwrite
-                || (!skipDialogue && isAskIndividually && await Interactions.ShowMessageBoxAsync(
+                || (!skipDialogue && isAskIndividually && Interactions.ShowMessageBox(
                     $"Overwrite the following file? {targetFile}",
                     "File Overwrite Confirmation",
                     WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
