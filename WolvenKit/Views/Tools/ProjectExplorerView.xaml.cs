@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using HandyControl.Data;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
@@ -93,6 +94,10 @@ namespace WolvenKit.Views.Tools
         /// ExpansionStateDictionary without re-touching an untouched tree.
         /// </summary>
         private bool _searchMutatedExpansion;
+
+        private ProjectExplorerViewModel.LoadingMode _loadingMode = ProjectExplorerViewModel.LoadingMode.Ready;
+
+        private bool _isShowingLoadingIndicator = true;
 
         #endregion fields
 
@@ -280,14 +285,122 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
-                ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
+                ViewModel.OnSetLoading += SetLoading;
+                ViewModel.BeginDeferredRefreshContext = BeginDeferredRefreshContext;
 
+                ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled)
+                    .Subscribe(_ => UpdatePaneVisibility())
+                    .DisposeWith(disposables);
             });
+
+            this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
         #endregion
 
         #region Project_Loading
+
+        private bool ShouldStartLoadingProject(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject
+                   || mode == ProjectExplorerViewModel.LoadingMode.ReloadingSameProject;
+        }
+
+        private bool ShouldStopLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        private bool ShouldStopTemporaryLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        private bool ShouldStartTemporaryLoading(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation;
+        }
+
+        private bool IsFreshLoad(ProjectExplorerViewModel.LoadingMode mode)
+        {
+            return mode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject;
+        }
+
+        private bool AlreadyLoadingProject()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.LoadingNewProject
+                   || _loadingMode == ProjectExplorerViewModel.LoadingMode.ReloadingSameProject;
+        }
+
+        private bool AlreadyTemporaryLoading()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.ShowLoadingDuringOperation;
+        }
+
+        private bool Ready()
+        {
+            return _loadingMode == ProjectExplorerViewModel.LoadingMode.Ready;
+        }
+
+        /// <summary>
+        /// Called by the ViewModel when the View should show "Loading" on the file pane.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetLoading(object sender, ProjectExplorerViewModel.LoadingMode mode)
+        {
+            if (ShouldStartLoadingProject(mode) && Ready())
+            {
+                ResetCurrentFolderQuerySearchFilter();
+
+                if (IsFreshLoad(mode))
+                {
+                    IndicateProjectLoading();
+                }
+            }
+            else if (ShouldStopLoading(mode) && AlreadyLoadingProject())
+            {
+                IndicateProjectNotLoading();
+            }
+            else if (ShouldStopTemporaryLoading(mode) && AlreadyTemporaryLoading())
+            {
+                IndicateProjectNotLoading();
+            }
+            else if (ShouldStartTemporaryLoading(mode) && Ready())
+            {
+                IndicateProjectLoading();
+            }
+
+            _loadingMode = mode;
+        }
+
+        private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
+        {
+            _isShowingLoadingIndicator = true;
+            UpdatePaneVisibility();
+        });
+
+        private void IndicateProjectNotLoading()
+        {
+            _isShowingLoadingIndicator = false;
+            UpdatePaneVisibility();
+        }
+
+        private void UpdatePaneVisibility()
+        {
+            var isFlat = ViewModel?.IsFlatModeEnabled ?? false;
+            var isLoading = _isShowingLoadingIndicator;
+
+            LoadingText.SetCurrentValue(VisibilityProperty, ToVisibility(isLoading));
+            TreeGrid.SetCurrentValue(VisibilityProperty, ToVisibility(!isLoading && !isFlat));
+            TreeGridFlat.SetCurrentValue(VisibilityProperty, ToVisibility(!isLoading && isFlat));
+
+            static Visibility ToVisibility(bool isVisible) => isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        #endregion Project_Loading
+
+        #region refresh
 
         public void Receive(ChalkboardService.WillStartLoadingProjectFiles msg)
         {
@@ -312,9 +425,12 @@ namespace WolvenKit.Views.Tools
                 _disposables.Clear();
             });
 
-        #endregion Project_Loading
-
-        #region refresh
+        private void ResetCurrentFolderQuerySearchFilter()
+        {
+            _currentFolderQuery = "";
+            _searchVisiblePaths = null;
+            PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
+        }
 
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements() => Dispatcher.Invoke(() =>
@@ -375,6 +491,21 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        /// <summary>
+        /// Needed to prevent a mysterious gray bar from
+        /// hiding part of the view.
+        /// </summary>
+        /// <param name="grid"></param>
+        private static void RefreshColumnWidths(SfTreeGrid grid)
+        {
+            if (grid.ActualWidth <= 0)
+            {
+                return;
+            }
+
+            grid.TreeGridColumnSizer?.Refresh();
+        }
+
         private static void RefreshFlatColumnWidths(SfDataGrid grid)
         {
             if (grid.ActualWidth <= 0)
@@ -404,13 +535,14 @@ namespace WolvenKit.Views.Tools
             return (innerVm.Text, innerVm.EnableRefactoring == true);
         }
 
-        // Not sure why the property binding broke, but it did. This fixes it.
         private void OnToggleFlatMode(object sender, EventArgs e)
         {
             if (sender is not ProjectExplorerViewModel model)
             {
                 return;
             }
+
+            UpdatePaneVisibility();
 
             if (model.IsFlatModeEnabled)
             {
@@ -744,7 +876,7 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
@@ -833,6 +965,12 @@ namespace WolvenKit.Views.Tools
 
             view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
             view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
+        }
+
+        private void OnTreeGridSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!e.WidthChanged) return;
+            RefreshColumnWidths(TreeGrid);
         }
 
         #endregion grid responders

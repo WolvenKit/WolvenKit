@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3122
+      author: "gistya"
+      description: "Project Explorer will now show Loading... pane earlier in the process for smoother UX, and during long batch operations when the tree should not be interacted with."

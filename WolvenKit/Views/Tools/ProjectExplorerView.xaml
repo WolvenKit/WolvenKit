@@ -1108,8 +1108,7 @@
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
-            Visibility="{Binding IsFlatModeEnabled,
-                                 Converter={StaticResource BoolInvertConverter}}"
+            Visibility="Visible"
             HeaderRowHeight="3"
             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="Star"
@@ -1129,6 +1128,7 @@
             FilterLevel="Extended"
             NodeExpanded="TreeGrid_OnNodeExpanded"
             NodeCollapsed="TreeGrid_OnNodeCollapsed"
+            SizeChanged="OnTreeGridSizeChanged"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
@@ -1183,8 +1183,7 @@
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
-            Visibility="{Binding IsFlatModeEnabled,
-                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            Visibility="Visible"
             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="Star"
