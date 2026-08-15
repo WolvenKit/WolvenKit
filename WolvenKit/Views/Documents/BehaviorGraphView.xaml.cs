@@ -1,8 +1,6 @@
-using System;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor;
 
 namespace WolvenKit.Views.Documents;
 
@@ -11,19 +9,20 @@ public partial class BehaviorGraphView : UserControl
     public BehaviorGraphView()
     {
         InitializeComponent();
-        DataContextChanged += OnDataContextChanged;
+        BehaviorGraphEditor.CanvasRealized += OnEditorCanvasRealized;
     }
 
-    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    /// <summary>
+    /// Drops the loading overlay once the graph is finished building.
+    /// </summary>
+    /// <remarks>
+    /// The overlay prevents the user clicking nodes mid-realization.
+    /// </remarks>
+    private void OnEditorCanvasRealized(object sender, RedGraph graph)
     {
-        if (e.NewValue is not BehaviorGraphViewModel viewModel)
+        if (DataContext is BehaviorGraphViewModel viewModel)
         {
-            return;
+            viewModel.SetGraphLoaded();
         }
-
-        Dispatcher.BeginInvoke(new Action(() =>
-        {
-            Dispatcher.BeginInvoke(new Action(viewModel.SetGraphLoaded), DispatcherPriority.Background);
-        }), DispatcherPriority.Loaded);
     }
 }
