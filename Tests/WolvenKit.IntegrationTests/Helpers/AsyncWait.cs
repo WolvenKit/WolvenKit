@@ -41,7 +41,7 @@ internal static class AsyncWait
     /// Waits until <paramref name="count"/> reaches <paramref name="minimum"/> and has stopped changing.
     /// </summary>
     /// <remarks>
-    /// The project explorer's file list is filled by WatcherService, which drains its own queue on a
+    /// The project explorer's file list is filled by ProjectExplorerViewModel, which drains its own queue on a
     /// background thread and marshals every add back onto the dispatcher. An awaited extract/convert
     /// call returning therefore says nothing about what the list holds, and a single dispatcher pump
     /// only drains whatever happens to be queued at that instant. Settling is what "the operation is
