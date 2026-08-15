@@ -10,11 +10,6 @@ using Xunit;
 
 namespace Wolvenkit.Test.App.Services;
 
-/// <summary>
-/// Tests for the new IProjectEvents pub/sub used by the large-project performance bypass path.
-/// These protect the contract between bulk file add operations (Asset Browser, JSON export, RED4 AddToModAsync)
-/// and the WatcherService's OnFilesImported handler.
-/// </summary>
 public class ProjectEventsTests
 {
     [Fact]
