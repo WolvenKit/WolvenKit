@@ -13,7 +13,7 @@ namespace WolvenKit.App.Services;
 /// Why this exists: <c>ObserveOn(RxApp.MainThreadScheduler)</c> ALWAYS re-posts each notification to a
 /// later dispatcher turn — even for a publisher that is already on the UI thread. For the project-event
 /// pipeline that means a UI-thread flow which publishes and then <i>immediately</i> releases a Syncfusion
-/// deferred-refresh (e.g. renaming a file) can redraw the grid from domain models the WatcherService
+/// deferred-refresh (e.g. renaming a file) can redraw the grid from domain models the ProjectExplorerViewModel
 /// handler hasn't updated yet — a race. Delivering inline when we're on the UI thread closes it: by the
 /// time <c>PublishXxx(...)</c> returns, the handler has already applied the change to FileList/FileTree,
 /// so the subsequent refresh reflects reality.
