@@ -78,7 +78,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         PumpDispatcher();
         await WaitForExtractedFilesAsync();
 
-        // FileList holds files only - WatcherService adds directories to FileTree and never to
+        // FileList holds files only - ProjectExplorerViewModel adds directories to FileTree and never to
         // FileList - so every one of the imported items is counted here, with nothing to subtract.
         Assert.Equal(expectedNumberOfItems, FilesInList());
     }
@@ -129,7 +129,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
     /// <summary>
     /// Waits for the extraction to become visible in the project explorer. The awaited
     /// <see cref="AssetBrowserViewModel.AddSelectedAsync"/> only guarantees the files reached disk;
-    /// WatcherService puts them in the tree afterwards, on its own thread.
+    /// ProjectExplorerViewModel puts them in the tree afterwards, on its own thread.
     /// </summary>
     private async Task WaitForExtractedFilesAsync(int minimumFiles = 1)
     {
