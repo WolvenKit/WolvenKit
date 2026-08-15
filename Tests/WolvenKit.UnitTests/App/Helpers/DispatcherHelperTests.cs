@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -233,4 +234,140 @@ public class DispatcherHelperTests
         using var restarted = DispatcherHelper.StartRepeatingAction(purpose, () => { }, TimeSpan.FromHours(1));
         Assert.True(DispatcherHelper.IsRepeatingActionRunning(purpose));
     }
+
+    #region DrainTheQueue
+
+    // The drain semantics are covered by passing a dispatcher the test owns.
+
+    [Fact]
+    public void DrainTheQueue_WithoutAnApplication_DoesNotThrow()
+    {
+        Assert.Null(Record.Exception(() =>
+        {
+            DispatcherHelper.DrainTheQueue();
+            DispatcherHelper.DrainTheQueue();
+        }));
+    }
+
+    [Fact]
+    public void DrainTheQueue_WithoutAnApplication_DrainsNothing()
+    {
+        var dispatcher = Dispatcher.CurrentDispatcher;
+        var ran = false;
+
+        dispatcher.BeginInvoke(() => ran = true, DispatcherPriority.Normal);
+
+        DispatcherHelper.DrainTheQueue();
+
+        // no Application.Current means no dispatcher to invoke on, so the queue is untouched
+        Assert.False(ran);
+
+        // ...and the operation really was pending - it runs the moment anything does pump
+        PumpUntil(() => ran, TimeSpan.FromSeconds(10));
+        Assert.True(ran);
+    }
+
+    [Fact]
+    public void DrainTheQueue_OnAThreadWithNoDispatcher_ReturnsWithoutCreatingOne()
+    {
+        Exception? thrown = null;
+        var createdADispatcher = true;
+
+        // a fresh thread, so this cannot see a dispatcher some earlier test left on a pool thread
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                DispatcherHelper.DrainTheQueue();
+                createdADispatcher = Dispatcher.FromThread(Thread.CurrentThread) is not null;
+            }
+            catch (Exception exception)
+            {
+                thrown = exception;
+            }
+        });
+
+        thread.Start();
+
+        // the Join bound is the real assertion: reaching for Dispatcher.CurrentDispatcher here
+        // instead of Application.Current would spin up a dispatcher nobody pumps and block forever
+        Assert.True(thread.Join(TimeSpan.FromSeconds(10)), "DrainTheQueue did not return");
+        Assert.Null(thrown);
+        Assert.False(createdADispatcher);
+    }
+
+    [Fact]
+    public void DrainTheQueue_RunsEverythingQueuedAboveContextIdle_HighestPriorityFirst()
+    {
+        var dispatcher = Dispatcher.CurrentDispatcher;
+        var order = new List<string>();
+
+        // queued lowest-first, so an implementation that merely drained in insertion order would
+        // still pass the ordering assertion by accident
+        var background = dispatcher.BeginInvoke(() => order.Add("background"), DispatcherPriority.Background);
+        var input = dispatcher.BeginInvoke(() => order.Add("input"), DispatcherPriority.Input);
+        var normal = dispatcher.BeginInvoke(() => order.Add("normal"), DispatcherPriority.Normal);
+
+        DispatcherHelper.DrainTheQueue(dispatcher);
+
+        Assert.Equal(new[] { "normal", "input", "background" }, order);
+        Assert.Equal(DispatcherOperationStatus.Completed, normal.Status);
+        Assert.Equal(DispatcherOperationStatus.Completed, input.Status);
+        Assert.Equal(DispatcherOperationStatus.Completed, background.Status);
+    }
+
+    [Fact]
+    public void DrainTheQueue_LeavesWorkQueuedBelowContextIdle()
+    {
+        var dispatcher = Dispatcher.CurrentDispatcher;
+        var ran = false;
+
+        var operation = dispatcher.BeginInvoke(() => ran = true, DispatcherPriority.ApplicationIdle);
+
+        DispatcherHelper.DrainTheQueue(dispatcher);
+
+        // ContextIdle is the floor: idle-priority work is deliberately left for a real idle moment
+        Assert.False(ran);
+        Assert.Equal(DispatcherOperationStatus.Pending, operation.Status);
+
+        // this dispatcher outlives the test - don't leave the operation to fire during another one
+        operation.Abort();
+    }
+
+    [Fact]
+    public void DrainTheQueue_OnAShutDownDispatcher_DoesNotThrow()
+    {
+        var dispatcher = DispatcherOnItsOwnShutDownThread();
+
+        // the only path that reaches the catch: Invoke on a dead dispatcher. "Best effort" in the
+        // doc comment means the caller never sees this.
+        Assert.Null(Record.Exception(() => DispatcherHelper.DrainTheQueue(dispatcher)));
+    }
+
+    /// <summary>Spins up a dispatcher on its own thread, shuts it down, and hands back the corpse.</summary>
+    private static Dispatcher DispatcherOnItsOwnShutDownThread()
+    {
+        Dispatcher? dispatcher = null;
+        using var ready = new ManualResetEventSlim();
+
+        var thread = new Thread(() =>
+        {
+            dispatcher = Dispatcher.CurrentDispatcher;
+            ready.Set();
+            Dispatcher.Run();
+        })
+        {
+            IsBackground = true
+        };
+
+        thread.Start();
+        Assert.True(ready.Wait(TimeSpan.FromSeconds(10)), "the dispatcher thread never started");
+
+        dispatcher!.InvokeShutdown();
+        Assert.True(thread.Join(TimeSpan.FromSeconds(10)), "the dispatcher thread never stopped");
+
+        return dispatcher;
+    }
+
+    #endregion DrainTheQueue
 }

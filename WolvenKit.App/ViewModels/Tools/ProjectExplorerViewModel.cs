@@ -76,7 +76,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
-    private readonly IWatcherService _projectWatcher;
+    private readonly IProjectEvents _projectEvents;
+
     private DispatcherHelper.RepeatingActionHandle? _autoSaveCancelToken;
 
     /// <summary>
@@ -98,22 +99,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private readonly ImportExportHelper _importExportHelper;
     private readonly TimeSpan _projectLoadPollingInterval = TimeSpan.FromMilliseconds(50);
-    //private bool _inFlight = false;
 
-    // FileTree / FileList are owned by the watcher service and are the grids' single source of truth.
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
+    public DispatchedObservableCollection<FileSystemModel> FileList { get; } = new();
+    public DispatchedObservableCollection<FileSystemModel> FileTree { get; } = new();
 
     public Func<Func<Task>, Task>? BeginDeferredRefreshContext { get; set; }
 
-    /// <summary>
-    /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
-    /// </summary>
-    public Dictionary<string, bool> ExpansionStateDictionary
-    {
-        get => _projectWatcher.ExpansionStateDictionary;
-        set => _projectWatcher.ExpansionStateDictionary = value;
-    }
+    public Dictionary<string, bool> ExpansionStateDictionary { get; set; } = [];
 
     public bool IsKeyUpEventAssigned { get; set; }
 
@@ -136,7 +128,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
         ImportExportHelper importExportHelper,
-        IWatcherService projectWatcher
+        IProjectEvents projectEvents
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -151,10 +143,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectResourceTools = projectResourceTools;
         _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
+        _projectEvents = projectEvents;
 
         _appViewModel = appViewModel;
-
-        _projectWatcher = projectWatcher;
 
         SideInDockedMode = DockSide.Left;
 
@@ -170,6 +161,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _autoSaveCancelToken = null;
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
+
+        InitializeProjectWatcher();
 
         DispatcherHelper.StopRepeatingAction(_autoSaveCancelToken);
         _autoSaveCancelToken = DispatcherHelper.StartRepeatingAction(
@@ -291,18 +284,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region general commands
 
-    //[RelayCommand]
-    //private void ExpandAll() {  }
-
-    //[RelayCommand]
-    //private void CollapseAll() { }
-
-    //[RelayCommand]
-    //private void CollapseChildren() { }
-
-    //[RelayCommand]
-    //private void ExpandChildren() { }
-
     /// <summary>
     /// Refreshes all files in the Grid
     /// </summary>
@@ -310,13 +291,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRefresh))]
     private void Refresh()
     {
-        if (_projectWatcher.IsWatcherStopped)
+        if (IsWatcherStopped)
         {
             ResumeFileWatcher();
         }
         else
         {
-            _projectWatcher.Refresh();
+            RefreshWatcher();
         }
     }
 
@@ -1062,7 +1043,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                             {
                                 var jsonFileInfo = new FileInfo(jsonFilePath);
 
-                                if (_projectWatcher.FileLookup.ContainsKey(jsonFilePath))
+                                if (FileLookup.ContainsKey(jsonFilePath))
                                 {
                                     // don't add a duplicate file to the trees
                                     return;
@@ -1799,7 +1780,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 _hasUnsavedFileTreeChanges = true;
                 SaveProjectExplorerExpansionStateIfDirty();
-                _projectWatcher.UnwatchProject(ActiveProject);
+                UnwatchProject(ActiveProject);
             }
 
             if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
@@ -1812,7 +1793,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             if (ActiveProject is not null)
             {
                 RestoreProjectState(ActiveProject);
-                _projectWatcher.WatchProject(ActiveProject);
+                WatchProject(ActiveProject);
             }
 
             OnProjectChanged?.Invoke();
@@ -1888,7 +1869,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         });
     }
 
-    public void StopWatcher() => _projectWatcher.ForceStop();
+    public void StopWatcher() => ForceStop();
 
     public void SuspendFileWatcher()
     {
@@ -1899,8 +1880,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.UnwatchProject(project);
-            _projectWatcher.ForceStop();
+            UnwatchProject(project);
+            ForceStop();
         }
         catch
         {
@@ -1920,7 +1901,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.WatchProject(project);
+            WatchProject(project);
             _hasUnsavedFileTreeChanges = false;
         }
         catch
@@ -2158,7 +2139,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region expansion state
 
-    public bool? GetExpansionStateOrNull(string relPath) => _projectWatcher.GetExpansionStateOrNull(relPath);
+    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
     {
