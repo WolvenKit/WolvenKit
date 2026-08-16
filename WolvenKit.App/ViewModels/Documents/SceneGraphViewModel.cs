@@ -66,6 +66,10 @@ namespace WolvenKit.App.ViewModels.Documents
 
         public bool IsOptionCreationVisible => SelectedTab?.Header == "Dialogue";
 
+        /// <summary>
+        /// Named in its own right so the Import Dialogue button says what it is bound to, though it
+        /// is on the same tab as the two above and so adds nothing to <see cref="IsButtonBarVisible"/>.
+        /// </summary>
         public bool IsDialogueImportVisible => SelectedTab?.Header == "Dialogue";
 
         public bool IsWorkspotCreationVisible => SelectedTab?.Header == "Asset Library";
@@ -74,7 +78,7 @@ namespace WolvenKit.App.ViewModels.Documents
 
         public bool IsAnimationCreationVisible => SelectedTab?.Header == "Asset Library";
 
-        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsDialogueImportVisible || IsWorkspotCreationVisible || IsEffectCreationVisible || IsAnimationCreationVisible;
+        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible || IsEffectCreationVisible || IsAnimationCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
@@ -304,7 +308,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 // Auto-expand to show the newly created actor
-                ExpandToNewEntry("actors", "", 0);
+                ExpandToNewEntry("actors", "");
 
                 // Update total actors count in the UI
                 OnPropertyChanged(nameof(TotalActors));
@@ -361,7 +365,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 // Auto-expand to show the newly created prop
-                ExpandToNewEntry("props", "", 0);
+                ExpandToNewEntry("props", "");
 
                 // Update total props count in the UI
                 OnPropertyChanged(nameof(TotalProps));
@@ -398,11 +402,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 var createEmbedText = dialogResult.enableSecondary;
                 var embeddedText = dialogResult.secondaryInput;
 
-                var itemId = (uint)1; // First id is always 1
-                if (_sceneData.ScreenplayStore.Lines.Count > 0)
-                {
-                    itemId = _sceneData.ScreenplayStore.Lines[^1].ItemId.Id + 256;
-                }
+                var itemId = SceneEditingHelper.GetNextDialogLineItemId(_sceneData.ScreenplayStore.Lines);
 
                 var random = new Random();
                 var cruid = (CRUID)random.NextCRUID();
@@ -465,7 +465,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 // Auto-expand to show the newly created dialogue line
-                ExpandToNewEntry("screenplayStore", "lines", itemId);
+                ExpandToNewEntry("screenplayStore", "lines");
 
                 // Update total dialogues count in the UI
                 OnPropertyChanged(nameof(TotalDialogues));
@@ -504,11 +504,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 var createEmbedText = dialogResult.enableSecondary;
                 var embeddedText = dialogResult.secondaryInput;
 
-                var itemId = (uint)2; // First id is always 2
-                if (_sceneData.ScreenplayStore.Options.Count > 0)
-                {
-                    itemId = _sceneData.ScreenplayStore.Options[^1].ItemId.Id + 256;
-                }
+                var itemId = SceneEditingHelper.GetNextChoiceOptionItemId(_sceneData.ScreenplayStore.Options);
 
                 var random = new Random();
                 var cruid = (CRUID)random.NextCRUID();
@@ -571,7 +567,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 // Auto-expand to show the newly created choice option
-                ExpandToNewEntry("screenplayStore", "options", itemId);
+                ExpandToNewEntry("screenplayStore", "options");
 
                 // Update total dialogues count in the UI
                 OnPropertyChanged(nameof(TotalDialogues));
@@ -633,17 +629,13 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 // Item ids run in steps of 256, as the game's own scenes do, and both halves of the
                 // screenplay store number themselves independently.
-                var nextLineItemId = (uint)1;
-                if (screenplayLines.Count > 0)
-                {
-                    nextLineItemId = screenplayLines[^1].ItemId.Id + 256;
-                }
+                var nextLineItemId = SceneEditingHelper.GetNextDialogLineItemId(screenplayLines);
+                var nextOptionItemId = SceneEditingHelper.GetNextChoiceOptionItemId(screenplayOptions);
 
-                var nextOptionItemId = (uint)2;
-                if (screenplayOptions.Count > 0)
-                {
-                    nextOptionItemId = screenplayOptions[^1].ItemId.Id + 256;
-                }
+                // The locstrings the scene already carries embedded text for, read once rather than
+                // per line: an import of any size against a scene of any size would otherwise walk
+                // the whole locStore for every line it takes. Grows as text is embedded below.
+                var describedLocStrings = GetLocStringIds(_sceneData.LocStore?.VdEntries?.Select(entry => entry.LocstringId));
 
                 var addedLines = 0;
                 var addedOptions = 0;
@@ -722,7 +714,7 @@ namespace WolvenKit.App.ViewModels.Documents
                         addedLines++;
                     }
 
-                    if (createEmbeddedText && AddEmbeddedText(line.LocStringId, line.Text, random))
+                    if (createEmbeddedText && AddEmbeddedText(line.LocStringId, line.Text, random, describedLocStrings))
                     {
                         addedTexts++;
                     }
@@ -750,8 +742,17 @@ namespace WolvenKit.App.ViewModels.Documents
                     UpdateTabContent(SelectedTab);
                 }
 
-                // Auto-expand to show what came in
-                ExpandToNewEntry("screenplayStore", addedLines > 0 ? "lines" : "options", 0);
+                // Auto-expand to show what came in. A payload can hold both, and both halves of the
+                // store are worth revealing when it does.
+                if (addedLines > 0)
+                {
+                    ExpandToNewEntry("screenplayStore", "lines");
+                }
+
+                if (addedOptions > 0)
+                {
+                    ExpandToNewEntry("screenplayStore", "options");
+                }
 
                 // Update dialogue and choice counts in the UI
                 OnPropertyChanged(nameof(TotalDialogues));
@@ -817,8 +818,12 @@ namespace WolvenKit.App.ViewModels.Documents
         /// Embeds a line's text into the scene's locStore, as a payload entry plus the descriptor
         /// that points a locstring at it.
         /// </summary>
+        /// <param name="describedLocStrings">
+        /// The locstrings the locStore already describes, which this adds to. Handed in rather than
+        /// read from the store so that importing n lines does not walk it n times.
+        /// </param>
         /// <returns>False when there was nothing to embed, or the locStore already describes this locstring.</returns>
-        private bool AddEmbeddedText(ulong locStringId, string text, Random random)
+        private bool AddEmbeddedText(ulong locStringId, string text, Random random, HashSet<ulong> describedLocStrings)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -827,8 +832,7 @@ namespace WolvenKit.App.ViewModels.Documents
 
             // A locstring the scene already carries text for keeps the text it has: two descriptors
             // for one locstring and locale is what the game reads as a broken locStore.
-            if (_sceneData.LocStore.VdEntries.Any(entry =>
-                    entry.LocstringId != null && (ulong)entry.LocstringId.Ruid == locStringId))
+            if (!describedLocStrings.Add(locStringId))
             {
                 return false;
             }
@@ -986,7 +990,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 // Auto-expand to show the newly created workspot instance
-                ExpandToNewEntry("workspotInstances", "", 0);
+                ExpandToNewEntry("workspotInstances", "");
 
                 _logger?.Info($"Created new workspot: path='{workspotPath}', dataId={dataId}, instanceId={instanceId}");
             }
@@ -1143,7 +1147,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 // Auto-expand to show the newly created effect instance
-                ExpandToNewEntry("effectInstances", "", 0);
+                ExpandToNewEntry("effectInstances", "");
 
                 _logger?.Info($"Created new effect: path='{effectPath}', effectId={effectId}, instanceId={instanceId}, compiledEvents={compiledEventInfos.Count}");
             }
@@ -1304,10 +1308,10 @@ namespace WolvenKit.App.ViewModels.Documents
                 switch (animationType.ToLower())
                 {
                     case "cinematic":
-                        ExpandToNewEntry("resouresReferences", "cinematicAnimNames", 0);
+                        ExpandToNewEntry("resouresReferences", "cinematicAnimNames");
                         break;
                     case "gameplay":
-                        ExpandToNewEntry("resouresReferences", "gameplayAnimNames", 0);
+                        ExpandToNewEntry("resouresReferences", "gameplayAnimNames");
                         break;
                 }
 
@@ -1324,8 +1328,7 @@ namespace WolvenKit.App.ViewModels.Documents
         /// </summary>
         /// <param name="parentPath">Parent path like "screenplayStore", "actors", or "props"</param>
         /// <param name="childPath">Child collection like "lines" or "options", or empty for direct arrays</param>
-        /// <param name="itemId">The itemId of the newly created entry</param>
-        private void ExpandToNewEntry(string parentPath, string childPath, uint itemId)
+        private void ExpandToNewEntry(string parentPath, string childPath)
         {
             try
             {

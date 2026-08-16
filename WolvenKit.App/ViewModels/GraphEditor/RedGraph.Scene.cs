@@ -134,13 +134,7 @@ public partial class RedGraph
             var random = new Random();
             var cruid = (CRUID)random.NextCRUID();
 
-            // first id is always 2, don't know why
-            var id = (CUInt32)2;
-            if (sceneResource.ScreenplayStore.Options.Count > 0)
-            {
-                // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
-                id = sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
-            }
+            var id = (CUInt32)SceneEditingHelper.GetNextChoiceOptionItemId(sceneResource.ScreenplayStore.Options);
 
             sceneResource.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
             {

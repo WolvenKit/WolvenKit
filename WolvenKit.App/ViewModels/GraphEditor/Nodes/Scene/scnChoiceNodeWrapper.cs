@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
@@ -383,13 +384,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
         // VariantId is 4 higher then LocstringId, doesn't seem important
         var cruid = (CRUID)random.NextCRUID();
 
-        // first id is always 2, don't know why
-        var id = (CUInt32)2;
-        if (_sceneResource.ScreenplayStore.Options.Count > 0)
-        {
-            // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
-            id = _sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
-        }
+        var id = (CUInt32)SceneEditingHelper.GetNextChoiceOptionItemId(_sceneResource.ScreenplayStore.Options);
 
         _sceneResource.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
         {

@@ -109,8 +109,6 @@ public partial class DialogueImportDialogView : Window
         }
     }
 
-    private void OnClearClick(object sender, RoutedEventArgs e) => ViewModel.JsonText = "";
-
     /// <summary>Opens the mod's page in whatever the user browses with.</summary>
     private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
     {

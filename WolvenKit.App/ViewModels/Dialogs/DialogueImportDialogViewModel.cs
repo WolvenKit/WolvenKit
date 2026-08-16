@@ -136,6 +136,16 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
     /// <summary>Where the payload being read came from, named once in the status line.</summary>
     private string _sourceName = "";
 
+    /// <summary>What the list was last built from, which is what makes an edit to the box stale.</summary>
+    private string _readJson = "";
+
+    /// <summary>
+    /// Whether the list is being rebuilt or set wholesale. The counts are worth one pass at the end
+    /// of that rather than one per line, which is what a handler per entry and per collection change
+    /// would otherwise cost on every load and every Select all.
+    /// </summary>
+    private bool _isUpdatingEntries;
+
     public DialogueImportDialogViewModel(DialogueImportDialogOptions dialogOptions)
     {
         _existingLineLocStrings = dialogOptions.ExistingLineLocStrings;
@@ -166,8 +176,15 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
     public string ExportFolderPath { get; } =
         Path.Combine("Cyberpunk 2077", DialogueImportHelper.ExportDirectoryRelativePath);
 
-    /// <summary>The payload itself. Parsed on every change, so pasting into the box is enough.</summary>
+    /// <summary>
+    /// The payload itself. Read when the user asks for it rather than on every keystroke: rebuilding
+    /// the list throws away every speaker, addressee and checkbox they have set, so re-reading is
+    /// theirs to ask for. The paste and load buttons are that ask; typing in the box is not.
+    /// </summary>
     [ObservableProperty] private string _jsonText = "";
+
+    /// <summary>Whether the box holds something other than what the list was built from.</summary>
+    [ObservableProperty] private bool _isPayloadStale;
 
     /// <summary>What the import says about itself: where it came from, and how much of it is new.</summary>
     [ObservableProperty] private string _statusMessage =
@@ -196,7 +213,19 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
 
     public bool CanImport => SelectedCount > 0;
 
-    partial void OnJsonTextChanged(string value) => LoadPayload(value);
+    partial void OnJsonTextChanged(string value) => IsPayloadStale = value != _readJson;
+
+    /// <summary>Reads what is in the payload box, at the user's asking.</summary>
+    [RelayCommand]
+    private void ReadPayload() => LoadPayload(JsonText);
+
+    /// <summary>Puts the dialog back where it started, payload box and all.</summary>
+    [RelayCommand]
+    private void Clear()
+    {
+        JsonText = "";
+        LoadPayload("");
+    }
 
     /// <summary>
     /// Reads a payload into the list. Anything already listed is dropped first: a second paste
@@ -209,6 +238,31 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
         var sourceName = _sourceName;
         _sourceName = "";
 
+        _readJson = json ?? "";
+        IsPayloadStale = JsonText != _readJson;
+
+        // One pass over the counts at the end rather than one per line cleared and one per line
+        // added, each of which walks the whole list twice.
+        _isUpdatingEntries = true;
+
+        try
+        {
+            RebuildEntries(json, sourceName);
+        }
+        finally
+        {
+            _isUpdatingEntries = false;
+        }
+
+        RefreshCounts();
+    }
+
+    /// <summary>
+    /// The list itself, dropped and built back up. Only ever called with the counts held, which is
+    /// what <see cref="LoadPayload"/> is for.
+    /// </summary>
+    private void RebuildEntries(string? json, string sourceName)
+    {
         foreach (var entry in Entries)
         {
             entry.PropertyChanged -= OnEntryPropertyChanged;
@@ -219,7 +273,6 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
         if (string.IsNullOrWhiteSpace(json))
         {
             SetStatus("Paste an export from the Dialogue Browser, or load one from a file.", false);
-            RefreshCounts();
             return;
         }
 
@@ -228,7 +281,6 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
         if (!payload.IsValid)
         {
             SetStatus(payload.Error ?? "Could not read the import.", true);
-            RefreshCounts();
             return;
         }
 
@@ -242,26 +294,19 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
             Entries.Add(entry);
         }
 
-        RefreshCounts();
         SetStatus(DescribePayload(payload, sourceName), false);
     }
 
     /// <summary>
-    /// Takes a payload, named by where it came from. Goes through here rather than through
+    /// Takes a payload, named by where it came from. Reads it itself rather than leaving that to
     /// <see cref="JsonText"/> so that handing over the same thing twice still reports itself - the
     /// property only raises a change when the text differs.
     /// </summary>
     public void SetPayload(string json, string sourceName)
     {
         _sourceName = sourceName;
-
-        if (JsonText == json)
-        {
-            LoadPayload(json);
-            return;
-        }
-
         JsonText = json;
+        LoadPayload(json);
     }
 
     [RelayCommand]
@@ -324,10 +369,23 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
 
     private void SetSelection(bool isSelected)
     {
-        foreach (var entry in Entries.Where(entry => entry.CanImport))
+        // Each row raising its own change would have the counts recomputed once per row; they are
+        // the same counts either way, so they are taken once at the end.
+        _isUpdatingEntries = true;
+
+        try
         {
-            entry.IsSelected = isSelected;
+            foreach (var entry in Entries.Where(entry => entry.CanImport))
+            {
+                entry.IsSelected = isSelected;
+            }
         }
+        finally
+        {
+            _isUpdatingEntries = false;
+        }
+
+        RefreshCounts();
     }
 
     private void SetStatus(string message, bool isError)
@@ -366,9 +424,29 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
 
     private void RefreshCounts()
     {
+        if (_isUpdatingEntries)
+        {
+            return;
+        }
+
+        var duplicates = 0;
+        var selected = 0;
+
+        foreach (var entry in Entries)
+        {
+            if (entry.IsDuplicate)
+            {
+                duplicates++;
+            }
+            else if (entry.IsSelected)
+            {
+                selected++;
+            }
+        }
+
         EntryCount = Entries.Count;
-        DuplicateCount = Entries.Count(entry => entry.IsDuplicate);
-        SelectedCount = Entries.Count(entry => entry is { IsSelected: true, CanImport: true });
+        DuplicateCount = duplicates;
+        SelectedCount = selected;
     }
 
     private void OnEntriesChanged(object? sender, NotifyCollectionChangedEventArgs e) => RefreshCounts();

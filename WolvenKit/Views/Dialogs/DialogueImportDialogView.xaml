@@ -33,9 +33,18 @@
                     x:Key="ImportColumnHeaderStyle"
                     TargetType="TextBlock">
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+                </Style>
+
+                <!-- Everything the dialog says about itself rather than about a line -->
+                <Style
+                    x:Key="ImportHintStyle"
+                    TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
+                    <Setter Property="TextWrapping" Value="Wrap" />
                 </Style>
 
                 <Style
@@ -51,7 +60,7 @@
                 <!-- The rows of an open dropdown, as the Archive XL dialog dresses them: the
                      window's own theme leaves them light, which is unreadable in this one -->
                 <Style TargetType="{x:Type ComboBoxItem}">
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                     <Setter Property="OverridesDefaultStyle" Value="true" />
                     <Setter Property="SnapsToDevicePixels" Value="true" />
                     <Setter Property="Template">
@@ -92,8 +101,8 @@
                     x:Key="ImportActorSelectorStyle"
                     BasedOn="{StaticResource {x:Type ComboBox}}"
                     TargetType="ComboBox">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                     <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -166,7 +175,7 @@
                             Content="Clear"
                             Visibility="{Binding HasEntries,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Click="OnClearClick" />
+                            Command="{Binding ClearCommand}" />
                     </StackPanel>
 
                     <!-- ============================================ status line -->
@@ -178,12 +187,12 @@
                         TextWrapping="Wrap">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Gray" />
+                                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                                 <Style.Triggers>
                                     <DataTrigger
                                         Binding="{Binding IsStatusError}"
                                         Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Red}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -195,19 +204,43 @@
                         Grid.Row="2"
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                        Foreground="Gray"
+                        Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                         Header="Payload (JSON)">
-                        <TextBox
-                            Height="90"
-                            Margin="{DynamicResource WolvenKitMarginTinyTop}"
-                            Padding="{DynamicResource WolvenKitMarginTiny}"
-                            FontFamily="Consolas"
-                            FontSize="{DynamicResource WolvenKitFontAltTitle}"
-                            AcceptsReturn="True"
-                            HorizontalScrollBarVisibility="Auto"
-                            VerticalScrollBarVisibility="Auto"
-                            Text="{Binding JsonText,
-                                           UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel Margin="{DynamicResource WolvenKitMarginTinyTop}">
+                            <TextBox
+                                Height="90"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                FontFamily="Consolas"
+                                FontSize="{DynamicResource WolvenKitFontAltTitle}"
+                                AcceptsReturn="True"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Auto"
+                                Text="{Binding JsonText,
+                                               UpdateSourceTrigger=PropertyChanged}" />
+
+                            <!-- Reading the box rebuilds the list from scratch, which throws away
+                                 every speaker and checkbox the user has set. That is theirs to ask
+                                 for rather than something an edit does out from under them -->
+                            <StackPanel
+                                Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                                Orientation="Horizontal">
+                                <Button
+                                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                    Padding="{DynamicResource WolvenKitMarginTiny}"
+                                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                    Content="Read payload"
+                                    ToolTip="Rebuilds the list below from this text. Any speaker, addressee or selection you have set is lost"
+                                    Command="{Binding ReadPayloadCommand}" />
+
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource ImportHintStyle}"
+                                    Foreground="{DynamicResource ForegroundColor_Yellow}"
+                                    Text="Edited - press Read payload to rebuild the list below."
+                                    Visibility="{Binding IsPayloadStale,
+                                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </StackPanel>
+                        </StackPanel>
                     </Expander>
 
                     <!-- ============================== what all this is, for a
@@ -217,8 +250,8 @@
                         Grid.Row="3"
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                         Padding="10,8"
-                        Background="#14FFFFFF"
-                        BorderBrush="#33FFFFFF"
+                        Background="{DynamicResource BackgroundColor_Frame_Active}"
+                        BorderBrush="{DynamicResource ForegroundColor_Grey_Inactive}"
                         BorderThickness="1"
                         Visibility="{Binding HasEntries,
                                              Converter={StaticResource InverseBooleanToVisibilityConverter}}">
@@ -227,7 +260,7 @@
                                 Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 FontWeight="Bold"
-                                Foreground="{StaticResource WolvenKitCyan}"
+                                Foreground="{DynamicResource ForegroundColor_Cyan}"
                                 Text="What is the Dialogue Browser?" />
 
                             <TextBlock
@@ -235,23 +268,19 @@
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Foreground="{DynamicResource PrimaryTextBrush}"
                                 TextWrapping="Wrap"><Run Text="A Cyber Engine Tweaks mod that lets you browse the game's vanilla conversations while it runs, and export the lines you pick. Dialogue Browser is available on Nexus Mods and on GitHub : " /><Hyperlink
-                                    Foreground="{StaticResource WolvenKitCyan}"
+                                    Foreground="{DynamicResource ForegroundColor_Cyan}"
                                     NavigateUri="https://github.com/Akiway/Dialogue-Browser"
                                     RequestNavigate="OnHyperlinkRequestNavigate"
                                     ToolTip="Opens in your browser">https://github.com/Akiway/Dialogue-Browser</Hyperlink></TextBlock>
 
                             <TextBlock
-                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                Foreground="Gray"
-                                TextWrapping="Wrap"
+                                Style="{StaticResource ImportHintStyle}"
                                 Text="Export from the mod: it puts the JSON on your clipboard, and writes a copy to the folder below." />
 
                             <TextBlock
                                 Margin="{DynamicResource WolvenKitMarginTinyTop}"
                                 FontFamily="Consolas"
-                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                Foreground="Gray"
-                                TextWrapping="Wrap"
+                                Style="{StaticResource ImportHintStyle}"
                                 Text="{Binding ExportFolderPath}"
                                 ToolTip="Where 'Load file...' opens" />
                         </StackPanel>
@@ -262,7 +291,7 @@
                         Grid.Row="4"
                         Margin="{DynamicResource WolvenKitMarginSmallTop}"
                         Padding="4,2"
-                        BorderBrush="#33FFFFFF"
+                        BorderBrush="{DynamicResource ForegroundColor_Grey_Inactive}"
                         BorderThickness="0,0,0,1">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -392,7 +421,7 @@
                                         Grid.Column="5"
                                         Width="190"
                                         Style="{StaticResource ImportCellStyle}"
-                                        Foreground="Gray"
+                                        Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                                         Text="{Binding LipsyncAnimNames}"
                                         ToolTip="{Binding LipsyncAnimNames}" />
 
@@ -404,12 +433,12 @@
                                             <Style
                                                 BasedOn="{StaticResource ImportCellStyle}"
                                                 TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitGreen}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource WolvenKitGreen}" />
                                                 <Style.Triggers>
                                                     <DataTrigger
                                                         Binding="{Binding IsDuplicate}"
                                                         Value="True">
-                                                        <Setter Property="Foreground" Value="{StaticResource WolvenKitYellow}" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitYellow}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -452,7 +481,7 @@
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
                             VerticalAlignment="Center"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Foreground="Gray"
+                            Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                             Visibility="{Binding HasEntries,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Run Text="{Binding SelectedCount, Mode=OneWay}" />
