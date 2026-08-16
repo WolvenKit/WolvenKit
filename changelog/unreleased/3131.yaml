@@ -1,0 +1,6 @@
+changes:
+    - type: "removed"
+      packages: ["Nuget Packages"]
+      pr-number: 3131
+      author: "notaspirit"
+      description: "Previously deprecated RedTypeFactory has been removed, use RedTypeManager instead."
