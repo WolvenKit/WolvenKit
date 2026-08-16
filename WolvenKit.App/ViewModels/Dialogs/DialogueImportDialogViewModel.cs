@@ -84,7 +84,37 @@ public partial class DialogueImportEntryViewModel : ObservableObject
 
     public string AddresseeToolTip => DescribeExportedName("addressee", Line.Addressee);
 
-    public string Text => string.IsNullOrEmpty(Line.Text) ? "(no text)" : Line.Text;
+    public string Text => string.IsNullOrEmpty(Line.EmbeddedText) ? "(no text)" : Line.EmbeddedText;
+
+    /// <summary>
+    /// Whether the line is worded for the player's gender. Worth saying because only one of the two
+    /// wordings can be embedded: a locstore descriptor is keyed on locstring, locale and gender, and
+    /// the scene editor writes one under "both".
+    /// </summary>
+    public bool HasGenderedText => Line.HasGenderedText;
+
+    /// <summary>
+    /// The line in full, with both wordings where it has two. The column itself is one line high and
+    /// trimmed, so this is where a line long enough to be cut off can actually be read.
+    /// </summary>
+    public string TextToolTip
+    {
+        get
+        {
+            if (!HasGenderedText)
+            {
+                return Text;
+            }
+
+            return $"""
+                Female V: {Line.FemaleText}
+                Male V: {Line.MaleText}
+
+                Only the first is embedded - the scene's locstore keeps one text per line. Leave
+                "Embed the text into the scene" off to let the game use its own, which has both.
+                """;
+        }
+    }
 
     /// <summary>
     /// The lipsync animations, named per recorded variant: the index knows a female name for

@@ -411,11 +411,25 @@
                                                                UpdateSourceTrigger=PropertyChanged}"
                                         ToolTip="{Binding AddresseeToolTip}" />
 
-                                    <TextBlock
+                                    <!-- A line worded for the player's gender is marked: only one
+                                         of its two wordings can be embedded, and the tooltip says
+                                         which and why -->
+                                    <StackPanel
                                         Grid.Column="4"
-                                        Style="{StaticResource ImportCellStyle}"
-                                        Text="{Binding Text}"
-                                        ToolTip="{Binding Text}" />
+                                        Orientation="Horizontal"
+                                        ToolTip="{Binding TextToolTip}">
+                                        <TextBlock
+                                            Style="{StaticResource ImportCellStyle}"
+                                            Margin="0,0,4,0"
+                                            FontWeight="Bold"
+                                            Foreground="{DynamicResource ForegroundColor_Yellow}"
+                                            Text="F/M"
+                                            Visibility="{Binding HasGenderedText,
+                                                                 Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock
+                                            Style="{StaticResource ImportCellStyle}"
+                                            Text="{Binding Text}" />
+                                    </StackPanel>
 
                                     <TextBlock
                                         Grid.Column="5"

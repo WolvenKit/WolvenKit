@@ -106,6 +106,37 @@ public class DialogueImportDialogViewModelTests
     }
 
     [TestMethod]
+    public void ShowsBothWordingsOfALineWordedForThePlayersGender()
+    {
+        var viewModel = ViewModel();
+
+        viewModel.LoadPayload("""
+            {
+              "lines": [
+                {
+                  "locStringId": "1",
+                  "text": "Got 'nads on you, girl.",
+                  "femaleText": "Got 'nads on you, girl.",
+                  "maleText": "Got balls on you, boy."
+                },
+                { "locStringId": "2", "text": "Same either way." }
+              ]
+            }
+            """);
+
+        var gendered = viewModel.Entries[0];
+
+        Assert.IsTrue(gendered.HasGenderedText);
+        Assert.AreEqual("Got 'nads on you, girl.", gendered.Text, "the column shows what gets embedded");
+        Assert.IsTrue(gendered.TextToolTip.Contains("Got balls on you, boy."), "and the tooltip the other");
+        Assert.IsTrue(gendered.TextToolTip.Contains("Only the first is embedded"));
+
+        // An ordinary line says nothing about gender, and its tooltip is just the line.
+        Assert.IsFalse(viewModel.Entries[1].HasGenderedText);
+        Assert.AreEqual("Same either way.", viewModel.Entries[1].TextToolTip);
+    }
+
+    [TestMethod]
     public void LeavesAChoiceOptionWithoutActorsToSet()
     {
         var viewModel = ViewModel();

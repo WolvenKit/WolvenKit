@@ -18,12 +18,29 @@ public sealed class ImportedDialogueLine
     /// <summary>Locstring id the recording is registered under.</summary>
     public ulong LocStringId { get; init; }
 
-    /// <summary>Subtitle text, ready to be embedded into the scene's locstore.</summary>
-    public string Text { get; init; } = "";
+    /// <summary>
+    /// The one subtitle the scene's locstore gets for this line, picked from the variants below.
+    /// A locstore descriptor is keyed on locstring, locale and gender, and the gender it is written
+    /// under here is "both" - so one text is all a line can carry.
+    /// </summary>
+    public string EmbeddedText { get; init; } = "";
 
+    /// <summary>
+    /// What female V hears the line as, which is the game's own primary variant: the male one is an
+    /// override an export only carries where the wording actually differs.
+    /// </summary>
     public string FemaleText { get; init; } = "";
 
+    /// <inheritdoc cref="FemaleText"/>
     public string MaleText { get; init; } = "";
+
+    /// <summary>
+    /// Whether the two variants say different things, i.e. the line is worded for the player's
+    /// gender. Only <see cref="EmbeddedText"/> reaches the scene, so this is what the import dialog
+    /// warns on rather than something it can write out.
+    /// </summary>
+    public bool HasGenderedText =>
+        MaleText.Length > 0 && FemaleText.Length > 0 && MaleText != FemaleText;
 
     public string Speaker { get; init; } = "";
 
@@ -323,7 +340,7 @@ public static class DialogueImportHelper
             lines.Add(new ImportedDialogueLine
             {
                 LocStringId = locStringId,
-                Text = text,
+                EmbeddedText = text,
                 FemaleText = dto.FemaleText?.Trim() ?? "",
                 MaleText = dto.MaleText?.Trim() ?? "",
                 Speaker = dto.Speaker?.Trim() ?? "",

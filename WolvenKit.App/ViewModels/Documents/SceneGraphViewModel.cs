@@ -443,7 +443,7 @@ namespace WolvenKit.App.ViewModels.Documents
                         LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringIdValue },
                         VariantId = new scnlocVariantId { Ruid = variantCruid },
                         VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
-                        Signature = new scnlocSignature { Val = 3 }, // en_us locale signature
+                        Signature = new scnlocSignature { Val = 3 }, // gender mask: 1 = male, 2 = female, 3 = both
                         LocaleId = Enums.scnlocLocaleId.en_us
                     });
                 }
@@ -545,7 +545,7 @@ namespace WolvenKit.App.ViewModels.Documents
                         LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringIdValue },
                         VariantId = new scnlocVariantId { Ruid = variantCruid },
                         VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
-                        Signature = new scnlocSignature { Val = 3 }, // en_us locale signature
+                        Signature = new scnlocSignature { Val = 3 }, // gender mask: 1 = male, 2 = female, 3 = both
                         LocaleId = Enums.scnlocLocaleId.en_us
                     });
                 }
@@ -714,7 +714,7 @@ namespace WolvenKit.App.ViewModels.Documents
                         addedLines++;
                     }
 
-                    if (createEmbeddedText && AddEmbeddedText(line.LocStringId, line.Text, random, describedLocStrings))
+                    if (createEmbeddedText && AddEmbeddedText(line.LocStringId, line.EmbeddedText, random, describedLocStrings))
                     {
                         addedTexts++;
                     }
@@ -852,7 +852,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringId },
                 VariantId = new scnlocVariantId { Ruid = variantCruid },
                 VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
-                Signature = new scnlocSignature { Val = 3 }, // en_us locale signature
+                Signature = new scnlocSignature { Val = 3 }, // gender mask: 1 = male, 2 = female, 3 = both
                 LocaleId = Enums.scnlocLocaleId.en_us
             });
 

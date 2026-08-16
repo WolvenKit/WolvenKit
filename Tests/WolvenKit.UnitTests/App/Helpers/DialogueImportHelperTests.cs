@@ -76,12 +76,44 @@ public class DialogueImportHelperTests
         var line = DialogueImportHelper.Parse(ConversationExport).Lines[0];
 
         Assert.AreEqual(45896283497UL, line.LocStringId);
-        Assert.AreEqual("Wakey wakey, choom.", line.Text);
+        Assert.AreEqual("Wakey wakey, choom.", line.EmbeddedText);
         Assert.AreEqual("Viktor Vektor", line.Speaker);
         Assert.AreEqual("V", line.Addressee);
         Assert.AreEqual("f_1A95FA94452C5000", line.FemaleLipsyncAnim);
         Assert.AreEqual("", line.MaleLipsyncAnim);
         Assert.IsFalse(line.IsChoiceOption);
+    }
+
+    [TestMethod]
+    public void SpotsALineWordedForThePlayersGender()
+    {
+        // Vanilla keeps both wordings against one locstring, told apart by the locstore descriptor's
+        // gender signature. Only one of them can be embedded, so the dialog says when there are two.
+        var payload = DialogueImportHelper.Parse("""
+            {
+              "lines": [
+                {
+                  "locStringId": "1677648457431117824",
+                  "text": "Got 'nads on you, girl.",
+                  "femaleText": "Got 'nads on you, girl.",
+                  "maleText": "Got balls on you, boy."
+                },
+                {
+                  "locStringId": "2",
+                  "text": "Same either way.",
+                  "femaleText": "Same either way.",
+                  "maleText": "Same either way."
+                },
+                { "locStringId": "3", "text": "Only one take.", "femaleText": "Only one take." }
+              ]
+            }
+            """);
+
+        Assert.IsTrue(payload.Lines[0].HasGenderedText);
+        Assert.AreEqual("Got balls on you, boy.", payload.Lines[0].MaleText);
+
+        Assert.IsFalse(payload.Lines[1].HasGenderedText, "the same wording twice is not gendered");
+        Assert.IsFalse(payload.Lines[2].HasGenderedText, "one variant cannot differ from the other");
     }
 
     [TestMethod]
@@ -107,7 +139,7 @@ public class DialogueImportHelperTests
             """);
 
         Assert.IsTrue(payload.IsValid);
-        Assert.AreEqual("Only the female take was written.", payload.Lines[0].Text);
+        Assert.AreEqual("Only the female take was written.", payload.Lines[0].EmbeddedText);
     }
 
     [TestMethod]

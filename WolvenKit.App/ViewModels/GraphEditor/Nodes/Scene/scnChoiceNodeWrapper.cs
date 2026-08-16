@@ -408,7 +408,10 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
             VpeIndex = (uint)(_sceneResource.LocStore.VpEntries.Count - 1),
             Signature = new scnlocSignature
             {
-                Val = 3 // ???
+                // Gender mask, same 1 = male / 2 = female / 3 = both as scnGenderMask. Vanilla
+                // writes a second descriptor under 1 and 2 where the wording differs by player
+                // gender; one text authored here is the same for everyone, so it goes under 3.
+                Val = 3
             }
         });
 
