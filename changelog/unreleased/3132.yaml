@@ -1,0 +1,6 @@
+changes:
+    - type: "removed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3132
+      author: "notaspirit"
+      description: "Legacy mesh bone rotation import has been removed, old exports pre 8.19.0 will need to be reexported."
