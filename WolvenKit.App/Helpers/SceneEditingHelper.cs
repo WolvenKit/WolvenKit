@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.RED4.Types;
 
@@ -220,5 +221,80 @@ namespace WolvenKit.App.Helpers
             }
             return null;
         }
+
+#region screenplay item ids
+
+        /// <summary>
+        /// The step between screenplay item ids, as the game's own scenes number them. An id lower
+        /// than the one before it makes the previous entry's text play; a gap larger than a step
+        /// makes nothing play at all.
+        /// </summary>
+        public const uint ScreenplayItemIdStep = 256;
+
+        /// <summary>What dialogue lines number from when the screenplay store holds none.</summary>
+        public const uint FirstDialogLineItemId = 1;
+
+        /// <summary>What choice options number from when the screenplay store holds none.</summary>
+        public const uint FirstChoiceOptionItemId = 2;
+
+        /// <summary>
+        /// The id <c>new scnscreenplayItemId()</c> starts on, which is what an entry added through
+        /// the raw array editor carries until someone gives it one. Never a real id, and too near
+        /// the top of a uint to count a step up from.
+        /// </summary>
+        public const uint UnassignedScreenplayItemId = 4294967040;
+
+        /// <summary>
+        /// The next free item id for one half of a screenplay store.
+        /// </summary>
+        /// <remarks>
+        /// The highest id in use is counted up from, not the last entry's: nothing keeps the array
+        /// in order, so a store whose entries were added or reordered through the raw chunk editor
+        /// can carry its highest id anywhere. Handing out an id that is already taken is not a
+        /// cosmetic problem - graph events bind to their screenplay entry by item id, so a
+        /// collision makes a <c>scnDialogLineEvent</c> play the wrong line.
+        /// </remarks>
+        /// <param name="itemIds">The ids already in that half of the store, in any order.</param>
+        /// <param name="firstItemId">What the half numbers from when it is empty.</param>
+        public static uint GetNextScreenplayItemId(IEnumerable<uint> itemIds, uint firstItemId)
+        {
+            var next = firstItemId;
+
+            foreach (var itemId in itemIds)
+            {
+                // Ids too near the top of a uint to step past - the unassigned one above among them
+                // - are left out of the reckoning. Counting up from one wraps to 0, which is an id
+                // every unassigned entry would then answer to.
+                if (itemId > uint.MaxValue - ScreenplayItemIdStep)
+                {
+                    continue;
+                }
+
+                if (itemId >= next)
+                {
+                    next = itemId + ScreenplayItemIdStep;
+                }
+            }
+
+            return next;
+        }
+
+        /// <inheritdoc cref="GetNextScreenplayItemId(IEnumerable{uint}, uint)"/>
+        public static uint GetNextDialogLineItemId(IEnumerable<scnscreenplayDialogLine>? lines) =>
+            GetNextScreenplayItemId(
+                lines?.Select(line => ItemIdOf(line?.ItemId)) ?? [],
+                FirstDialogLineItemId);
+
+        /// <inheritdoc cref="GetNextScreenplayItemId(IEnumerable{uint}, uint)"/>
+        public static uint GetNextChoiceOptionItemId(IEnumerable<scnscreenplayChoiceOption>? options) =>
+            GetNextScreenplayItemId(
+                options?.Select(option => ItemIdOf(option?.ItemId)) ?? [],
+                FirstChoiceOptionItemId);
+
+        /// <summary>An entry's id, or the unassigned one where the raw editor left it without.</summary>
+        private static uint ItemIdOf(scnscreenplayItemId? itemId) =>
+            itemId is null ? UnassignedScreenplayItemId : itemId.Id;
+
+#endregion
     }
 }
