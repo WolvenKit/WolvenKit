@@ -23,6 +23,26 @@ namespace WolvenKit.Modkit.RED4.Animation
 {
     internal class CompressedBuffer
     {
+        // TODO: migrate this to animAnimationBufferCompressed and refactor to use it 
+        private static ushort AnimKeyOrder(animKey k) => k switch
+        {
+        	animKeyPosition => 0,
+        	animKeyRotation => 1,
+        	animKeyScale => 2,
+        	_ => 0
+        };
+        
+        private static readonly Comparison<animKey?> AnimKeySort = (a, b) =>
+        {
+        	int cmp = a!.Idx.CompareTo(b!.Idx);
+        	if (cmp != 0) return cmp;
+        
+        	cmp = a.Time.CompareTo(b.Time);
+        	if (cmp != 0) return cmp;
+        
+        	return AnimKeyOrder(a).CompareTo(AnimKeyOrder(b));
+        };
+        
 #region export
         internal static void DecodeAnimationData(out AnimationBufferData result, animAnimation animAnimDes, ILoggerService _loggerService)
         {
@@ -228,6 +248,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                 ((List<JointsScalesAtTimes>)[incomingAnimBufferData.Scales, incomingAnimBufferData.ConstScales]).All(_ =>
                     _.All(_ => _.Value.All(_ => EqWithEpsilon(_.Value, Scale1to1))));
 
+            // Sort Keys by Bone->Time->KeyType (pos->rot->sca)
+            animKeys.Sort(AnimKeySort);
+            animKeysRaw.Sort(AnimKeySort);
+    
             newCompressedBuffer = new animAnimationBufferCompressed()
             {
                 Duration = incomingAnimBufferData.Duration,
