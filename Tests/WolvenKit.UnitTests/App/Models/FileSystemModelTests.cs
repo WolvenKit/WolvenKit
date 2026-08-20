@@ -19,7 +19,7 @@ namespace Wolvenkit.Test.App.Models;
 /// physically exists. They need nothing beyond <see cref="Path.GetTempPath"/> though - no game
 /// install, no project fixture - so they belong here and not in the integration tests.
 ///
-/// The tree shape mirrors what <c>WatcherService</c> builds:
+/// The tree shape mirrors what <c>ProjectExplorerViewModel</c> builds:
 /// the root is <c>&lt;ProjectDir&gt;</c> whose <c>RawRelativePath</c> is the *absolute*
 /// project directory; every descendant's <c>RawRelativePath</c> is relative to it.
 ///
@@ -49,7 +49,7 @@ public sealed class FileSystemModelTests : IDisposable
 
     #region helpers
 
-    /// <summary>The <c>&lt;ProjectDir&gt;</c> node, exactly as <c>WatcherService.WatchProject</c> creates it.</summary>
+    /// <summary>The <c>&lt;ProjectDir&gt;</c> node, exactly as <c>ProjectExplorerViewModel.WatchProject</c> creates it.</summary>
     private FileSystemModel NewRoot() =>
         new(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
 
@@ -95,7 +95,7 @@ public sealed class FileSystemModelTests : IDisposable
 
     /// <summary>
     /// Builds a node whose <c>RawRelativePath</c> is spelled with forward slashes - the way
-    /// <c>Path.Combine</c> would spell it on Linux, and the way <c>WatcherService</c> would then
+    /// <c>Path.Combine</c> would spell it on Linux, and the way <c>ProjectExplorerViewModel</c> would then
     /// feed it in. Windows still resolves the physical path, because '/' is
     /// <see cref="Path.AltDirectorySeparatorChar"/> there.
     /// </summary>

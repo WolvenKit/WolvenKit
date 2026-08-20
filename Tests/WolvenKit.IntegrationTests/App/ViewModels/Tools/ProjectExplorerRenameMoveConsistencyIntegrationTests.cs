@@ -61,7 +61,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         Assert.NotNull(_ab);
 
         // No real Syncfusion grid in the test: run the deferred-refresh task straight through. The tree we
-        // assert on is the WatcherService FileList, which the project-event handlers keep in sync.
+        // assert on is the ProjectExplorerViewModel FileList, which the project-event handlers keep in sync.
         _pe!.BeginDeferredRefreshContext = (task) => task();
 
         // Always confirm overwrite prompts (the final collision step relies on this).
@@ -158,7 +158,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         var onDisk = FilesOnDisk();
         Assert.True(expected == onDisk, $"[{when}] expected {expected} file(s) on disk, found {onDisk}.\n{TreeDump()}");
 
-        // The tree is not: WatcherService picks the change up on its own thread and marshals the
+        // The tree is not: ProjectExplorerViewModel picks the change up on its own thread and marshals the
         // add/remove back onto the dispatcher, and a rename passes through 0 nodes on the way. Poll
         // rather than sampling the instant the command returns.
         await AsyncWait.UntilAsync(() => FilesInTree() == expected, TimeSpan.FromSeconds(30));
