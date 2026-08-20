@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3151
+      author: "gistya"
+      description: "Fixed an issue where the app could create a new copy of a file when saving if the underlying file had been moved before the document had unsaved changes. Added warning logs for situations where a document is moved while it has unsaved changes, clarifying some existing behavior."

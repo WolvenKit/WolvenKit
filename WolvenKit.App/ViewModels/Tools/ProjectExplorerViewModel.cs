@@ -1588,9 +1588,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 throw;
             }
         }
-
-        _appViewModel.ReloadChangedFiles();
-
     }
 
     /// <summary>
@@ -2342,6 +2339,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             else
             {
                 File.Move(copyMe.Key, targetFile, true);
+                _projectEvents.PublishFilesMoved(
+                    new FilesMovedMessage([(copyMe.Key, targetFile)]));
             }
         }
 
