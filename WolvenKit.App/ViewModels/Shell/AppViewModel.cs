@@ -151,6 +151,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _updateService = updateService;
         _redTypeTemplateService = redTypeTemplateService;
         _projectEvents = projectEvents;
+        _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
+        _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
         _archiveManagerLoader = archiveManagerLoader;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
@@ -442,7 +444,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         string? projectPathToOpen = null;
 
         // Will be overwritten if the launch args contain a project path
-        if (args.Contains("-reopenProject") && SettingsManager.LastUsedProjectPath is string projectPath)
+        if ((args.Contains("-reopenProject") || SettingsManager.ReopenLastProject)
+            && (SettingsManager.LastUsedProjectPath is string projectPath))
         {
             projectPathToOpen = projectPath;
         }
@@ -897,7 +900,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task NewProject()
     {
-        //IsOverlayShown = false;
         await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
         {
             FileHandler = NewProject
@@ -958,7 +960,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveFile() => Save(ActiveDocument.NotNull());
+    private void SaveFile()
+    {
+        if (ActiveDocument is not IDocumentViewModel document)
+        {
+            return;
+        }
+
+        Save(document);
+    }
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
@@ -1000,15 +1010,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Any();
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
-    private void SaveAll()
+    private void SaveAll(bool onlyProjectFiles = false)
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not { } activeProject)
         {
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
 
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>()
+                     .Where(f => f.IsDirty)
+                     .Where(f => !onlyProjectFiles || activeProject.ModFiles
+                         .Select(relPath => Path.Join(activeProject.ModDirectory, relPath).ToLower())
+                         .Contains(f.FilePath?.ToLower())))
         {
             Save(file);
         }
@@ -1016,7 +1030,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
     {
-        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>()
+            .Where(tab => tab.IsDirty)
+            .Where(tab =>
+            {
+                if (_projectManager.ActiveProject is not { } project || string.IsNullOrEmpty(tab.FilePath))
+                {
+                    return true;
+                }
+
+                var filePath = project.GetRelativePath(tab.FilePath) ?? tab.FilePath;
+                return project.ModFiles.Contains(filePath, StringComparer.InvariantCultureIgnoreCase);
+            }).ToList();
+
         if (dirtyFiles.Count == 0)
         {
             return true;
@@ -1037,7 +1063,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case WMessageBoxResult.OK:
             case WMessageBoxResult.Yes:
             default:
-                SaveAll();
+                SaveAll(true);
                 break;
         }
 
@@ -1708,8 +1734,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
+            if (!documentViewModel.IsDirty)
+            {
+                documentViewModel.Reload(true);
+                continue;
+            }
+
             var result = Interactions.ShowConfirmation((
-                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                $"The file {documentViewModel.FilePath} has been modified on disk, but you have unsaved changes. " +
+                "Reload and discard your changes?",
                 "File Modified",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
@@ -3107,6 +3140,131 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         catch
         {
             _loggerService.Error($"Failed to reload {project.GetRelativePath(absolutePath)}");
+        }
+    }
+
+    private void RefreshOpenDocumentsAfterMoves(FilesMovedMessage msg)
+    {
+        if (!DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return;
+        }
+
+        foreach (var (from, to) in msg.Moves)
+        {
+            // File was moved/renamed
+            var handledMovedTab = !string.IsNullOrEmpty(from)
+                                  && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                                  && TryRefreshOpenDocument(from, to);
+
+            // File was overwritten by external app
+            if (!handledMovedTab)
+            {
+                TryRefreshOpenDocument(to);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Refreshes open document tabs after an open file is overwritten by another part of the app
+    /// such as converting to/from JSON, etc.
+    /// </summary>
+    private void RefreshOpenDocumentsAfterImports(FilesImportedMessage msg)
+    {
+        if (_projectManager.ActiveProject is not { } project
+            || !DockedViews.OfType<IDocumentViewModel>().Any())
+        {
+            return;
+        }
+
+        switch (msg)
+        {
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var gameFile in files)
+                {
+                    // FileName is a resource path and may use '/'; normalize to an OS path so it matches the
+                    // document's FilePath (which the watcher builds via FileInfo).
+                    TryRefreshOpenDocument(Path.GetFullPath(Path.Combine(project.ModDirectory, gameFile.FileName)));
+                }
+
+                break;
+
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var rawFile in files)
+                {
+                    TryRefreshOpenDocument(rawFile.FullName);
+                }
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// If a document is open at <paramref name="currentFilePath"/>, refresh it from disk, optionally
+    /// retargeting it to <paramref name="newFilePath"/> first (for a rename/move). Clean documents are
+    /// reloaded silently; documents with unsaved changes are skipped with a warning so edits aren't
+    /// lost. Returns true if a matching open document was found.
+    /// </summary>
+    private bool TryRefreshOpenDocument(string currentFilePath, string? newFilePath = null)
+    {
+        var targetPath = newFilePath ?? currentFilePath;
+
+        if (string.IsNullOrEmpty(currentFilePath) || !File.Exists(targetPath))
+        {
+            return false;
+        }
+
+        if (DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(doc =>
+                currentFilePath.Equals(doc.FilePath, StringComparison.OrdinalIgnoreCase)) is not { } openDocument)
+        {
+            return false;
+        }
+
+        if (openDocument.IsDirty)
+        {
+            var warning =
+                $"Warning: the open document that used to exist at path \"{openDocument.FilePath}\" has been moved, renamed, or deleted while it had unsaved changes. To protect your changes, save your file now. A new file will be created at the former path.";
+
+            _ = Interactions.ShowMessageBox(
+                warning,
+                "Warning",
+                WMessageBoxButtons.Ok);
+
+            _loggerService.Warning(warning);
+            return true;
+        }
+
+        if (!targetPath.Equals(openDocument.FilePath, StringComparison.OrdinalIgnoreCase))
+        {
+            openDocument.FilePath = targetPath; // follow the rename/move so Reload reads the new file
+        }
+
+        try
+        {
+            openDocument.Reload(true);
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to refresh \"{Path.GetFileName(targetPath)}\" after it changed on disk.");
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Runs an open-document refresh on the UI thread, logging any exceptions. The
+    /// FilesMoved/FilesImported subscriptions run synchronously on the publishing thread, so a throw
+    /// here would escape into the publisher (e.g. MoveAndRefactorAsync mid-rename).
+    /// </summary>
+    private void SafeRefreshOpenDocuments(Action refresh)
+    {
+        try
+        {
+            DispatcherHelper.RunOnMainThread(refresh);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to refresh open documents after a file change: {ex.Message}");
         }
     }
 
