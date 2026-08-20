@@ -291,6 +291,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRefresh))]
     private void Refresh()
     {
+        EnableLoadingMode(LoadingMode.ReloadingSameProject);
+
         if (IsWatcherStopped)
         {
             ResumeFileWatcher();
@@ -299,6 +301,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             RefreshWatcher();
         }
+
+        DisableLoadingMode();
     }
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
