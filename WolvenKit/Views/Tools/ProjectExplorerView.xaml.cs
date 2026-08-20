@@ -437,6 +437,11 @@ namespace WolvenKit.Views.Tools
             {
                 _disposables.ForEach(d => d.Dispose());
                 _disposables.Clear();
+
+                if (TreeGrid.View is { } treeView)
+                {
+                    RestoreExpansionRecursive(treeView.Nodes);
+                }
             });
 
         private void ResetCurrentFolderQuerySearchFilter()
@@ -782,13 +787,6 @@ namespace WolvenKit.Views.Tools
                     continue;
                 }
 
-                // Depth-first: fix children before this node so collapsing a parent
-                // does not leave child model/view state inconsistent.
-                if (node.ChildNodes is { Count: > 0 })
-                {
-                    RestoreExpansionRecursive(node.ChildNodes);
-                }
-
                 // Paths never recorded stay collapsed after search (search may have opened them).
                 var desired = ViewModel.GetExpansionStateOrNull(model.RawRelativePath) is true;
 
@@ -797,6 +795,11 @@ namespace WolvenKit.Views.Tools
                     if (!node.IsExpanded)
                     {
                         TreeGrid.ExpandNode(node);
+                    }
+
+                    if (node.ChildNodes is { Count: > 0 })
+                    {
+                        RestoreExpansionRecursive(node.ChildNodes);
                     }
                 }
                 else if (node.IsExpanded)
@@ -892,7 +895,7 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }

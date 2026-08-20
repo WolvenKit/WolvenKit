@@ -263,8 +263,7 @@ public partial class ProjectExplorerViewModel
                     isDirectory = attr.HasFlag(FileAttributes.Directory);
                 }
 
-                var isExpanded = GetExpansionStateOrNull(tmpPath) ?? true;
-                current = new FileSystemModel(parent, part, tmpPath, isDirectory, isExpanded);
+                current = new FileSystemModel(parent, part, tmpPath, isDirectory);
 
                 if (!current.IsDirectory)
                 {
@@ -528,8 +527,7 @@ public partial class ProjectExplorerViewModel
             parent,
             Path.GetFileName(entry.RawRelPath),
             entry.RawRelPath,
-            entry.IsDirectory,
-            GetExpansionStateOrNull(entry.RawRelPath) ?? false);
+            entry.IsDirectory);
 
         if (!_fileLookup.TryAdd(entry.RawRelPath, model))
         {
@@ -547,9 +545,7 @@ public partial class ProjectExplorerViewModel
         }
         else if (parent is { } parentModel)
         {
-            parentModel.Children.SuppressNotification = true;
             parentModel.Children.Add(model);
-            parentModel.Children.SuppressNotification = false;
         }
     }
 
