@@ -694,7 +694,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        // Delete from file structure
+        DeleteRecursively(selected);
+    }
+
+    private void DeleteRecursively(List<FileSystemModel> selected)
+    {
         foreach (var item in selected)
         {
             var fullPath = item.FullName;
@@ -702,6 +706,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 if (item.IsDirectory)
                 {
+                    if (
+                        item.FullName == ActiveProject!.ModDirectory ||
+                        item.FullName == ActiveProject!.RawDirectory ||
+                        item.FullName == ActiveProject!.ResourcesDirectory
+                    )
+                    {
+                        var children = item.Children.ToList();
+                        DeleteRecursively(children);
+                        continue;
+                    }
+
                     FileSystem.DeleteDirectory(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
                 else
