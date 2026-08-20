@@ -55,10 +55,10 @@ public class CvmTools : ICvmTools
 
     #region CvmDependencyTools
 
-    public void RegenerateVisualControllers(ChunkViewModel? cvm)
+    public int RegenerateVisualControllers(ChunkViewModel? cvm)
     {
         cvm?.CalculatePropertiesRecursive();
-        _cvmDependencyTools.RegenerateVisualControllers(cvm);
+        return _cvmDependencyTools.RegenerateVisualControllers(cvm);
     }
 
     #endregion

@@ -1,5 +1,6 @@
 ﻿using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
@@ -22,11 +23,11 @@ public class CvmDependencyTools
         _loggerService = loggerService;
     }
 
-    public void RegenerateVisualControllers(ChunkViewModel? cvm)
+    public int RegenerateVisualControllers(ChunkViewModel? cvm)
     {
         if (cvm is null)
         {
-            return;
+            return 0;
         }
 
         if (cvm.ResolvedData is RedDummy)
@@ -37,48 +38,46 @@ public class CvmDependencyTools
         switch (cvm.ResolvedData)
         {
             case appearanceAppearanceDefinition when cvm.GetPropertyChild("components") is { } components:
-                RegenerateVisualControllers(components);
-                return;
+                return RegenerateVisualControllers(components);
             case appearanceAppearanceResource when cvm.GetPropertyChild("appearances") is { } appearances:
             {
-                RegenerateVisualControllers(appearances);
-                return;
+                return RegenerateVisualControllers(appearances);
             }
             case CArray<CHandle<appearanceAppearanceDefinition>>:
+                var totalChanges = 0;
                 foreach (var chunkViewModel in cvm.TVProperties)
                 {
-                    RegenerateVisualControllers(chunkViewModel);
+                    totalChanges += RegenerateVisualControllers(chunkViewModel);
                 }
+                return totalChanges;
 
-                return;
             case CArray<entIComponent> arr:
-                Regenerate(arr);
-                return;
+                var changedComponents = Regenerate(arr);
+                _notificationService.Success($"Recalculated {changedComponents} dependencies");
+                return changedComponents;
             case RedDummy:
+                var numChanged = 0;
+
                 // this shouldn't happen, but issue #2806 ran into a case where a component array kept being a
                 // RedDummy despite TVProperties being correctly initialized. Adding the check just in case.
                 if (cvm.Data is CArray<entIComponent> ary)
                 {
-                    Regenerate(ary);
+                    numChanged = Regenerate(ary);
+                    _notificationService.Success($"Recalculated {numChanged} dependencies");
                 }
 
-                return;
+                return numChanged;
             default:
-                _notificationService.Error(
-                    "Can't regenerate visual controllers. Please check the log for more detail.");
-                _loggerService.Error(
-                    $"Failed to regenerate visual controllers on {cvm.ResolvedData.GetType().Name}. " +
-                    "Select one or more appearances, the appearances array, or the root node.");
-
-                return;
+                throw new WolvenKitException(0, $"Failed to regenerate visual controllers on {cvm.ResolvedData.GetType().Name}. " +
+                                                "Select one or more appearances, the appearances array, or the root node.");
         }
 
-        void Regenerate(CArray<entIComponent> arr)
+        int Regenerate(CArray<entIComponent> arr)
         {
             entVisualControllerComponent? vc = null;
             var list = new CArray<entVisualControllerDependency>();
 
-            var hasChange = false;
+            var numChanged = 0;
             foreach (var component in arr)
             {
                 switch (component)
@@ -91,7 +90,7 @@ public class CvmDependencyTools
                             AppearanceName = mesh.MeshAppearance, ComponentName = mesh.Name, Mesh = mesh.Mesh
                         });
 
-                        hasChange = true;
+                        numChanged++;
                         break;
                     case entSkinnedMeshComponent skinnedMesh when
                         skinnedMesh.LODMode == Enums.entMeshComponentLODMode.Appearance &&
@@ -102,7 +101,7 @@ public class CvmDependencyTools
                             ComponentName = skinnedMesh.Name,
                             Mesh = skinnedMesh.Mesh
                         });
-                        hasChange = true;
+                        numChanged++;
                         break;
                     case entSkinnedClothComponent skinnedCloth when
                         skinnedCloth.LODMode == Enums.entMeshComponentLODMode.Appearance:
@@ -119,18 +118,18 @@ public class CvmDependencyTools
                             ComponentName = skinnedCloth.Name,
                             Mesh = skinnedCloth.PhysicalMesh
                         });
-                        hasChange = true;
+                        numChanged++;
                         break;
                     case entVisualControllerComponent c3:
                         vc = c3;
-                        hasChange = true;
+                        numChanged++;
                         break;
                 }
             }
 
-            if (!hasChange && vc != null)
+            if (numChanged == 0 && vc != null)
             {
-                return;
+                return 0;
             }
 
             if (vc == null)
@@ -143,6 +142,8 @@ public class CvmDependencyTools
             cvm.RecalculateProperties();
 
             cvm.Tab?.Parent.SetIsDirty(true);
+
+            return numChanged;
         }
     }
 }
