@@ -1134,7 +1134,7 @@
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
             RowDropIndicatorMode="Line"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems,
+            SelectedItems="{Binding TreeSelectedItems,
                                     UpdateSourceTrigger=PropertyChanged,
                                     Mode=TwoWay}"
             SelectionMode="Extended"
@@ -1198,7 +1198,7 @@
             CurrentCellBorderThickness="0"
             IsReadOnly="True"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems,
+            SelectedItems="{Binding FlatSelectedItems,
                                     UpdateSourceTrigger=PropertyChanged,
                                     Mode=TwoWay}"
             SelectionMode="Extended"

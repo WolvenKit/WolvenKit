@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3137
+      author: "gistya"
+      description: "Fixed numerous bugs with drag-and-drop within WolvenKit's ProjectExplorer file tree."
