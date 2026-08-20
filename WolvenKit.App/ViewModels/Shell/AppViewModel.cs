@@ -1519,6 +1519,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
+        var projExp = GetToolViewModel<ProjectExplorerViewModel>();
+
         if (string.IsNullOrEmpty(GetModderName()))
         {
             return;
@@ -1530,15 +1532,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        GetToolViewModel<ProjectExplorerViewModel>().Suspend();
+        projExp.Suspend();
         try
         {
             _archiveXlItemService.CreateEquipmentItem(item);
         }
         finally
         {
-            GetToolViewModel<ProjectExplorerViewModel>().Resume();
-            GetToolViewModel<ProjectExplorerViewModel>().RefreshWatcher();
+            projExp.Resume();
+            projExp.RefreshWatcher();
         }
     }
 
