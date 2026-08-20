@@ -444,7 +444,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         string? projectPathToOpen = null;
 
         // Will be overwritten if the launch args contain a project path
-        if (args.Contains("-reopenProject") && (SettingsManager.LastUsedProjectPath is string projectPath) && SettingsManager.ReopenLastProject)
+        if (args.Contains("-reopenProject") && (SettingsManager.LastUsedProjectPath is string projectPath) || SettingsManager.ReopenLastProject)
         {
             projectPathToOpen = projectPath;
         }
