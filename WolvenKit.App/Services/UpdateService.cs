@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Semver;
 using WolvenKit.App.Helpers;
@@ -21,6 +22,9 @@ public class UpdateService : IUpdateService
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
     private readonly HttpClient _httpClient;
+
+    private readonly string _localChangelogPath = Path.Join(ISettingsManager.GetAppData(), "changelog.md");
+    private const string s_remoteChangelogPath = "https://raw.githubusercontent.com/WolvenKit/WolvenKit/refs/heads/main/CHANGELOG.md";
 
     public UpdateService(ILoggerService loggerService, ISettingsManager settingsManager)
     {
@@ -121,6 +125,12 @@ public class UpdateService : IUpdateService
             File.Delete(unpackerZipPath);
         }
 
+        var relevantChangelog = await GetRemoteChangeLog(GetLocalVersion()?.ToString() ?? "", latestRelease.TagName);
+        if (!string.IsNullOrEmpty(relevantChangelog))
+        {
+            await File.WriteAllTextAsync(_localChangelogPath, relevantChangelog);
+        }
+
         var wolvenKitExePath = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "WolvenKit.exe");
         var startInfo = new ProcessStartInfo()
         {
@@ -164,6 +174,16 @@ public class UpdateService : IUpdateService
         return latestRelease?.TagName ?? "0.0.0";
     }
 
+    public string? GetSavedChangelog()
+    {
+        if (!File.Exists(_localChangelogPath))
+        {
+            return null;
+        }
+
+        return File.ReadAllText(_localChangelogPath);
+    }
+
     private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 
     public SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
@@ -198,5 +218,61 @@ public class UpdateService : IUpdateService
             return null;
         }
         return SemVersion.Parse(latestRelease.TagName, SemVersionStyles.OptionalMinorPatch);
+    }
+
+    private async Task<string?> GetRemoteChangeLog(string localVersion, string remoteVersion)
+    {
+        if (remoteVersion.Contains("nightly"))
+        {
+            // nightly doesn't have changelogs
+            return null;
+        }
+
+        var response =
+            await _httpClient.GetAsync(s_remoteChangelogPath);
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        var remoteVersionStartIndex = -1;
+        var foundLocalVersion = false;
+        var localVersionEndIndex = -1;
+
+
+        var i = 0;
+        var contentByLine = content.Split("\n");
+        foreach (var line in contentByLine)
+        {
+            if (line.StartsWith($"## {remoteVersion}"))
+            {
+                remoteVersionStartIndex = i;
+            }
+
+            if (line.StartsWith($"## {localVersion}"))
+            {
+                foundLocalVersion = true;
+            }
+
+            if (foundLocalVersion && line.StartsWith("---"))
+            {
+                localVersionEndIndex = i;
+                break;
+            }
+
+            i++;
+        }
+
+        if (!foundLocalVersion)
+        {
+            localVersionEndIndex = contentByLine.Length - 1;
+        }
+
+        if (remoteVersionStartIndex == -1 || localVersionEndIndex == -1)
+        {
+            return null;
+        }
+
+        return string.Join("\n",
+            contentByLine.AsSpan(remoteVersionStartIndex, localVersionEndIndex - remoteVersionStartIndex));
     }
 }
