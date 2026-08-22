@@ -237,8 +237,7 @@ public class UpdateService : IUpdateService
         var content = await response.Content.ReadAsStringAsync();
 
         var remoteVersionStartIndex = -1;
-        var foundLocalVersion = false;
-        var localVersionEndIndex = -1;
+        var localVersionStartIndex = -1;
 
 
         var i = 0;
@@ -252,29 +251,28 @@ public class UpdateService : IUpdateService
 
             if (line.StartsWith($"## {localVersion}"))
             {
-                foundLocalVersion = true;
+                localVersionStartIndex = i;
             }
 
-            if (foundLocalVersion && line.StartsWith("---"))
+            if (remoteVersionStartIndex != -1 && localVersionStartIndex != -1)
             {
-                localVersionEndIndex = i;
                 break;
             }
 
             i++;
         }
 
-        if (!foundLocalVersion)
+        if (localVersionStartIndex == -1)
         {
-            localVersionEndIndex = contentByLine.Length - 1;
+            localVersionStartIndex = contentByLine.Length - 1;
         }
 
-        if (remoteVersionStartIndex == -1 || localVersionEndIndex == -1)
+        if (remoteVersionStartIndex == -1)
         {
             return null;
         }
 
         return string.Join("\n",
-            contentByLine.AsSpan(remoteVersionStartIndex, localVersionEndIndex - remoteVersionStartIndex));
+            contentByLine.AsSpan(remoteVersionStartIndex, localVersionStartIndex - remoteVersionStartIndex - 1));
     }
 }
