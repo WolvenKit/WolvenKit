@@ -184,6 +184,8 @@ public class UpdateService : IUpdateService
         return File.ReadAllText(_localChangelogPath);
     }
 
+    public void ClearSavedChangelog() => File.Delete(_localChangelogPath);
+
     private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 
     public SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
