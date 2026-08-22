@@ -1,0 +1,11 @@
+changes:
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3148
+      author: "Zhincore"
+      description: "Fixed exporting all sounds from OpusPaks skipping the last pak, leaving some sounds unexported."
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3148
+      author: "Zhincore"
+      description: "Fixed opus export and import writing .wav files to a wrong path when the used directory contains 'opus' in its name."
