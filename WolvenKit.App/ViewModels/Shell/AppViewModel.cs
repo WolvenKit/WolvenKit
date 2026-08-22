@@ -2128,6 +2128,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GeneratePropItemCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddPlayerHeadCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddNPVCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegisterWorldbuilderFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
