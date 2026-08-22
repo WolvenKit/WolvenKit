@@ -28,6 +28,12 @@
             TargetType="Hyperlink">
             <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
         </Style>
+        <Style
+            x:Key="SectionHeaderStyle"
+            TargetType="Label">
+            <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontTitle}" />
+            <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallBottom}" />
+        </Style>
 
         <!-- Shapekey options -->
         <x:Array
@@ -89,11 +95,11 @@
             <system:String>07</system:String>
         </x:Array>
 
-        <!-- Eye makeup -->
+
+        <!-- Shapekey options -->
         <x:Array
-            x:Key="EyeMakeupListBoxItems"
+            x:Key="HairListboxItems"
             Type="system:String">
-            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -114,11 +120,70 @@
             <system:String>18</system:String>
             <system:String>19</system:String>
             <system:String>20</system:String>
+            <system:String>21</system:String>
+            <system:String>22</system:String>
+            <system:String>23</system:String>
+            <system:String>24</system:String>
+            <system:String>25</system:String>
+            <system:String>26</system:String>
+            <system:String>27</system:String>
+            <system:String>28</system:String>
+            <system:String>29</system:String>
+            <system:String>30</system:String>
+            <system:String>31</system:String>
+            <system:String>32</system:String>
+            <system:String>33</system:String>
+            <system:String>34</system:String>
+            <system:String>35</system:String>
+            <system:String>36</system:String>
+            <system:String>37</system:String>
+            <system:String>38</system:String>
         </x:Array>
 
-        <!-- Lip Makeup -->
+        <!-- Hair Color -->
         <x:Array
-            x:Key="LipMakeupListBoxItems"
+            x:Key="HairColorListboxItems"
+            Type="system:String">
+            <system:String>brown_liquorice</system:String>
+            <system:String>blonde_platinum</system:String>
+            <system:String>red_merlot</system:String>
+            <system:String>ginger_copper</system:String>
+            <system:String>teal_ombre</system:String>
+            <system:String>black_carbon</system:String>
+            <system:String>blonde_golden</system:String>
+            <system:String>blonde_dishwater</system:String>
+            <system:String>blue_sapphire</system:String>
+            <system:String>brown_ombre</system:String>
+            <system:String>red_apple</system:String>
+            <system:String>gray_gunmetal</system:String>
+            <system:String>ginger_strawberry</system:String>
+            <system:String>teal_ash</system:String>
+            <system:String>pink_magenta</system:String>
+            <system:String>pink_rose</system:String>
+            <system:String>blue_steel</system:String>
+            <system:String>blue_red_ombre</system:String>
+            <system:String>cold_white</system:String>
+            <system:String>cyberpunk_yellow</system:String>
+            <system:String>goblin_green</system:String>
+            <system:String>liliac</system:String>
+            <system:String>mermaid_aquamarine</system:String>
+            <system:String>purple_ombre</system:String>
+            <system:String>black_salt_n_pepper</system:String>
+            <system:String>green_toxic</system:String>
+            <system:String>brown_medium</system:String>
+            <system:String>blue_sky</system:String>
+            <system:String>citrus_yellow</system:String>
+            <system:String>dark_purple</system:String>
+            <system:String>green_orange</system:String>
+            <system:String>liliac_ombre</system:String>
+            <system:String>phoenix_fire</system:String>
+            <system:String>purple_blonde</system:String>
+            <system:String>silver_rose</system:String>
+        </x:Array>
+
+        <!-- Eye makeup -->
+        <x:Array
+            x:Key="MakeupOptionsListboxItems20"
             Type="system:String">
             <system:String>None</system:String>
             <system:String>01</system:String>
@@ -164,6 +229,10 @@
             <system:String>14</system:String>
         </x:Array>
 
+        <!-- Cheek Makeup Colors -->
+
+        <!-- Freckle Colors -->
+
         <!-- Blemishes -->
         <x:Array
             x:Key="BlemishListBoxItems"
@@ -172,6 +241,16 @@
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
+        </x:Array>
+
+        <!-- Lipstick -->
+        <x:Array
+            x:Key="LipstickStyleListboxItems"
+            Type="system:String">
+            <system:String>None</system:String>
+            <system:String>default</system:String>
+            <system:String>glossy</system:String>
+            <system:String>matte</system:String>
         </x:Array>
 
         <!-- Facial Tattoos -->
@@ -295,7 +374,7 @@
 
         <!-- Genitals2 -->
         <x:Array
-            x:Key="GenitalListBoxItems2"
+            x:Key="GenitalListBoxItemsSize"
             Type="system:String">
             <system:String>Default</system:String>
             <system:String>Small</system:String>
@@ -320,6 +399,687 @@
         CancelVisible="True"
         HelpVisible="True">
 
+        <!-- Wizard: page 3 -->
+        <syncfusion:WizardPage
+            Name="BodyPage"
+            Title="Body options"
+            Height="Auto"
+            FinishVisibility="Visible"
+            NextVisible="False"
+            PreviewKeyDown="WizardPage_PreviewKeyDown"
+            BannerBackground="{DynamicResource BackgroundBrush}"
+            Description="Pick your body parts."
+            PreviousPage="{Binding ElementName=FaceOptionsPage}">
+
+            <StackPanel
+                Margin="{DynamicResource WolvenKitMarginHorizontal}"
+                Orientation="Vertical">
+
+                <!-- Body -->
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Body
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Nails -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        Nails
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxNails"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource NailsListBoxItems}"
+                        SelectedIndex="{Binding Nails}" />
+
+                    <!-- Body Scars -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        Body Scars
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxBodyScars"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource BodyScarListBoxItems}"
+                        SelectedIndex="{Binding BodyScars}" />
+
+                </Grid>
+
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Hair
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        Hair
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxHair"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource HairListboxItems}"
+                        SelectedIndex="{Binding Hair}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3">
+                        Hair Color
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxHairColor"
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource HairColorListboxItems}"
+                        SelectedIndex="{Binding HairColor}" />
+
+                    <!-- Beard -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Visibility="{Binding Path=BodyGenderMale,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Beard
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxBeard"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding Path=BodyGenderMale,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ItemsSource="{StaticResource BeardListBoxItems}"
+                        SelectedIndex="{Binding Beard}" />
+
+                    <!-- Beard Style -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Visibility="{Binding Path=BodyGenderMale,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Beard Style
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxBeardStyle"
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding Path=IsBeardEnabled,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ItemsSource="{StaticResource BeardStyleListBoxItems}"
+                        SelectedIndex="{Binding BeardStyle}" />
+
+                    <!-- Beard Color -->
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="3"
+                        Visibility="{Binding Path=IsBeardEnabled,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Beard Color
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxBeardColor"
+                        Grid.Row="4"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding Path=IsBeardEnabled,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ItemsSource="{StaticResource HairColorListboxItems}"
+                        SelectedIndex="{Binding BeardColor}" />
+
+                </Grid>
+
+                <!-- Genitals -->
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Genitals
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Boobs/Nipples -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Visibility="{Binding BodyGenderMale,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}">
+                        Boobs
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxBoobs"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding BodyGenderMale,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        ItemsSource="{StaticResource GenitalListBoxItemsSize}"
+                        SelectedIndex="{Binding Boobs}" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Visibility="{Binding BodyGenderMale,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}">
+                        Nipples
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxNipples"
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding BodyGenderMale,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        ItemsSource="{StaticResource NippleListBoxItems}"
+                        SelectedIndex="{Binding Nipples}" />
+
+
+                    <!-- Genitals -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        Genitals
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxGenitals"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource GenitalListBoxItems}"
+                        SelectedIndex="{Binding Genitals}" />
+
+                    <!-- Genital Size -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="3">
+                        Genital Size
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxGenitalSize"
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding IsPensiEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ItemsSource="{StaticResource GenitalListBoxItemsSize}"
+                        SelectedIndex="{Binding GenitalSize}" />
+
+
+                    <!-- Pubic Hair -->
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0">
+                        Pubic Hair
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxPubicHair"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource PubeListBoxItems}"
+                        SelectedIndex="{Binding PubicHair}" />
+
+                    <!-- Pubic Hair -->
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="3">
+                        Pubic Hair Color
+                    </Label>
+
+                    <ComboBox
+                        Name="ComboboxPubicHairColor"
+                        Grid.Row="4"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding IsPubesEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanVisibilityConverter}}"
+                        ItemsSource="{StaticResource HairColorListboxItems}"
+                        SelectedIndex="{Binding PubicHairColor}" />
+
+                </Grid>
+
+            </StackPanel>
+
+        </syncfusion:WizardPage>
+
+        <!-- Wizard: page 2 (Face) -->
+        <syncfusion:WizardPage
+            Name="FaceOptionsPage"
+            Title="Face options"
+            Height="Auto"
+            FinishVisibility="Visible"
+            NextVisible="True"
+            PreviewKeyDown="WizardPage_PreviewKeyDown"
+            BannerBackground="{DynamicResource BackgroundBrush}"
+            Description="Pick your cyberware, make-up etc."
+            PreviousPage="{Binding ElementName=InitialConfigPage}"
+            NextPage="{Binding ElementName=BodyPage}">
+
+            <StackPanel
+                Margin="{DynamicResource WolvenKitMarginHorizontal}"
+                Orientation="Vertical">
+
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Eyes
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Eye Stuff -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        Eye Color
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxEyeColor"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding EyeColorListBoxItems}"
+                        SelectedIndex="{Binding EyeColor}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3">
+                        Eyelash Color
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxEyelashColor"
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding EyelashColorListBoxItems}"
+                        SelectedIndex="{Binding EyelashColor}" />
+
+
+                    <!-- Eye Make-Up -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        Eye Make-Up
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxEyeMakeUp"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource MakeupOptionsListboxItems20}"
+                        SelectedIndex="{Binding EyeMakeup}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Visibility="{Binding IsEyeMakeupEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Eye Make-Up Color
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxEyeMakeUpColor"
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding IsEyeMakeupEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ItemsSource="{Binding EyeMakeupColorListBoxItems}"
+                        SelectedIndex="{Binding EyeMakeup}" />
+
+                </Grid>
+
+                <!-- Cheeks -->
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Cheeks
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Cyberware -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        Cyberware
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxCyberware"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource CyberwareListBoxItems}"
+                        SelectedIndex="{Binding Cyberware}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        Cheek Make-Up
+                    </Label>
+
+                    <ComboBox
+                        Name="ComboboxCheekMakeUp"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding CheekMakeupDropdownOptions}"
+                        SelectedIndex="{Binding CheekMakeup}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Margin="{DynamicResource WolvenKitMarginTinyTopLeft}"
+                        Visibility="{Binding IsCheekMakeupEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="Make-up Color">
+                        <TextBlock.Style>
+                            <Style.Triggers>
+                                <Trigger Property="IsFrecklesEnabled" Value="True">
+                                    <Setter Property="Content" Value="Freckle Color" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <ComboBox
+                        Name="ComboboxCheekMakeUpColor"
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding IsCheekMakeupEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        SelectedItem="{Binding CheekMakeupColor}"
+                        ItemsSource="{Binding CheekMakeupDropdownOptions}" />
+
+                </Grid>
+
+                <!-- Cheek make-up -->
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Lipstick
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        Lipstick Style
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxCheekMakeupStyle"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource LipstickStyleListboxItems}"
+                        SelectedIndex="{Binding EyeColor}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Visibility="{Binding IsLipMakeupEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Lipstick Color
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxLipstickColor"
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding IsLipMakeupEnabled,
+                                             Mode=OneWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ItemsSource="{Binding LipstickColorListBoxItems}"
+                        SelectedIndex="{Binding LipstickColor}" />
+                </Grid>
+
+                <!-- Scars and Tattoos -->
+                <Label Style="{StaticResource SectionHeaderStyle}">
+                    Scars and Tattoos
+                </Label>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+
+                    </Grid.ColumnDefinitions>
+                    <ComboBox
+                        Name="ComboboxFacialTattoos"
+                        Grid.Row="0"
+                        Grid.Column=""
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource FacialTattooListBoxItems}"
+                        SelectedIndex="{Binding FacialTattoos}" />
+
+                    <!-- Facial Scars -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        Facial Scars
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxFacialScars"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource FacialScarListBoxItems}"
+                        SelectedIndex="{Binding FacialScars}" />
+
+                    <!-- Facial Tattoos -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3">
+                        Facial Tattoos
+                    </Label>
+
+
+                    <!-- Piercings -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        Piercings
+                    </Label>
+                    <ComboBox
+                        Name="ComboboxPiercings"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Width="{DynamicResource WolvenkitControlMinWidth}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{StaticResource PiercingListBoxItems}"
+                        SelectedIndex="{Binding Piercings}" />
+
+                </Grid>
+            </StackPanel>
+
+        </syncfusion:WizardPage>
+
+
+        <!-- Wizard: page 1 -->
         <syncfusion:WizardPage
             Name="InitialConfigPage"
             Title="Configure your NPV"
@@ -330,7 +1090,7 @@
             NextEnabled="{Binding FormValid}"
             PreviewKeyDown="WizardPage_PreviewKeyDown"
             Description="Enter the numeric values from character creator (check your apartment's mirror)."
-            NextPage="{Binding ElementName=ComponentsPage}">
+            NextPage="{Binding ElementName=FaceOptionsPage}">
 
             <Grid Margin="{DynamicResource WolvenKitMarginHorizontal}">
                 <Grid.ColumnDefinitions>
@@ -532,332 +1292,6 @@
                     HorizontalAlignment="Left"
                     ItemsSource="{StaticResource ShapekeyListBoxItems}"
                     SelectedIndex="{Binding Ears}" />
-            </Grid>
-        </syncfusion:WizardPage>
-
-        <syncfusion:WizardPage
-            Name="ComponentsPage"
-            Title="Pick your components"
-            Height="Auto"
-            FinishVisibility="Visible"
-            NextVisible="False"
-            PreviewKeyDown="WizardPage_PreviewKeyDown"
-            BannerBackground="{DynamicResource BackgroundBrush}"
-            Description="Select your cyberware, make-up etc., pick 0 to disable."
-            PreviousPage="{Binding ElementName=InitialConfigPage}">
-
-
-            <Grid Margin="20">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
-                    <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
-                    <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
-                    <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
-                    <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
-
-                </Grid.ColumnDefinitions>
-
-                <!-- Cyberware -->
-                <Label
-                    Grid.Row="0"
-                    Grid.Column="0">
-                    Cyberware
-                </Label>
-                <ComboBox
-                    Name="ComboboxCyberware"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource CyberwareListBoxItems}"
-                    SelectedIndex="{Binding Cyberware}" />
-
-                <!-- Nails -->
-                <Label
-                    Grid.Row="0"
-                    Grid.Column="3">
-                    Nails
-                </Label>
-                <ComboBox
-                    Name="ComboboxNails"
-                    Grid.Row="0"
-                    Grid.Column="4"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource NailsListBoxItems}"
-                    SelectedIndex="{Binding Nails}" />
-
-                <!-- Facial Scars -->
-                <Label
-                    Grid.Row="2"
-                    Grid.Column="0">
-                    Facial Scars
-                </Label>
-                <ComboBox
-                    Name="ComboboxFacialScars"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource FacialScarListBoxItems}"
-                    SelectedIndex="{Binding FacialScars}" />
-
-                <!-- Genitals -->
-                <Label
-                    Grid.Row="2"
-                    Grid.Column="3">
-                    Genitals
-                </Label>
-                <ComboBox
-                    Name="ComboboxGenitals"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource GenitalListBoxItems}"
-                    SelectedIndex="{Binding Genitals}" />
-
-                <!-- Facial Tattoos -->
-                <Label
-                    Grid.Row="4"
-                    Grid.Column="0">
-                    Facial Tattoos
-                </Label>
-                <ComboBox
-                    Name="ComboboxFacialTattoos"
-                    Grid.Row="4"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource FacialTattooListBoxItems}"
-                    SelectedIndex="{Binding FacialTattoos}" />
-
-                <!-- Genital Size -->
-                <Label
-                    Grid.Row="4"
-                    Grid.Column="3">
-                    Genital Size
-                </Label>
-                <ComboBox
-                    Name="ComboboxGenitals2"
-                    Grid.Row="4"
-                    Grid.Column="4"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource GenitalListBoxItems2}"
-                    SelectedIndex="{Binding GenitalSize}" />
-
-                <!-- Piercings -->
-                <Label
-                    Grid.Row="6"
-                    Grid.Column="0">
-                    Piercings
-                </Label>
-                <ComboBox
-                    Name="ComboboxPiercings"
-                    Grid.Row="6"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource PiercingListBoxItems}"
-                    SelectedIndex="{Binding Piercings}" />
-
-                <!-- Pubic Hair -->
-                <Label
-                    Grid.Row="6"
-                    Grid.Column="3">
-                    Pubic Hair
-                </Label>
-                <ComboBox
-                    Name="ComboboxPubicHair"
-                    Grid.Row="6"
-                    Grid.Column="4"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource PubeListBoxItems}"
-                    SelectedIndex="{Binding PubicHair}" />
-
-                <!-- Eye Make-Up -->
-                <Label
-                    Grid.Row="8"
-                    Grid.Column="0">
-                    Eye Make-Up
-                </Label>
-                <ComboBox
-                    Name="ComboboxEyeMakeUp"
-                    Grid.Row="8"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource EyeMakeupListBoxItems}"
-                    SelectedIndex="{Binding EyeMakeup}" />
-
-                <!-- Body Scars -->
-                <Label
-                    Grid.Row="8"
-                    Grid.Column="3">
-                    Body Scars
-                </Label>
-                <ComboBox
-                    Name="ComboboxBodyScars"
-                    Grid.Row="8"
-                    Grid.Column="4"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource BodyScarListBoxItems}"
-                    SelectedIndex="{Binding BodyScars}" />
-
-                <!-- Lip Make-Up -->
-                <Label
-                    Grid.Row="10"
-                    Grid.Column="0">
-                    Lip Make-Up
-                </Label>
-                <ComboBox
-                    Name="ComboboxLipMakeUp"
-                    Grid.Row="10"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource LipMakeupListBoxItems}"
-                    SelectedIndex="{Binding LipMakeup}" />
-
-                <!-- Nipples -->
-                <Label
-                    Grid.Row="10"
-                    Grid.Column="3">
-                    Nipples
-                </Label>
-                <ComboBox
-                    Name="ComboboxNipples"
-                    Grid.Row="10"
-                    Grid.Column="4"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource NippleListBoxItems}"
-                    SelectedIndex="{Binding Nipples}" />
-
-                <!-- Cheek Make-Up -->
-                <Label
-                    Grid.Row="12"
-                    Grid.Column="0">
-                    Cheek Make-Up
-                </Label>
-                <ComboBox
-                    Name="ComboboxCheekMakeUp"
-                    Grid.Row="12"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource CheekMakeupListBoxItems}"
-                    SelectedIndex="{Binding CheekMakeup}" />
-
-                <!-- Blemishes -->
-                <Label
-                    Grid.Row="14"
-                    Grid.Column="0">
-                    Blemishes
-                </Label>
-                <ComboBox
-                    Name="ComboboxBlemishes"
-                    Grid.Row="14"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    ItemsSource="{StaticResource BlemishListBoxItems}"
-                    SelectedIndex="{Binding Blemishes}" />
-
-
-                <!-- Beard -->
-                <Label
-                    Grid.Row="16"
-                    Grid.Column="0"
-                    Visibility="{Binding Path=BodyGenderMale,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}">
-                    Beard
-                </Label>
-                <ComboBox
-                    Name="ComboboxBeard"
-                    Grid.Row="16"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    Visibility="{Binding Path=BodyGenderMale,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ItemsSource="{StaticResource BeardListBoxItems}"
-                    SelectedIndex="{Binding Beard}" />
-
-                <!-- Beard Style -->
-                <Label
-                    Grid.Row="18"
-                    Grid.Column="0"
-                    Visibility="{Binding Path=BodyGenderMale,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}">
-                    Beard Style
-                </Label>
-                <ComboBox
-                    Name="ComboboxBeardStyle"
-                    Grid.Row="18"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Width="{DynamicResource WolvenkitControlMinWidth}"
-                    Margin="{DynamicResource WolvenKitMarginBottom}"
-                    HorizontalAlignment="Left"
-                    Visibility="{Binding Path=BodyGenderMale,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ItemsSource="{StaticResource BeardStyleListBoxItems}"
-                    SelectedIndex="{Binding BeardStyle}" />
-
-
             </Grid>
         </syncfusion:WizardPage>
 

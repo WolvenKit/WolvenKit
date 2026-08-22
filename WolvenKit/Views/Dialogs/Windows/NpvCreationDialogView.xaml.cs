@@ -31,14 +31,24 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
     {
         InitializeComponent();
 
-        ViewModel = new NpvCreationDialogViewModel()
-        {
-            ProjectFolders = activeProject.GetAllFolders(activeProject.ModDirectory).ToDictionary<string, string>(x => x)
-        };
+        ViewModel = new NpvCreationDialogViewModel(activeProject);
         DataContext = ViewModel;
 
         this.WhenActivated(disposables =>
         {
+            /*
+             * Page 1
+             */
+
+            this.Bind(ViewModel,
+                    x => x.ProjectFolders,
+                    x => x.FilterableDropdownMenu.Options)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.DestFolderPath,
+                    x => x.FilterableDropdownMenu.SelectedOption)
+                .DisposeWith(disposables);
+
             this.Bind(ViewModel,
                     x => x.Eyes,
                     x => x.ComboboxEyes.SelectedIndex)
@@ -60,6 +70,10 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
                     x => x.ComboboxEars.SelectedIndex)
                 .DisposeWith(disposables);
 
+
+            /*
+             * Page 2
+             */
             this.Bind(ViewModel,
                     x => x.Beard,
                     x => x.ComboboxBeard.SelectedIndex)
@@ -124,11 +138,6 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
             this.Bind(ViewModel,
                     x => x.PubicHair,
                     x => x.ComboboxPubicHair.SelectedIndex)
-                .DisposeWith(disposables);
-
-            this.Bind(ViewModel,
-                    x => x.ProjectFolders,
-                    x => x.FilterableDropdownMenu.Options)
                 .DisposeWith(disposables);
         });
     }

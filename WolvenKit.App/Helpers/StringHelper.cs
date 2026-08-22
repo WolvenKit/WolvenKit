@@ -487,4 +487,20 @@ public abstract partial class StringHelper
     }
 
     public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
+
+    public static List<string> GetEnumValues(Type enumType)
+    {
+        var ret = new List<string>();
+        foreach (var value in Enum.GetValues(enumType))
+        {
+            if (value.ToString() is not string s)
+            {
+                continue;
+            }
+
+            ret.Add(s);
+        }
+
+        return ret;
+    }
 }
