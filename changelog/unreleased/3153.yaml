@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3153
+      author: "notaspirit"
+      description: "After a successful update of the app using the build in updater the changelog is now shown"
