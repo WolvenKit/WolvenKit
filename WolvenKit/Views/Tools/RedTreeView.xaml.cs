@@ -715,7 +715,8 @@ namespace WolvenKit.Views.Tools
                     {
                         // delete selection, then paste at index of last selected child
                         group.Key.DeleteNodes(selectedNodes);
-                        var pasteIndex = group.LastOrDefault()?.NodeIdxInParent ?? -1;
+                        var offset = useSingle ? 0 : 1;
+                        var pasteIndex = (group.LastOrDefault()?.NodeIdxInParent - offset) ?? -1;
                         group.Key.PasteAtIndex(copiedChunks, pasteIndex);
                     }
                 }
