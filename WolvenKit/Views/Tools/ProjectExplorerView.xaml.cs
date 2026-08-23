@@ -391,6 +391,10 @@ namespace WolvenKit.Views.Tools
             {
                 IndicateProjectLoading();
             }
+            else if (Ready())
+            {
+                IndicateProjectNotLoading();
+            }
 
             _loadingMode = mode;
         }
