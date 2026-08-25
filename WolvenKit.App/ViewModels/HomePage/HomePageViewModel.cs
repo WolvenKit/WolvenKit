@@ -9,7 +9,6 @@ namespace WolvenKit.App.ViewModels.HomePage;
 public enum EHomePage
 {
     Welcome,
-    Mods,
     Plugins,
     Settings,
     Wiki,
