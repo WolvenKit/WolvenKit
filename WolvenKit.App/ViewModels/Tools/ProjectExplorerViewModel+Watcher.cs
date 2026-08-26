@@ -152,7 +152,7 @@ public partial class ProjectExplorerViewModel
             }
 
             var extension = Path.GetExtension(e.Name);
-            if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
+            if (!string.IsNullOrEmpty(extension) && (HasIgnoredExtension(e.Name) && e.ChangeType != WatcherChangeTypes.Renamed))
             {
                 continue;
             }
@@ -345,9 +345,22 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
+            if (!_fileLookup.TryGetValue(renamedEventArgs.OldName, out var renamedModel))
+            {
+                _loggerService?.Warning($"Renamed file was not in the database: {renamedEventArgs.OldName}. Recommend to restart WolvenKit.");
+                return;
+            }
+
+            if (!renamedModel.IsDirectory)
+            {
+                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(
+                    new FileSystemEventArgs(WatcherChangeTypes.Deleted, _projectDirectory, renamedEventArgs.OldName)));
+                return;
+            }
+
             foreach (var key in _fileLookup.Keys)
             {
-                if (!key.StartsWith(renamedEventArgs.OldName))
+                if (!key.StartsWith(renamedEventArgs.OldName + Path.DirectorySeparatorChar))
                 {
                     continue;
                 }
