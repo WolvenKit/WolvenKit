@@ -12,23 +12,40 @@ public class DialogueImportDialogOptions
 {
     public DialogueImportDialogOptions(
         string sceneName,
-        IEnumerable<ulong> existingLineLocStrings,
+        IEnumerable<ExistingSceneLine> existingLines,
         IEnumerable<ulong> existingOptionLocStrings,
         IEnumerable<SceneActorOption> actors)
     {
         SceneName = sceneName;
-        ExistingLineLocStrings = existingLineLocStrings.ToHashSet();
         ExistingOptionLocStrings = existingOptionLocStrings.ToHashSet();
         Actors = actors.ToList();
+
+        var lines = new Dictionary<ulong, ExistingSceneLine>();
+
+        // The first entry of a locstring keeps it. A store with two is already broken in the way
+        // this dialog exists to prevent, and nothing says which was meant.
+        foreach (var line in existingLines)
+        {
+            lines.TryAdd(line.LocStringId, line);
+        }
+
+        ExistingLines = lines;
     }
 
     /// <summary>Named in the dialog title, so it is clear which scene is being imported into.</summary>
     public string SceneName { get; init; }
 
-    /// <summary>Locstring ids already in the screenplay store's lines. Imports matching one are refused.</summary>
-    public HashSet<ulong> ExistingLineLocStrings { get; init; }
+    /// <summary>
+    /// The screenplay lines the scene already carries, by locstring id. An import matching one is
+    /// never written again, but the user may still take it for a section to play - hence the item
+    /// id and actors.
+    /// </summary>
+    public IReadOnlyDictionary<ulong, ExistingSceneLine> ExistingLines { get; init; }
 
-    /// <inheritdoc cref="ExistingLineLocStrings"/>
+    /// <summary>
+    /// Locstring ids already among the screenplay store's choice options. Imports matching one are
+    /// refused outright: an option is picked rather than played, so no section can use it either.
+    /// </summary>
     public HashSet<ulong> ExistingOptionLocStrings { get; init; }
 
     /// <summary>

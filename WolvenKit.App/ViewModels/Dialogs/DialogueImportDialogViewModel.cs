@@ -27,6 +27,35 @@ public sealed class DialogueImportSelection
 
     /// <inheritdoc cref="SpeakerActorId"/>
     public uint? AddresseeActorId { get; init; }
+
+    /// <summary>Whether the scene already carries a screenplay entry for this line.</summary>
+    public bool IsAlreadyInScene { get; init; }
+
+    /// <summary>
+    /// The item id of the entry the scene already has, or null where that entry carries none yet
+    /// and the import is to give it one.
+    /// </summary>
+    public uint? ExistingScreenplayLineId { get; init; }
+
+    /// <summary>
+    /// The line as a section plays it. Length and voiceover parameters come off the export; the
+    /// actors are the user's answer above.
+    /// </summary>
+    /// <param name="screenplayLineId">
+    /// The item id the line is in the screenplay store under. A section binds to its lines by item
+    /// id alone, so this must be the id actually written.
+    /// </param>
+    public SectionDialogueLine ToSectionLine(uint screenplayLineId) => new()
+    {
+        ScreenplayLineId = screenplayLineId,
+        SpeakerActorId = SpeakerActorId,
+        AddresseeActorId = AddresseeActorId,
+        DurationMs = Line.DurationMs,
+        StartTimeMs = Line.StartTimeMs,
+        Text = Line.EmbeddedText,
+        VoContext = Line.VoContext,
+        VoExpression = Line.VoExpression
+    };
 }
 
 /// <summary>
@@ -40,18 +69,31 @@ public partial class DialogueImportEntryViewModel : ObservableObject
     public DialogueImportEntryViewModel(
         ImportedDialogueLine line,
         bool isDuplicate,
+        ExistingSceneLine? existingLine,
         IReadOnlyList<SceneActorOption> actorOptions,
         DialogueSpeakerResolver resolver)
     {
         Line = line;
         IsDuplicate = isDuplicate;
-        IsSelected = !isDuplicate;
+        ExistingLine = existingLine;
         ActorOptions = actorOptions;
 
-        // What the export says, matched against the scene's cast. Whatever it did not match is left
-        // unset for the user to pick, which is the same "no actor" a line added by hand starts with.
-        _speakerActor = resolver.Resolve(line.Speaker) ?? SceneActorOption.None;
-        _addresseeActor = resolver.Resolve(line.Addressee) ?? SceneActorOption.None;
+        // A line already in the scene starts unticked: it is only worth taking for a section.
+        IsSelected = !isDuplicate;
+
+        if (existingLine is not null)
+        {
+            // The scene's answer, not the export's: the entry is not being rewritten.
+            _speakerActor = FindActor(existingLine.SpeakerActorId, actorOptions);
+            _addresseeActor = FindActor(existingLine.AddresseeActorId, actorOptions);
+        }
+        else
+        {
+            // What the export says, matched against the scene's cast. Anything unmatched is left on
+            // "no actor", the same as a line added by hand.
+            _speakerActor = resolver.Resolve(line.Speaker) ?? SceneActorOption.None;
+            _addresseeActor = resolver.Resolve(line.Addressee) ?? SceneActorOption.None;
+        }
     }
 
     public ImportedDialogueLine Line { get; }
@@ -59,8 +101,29 @@ public partial class DialogueImportEntryViewModel : ObservableObject
     /// <summary>Whether the scene already carries a screenplay entry for this locstring id.</summary>
     public bool IsDuplicate { get; }
 
-    /// <summary>Whether the line is the user's to take. Duplicates never are.</summary>
-    public bool CanImport => !IsDuplicate;
+    /// <summary>
+    /// The entry the scene already carries for this line. Null for a new line, and for a choice
+    /// option - nothing plays an option, so there is nothing to do with one the scene has.
+    /// </summary>
+    public ExistingSceneLine? ExistingLine { get; }
+
+    /// <summary>
+    /// Whether taking this line only feeds a section, leaving the screenplay store alone. The scene
+    /// already has the entry, and writing it again would put two entries on one recording.
+    /// </summary>
+    public bool IsSectionOnly => ExistingLine is not null;
+
+    /// <summary>
+    /// Whether the entry the scene has carries no item id yet. Taking the line gives it one, since
+    /// a section's event has to have something to point at.
+    /// </summary>
+    public bool NeedsItemId => ExistingLine is { ScreenplayLineId: null };
+
+    /// <summary>
+    /// Whether the line is the user's to take. A duplicate line is, for a section's sake; a
+    /// duplicate choice option is not, since no section plays one.
+    /// </summary>
+    public bool CanImport => !IsDuplicate || IsSectionOnly;
 
     [ObservableProperty] private bool _isSelected;
 
@@ -72,17 +135,17 @@ public partial class DialogueImportEntryViewModel : ObservableObject
     [ObservableProperty] private SceneActorOption _addresseeActor;
 
     /// <summary>
-    /// Whether this line has actors to assign at all. A choice option is something the player says
-    /// by picking it, and the screenplay store keeps no speaker for one.
+    /// Whether this line's actors are the user's to set. The store keeps no speaker for a choice
+    /// option, and a line the scene already has is shown as the scene has it, not rewritten.
     /// </summary>
-    public bool CanSetActors => !Line.IsChoiceOption;
+    public bool CanSetActors => !Line.IsChoiceOption && !IsSectionOnly;
 
     public string LocStringId => Line.LocStringId.ToString();
 
     /// <summary>What the export called the speaker, kept where the user can check the match.</summary>
-    public string SpeakerToolTip => DescribeExportedName("speaker", Line.Speaker);
+    public string SpeakerToolTip => DescribeActor("speaker", Line.Speaker);
 
-    public string AddresseeToolTip => DescribeExportedName("addressee", Line.Addressee);
+    public string AddresseeToolTip => DescribeActor("addressee", Line.Addressee);
 
     public string Text => string.IsNullOrEmpty(Line.EmbeddedText) ? "(no text)" : Line.EmbeddedText;
 
@@ -140,16 +203,56 @@ public partial class DialogueImportEntryViewModel : ObservableObject
         }
     }
 
-    public string Status => IsDuplicate
-        ? "Already in scene"
-        : Line.IsChoiceOption
-            ? "New choice option"
-            : "New line";
+    public string Status => NeedsItemId
+        ? "In scene - needs item id"
+        : IsSectionOnly
+            ? "In scene - section only"
+            : IsDuplicate
+                ? "Already in scene"
+                : Line.IsChoiceOption
+                    ? "New choice option"
+                    : "New line";
 
-    private static string DescribeExportedName(string role, string name) =>
-        string.IsNullOrEmpty(name)
+    /// <summary>
+    /// What taking this line would do, where the row has no room to say it. Worth explaining for a
+    /// line the scene already has, since ticking it looks like an import and is not.
+    /// </summary>
+    public string StatusToolTip => NeedsItemId
+        ? "This line is already in the scene, but its screenplay entry carries no item id. Select it to give the entry an item id."
+        : IsSectionOnly
+            ? "This line is already in the scene. Select it to append it to a new section."
+            : IsDuplicate
+                ? "The scene already has this choice option. An option is picked rather than " +
+                  "played, so there is nothing a section could do with it either."
+                : "This line is not in the scene yet and will be added to the screenplay store.";
+
+    /// <summary>
+    /// Where a row's actor came from: the entry the scene has, or the name the export gave.
+    /// </summary>
+    private string DescribeActor(string role, string exportedName)
+    {
+        if (IsSectionOnly)
+        {
+            return $"The scene's own {role} for this line, which the import does not change";
+        }
+
+        return string.IsNullOrEmpty(exportedName)
             ? $"The export names no {role} for this line"
-            : $"The export names \"{name}\" as the {role}";
+            : $"The export names \"{exportedName}\" as the {role}";
+    }
+
+    /// <summary>The dropdown entry for an actor id, or "no actor" where there is none.</summary>
+    private static SceneActorOption FindActor(uint? actorId, IReadOnlyList<SceneActorOption> actorOptions)
+    {
+        if (actorId is not { } id || id == SceneActorOption.NoActorId)
+        {
+            return SceneActorOption.None;
+        }
+
+        // An id the scene's cast no longer runs to shows as unset: the dropdown can only offer
+        // actors the scene has.
+        return actorOptions.FirstOrDefault(option => option.ActorId == id) ?? SceneActorOption.None;
+    }
 }
 
 /// <summary>
@@ -159,7 +262,7 @@ public partial class DialogueImportEntryViewModel : ObservableObject
 /// </summary>
 public partial class DialogueImportDialogViewModel : DialogViewModel
 {
-    private readonly HashSet<ulong> _existingLineLocStrings;
+    private readonly IReadOnlyDictionary<ulong, ExistingSceneLine> _existingLines;
     private readonly HashSet<ulong> _existingOptionLocStrings;
     private readonly DialogueSpeakerResolver _speakerResolver;
 
@@ -178,7 +281,7 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
 
     public DialogueImportDialogViewModel(DialogueImportDialogOptions dialogOptions)
     {
-        _existingLineLocStrings = dialogOptions.ExistingLineLocStrings;
+        _existingLines = dialogOptions.ExistingLines;
         _existingOptionLocStrings = dialogOptions.ExistingOptionLocStrings;
         _speakerResolver = new DialogueSpeakerResolver(dialogOptions.Actors);
 
@@ -223,25 +326,59 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
     [ObservableProperty] private bool _isStatusError;
 
     /// <summary>
+    /// What the export called the conversation. Names the section node, so it can be found in the
+    /// graph afterwards.
+    /// </summary>
+    [ObservableProperty] private string _conversationName = "";
+
+    /// <summary>
     /// Whether the lines' text is embedded into the scene's locstore. Without it the scene points
     /// at recordings whose subtitles live in the game's own string tables, which is what a scene
     /// referencing existing dialogue wants; with it the text travels with the scene.
     /// </summary>
     [ObservableProperty] private bool _createEmbeddedText = true;
 
+    /// <summary>
+    /// Whether the conversation is laid out as a section node as well as written to the screenplay
+    /// store. On by default: lines in the store with nothing playing them is half an import. A user
+    /// who wants only the store entries unticks it.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanImport))]
+    private bool _createSectionNode = true;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasEntries))]
     private int _entryCount;
 
+    /// <summary>Rows the user has ticked, of either kind.</summary>
+    [ObservableProperty] private int _selectedCount;
+
+    /// <summary>Ticked rows that will be written to the screenplay store.</summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanImport))]
-    private int _selectedCount;
+    private int _selectedNewCount;
+
+    /// <summary>
+    /// Ticked rows the scene already has, which are worth taking only for a section to play.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanImport))]
+    [NotifyPropertyChangedFor(nameof(HasSectionOnlySelection))]
+    private int _selectedExistingCount;
 
     [ObservableProperty] private int _duplicateCount;
 
     public bool HasEntries => EntryCount > 0;
 
-    public bool CanImport => SelectedCount > 0;
+    /// <summary>Whether the user has taken a line that only a section could use.</summary>
+    public bool HasSectionOnlySelection => SelectedExistingCount > 0;
+
+    /// <summary>
+    /// Whether there is anything for the import to do. Lines the scene already has count only when a
+    /// section is being built.
+    /// </summary>
+    public bool CanImport => SelectedNewCount > 0 || (CreateSectionNode && SelectedExistingCount > 0);
 
     partial void OnJsonTextChanged(string value) => IsPayloadStale = value != _readJson;
 
@@ -300,6 +437,8 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
 
         Entries.Clear();
 
+        ConversationName = "";
+
         if (string.IsNullOrWhiteSpace(json))
         {
             SetStatus("Paste an export from the Dialogue Browser, or load one from a file.", false);
@@ -314,11 +453,20 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
             return;
         }
 
+        ConversationName = payload.ConversationName;
+
         foreach (var line in payload.Lines)
         {
-            var existing = line.IsChoiceOption ? _existingOptionLocStrings : _existingLineLocStrings;
+            // Options are looked up among options and lines among lines: the two halves of the
+            // store number themselves apart.
+            var existingLine = line.IsChoiceOption ? null : FindExistingLine(line.LocStringId);
+
+            var isDuplicate = line.IsChoiceOption
+                ? _existingOptionLocStrings.Contains(line.LocStringId)
+                : existingLine is not null;
+
             var entry = new DialogueImportEntryViewModel(
-                line, existing.Contains(line.LocStringId), ActorOptions, _speakerResolver);
+                line, isDuplicate, existingLine, ActorOptions, _speakerResolver);
 
             entry.PropertyChanged += OnEntryPropertyChanged;
             Entries.Add(entry);
@@ -378,10 +526,14 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
     private void SelectNone() => SetSelection(false);
 
     /// <summary>
-    /// The lines the user settled on, each with the actors they left it pointing at. Duplicates are
-    /// filtered out here as well as being locked in the list, so nothing gets in by way of a payload
-    /// swapped out from under the selection.
+    /// The lines the user settled on, in conversation order, each with the actors they left it
+    /// pointing at. A line the scene already has comes back flagged, which tells the import to play
+    /// it rather than write it again.
     /// </summary>
+    /// <remarks>
+    /// A duplicate choice option is filtered out here as well as locked in the list, so nothing gets
+    /// in by way of a payload swapped out from under the selection.
+    /// </remarks>
     public List<DialogueImportSelection> GetLinesToImport() =>
         Entries
             .Where(entry => entry.IsSelected && entry.CanImport)
@@ -389,9 +541,15 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
             {
                 Line = entry.Line,
                 SpeakerActorId = ActorIdOf(entry.SpeakerActor),
-                AddresseeActorId = ActorIdOf(entry.AddresseeActor)
+                AddresseeActorId = ActorIdOf(entry.AddresseeActor),
+                IsAlreadyInScene = entry.IsSectionOnly,
+                ExistingScreenplayLineId = entry.ExistingLine?.ScreenplayLineId
             })
             .ToList();
+
+    /// <summary>The entry the scene has for a locstring, or null where it has none.</summary>
+    private ExistingSceneLine? FindExistingLine(ulong locStringId) =>
+        _existingLines.TryGetValue(locStringId, out var existingLine) ? existingLine : null;
 
     /// <summary>An actor id to write, or null where the user left the line unassigned.</summary>
     private static uint? ActorIdOf(SceneActorOption? option) =>
@@ -399,8 +557,7 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
 
     private void SetSelection(bool isSelected)
     {
-        // Each row raising its own change would have the counts recomputed once per row; they are
-        // the same counts either way, so they are taken once at the end.
+        // Recomputing per row would give the same counts, so take them once at the end.
         _isUpdatingEntries = true;
 
         try
@@ -460,7 +617,8 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
         }
 
         var duplicates = 0;
-        var selected = 0;
+        var selectedNew = 0;
+        var selectedExisting = 0;
 
         foreach (var entry in Entries)
         {
@@ -468,15 +626,27 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
             {
                 duplicates++;
             }
-            else if (entry.IsSelected)
+
+            if (!entry.IsSelected || !entry.CanImport)
             {
-                selected++;
+                continue;
+            }
+
+            if (entry.IsSectionOnly)
+            {
+                selectedExisting++;
+            }
+            else
+            {
+                selectedNew++;
             }
         }
 
         EntryCount = Entries.Count;
         DuplicateCount = duplicates;
-        SelectedCount = selected;
+        SelectedNewCount = selectedNew;
+        SelectedExistingCount = selectedExisting;
+        SelectedCount = selectedNew + selectedExisting;
     }
 
     private void OnEntriesChanged(object? sender, NotifyCollectionChangedEventArgs e) => RefreshCounts();
