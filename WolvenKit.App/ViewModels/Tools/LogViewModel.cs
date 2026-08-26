@@ -50,7 +50,7 @@ public partial class LogViewModel : ToolViewModel
         { LogType.Warning, true },
         { LogType.Success, true },
         { LogType.Important, true },
-        { LogType.Debug, true },
+        { LogType.Debug, false },
     };
 
     private readonly ObservableCollection<ScriptFileViewModel> _scriptFiles = new();
