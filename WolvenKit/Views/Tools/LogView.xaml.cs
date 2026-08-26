@@ -25,7 +25,7 @@ using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
 {
-    public record LogEntry(Logtype Level, string Message, Uri Uri, Brush TextColor);
+    public record LogEntry(LogType Level, string Message, Uri Uri, Brush TextColor);
 
     /// <summary>
     /// Interaction logic for LogView.xaml
@@ -73,11 +73,11 @@ namespace WolvenKit.Views.Tools
         private bool PassesFilter(LogEntry log) =>
             ViewModel is null || log.Level switch
             {
-                Logtype.Error => ViewModel.FilterByLevel[0],
-                Logtype.Warning => ViewModel.FilterByLevel[1],
-                Logtype.Success => ViewModel.FilterByLevel[2],
-                Logtype.Normal or Logtype.Important => ViewModel.FilterByLevel[3],
-                Logtype.Debug => ViewModel.FilterByLevel[4],
+                LogType.Error => ViewModel.FilterByLevel[0],
+                LogType.Warning => ViewModel.FilterByLevel[1],
+                LogType.Success => ViewModel.FilterByLevel[2],
+                LogType.Normal or LogType.Important => ViewModel.FilterByLevel[3],
+                LogType.Debug => ViewModel.FilterByLevel[4],
                 _ => true
             };
 
@@ -134,7 +134,7 @@ namespace WolvenKit.Views.Tools
             var level = ToLogtype(item.Level);
             if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var isSuccessObj) && isSuccessObj is ScalarValue { Value: true })
             {
-                level = Logtype.Success;
+                level = LogType.Success;
             }
 
             var brush = GetBrushForLevel(level);
@@ -154,25 +154,25 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private static Logtype ToLogtype(LogEventLevel level) =>
+        private static LogType ToLogtype(LogEventLevel level) =>
             level switch
             {
-                LogEventLevel.Verbose => Logtype.Debug,
-                LogEventLevel.Debug => Logtype.Debug,
-                LogEventLevel.Information => Logtype.Important,
-                LogEventLevel.Warning => Logtype.Warning,
-                LogEventLevel.Error => Logtype.Error,
-                LogEventLevel.Fatal => Logtype.Error,
-                _ => Logtype.Normal,
+                LogEventLevel.Verbose => LogType.Debug,
+                LogEventLevel.Debug => LogType.Debug,
+                LogEventLevel.Information => LogType.Important,
+                LogEventLevel.Warning => LogType.Warning,
+                LogEventLevel.Error => LogType.Error,
+                LogEventLevel.Fatal => LogType.Error,
+                _ => LogType.Normal,
             };
 
-        private static Brush GetBrushForLevel(Logtype level) => level switch
+        private static Brush GetBrushForLevel(LogType level) => level switch
         {
-            Logtype.Normal or Logtype.Important => Brushes.LightGray,
-            Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-            Logtype.Debug => (Brush)Application.Current.FindResource("WolvenKitPurple"),
-            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitGreen"),
+            LogType.Normal or LogType.Important => Brushes.LightGray,
+            LogType.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
+            LogType.Warning => (Brush)Application.Current.FindResource("WolvenKitYellow"),
+            LogType.Debug => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            LogType.Success => (Brush)Application.Current.FindResource("WolvenKitGreen"),
 
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };

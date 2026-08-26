@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -11,6 +12,7 @@ using DynamicData;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Scripting;
+using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 
