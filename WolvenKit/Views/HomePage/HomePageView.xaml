@@ -325,31 +325,6 @@
                 </TabItem.Content>
             </TabItem>
 
-            <TabItem
-                Name="ModsPageTab"
-                Selector.Selected="ModsPageTab_Selected">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <templates:IconBox
-                            IconPack="Codicons"
-                            Kind="Package"
-                            Margin="0"
-                            Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
-
-                        <TextBlock
-                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                            VerticalAlignment="Center"
-                            FontSize="{DynamicResource WolvenKitFontMedium}"
-                            Text="Mod Manager" />
-                    </StackPanel>
-                </TabItem.Header>
-
-                <TabItem.Content>
-                    <pages:ModsView />
-                </TabItem.Content>
-            </TabItem>
-
             <TabItem Name="PluginsPageTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">

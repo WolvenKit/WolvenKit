@@ -226,9 +226,6 @@ namespace WolvenKit
                     services.AddTransient<WelcomePageViewModel>();
                     services.AddTransient<IViewFor<WelcomePageViewModel>, WelcomePageView>();
 
-                    services.AddTransient<ModsViewModel>();
-                    services.AddTransient<IViewFor<ModsViewModel>, ModsView>();
-
                     services.AddTransient<PluginsToolViewModel>();
                     services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
 

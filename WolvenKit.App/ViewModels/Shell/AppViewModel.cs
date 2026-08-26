@@ -1443,10 +1443,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
     private async Task ShowPlugin() => await ShowHomePageAsync(EHomePage.Plugins);
 
-    private bool CanShowModsView() => !IsDialogShown;
-    [RelayCommand(CanExecute = nameof(CanShowModsView))]
-    private async Task ShowModsView() => await ShowHomePageAsync(EHomePage.Mods);
-
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
     private async Task NewFile(string? inputDir)
@@ -2076,7 +2072,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowSoundModdingToolCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowScriptManagerCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPluginCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ShowModsViewCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]

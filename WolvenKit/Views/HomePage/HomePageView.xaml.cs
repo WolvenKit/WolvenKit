@@ -41,12 +41,6 @@ namespace WolvenKit.Views.HomePage
         {
             base.OnMouseLeftButtonDown(e);
 
-            // dumb hack
-            if (ViewModel.SelectedIndex == (int)EHomePage.Mods)
-            {
-                return;
-            }
-
             if (!e.Handled)
             {
                 var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
@@ -61,16 +55,6 @@ namespace WolvenKit.Views.HomePage
                 base.OnMouseLeftButtonDown(e);
                 var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
                 mainWindow?.DragMove();
-            }
-        }
-
-        // TODO: Can't you bind this directly in XAML? -wopss
-
-        private void ModsPageTab_Selected(object sender, RoutedEventArgs e)
-        {
-            if (sender is TabItem tab && tab.Content is Pages.ModsView view && view.DataContext is ModsViewModel vm)
-            {
-                vm.CheckRedModCommand.SafeExecute();
             }
         }
 
