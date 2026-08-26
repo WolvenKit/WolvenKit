@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using SharpDX.Direct2D1;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Scripting;
@@ -42,7 +44,14 @@ public partial class LogViewModel : ToolViewModel
     // private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
     // public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
     [ObservableProperty]
-    private bool[] _filterByLevel = { true, true, true, true, true };
+    private Dictionary<LogType, bool> _filterByLevel = new()
+    {
+        { LogType.Error, true },
+        { LogType.Warning, true },
+        { LogType.Success, true },
+        { LogType.Important, true },
+        { LogType.Debug, true },
+    };
 
     private readonly ObservableCollection<ScriptFileViewModel> _scriptFiles = new();
     public CollectionViewSource ScriptFiles { get; } = new();
@@ -87,24 +96,23 @@ public partial class LogViewModel : ToolViewModel
     }
 
     [RelayCommand]
-    private void ToggleFilterLevel(string index)
+    private void ToggleFilterLevel(string logTypeString)
     {
-        if (!int.TryParse(index, out var level))
+        if (!Enum.TryParse<LogType>(logTypeString, out var logType))
         {
-            level = -1;
-        }
-        if (level < 0 || level >= FilterByLevel.Length)
-        {
+            Console.WriteLine($"Invalid log type: {logTypeString}");
             return;
         }
-        var copy = (bool[])FilterByLevel.Clone();
 
-        copy[level] = !copy[level];
-        if (copy.All(value => !value))
+        if (logType == LogType.Normal)
         {
-            return;
+            logType = LogType.Important;
         }
-        FilterByLevel = copy;
+
+        var updated = new Dictionary<LogType, bool>(FilterByLevel);
+        updated[logType] = !updated[logType];
+
+        FilterByLevel = updated;
     }
 
     [RelayCommand]

@@ -54,15 +54,15 @@ namespace WolvenKit.Views.Tools
 
             this.WhenActivated(disposables =>
             {
-                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterErrorButton.Opacity, level => level[0] ? 1.0 : 0.33)
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterErrorButton.Opacity, level => level[LogType.Error] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
-                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterWarningButton.Opacity, level => level[1] ? 1.0 : 0.33)
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterWarningButton.Opacity, level => level[LogType.Warning] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
-                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterSuccessButton.Opacity, level => level[2] ? 1.0 : 0.33)
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterSuccessButton.Opacity, level => level[LogType.Success] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
-                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterInfoButton.Opacity, level => level[3] ? 1.0 : 0.33)
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterInfoButton.Opacity, level => level[LogType.Important] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
-                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterDebugButton.Opacity, level => level[4] ? 1.0 : 0.33)
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterDebugButton.Opacity, level => level[LogType.Debug] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
                 this.WhenAnyValue(v => v.ViewModel.FilterByLevel)
                     .Subscribe(_ => RebuildFilteredEntries())
@@ -70,16 +70,21 @@ namespace WolvenKit.Views.Tools
             });
         }
 
-        private bool PassesFilter(LogEntry log) =>
-            ViewModel is null || log.Level switch
+        private bool PassesFilter(LogEntry log)
+        {
+            if (ViewModel is null)
             {
-                LogType.Error => ViewModel.FilterByLevel[0],
-                LogType.Warning => ViewModel.FilterByLevel[1],
-                LogType.Success => ViewModel.FilterByLevel[2],
-                LogType.Normal or LogType.Important => ViewModel.FilterByLevel[3],
-                LogType.Debug => ViewModel.FilterByLevel[4],
-                _ => true
-            };
+                return true;
+            }
+
+            var logType = log.Level;
+            if (logType == LogType.Normal)
+            {
+                logType = LogType.Important;
+            }
+
+            return !ViewModel.FilterByLevel.TryGetValue(logType, out var filter) || filter;
+        }
 
         /// <summary>
         /// Re-applies the level filter across every entry. Only for when the filter itself
