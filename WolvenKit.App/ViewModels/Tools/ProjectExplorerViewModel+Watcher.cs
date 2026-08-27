@@ -312,10 +312,6 @@ public partial class ProjectExplorerViewModel
 
             if (!_fileLookup.TryGetValue(e.Name, out var item))
             {
-                if (!_isWatcherStopped)
-                {
-                    _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
-                }
                 return;
             }
 

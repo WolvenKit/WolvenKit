@@ -514,6 +514,11 @@ namespace WolvenKit.Views.Tools
                                 }
 
                                 PESearchBar.AppendText("");
+
+                                if (TreeGrid.View is { } treeView)
+                                {
+                                    RestoreExpansionRecursive(treeView.Nodes);
+                                }
                             }, DispatcherPriority.ApplicationIdle);
                         }, 10);
                     });
