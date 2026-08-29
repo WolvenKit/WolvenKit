@@ -280,10 +280,32 @@ public partial class ProjectExplorerViewModel
                     FileTree.Add(current);
                 }
 
-                if (parent != null && !parent.Children.Contains(current))
+                if (parent == null)
+                {
+                    continue;
+                }
+
+                if (!parent.Children.Contains(current))
                 {
                     parent.Children.Add(current);
                 }
+
+                ExpandParentsOf(parent);
+            }
+
+            void ExpandParentsOf(FileSystemModel dir)
+            {
+                ExpansionStateDictionary[dir.RawRelativePath] = true;
+
+                if (dir.Parent != null)
+                {
+                    ExpandParentsOf(dir.Parent);
+                }
+            }
+
+            if (current is not null)
+            {
+                OnFileMaterialized?.Invoke(current);
             }
 
             if (current is not { IsDirectory: true })
@@ -312,10 +334,6 @@ public partial class ProjectExplorerViewModel
 
             if (!_fileLookup.TryGetValue(e.Name, out var item))
             {
-                if (!_isWatcherStopped)
-                {
-                    _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
-                }
                 return;
             }
 

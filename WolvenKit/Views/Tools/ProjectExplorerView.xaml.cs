@@ -89,6 +89,8 @@ namespace WolvenKit.Views.Tools
         private readonly DispatcherTimer _searchDebounceTimer;
         private bool _isDragging;
         private CancellationTokenSource _deferRefreshTokenSource = new();
+
+        private int _deferDepth;
         private readonly CancellableRowDragDropController _rowDragDropController;
 
         /// <summary>
@@ -305,6 +307,11 @@ namespace WolvenKit.Views.Tools
                         view => view.TreeGridFlat.ItemsSource)
                     .DisposeWith(disposables);
 
+                ViewModel.OnFileMaterialized += RevealMaterializedModel;
+                Disposable
+                    .Create(() => ViewModel.OnFileMaterialized -= RevealMaterializedModel)
+                    .DisposeWith(disposables);
+
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
                 ViewModel.OnSetLoading += SetLoading;
                 ViewModel.BeginDeferredRefreshContext = BeginDeferredRefreshContext;
@@ -440,6 +447,8 @@ namespace WolvenKit.Views.Tools
                 {
                     _disposables.Add(treeView.DeferRefresh(TreeViewRefreshMode.DeferRefresh));
                 }
+
+                _deferDepth++;
             });
         }
 
@@ -448,6 +457,11 @@ namespace WolvenKit.Views.Tools
             {
                 _disposables.ForEach(d => d.Dispose());
                 _disposables.Clear();
+
+                if (_deferDepth > 0)
+                {
+                    _deferDepth--;
+                }
 
                 if (TreeGrid.View is { } treeView)
                 {
@@ -488,10 +502,13 @@ namespace WolvenKit.Views.Tools
 
         private async Task BeginDeferredRefreshContext(Func<Task> doBeforeRefresh)
         {
+            _deferDepth++;
+
             CompositeDisposable disposables =
             [
                 TreeGridFlat.View.DeferRefresh(),
-                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
+                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
+                Disposable.Create(() => _deferDepth--)
             ];
 
             using (disposables)
@@ -514,6 +531,11 @@ namespace WolvenKit.Views.Tools
                                 }
 
                                 PESearchBar.AppendText("");
+
+                                if (TreeGrid.View is { } treeView)
+                                {
+                                    RestoreExpansionRecursive(treeView.Nodes);
+                                }
                             }, DispatcherPriority.ApplicationIdle);
                         }, 10);
                     });
@@ -936,8 +958,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            TreeGridFlat.View.Filter = IsFileInFlat;
-            TreeGridFlat.View.RefreshFilter();
+            ReapplyCurrentSearchFilter(false);
         }
 
         private void TreeGridFlat_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -1220,6 +1241,49 @@ namespace WolvenKit.Views.Tools
             finally
             {
                 _suppressExpansionPersistence = false;
+            }
+        }
+
+        private void RevealMaterializedModel(FileSystemModel model)
+        {
+            DispatcherHelper.PostOnMainThread(() => RevealMaterializedModelCore(model), DispatcherPriority.Background);
+        }
+
+        private void RevealMaterializedModelCore(FileSystemModel model)
+        {
+            if (ViewModel is null || TreeGrid?.View is null || _deferDepth > 0)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(_currentFolderQuery))
+            {
+                return;
+            }
+
+            var chain = new Stack<FileSystemModel>();
+
+            for (var dir = model.IsDirectory ? model : model.Parent; dir is not null; dir = dir.Parent)
+            {
+                if (dir.Name != FileSystemModel.ProjectDirName)
+                {
+                    chain.Push(dir);
+                }
+            }
+
+            while (chain.Count > 0)
+            {
+                var node = FindNodeIgnoringFilter(chain.Pop());
+
+                if (node is null)
+                {
+                    return;
+                }
+
+                if (!node.IsExpanded)
+                {
+                    TreeGrid.ExpandNode(node);
+                }
             }
         }
 
