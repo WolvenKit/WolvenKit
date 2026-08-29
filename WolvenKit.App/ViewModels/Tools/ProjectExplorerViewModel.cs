@@ -1694,6 +1694,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     public event EventHandler<LoadingMode>? OnSetLoading;
 
+    /// <summary>
+    /// Gets called when we add files to the tree, so that
+    /// auto-expansion can occur in the view.
+    /// </summary>
+    public event Action<FileSystemModel>? OnFileMaterialized;
+
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
 
