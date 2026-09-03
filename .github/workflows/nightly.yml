@@ -65,11 +65,38 @@ jobs:
         with:
           proj-path: ./WolvenKit/WolvenKit.csproj
 
-      - run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+      - name: Get Version Suffix
+        shell: pwsh
+        run: |
+          $date = Get-Date -Format "yyyy-MM-dd"
+          $revision = 1
+
+          while ($true) {
+              $tag = "nightly.$date.r$revision"
+
+              git ls-remote --exit-code --tags origin "refs/tags/$tag" 2>$null
+
+              if ($LASTEXITCODE -ne 0) {
+                  break
+              }
+
+              $revision++
+          }
+
+          $versionSuffix = "nightly.$date.r$revision"
+
+          echo "ISODATE=$date" >> $env:GITHUB_ENV
+          echo "TAG=$tag" >> $env:GITHUB_ENV
+          echo "VERSION_SUFFIX=$versionSuffix" >> $env:GITHUB_ENV
+
+          Write-Host "Using version: $version"
+          exit 0
+
+      - run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}-${{ env.VERSION_SUFFIX }}" >> $env:GITHUB_ENV
       - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION_APP}}.zip" >> $env:GITHUB_ENV
 
       # Publish app
-      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}" -p:DebugType=None -p:DebugSymbols=false
+      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "${{ env.VERSION_SUFFIX }}" -p:InformationalVersion="${{env.VERSION_APP}}" -p:DebugType=None -p:DebugSymbols=false
       - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
 
       ##########################################
@@ -82,7 +109,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: false
-          custom_tag: ${{ env.VERSION_APP }}
+          custom_tag: ${{ env.TAG }}
           tag_prefix: ""
 
       # CLI commit checks
@@ -104,7 +131,7 @@ jobs:
 
       - name: env cli version
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: echo "VERSION_CLI=${{steps.get_version_cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+        run: echo "VERSION_CLI=${{steps.get_version_cli.outputs.assembly-version}}-${{ env.VERSION_SUFFIX }}" >> $env:GITHUB_ENV
       - name: env cli name
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
         run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSION_CLI}}.zip" >> $env:GITHUB_ENV
