@@ -345,6 +345,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 #endif
 
+        ShowChangeLogIfAvailableCommand.SafeExecute();
+
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForTemplateUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
@@ -698,6 +700,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             _loggerService.Warning("Failed to update system templates");
             _loggerService.Warning(ex.Message);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ShowChangeLogIfAvailable()
+    {
+        var changelog = _updateService.GetSavedChangelog();
+        if (changelog is not null)
+        {
+            await SetActiveDialog(new MarkdownInfoViewModel(this, "Changelog", changelog));
+            _updateService.ClearSavedChangelog();
         }
     }
 
