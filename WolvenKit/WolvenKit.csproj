@@ -107,6 +107,9 @@
     <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" />
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" />
+    <PackageReference Include="Syncfusion.SfMarkdownViewer.WPF"/>
+    <PackageReference Include="Syncfusion.Markdown" />
+    <PackageReference Include="Syncfusion.Shared.WPF"/>
   </ItemGroup>
 
   <ItemGroup>
