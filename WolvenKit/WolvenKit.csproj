@@ -18,6 +18,7 @@
     <Product>WolvenKit</Product>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Nullable>Disable</Nullable>
+    <CetCompat>false</CetCompat>
   </PropertyGroup>
 
   <PropertyGroup>
