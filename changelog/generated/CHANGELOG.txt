@@ -1,3 +1,3 @@
-[b]8.20.0 — 2026-08-06[/b]
+[b]9.0.0 — 2026-09-06[/b]
 
-The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/8.20.0]GitHub releases page[/url]
+The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/9.0.0]GitHub releases page[/url]

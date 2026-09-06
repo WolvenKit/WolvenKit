@@ -1,6 +1,0 @@
-changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 3120
-      author: "gistya"
-      description: "Fixed tab filters not working in Project Explorer flat tree mode ('archive', 'raw', 'resources')."

@@ -1,6 +1,0 @@
-changes:
-    - type: "changed"
-      packages: ["App"]
-      pr-number: 3090
-      author: "gistya"
-      description: "Updated the version of WolvenKit's SyncFusion dependencies to 34.2.2."
