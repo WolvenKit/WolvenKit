@@ -79,7 +79,7 @@
                     x:Name="FilterErrorButton"
                     Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
-                    CommandParameter="0"
+                    CommandParameter="Error"
                     ToolTip="Error">
                     <templates:IconBox
                         IconPack="Material"
@@ -93,7 +93,7 @@
                     x:Name="FilterWarningButton"
                     Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
-                    CommandParameter="1"
+                    CommandParameter="Warning"
                     ToolTip="Warning">
                     <templates:IconBox
                         IconPack="Material"
@@ -107,7 +107,7 @@
                     x:Name="FilterSuccessButton"
                     Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
-                    CommandParameter="2"
+                    CommandParameter="Success"
                     ToolTip="Success">
                     <templates:IconBox
                         IconPack="Material"
@@ -121,7 +121,7 @@
                     x:Name="FilterInfoButton"
                     Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
-                    CommandParameter="3"
+                    CommandParameter="Important"
                     ToolTip="Normal / Important">
                     <templates:IconBox
                         IconPack="Material"
@@ -134,7 +134,7 @@
                     x:Name="FilterDebugButton"
                     Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
-                    CommandParameter="4"
+                    CommandParameter="Debug"
                     ToolTip="Debug">
                     <templates:IconBox
                         IconPack="Material"
