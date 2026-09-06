@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
