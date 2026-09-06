@@ -246,6 +246,16 @@ namespace WolvenKit.Views.Shell
                     return dialog.ShowDialog() == true;
                 };
 
+                Interactions.ShowNpvCreationDialogue = (activeProject) =>
+                {
+                    NpvCreationDialogView dialog = new(activeProject);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,
