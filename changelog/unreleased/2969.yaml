@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages "]
+      pr-number: 2969
+      author: "Ametis81"
+      description: "Handle TRF_Invalid rawFormat for grayscale textures during uncook"
