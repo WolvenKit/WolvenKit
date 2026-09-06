@@ -46,7 +46,6 @@ namespace WolvenKit.Views.Documents
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
-        private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
         private readonly ProjectExplorerViewModel _projectExplorer;
@@ -57,24 +56,21 @@ namespace WolvenKit.Views.Documents
         private readonly ICvmTools _cvmTools;
         private readonly Cr2WTools _cr2WTools;
 
-
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
             _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
             _projectManager = Locator.Current.GetService<IProjectManager>()!;
             _loggerService = Locator.Current.GetService<ILoggerService>()!;
-            _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
-            _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;
             _cvmTools = Locator.Current.GetService<ICvmTools>()!;
-
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
+            _projectExplorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()!;
 
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
@@ -91,7 +87,9 @@ namespace WolvenKit.Views.Documents
                 _documentTools,
                 Locator.Current.GetService<CRUIDService>()!,
                 _cvmTools,
-                _loggerService) { CurrentTab = _currentTab };
+                _loggerService,
+                _notificationService,
+                _archiveManager) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -154,7 +152,10 @@ namespace WolvenKit.Views.Documents
                 [
                     "File validation script not found!",
                     "Try deleting '%APPDATA%\\REDModding\\WolvenKit\\Scripts\\Wolvenkit_FileValidation.wscript',",
-                    "then restart Wolvenkit. If that does not help, please get in touch with the devs."
+                    "then restart Wolvenkit. If that does not help, make sure that Wolvenkit is installed in a location ",
+                    "that is not restricted by windows (e.g. 'C:\\CyberpunkModding\\WolvenKit')",
+                    "If that doesn't help either, please get in touch with the devs!"
+
                 ];
                 throw new WolvenKitException(0x5002, string.Join('\n', exceptionMsg));
             }
@@ -438,9 +439,18 @@ namespace WolvenKit.Views.Documents
         {
             _cvmTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+            _notificationService.Success("Dynamic materials resolved");
+        }
+
+        private void ExpandMeshAppearances(ChunkViewModel? cvm)
+        {
+            _cvmTools.ExpandMeshAppearances(cvm, true);
+            ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+            _notificationService.Success("Mesh appearances expanded");
         }
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
+        private void OnExpandMeshAppearancesClick(object _, RoutedEventArgs e) => ExpandMeshAppearances(RootChunk);
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
         {
@@ -860,7 +870,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                _projectWatcher.Suspend();
+                _projectExplorer.Suspend();
 
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
                 _notificationService.Success("Successfully added dependencies");
@@ -887,11 +897,10 @@ namespace WolvenKit.Views.Documents
                 await Task.Run(async () =>
                 {
                     await Task.Delay(100);
-                    _projectWatcher.Refresh();
-                    _projectWatcher.Resume();
+                    _projectExplorer.RefreshWatcher();
+                    _projectExplorer.Resume();
                 });
             }
-
         }
 
         private List<appearanceAppearanceDefinition> GetAppearancesFromSelectionOrRoot()

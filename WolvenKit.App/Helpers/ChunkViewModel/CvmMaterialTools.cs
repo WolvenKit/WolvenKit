@@ -15,14 +15,17 @@ public class CvmMaterialTools
 {
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
+    private readonly  IAppArchiveManager _archiveManager;
 
     public CvmMaterialTools(
         ILoggerService loggerService,
-        INotificationService notificationService
+        INotificationService notificationService,
+        IAppArchiveManager archiveManager
     )
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
+        _archiveManager = archiveManager;
     }
 
     #region convert between preload and regular
@@ -564,35 +567,53 @@ public class CvmMaterialTools
         }
     }
 
-
-    public void UnDynamifyMaterials(ChunkViewModel? cvm)
+    public Dictionary<string, List<string>> ExpandMeshAppearances(ChunkViewModel? cvm, bool preserveDynamicChunks = false)
     {
+        Dictionary<string, List<string>> templatesAndValues = [];
+
         if (cvm?.ResolvedData is not CMesh mesh ||
             cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
         {
-            return;
+            return templatesAndValues;
         }
 
         appearances.CalculatePropertiesRecursive();
 
-        var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
+        templatesAndValues.AddRange(ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances));
 
         // nothing to do here
         if (templatesAndValues.Count == 0)
         {
-            return;
+            return templatesAndValues;
         }
 
         var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
-        appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+
+        if (!preserveDynamicChunks)
+        {
+            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+        }
 
         appearances.RecalculateProperties();
+
+        return templatesAndValues;
+    }
+
+    public void UnDynamifyMaterials(ChunkViewModel? cvm)
+    {
+        if (cvm?.ResolvedData is not CMesh mesh ||
+            cvm.GetPropertyChild("appearances") is not ChunkViewModel)
+        {
+            return;
+        }
+
+        var templatesAndValues = ExpandMeshAppearances(cvm);
 
         cvm.GetPropertyChild("materials")?.CalculateProperties();
         cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
         cvm.GetPropertyChild("preloadLocalMaterialInstances")?.CalculateProperties();
 
-        var hasPreload = CvmMaterialTools.HasPreloadMaterials(cvm);
+        var hasPreload = HasPreloadMaterials(cvm);
 
         // iterate over dictionary and create new materials
         foreach (var (matName, resolvedMatNames) in templatesAndValues)
@@ -627,11 +648,17 @@ public class CvmMaterialTools
                 foreach (var cvp in matInstance.Values)
                 {
                     var value = ArchiveXlHelper.UnDynamifyResourceReference(cvp.Value, newMatName);
-
                     newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
                 }
 
-                mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                if (hasPreload)
+                {
+                    mesh.PreloadLocalMaterialInstances.Add(new CHandle<IMaterial>() { Chunk = newMaterialInstance });
+                }
+                else
+                {
+                    mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                }
             }
         }
 
@@ -655,6 +682,7 @@ public class CvmMaterialTools
             };
         }
     }
+
 
     /// <summary>
     /// Called from <see cref="ChunkViewModel.AddMaterialAndDefinition"/>
@@ -778,15 +806,15 @@ public class CvmMaterialTools
         return ret;
     }
 
-    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> materialEntries, bool isLocalMaterial)
+    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
     {
-        if (materialEntries.Count == 0)
+        if (matDefArray.Count == 0)
         {
             return -1;
         }
 
-        var existingIndices = materialEntries
-            .Select(m => m.IsLocalInstance == isLocalMaterial ? m.Index : -1)
+        var existingIndices = matDefArray
+            .Select(m => m.IsLocalInstance == isLocalInstance ? m.Index : -1)
             .ToList();
 
         if (existingIndices.Count == 0)
@@ -858,7 +886,7 @@ public class CvmMaterialTools
         {
             var kvp = material.Values[i];
 
-            if (kvp.Value is not IRedRef { Flags: InternalEnums.EImportFlags.Soft } redRef)
+            if (kvp.Value is not IRedRef { Flags: InternalEnums.EImportFlags.Embedded })
             {
                 continue;
             }
@@ -869,7 +897,7 @@ public class CvmMaterialTools
         return material;
     }
 
-    public static IRedType UnEmbedResourceReference(IRedType cvpValue)
+    private static IRedType UnEmbedResourceReference(IRedType cvpValue)
     {
         if (cvpValue is not IRedRef original)
         {
@@ -907,5 +935,200 @@ public class CvmMaterialTools
             _ => (IRedResourceAsyncReference) original
         };
         // @formatter:on
+    }
+
+    private record FlatMaterial(string BaseMaterial, Dictionary<string, CKeyValuePair> Properties);
+    private FlatMaterial GetFlattenedMaterial(IMaterial material, string basePath)
+    {
+        var baseMaterial = basePath;
+        Dictionary<string, CKeyValuePair> properties = new();
+
+        var currentMat = material;
+
+        while (true)
+        {
+            switch (currentMat)
+            {
+                case CMaterialInstance matInstance:
+                {
+                    foreach (var kvp in matInstance.Values)
+                    {
+                        if (kvp.Key.GetResolvedText() is not string name)
+                        {
+                            continue;
+                        }
+
+                        properties.TryAdd(name, kvp);
+                    }
+
+                    if (matInstance.BaseMaterial.DepotPath.GetString() is not { } baseMaterialPath)
+                    {
+                        goto breakOuter;
+                    }
+
+                    var baseMatRc = _archiveManager.GetCR2WFile(baseMaterialPath)?.RootChunk;
+
+                    if (baseMatRc is not IMaterial baseMat)
+                    {
+                        goto breakOuter;
+                    }
+
+                    currentMat = baseMat;
+                    baseMaterial = baseMaterialPath;
+                    break;
+                }
+                case CMaterialTemplate matTemplate:
+                {
+                    var values = matTemplate.Parameters[2];
+                    foreach (var matParam in values)
+                    {
+                        if (matParam.Chunk?.ParameterName.GetResolvedText() is not string name || string.IsNullOrEmpty(name) )
+                        {
+                            continue;
+                        }
+                        properties.TryAdd(name, CKeyValuePairFactory.Create(matParam.Chunk));
+                    }
+
+                    goto breakOuter;
+                }
+                default:
+                {
+                    _loggerService.Info($"Material {currentMat} is not a material instance or material template!");
+                    goto breakOuter;
+                }
+            }
+
+            continue;
+
+            breakOuter:
+            break;
+        }
+
+        return new FlatMaterial(baseMaterial, properties);
+    }
+
+    private bool FlattenMaterial(CMaterialInstance material)
+    {
+        var flatMaterial = GetFlattenedMaterial(material, material.BaseMaterial.DepotPath.GetString() ?? "");
+        if (material.BaseMaterial.DepotPath.GetResolvedText() == flatMaterial.BaseMaterial && material.Values.Count == flatMaterial.Properties.Count)
+        {
+            return false;
+        }
+        material.BaseMaterial = new CResourceReference<IMaterial>(flatMaterial.BaseMaterial, InternalEnums.EImportFlags.Default);
+        material.Values.Clear();
+        foreach (var cKeyValuePair in flatMaterial.Properties.Values)
+        {
+            material.Values.Add(cKeyValuePair);
+        }
+
+        return true;
+    }
+
+    public bool FlattenMiChain(CMesh mesh)
+    {
+        var ret = false;
+        foreach (var material in mesh.LocalMaterialBuffer.Materials.OfType<CMaterialInstance>())
+        {
+            ret = FlattenMaterial(material) || ret;
+        }
+        foreach (var matHandle in mesh.PreloadLocalMaterialInstances)
+        {
+            if (matHandle.Chunk is not CMaterialInstance material)
+            {
+                continue;
+            }
+
+            ret = FlattenMaterial(material) || ret;
+        }
+
+        return ret;
+    }
+
+    public bool FlattenMiChain(ChunkViewModel? cvm)
+    {
+        var ret = false;
+        switch (cvm?.ResolvedData)
+        {
+            case CMesh mesh:
+                ret = FlattenMiChain(mesh);
+                if (ret)
+                {
+                    cvm.RecalculateProperties();
+                }
+                return ret;
+            case CMaterialInstance matInstance:
+                FlattenMaterial(matInstance);
+                if (ret)
+                {
+                    cvm.RecalculateProperties();
+                }
+                return ret;
+            case CArray<IRedHandle<IMaterial>> preloadLocalMaterials:
+                var preMats = preloadLocalMaterials.Select(h => h.GetValue()).OfType<CMaterialInstance>().ToList();
+
+                preMats.ForEach((mat) =>
+                {
+                    ret = FlattenMaterial(mat) || ret;
+                });
+                if (!ret)
+                {
+                    return false;
+                }
+                preloadLocalMaterials.Clear();
+                foreach (var newPreloadMaterial in preMats)
+                {
+                    preloadLocalMaterials.Add(newPreloadMaterial);
+                }
+                foreach (var child in cvm.Properties)
+                {
+                    child.RecalculateProperties();
+                }
+
+                return ret;
+            case meshMeshMaterialBuffer:
+                ret = FlattenMiChain(cvm.GetPropertyChild("materials"));
+                break;
+            case CArray<IMaterial> materials:
+                var newMaterials = materials.OfType<CMaterialInstance>().ToList();
+                newMaterials.ForEach((mat) =>
+                {
+                    ret =  FlattenMaterial(mat) || ret;
+                });
+                if (!ret)
+                {
+                    return false;
+                }
+                materials.Clear();
+                foreach (var mat in newMaterials)
+                {
+                    materials.Add(mat);
+                }
+                break;
+            default:
+                if (cvm?.GetRootModel() is { ResolvedData: CMesh rootMesh } rootModel)
+                {
+                    ret = FlattenMiChain(rootMesh);
+                    rootModel.RecalculateProperties();
+                    RecalculateMaterialProperties(rootModel, true);
+                }
+                break;
+        }
+
+        if (ret)
+        {
+            cvm?.RecalculateProperties();
+        }
+
+        return ret;
+    }
+    public void FlattenMiChain(List<ChunkViewModel> cvmSelection)
+    {
+        var ret = false;
+        foreach (var chunkViewModel in cvmSelection)
+        {
+            ret = FlattenMiChain(chunkViewModel) || ret;
+        }
+
+        cvmSelection.FirstOrDefault()?.Tab?.Parent.SetIsDirty(ret);
     }
 }

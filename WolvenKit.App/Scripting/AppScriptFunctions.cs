@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -48,6 +48,7 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly IGameControllerFactory _gameController;
     private readonly GeometryCacheService _geometryCacheService;
     private readonly ISettingsManager _settingsManager;
+    private readonly IProjectEvents _projectEvents;
 
     public AppViewModel? AppViewModel;
 
@@ -60,8 +61,10 @@ public class AppScriptFunctions : ScriptFunctions
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
-        ISettingsManager settingsManager)
-        : base(loggerService, archiveManager, parserService)
+        ISettingsManager settingsManager,
+        RedTypeTemplateService templateService,
+        IProjectEvents projectEvents)
+        : base(loggerService, archiveManager, parserService, templateService)
     {
         _projectManager = projectManager;
         _modTools = modTools;
@@ -69,7 +72,7 @@ public class AppScriptFunctions : ScriptFunctions
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
         _settingsManager = settingsManager;
-
+        _projectEvents = projectEvents;
     }
 
     /// <summary>
@@ -159,6 +162,9 @@ public class AppScriptFunctions : ScriptFunctions
         try
         {
             action(diskPathInfo.FullName);
+            // Announce the add to the project explorer (covers SaveToProject/SaveToRaw/SaveToResources).
+            // For an overwrite the tree add is a no-op, but the publish still reloads an open editor tab.
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
         catch (Exception ex)
         {
@@ -745,6 +751,7 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         File.Delete(absoluteFilePath);
+        _projectEvents.PublishFileDeleted(absoluteFilePath);
         return !File.Exists(baseFolder);
     }
 

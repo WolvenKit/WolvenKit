@@ -45,8 +45,6 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
-            LogEntries.CollectionChanged += LogEntries_CollectionChanged;
-
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -67,35 +65,38 @@ namespace WolvenKit.Views.Tools
                 this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterDebugButton.Opacity, level => level[4] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
                 this.WhenAnyValue(v => v.ViewModel.FilterByLevel)
-                    .Subscribe(_ => LogEntries_CollectionChanged(null, null))
+                    .Subscribe(_ => RebuildFilteredEntries())
                     .DisposeWith(disposables);
             });
         }
 
-        private void LogEntries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-           
-            var filtered = LogEntries.Where(log =>
+        private bool PassesFilter(LogEntry log) =>
+            ViewModel is null || log.Level switch
             {
-                return ViewModel is null || log.Level switch
-                {
-                    Logtype.Error => ViewModel.FilterByLevel[0],
-                    Logtype.Warning => ViewModel.FilterByLevel[1],
-                    Logtype.Success => ViewModel.FilterByLevel[2],
-                    Logtype.Normal or Logtype.Important => ViewModel.FilterByLevel[3],
-                    Logtype.Debug => ViewModel.FilterByLevel[4],
-                    _ => true
-                };
-            });
+                Logtype.Error => ViewModel.FilterByLevel[0],
+                Logtype.Warning => ViewModel.FilterByLevel[1],
+                Logtype.Success => ViewModel.FilterByLevel[2],
+                Logtype.Normal or Logtype.Important => ViewModel.FilterByLevel[3],
+                Logtype.Debug => ViewModel.FilterByLevel[4],
+                _ => true
+            };
 
+        /// <summary>
+        /// Re-applies the level filter across every entry. Only for when the filter itself
+        /// changes. Appending a single entry must not come through here.
+        /// </summary>
+        private void RebuildFilteredEntries()
+        {
             FilteredLogEntries.Clear();
-            FilteredLogEntries.AddRange(filtered);
+            FilteredLogEntries.AddRange(LogEntries.Where(PassesFilter));
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
 
         private void OnNext(IChangeSet<LogEvent> obj)
         {
+            var countBefore = FilteredLogEntries.Count;
+
             foreach (var change in obj)
             {
                 switch (change.Reason)
@@ -121,6 +122,11 @@ namespace WolvenKit.Views.Tools
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
+            if (_autoscroll && FilteredLogEntries.Count != countBefore)
+            {
+                _scrollViewer?.ScrollToBottom();
+            }
         }
 
         private void AddLog(LogEvent item)
@@ -134,18 +140,17 @@ namespace WolvenKit.Views.Tools
             var brush = GetBrushForLevel(level);
 
             var message = item.RenderMessage();
-            if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
-            {
-                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
-            }
-            else
-            {
-                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
-            }
+            var uri = item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj)
+                      && infoCodeObj is ScalarValue { Value: int infoCode }
+                ? LogCodeHelper.GetUrl(infoCode)
+                : null;
 
-            if (_autoscroll)
+            var entry = new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", uri, brush);
+            LogEntries.Add(entry);
+
+            if (PassesFilter(entry))
             {
-                _scrollViewer?.ScrollToBottom();
+                FilteredLogEntries.Add(entry);
             }
         }
 
@@ -172,11 +177,15 @@ namespace WolvenKit.Views.Tools
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
 
-        private void ClearAll_Click(object sender, RoutedEventArgs e) => LogEntries.Clear();
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            LogEntries.Clear();
+            FilteredLogEntries.Clear();
+        }
 
         private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
         {
-            // regular click: open log folder 
+            // regular click: open log folder
             if (!ModifierViewStateService.IsShiftBeingHeld)
             {
                 Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });

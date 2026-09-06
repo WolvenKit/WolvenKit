@@ -244,10 +244,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    viewModel => viewModel.MainViewModel.ShowPluginCommand,
                    view => view.MenuItemShowPluginTool)
                .DisposeWith(disposables);
-            this.BindCommand(ViewModel,
-                   viewModel => viewModel.MainViewModel.ShowModsViewCommand,
-                   view => view.MenuItemShowModsView)
-               .DisposeWith(disposables);
 
             // visibility
             this.Bind(ViewModel,

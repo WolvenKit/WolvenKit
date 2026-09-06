@@ -66,7 +66,7 @@ public class AppIdleStateService
 
     private void OnActivity(object sender, PreProcessInputEventArgs e)
     {
-        if (e.StagingItem?.Input is not MouseEventArgs or KeyboardEventArgs)
+        if (e.StagingItem?.Input is not (MouseEventArgs or KeyboardEventArgs))
         {
             return;
         }
@@ -89,7 +89,7 @@ public class AppIdleStateService
     /// Will fire if the application is idle for one consecutive minute
     /// </summary>
     public event EventHandler? ThreadIdleOneMinute;
-    
+
     /// <summary>
     /// Will fire if the application is idle for five consecutive minutes
     /// </summary>

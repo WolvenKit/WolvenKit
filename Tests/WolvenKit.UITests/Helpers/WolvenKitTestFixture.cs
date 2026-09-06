@@ -28,6 +28,7 @@ public sealed class WolvenKitTestFixture : IDisposable
 
     private Application? _application;
     private UIA3Automation? _automation;
+    private int? _previousUiScale;
 
     public Application Application => _application ?? throw new InvalidOperationException("Fixture not started.");
     public UIA3Automation Automation => _automation ?? throw new InvalidOperationException("Fixture not started.");
@@ -53,6 +54,8 @@ public sealed class WolvenKitTestFixture : IDisposable
     /// </param>
     public Window Start(int startupTimeoutSeconds = 400)
     {
+        _previousUiScale = UiScaleTestSetup.ForceTo100Percent();
+
         var exePath = ResolveExePath();
         _automation = new UIA3Automation();
         _application = Application.Launch(exePath);
@@ -125,7 +128,7 @@ public sealed class WolvenKitTestFixture : IDisposable
                 Path.Combine(assemblyDir,
                     "..", "..", "..", "..", "..", "..",    // Tests/WolvenKit.UITests/bin/<config>/net…  →  repo root
                     "WolvenKit", "bin", "x64", config,
-                    "net8.0-windows10.0.17763", "win-x64",
+                    "net10.0-windows10.0.26100.0", "win-x64",
                     "WolvenKit.exe"));
 
             if (File.Exists(candidate))
@@ -170,8 +173,37 @@ public sealed class WolvenKitTestFixture : IDisposable
     public void Dispose()
     {
         try { _application?.Close(); } catch { /* best effort */ }
+
+        try
+        {
+            if (_application is { HasExited: false })
+            {
+                WaitUntil(() => _application.HasExited, timeoutMs: 15_000, pollIntervalMs: 200);
+            }
+
+            if (_application is { HasExited: false })
+            {
+                _application.Kill();
+                WaitUntil(() => _application.HasExited, timeoutMs: 5_000, pollIntervalMs: 100);
+            }
+        }
+        catch { /* best effort */ }
+
         try { _application?.Dispose(); } catch { /* best effort */ }
         try { _automation?.Dispose(); } catch { /* best effort */ }
+
+        try
+        {
+            RecentProjectsTestCleanup.RemoveProjectsUnder(TempRoot);
+        }
+        catch { /* best effort */ }
+
+        try
+        {
+            UiScaleTestSetup.Restore(_previousUiScale);
+        }
+        catch { /* best effort */ }
+        _previousUiScale = null;
 
         // Clean up temp projects created by this run.
         try

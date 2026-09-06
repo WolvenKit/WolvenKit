@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -18,28 +19,28 @@ public class CR2WListReader : IBufferReader, IDataCollector, IErrorHandler
     public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
     {
         var list = new CR2WList();
-        var result = EFileReadErrorCodes.NoError;
-        while (result != EFileReadErrorCodes.NoCr2w)
+        
+        while (_ms.Position < _ms.Length)
         {
             var reader = new CR2WReader(_ms);
             reader.ParsingError += HandleParsingError;
 
             reader.CollectData = CollectData;
 
-            result = reader.ReadFile(out var cr2wFile, false);
-            if (cr2wFile != null)
+            if (reader.ReadFile(out var cr2wFile, false) != EFileReadErrorCodes.NoError)
             {
-                byte[] data = _ms.ToArray().Skip(reader.Position).ToArray();
-                _ms = new MemoryStream(data);
-
-                list.Files.Add(cr2wFile);
-
-                if (reader.CollectData)
-                {
-                    DataCollection.Buffers ??= new List<DataCollection>();
-                    DataCollection.Buffers.Add(reader.DataCollection);
-                }
+                throw new TodoException("Unexpected error while reading CR2W list!");
             }
+
+            list.Files.Add(cr2wFile);
+
+            if (reader.CollectData)
+            {
+                DataCollection.Buffers ??= [];
+                DataCollection.Buffers.Add(reader.DataCollection);
+            }
+
+            _ms = new MemoryStream(_ms.ToArray()[reader.Position..]);
         }
 
         buffer.Data = list;

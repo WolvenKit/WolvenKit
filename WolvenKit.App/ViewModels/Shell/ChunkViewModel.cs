@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,6 +34,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
@@ -804,8 +805,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var redName = GetRedTypeFromCSType(PropertyType, Flags);
-            return redName != "" ? redName : PropertyType.Name;
+            try
+            {
+                var redName = GetRedTypeFromCSType(PropertyType, Flags);
+                return redName != "" ? redName : PropertyType.Name;
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error(
+                    $"Redtype could not be determined for {Name} with C# type: {PropertyType.Name}. Exception: {ex.Message}.");
+
+                return PropertyType.Name;
+            }
         }
     }
 
@@ -1278,9 +1289,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+        var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(handle.InnerType)
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
         var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
@@ -1309,7 +1318,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         await _appViewModel.SetActiveDialog(
-            new TypeSelectorDialogViewModel(_redTypeTemplateService, types, allowCreating) { DialogHandler = HandlePointer });
+            new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types, allowCreating) { DialogHandler = HandlePointer });
     }
 
     private bool CanAddItemToArray() =>
@@ -1350,9 +1359,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = innerType.GetGenericTypeDefinition();
         }
 
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+        var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(innerType)
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
 
@@ -1364,7 +1371,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 types = TypeHelper.GetCKeyValueEntryTypes();
                 await _appViewModel.SetActiveDialog(
-                    new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+                    new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
                     {
                         DialogHandler = HandleCKeyValuePair
                     });
@@ -1400,7 +1407,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
         {
             DialogHandler = handler
         });
@@ -1589,13 +1596,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             //    .DistinctBy(x => x.Name)
             //    .ToList();
 
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+            var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(typeof(inkWidgetReference))
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types)
             {
                 DialogHandler = HandleNewDynamicProperty
             });
@@ -1707,7 +1712,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     $"You can't create new items for {Data.RedType} yet. Please create a ticket and tell us what you need here.");
             }
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types) { DialogHandler = HandleChunk });
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, _loggerService, types) { DialogHandler = HandleChunk });
         }
     }
 

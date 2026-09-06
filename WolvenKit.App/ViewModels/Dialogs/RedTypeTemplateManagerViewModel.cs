@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -18,6 +18,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive.CR2W;
@@ -59,14 +60,13 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         _loggerService = loggerService;
         _cr2wTools = cr2wTools;
 
-        RedTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(templateService);
+        RedTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(templateService, _loggerService);
         RedTypeTemplateDropdownViewModel.PostRefresh += (_, _) => LoadTemplates();
 
-        ValidNewTypes = new ObservableCollection<TypeDesc>(AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(RedTypeTemplateService.IsTypeTemplatable)
-            .Select(x => new TypeDesc(x, x.Name))
-            .OrderBy(x => x.TypeName)
+        ValidNewTypes = new ObservableCollection<TypeDesc>(
+            AssemblyTypeIndex.GetFiltered("templatable", RedTypeTemplateService.IsTypeTemplatable)
+                .Select(x => new TypeDesc(x, x.Name))
+                .OrderBy(x => x.TypeName)
         );
         SelectedType = ValidNewTypes.FirstOrDefault()!;
     }

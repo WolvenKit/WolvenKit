@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.DependencyModel;
+using System.Text.Json;
 using SharpGLTF.Schema2;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Exceptions;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 using Vec3 = System.Numerics.Vector3;
@@ -59,27 +54,36 @@ namespace WolvenKit.Modkit.RED4
             var subMeshesCount = model.LogicalMeshes.Count;
 
             var gsAndTargetsPerSubmesh = model.LogicalMeshes.Select(submesh => {
-                var targets = Enumerable.Range(0, submesh.Primitives[0].MorphTargetsCount).Select(t =>
-                    submesh.Primitives[0].GetMorphTargetAccessors(t)
-                );
+                var primitive = submesh.Primitives[0];
+                var targets = Enumerable.Range(0, primitive.MorphTargetsCount)
+                    .Select(primitive.GetMorphTargetAccessors)
+                    .ToArray();
 
-                var hasGS = submesh.Primitives[0].GetVertexAccessor("_GARMENTSUPPORTWEIGHT") != null &&
-                            submesh.Primitives[0].GetVertexAccessor("_GARMENTSUPPORTCAP") != null;
+                var targetNames = submesh.Extras?.Deserialize<MeshExtras>()?.TargetNames?.ToList() ?? [];
+                if (targetNames.Count != targets.Length)
+                {
+                    throw new ArgumentException($"Submesh '{submesh.Name}' has {targets.Length} morph targets, but {targetNames.Count} names in extras. Please ensure the GLTF is exported correctly.");
+                }
 
-                var gsCount = hasGS ? 1 : 0;
+                var gsIndex = targetNames.IndexOf("GarmentSupport");
 
-                return (gs: targets.Take(gsCount).ToArray(), real: targets.Skip(gsCount).ToArray());
-            });
+                if (gsIndex == -1)
+                {
+                    return (gs: Array.Empty<TargetAccessor>(), real: targets);
+                }
+
+                if (targetNames.Skip(gsIndex + 1).Contains("GarmentSupport"))
+                {
+                    throw new ArgumentException($"Submesh '{submesh.Name}' contains multiple GarmentSupport targets, but only one is allowed per submesh.");
+                }
+
+                var realTargets = targets.Length == 1 ? [] : targets.Where((_, i) => i != gsIndex).ToArray();
+
+                return (gs: [targets[gsIndex]], real: realTargets);
+            }).ToArray();
 
             var garmentSupportPerSubmesh = gsAndTargetsPerSubmesh.Select(_ => _.gs).ToArray();
             var realTargetsPerSubmesh = gsAndTargetsPerSubmesh.Select(_ => _.real).ToArray();
-
-            var hasAtMostOneGsPerSubmesh = garmentSupportPerSubmesh.All(gs => gs.Length <= 1);
-
-            if (!hasAtMostOneGsPerSubmesh)
-            {
-                throw new ArgumentException("Multiple GarmentSupport targets per submesh are not allowed!");
-            }
 
             _loggerService.Debug($"{garmentSupportPerSubmesh.Count(gs => gs.Length == 1)} out of {subMeshesCount} submeshes have GarmentSupport");
 

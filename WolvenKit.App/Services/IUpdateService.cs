@@ -10,4 +10,6 @@ public interface IUpdateService
     public Task UpdateToNewestVersion();
     public Task<string> GetLatestVersionTag();
     public SemVersion? GetLocalVersion();
+    public string? GetSavedChangelog();
+    public void ClearSavedChangelog();
 }

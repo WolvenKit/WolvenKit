@@ -8,6 +8,7 @@ using System.Windows.Media;
 using DynamicData;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.App.Helpers;
 
@@ -156,6 +157,47 @@ public abstract partial class StringHelper
         return Stringify(nodeIds);
     }
 
+    public static string Stringify(scnIKEventData ikEvent, scnSceneResource scene)
+    {
+        var scnData = Stringify(ikEvent.Basic, scene);
+        if (ikEvent.ChainName.GetResolvedText() is string chainName && chainName != "")
+        {
+            return $"Chain {chainName} ({scnData})";
+        }
+
+        return scnData;
+    }
+    public static string Stringify(scnAnimTargetBasicData animEvtData, scnSceneResource scene)
+    {
+        var performerName = SceneEditingHelper.GetPerformerNameById(animEvtData.PerformerId.Id, scene)
+                            ?? $"{animEvtData.PerformerId.Id}";
+        if (!animEvtData.IsStart)
+        {
+            return $"{performerName} stop";
+        }
+
+        var targetName = SceneEditingHelper.GetPerformerNameById(animEvtData.TargetPerformerId.Id, scene);
+        var targetType = (scnLookAtTargetType)animEvtData.TargetType;
+        if (targetName is null && targetType == scnLookAtTargetType.Prop)
+        {
+            targetName = SceneEditingHelper.GetPropNameById(animEvtData.TargetPropId.Id, scene);
+        }
+
+        if (targetName is null && targetType == scnLookAtTargetType.Actor)
+        {
+            targetName = SceneEditingHelper.GetActorNameById(animEvtData.TargetActorId.Id, scene);
+        }
+
+        if (targetName is null &&
+            (animEvtData.StaticTarget.X != 0 || animEvtData.StaticTarget.Y != 0 || animEvtData.StaticTarget.Z != 0))
+        {
+            targetName = $"Position ({Stringify(animEvtData.StaticTarget)})";
+        }
+
+        targetName ??= "None";
+        return $"{performerName} => {targetName}";
+    }
+
 
     public static string Stringify(CColor color)
     {
@@ -184,12 +226,12 @@ public abstract partial class StringHelper
 
     public static string? StringifyOrNull(CName cname)
     {
-        if (cname.GetResolvedText() is not string path || path == "")
+        if (cname.GetResolvedText() is not string value || string.IsNullOrWhiteSpace(value) || value == "None")
         {
             return null;
         }
 
-        return cname.GetResolvedText();
+        return value;
     }
 
     public static string? StringifyOrNull(CString? str)
@@ -443,4 +485,6 @@ public abstract partial class StringHelper
 
         return text.Substring(0, maxLength) + "...";
     }
+
+    public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 }

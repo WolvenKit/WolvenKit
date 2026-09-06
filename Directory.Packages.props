@@ -61,37 +61,36 @@
     <PackageVersion Include="SharpGLTF.Core" Version="1.0.3" />
     <PackageVersion Include="SharpGLTF.Toolkit" Version="1.0.3" />
     <PackageVersion Include="SharpVectors.Wpf" Version="1.8.4.2" />
-    <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="Splat" Version="15.3.1" />
     <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.3.1" />
     <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="15.3.1" />
-    <PackageVersion Include="Syncfusion.Edit.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="33.2.8" />
+    <PackageVersion Include="Syncfusion.Edit.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.SfMarkdownViewer.WPF" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.Markdown" Version="34.2.2" />
+    <PackageVersion Include="Syncfusion.Shared.WPF" Version="34.2.2" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
-    <PackageVersion Include="System.Drawing.Common" Version="9.0.2" />
-    <PackageVersion Include="System.Net.Http" Version="4.3.4" />
-    <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Reflection.Metadata" Version="9.0.2" />
     <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="9.0.2" />
-    <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageVersion Include="WpfAnalyzers" Version="4.1.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
     <PackageVersion Include="Xunit.StaFact" Version="1.1.11" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
     <PackageVersion Include="FlaUI.Core" Version="4.0.0" />
@@ -100,6 +99,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.12-pre20260709125052" />
     <PackageVersion Include="semver" Version="3.0.0" />
     <PackageVersion Include="CommunityToolkit.WinUI" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />

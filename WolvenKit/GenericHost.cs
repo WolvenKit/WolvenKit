@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -61,6 +62,7 @@ namespace WolvenKit
                 .ConfigureServices((hostContext, services) =>
                 {
                     // services
+                    services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<IHashService, HashServiceExt>();                                      // can this be transient?
                     services.AddSingleton<CRUIDService>(x => new CRUIDService(false));    // can this be transient?
@@ -99,7 +101,8 @@ namespace WolvenKit
                     services.AddSingleton<IPluginService, PluginService>();
                     services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
                     services.AddSingleton<INodeSelectionService, NodeSelectionService>();
-                    services.AddSingleton<IWatcherService, WatcherService>();
+                    services.AddSingleton<IProjectEvents, ProjectEvents>();
+                    services.AddTransient<IArchiveManagerLoader, ArchiveManagerLoader>();
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();
@@ -222,9 +225,6 @@ namespace WolvenKit
 
                     services.AddTransient<WelcomePageViewModel>();
                     services.AddTransient<IViewFor<WelcomePageViewModel>, WelcomePageView>();
-
-                    services.AddTransient<ModsViewModel>();
-                    services.AddTransient<IViewFor<ModsViewModel>, ModsView>();
 
                     services.AddTransient<PluginsToolViewModel>();
                     services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();

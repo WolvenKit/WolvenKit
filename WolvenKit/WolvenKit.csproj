@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
-    <TargetFramework>net8.0-windows10.0.17763</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -18,6 +18,7 @@
     <Product>WolvenKit</Product>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Nullable>Disable</Nullable>
+    <CetCompat>false</CetCompat>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,9 +27,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>8.19.1</VersionPrefix>
+      <ServerGarbageCollection>true</ServerGarbageCollection>
+      <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>9.0.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>8.19.1</InformationalVersion>
+    <InformationalVersion>9.0.1</InformationalVersion>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
@@ -41,7 +47,6 @@
     <NoWarn>$(NoWarn);IDE0072</NoWarn>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
@@ -66,6 +71,7 @@
 
     <PackageReference Include="ReactiveUI" />
     <PackageReference Include="ReactiveUI.WPF" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
   </ItemGroup>
 
 
@@ -102,11 +108,9 @@
     <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" />
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" />
-    <PackageReference Include="System.Private.Uri" />
+    <PackageReference Include="Syncfusion.SfMarkdownViewer.WPF"/>
+    <PackageReference Include="Syncfusion.Markdown" />
+    <PackageReference Include="Syncfusion.Shared.WPF"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -1817,10 +1821,6 @@
   <ItemGroup>
     <Page Update="PathIcon.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Views\HomePage\Pages\ModsView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Dialogs\SoundModdingView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

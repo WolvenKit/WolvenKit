@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -286,4 +287,35 @@ public static partial class Cp77ProjectReferenceScanning
     /// </example>
     [GeneratedRegex(@"(((\w+\/)|(\w+\\\\?))+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
+
+    public static void DeleteEmptyFolders(this Cp77Project project, ILoggerService loggerService, IProjectEvents? projectEvents = null)
+    {
+        var deletedFolders = new List<string>();
+        DeleteEmptyFolders(project.ModDirectory, deletedFolders);
+        if (deletedFolders.Count > 0)
+        {
+            loggerService.Success($"Deleted {deletedFolders.Count} empty folders");
+
+            foreach (var folder in deletedFolders)
+            {
+                projectEvents?.PublishDirectoryDeleted(folder);
+            }
+        }
+    }
+
+    private static void DeleteEmptyFolders(string directory, List<string> deletedFolders)
+    {
+        foreach (var subdirectory in Directory.GetDirectories(directory))
+        {
+            DeleteEmptyFolders(subdirectory, deletedFolders);
+
+            if (Directory.GetFiles(subdirectory).Length != 0 || Directory.GetDirectories(subdirectory).Length != 0)
+            {
+                continue;
+            }
+
+            Directory.Delete(subdirectory);
+            deletedFolders.Add(subdirectory);
+        }
+    }
 }

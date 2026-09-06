@@ -1,0 +1,38 @@
+name: Unit Tests
+on:
+  pull_request:
+    paths:
+      - '**/*.cs'
+      - '**/*.csx'
+      - '**/*.csproj'
+      - '**/*.sln'
+      - '**/*.props'
+      - '**/*.targets'
+      - '**/*.resx'
+      - '**/*.xaml'
+  push:
+    branches: [ main, dev ]
+    paths:
+      - '**/*.cs'
+      - '**/*.csx'
+      - '**/*.csproj'
+      - '**/*.sln'
+      - '**/*.props'
+      - '**/*.targets'
+      - '**/*.resx'
+      - '**/*.xaml'
+
+jobs:
+    unit-tests:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v7
+            - name: Setup .NET Core
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: 10.x
+
+            - name: Run unit tests
+              run: |
+                  cd "Tests\WolvenKit.UnitTests"
+                  dotnet test

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.Helpers;
@@ -18,14 +20,22 @@ public interface ICvmTools
 
     void AdjustSubmeshCount(ChunkViewModel cvm);
     void UnDynamifyMaterials(ChunkViewModel? cvm);
+
+    void ExpandMeshAppearances(ChunkViewModel? cvm, bool preserveDynamicChunks = false);
     void AddMaterialAndDefinition(ChunkViewModel cvm, string newName);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
+    void FlattenMiChain(List<ChunkViewModel> cvmSelection);
     #endregion
 
     #region CvmDependencyTools
 
-    public void RegenerateVisualControllers(ChunkViewModel? cvm);
+    /// <summary>
+    /// Regenerates the visual controllers for the given ChunkViewModel and its dependencies.
+    /// </summary>
+    /// <param name="cvm">The chunk view model to regenerate for</param>
+    /// <returns>The total number of changes (for success notification)</returns>
+    public int RegenerateVisualControllers(ChunkViewModel? cvm);
 
     #endregion
 }

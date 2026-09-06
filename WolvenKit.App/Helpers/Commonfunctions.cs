@@ -6,8 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 using WolvenKit.Core.Extensions;
 
@@ -37,81 +35,6 @@ public static class Commonfunctions
             _ => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
         };
         return root?.GetValue(valueName) != null;
-    }
-
-
-    /// <summary>
-    /// Compresses a file into a zipstream.
-    /// </summary>
-    /// <param name="filename">Path to the file.</param>
-    /// <param name="zipStream">The zipstream to output to.</param>
-    /// <param name="nameOverride">Rename the file to a costum name.</param>
-    public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
-    {
-        var fi = new FileInfo(filename);
-
-        var entryName = Path.GetFileName(filename);
-        if (nameOverride != "")
-        {
-            entryName = nameOverride;
-        }
-
-        entryName = ZipEntry.CleanName(entryName);
-        var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
-        zipStream.PutNextEntry(newEntry);
-        var buffer = new byte[4096];
-        using (var streamReader = File.OpenRead(filename))
-        {
-            StreamUtils.Copy(streamReader, zipStream, buffer);
-        }
-        zipStream.CloseEntry();
-    }
-
-    /// <summary>
-    /// Compresses a folder of files into a zipstream.
-    /// </summary>
-    /// <param name="path">The path of the folder.</param>
-    /// <param name="zipStream">The output zipstream.</param>
-    /// <param name="folderOffset">The folderoffset.</param>
-    public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
-    {
-        var files = Directory.GetFiles(path);
-
-        foreach (var filename in files)
-        {
-            var fi = new FileInfo(filename);
-            var entryName = filename[folderOffset..];
-            entryName = ZipEntry.CleanName(entryName);
-            var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
-            zipStream.PutNextEntry(newEntry);
-            var buffer = new byte[4096];
-            using (var streamReader = File.OpenRead(filename))
-            {
-                StreamUtils.Copy(streamReader, zipStream, buffer);
-            }
-            zipStream.CloseEntry();
-        }
-        var folders = Directory.GetDirectories(path);
-        foreach (var folder in folders)
-        {
-            CompressFolder(folder, zipStream, folderOffset);
-        }
-    }
-
-    /// <summary>
-    /// Compresses a byte array to a zipstream.
-    /// </summary>
-    /// <param name="file">The byte array to compress.</param>
-    /// <param name="filename">The entry name.</param>
-    /// <param name="zipStream">The zipstream which we want to output this file to.</param>
-    public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
-    {
-        filename = ZipEntry.CleanName(filename);
-        var newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
-        zipStream.PutNextEntry(newEntry);
-        var buffer = new byte[4096];
-        StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
-        zipStream.CloseEntry();
     }
 
     /// <summary>

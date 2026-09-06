@@ -144,6 +144,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:UpdateDialogViewModel}">
                         <dialogs:UpdateDialog ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:MarkdownInfoViewModel}">
+                        <dialogs:MarkdownInfoDialog ViewModel="{Binding}" />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:ExtractEmbeddedFileDialogViewModel}">
                         <dialogs:ExtractEmbeddedFileDialog ViewModel="{Binding}" />
                     </DataTemplate>
@@ -180,7 +183,7 @@
                             Storyboard.TargetProperty="Opacity"
                             From="1.0"
                             To="0.0"
-                            Duration="0:0:0.3" />
+                            Duration="0:0:0.35" />
                         <!--ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
                             <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
                             <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>

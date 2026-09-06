@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Windows;
 using System.Windows.Media;
 using WolvenKit.Interfaces.Extensions;
@@ -12,6 +13,9 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
 /// </summary>
 public static class GraphNodeStyling
 {
+    private static ConcurrentDictionary<string, Brush> BrushCache = [];
+    private static ConcurrentDictionary<string, string> TitleCache = [];
+
     public static Brush GetBackgroundForSceneNodeType(scnSceneGraphNode node)
     {
         var resourceKey = node switch
@@ -174,20 +178,31 @@ public static class GraphNodeStyling
     /// </summary>
     private static Brush GetResourceWithFallback(string resourceKey, string defaultResourceKey, string hardcodedFallback)
     {
+        if (BrushCache.TryGetValue(resourceKey, out var cachedBrush))
+        {
+            return cachedBrush;
+        }
+
+        Brush brushToCache;
+
         // Try to get the specific resource
         if (Application.Current?.TryFindResource(resourceKey) is Brush brush)
         {
-            return brush;
+            brushToCache = brush;
         }
-        
-        // Fall back to default resource
-        if (Application.Current?.TryFindResource(defaultResourceKey) is Brush defaultBrush)
+        else if (Application.Current?.TryFindResource(defaultResourceKey) is Brush defaultBrush)
         {
-            return defaultBrush;
+            // Fall back to default resource
+            brushToCache = defaultBrush;
         }
-        
-        // Final fallback - hard-coded color for design-time safety
-        return new SolidColorBrush((Color)ColorConverter.ConvertFromString(hardcodedFallback));
+        else
+        {
+            // Final fallback - hard-coded color for design-time safety
+            brushToCache = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hardcodedFallback));
+        }
+
+        _ = BrushCache.TryAdd(resourceKey, brushToCache);
+        return brushToCache;
     }
 
     /// <summary>
@@ -196,23 +211,29 @@ public static class GraphNodeStyling
     public static string GetTitleForNodeType(Type nodeType)
     {
         var typeName = nodeType.Name;
-        
+
+        if (TitleCache.TryGetValue(typeName, out var cachedTitle))
+        {
+            return cachedTitle;
+        }
+
+        string titleToCache;
+
         // Quest node types - handle specific wrapper title overrides first
         if (typeof(questNodeDefinition).IsAssignableFrom(nodeType))
         {
             // Special cases where wrappers override the default title
-            return typeName switch
+            titleToCache = typeName switch
             {
                 "questCutControlNodeDefinition" => "Quest CutControl",
                 _ => GetGenericQuestNodeTitle(typeName)
             };
         }
-        
-        // Scene node types - handle special cases to match wrapper titles
-        if (typeof(scnSceneGraphNode).IsAssignableFrom(nodeType))
+        else if (typeof(scnSceneGraphNode).IsAssignableFrom(nodeType))
         {
+            // Scene node types - handle special cases to match wrapper titles
             // Special cases that have custom titles in their wrappers
-            return typeName switch
+            titleToCache = typeName switch
             {
                 "scnCutControlNode" => "Scene CutControl",
                 "questCutControlNodeDefinition" => "Quest CutControl",
@@ -220,13 +241,19 @@ public static class GraphNodeStyling
                 _ => typeName[3..^4] // Default: Remove "scn" prefix and "Node" suffix
             };
         }
-
-        if (typeof(AIbehaviorTreeNodeDefinition).IsAssignableFrom(nodeType))
+        else if (typeof(AIbehaviorTreeNodeDefinition).IsAssignableFrom(nodeType))
         {
-            return GetGenericBehaviorNodeTitle(typeName);
+            titleToCache = GetGenericBehaviorNodeTitle(typeName);
         }
-        
-        return typeName;
+
+        else
+        {
+            titleToCache = typeName;
+        }
+
+        _ = TitleCache.TryAdd(typeName, titleToCache);
+
+        return titleToCache;
     }
 
     /// <summary>

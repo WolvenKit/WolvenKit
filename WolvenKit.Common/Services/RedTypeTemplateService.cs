@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.Json;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
@@ -55,6 +56,15 @@ public class RedTypeTemplateService
 
             LoadTemplatesFromDirectory(_systemTemplateDir, SystemTemplates);
             LoadTemplatesFromDirectory(_userTemplateDir, UserTemplates);
+        }
+    }
+
+    public (IReadOnlyList<RedTypeTemplateDescriptor> User, IReadOnlyList<RedTypeTemplateDescriptor> System)
+        GetTemplateRegistrySnapshot()
+    {
+        lock (_lock)
+        {
+            return (UserTemplates.ToList(), SystemTemplates.ToList());
         }
     }
 
@@ -393,19 +403,11 @@ public class RedTypeTemplateService
     private string GetTemplateFilePath(Type type, string name, TemplateDestination src) => Path.Join(
         src == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{name}.{type.Name}.json");
 
-    private static readonly Lazy<Dictionary<string, Type>> s_typesByName = new(() =>
-        AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a =>
-            {
-                try { return a.GetTypes(); }
-                catch (ReflectionTypeLoadException ex) { return ex.Types.Where(t => t != null)!; }
-            })
-            .Where(t => t != null)
-            .Select(t => t!)
-            .GroupBy(t => t.Name)
-            .ToDictionary(g => g.Key, g => g.First()));
-
-    public static Type? ParseType(string typeName) => s_typesByName.Value.TryGetValue(typeName, out var t) ? t : null;
+    /// <remarks>
+    /// builds the map in a single TryAdd pass
+    /// and shares the underlying type scan with every other caller.
+    /// </remarks>
+    public static Type? ParseType(string typeName) => AssemblyTypeIndex.FindByName(typeName);
 
     private RedTypeTemplate DeserializeTemplate(Type type, string json)
     {

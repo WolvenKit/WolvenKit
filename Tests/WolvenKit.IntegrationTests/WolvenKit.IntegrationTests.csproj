@@ -5,8 +5,9 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <Platforms>x64</Platforms>
-    <TargetFramework>net8.0-windows10.0.17763</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <UseWpf>true</UseWpf>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,10 @@
     <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="System.Reflection.Metadata" />
     <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Xunit.StaFact" />
   </ItemGroup>
 
@@ -30,8 +35,8 @@
     <ProjectReference Include="..\..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\..\WolvenKit\WolvenKit.csproj" />
-    <Content Include="..\..\WolvenKit\bin\$(Configuration)\net8.0-windows10.0.17763\win-x64\WolvenKit.dll"
-             Condition="Exists('..\..\WolvenKit\bin\$(Configuration)\net8.0-windows10.0.17763\win-x64\WolvenKit.dll')">
+    <Content Include="..\..\WolvenKit\bin\$(Configuration)\net10.0-windows10.0.26100.0\win-x64\WolvenKit.dll"
+             Condition="Exists('..\..\WolvenKit\bin\$(Configuration)\net10.0-windows10.0.26100.0\win-x64\WolvenKit.dll')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>

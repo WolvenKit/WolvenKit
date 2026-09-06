@@ -1,0 +1,301 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using DynamicData;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Splat;
+using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.IntegrationTests.Helpers;
+using HandyControl.Tools;
+using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
+using Xunit;
+using Xunit.Abstractions;
+using Xunit.Sdk;
+using Assert = Xunit.Assert;
+
+namespace WolvenKit.IntegrationTests.App.ViewModels.Tools;
+
+static class Const
+{
+    public static string BaseDirName = "base";
+    public static string AnimationsName = "base\\animations";
+    public static string AnimMotionDbName = "base\\animations\\anim_motion_database";
+    public static string GameplayName = "base\\gameplay";
+    public static string DevicesName = "base\\gameplay\\devices";
+}
+
+public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
+{
+    private readonly string _tempProjectRoot;
+    private IHost? _host;
+    private ProjectExplorerViewModel? _projectExplorerVm;
+
+    public ProjectExplorerConvertToJsonIntegrationTests()
+    {
+        _tempProjectRoot = Path.Combine(Path.GetTempPath(), "WolvenKit_ConvertUITest_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(_tempProjectRoot);
+    }
+
+    [StaFact]
+    public async Task WhenAnimsDbSelectedAssetBrowserRightViewHasRightItems()
+    {
+        await LoadANewProject();
+
+        var expectedNumberOfItems = 27;
+
+        Assert.NotNull(_host);
+
+        var vm = _host.Services.GetRequiredService<AssetBrowserViewModel>();
+
+        // Grab the Archives and add them to the AssetBrowser
+        var archives = vm._boundRootNodes.First();
+        AddDirs(archives, vm);
+
+        // Navigate to the anim_motion_db folder
+        NavigateToAnimMotionDbFolder(vm);
+
+        // Verify the correct number of items are in the RightItems
+        Assert.Equal(expectedNumberOfItems, vm.RightItems.Count);
+
+        await AddRightItemsToProject(vm);
+        PumpDispatcher();
+        await WaitForExtractedFilesAsync();
+
+        // FileList holds files only - ProjectExplorerViewModel adds directories to FileTree and never to
+        // FileList - so every one of the imported items is counted here, with nothing to subtract.
+        Assert.Equal(expectedNumberOfItems, FilesInList());
+    }
+
+    [StaFact]
+    public async Task WhenFirstFileOfManyIsConvertedToJsonThenItAppearsInFlatFileList()
+    {
+        await LoadANewProject();
+
+        Assert.NotNull(_host);
+
+        var assetBrowser = _host.Services.GetRequiredService<AssetBrowserViewModel>();
+
+        NavigateToDevicesFolder(assetBrowser);
+        await AddRightItemsToProject(assetBrowser);
+
+        Assert.NotNull(_projectExplorerVm);
+        await WaitForExtractedFilesAsync(3601);
+
+        Assert.True(_projectExplorerVm.FileList.Count > 3600);
+
+        _projectExplorerVm.IsFlatModeEnabled = true;
+        var list = _projectExplorerVm.FileList.Where(model => !model.IsDirectory).ToList();
+            ;
+        list.Sort(Comparison);
+        var priorCount = list.Count;
+
+        Assert.NotNull(_projectExplorerVm.SelectedItems);
+
+        _projectExplorerVm.SelectedItems.Add(list.First());
+        await _projectExplorerVm.ConvertArchiveFile();
+        PumpDispatcher();
+
+        // The converted .json shows up via the watcher, not when ConvertArchiveFile returns.
+        await AsyncWait.UntilAsync(() => FilesInList() == priorCount + 1, TimeSpan.FromSeconds(60));
+
+        list = _projectExplorerVm.FileList.Where(model => !model.IsDirectory).ToList();
+
+        var count = list.Count;
+        Assert.True(count - priorCount == 1, $"expected exactly one new file node, went from {priorCount} to {count}.");
+    }
+
+    private int Comparison(FileSystemModel x, FileSystemModel y)
+        => string.Compare(x.GameRelativePath, y.GameRelativePath, StringComparison.Ordinal);
+
+    private int FilesInList() => _projectExplorerVm!.FileList.Count(m => !m.IsDirectory);
+
+    /// <summary>
+    /// Waits for the extraction to become visible in the project explorer. The awaited
+    /// <see cref="AssetBrowserViewModel.AddSelectedAsync"/> only guarantees the files reached disk;
+    /// ProjectExplorerViewModel puts them in the tree afterwards, on its own thread.
+    /// </summary>
+    private async Task WaitForExtractedFilesAsync(int minimumFiles = 1)
+    {
+        Assert.True(
+            await AsyncWait.UntilCountSettlesAsync(
+                FilesInList,
+                minimumFiles,
+                TimeSpan.FromSeconds(120)),
+            $"Project explorer never settled on at least {minimumFiles} extracted file(s); last saw {FilesInList()}.");
+    }
+
+    private async Task AddRightItemsToProject(AssetBrowserViewModel vm)
+    {
+        // Set all the RightItems to Checked so they can be added to ProjectManager
+        vm.RightItems.ToList().ForEach(item => item.IsChecked = true);
+
+        // Add the files to the mod project
+        await vm.AddSelectedAsync();
+    }
+
+    private void NavigateToBaseDir(AssetBrowserViewModel vm)
+    {
+        var archives = vm._boundRootNodes.First();
+        AddDirs(archives, vm);
+
+        var baseDir = vm.LeftItems.First().Directories[Const.BaseDirName];
+        AddDirs(baseDir, vm);
+    }
+
+    private void NavigateToAnimMotionDbFolder(AssetBrowserViewModel vm)
+    {
+        NavigateToBaseDir(vm);
+
+        var animations = vm.LeftItems.First()
+            .Directories[Const.BaseDirName]
+            .Directories[Const.AnimationsName];
+        AddDirs(animations, vm);
+
+        var animMotionDb = vm.LeftItems.First()
+            .Directories[Const.BaseDirName]
+            .Directories[Const.AnimationsName]
+            .Directories[Const.AnimMotionDbName];
+        AddDirs(animMotionDb, vm);
+    }
+
+    private void NavigateToDevicesFolder(AssetBrowserViewModel vm)
+    {
+        NavigateToBaseDir(vm);
+
+        var gameplay = vm.LeftItems.First()
+            .Directories[Const.BaseDirName]
+            .Directories[Const.GameplayName];
+        AddDirs(gameplay, vm);
+
+        var devices = vm.LeftItems.First()
+            .Directories[Const.BaseDirName]
+            .Directories[Const.GameplayName]
+            .Directories[Const.DevicesName];
+        AddDirs(devices, vm);
+    }
+
+
+    private void AddDirs(RedFileSystemModel model,
+        AssetBrowserViewModel vm)
+    {
+        vm.RightItems.Clear();
+
+        vm.RightItems.AddRange(model.Directories
+            .Select(h => new RedDirectoryViewModel(h.Value))
+            .OrderBy(el => Regex.Replace(el.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+        vm.RightItems.AddRange(model.Files
+            .Select(h => new RedFileViewModel(h))
+            .OrderBy(el => Regex.Replace(el.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+    }
+
+    private static string ResolveGameDirectory()
+    {
+        var dir = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
+        if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
+            return dir;
+
+        throw new XunitException("CP77_DIR user environment variable must point to a valid Cyberpunk 2077 installation.");
+    }
+
+    public void Dispose()
+    {
+        try
+        {
+            // Stop the file-system watcher before the host goes away: its polling thread outlives
+            // Dispose otherwise and keeps touching a temp directory this method is about to delete,
+            // which leaks work and log noise into whichever test runs next.
+            _projectExplorerVm?.StopWatcher();
+
+            _host?.Dispose();
+            RecentProjectsTestCleanup.RemoveProjectsUnder(_tempProjectRoot);
+            if (Directory.Exists(_tempProjectRoot))
+                Directory.Delete(_tempProjectRoot, true);
+        }
+        catch { /* best effort */ }
+    }
+
+    private static void PumpDispatcher()
+    {
+        try
+        {
+            var disp = System.Windows.Application.Current?.Dispatcher;
+            disp?.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* best effort in test env */ }
+    }
+
+    private async Task LoadANewProject()
+    {
+        // Setup Host
+        _host = IntegrationTestHost.Create();
+
+        // Setup Services
+        var services = _host.Services;
+        services.UseMicrosoftDependencyResolver();
+
+        // Setup DI Resolver
+        var resolver = Locator.CurrentMutable;
+        resolver.InitializeSplat();
+
+        // Setup Hash Services (needed for archives to load properly)
+        var hashService = services.GetRequiredService<IHashService>();
+        hashService.Load();
+
+        // Setup the Settings Manager & Game Directory
+        var gameDir = ResolveGameDirectory();
+        var settingsManager = services.GetRequiredService<ISettingsManager>();
+        var exePath = Path.Combine(gameDir, "bin", "x64", "Cyberpunk2077.exe");
+        settingsManager.CP77ExecutablePath = exePath;
+
+        // Grab the App View Model
+        var appViewModel = services.GetRequiredService<AppViewModel>();
+
+        // Grab the GameController
+        var gameControllerFactory = services.GetRequiredService<IGameControllerFactory>();
+        var controller = gameControllerFactory.GetRed4Controller();
+        Assert.NotNull(controller);
+
+        // Grab the Project Manager
+        var projectManager = services.GetRequiredService<IProjectManager>();
+
+        // Grab the Project Explorer
+        _projectExplorerVm = appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+
+        // Create a new Project & Add it to AppViewModel
+        var projectWizard = services.GetRequiredService<ProjectWizardViewModel>();
+        projectWizard.Author = "FF:06:B5";
+        projectWizard.ModName = "Cyberpunk2077";
+        projectWizard.ProjectName = "Make Misty Hot";
+        projectWizard.ProjectPath = _tempProjectRoot;
+        await appViewModel.NewProjectTask(projectWizard);
+
+        Assert.True(
+            await AsyncWait.UntilAsync(
+                () => _projectExplorerVm.ActiveProject is not null,
+                TimeSpan.FromSeconds(30)),
+            "Project explorer never adopted the new project.");
+
+        // Verify the project propagated to the right places
+        Assert.NotNull(projectManager.ActiveProject);
+        Assert.NotNull(_projectExplorerVm.ActiveProject);
+
+        await _host!.Services.GetRequiredService<IArchiveManagerLoader>().LoadArchiveManagerAsync();
+    }
+}

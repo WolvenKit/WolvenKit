@@ -133,18 +133,19 @@ public partial class CR2WReader
             ReadChunk(i);
         }
 
+        var clones = new List<RedBuffer>();
         for (var i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
         {
             var buffer = ReadBuffer(_cr2wFile.Info.BufferInfo[i]);
             buffer.RootChunk = _cr2wFile.RootChunk;
 
-            if (!BufferQueue.ContainsKey(i))
+            if (!BufferQueue.TryGetValue(i, out var queue))
             {
                 LoggerService?.Warning("Unused buffer found!");
                 continue;
             }
 
-            foreach (var pointer in BufferQueue[i])
+            foreach (var pointer in queue)
             {
                 var clone = buffer.Clone();
 
@@ -156,7 +157,7 @@ public partial class CR2WReader
 
                 pointer.SetValue(clone);
 
-                ParseBuffer(clone);
+                clones.Add(clone);
             }
 
             BufferQueue.Remove(i);
@@ -165,6 +166,11 @@ public partial class CR2WReader
         if (BufferQueue.Count > 0)
         {
             throw new TodoException($"The CR2W file is missing {BufferQueue.Count} buffer(s)");
+        }
+
+        foreach (var clone in clones)
+        {
+            ParseBuffer(clone);
         }
 
         foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)

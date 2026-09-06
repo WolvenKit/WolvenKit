@@ -144,12 +144,6 @@ public partial class BehaviorGraphViewModel : RedDocumentTabViewModel, IDisposab
         UpdateTabContent(value);
     }
 
-    public override void Unload()
-    {
-        Dispose();
-        base.Unload();
-    }
-
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposed && disposing)
