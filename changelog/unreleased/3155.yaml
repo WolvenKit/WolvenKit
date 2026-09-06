@@ -1,6 +1,0 @@
-changes:
-    - type: "removed"
-      packages: ["App"]
-      pr-number: 3155
-      author: "notaspirit"
-      description: "Removed mod manager"
