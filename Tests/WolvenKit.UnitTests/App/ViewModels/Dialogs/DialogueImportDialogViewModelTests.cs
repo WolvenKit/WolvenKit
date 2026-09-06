@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.UnitTests.App.ViewModels.Dialogs;
 
@@ -68,8 +69,8 @@ public class DialogueImportDialogViewModelTests
 
     /// <summary>The scene these tests import into: two cast members and a player actor.</summary>
     private static DialogueImportDialogViewModel ViewModel(
-        IEnumerable<ExistingSceneLine>? existingLines = null,
-        IEnumerable<ulong>? existingOptions = null) =>
+        IEnumerable<scnscreenplayDialogLine>? existingLines = null,
+        IEnumerable<scnscreenplayChoiceOption>? existingOptions = null) =>
         new(new DialogueImportDialogOptions(
             "q000_ripperdoc",
             existingLines ?? [],
@@ -80,19 +81,27 @@ public class DialogueImportDialogViewModelTests
                 new SceneActorOption(2, "Player", isPlayer: true)
             ]));
 
-    /// <summary>A line the scene already carries, as the screenplay store would report it.</summary>
-    private static ExistingSceneLine InScene(
+    /// <summary>Creates an existing screenplay line.</summary>
+    private static scnscreenplayDialogLine InScene(
         ulong locStringId,
         uint? screenplayLineId = 4_097,
         uint? speaker = null,
         uint? addressee = null) =>
         new()
         {
-            LocStringId = locStringId,
-            ScreenplayLineId = screenplayLineId,
-            SpeakerActorId = speaker,
-            AddresseeActorId = addressee
+            LocstringId = new scnlocLocstringId { Ruid = locStringId },
+            // Defaults represent an unset actor and an unassigned item id.
+            ItemId = new scnscreenplayItemId
+            {
+                Id = screenplayLineId ?? SceneEditingHelper.UnassignedScreenplayItemId
+            },
+            Speaker = new scnActorId { Id = speaker ?? SceneActorOption.NoActorId },
+            Addressee = new scnActorId { Id = addressee ?? SceneActorOption.NoActorId }
         };
+
+    /// <summary>Creates an existing screenplay choice option.</summary>
+    private static scnscreenplayChoiceOption OptionInScene(ulong locStringId) =>
+        new() { LocstringId = new scnlocLocstringId { Ruid = locStringId } };
 
     [TestMethod]
     public void NamesTheSceneItIsImportingInto()
@@ -211,7 +220,7 @@ public class DialogueImportDialogViewModelTests
     {
         // Nothing plays an option - the player picks it - so there is nothing a section could do
         // with one the scene already has.
-        var viewModel = ViewModel(existingOptions: [1003UL]);
+        var viewModel = ViewModel(existingOptions: [OptionInScene(1003)]);
 
         viewModel.LoadPayload(ThreeLines);
 
@@ -261,7 +270,7 @@ public class DialogueImportDialogViewModelTests
     {
         // The two halves of the screenplay store number and key themselves independently, so a
         // locstring in one says nothing about the other.
-        var viewModel = ViewModel(existingLines: [InScene(1003)], existingOptions: [1001UL]);
+        var viewModel = ViewModel(existingLines: [InScene(1003)], existingOptions: [OptionInScene(1001)]);
 
         viewModel.LoadPayload(ThreeLines);
 
@@ -283,16 +292,16 @@ public class DialogueImportDialogViewModelTests
         // new lines first and the old ones after.
         CollectionAssert.AreEqual(
             new ulong[] { 1001, 1002, 1003 },
-            selections.Select(selection => selection.Line.LocStringId).ToArray());
+            selections.Select(selection => (ulong)selection.Line.LocStringId).ToArray());
 
         var reused = selections[1];
 
         Assert.IsTrue(reused.IsAlreadyInScene);
-        Assert.AreEqual(4_097U, reused.ExistingScreenplayLineId);
-        Assert.AreEqual(1U, reused.SpeakerActorId, "the scene's speaker, not the export's");
+        Assert.AreEqual(4_097U, (uint)reused.ExistingLine!.ItemId.Id);
+        Assert.AreEqual(1U, (uint)reused.Speaker!.Id, "the scene's speaker, not the export's");
 
         Assert.IsFalse(selections[0].IsAlreadyInScene);
-        Assert.IsNull(selections[0].ExistingScreenplayLineId);
+        Assert.IsNull(selections[0].ExistingLine);
     }
 
     [TestMethod]
@@ -318,7 +327,7 @@ public class DialogueImportDialogViewModelTests
     {
         // Every line already in the scene: taking them writes nothing, and the section is the only
         // thing that makes taking them worth anything.
-        var viewModel = ViewModel(existingLines: [InScene(1001), InScene(1002)], existingOptions: [1003UL]);
+        var viewModel = ViewModel(existingLines: [InScene(1001), InScene(1002)], existingOptions: [OptionInScene(1003)]);
         viewModel.LoadPayload(ThreeLines);
 
         viewModel.SelectAllCommand.Execute(null);
@@ -368,10 +377,10 @@ public class DialogueImportDialogViewModelTests
         var imported = viewModel.GetLinesToImport();
 
         Assert.AreEqual(2, imported.Count);
-        Assert.AreEqual(1001UL, imported[0].Line.LocStringId);
-        Assert.AreEqual<uint?>(0u, imported[0].SpeakerActorId);
-        Assert.AreEqual<uint?>(1u, imported[0].AddresseeActorId, "the user's pick beats the matched name");
-        Assert.AreEqual(1003UL, imported[1].Line.LocStringId);
+        Assert.AreEqual(1001UL, (ulong)imported[0].Line.LocStringId);
+        Assert.AreEqual(0u, (uint)imported[0].Speaker!.Id);
+        Assert.AreEqual(1u, (uint)imported[0].Addressee!.Id, "the user's pick beats the matched name");
+        Assert.AreEqual(1003UL, (ulong)imported[1].Line.LocStringId);
     }
 
     [TestMethod]
@@ -384,14 +393,14 @@ public class DialogueImportDialogViewModelTests
 
         var imported = viewModel.GetLinesToImport();
 
-        Assert.IsNull(imported[0].SpeakerActorId);
-        Assert.AreEqual<uint?>(2u, imported[0].AddresseeActorId);
+        Assert.IsNull(imported[0].Speaker);
+        Assert.AreEqual(2u, (uint)imported[0].Addressee!.Id);
     }
 
     [TestMethod]
     public void NeverHandsBackALineTheSceneAlreadyCarriesAsOneToWrite()
     {
-        var viewModel = ViewModel(existingLines: [InScene(1001)], existingOptions: [1003UL]);
+        var viewModel = ViewModel(existingLines: [InScene(1001)], existingOptions: [OptionInScene(1003)]);
         viewModel.LoadPayload(ThreeLines);
 
         // Asked for outright, both of them. The line comes back marked as the scene's own, so the
@@ -415,7 +424,7 @@ public class DialogueImportDialogViewModelTests
     [TestMethod]
     public void SelectsAndDeselectsEverythingItIsAllowedTo()
     {
-        var viewModel = ViewModel(existingLines: [InScene(1001)], existingOptions: [1003UL]);
+        var viewModel = ViewModel(existingLines: [InScene(1001)], existingOptions: [OptionInScene(1003)]);
         viewModel.LoadPayload(ThreeLines);
 
         viewModel.SelectNoneCommand.Execute(null);
@@ -576,12 +585,11 @@ public class DialogueImportDialogViewModelTests
         Assert.AreEqual(1, viewModel.SelectedExistingCount);
         Assert.IsTrue(viewModel.HasSectionOnlySelection);
 
-        // Handed back saying the scene has it but naming no id, which is what tells the import to
-        // give the entry one.
+        // Existing entries with unassigned item ids are returned for repair.
         var selection = viewModel.GetLinesToImport().Single(line => line.Line.LocStringId == 1001);
 
         Assert.IsTrue(selection.IsAlreadyInScene);
-        Assert.IsNull(selection.ExistingScreenplayLineId);
+        Assert.IsFalse(SceneEditingHelper.HasAssignedItemId(selection.ExistingLine!.ItemId));
     }
 
     [TestMethod]
@@ -611,15 +619,17 @@ public class DialogueImportDialogViewModelTests
         viewModel.LoadPayload(TimedLines);
 
         var selection = viewModel.GetLinesToImport()[0];
-        var sectionLine = selection.ToSectionLine(257);
+        var sectionLine = selection.ToSectionLine(new scnscreenplayItemId { Id = 257 });
 
-        Assert.AreEqual(257U, sectionLine.ScreenplayLineId);
+        Assert.AreEqual(257U, (uint)sectionLine.ScreenplayLineId.Id);
         Assert.AreEqual(1_988U, sectionLine.DurationMs);
         Assert.AreEqual(1_500U, sectionLine.StartTimeMs, "where the export placed it in the conversation");
-        Assert.AreEqual(0U, sectionLine.SpeakerActorId, "Viktor Vektor, matched against the cast");
-        Assert.AreEqual(2U, sectionLine.AddresseeActorId, "V, which is always the first player actor");
-        Assert.AreEqual("Vo_Context_Quest", sectionLine.VoContext);
-        Assert.AreEqual("Vo_Expression_Spoken", sectionLine.VoExpression);
+        Assert.AreEqual(0U, (uint)sectionLine.Speaker!.Id, "Viktor Vektor, matched against the cast");
+        Assert.AreEqual(2U, (uint)sectionLine.Addressee!.Id, "V, which is always the first player actor");
+        Assert.AreEqual(Enums.locVoiceoverContext.Vo_Context_Quest, (Enums.locVoiceoverContext)sectionLine.VoContext!.Value);
+        Assert.AreEqual(
+            Enums.locVoiceoverExpression.Vo_Expression_Spoken,
+            (Enums.locVoiceoverExpression)sectionLine.VoExpression!.Value);
         Assert.AreEqual("Welcome to Night City.", sectionLine.Text);
     }
 

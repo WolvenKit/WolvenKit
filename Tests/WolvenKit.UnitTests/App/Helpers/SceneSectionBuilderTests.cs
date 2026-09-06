@@ -22,15 +22,15 @@ public class SceneSectionBuilderTests
         uint? speaker = null,
         uint? addressee = null,
         string text = "",
-        string voContext = "",
-        string voExpression = "") =>
+        Enums.locVoiceoverContext? voContext = null,
+        Enums.locVoiceoverExpression? voExpression = null) =>
         new()
         {
-            ScreenplayLineId = screenplayLineId,
+            ScreenplayLineId = new scnscreenplayItemId { Id = screenplayLineId },
             DurationMs = durationMs,
             StartTimeMs = startTimeMs,
-            SpeakerActorId = speaker,
-            AddresseeActorId = addressee,
+            Speaker = speaker is { } speakerId ? new scnActorId { Id = speakerId } : null,
+            Addressee = addressee is { } addresseeId ? new scnActorId { Id = addresseeId } : null,
             Text = text,
             VoContext = voContext,
             VoExpression = voExpression
@@ -202,8 +202,9 @@ public class SceneSectionBuilderTests
     {
         var section = SceneSectionBuilder.Build(
             [
-                Line(voContext: "Vo_Context_Community", voExpression: "Vo_Expression_Phone"),
-                Line(voContext: "Vo_Context_Whatever", voExpression: "")
+                Line(voContext: Enums.locVoiceoverContext.Vo_Context_Community,
+                     voExpression: Enums.locVoiceoverExpression.Vo_Expression_Phone),
+                Line(voContext: null, voExpression: null)
             ]);
 
         var events = EventsOf(section.Node);
@@ -215,8 +216,7 @@ public class SceneSectionBuilderTests
             Enums.locVoiceoverExpression.Vo_Expression_Phone,
             (Enums.locVoiceoverExpression)events[0].VoParams.VoExpression);
 
-        // A name the game does not know is left off rather than guessed at, which leaves the same
-        // default the scene editor's own Add Dialogue writes.
+        // Missing or invalid voiceover parameters keep the event defaults.
         Assert.AreEqual(
             Enums.locVoiceoverContext.Vo_Context_Quest,
             (Enums.locVoiceoverContext)events[1].VoParams.VoContext);
@@ -301,11 +301,11 @@ public class SceneSectionBuilderTests
     [TestMethod]
     public void NamesTheSectionAfterTheConversationItCameFrom()
     {
-        Assert.AreEqual("showcase", SceneSectionBuilder.GetNotablePointName("Showcase"));
-        Assert.AreEqual("ripperdoc_intro", SceneSectionBuilder.GetNotablePointName("Ripperdoc Intro"));
-        Assert.AreEqual("q000_wakeup", SceneSectionBuilder.GetNotablePointName(" q000 - wakeup! "));
-        Assert.AreEqual("imported_dialogue", SceneSectionBuilder.GetNotablePointName(""));
-        Assert.AreEqual("imported_dialogue", SceneSectionBuilder.GetNotablePointName(null));
-        Assert.AreEqual("imported_dialogue", SceneSectionBuilder.GetNotablePointName("---"));
+        Assert.AreEqual("showcase", SceneSectionBuilder.SanitizeNotablePointName("Showcase"));
+        Assert.AreEqual("ripperdoc_intro", SceneSectionBuilder.SanitizeNotablePointName("Ripperdoc Intro"));
+        Assert.AreEqual("q000_wakeup", SceneSectionBuilder.SanitizeNotablePointName(" q000 - wakeup! "));
+        Assert.AreEqual("imported_dialogue", SceneSectionBuilder.SanitizeNotablePointName(""));
+        Assert.AreEqual("imported_dialogue", SceneSectionBuilder.SanitizeNotablePointName(null));
+        Assert.AreEqual("imported_dialogue", SceneSectionBuilder.SanitizeNotablePointName("---"));
     }
 }

@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction.Options;
+using WolvenKit.RED4.Types;
 using Clipboard = System.Windows.Clipboard;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -23,19 +24,19 @@ public sealed class DialogueImportSelection
     public required ImportedDialogueLine Line { get; init; }
 
     /// <summary>Actor to write as the line's speaker, or null to leave it unset.</summary>
-    public uint? SpeakerActorId { get; init; }
+    public scnActorId? Speaker { get; init; }
 
-    /// <inheritdoc cref="SpeakerActorId"/>
-    public uint? AddresseeActorId { get; init; }
-
-    /// <summary>Whether the scene already carries a screenplay entry for this line.</summary>
-    public bool IsAlreadyInScene { get; init; }
+    /// <inheritdoc cref="Speaker"/>
+    public scnActorId? Addressee { get; init; }
 
     /// <summary>
-    /// The item id of the entry the scene already has, or null where that entry carries none yet
-    /// and the import is to give it one.
+    /// Existing screenplay entry for this line, or null for a new line.
+    /// Section events reuse this entry instead of creating a duplicate.
     /// </summary>
-    public uint? ExistingScreenplayLineId { get; init; }
+    public scnscreenplayDialogLine? ExistingLine { get; init; }
+
+    /// <summary>Whether an existing screenplay entry was matched.</summary>
+    public bool IsAlreadyInScene => ExistingLine is not null;
 
     /// <summary>
     /// The line as a section plays it. Length and voiceover parameters come off the export; the
@@ -45,11 +46,11 @@ public sealed class DialogueImportSelection
     /// The item id the line is in the screenplay store under. A section binds to its lines by item
     /// id alone, so this must be the id actually written.
     /// </param>
-    public SectionDialogueLine ToSectionLine(uint screenplayLineId) => new()
+    public SectionDialogueLine ToSectionLine(scnscreenplayItemId screenplayLineId) => new()
     {
         ScreenplayLineId = screenplayLineId,
-        SpeakerActorId = SpeakerActorId,
-        AddresseeActorId = AddresseeActorId,
+        Speaker = Speaker,
+        Addressee = Addressee,
         DurationMs = Line.DurationMs,
         StartTimeMs = Line.StartTimeMs,
         Text = Line.EmbeddedText,
@@ -66,10 +67,15 @@ public sealed class DialogueImportSelection
 /// </summary>
 public partial class DialogueImportEntryViewModel : ObservableObject
 {
+    /// <param name="line">Imported line data.</param>
+    /// <param name="isDuplicate">Whether the locstring id already exists.</param>
+    /// <param name="existingLine">Existing screenplay entry, when matched.</param>
+    /// <param name="actorOptions">Available actor choices.</param>
+    /// <param name="resolver">Speaker-name resolver.</param>
     public DialogueImportEntryViewModel(
         ImportedDialogueLine line,
         bool isDuplicate,
-        ExistingSceneLine? existingLine,
+        scnscreenplayDialogLine? existingLine,
         IReadOnlyList<SceneActorOption> actorOptions,
         DialogueSpeakerResolver resolver)
     {
@@ -84,8 +90,8 @@ public partial class DialogueImportEntryViewModel : ObservableObject
         if (existingLine is not null)
         {
             // The scene's answer, not the export's: the entry is not being rewritten.
-            _speakerActor = FindActor(existingLine.SpeakerActorId, actorOptions);
-            _addresseeActor = FindActor(existingLine.AddresseeActorId, actorOptions);
+            _speakerActor = FindActor(existingLine.Speaker, actorOptions);
+            _addresseeActor = FindActor(existingLine.Addressee, actorOptions);
         }
         else
         {
@@ -105,7 +111,7 @@ public partial class DialogueImportEntryViewModel : ObservableObject
     /// The entry the scene already carries for this line. Null for a new line, and for a choice
     /// option - nothing plays an option, so there is nothing to do with one the scene has.
     /// </summary>
-    public ExistingSceneLine? ExistingLine { get; }
+    public scnscreenplayDialogLine? ExistingLine { get; }
 
     /// <summary>
     /// Whether taking this line only feeds a section, leaving the screenplay store alone. The scene
@@ -117,7 +123,8 @@ public partial class DialogueImportEntryViewModel : ObservableObject
     /// Whether the entry the scene has carries no item id yet. Taking the line gives it one, since
     /// a section's event has to have something to point at.
     /// </summary>
-    public bool NeedsItemId => ExistingLine is { ScreenplayLineId: null };
+    public bool NeedsItemId =>
+        ExistingLine is not null && !SceneEditingHelper.HasAssignedItemId(ExistingLine.ItemId);
 
     /// <summary>
     /// Whether the line is the user's to take. A duplicate line is, for a section's sake; a
@@ -242,16 +249,20 @@ public partial class DialogueImportEntryViewModel : ObservableObject
     }
 
     /// <summary>The dropdown entry for an actor id, or "no actor" where there is none.</summary>
-    private static SceneActorOption FindActor(uint? actorId, IReadOnlyList<SceneActorOption> actorOptions)
+    /// <param name="actorId">The actor id to find.</param>
+    /// <param name="actorOptions">Available actor choices.</param>
+    private static SceneActorOption FindActor(
+        scnActorId? actorId, IReadOnlyList<SceneActorOption> actorOptions)
     {
-        if (actorId is not { } id || id == SceneActorOption.NoActorId)
+        if (actorId is null || actorId.Id == SceneActorOption.NoActorId)
         {
             return SceneActorOption.None;
         }
 
         // An id the scene's cast no longer runs to shows as unset: the dropdown can only offer
         // actors the scene has.
-        return actorOptions.FirstOrDefault(option => option.ActorId == id) ?? SceneActorOption.None;
+        return actorOptions.FirstOrDefault(option => option.ActorId == actorId.Id) ??
+               SceneActorOption.None;
     }
 }
 
@@ -262,8 +273,8 @@ public partial class DialogueImportEntryViewModel : ObservableObject
 /// </summary>
 public partial class DialogueImportDialogViewModel : DialogViewModel
 {
-    private readonly IReadOnlyDictionary<ulong, ExistingSceneLine> _existingLines;
-    private readonly HashSet<ulong> _existingOptionLocStrings;
+    private readonly IReadOnlyDictionary<CRUID, scnscreenplayDialogLine> _existingLines;
+    private readonly HashSet<CRUID> _existingOptionLocStrings;
     private readonly DialogueSpeakerResolver _speakerResolver;
 
     /// <summary>Where the payload being read came from, named once in the status line.</summary>
@@ -540,20 +551,21 @@ public partial class DialogueImportDialogViewModel : DialogViewModel
             .Select(entry => new DialogueImportSelection
             {
                 Line = entry.Line,
-                SpeakerActorId = ActorIdOf(entry.SpeakerActor),
-                AddresseeActorId = ActorIdOf(entry.AddresseeActor),
-                IsAlreadyInScene = entry.IsSectionOnly,
-                ExistingScreenplayLineId = entry.ExistingLine?.ScreenplayLineId
+                Speaker = ActorIdOf(entry.SpeakerActor),
+                Addressee = ActorIdOf(entry.AddresseeActor),
+                ExistingLine = entry.ExistingLine
             })
             .ToList();
 
     /// <summary>The entry the scene has for a locstring, or null where it has none.</summary>
-    private ExistingSceneLine? FindExistingLine(ulong locStringId) =>
+    /// <param name="locStringId">The locstring id to look up.</param>
+    private scnscreenplayDialogLine? FindExistingLine(CRUID locStringId) =>
         _existingLines.TryGetValue(locStringId, out var existingLine) ? existingLine : null;
 
     /// <summary>An actor id to write, or null where the user left the line unassigned.</summary>
-    private static uint? ActorIdOf(SceneActorOption? option) =>
-        option is null || option.IsNone ? null : option.ActorId;
+    /// <param name="option">Selected actor option.</param>
+    private static scnActorId? ActorIdOf(SceneActorOption? option) =>
+        option is null || option.IsNone ? null : new scnActorId { Id = option.ActorId };
 
     private void SetSelection(bool isSelected)
     {

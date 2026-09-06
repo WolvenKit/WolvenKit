@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.App.Helpers;
 
@@ -13,13 +14,13 @@ namespace WolvenKit.App.Helpers;
 public sealed class SectionDialogueLine
 {
     /// <summary>The screenplay entry the event plays.</summary>
-    public required uint ScreenplayLineId { get; init; }
+    public required scnscreenplayItemId ScreenplayLineId { get; init; }
 
     /// <summary>Who says it, or null if unassigned.</summary>
-    public uint? SpeakerActorId { get; init; }
+    public scnActorId? Speaker { get; init; }
 
-    /// <inheritdoc cref="SpeakerActorId"/>
-    public uint? AddresseeActorId { get; init; }
+    /// <inheritdoc cref="Speaker"/>
+    public scnActorId? Addressee { get; init; }
 
     /// <summary>
     /// How long the recording runs, in milliseconds, or 0 to estimate it from <see cref="Text"/>.
@@ -35,11 +36,15 @@ public sealed class SectionDialogueLine
     /// <summary>Used only to estimate a duration the export did not give.</summary>
     public string Text { get; init; } = "";
 
-    /// <summary>A <c>locVoiceoverContext</c> by name, e.g. "Vo_Context_Quest". Empty for the default.</summary>
-    public string VoContext { get; init; } = "";
+    /// <summary>
+    /// Voiceover context to write, or null to keep the default.
+    /// </summary>
+    public CEnum<locVoiceoverContext>? VoContext { get; init; }
 
-    /// <summary>A <c>locVoiceoverExpression</c> by name, e.g. "Vo_Expression_Spoken".</summary>
-    public string VoExpression { get; init; } = "";
+    /// <summary>
+    /// Voiceover expression to write, or null to keep the default.
+    /// </summary>
+    public CEnum<locVoiceoverExpression>? VoExpression { get; init; }
 }
 
 /// <summary>What a section came out as, so the caller need not walk the node again.</summary>
@@ -60,8 +65,7 @@ public sealed class BuiltDialogueSection
     public required int EstimatedDurationCount { get; init; }
 
     /// <summary>
-    /// Lines the export gave a start time for, as against ones laid end to end. An older export
-    /// places none of them.
+    /// Lines with explicit start times from the export.
     /// </summary>
     public required int PlacedByExportCount { get; init; }
 }
@@ -105,7 +109,7 @@ public static class SceneSectionBuilder
     /// Characters a second to read an untimed line at. Near Cyberpunk's own delivery, and a guess
     /// the user can drag on the timeline afterwards.
     /// </summary>
-    private const double EstimatedCharactersPerSecond = 14;
+    private const double estimatedCharactersPerSecond = 14;
 
     /// <summary>
     /// Builds the section. The node comes back without a node id - the graph hands one out when it
@@ -161,15 +165,15 @@ public static class SceneSectionBuilder
                 Id = new scnSceneEventId { Id = random.NextCRUID() },
                 StartTime = startTime,
                 Duration = duration,
-                ScreenplayLineId = new scnscreenplayItemId { Id = line.ScreenplayLineId },
+                ScreenplayLineId = new scnscreenplayItemId { Id = line.ScreenplayLineId.Id },
                 VoParams = BuildVoParams(line)
             }));
 
             cursor = startTime + duration;
             end = Math.Max(end, cursor);
 
-            AddActor(line.SpeakerActorId, actorIds, seenActorIds);
-            AddActor(line.AddresseeActorId, actorIds, seenActorIds);
+            AddActor(line.Speaker, actorIds, seenActorIds);
+            AddActor(line.Addressee, actorIds, seenActorIds);
         }
 
         foreach (var actorId in actorIds)
@@ -177,7 +181,7 @@ public static class SceneSectionBuilder
             section.ActorBehaviors.Add(new scnSectionInternalsActorBehavior
             {
                 ActorId = new scnActorId { Id = actorId },
-                BehaviorMode = Enums.scnSectionInternalsActorBehaviorMode.OnlyIfAlive
+                BehaviorMode = scnSectionInternalsActorBehaviorMode.OnlyIfAlive
             });
         }
 
@@ -198,6 +202,8 @@ public static class SceneSectionBuilder
     /// <summary>
     /// How long to play a line for: what the export timed it at, or an estimate from its text.
     /// </summary>
+    /// <param name="line">The line whose duration is being calculated.</param>
+    /// <param name="wasEstimated">Whether the duration was estimated from text.</param>
     public static uint GetLineDuration(SectionDialogueLine line, out bool wasEstimated)
     {
         ArgumentNullException.ThrowIfNull(line);
@@ -211,11 +217,9 @@ public static class SceneSectionBuilder
             : Math.Clamp(line.DurationMs, MinLineDurationMs, MaxLineDurationMs);
     }
 
-    /// <summary>
-    /// What to list the section under in the scene's notable points, which is what the canvas puts
-    /// on the node's marker bar. The conversation name, cut down to an identifier.
-    /// </summary>
-    public static string GetNotablePointName(string? conversationName)
+    /// <summary>Returns a valid notable point name for a conversation.</summary>
+    /// <param name="conversationName">The source name.</param>
+    public static string SanitizeNotablePointName(string? conversationName)
     {
         const string fallback = "imported_dialogue";
 
@@ -244,6 +248,7 @@ public static class SceneSectionBuilder
     }
 
     /// <summary>How long text of this length takes to say, in milliseconds.</summary>
+    /// <param name="text">The text to estimate from.</param>
     public static uint EstimateDuration(string? text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -251,27 +256,24 @@ public static class SceneSectionBuilder
             return MinLineDurationMs;
         }
 
-        var seconds = text.Trim().Length / EstimatedCharactersPerSecond;
+        var seconds = text.Trim().Length / estimatedCharactersPerSecond;
 
         return (uint)Math.Clamp(Math.Round(seconds * 1000), MinLineDurationMs, MaxEstimatedDurationMs);
     }
 
     /// <summary>
-    /// The line's voiceover parameters, as far as the export named them. A name the game does not
-    /// know is left off, which leaves the field on the same default Add Dialogue writes.
+    /// Builds voiceover parameters, preserving defaults for missing values.
     /// </summary>
     private static scnDialogLineVoParams BuildVoParams(SectionDialogueLine line)
     {
         var voParams = new scnDialogLineVoParams();
 
-        if (Enum.TryParse<Enums.locVoiceoverContext>(line.VoContext, ignoreCase: true, out var context) &&
-            Enum.IsDefined(context))
+        if (line.VoContext is { } context)
         {
             voParams.VoContext = context;
         }
 
-        if (Enum.TryParse<Enums.locVoiceoverExpression>(line.VoExpression, ignoreCase: true, out var expression) &&
-            Enum.IsDefined(expression))
+        if (line.VoExpression is { } expression)
         {
             voParams.VoExpression = expression;
         }
@@ -283,16 +285,19 @@ public static class SceneSectionBuilder
     /// Notes an actor as being in the section, once. <see cref="SceneActorOption.NoActorId"/> is
     /// the id an unassigned line carries, not an actor, so it is skipped.
     /// </summary>
-    private static void AddActor(uint? actorId, List<uint> actorIds, HashSet<uint> seenActorIds)
+    /// <param name="actorId">The actor id to add, or null to skip.</param>
+    /// <param name="actorIds">The destination list in insertion order.</param>
+    /// <param name="seenActorIds">Set used to avoid duplicates.</param>
+    private static void AddActor(scnActorId? actorId, List<uint> actorIds, HashSet<uint> seenActorIds)
     {
-        if (actorId is not { } id || id == SceneActorOption.NoActorId)
+        if (actorId is null || actorId.Id == SceneActorOption.NoActorId)
         {
             return;
         }
 
-        if (seenActorIds.Add(id))
+        if (seenActorIds.Add(actorId.Id))
         {
-            actorIds.Add(id);
+            actorIds.Add(actorId.Id);
         }
     }
 }

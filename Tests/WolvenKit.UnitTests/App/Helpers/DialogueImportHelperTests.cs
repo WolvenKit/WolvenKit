@@ -217,7 +217,7 @@ public class DialogueImportHelperTests
     {
         var line = DialogueImportHelper.Parse(LegacyConversationExport).Lines[0];
 
-        Assert.AreEqual(45896283497UL, line.LocStringId);
+        Assert.AreEqual(45896283497UL, (ulong)line.LocStringId);
         Assert.AreEqual("Wakey wakey, choom.", line.EmbeddedText);
         Assert.AreEqual("Viktor Vektor", line.Speaker);
         Assert.AreEqual("V", line.Addressee);
@@ -293,7 +293,7 @@ public class DialogueImportHelperTests
             payload.Lines
                 .Select((line, index) => new SectionDialogueLine
                 {
-                    ScreenplayLineId = (uint)(1 + index * 256),
+                    ScreenplayLineId = new scnscreenplayItemId { Id = (uint)(1 + index * 256) },
                     DurationMs = line.DurationMs,
                     StartTimeMs = line.StartTimeMs,
                     Text = line.EmbeddedText
@@ -424,11 +424,77 @@ public class DialogueImportHelperTests
     {
         var payload = DialogueImportHelper.Parse(LegacyConversationExport);
 
-        Assert.AreEqual("Vo_Context_Quest", payload.Lines[0].VoContext);
-        Assert.AreEqual("Vo_Expression_Spoken", payload.Lines[0].VoExpression);
+        Assert.AreEqual(
+            Enums.locVoiceoverContext.Vo_Context_Quest,
+            (Enums.locVoiceoverContext)payload.Lines[0].VoContext!.Value);
+        Assert.AreEqual(
+            Enums.locVoiceoverExpression.Vo_Expression_Spoken,
+            (Enums.locVoiceoverExpression)payload.Lines[0].VoExpression!.Value);
 
-        Assert.AreEqual("", payload.Lines[1].VoContext);
-        Assert.AreEqual("", payload.Lines[1].VoExpression);
+        Assert.IsNull(payload.Lines[1].VoContext, "the export named none");
+        Assert.IsNull(payload.Lines[1].VoExpression);
+    }
+
+    [TestMethod]
+    public void ReadsAroundAFieldWrittenAsSomethingElseEntirely()
+    {
+        // Invalid field shapes should not prevent other fields from being parsed.
+        var payload = DialogueImportHelper.Parse("""
+            {
+              "version": { "major": 2 },
+              "lines": [
+                {
+                  "locStringId": "1",
+                  "text": "Still readable.",
+                  "duration": { "ms": 1988 },
+                  "startTime": [ 1500 ],
+                  "order": { },
+                  "context": [ "Vo_Context_Quest" ]
+                }
+              ]
+            }
+            """);
+
+        Assert.IsTrue(payload.IsValid);
+        Assert.AreEqual(0, payload.Version);
+        Assert.AreEqual("Still readable.", payload.Lines[0].EmbeddedText);
+        Assert.AreEqual(0U, payload.Lines[0].DurationMs);
+        Assert.IsNull(payload.Lines[0].StartTimeMs);
+        Assert.AreEqual(0, payload.Lines[0].Order);
+        Assert.IsNull(payload.Lines[0].VoContext);
+    }
+
+    [TestMethod]
+    public void RefusesAVoiceoverParameterThatIsNotAnEnumName()
+    {
+        // Only supported voiceover parameter names are accepted.
+        // Numeric strings are refused even where they would map to a declared enum value.
+        var payload = DialogueImportHelper.Parse("""
+            {
+              "lines": [
+                { "locStringId": "1", "context": "Vo_Context_Whatever" },
+                { "locStringId": "2", "context": "1" },
+                { "locStringId": "3", "expression": "7" },
+                { "locStringId": "4", "context": "" },
+                { "locStringId": "5", "context": 1 },
+                { "locStringId": "6", "context": "vo_context_community", "expression": "vo_expression_globaltv" }
+              ]
+            }
+            """);
+
+        Assert.IsNull(payload.Lines[0].VoContext, "not a context the game knows");
+        Assert.IsNull(payload.Lines[1].VoContext, "numeric strings are not names");
+        Assert.IsNull(payload.Lines[2].VoExpression, "numeric strings are not names");
+        Assert.IsNull(payload.Lines[3].VoContext);
+        Assert.IsNull(payload.Lines[4].VoContext, "a context is named, not numbered");
+
+        // Voiceover parameter names are matched case-insensitively.
+        Assert.AreEqual(
+            Enums.locVoiceoverContext.Vo_Context_Community,
+            (Enums.locVoiceoverContext)payload.Lines[5].VoContext!.Value);
+        Assert.AreEqual(
+            Enums.locVoiceoverExpression.Vo_Expression_GlobalTV,
+            (Enums.locVoiceoverExpression)payload.Lines[5].VoExpression!.Value);
     }
 
     [TestMethod]
@@ -446,7 +512,7 @@ public class DialogueImportHelperTests
 
         CollectionAssert.AreEqual(
             new ulong[] { 1, 2, 3 },
-            payload.Lines.Select(line => line.LocStringId).ToArray());
+            payload.Lines.Select(line => (ulong)line.LocStringId).ToArray());
     }
 
     [TestMethod]
@@ -466,7 +532,7 @@ public class DialogueImportHelperTests
 
         CollectionAssert.AreEqual(
             new ulong[] { 3, 1, 2 },
-            payload.Lines.Select(line => line.LocStringId).ToArray());
+            payload.Lines.Select(line => (ulong)line.LocStringId).ToArray());
 
         Assert.AreEqual(0, payload.Lines[1].Order);
     }
@@ -505,7 +571,7 @@ public class DialogueImportHelperTests
             """);
 
         Assert.IsTrue(payload.IsValid);
-        Assert.AreEqual(45896283497UL, payload.Lines[0].LocStringId);
+        Assert.AreEqual(45896283497UL, (ulong)payload.Lines[0].LocStringId);
     }
 
     [TestMethod]
@@ -563,7 +629,7 @@ public class DialogueImportHelperTests
 
         Assert.IsTrue(payload.IsValid);
         Assert.AreEqual(1, payload.Lines.Count);
-        Assert.AreEqual(77UL, payload.Lines.Single().LocStringId);
+        Assert.AreEqual(77UL, (ulong)payload.Lines.Single().LocStringId);
         Assert.AreEqual(3, payload.SkippedCount);
     }
 

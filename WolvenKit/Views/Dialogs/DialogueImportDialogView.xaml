@@ -524,9 +524,11 @@
                             </TextBlock>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2">
+                        <StackPanel
+                            Grid.Column="2"
+                            HorizontalAlignment="Right">
                             <CheckBox
-                                HorizontalAlignment="Right"
+                                HorizontalAlignment="Left"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Content="Embed the text into the scene"
                                 ToolTip="Writes each line's subtitle into the scene's locStore"
@@ -534,7 +536,7 @@
 
                             <CheckBox
                                 Margin="{DynamicResource WolvenKitMarginTinyTop}"
-                                HorizontalAlignment="Right"
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Content="Create a section node"
