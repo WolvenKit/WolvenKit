@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
