@@ -1,0 +1,11 @@
+changes:
+    - type: "fixed"
+      packages: ["CLI"]
+      pr-number: 3164
+      author: "poirierlouis"
+      description: "Build command will will now correctly pack the source archive subfolder instead of the root folder."
+    - type: "fixed"
+      packages: ["Nuget Packages"]
+      pr-number: 3164
+      author: "poirierlouis"
+      description: "ModTools.Build() in ModKit.RED4 will now correctly pack the source archive subfolder instead of the root folder."
