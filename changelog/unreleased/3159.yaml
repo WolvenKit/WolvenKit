@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3159
+      author: "Akiway"
+      description: "Importing a dialogue in the Scene Editor now creates a section node in the scene graph."
