@@ -1,13 +1,3 @@
 [b]9.0.1 — 2026-09-07[/b]
 
-[b]App[/b]
-
-[*] [i]Reverted[/i]: Reintroduce backwards compatibility for mesh bones exported before 8.19.0. The feature remains deprecated but removal of it has been postponed significantly. by @notaspirit
-
-[b]CLI[/b]
-
-[*] [i]Reverted[/i]: Reintroduce backwards compatibility for mesh bones exported before 8.19.0. The feature remains deprecated but removal of it has been postponed significantly. by @notaspirit
-
-[b]Nuget Packages[/b]
-
-[*] [i]Reverted[/i]: Reintroduce backwards compatibility for mesh bones exported before 8.19.0. The feature remains deprecated but removal of it has been postponed significantly. by @notaspirit
+The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/9.0.1]GitHub releases page[/url]
