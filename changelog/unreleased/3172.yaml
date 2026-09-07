@@ -1,6 +1,0 @@
-changes:
-    - type: "reverted"
-      packages: ["App", "CLI", "Nuget Packages"]
-      pr-number: 3172
-      author: "notaspirit"
-      description: "Reintroduce backwards compatibility for mesh bones exported before 8.19.0. The feature remains deprecated but removal of it has been postponed significantly."
