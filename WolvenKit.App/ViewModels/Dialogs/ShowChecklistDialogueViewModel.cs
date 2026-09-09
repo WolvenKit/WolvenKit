@@ -5,7 +5,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using WolvenKit.App.Interaction.Options;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;

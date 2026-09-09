@@ -2,7 +2,7 @@
 using ReactiveUI;
 using System.Windows;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 /// <summary>

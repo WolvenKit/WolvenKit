@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;

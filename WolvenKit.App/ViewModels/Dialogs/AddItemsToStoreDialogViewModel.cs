@@ -2,7 +2,7 @@
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
