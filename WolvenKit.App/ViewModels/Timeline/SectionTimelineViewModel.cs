@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,12 +8,16 @@ using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.Timeline;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Timeline;
 
 public partial class SectionTimelineViewModel : ObservableObject, IDisposable
 {
     private readonly TimelineService _service;
+    private readonly Dictionary<scnSectionNode, double> _sectionZoomLevels = new(ReferenceEqualityComparer.Instance);
+    private scnSectionNode? _currentSection;
+    private bool _isApplyingSectionZoom;
     
     private const double BaseRowHeight = 56.0;
     private const double BasePixelsPerMs = 0.1;
@@ -56,6 +61,7 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
         switch (e.PropertyName)
         {
             case nameof(TimelineService.ZoomLevel):
+                RememberCurrentSectionZoom();
                 OnPropertyChanged(nameof(PixelsPerMs));
                 OnPropertyChanged(nameof(TimelineWidth));
                 break;
@@ -73,6 +79,7 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
                 OnPropertyChanged(nameof(IsSectionDurationTooShort));
                 break;
             case nameof(TimelineService.Tracks):
+                ApplySectionZoom();
                 OnPropertyChanged(nameof(Tracks));
                 OnPropertyChanged(nameof(TotalTrackHeight));
                 break;
@@ -82,6 +89,43 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
             case nameof(TimelineService.SectionName):
                 OnPropertyChanged(nameof(SectionName));
                 break;
+        }
+    }
+
+    private void ApplySectionZoom()
+    {
+        if (_service.NodeWrapper?.Data is not scnSectionNode sectionNode ||
+            ReferenceEquals(_currentSection, sectionNode))
+        {
+            return;
+        }
+
+        _currentSection = sectionNode;
+        _isApplyingSectionZoom = true;
+        try
+        {
+            if (_sectionZoomLevels.TryGetValue(sectionNode, out var zoomLevel))
+            {
+                _service.ZoomLevel = zoomLevel;
+            }
+            else
+            {
+                _service.ZoomLevel = 1.0;
+                _service.ZoomToFit(ViewportWidth);
+                _sectionZoomLevels[sectionNode] = _service.ZoomLevel;
+            }
+        }
+        finally
+        {
+            _isApplyingSectionZoom = false;
+        }
+    }
+
+    private void RememberCurrentSectionZoom()
+    {
+        if (!_isApplyingSectionZoom && _currentSection is not null)
+        {
+            _sectionZoomLevels[_currentSection] = _service.ZoomLevel;
         }
     }
     
