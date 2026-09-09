@@ -21,25 +21,60 @@
         <!-- Node icon converter -->
         <converters:NodeIconConverter x:Key="NodeIconConverter" />
 
-        <!-- Style for help/info menu items -->
         <Style
-            x:Key="HelpMenuItemStyle"
-            TargetType="MenuItem">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="Icon">
+            x:Key="GraphContextMenuStyle"
+            TargetType="ContextMenu">
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
                 <Setter.Value>
-                    <iconPacks:PackIconMaterial
-                        Kind="Information"
-                        Width="12"
-                        Height="12"
-                        Margin="{DynamicResource WolvenKitMarginTiny}"
-                        Foreground="{DynamicResource WolvenKitYellow}"
-                        Opacity="0.7" />
+                    <ControlTemplate TargetType="ContextMenu">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            SnapsToDevicePixels="True">
+                            <StackPanel
+                                IsItemsHost="True"
+                                KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Opacity" Value="0.7" />
-            <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTiny}" />
         </Style>
+
+        <Style
+            x:Key="GraphContextMenuItemStyle"
+            BasedOn="{StaticResource {x:Type MenuItem}}"
+            TargetType="MenuItem">
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="GraphContextMenuSeparatorStyle"
+            TargetType="Separator">
+            <Setter Property="Height" Value="1" />
+            <Setter Property="Margin" Value="0,4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Separator">
+                        <Border
+                            Height="1"
+                            Background="{DynamicResource BorderAlt}"
+                            SnapsToDevicePixels="True" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Tiled vector grid for the graph background -->
         <DrawingBrush
             x:Key="EditorGridBrush"
