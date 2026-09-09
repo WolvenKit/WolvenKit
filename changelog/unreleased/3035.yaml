@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3035
+      author: "manavortex"
+      description: "cvm: 'overwrite with selection' no longer has index offset by 1"
