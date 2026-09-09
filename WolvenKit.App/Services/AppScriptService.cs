@@ -26,6 +26,7 @@ public partial class AppScriptService : ScriptService
 
     private readonly ISettingsManager _settingsManager;
     private readonly IHookService _hookService;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     public Dictionary<string, object> DefaultHostObject { get; }
 
@@ -41,10 +42,12 @@ public partial class AppScriptService : ScriptService
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
         RedTypeTemplateService templateService,
-        IProjectEvents projectEvents) : base(loggerService)
+        IProjectEvents projectEvents,
+        IApplicationDirectoriesService appDirectoriesService) : base(loggerService)
     {
         _settingsManager = settingsManager;
         _hookService = hookService;
+        _appDirectoriesService = appDirectoriesService;
 
         _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService, settingsManager, templateService, projectEvents);
         _ui = new UiScriptFunctions(this);
@@ -77,7 +80,7 @@ public partial class AppScriptService : ScriptService
 
     public IList<ScriptFile> GetScripts()
     {
-        var result = GetScripts(ISettingsManager.GetWScriptDir());
+        var result = GetScripts(_appDirectoriesService.WScriptDir);
 
         foreach (var scriptFile in GetScripts(@"Resources\Scripts"))
         {
@@ -92,7 +95,7 @@ public partial class AppScriptService : ScriptService
 
     protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null, bool enableDebugging = false)
     {
-        searchPaths ??= new List<string> { ISettingsManager.GetWScriptDir(), Path.GetFullPath(@"Resources\Scripts") };
+        searchPaths ??= new List<string> { _appDirectoriesService.WScriptDir, Path.GetFullPath(@"Resources\Scripts") };
 
         var engine = base.GetScriptEngine(hostObjects, searchPaths, enableDebugging);
 

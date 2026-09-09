@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using DynamicData;
+using Splat;
 using WolvenKit.App.Services;
 
 namespace WolvenKit.App.Models.ProjectManagement;
 
 public class RecentlyUsedItemsService : IRecentlyUsedItemsService
 {
-    private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "recentItems.json");
+    private static string GetConfigurationPath() => Path.Combine(Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir, "recentItems.json");
     private readonly SourceCache<RecentlyUsedItemModel, string> _recentlyUsedItems = new(_ => _.Name);
 
     public IObservableCache<RecentlyUsedItemModel, string> Items => _recentlyUsedItems;

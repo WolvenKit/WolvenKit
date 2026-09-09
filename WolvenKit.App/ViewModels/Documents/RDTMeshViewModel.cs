@@ -50,6 +50,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private readonly IModTools _modTools;
     private readonly GeometryCacheService _geometryCacheService;
     private readonly IModifierViewStateService _modifierSvc;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     protected readonly RedBaseClass? _data;
 
@@ -69,7 +70,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ILoggerService loggerService,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc
+        IModifierViewStateService modifierSvc,
+        IApplicationDirectoriesService appDirectoriesService
     ) : base(parent, header)
     {
         _loggerService = loggerService;
@@ -78,6 +80,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         _modTools = modTools;
         _geometryCacheService = geometryCacheService;
         _modifierSvc = modifierSvc;
+        _appDirectoriesService = appDirectoriesService;
 
         _modifierSvc.ModifierStateChanged += ModifierStateChanged;
 
@@ -94,9 +97,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ILoggerService loggerService,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc)
+        IModifierViewStateService modifierSvc,
+        IApplicationDirectoriesService appDirectoriesService)
         : this(file, MeshViewHeaders.MeshPreview, settingsManager, gameController, loggerService, modTools,
-            geometryCacheService, modifierSvc)
+            geometryCacheService, modifierSvc, appDirectoriesService)
     {
         _data = data;
     }
@@ -107,9 +111,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ILoggerService loggerService,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc)
+        IModifierViewStateService modifierSvc,
+        IApplicationDirectoriesService appDirectoriesService)
         : this(file, MeshViewHeaders.SectorPreview, settingsManager, gameController, loggerService, modTools,
-            geometryCacheService, modifierSvc)
+            geometryCacheService, modifierSvc, appDirectoriesService)
     {
         _data = data;
     }
@@ -120,9 +125,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ILoggerService loggerService,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc)
+        IModifierViewStateService modifierSvc,
+        IApplicationDirectoriesService appDirectoriesService)
         : this(file, MeshViewHeaders.AllSectorPreview, settingsManager, gameController, loggerService, modTools,
-            geometryCacheService, modifierSvc)
+            geometryCacheService, modifierSvc, appDirectoriesService)
     {
         _data = data;
     }
@@ -133,9 +139,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ILoggerService loggerService,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc)
+        IModifierViewStateService modifierSvc,
+        IApplicationDirectoriesService appDirectoriesService)
         : this(file, MeshViewHeaders.EntityPreview, settingsManager, gameController, loggerService, modTools,
-            geometryCacheService, modifierSvc)
+            geometryCacheService, modifierSvc, appDirectoriesService)
     {
         _data = ent;
     }
@@ -170,7 +177,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             EffectsManager = new DefaultEffectsManager();
 
-            //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
+            //EnvironmentMap = TextureModel.Create(Path.Combine(_appDirectoriesService.TempObjDir, "Cubemap_Grandcanyon.dds"));
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
             {
                 FarPlaneDistance = 1E+8,
@@ -375,7 +382,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return;
         }
 
-        ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+        ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), _appDirectoriesService.TempObjDir);
     }
 
     private bool _isCollisionRendered = true;
@@ -1571,15 +1578,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private (string filename_b, string filename_bn, string filename_rm, string filename_d, string filename_n) GetMaterialFilePathsFromCache(
         string name, bool deleteAll = false)
     {
-        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + ".png");
+        var filename_b = Path.Combine(_appDirectoriesService.TempObjDir, name + ".png");
         CheckFile(filename_b);
-        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.png");
+        var filename_bn = Path.Combine(_appDirectoriesService.TempObjDir, name + "_n.png");
         CheckFile(filename_bn);
-        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_rm.png");
+        var filename_rm = Path.Combine(_appDirectoriesService.TempObjDir, name + "_rm.png");
         CheckFile(filename_rm);
-        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_d.dds");
+        var filename_d = Path.Combine(_appDirectoriesService.TempObjDir, name + "_d.dds");
         CheckFile(filename_d);
-        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.dds");
+        var filename_n = Path.Combine(_appDirectoriesService.TempObjDir, name + "_n.dds");
         CheckFile(filename_n);
 
         return (filename_b, filename_bn, filename_rm, filename_d, filename_n);
@@ -1690,14 +1697,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     private void DeleteMaterialCache()
     {
-        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
+        if (!Directory.Exists(_appDirectoriesService.TempObjDir))
         {
             return;
         }
 
         try
         {
-            var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
+            var files = Directory.GetFiles(_appDirectoriesService.TempObjDir);
             foreach (var file in files)
             {
                 File.Delete(file);

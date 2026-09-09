@@ -36,6 +36,7 @@ public partial class LogViewModel : ToolViewModel
     private readonly ILoggerService _loggerService;
     private readonly AppScriptService _scriptService;
     private readonly ISettingsManager _settingsManager;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     // private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
     // public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
@@ -62,12 +63,14 @@ public partial class LogViewModel : ToolViewModel
     public LogViewModel(
         ILoggerService loggerService,
         AppScriptService scriptService,
-        ISettingsManager settingsManager
+        ISettingsManager settingsManager,
+        IApplicationDirectoriesService appDirectoriesService
         ) : base(ToolTitle)
     {
         _loggerService = loggerService;
         _scriptService = scriptService;
         _settingsManager = settingsManager;
+        _appDirectoriesService = appDirectoriesService;
 
         SetupToolDefaults();
         SideInDockedMode = DockSide.Bottom;
@@ -148,7 +151,7 @@ public partial class LogViewModel : ToolViewModel
     {
         _scriptFiles.Clear();
         ScanDir(ScriptSource.System, @"Resources\Scripts");
-        ScanDir(ScriptSource.User, ISettingsManager.GetWScriptDir());
+        ScanDir(ScriptSource.User, _appDirectoriesService.WScriptDir);
 
         void ScanDir(ScriptSource scriptSource, string path)
         {

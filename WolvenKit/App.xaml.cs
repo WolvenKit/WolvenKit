@@ -37,6 +37,7 @@ namespace WolvenKit
 
         private ISettingsManager _settingsManager;
         private ILoggerService _loggerService;
+        private IApplicationDirectoriesService _appDirectoriesService;
 
         static AppImpl()
         {
@@ -156,6 +157,8 @@ namespace WolvenKit
 
             _host = GenericHost.CreateHostBuilder(args).Build();
 
+            _appDirectoriesService = Locator.Current.GetService<IApplicationDirectoriesService>();
+
             // Since MS DI container is a different type,
             // we need to re-register the built container with Splat again
             Container = _host.Services;
@@ -163,7 +166,9 @@ namespace WolvenKit
 
             MoveOldLogs();
 
-            var path = Path.Combine(ISettingsManager.GetLogsDir(), "applog.txt");
+            var logDir = _appDirectoriesService.LogsDir;
+
+            var path = Path.Combine(logDir, "applog.txt");
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
@@ -188,11 +193,11 @@ namespace WolvenKit
 
         private void MoveOldLogs()
         {
-            var logFolder = ISettingsManager.GetLogsDir();
+            var logFolder = _appDirectoriesService.LogsDir;
 
             var existingLogs = Directory.GetFiles(logFolder, "*.txt");
 
-            foreach (var file in Directory.GetFiles(ISettingsManager.GetAppData(), "applog*.txt", SearchOption.TopDirectoryOnly))
+            foreach (var file in Directory.GetFiles(_appDirectoriesService.AppDataDir, "applog*.txt", SearchOption.TopDirectoryOnly))
             {
                 var fileName = Path.GetFileName(file);
                 var destFileName = Path.Combine(logFolder, fileName);

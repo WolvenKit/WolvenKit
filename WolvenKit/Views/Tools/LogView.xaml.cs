@@ -32,6 +32,8 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class LogView : ReactiveUserControl<LogViewModel>
     {
+        private IApplicationDirectoriesService _appDirectoriesService;
+
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
 
@@ -44,6 +46,8 @@ namespace WolvenKit.Views.Tools
 
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
+
+            _appDirectoriesService = Locator.Current.GetService<IApplicationDirectoriesService>();
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -185,15 +189,17 @@ namespace WolvenKit.Views.Tools
 
         private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
         {
+            var logDir = _appDirectoriesService.LogsDir;
+
             // regular click: open log folder
             if (!ModifierViewStateService.IsShiftBeingHeld)
             {
-                Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo(logDir) { UseShellExecute = true });
                 return;
             }
 
             // should never happen, but better safe than sorry
-            if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is
+            if (FileHelper.GetMostRecentlyChangedFile(logDir, "*.txt") is
                 not FileInfo fI)
             {
                 return;

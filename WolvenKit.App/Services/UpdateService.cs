@@ -21,15 +21,19 @@ public class UpdateService : IUpdateService
 {
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
     private readonly HttpClient _httpClient;
 
-    private readonly string _localChangelogPath = Path.Join(ISettingsManager.GetAppData(), "changelog.md");
+    private string LocalChangelogPath => Path.Join(_appDirectoriesService.AppDataDir, "changelog.md");
     private const string s_remoteChangelogPath = "https://raw.githubusercontent.com/WolvenKit/WolvenKit/refs/heads/main/CHANGELOG.md";
 
-    public UpdateService(ILoggerService loggerService, ISettingsManager settingsManager)
+    public UpdateService(ILoggerService loggerService,
+        ISettingsManager settingsManager,
+        IApplicationDirectoriesService appDirectoriesService)
     {
         _loggerService = loggerService;
         _settingsManager = settingsManager;
+        _appDirectoriesService = appDirectoriesService;
         _httpClient = new HttpClient();
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "WolvenKit");
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
@@ -83,7 +87,7 @@ public class UpdateService : IUpdateService
         ZipFile.ExtractToDirectory(downloadZipPath, unzipPath);
         File.Delete(downloadZipPath);
 
-        var unpackerExePath = Path.Combine(ISettingsManager.GetAppData(), "Updater" ,"WolvenKit.Unpacker.exe");
+        var unpackerExePath = Path.Combine(_appDirectoriesService.AppDataDir, "Updater" ,"WolvenKit.Unpacker.exe");
         if (!File.Exists(unpackerExePath))
         {
             if (Directory.Exists(Path.GetDirectoryName(unpackerExePath)!))
@@ -128,7 +132,7 @@ public class UpdateService : IUpdateService
         var relevantChangelog = await GetRemoteChangeLog(GetLocalVersion()?.ToString() ?? "", latestRelease.TagName);
         if (!string.IsNullOrEmpty(relevantChangelog))
         {
-            await File.WriteAllTextAsync(_localChangelogPath, relevantChangelog);
+            await File.WriteAllTextAsync(LocalChangelogPath, relevantChangelog);
         }
 
         var wolvenKitExePath = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "WolvenKit.exe");
@@ -176,15 +180,15 @@ public class UpdateService : IUpdateService
 
     public string? GetSavedChangelog()
     {
-        if (!File.Exists(_localChangelogPath))
+        if (!File.Exists(LocalChangelogPath))
         {
             return null;
         }
 
-        return File.ReadAllText(_localChangelogPath);
+        return File.ReadAllText(LocalChangelogPath);
     }
 
-    public void ClearSavedChangelog() => File.Delete(_localChangelogPath);
+    public void ClearSavedChangelog() => File.Delete(LocalChangelogPath);
 
     private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 

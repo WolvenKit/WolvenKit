@@ -20,6 +20,7 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
     private readonly IModTools _modTools;
     private readonly GeometryCacheService _geometryCacheService;
     private readonly IModifierViewStateService _modifierSvc;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     public DocumentTabViewmodelFactory(
         ILoggerService loggerService,
@@ -28,7 +29,8 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
         IGameControllerFactory gameController,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc)
+        IModifierViewStateService modifierSvc,
+        IApplicationDirectoriesService appDirectoriesService)
     {
         _loggerService = loggerService;
         _parserService = parserService;
@@ -37,6 +39,7 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
         _modTools = modTools;
         _geometryCacheService = geometryCacheService;
         _modifierSvc = modifierSvc;
+        _appDirectoriesService = appDirectoriesService;
     }
 
     public RDTInkTextureAtlasViewModel RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, RedDocumentViewModel file) => new(atlas, file);
@@ -45,20 +48,20 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
     public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(CTextureArray textureArray, RedDocumentViewModel file) => new(textureArray, file);
     public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(CReflectionProbeDataResource textureArray, RedDocumentViewModel file) => new(textureArray, file);
 
-    public RDTDataViewModel RDTDataViewModel(IRedType data, RedDocumentViewModel parent, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory) 
+    public RDTDataViewModel RDTDataViewModel(IRedType data, RedDocumentViewModel parent, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory)
         => new(data, parent, appViewModel, chunkViewmodelFactory, _settingsManager, _gameController);
-    public RDTDataViewModel RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory) 
+    public RDTDataViewModel RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory)
         => new(header, data, file, appViewModel, chunkViewmodelFactory, _settingsManager, _gameController);
 
     public RDTMeshViewModel RDTMeshViewModel(CMesh data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _appDirectoriesService);
 
     public RDTMeshViewModel RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _appDirectoriesService);
 
     public RDTMeshViewModel RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _appDirectoriesService);
 
     public RDTMeshViewModel RDTMeshViewModel(entEntityTemplate data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _appDirectoriesService);
 }

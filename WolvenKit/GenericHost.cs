@@ -73,7 +73,11 @@ namespace WolvenKit
                         return instanceSettings;
                     });
                     services.AddSingleton<IApplicationDirectoriesService, ApplicationDirectoriesService>();
-                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
+                    services.AddSingleton<ISettingsManager>(provider =>
+                    {
+                        var appDirectoriesService = provider.GetRequiredService<IApplicationDirectoriesService>();
+                        return SettingsManager.Load(appDirectoriesService);
+                    });
                     services.AddSingleton<IHashService, HashServiceExt>();                                      // can this be transient?
                     services.AddSingleton<CRUIDService>(x => new CRUIDService(false));    // can this be transient?
                     services.AddSingleton<MySink>();                                                            // can this be transient?
@@ -86,7 +90,7 @@ namespace WolvenKit
 
                     services.AddSingleton<RedTypeTemplateService>(provider => new RedTypeTemplateService(provider.GetRequiredService<ILoggerService>(),
                         Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Templates"),
-                        ISettingsManager.GetUserTemplateDir()));
+                        provider.GetRequiredService<IApplicationDirectoriesService>().UserTemplateDir));
 
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();

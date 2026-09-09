@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types.Pools;
@@ -55,7 +56,7 @@ public class HashServiceExt : HashService
     /// Exists purely as a test hook.
     /// Production behaviour is identical.
     /// </remarks>
-    protected virtual string GetGlobalCacheDirectory() => ISettingsManager.GetAppData();
+    protected virtual string GetGlobalCacheDirectory() => Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir;
 
     public bool AddResourcePath(string resourcePath)
     {

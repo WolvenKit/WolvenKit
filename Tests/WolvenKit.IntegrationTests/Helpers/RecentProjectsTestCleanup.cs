@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Splat;
 using WolvenKit.App.Services;
 
 namespace WolvenKit.IntegrationTests.Helpers;
@@ -45,7 +46,7 @@ public static class RecentProjectsTestCleanup
 
     private static void RemoveFromRecentItems(string root)
     {
-        var path = Path.Combine(ISettingsManager.GetAppData(), "recentItems.json");
+        var path = Path.Combine(Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir, "recentItems.json");
         if (!File.Exists(path))
         {
             return;
@@ -82,7 +83,7 @@ public static class RecentProjectsTestCleanup
 
     private static void ClearLastUsedProjectPathIfUnder(string root)
     {
-        var path = Path.Combine(ISettingsManager.GetAppData(), "config.json");
+        var path = Path.Combine(Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir, "config.json");
         if (!File.Exists(path))
         {
             return;

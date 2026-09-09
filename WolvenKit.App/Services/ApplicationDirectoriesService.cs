@@ -12,7 +12,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
         appDataRoot = instanceSettings.AppDataPath;
     }
 
-    public string AppData
+    public string AppDataDir
     {
         get
         {
@@ -81,7 +81,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
         }
     }
 
-    public string TempVideoPreviewPath
+    public string TempVideoPreviewDir
     {
         get
         {

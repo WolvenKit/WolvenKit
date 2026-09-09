@@ -38,6 +38,7 @@ namespace WolvenKit.Views.Shell
     public partial class DockingAdapter : UserControl
     {
         private readonly ILoggerService _logger;
+        private readonly IApplicationDirectoriesService _appDirectoriesService;
 
         private AppViewModel _viewModel;
         private Window _mainWindow;
@@ -48,6 +49,7 @@ namespace WolvenKit.Views.Shell
         public DockingAdapter()
         {
             _logger = Locator.Current.GetService<ILoggerService>();
+            _appDirectoriesService = Locator.Current.GetService<IApplicationDirectoriesService>();
 
             InitializeComponent();
             G_Dock = this;
@@ -102,7 +104,7 @@ namespace WolvenKit.Views.Shell
             }
             else
             {
-                SaveLayout(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
+                SaveLayout(Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml"));
             }
         }
 
@@ -159,8 +161,8 @@ namespace WolvenKit.Views.Shell
                 _logger.Error("If that does not work, close Wolvenkit and delete or rename the following files:");
                 _logger.Error("(This will reset your settings)");
                 _logger.Error(projectLayout);
-                _logger.Error(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
-                _logger.Error(Path.Combine(ISettingsManager.GetAppData(), "config.json"));
+                _logger.Error(Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml"));
+                _logger.Error(Path.Combine(_appDirectoriesService.AppDataDir, "config.json"));
 
 
                 File.Delete(projectLayout);
@@ -169,7 +171,7 @@ namespace WolvenKit.Views.Shell
 
         public void ResetDefaultLayout()
         {
-            var appDataLayoutPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
+            var appDataLayoutPath = Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml");
             if (!File.Exists(appDataLayoutPath))
             {
                 _logger.Info("You don't have a custom default layout");
@@ -187,7 +189,7 @@ namespace WolvenKit.Views.Shell
                 File.Delete(Path.Combine(project.ProjectDirectory, "layout.xml"));
             }
 
-            var appDataLayoutPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
+            var appDataLayoutPath = Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml");
 
             if (LoadLayout(appDataLayoutPath, "default"))
             {

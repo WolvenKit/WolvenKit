@@ -237,9 +237,9 @@ public class SettingsDto : ISettingsDto
         return settingsManager;
     }
 
-    public SettingsManager ToSettingsManager()
+    public SettingsManager ToSettingsManager(IApplicationDirectoriesService appDirectoriesService)
     {
-        var config = new SettingsManager();
+        var config = new SettingsManager(appDirectoriesService);
 
         return ReconfigureSettingsManager(config);
     }

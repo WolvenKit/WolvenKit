@@ -27,6 +27,7 @@ public partial class PluginService : ObservableObject, IPluginService
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settings;
     private readonly IProgressService<double> _progressService;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     private readonly HttpClient _client = new();
     private readonly Dictionary<EPlugin, string> _pluginIds = new();
@@ -34,11 +35,13 @@ public partial class PluginService : ObservableObject, IPluginService
     public PluginService(
         ILoggerService loggerService,
         IProgressService<double> progressService,
-        ISettingsManager settingsManager)
+        ISettingsManager settingsManager,
+        IApplicationDirectoriesService appDirectoriesService)
     {
         _loggerService = loggerService;
         _settings = settingsManager;
         _progressService = progressService;
+        _appDirectoriesService = appDirectoriesService;
     }
 
     [ObservableProperty] private ObservableCollection<PluginViewModel> _plugins = new();
@@ -293,7 +296,7 @@ public partial class PluginService : ObservableObject, IPluginService
                 return;
             }
 
-            // download 
+            // download
             var contentUrl = asset.First().BrowserDownloadUrl;
             zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
 
@@ -374,7 +377,7 @@ public partial class PluginService : ObservableObject, IPluginService
                 case Common.Constants.RedDbKark:
 
                     // unkark reddb
-                    var destinationPath = Path.Combine(ISettingsManager.GetAppData(), Common.Constants.RedDb);
+                    var destinationPath = Path.Combine(_appDirectoriesService.AppDataDir, Common.Constants.RedDb);
 
                     var (hash, _) = CommonFunctions.HashFileSHA512(resource);
 

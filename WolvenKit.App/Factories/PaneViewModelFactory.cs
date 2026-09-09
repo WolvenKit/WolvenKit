@@ -36,6 +36,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly ProjectResourceTools _projectResourceTools;
     private readonly IProjectEvents _projectEvents;
     private readonly IArchiveManagerLoader _archiveManagerLoader;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     public PaneViewModelFactory(
         IProjectManager projectManager,
@@ -57,7 +58,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         ProjectResourceTools projectResourceTools,
         IModifierViewStateService modifierSvc,
         IProjectEvents projectEvents,
-        IArchiveManagerLoader archiveManagerLoader
+        IArchiveManagerLoader archiveManagerLoader,
+        IApplicationDirectoriesService appDirectoriesService
         )
     {
         _projectManager = projectManager;
@@ -80,9 +82,10 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _projectResourceTools = projectResourceTools;
         _projectEvents = projectEvents;
         _archiveManagerLoader = archiveManagerLoader;
+        _appDirectoriesService = appDirectoriesService;
     }
 
-    public LogViewModel LogViewModel() => new(_loggerService, _appScriptService, _settingsManager);
+    public LogViewModel LogViewModel() => new(_loggerService, _appScriptService, _settingsManager, _appDirectoriesService);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _loggerService, _notificationService, _progressService, _modTools,
             _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager, _projectResourceTools, _importExportHelper, _projectEvents);

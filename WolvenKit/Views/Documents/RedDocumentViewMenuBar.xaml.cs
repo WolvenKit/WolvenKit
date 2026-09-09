@@ -54,6 +54,7 @@ namespace WolvenKit.Views.Documents
         private readonly DocumentTools _documentTools;
         private readonly ICvmTools _cvmTools;
         private readonly Cr2WTools _cr2WTools;
+        private readonly IApplicationDirectoriesService _appDirectoriesService;
 
         public RedDocumentViewMenuBar()
         {
@@ -68,6 +69,7 @@ namespace WolvenKit.Views.Documents
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;
             _cvmTools = Locator.Current.GetService<ICvmTools>()!;
+            _appDirectoriesService = Locator.Current.GetService<IApplicationDirectoriesService>()!;
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
             _projectExplorer = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()!;
 
@@ -115,7 +117,7 @@ namespace WolvenKit.Views.Documents
 
         private void InitializeInstanceObjects()
         {
-            _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+            _fileValidationScript = _scriptService.GetScripts(_appDirectoriesService.WScriptDir).ToList()
                 .Where(s => s.Name == "run_FileValidation_on_active_tab")
                 .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
                 .FirstOrDefault();

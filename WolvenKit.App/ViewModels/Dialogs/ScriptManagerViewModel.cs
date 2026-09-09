@@ -22,14 +22,21 @@ public partial class ScriptManagerViewModel : DialogViewModel
     private readonly AppScriptService _scriptService;
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
 
-    public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager, ILoggerService loggerService)
+    public ScriptManagerViewModel(
+        AppViewModel appViewModel,
+        AppScriptService scriptService,
+        ISettingsManager settingsManager,
+        ILoggerService loggerService,
+        IApplicationDirectoriesService appDirectoriesService)
     {
         _appViewModel = appViewModel;
         _scriptService = scriptService;
         _settingsManager = settingsManager;
         _loggerService = loggerService;
+        _appDirectoriesService = appDirectoriesService;
 
         GetScriptFiles();
     }
@@ -48,7 +55,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
             fileName += s_scriptExtension;
         }
 
-        var scriptPath = Path.Combine(ISettingsManager.GetWScriptDir(), fileName);
+        var scriptPath = Path.Combine(_appDirectoriesService.WScriptDir, fileName);
         if (File.Exists(scriptPath))
         {
             return;
@@ -84,7 +91,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
         var files = new List<string>();
         ScanDir(ScriptSource.System, @"Resources\Scripts");
-        ScanDir(ScriptSource.User, ISettingsManager.GetWScriptDir());
+        ScanDir(ScriptSource.User, _appDirectoriesService.WScriptDir);
 
         var keys = _settingsManager.ScriptStatus.Keys.ToList();
         foreach (var statusKey in keys)
@@ -152,7 +159,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
                 return;
             }
 
-            localFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), Path.GetFileName(scriptFile.Path));
+            localFilePath = Path.Combine(_appDirectoriesService.WScriptDir, Path.GetFileName(scriptFile.Path));
             if (File.Exists(localFilePath))
             {
                 response = await Interactions.ShowMessageBoxAsync(

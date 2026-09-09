@@ -87,6 +87,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     private readonly RedTypeTemplateService _redTypeTemplateService;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
@@ -124,7 +125,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IUpdateService updateService,
         RedTypeTemplateService redTypeTemplateService,
         IProjectEvents projectEvents,
-        IArchiveManagerLoader archiveManagerLoader
+        IArchiveManagerLoader archiveManagerLoader,
+        IApplicationDirectoriesService appDirectoriesService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -150,6 +152,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
         _redTypeTemplateService = redTypeTemplateService;
+        _appDirectoriesService = appDirectoriesService;
         _projectEvents = projectEvents;
         _projectEvents.FilesMoved.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterMoves(msg)));
         _projectEvents.FilesImported.Subscribe(msg => SafeRefreshOpenDocuments(() => RefreshOpenDocumentsAfterImports(msg)));
@@ -202,12 +205,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void ClearMaterialCache()
     {
-        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
+        if (!Directory.Exists(_appDirectoriesService.TempObjDir))
         {
             return;
         }
 
-        var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
+        var files = Directory.GetFiles(_appDirectoriesService.TempObjDir);
         List<string> failedToDelete = [];
         foreach (var file in files)
         {
@@ -1344,7 +1347,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void OpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
+    private void OpenLogs() => Commonfunctions.ShowFolderInExplorer(_appDirectoriesService.AppDataDir);
 
     [ObservableProperty]
     private int? _selectedGameCommandIdx;
@@ -1441,7 +1444,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, SettingsManager, _loggerService));
+        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, SettingsManager, _loggerService, _appDirectoriesService));
     }
 
     private bool CanShowRedTypeTemplateManager() => !IsDialogShown;
@@ -2464,7 +2467,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 WScriptDocumentViewModel wScript =>
                     saveAsDialogRequested ||
                     string.IsNullOrEmpty(wScript.FilePath) ||
-                    !Directory.Exists(ISettingsManager.GetWScriptDir()),
+                    !Directory.Exists(_appDirectoriesService.WScriptDir),
                 _ => false,
             };
 
@@ -2501,7 +2504,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
-    private bool IsInTemplateFolder(string path) => path.Contains(ISettingsManager.GetUserTemplateDir(), StringComparison.OrdinalIgnoreCase);
+    private bool IsInTemplateFolder(string path) => path.Contains(_appDirectoriesService.UserTemplateDir, StringComparison.OrdinalIgnoreCase);
 
     private void OpenRedengineFile(string fullpath, string ext)
     {

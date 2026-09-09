@@ -23,6 +23,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _isLoaded;
 
     private readonly string _assemblyVersion;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
 
     private static readonly JsonSerializerOptions s_options = new()
@@ -34,8 +35,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     /// <summary>
     /// Default constructor.
     /// </summary>
-    public SettingsManager()
+    public SettingsManager(IApplicationDirectoriesService appDirectoriesService)
     {
+        _appDirectoriesService = appDirectoriesService;
+
         _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
 
         _ = this.WhenAnyPropertyChanged(
@@ -106,14 +109,14 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #region lifecycle
 
-    public static SettingsManager Load()
+    public static SettingsManager Load(IApplicationDirectoriesService appDirectoriesService)
     {
-        var dto = LoadFromFile();
+        var dto = LoadFromFile(GetConfigurationPath(appDirectoriesService));
 
         var settings =
             dto != null
-            ? dto.ToSettingsManager()
-            : new SettingsManager();
+            ? dto.ToSettingsManager(appDirectoriesService)
+            : new SettingsManager(appDirectoriesService);
 
         settings._isLoaded = true;
 
@@ -132,26 +135,26 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         }
 
         var json = JsonSerializer.Serialize(new SettingsDto(this), s_options);
-        File.WriteAllText(GetConfigurationPath(), json);
+        File.WriteAllText(GetConfigurationPath(_appDirectoriesService), json);
         // _loggerService.Info("Settings saved.");
     }
 
     public void Bounce()
     {
         Save();
-        var bouncedSettings = LoadFromFile();
+        var bouncedSettings = LoadFromFile(GetConfigurationPath(_appDirectoriesService));
         bouncedSettings?.ReconfigureSettingsManager(this);
     }
 
-    private static SettingsDto? LoadFromFile()
+    private static SettingsDto? LoadFromFile(string path)
     {
-        if (!File.Exists(GetConfigurationPath()))
+        if (!File.Exists(path))
         {
             return null;
         }
         try
         {
-            var jsonString = File.ReadAllText(GetConfigurationPath());
+            var jsonString = File.ReadAllText(path);
             var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, s_options);
 
             return dto;
@@ -422,7 +425,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public string GetVersionNumber() => _assemblyVersion;
 
-    private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "config.json");
+    private static string GetConfigurationPath(IApplicationDirectoriesService appDirectoriesService) =>
+        Path.Combine(appDirectoriesService.AppDataDir, "config.json");
 
     public Color GetThemeAccent() =>
        !string.IsNullOrEmpty(ThemeAccentString)

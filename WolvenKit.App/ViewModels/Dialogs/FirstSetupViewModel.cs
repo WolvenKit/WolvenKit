@@ -23,20 +23,23 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
+    private readonly IApplicationDirectoriesService _appDirectoriesService;
 
     public FirstSetupViewModel(
         ISettingsManager settingsManager,
-        ILoggerService loggerService
+        ILoggerService loggerService,
+        IApplicationDirectoriesService appDirectoriesService
     )
     {
         _settingsManager = settingsManager;
         _loggerService = loggerService;
+        _appDirectoriesService = appDirectoriesService;
 
         Title = "Settings";
 
         TryToFindCP77ExecutableAutomatically();
 
-        _materialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "Depot");
+        _materialDepotPath = Path.Combine(_appDirectoriesService.AppDataDir, "Depot");
         if (!Directory.Exists(_materialDepotPath))
         {
             Directory.CreateDirectory(_materialDepotPath);
