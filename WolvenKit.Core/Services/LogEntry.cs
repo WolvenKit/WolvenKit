@@ -5,7 +5,7 @@ namespace WolvenKit.Common.Services
 {
     public class LogEntry : ObservableObject
     {
-        public LogEntry(string message, Logtype level, DateTime timeStamp)
+        public LogEntry(string message, LogType level, DateTime timeStamp)
         {
             Message = message;
             Level = level;
@@ -14,7 +14,7 @@ namespace WolvenKit.Common.Services
 
         public string Message { get; set; }
         public DateTime TimeStamp { get; set; }
-        public Logtype Level { get; set; }
+        public LogType Level { get; set; }
 
         public override string ToString() => $"[{TimeStamp}] [{Level}] {Message}";
     }
