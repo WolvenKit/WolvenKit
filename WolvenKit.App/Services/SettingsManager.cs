@@ -111,7 +111,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public static SettingsManager Load(IApplicationDirectoriesService appDirectoriesService)
     {
-        var dto = LoadFromFile(GetConfigurationPath(appDirectoriesService));
+        var dto = LoadFromFile(appDirectoriesService.ConfigFile);
 
         var settings =
             dto != null
@@ -135,14 +135,14 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         }
 
         var json = JsonSerializer.Serialize(new SettingsDto(this), s_options);
-        File.WriteAllText(GetConfigurationPath(_appDirectoriesService), json);
+        File.WriteAllText(_appDirectoriesService.ConfigFile, json);
         // _loggerService.Info("Settings saved.");
     }
 
     public void Bounce()
     {
         Save();
-        var bouncedSettings = LoadFromFile(GetConfigurationPath(_appDirectoriesService));
+        var bouncedSettings = LoadFromFile(_appDirectoriesService.ConfigFile);
         bouncedSettings?.ReconfigureSettingsManager(this);
     }
 
@@ -424,9 +424,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     #region methods
 
     public string GetVersionNumber() => _assemblyVersion;
-
-    private static string GetConfigurationPath(IApplicationDirectoriesService appDirectoriesService) =>
-        Path.Combine(appDirectoriesService.AppDataDir, "config.json");
 
     public Color GetThemeAccent() =>
        !string.IsNullOrEmpty(ThemeAccentString)

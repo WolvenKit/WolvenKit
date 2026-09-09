@@ -12,4 +12,8 @@ public interface IApplicationDirectoriesService
     string TempVideoPreviewDir { get; }
     string WScriptDir { get; }
     string UserTemplateDir { get; }
+    string MaterialDepotDir { get; }
+    string ConfigFile { get; }
+    string DockStatesFile { get; }
+    string RecentItemsFile { get; }
 }

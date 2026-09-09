@@ -11,18 +11,21 @@ namespace WolvenKit.App.Models.ProjectManagement;
 
 public class RecentlyUsedItemsService : IRecentlyUsedItemsService
 {
-    private static string GetConfigurationPath() => Path.Combine(Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir, "recentItems.json");
+    private readonly IApplicationDirectoriesService _applicationDirectoriesService;
+
     private readonly SourceCache<RecentlyUsedItemModel, string> _recentlyUsedItems = new(_ => _.Name);
 
     public IObservableCache<RecentlyUsedItemModel, string> Items => _recentlyUsedItems;
     public List<RecentlyUsedItemModel> PinnedItems => _recentlyUsedItems.Items.Where(_ => _.IsPinned).ToList();
 
-    public RecentlyUsedItemsService()
+    public RecentlyUsedItemsService(IApplicationDirectoriesService applicationDirectoriesService)
     {
+        _applicationDirectoriesService = applicationDirectoriesService;
+
         // load on start
-        if (File.Exists(GetConfigurationPath()))
+        if (File.Exists(_applicationDirectoriesService.RecentItemsFile))
         {
-            var jsonString = File.ReadAllText(GetConfigurationPath());
+            var jsonString = File.ReadAllText(_applicationDirectoriesService.RecentItemsFile);
             var dto = JsonSerializer.Deserialize<Dictionary<string, RecentlyUsedItemModel>>(jsonString);
             if (dto != null)
             {
@@ -66,6 +69,6 @@ public class RecentlyUsedItemsService : IRecentlyUsedItemsService
         };
         var dto = Items.Items.ToDictionary(_ => _.Name);
         var json = JsonSerializer.Serialize(dto, options);
-        File.WriteAllText(GetConfigurationPath(), json);
+        File.WriteAllText(_applicationDirectoriesService.RecentItemsFile, json);
     }
 }

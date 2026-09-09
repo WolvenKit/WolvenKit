@@ -46,7 +46,7 @@ public static class RecentProjectsTestCleanup
 
     private static void RemoveFromRecentItems(string root)
     {
-        var path = Path.Combine(Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir, "recentItems.json");
+        var path = Locator.Current.GetService<IApplicationDirectoriesService>()!.RecentItemsFile;
         if (!File.Exists(path))
         {
             return;
@@ -83,7 +83,7 @@ public static class RecentProjectsTestCleanup
 
     private static void ClearLastUsedProjectPathIfUnder(string root)
     {
-        var path = Path.Combine(Locator.Current.GetService<IApplicationDirectoriesService>()!.AppDataDir, "config.json");
+        var path = Locator.Current.GetService<IApplicationDirectoriesService>()!.ConfigFile;
         if (!File.Exists(path))
         {
             return;

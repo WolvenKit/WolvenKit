@@ -39,11 +39,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
         TryToFindCP77ExecutableAutomatically();
 
-        _materialDepotPath = Path.Combine(_appDirectoriesService.AppDataDir, "Depot");
-        if (!Directory.Exists(_materialDepotPath))
-        {
-            Directory.CreateDirectory(_materialDepotPath);
-        }
+        _materialDepotPath = _appDirectoriesService.MaterialDepotDir;
     }
 
     #region Properties

@@ -110,4 +110,18 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
             return dir;
         }
     }
+
+    public string MaterialDepotDir
+    {
+        get
+        {
+            var dir = Path.Combine(appDataRoot, "Depot");
+            Directory.CreateDirectory(dir);
+            return dir;
+        }
+    }
+
+    public string ConfigFile => Path.Combine(appDataRoot, "config.json");
+    public string DockStatesFile => Path.Combine(appDataRoot, "DockStates.xml");
+    public string RecentItemsFile => Path.Combine(appDataRoot, "recentItems.json");
 }

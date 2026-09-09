@@ -104,7 +104,7 @@ namespace WolvenKit.Views.Shell
             }
             else
             {
-                SaveLayout(Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml"));
+                SaveLayout(_appDirectoriesService.DockStatesFile);
             }
         }
 
@@ -161,8 +161,8 @@ namespace WolvenKit.Views.Shell
                 _logger.Error("If that does not work, close Wolvenkit and delete or rename the following files:");
                 _logger.Error("(This will reset your settings)");
                 _logger.Error(projectLayout);
-                _logger.Error(Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml"));
-                _logger.Error(Path.Combine(_appDirectoriesService.AppDataDir, "config.json"));
+                _logger.Error(_appDirectoriesService.DockStatesFile);
+                _logger.Error(_appDirectoriesService.ConfigFile);
 
 
                 File.Delete(projectLayout);
@@ -171,14 +171,13 @@ namespace WolvenKit.Views.Shell
 
         public void ResetDefaultLayout()
         {
-            var appDataLayoutPath = Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml");
-            if (!File.Exists(appDataLayoutPath))
+            if (!File.Exists(_appDirectoriesService.DockStatesFile))
             {
                 _logger.Info("You don't have a custom default layout");
                 return;
             }
 
-            File.Delete(appDataLayoutPath);
+            File.Delete(_appDirectoriesService.DockStatesFile);
             _logger.Success("Your custom default layout was reset");
         }
 
@@ -189,18 +188,16 @@ namespace WolvenKit.Views.Shell
                 File.Delete(Path.Combine(project.ProjectDirectory, "layout.xml"));
             }
 
-            var appDataLayoutPath = Path.Combine(_appDirectoriesService.AppDataDir, "DockStates.xml");
-
-            if (LoadLayout(appDataLayoutPath, "default"))
+            if (LoadLayout(_appDirectoriesService.DockStatesFile, "default"))
             {
                 return;
             }
 
             var systemLayoutPath = Path.GetFullPath("DockStatesDefault.xml");
 
-            File.Copy(systemLayoutPath, appDataLayoutPath, true);
+            File.Copy(systemLayoutPath, _appDirectoriesService.DockStatesFile, true);
 
-            if (!LoadLayout(appDataLayoutPath, "default"))
+            if (!LoadLayout(_appDirectoriesService.DockStatesFile, "default"))
             {
                 _logger.Error("Can't load system layout. Please re-download WolvenKit");
             }
