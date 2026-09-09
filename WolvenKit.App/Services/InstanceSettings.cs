@@ -3,17 +3,17 @@ using System.IO;
 using Newtonsoft.Json;
 using WolvenKit.Core.Services;
 
-namespace WolvenKit.App.Models;
+namespace WolvenKit.App.Services;
 
 /// <summary>
 /// Represents the per-instance settings of the application resolved from the instance config file and executable arguments.
 /// It is deliberately read-only.
 /// </summary>
-public class InstanceSettings
+public class InstanceSettings : IInstanceSettings
 {
     public string AppDataPath { get; set; } // can't private set because of deserialization
 
-    private InstanceSettings()
+    public InstanceSettings()
     {
         AppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
     }
@@ -25,10 +25,8 @@ public class InstanceSettings
     /// <param name="instanceSettingsFile"></param>
     /// <param name="executableArguments"></param>
     /// <returns></returns>
-    public static InstanceSettings Load(string instanceSettingsFile, string[] executableArguments)
+    public void Load(string instanceSettingsFile, string[] executableArguments)
     {
-        var instance = new InstanceSettings();
-
         if (File.Exists(instanceSettingsFile))
         {
             InstanceSettings? fileInstance;
@@ -47,7 +45,7 @@ public class InstanceSettings
                 var appDataPath = CleanPath(fileInstance.AppDataPath);
                 if (FilepathValidationTools.IsOsFilePathValid(appDataPath))
                 {
-                    instance.AppDataPath = appDataPath;
+                    AppDataPath = appDataPath;
                 }
             }
         }
@@ -63,13 +61,11 @@ public class InstanceSettings
             var path = CleanPath(executableArguments[i + 1]);
             if (FilepathValidationTools.IsOsFilePathValid(path))
             {
-                instance.AppDataPath = path;
+                AppDataPath = path;
             }
         }
 
-        Directory.CreateDirectory(instance.AppDataPath);
-
-        return instance;
+        Directory.CreateDirectory(AppDataPath);
     }
 
     private static string CleanPath(string path) => path.Replace("/", Path.DirectorySeparatorChar.ToString())

@@ -2,8 +2,9 @@ using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 
-namespace Wolvenkit.Test.App.Models;
+namespace Wolvenkit.Test.App.Services;
 
 [TestClass]
 public class InstanceSettingsTests
@@ -29,7 +30,8 @@ public class InstanceSettingsTests
             File.WriteAllText(configFile, instanceConfigContent);
         }
 
-        var instanceSettings = InstanceSettings.Load(configFile, args);
+        var instanceSettings = new InstanceSettings();
+        instanceSettings.Load(configFile, args);
 
         File.Delete(configFile);
 
