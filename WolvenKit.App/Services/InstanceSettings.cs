@@ -52,8 +52,7 @@ public class InstanceSettings : IInstanceSettings
 
         for (var i = 0; i < executableArguments.Length; i++)
         {
-            var trimmed = executableArguments[i].TrimStart("-").ToString();
-            if (!trimmed.StartsWith("AppDataPath") || executableArguments.Length <= i + 1)
+            if (executableArguments[i] != "--AppDataPath" || executableArguments.Length <= i + 1)
             {
                 continue;
             }
