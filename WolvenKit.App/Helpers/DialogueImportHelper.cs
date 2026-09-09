@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.App.Helpers;
 
@@ -16,7 +19,7 @@ namespace WolvenKit.App.Helpers;
 public sealed class ImportedDialogueLine
 {
     /// <summary>Locstring id the recording is registered under.</summary>
-    public ulong LocStringId { get; init; }
+    public CRUID LocStringId { get; init; }
 
     /// <summary>
     /// The one subtitle the scene's locstore gets for this line, picked from the variants below.
@@ -52,6 +55,34 @@ public sealed class ImportedDialogueLine
     public string MaleLipsyncAnim { get; init; } = "";
 
     /// <summary>
+    /// How long the recording runs, in milliseconds, or 0 where the export gave no length and a
+    /// section has to estimate one.
+    /// </summary>
+    /// <remarks>
+    /// Where an export times each recorded variant, this is the longer of the two: one event plays
+    /// whichever V is speaking, and the shorter take would cut the other off.
+    /// </remarks>
+    public uint DurationMs { get; init; }
+
+    /// <summary>
+    /// Where the line starts, in milliseconds from the beginning of the conversation. Null where the
+    /// export did not say - an older payload, or a hand-written one - leaving it to whoever lays the
+    /// lines out.
+    /// </summary>
+    public uint? StartTimeMs { get; init; }
+
+    /// <summary>Voiceover context for the line.</summary>
+    public CEnum<locVoiceoverContext>? VoContext { get; init; }
+
+    /// <summary>Voiceover expression for the line.</summary>
+    public CEnum<locVoiceoverExpression>? VoExpression { get; init; }
+
+    /// <summary>
+    /// Where the line falls in the conversation, counting from 1, or 0 where the export did not say.
+    /// </summary>
+    public int Order { get; init; }
+
+    /// <summary>
     /// Whether the line belongs in the screenplay store's options rather than its lines. A choice
     /// option has no recording behind it, so exports from a conversation are never one.
     /// </summary>
@@ -70,6 +101,12 @@ public sealed class DialogueImportPayload
 
     /// <summary>Tool and version that wrote the payload, when it said.</summary>
     public string Source { get; init; } = "";
+
+    /// <summary>
+    /// The payload format's version, or 0 where the export declared none. See
+    /// <see cref="DialogueImportHelper.PayloadVersion"/> for what the versions mean.
+    /// </summary>
+    public int Version { get; init; }
 
     /// <summary>Entries that carried no usable locstring id and were dropped.</summary>
     public int SkippedCount { get; init; }
@@ -228,6 +265,33 @@ public static class DialogueImportHelper
 {
     public const string PayloadFormat = "wolvenkit.scene.dialogue";
 
+    /// <summary>The payload version this was written against, and what the exporter writes now.</summary>
+    public const int PayloadVersion = 2;
+
+    /// <summary>
+    /// The version from which <c>duration</c> is milliseconds and a line carries its own
+    /// <c>startTime</c>. Version 1 wrote seconds, and the unit cannot be told from the number - 2 is
+    /// either two seconds or a fifth of a frame - so only the version says which.
+    /// </summary>
+    private const int millisecondTimingVersion = 2;
+
+    /// <summary>
+    /// The longest a line's stated length can be and still be believed. No single recording runs
+    /// five minutes, so a payload saying it does is writing something other than what it declared.
+    /// A length past this reads as "not said" and is estimated from the text instead.
+    /// </summary>
+    /// <remarks>
+    /// The same ceiling as <see cref="SceneSectionBuilder.MaxLineDurationMs"/>, so a length believed
+    /// here is one a section plays in full. Move the two together.
+    /// </remarks>
+    private const double maxLineDurationMs = 300_000;
+
+    /// <summary>
+    /// The latest a line can be said to start. A start time past this would leave a section running
+    /// for hours with nothing in it.
+    /// </summary>
+    private const double maxStartTimeMs = 3_600_000;
+
     /// <summary>
     /// Where the Dialogue Browser writes its exports, relative to a Cyberpunk install. Named here
     /// rather than in the file picker so the dialog can tell the user the same path it opens.
@@ -239,11 +303,20 @@ public static class DialogueImportHelper
     public static string GetExportDirectory(string gameRootDir) =>
         Path.Combine(gameRootDir, ExportDirectoryRelativePath);
 
+    /// <summary>JSON parser settings for import payloads.</summary>
     private static readonly JsonSerializerOptions s_options = new()
     {
         PropertyNameCaseInsensitive = true,
         AllowTrailingCommas = true,
-        ReadCommentHandling = JsonCommentHandling.Skip
+        ReadCommentHandling = JsonCommentHandling.Skip,
+        Converters =
+        {
+            new LocStringIdConverter(),
+            new LenientDoubleConverter(),
+            new LenientInt32Converter(),
+            new RedEnumNameConverter<locVoiceoverContext>(),
+            new RedEnumNameConverter<locVoiceoverExpression>()
+        }
     };
 
     /// <summary>
@@ -315,13 +388,19 @@ public static class DialogueImportHelper
             return DialogueImportPayload.Failed("No dialogue lines in that import.");
         }
 
+        // How to read the lines' timings. Taken once: every line in a payload shares the version.
+        // Missing or invalid versions use the oldest payload format.
+        var version = Math.Max(payload.Version ?? 0, 0);
+        var isMillisecondTiming = version >= millisecondTimingVersion;
+
         var lines = new List<ImportedDialogueLine>(payload.Lines.Count);
         var skipped = 0;
-        var seen = new HashSet<ulong>();
+        var seen = new HashSet<CRUID>();
 
         foreach (var dto in payload.Lines)
         {
-            if (dto is null || !TryReadLocStringId(dto.LocStringId, out var locStringId) || locStringId == 0)
+            // Lines without a usable locstring id cannot be imported.
+            if (dto is null || dto.LocStringId is not { } locStringId || locStringId == 0)
             {
                 skipped++;
                 continue;
@@ -347,6 +426,11 @@ public static class DialogueImportHelper
                 Addressee = dto.Addressee?.Trim() ?? "",
                 FemaleLipsyncAnim = dto.FemaleLipsyncAnim?.Trim() ?? "",
                 MaleLipsyncAnim = dto.MaleLipsyncAnim?.Trim() ?? "",
+                DurationMs = ReadDurationMs(dto.Duration, isMillisecondTiming),
+                StartTimeMs = ReadStartTimeMs(dto.StartTime),
+                VoContext = dto.Context,
+                VoExpression = dto.Expression,
+                Order = dto.Order is > 0 ? dto.Order.Value : 0,
                 IsChoiceOption = string.Equals(dto.Kind, "option", StringComparison.OrdinalIgnoreCase)
             });
         }
@@ -358,34 +442,60 @@ public static class DialogueImportHelper
 
         return new DialogueImportPayload
         {
-            Lines = lines,
+            Lines = SortByConversationOrder(lines),
             ConversationName = payload.Conversation?.Trim() ?? "",
             Source = payload.Source?.Trim() ?? "",
+            Version = version,
             SkippedCount = skipped
         };
     }
 
     /// <summary>
-    /// Locstring ids are 64 bit, so an exporter is free to write one as a string to keep it out of
-    /// a language's float; both forms are read here.
+    /// Converts a stated line duration to milliseconds and rejects unusable values.
     /// </summary>
-    private static bool TryReadLocStringId(JsonElement element, out ulong value)
+    /// <param name="duration">The stated duration in the payload unit.</param>
+    /// <param name="isMilliseconds">Whether the payload unit is milliseconds.</param>
+    private static uint ReadDurationMs(double? duration, bool isMilliseconds)
     {
-        value = 0;
-
-        if (element.ValueKind == JsonValueKind.String)
+        if (duration is not { } stated)
         {
-            return ulong.TryParse(element.GetString()?.Trim(), NumberStyles.Integer,
-                CultureInfo.InvariantCulture, out value);
+            return 0;
         }
 
-        if (element.ValueKind == JsonValueKind.Number)
+        var milliseconds = isMilliseconds ? stated : stated * 1000;
+
+        if (milliseconds <= 0 || milliseconds > maxLineDurationMs)
         {
-            return element.TryGetUInt64(out value);
+            return 0;
         }
 
-        return false;
+        return (uint)Math.Round(milliseconds);
     }
+
+    /// <summary>
+    /// Where a line starts, in milliseconds from the beginning of the conversation, or null where
+    /// the export said nothing. 0 is a start time in its own right, so it cannot mean "not said".
+    /// </summary>
+    /// <param name="startTime">The stated start time in milliseconds.</param>
+    private static uint? ReadStartTimeMs(double? startTime)
+    {
+        if (startTime is not { } stated || double.IsNegative(stated) || stated > maxStartTimeMs)
+        {
+            return null;
+        }
+
+        return (uint)Math.Round(stated);
+    }
+
+    /// <summary>
+    /// The lines in conversation order, where every one of them says where it falls. A payload
+    /// missing even one order is left as written: a partial ordering would move the lines that have
+    /// one past the lines that do not.
+    /// </summary>
+    private static List<ImportedDialogueLine> SortByConversationOrder(List<ImportedDialogueLine> lines) =>
+        lines.TrueForAll(line => line.Order > 0)
+            ? lines.OrderBy(line => line.Order).ToList()
+            : lines;
 
     private static string FirstNonEmpty(params string?[] values)
     {
@@ -405,12 +515,13 @@ public static class DialogueImportHelper
         public string? Format { get; set; }
         public string? Conversation { get; set; }
         public string? Source { get; set; }
+        public int? Version { get; set; }
         public List<LineDto>? Lines { get; set; }
     }
 
     private sealed class LineDto
     {
-        [JsonPropertyName("locStringId")] public JsonElement LocStringId { get; set; }
+        [JsonPropertyName("locStringId")] public CRUID? LocStringId { get; set; }
         public string? Text { get; set; }
         public string? FemaleText { get; set; }
         public string? MaleText { get; set; }
@@ -419,5 +530,195 @@ public static class DialogueImportHelper
         public string? FemaleLipsyncAnim { get; set; }
         public string? MaleLipsyncAnim { get; set; }
         public string? Kind { get; set; }
+        public double? Duration { get; set; }
+        public double? StartTime { get; set; }
+        public CEnum<locVoiceoverContext>? Context { get; set; }
+        public CEnum<locVoiceoverExpression>? Expression { get; set; }
+        public int? Order { get; set; }
+    }
+
+    /// <summary>
+    /// Reads a locstring id from a JSON number or string.
+    /// Invalid values return 0 so callers can skip the line.
+    /// </summary>
+    private sealed class LocStringIdConverter : JsonConverter<CRUID?>
+    {
+        public override CRUID? Read(
+            ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            switch (reader.TokenType)
+            {
+                case JsonTokenType.Number:
+                    // Avoid double conversion so large ids are not rounded.
+                    return reader.TryGetUInt64(out var number) ? number : 0;
+
+                case JsonTokenType.String:
+                    return ulong.TryParse(reader.GetString()?.Trim(), NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out var text)
+                        ? text
+                        : 0;
+
+                default:
+                    SkipValue(ref reader);
+                    return 0;
+            }
+        }
+
+        public override void Write(Utf8JsonWriter writer, CRUID? value, JsonSerializerOptions options)
+        {
+            // Write as a string so readers that parse numbers as doubles do not round large ids.
+            if (value is { } locStringId)
+            {
+                writer.WriteStringValue(((ulong)locStringId).ToString(CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reads a nullable number from a JSON number or string.
+    /// Invalid or non-finite values return null.
+    /// </summary>
+    private sealed class LenientDoubleConverter : JsonConverter<double?>
+    {
+        public override double? Read(
+            ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            double value;
+
+            switch (reader.TokenType)
+            {
+                case JsonTokenType.Number:
+                    if (!reader.TryGetDouble(out value))
+                    {
+                        return null;
+                    }
+
+                    break;
+
+                case JsonTokenType.String:
+                    if (!double.TryParse(reader.GetString()?.Trim(), NumberStyles.Float,
+                            CultureInfo.InvariantCulture, out value))
+                    {
+                        return null;
+                    }
+
+                    break;
+
+                default:
+                    SkipValue(ref reader);
+                    return null;
+            }
+
+            // String parsing can produce NaN or Infinity, which are not valid timings.
+            return double.IsFinite(value) ? value : null;
+        }
+
+        public override void Write(Utf8JsonWriter writer, double? value, JsonSerializerOptions options)
+        {
+            if (value is { } number)
+            {
+                writer.WriteNumberValue(number);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+        }
+    }
+
+    /// <inheritdoc cref="LenientDoubleConverter"/>
+    private sealed class LenientInt32Converter : JsonConverter<int?>
+    {
+        public override int? Read(
+            ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            switch (reader.TokenType)
+            {
+                case JsonTokenType.Number:
+                    return reader.TryGetInt32(out var number) ? number : null;
+
+                case JsonTokenType.String:
+                    return int.TryParse(reader.GetString()?.Trim(), NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out var text)
+                        ? text
+                        : null;
+
+                default:
+                    SkipValue(ref reader);
+                    return null;
+            }
+        }
+
+        public override void Write(Utf8JsonWriter writer, int? value, JsonSerializerOptions options)
+        {
+            if (value is { } number)
+            {
+                writer.WriteNumberValue(number);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reads a RED enum from a JSON string and returns null for unknown values or numeric strings.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Enum.TryParse{T}(string, bool, out T)"/> accepts numeric strings, so accepted
+    /// values are looked up by declared name instead.
+    /// </remarks>
+    /// <typeparam name="T">The RED enum type.</typeparam>
+    private sealed class RedEnumNameConverter<T> : JsonConverter<CEnum<T>?> where T : struct, Enum
+    {
+        private static readonly IReadOnlyDictionary<string, T> s_valuesByName =
+            Enum.GetNames<T>().ToDictionary(
+                name => name,
+                name => Enum.Parse<T>(name),
+                StringComparer.OrdinalIgnoreCase);
+
+        public override CEnum<T>? Read(
+            ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.String)
+            {
+                SkipValue(ref reader);
+                return null;
+            }
+
+            var name = reader.GetString()?.Trim();
+
+            return !string.IsNullOrEmpty(name) && s_valuesByName.TryGetValue(name, out var value)
+                ? value
+                : null;
+        }
+
+        public override void Write(Utf8JsonWriter writer, CEnum<T>? value, JsonSerializerOptions options)
+        {
+            if (value is { } redEnum)
+            {
+                writer.WriteStringValue(redEnum.ToEnumString());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Skips object or array values that a converter does not handle.
+    /// </summary>
+    private static void SkipValue(ref Utf8JsonReader reader)
+    {
+        if (reader.TokenType is JsonTokenType.StartObject or JsonTokenType.StartArray)
+        {
+            reader.Skip();
+        }
     }
 }
