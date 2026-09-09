@@ -5,15 +5,26 @@ using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.Models;
 
+/// <summary>
+/// Represents the per-instance settings of the application resolved from the instance config file and executable arguments.
+/// It is deliberately read-only.
+/// </summary>
 public class InstanceSettings
 {
-    public string AppDataPath { get; set; }
+    public string AppDataPath { get; set; } // can't private set because of deserialization
 
     private InstanceSettings()
     {
         AppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
     }
 
+    /// <summary>
+    /// Loads the instance settings from the instance config file and executable arguments.
+    /// Values get prioritized in the following order: executable arguments, instance config file, default as defined in the constructor.
+    /// </summary>
+    /// <param name="instanceSettingsFile"></param>
+    /// <param name="executableArguments"></param>
+    /// <returns></returns>
     public static InstanceSettings Load(string instanceSettingsFile, string[] executableArguments)
     {
         var instance = new InstanceSettings();
@@ -30,7 +41,6 @@ public class InstanceSettings
             {
                 fileInstance = null;
             }
-
 
             if (fileInstance != null)
             {
