@@ -38,18 +38,17 @@ namespace WolvenKit
         private ISettingsManager _settingsManager;
         private ILoggerService _loggerService;
 
-        // Constructor #1
         static AppImpl()
         {
 
         }
 
-        // Constructor #2
-        public AppImpl()
+        // Application OnStartup Override.
+        protected override void OnStartup(StartupEventArgs e)
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
-            Init();
+            Init(e.Args);
 
             SetupExceptionHandling();
 
@@ -59,11 +58,7 @@ namespace WolvenKit
             {
                 throw new FileNotFoundException($"{Core.Constants.Oodle} not found.");
             }
-        }
 
-        // Application OnStartup Override.
-        protected override void OnStartup(StartupEventArgs e)
-        {
             _settingsManager ??= Locator.Current.GetService<ISettingsManager>();
 
             _loggerService = Locator.Current.GetService<ILoggerService>();
@@ -152,14 +147,14 @@ namespace WolvenKit
 
         private IHost _host;
 
-        private void Init()
+        private void Init(string[] args)
         {
             // Set application licenses.
             Initializations.InitializeLicenses();
             //protobuf
             //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            _host = GenericHost.CreateHostBuilder().Build();
+            _host = GenericHost.CreateHostBuilder(args).Build();
 
             // Since MS DI container is a different type,
             // we need to re-register the built container with Splat again

@@ -7,7 +7,7 @@ namespace WolvenKit.IntegrationTests.Helpers;
 
 /// <summary>
 /// Central place to create a real application host for integration / UI tests.
-/// 
+///
 /// Instead of manually registering dozens of services (which leads to endless
 /// "Unable to resolve service" AggregateExceptions), we start from the real
 /// <see cref="GenericHost.CreateHostBuilder"/> and only apply test-specific
@@ -22,9 +22,10 @@ public static class IntegrationTestHost
     /// Optional action to further configure or override services for the specific test.
     /// This runs after the real production registrations.
     /// </param>
-    public static IHost Create(Action<IServiceCollection>? configureTestServices = null)
+    /// <param name="args">Optional command-line arguments to pass to the host.</param>
+    public static IHost Create(Action<IServiceCollection>? configureTestServices = null, string[]? args = null)
     {
-        var builder = GenericHost.CreateHostBuilder();
+        var builder = GenericHost.CreateHostBuilder(args ?? []);
 
         if (configureTestServices != null)
         {

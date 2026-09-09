@@ -11,6 +11,7 @@ using WolvenKit.App;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -43,7 +44,7 @@ namespace WolvenKit
 {
     public static class GenericHost
     {
-        public static IHostBuilder CreateHostBuilder() => Host
+        public static IHostBuilder CreateHostBuilder(string[] args) => Host
                 .CreateDefaultBuilder()
                 .ConfigureAppConfiguration((hostingContext, configuration) =>
                 {
@@ -63,6 +64,15 @@ namespace WolvenKit
                 {
                     // services
                     services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+                    services.AddSingleton<IInstanceSettings, InstanceSettings>(
+                    _ => {
+                        var instanceSettings = new InstanceSettings();
+                        instanceSettings.Load(
+                            Path.Join(Path.GetDirectoryName(AppContext.BaseDirectory), "instanceConfig.json"),
+                            args);
+                        return instanceSettings;
+                    });
+                    services.AddSingleton<IApplicationDirectoriesService, ApplicationDirectoriesService>();
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<IHashService, HashServiceExt>();                                      // can this be transient?
                     services.AddSingleton<CRUIDService>(x => new CRUIDService(false));    // can this be transient?
