@@ -31,6 +31,8 @@ public class InstanceSettingsTests
 
         var instanceSettings = InstanceSettings.Load(configFile, args);
 
+        File.Delete(configFile);
+
         Assert.AreEqual(expectedAppDataPath, instanceSettings.AppDataPath);
     }
 }
