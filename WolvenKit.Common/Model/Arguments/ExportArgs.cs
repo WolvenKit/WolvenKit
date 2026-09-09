@@ -199,6 +199,10 @@ namespace WolvenKit.Common.Model.Arguments
         [WkitScriptAccess("MeshExporter")]
         public MeshExporterType MeshExporter { get; set; }
 
+        [Category("Experimental")]
+        [Display(Name = "Choose File Format")]
+        public MeshExperimental2Format Format { get; set; } = MeshExperimental2Format.New;
+
         /// <summary>
         /// Export type for the selected Mesh.
         /// </summary>
@@ -406,6 +410,13 @@ namespace WolvenKit.Common.Model.Arguments
     {
         Default,
         Experimental,
-        REDmod
+        REDmod,
+        Experimental2
+    }
+
+    public enum MeshExperimental2Format
+    {
+        Legacy,
+        New
     }
 }
