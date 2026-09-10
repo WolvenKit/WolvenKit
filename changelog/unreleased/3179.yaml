@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3179
+      author: "notaspirit"
+      description: "Default project layout has been adjusted to optimize for document editing"
