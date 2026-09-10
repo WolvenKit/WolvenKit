@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3178
+      author: "notaspirit"
+      description: "Template Manager no longer appears empty when opened when templates are available."
