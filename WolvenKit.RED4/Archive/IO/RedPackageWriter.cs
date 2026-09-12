@@ -9,6 +9,8 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public partial class RedPackageWriter : Red4Writer
 {
+    private int _psData = 0;
+
     public RedPackageSettings Settings = new();
 
     public RedPackageWriter(Stream output) : this(output, Encoding.UTF8, false)
@@ -44,21 +46,30 @@ public partial class RedPackageWriter : Red4Writer
     {
         var typeInfo = RedReflection.GetTypeInfo(cls);
 
+        if (cls is gamePersistentState)
+        {
+            _psData++;
+        }
+
         var nonDefaultProperties = new List<ExtendedPropertyInfo>();
         foreach (var propertyInfo in cls.GetWritableProperties())
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 
             var value = cls.GetProperty(propertyInfo.RedName);
-            if (!propertyInfo.IsDynamic)
+            if (_psData > 0)
             {
-                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && propertyInfo.IsDefault(value))
+                if (value != null)
                 {
-                    continue;
+                    nonDefaultProperties.Add(propertyInfo);
                 }
+                continue;
             }
 
-            nonDefaultProperties.Add(propertyInfo);
+            if (propertyInfo.IsDynamic || typeInfo.SerializeDefault || propertyInfo.SerializeDefault || !propertyInfo.IsDefault(value))
+            {
+                nonDefaultProperties.Add(propertyInfo);
+            }
         }
 
         _writer.Write((ushort)nonDefaultProperties.Count);
@@ -105,6 +116,11 @@ public partial class RedPackageWriter : Red4Writer
             }
 
             currentDataPosition = BaseStream.Position;
+        }
+
+        if (cls is gamePersistentState)
+        {
+            --_psData;
         }
 
         if (cls is IRedAppendix app)
