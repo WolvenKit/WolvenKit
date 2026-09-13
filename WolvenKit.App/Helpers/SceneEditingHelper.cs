@@ -296,5 +296,186 @@ namespace WolvenKit.App.Helpers
             itemId is null ? UnassignedScreenplayItemId : itemId.Id;
 
 #endregion
+
+#region lipsync
+
+        private const string femaleLipsyncAnimationPrefix = "f_";
+        private const string maleLipsyncAnimationPrefix = "m_";
+        private const uint unassignedLipsyncAnimSetId = uint.MaxValue;
+
+        /// <summary>Formats the female lipsync animation name for a locstring RUID.</summary>
+        /// <param name="ruid">The RUID of the dialogue line's locstring.</param>
+        public static CName GetFemaleLipsyncAnimationName(CRUID ruid) =>
+            FormatLipsyncAnimationName(femaleLipsyncAnimationPrefix, ruid);
+
+        /// <summary>Formats the male lipsync animation name for a locstring RUID.</summary>
+        /// <param name="ruid">The RUID of the dialogue line's locstring.</param>
+        public static CName GetMaleLipsyncAnimationName(CRUID ruid) =>
+            FormatLipsyncAnimationName(maleLipsyncAnimationPrefix, ruid);
+
+        /// <summary>
+        /// Fills missing lipsync animation names from each dialogue line's locstring RUID.
+        /// </summary>
+        /// <remarks>
+        /// Existing names are preserved; player lines and zero RUIDs are skipped.
+        /// </remarks>
+        /// <param name="scene">The scene whose dialogue lines are named.</param>
+        /// <returns>How many lines were given at least one name.</returns>
+        public static int FillMissingLipsyncAnimationNames(scnSceneResource scene)
+        {
+            var playerActorIds = scene.PlayerActors.Select(playerActor => playerActor.ActorId.Id).ToHashSet();
+            var namedLines = 0;
+
+            foreach (var line in scene.ScreenplayStore.Lines)
+            {
+                var ruid = line.LocstringId.Ruid;
+                if ((ulong)ruid == 0 || playerActorIds.Contains(line.Speaker.Id))
+                {
+                    continue;
+                }
+
+                var isNamed = false;
+
+                if (CName.IsNullOrEmpty(line.FemaleLipsyncAnimationName))
+                {
+                    line.FemaleLipsyncAnimationName = GetFemaleLipsyncAnimationName(ruid);
+                    isNamed = true;
+                }
+
+                if (CName.IsNullOrEmpty(line.MaleLipsyncAnimationName))
+                {
+                    line.MaleLipsyncAnimationName = GetMaleLipsyncAnimationName(ruid);
+                    isNamed = true;
+                }
+
+                if (isNamed)
+                {
+                    namedLines++;
+                }
+            }
+
+            return namedLines;
+        }
+
+        /// <summary>
+        /// Groups NPC dialogue lines by voicetag, keeping untagged actors separate.
+        /// </summary>
+        /// <remarks>Player and unknown speakers are skipped.</remarks>
+        /// <param name="scene">The scene whose dialogue lines are grouped.</param>
+        /// <returns>The voices, in the order their first line appears in the screenplay.</returns>
+        public static List<SceneLipsyncVoice> CollectLipsyncVoices(scnSceneResource scene)
+        {
+            var speakers = scene.Actors
+                .DistinctBy(actor => actor.ActorId.Id)
+                .ToDictionary(actor => actor.ActorId.Id);
+
+            var voices = new List<SceneLipsyncVoice>();
+            var voicesByKey = new Dictionary<(CRUID VoicetagId, CUInt32 UntaggedActorId), SceneLipsyncVoice>();
+
+            foreach (var line in scene.ScreenplayStore.Lines)
+            {
+                if (!speakers.TryGetValue(line.Speaker.Id, out var speaker))
+                {
+                    continue;
+                }
+
+                // Use actor IDs only to distinguish untagged voices.
+                var voicetagId = speaker.VoicetagId.Id;
+                var voiceKey = (voicetagId, (ulong)voicetagId == 0 ? speaker.ActorId.Id : default);
+
+                if (!voicesByKey.TryGetValue(voiceKey, out var voice))
+                {
+                    voice = new SceneLipsyncVoice(voicetagId, speaker.ActorName);
+                    voicesByKey.Add(voiceKey, voice);
+                    voices.Add(voice);
+                }
+
+                voice.Lines.Add(line);
+            }
+
+            return voices;
+        }
+
+        /// <summary>
+        /// Replaces the scene's lipsync references and assigns each speaking actor its voicetag's anim set.
+        /// </summary>
+        /// <remarks>Player, silent, and unmatched actors remain unassigned.</remarks>
+        /// <param name="scene">The scene whose actors and lipsync references are updated.</param>
+        /// <param name="animSetsByVoicetag">The anim set each voicetag should reference.</param>
+        /// <returns>Whether the scene changed.</returns>
+        public static bool AssignLipsyncAnimSets(
+            scnSceneResource scene,
+            IReadOnlyDictionary<CRUID, ResourcePath> animSetsByVoicetag)
+        {
+            var speakerIds = scene.ScreenplayStore.Lines.Select(line => line.Speaker.Id).ToHashSet();
+            var animSetPaths = new List<ResourcePath>();
+            var isChanged = false;
+
+            foreach (var actor in scene.Actors)
+            {
+                var lipsyncAnimSetId = GetLipsyncAnimSetId(actor);
+                isChanged |= (uint)actor.LipsyncAnimSet.Id != lipsyncAnimSetId;
+                actor.LipsyncAnimSet = new scnLipsyncAnimSetSRRefId { Id = lipsyncAnimSetId };
+            }
+
+            foreach (var playerActor in scene.PlayerActors)
+            {
+                isChanged |= (uint)playerActor.LipsyncAnimSet.Id != unassignedLipsyncAnimSetId;
+                playerActor.LipsyncAnimSet = new scnLipsyncAnimSetSRRefId { Id = unassignedLipsyncAnimSetId };
+            }
+
+            isChanged |= SetLipsyncAnimSetReferences(scene, animSetPaths);
+            return isChanged;
+
+            // Return the reference index, adding it when necessary.
+            uint GetLipsyncAnimSetId(scnActorDef actor)
+            {
+                if (!speakerIds.Contains(actor.ActorId.Id) ||
+                    !animSetsByVoicetag.TryGetValue(actor.VoicetagId.Id, out var animSetPath))
+                {
+                    return unassignedLipsyncAnimSetId;
+                }
+
+                var index = animSetPaths.IndexOf(animSetPath);
+                if (index < 0)
+                {
+                    index = animSetPaths.Count;
+                    animSetPaths.Add(animSetPath);
+                }
+
+                return (uint)index;
+            }
+        }
+
+        /// <summary>Replaces the scene's lipsync references when they differ.</summary>
+        /// <param name="scene">The scene whose lipsync references are replaced.</param>
+        /// <param name="animSetPaths">The anim sets to reference, in reference index order.</param>
+        /// <returns>Whether the entries changed.</returns>
+        private static bool SetLipsyncAnimSetReferences(scnSceneResource scene, List<ResourcePath> animSetPaths)
+        {
+            var lipsyncAnimSets = scene.ResouresReferences.LipsyncAnimSets;
+            if (lipsyncAnimSets.Select(reference => reference.AsyncRefLipsyncAnimSet.DepotPath).SequenceEqual(animSetPaths))
+            {
+                return false;
+            }
+
+            lipsyncAnimSets.Clear();
+            foreach (var animSetPath in animSetPaths)
+            {
+                lipsyncAnimSets.Add(new scnLipsyncAnimSetSRRef
+                {
+                    AsyncRefLipsyncAnimSet = new CResourceAsyncReference<animAnimSet>(animSetPath, InternalEnums.EImportFlags.Soft),
+                });
+            }
+
+            return true;
+        }
+
+        /// <summary>Formats a lipsync animation name from its prefix and a locstring RUID.</summary>
+        /// <param name="prefix">The female or male animation prefix.</param>
+        /// <param name="ruid">The RUID of the dialogue line's locstring.</param>
+        private static CName FormatLipsyncAnimationName(string prefix, CRUID ruid) => $"{prefix}{(ulong)ruid:X16}";
+
+#endregion
     }
 }
