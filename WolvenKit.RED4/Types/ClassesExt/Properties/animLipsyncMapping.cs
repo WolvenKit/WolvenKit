@@ -4,6 +4,7 @@ public partial class animLipsyncMapping
 {
     [Ordinal(3)]
     [RED("scenePreviewPaths")]
+    [DisplayAsResourcePath]
     public CArray<CUInt64> ScenePreviewPaths
     {
         get => GetPropertyValue<CArray<CUInt64>>();

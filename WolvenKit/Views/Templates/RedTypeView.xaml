@@ -524,6 +524,12 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.UIntAsEnumEditor>
 
+                <converters:RedEditorTemplateSelector.UlongAsResourcePathEditor>
+                    <DataTemplate>
+                        <templates:DisplayAsResourcePathEditor RedNumber="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.UlongAsResourcePathEditor>
+
                 <converters:RedEditorTemplateSelector.RedBoolEditor>
                     <DataTemplate>
                         <editors:RedBoolEditor RedBool="{Binding Data, Mode=TwoWay}" />

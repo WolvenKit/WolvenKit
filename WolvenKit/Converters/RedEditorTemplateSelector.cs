@@ -35,6 +35,7 @@ namespace WolvenKit.Converters
         public DataTemplate EnumTemplateView { get; set; }
         public DataTemplate UIntAsBitfieldEditor { get; set; }
         public DataTemplate UIntAsEnumEditor { get; set; }
+        public DataTemplate UlongAsResourcePathEditor { get; set; }
         public DataTemplate ColorPickerPalette { get; set; }
         public DataTemplate RedBoolEditor { get; set; }
         public DataTemplate RedVector2Editor { get; set; }
@@ -100,6 +101,11 @@ namespace WolvenKit.Converters
                 {
                     return UIntAsEnumEditor;
                 }
+            }
+
+            if (vm.DisplayAsResourcePath)
+            {
+                return UlongAsResourcePathEditor;
             }
 
             if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
