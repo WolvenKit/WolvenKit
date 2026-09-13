@@ -630,6 +630,19 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case workExitAnim exitAnim:
+                Value = $"{exitAnim.AnimName.GetResolvedText()}";
+                IsValueExtrapolated = !string.IsNullOrWhiteSpace(Value);
+                break;
+            case workEntryAnim entryAnim:
+                Value = $"{entryAnim.AnimName.GetResolvedText()}";
+                IsValueExtrapolated = !string.IsNullOrWhiteSpace(Value);
+                break;
+            case workFastExit fastExit:
+                Value = $"{fastExit.AnimName.GetResolvedText()}".Trim();
+                Value = $"{Value} ({fastExit.MovementType.ToEnumString()})";
+                IsValueExtrapolated = true;
+                break;
             case scnEffectInstanceId scnEffectInstance
                 when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource sceneForEffect:
                 Value = $"{scnEffectInstance.Id}";
