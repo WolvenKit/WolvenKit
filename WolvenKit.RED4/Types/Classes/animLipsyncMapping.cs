@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(2)] 
 		[RED("scenePaths")] 
+		[DisplayAsResourcePath]
 		public CArray<CUInt64> ScenePaths
 		{
 			get => GetPropertyValue<CArray<CUInt64>>();

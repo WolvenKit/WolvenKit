@@ -801,6 +801,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Defined with the DisplayAsEnum attribute
     public Type? DisplayAsEnumType => _displayAsEnumType;
 
+    // Display CUInt64 values marked with DisplayAsResourcePath as depot paths.
+    public bool DisplayAsResourcePath =>
+        Data is CUInt64 &&
+        (Parent is { Data: IRedArray } array ? array : this).GetDeclaringPropertyInfo()?.DisplayAsResourcePath == true;
+
+    /// <summary>Gets the metadata for the property represented by this node.</summary>
+    private ExtendedPropertyInfo? GetDeclaringPropertyInfo()
+    {
+        if (Parent is null)
+        {
+            return null;
+        }
+
+        var parentType = Parent.ResolvedPropertyType;
+        return GetPropertyByRedName(parentType, PropertyName);
+    }
+
+    /// <summary>Formats a depot path for display.</summary>
+    private string GetDepotPathValue(ResourcePath depotPath)
+    {
+        if (depotPath.IsResolvable)
+        {
+            return depotPath.GetResolvedText().NotNull();
+        }
+
+        return depotPath == ResourcePath.Empty
+            ? "null"
+            : $"{(ulong)depotPath}{_hashService.GetGuessedExtension(depotPath)}";
+    }
+
     public string Type
     {
         get
@@ -1082,6 +1112,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
+            if (DisplayAsResourcePath)
+            {
+                return "FileSymlinkFile";
+            }
+
             if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 return "SymbolNumeric";
