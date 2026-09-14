@@ -471,6 +471,12 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.FilterableDropdownRedRefEditor>
 
+                <converters:RedEditorTemplateSelector.FilterableDropdownResourcePathHashEditor>
+                    <DataTemplate>
+                        <editors:FilterableDropdownResourcePathHashMenu DataContext="{Binding}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.FilterableDropdownResourcePathHashEditor>
+
                 <converters:RedEditorTemplateSelector.FilterableDropdownIntegerEditor>
                     <DataTemplate>
                         <editors:ScnActorIdDropdown DataContext="{Binding}" />

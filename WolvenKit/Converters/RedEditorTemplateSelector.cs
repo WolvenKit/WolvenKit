@@ -24,6 +24,7 @@ namespace WolvenKit.Converters
         public DataTemplate FilterableDropdownCNameEditor { get; set; }
         public DataTemplate FilterableDropdownRedstringEditor { get; set; }
         public DataTemplate FilterableDropdownRedRefEditor { get; set; }
+        public DataTemplate FilterableDropdownResourcePathHashEditor { get; set; }
         public DataTemplate FilterableDropdownIntegerEditor { get; set; }
         public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
@@ -105,7 +106,12 @@ namespace WolvenKit.Converters
 
             if (vm.DisplayAsResourcePath)
             {
-                return UlongAsResourcePathEditor;
+                if (!CvmDropdownHelper.HasDropdownOptions(vm))
+                {
+                    return UlongAsResourcePathEditor;
+                }
+
+                return FilterableDropdownResourcePathHashEditor;
             }
 
             if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
