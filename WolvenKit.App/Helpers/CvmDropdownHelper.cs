@@ -65,6 +65,13 @@ public abstract class CvmDropdownHelper
         "microblend"
     ];
 
+    /// <summary>
+    /// Returns whether <paramref name="cvm"/> is an element of an <see cref="animLipsyncMapping"/> array property
+    /// marked with <see cref="DisplayAsResourcePathAttribute"/>.
+    /// </summary>
+    private static bool isLipsyncScenePath(ChunkViewModel cvm) =>
+        cvm is { DisplayAsResourcePath: true, Parent: { Data: IRedArray, Parent.ResolvedData: animLipsyncMapping } };
+
     #region questsAndScenes
 
     /// <summary>
@@ -772,6 +779,14 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
+            #region lipmapFile
+
+            case CArray<CUInt64> when isLipsyncScenePath(cvm):
+                ret = documentTools.CollectProjectFiles(".scene");
+                break;
+
+            #endregion
+
             #region iComponent
 
             // mesh entity options
@@ -1066,6 +1081,12 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
+            #region lipmap
+
+            CArray<CUInt64> when isLipsyncScenePath(cvm) => true,
+
+            #endregion
+
             #region inkatlas
 
             inkTextureSlot => cvm.Name is "texture",
@@ -1089,6 +1110,11 @@ public abstract class CvmDropdownHelper
         }
 
         if (cvm is { ParentData: graphGraphNodeDefinition, Name: "phaseResource" or "sceneFile" })
+        {
+            return true;
+        }
+
+        if (isLipsyncScenePath(cvm))
         {
             return true;
         }

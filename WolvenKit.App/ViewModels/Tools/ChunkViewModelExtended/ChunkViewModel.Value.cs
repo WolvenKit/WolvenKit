@@ -69,6 +69,10 @@ public partial class ChunkViewModel
                 Value = EnumHelper.RedIntToEnumString(DisplayAsEnumType, ri);
             }
         }
+        else if (Data is CUInt64 resourcePathHash && DisplayAsResourcePath)
+        {
+            Value = GetDepotPathValue((ulong)resourcePathHash);
+        }
         else if (PropertyType.IsAssignableTo(typeof(IRedEnum)) && Data is IRedEnum e)
         {
             Value = e.ToEnumString();
@@ -120,18 +124,7 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedRef)) && Data is IRedRef rr)
         {
-            var depotPath = rr.DepotPath;
-
-            if (depotPath.IsResolvable)
-            {
-                Value = depotPath.GetResolvedText().NotNull();
-            }
-            else
-            {
-                Value = depotPath == ResourcePath.Empty
-                    ? "null"
-                    : $"{(ulong)depotPath}{_hashService.GetGuessedExtension(depotPath)}";
-            }
+            Value = GetDepotPathValue(rr.DepotPath);
         }
         else if (Data is IBrowsableType ibt)
         {
