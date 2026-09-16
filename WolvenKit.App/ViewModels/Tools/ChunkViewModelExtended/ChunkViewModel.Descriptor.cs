@@ -131,6 +131,11 @@ public partial class ChunkViewModel
                 Descriptor = $"{startTime}scneventsVFXEvent{effectDetails}";
                 return;
             }
+            case AIActionSpot aiSpot:
+            {
+                Descriptor = $"{aiSpot.Resource.DepotPath.GetResolvedText()}";
+                return;
+            }
             case scneventsVFXDurationEvent vfxDurationEvent:
             {
                 var startTime = $"[{vfxDurationEvent.StartTime}ms] ";
