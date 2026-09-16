@@ -62,6 +62,73 @@ public static class YamlHelper
 
 
     /// <summary>
+    /// Finds an existing nested mapping without modifying the YAML tree.
+    /// </summary>
+    /// <returns>The mapping, or <see langword="null"/> if the path is missing or invalid.</returns>
+    public static YamlMappingNode? FindNestedMapping(YamlMappingNode rootNode, params string[] names)
+    {
+        var currentNode = rootNode;
+        foreach (var name in names)
+        {
+            if (!currentNode.Children.TryGetValue(name, out var child) || child is not YamlMappingNode childMapping)
+            {
+                return null;
+            }
+
+            currentNode = childMapping;
+        }
+
+        return currentNode;
+    }
+
+    /// <summary>
+    /// Adds a unique value to an ArchiveXL scalar-or-sequence field.
+    /// </summary>
+    /// <remarks>A different scalar is converted into a sequence containing both values.</remarks>
+    /// <returns>Whether the mapping changed.</returns>
+    /// <exception cref="InvalidOperationException">The key holds neither a scalar nor a sequence node.</exception>
+    public static bool AddToScalarOrSequence(
+        YamlMappingNode mappingNode,
+        string key,
+        string value,
+        StringComparison comparisonType)
+    {
+        if (!mappingNode.Children.TryGetValue(key, out var existingNode) ||
+            existingNode is YamlScalarNode { Value: null or "" })
+        {
+            mappingNode.Children[key] = new YamlScalarNode(value);
+            return true;
+        }
+
+        if (existingNode is YamlSequenceNode sequence)
+        {
+            if (sequence.Children.Any(HoldsValue))
+            {
+                return false;
+            }
+
+            sequence.Add(value);
+            return true;
+        }
+
+        if (existingNode is not YamlScalarNode scalar)
+        {
+            throw new InvalidOperationException($"Node '{key}' exists but is neither a scalar nor a sequence node.");
+        }
+
+        if (HoldsValue(scalar))
+        {
+            return false;
+        }
+
+        mappingNode.Children[key] = new YamlSequenceNode(scalar, new YamlScalarNode(value));
+        return true;
+
+        bool HoldsValue(YamlNode node) =>
+            node is YamlScalarNode { Value: { } nodeValue } && string.Equals(nodeValue, value, comparisonType);
+    }
+
+    /// <summary>
     /// Appending to parsed yaml will not preserve comments, and also wreak havoc with formatting by trimming all whitespaces.
     /// For that reason, we're parsing first and appending later.
     /// </summary>
