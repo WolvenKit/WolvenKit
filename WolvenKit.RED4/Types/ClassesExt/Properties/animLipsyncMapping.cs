@@ -10,8 +10,6 @@ public partial class animLipsyncMapping
         set => SetPropertyValue<CArray<CUInt64>>(value);
     }
 
-    partial void PostConstruct() => ScenePreviewPaths = [];
-
     /// <summary>Gets the entry for a scene, or <see langword="null"/> when the mapping has none.</summary>
     public animLipsyncMappingSceneEntry? GetSceneEntry(CUInt64 scenePathHash)
     {
@@ -58,6 +56,9 @@ public partial class animLipsyncMapping
 
     private void AlignPreviewPaths()
     {
+        // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+        ScenePreviewPaths ??= [];
+
         while (ScenePreviewPaths.Count > ScenePaths.Count)
         {
             ScenePreviewPaths.RemoveAt(ScenePreviewPaths.Count - 1);
