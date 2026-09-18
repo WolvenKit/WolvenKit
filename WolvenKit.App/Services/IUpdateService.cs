@@ -12,4 +12,5 @@ public interface IUpdateService
     public SemVersion GetLocalVersion();
     public string? GetSavedChangelog();
     public void ClearSavedChangelog();
+    public Task<string?> GetRemoteChangelog(string localVersion, string remoteVersion);
 }
