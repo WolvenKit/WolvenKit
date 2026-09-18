@@ -72,3 +72,11 @@ public enum ProjectFolder
     Raw,
     Resources
 }
+
+public enum UpdateAvailability
+{
+    None,
+    Major,
+    Minor,
+    Patch
+}
