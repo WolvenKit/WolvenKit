@@ -724,12 +724,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 return;
             }
 
-            if (!await _updateService.IsUpdateAvailable())
+            var updateStatus = await _updateService.IsUpdateAvailable();
+
+            if (updateStatus == UpdateAvailability.None)
             {
                 return;
             }
 
-            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService, !SettingsManager.AlwaysAskBeforeUpdating, true));
+            var skipPermissionState = updateStatus != UpdateAvailability.Major &&
+                                      !SettingsManager.AlwaysAskBeforeUpdating;
+
+            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService, skipPermissionState, updateStatus));
         }
         else
         {
