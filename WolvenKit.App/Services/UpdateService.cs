@@ -125,7 +125,7 @@ public class UpdateService : IUpdateService
             File.Delete(unpackerZipPath);
         }
 
-        var relevantChangelog = await GetRemoteChangeLog(GetLocalVersion()?.ToString() ?? "", latestRelease.TagName);
+        var relevantChangelog = await GetRemoteChangelog(GetLocalVersion().ToString(), latestRelease.TagName);
         if (!string.IsNullOrEmpty(relevantChangelog))
         {
             await File.WriteAllTextAsync(_localChangelogPath, relevantChangelog);
@@ -237,7 +237,7 @@ public class UpdateService : IUpdateService
         return SemVersion.Parse(latestRelease.TagName, SemVersionStyles.OptionalMinorPatch);
     }
 
-    private async Task<string?> GetRemoteChangeLog(string localVersion, string remoteVersion)
+    public async Task<string?> GetRemoteChangelog(string localVersion, string remoteVersion)
     {
         if (remoteVersion.Contains("nightly"))
         {
