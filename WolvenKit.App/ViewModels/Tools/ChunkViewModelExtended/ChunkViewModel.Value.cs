@@ -631,11 +631,11 @@ public partial class ChunkViewModel
 
                 break;
             case workExitAnim exitAnim:
-                Value = $"{exitAnim.AnimName.GetResolvedText()}";
+                Value = $"{exitAnim.AnimName.GetResolvedText()}".Trim();
                 IsValueExtrapolated = !string.IsNullOrWhiteSpace(Value);
                 break;
             case workEntryAnim entryAnim:
-                Value = $"{entryAnim.AnimName.GetResolvedText()}";
+                Value = $"{entryAnim.AnimName.GetResolvedText()}".Trim();
                 IsValueExtrapolated = !string.IsNullOrWhiteSpace(Value);
                 break;
             case workFastExit fastExit:
