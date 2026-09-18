@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3184
+      author: "notaspirit"
+      description: "The auto update process at startup will now no longer be able to automatically update to a major version, requiring user confirmation"
