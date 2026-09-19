@@ -712,6 +712,27 @@ public partial class ChunkViewModel
                 Value = $"Pitch: {eulerAngles.Pitch}, Roll: {eulerAngles.Roll}, Yaw: {eulerAngles.Yaw}";
                 IsValueExtrapolated = true;
                 break;
+
+            #region workspot
+
+            case workLookAtDrivenTurn lookat:
+                Value = $"Angle: {lookat.TurnAngle}, blend time: {lookat.BlendTime}";
+                IsValueExtrapolated = true;
+                break;
+            case workSequence workSequence:
+                Value = StringHelper.Stringify(workSequence.List);
+                IsValueExtrapolated = true;
+                break;
+            case workRandomList randomList:
+                Value = StringHelper.Stringify(randomList.List);
+                IsValueExtrapolated = true;
+                break;
+            case IRedArray<IRedHandle<workIEntry>> workEntryList:
+                Value = StringHelper.Stringify(workEntryList);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+
+            #endregion
             case CArray<entSlot> entSlots:
                 var entSlotDescriptors = entSlots
                     .Select(slotsOption => slotsOption.SlotName.GetResolvedText() ?? "")
