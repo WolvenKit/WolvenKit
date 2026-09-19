@@ -3,4 +3,4 @@ changes:
       packages: ["App"]
       pr-number: 3180
       author: "manavortex"
-      description: "Added editor descriptions for nodes in workspot files"
+      description: "Added editor descriptions for various node types in the editor"

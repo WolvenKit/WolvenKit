@@ -684,12 +684,32 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case scnPlaySkAnimRootMotionData { OriginMarker: { } om }:
+                Value = $"{om.NodeRef.GetResolvedText()}".Split("/").Last();
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case scnPlayerActorDef playerActorDef:
                 Value = $"NodeId: {playerActorDef.SpecCharacterRecordId.GetResolvedText()}";
                 IsValueExtrapolated = true;
                 break;
+            case scnPlayerAnimData { TierData: { Chunk: { } td } }:
+                Value = $"{td.Tier}";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case scnSceneTime sceneTime:
+                Value = $"{sceneTime.Stu}";
+                IsValueExtrapolated = true;
+                break;
+            case scnfppGenderSpecificParams scnfppGenderSpecificParams:
+                Value = $"GenderMask: {scnfppGenderSpecificParams.GenderMask.Mask}";
+                IsValueExtrapolated = true;
+                break;
             case workWorkEntryId id:
                 Value = $"{id.Id}";
+                IsValueExtrapolated = true;
+                break;
+            case EulerAngles eulerAngles:
+                Value = $"Pitch: {eulerAngles.Pitch}, Roll: {eulerAngles.Roll}, Yaw: {eulerAngles.Yaw}";
                 IsValueExtrapolated = true;
                 break;
             case CArray<entSlot> entSlots:
