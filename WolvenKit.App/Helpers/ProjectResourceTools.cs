@@ -1021,20 +1021,25 @@ public partial class ProjectResourceTools
                     case CKeyValuePair kvp:
                         kvp.Value = newValue;
                         break;
-                    case IRedHandle handle when handle.GetValue() is gameuiAppearanceInfo appInfo:
-                        appInfo.Resource =
-                            new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                    case IRedHandle handle:
+                        switch (handle.GetValue())
+                        {
+                            case gameuiAppearanceInfo appInfo:
+                                appInfo.Resource =
+                                    new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                                break;
+                            case CMaterialInstance mInstance:
+                                mInstance.BaseMaterial = new CResourceReference<IMaterial>(newValue.DepotPath);
+                                break;
+                            case questPhaseNodeDefinition questNode:
+                                questNode.PhaseResource =
+                                    new CResourceAsyncReference<questQuestPhaseResource>(newValue.DepotPath);
+                                break;
+                            default:
+                                throw new WolvenKitException(-1,
+                                    $"Can't replace in IRedHandle property type {handle.RedType}");
+                        }
                         break;
-                    case IRedHandle handle when handle.GetValue() is CMaterialInstance mInstance:
-                        mInstance.BaseMaterial = new CResourceReference<IMaterial>(newValue.DepotPath);
-                        break;
-                    case IRedHandle handle when handle.GetValue() is questPhaseNodeDefinition questNode:
-                        questNode.PhaseResource =
-                            new CResourceAsyncReference<questQuestPhaseResource>(newValue.DepotPath);
-                        break;
-                    case IRedHandle ira:
-                        throw new WolvenKitException(-1,
-                            $"Can't replace in IRedHandle property type {ira.RedType}");
                     default:
                         throw new WolvenKitException(-1,
                             $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
