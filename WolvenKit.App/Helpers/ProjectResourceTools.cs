@@ -1028,6 +1028,10 @@ public partial class ProjectResourceTools
                     case IRedHandle handle when handle.GetValue() is CMaterialInstance mInstance:
                         mInstance.BaseMaterial = new CResourceReference<IMaterial>(newValue.DepotPath);
                         break;
+                    case IRedHandle handle when handle.GetValue() is questPhaseNodeDefinition questNode:
+                        questNode.PhaseResource =
+                            new CResourceAsyncReference<questQuestPhaseResource>(newValue.DepotPath);
+                        break;
                     case IRedHandle ira:
                         throw new WolvenKitException(-1,
                             $"Can't replace in IRedHandle property type {ira.RedType}");
