@@ -14,11 +14,11 @@ public partial class UpdateDialogViewModel : DialogViewModel
     private readonly IUpdateService _updateService;
     private readonly ISettingsManager _settingsManager;
     public readonly ILoggerService _logger;
-    
+
     public bool NoUpdateAvailableState { get; set; }
     public bool AskForPermissionState { get; set; }
     public bool UpdateExecutingState { get; set; }
-    
+
     private bool _showLoadingSpinner = false;
     public bool ShowLoadingSpinner
     {
@@ -29,7 +29,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
             OnPropertyChanged();
         }
     }
-    
+
 
     public string Title
     {
@@ -66,14 +66,14 @@ public partial class UpdateDialogViewModel : DialogViewModel
     private string _title;
     private string _body;
     private List<string> _buttons;
-    
-    public UpdateDialogViewModel(AppViewModel appvm, IUpdateService updateService, ISettingsManager settingsManager, ILoggerService loggerService, bool skipPermissionStage = false, bool? updateAvailable = null)
+
+    public UpdateDialogViewModel(AppViewModel appvm, IUpdateService updateService, ISettingsManager settingsManager, ILoggerService loggerService, bool skipPermissionStage = false, UpdateAvailability? updateAvailable = null)
     {
         _appvm = appvm;
         _updateService = updateService;
         _settingsManager = settingsManager;
         _logger = loggerService;
-        
+
         _title = "Update";
         _body = "";
         _buttons = new List<string>() { "Ok" };
@@ -83,12 +83,12 @@ public partial class UpdateDialogViewModel : DialogViewModel
         InitializeState(skipPermissionStage, updateAvailable);
     }
 
-    private async Task InitializeState(bool skipPermissionStage = false, bool? updateAvailable = null)
+    private async Task InitializeState(bool skipPermissionStage = false, UpdateAvailability? updateAvailable = null)
     {
         _latestVersionTag = await _updateService.GetLatestVersionTag();
         updateAvailable ??= await _updateService.IsUpdateAvailable();
-        
-        if (!(bool)updateAvailable)
+
+        if (updateAvailable == UpdateAvailability.None)
         {
             NoUpdateAvailableState = true;
         }
@@ -97,7 +97,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
             AskForPermissionState = !skipPermissionStage;
             UpdateExecutingState = skipPermissionStage;
         }
-        
+
         if (NoUpdateAvailableState)
         {
             SetDialogToNoUpdateAvailableState();
@@ -111,42 +111,42 @@ public partial class UpdateDialogViewModel : DialogViewModel
             SetDialogToUpdateExecutingState();
         }
     }
-    
+
     public void SetDialogToNoUpdateAvailableState()
     {
         NoUpdateAvailableState = true;
         AskForPermissionState = false;
         UpdateExecutingState = false;
-        
+
         Title = "No update available";
         Body = $"You are already on the latest release ({_updateService.GetLocalVersion()}) for the {_settingsManager.UpdateChannel} release channel";
         Buttons = new List<string>() { "OK" };
     }
-    
+
     public void SetDialogToAskForPermissionState()
     {
         NoUpdateAvailableState = false;
         AskForPermissionState = true;
         UpdateExecutingState = false;
-        
+
         Title = "Update available";
         Body =
             $"An update to version {_latestVersionTag} is available on the {_settingsManager.UpdateChannel} release channel";
         Buttons = new List<string>() { "Update", "Ignore" };
     }
-    
+
     public void SetDialogToUpdateExecutingState()
     {
         NoUpdateAvailableState = false;
         AskForPermissionState = false;
         UpdateExecutingState = true;
-        
+
         ShowLoadingSpinner = true;
-        
+
         Title = "Updating WolvenKit...";
         Body = $"Updating to version {_latestVersionTag} on the {_settingsManager.UpdateChannel} release channel...\nWolvenKit will restart as part of the update process.";
         Buttons = new List<string>() { };
-        
+
         Task.Run(async () =>
         {
             try
@@ -164,5 +164,5 @@ public partial class UpdateDialogViewModel : DialogViewModel
             }
         });
     }
-    
+
 }

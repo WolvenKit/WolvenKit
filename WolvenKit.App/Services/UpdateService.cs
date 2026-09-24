@@ -43,7 +43,7 @@ public class UpdateService : IUpdateService
             throw new Exception("Failed to get latest release");
         }
 
-        if (!await IsUpdateAvailable(latestRelease))
+        if (await IsUpdateAvailable(latestRelease) == UpdateAvailability.None)
         {
             return;
         }
@@ -144,28 +144,43 @@ public class UpdateService : IUpdateService
         Environment.Exit(0);
     }
 
-    public async Task<bool> IsUpdateAvailable(MinimalGithubRelease? release = null)
+    public async Task<UpdateAvailability> IsUpdateAvailable(MinimalGithubRelease? release = null)
     {
         if (DesktopBridgeHelper.IsRunningAsPackage())
         {
-            return false;
+            return UpdateAvailability.None;
         }
 
         var remoteVersion = await GetRemoteVersion(release);
         if (remoteVersion is null)
         {
-            return false;
+            return UpdateAvailability.None;
         }
 
         var localVersion = GetLocalVersion();
 
         // allow updating to the latest stable when the release channel changes, even if it technically is a downgrade
-        if ((localVersion?.ToString().Contains("nightly") ?? false) && !remoteVersion.ToString().Contains("nightly"))
+        if ((!localVersion.ToString().Contains("nightly")
+             || remoteVersion.ToString().Contains("nightly"))
+            && !IsLeftNewerThanRight(remoteVersion, localVersion))
         {
-            return true;
+            return UpdateAvailability.None;
         }
 
-        return IsLeftNewerThanRight(remoteVersion, localVersion!);
+        if (localVersion.Major != remoteVersion.Major)
+        {
+            return UpdateAvailability.Major;
+        }
+        if (localVersion.Minor != remoteVersion.Minor)
+        {
+            return UpdateAvailability.Minor;
+        }
+        if (localVersion.Patch != remoteVersion.Patch)
+        {
+            return UpdateAvailability.Patch;
+        }
+
+        return UpdateAvailability.None;
     }
 
     public async Task<string> GetLatestVersionTag()
@@ -188,7 +203,7 @@ public class UpdateService : IUpdateService
 
     private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 
-    public SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
+    public SemVersion GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
 
     private string GetRepositoryName() => _settingsManager.UpdateChannel == EUpdateChannel.Stable
         ? "WolvenKit"
