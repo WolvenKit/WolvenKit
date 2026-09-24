@@ -6,10 +6,10 @@ namespace WolvenKit.App.Services;
 
 public interface IUpdateService
 {
-    public Task<bool> IsUpdateAvailable(MinimalGithubRelease? release = null);
+    public Task<UpdateAvailability> IsUpdateAvailable(MinimalGithubRelease? release = null);
     public Task UpdateToNewestVersion();
     public Task<string> GetLatestVersionTag();
-    public SemVersion? GetLocalVersion();
+    public SemVersion GetLocalVersion();
     public string? GetSavedChangelog();
     public void ClearSavedChangelog();
 }
