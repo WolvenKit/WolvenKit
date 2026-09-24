@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Semver;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Interfaces;
@@ -104,7 +105,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         }
         else if (AskForPermissionState)
         {
-            SetDialogToAskForPermissionState();
+            await SetDialogToAskForPermissionState();
         }
         else if (UpdateExecutingState)
         {
@@ -119,19 +120,25 @@ public partial class UpdateDialogViewModel : DialogViewModel
         UpdateExecutingState = false;
 
         Title = "No update available";
-        Body = $"You are already on the latest release ({_updateService.GetLocalVersion()}) for the {_settingsManager.UpdateChannel} release channel";
+        Body = $"You are already on the latest release ({_updateService.GetLocalVersion()}) for the {_settingsManager.UpdateChannel} release channel.";
         Buttons = new List<string>() { "OK" };
     }
 
-    public void SetDialogToAskForPermissionState()
+    public async Task SetDialogToAskForPermissionState()
     {
         NoUpdateAvailableState = false;
         AskForPermissionState = true;
         UpdateExecutingState = false;
 
+        var localVersion = _updateService.GetLocalVersion();
+        var remoteVersion = SemVersion.Parse(_latestVersionTag);
+
+        var changelog = await _updateService.GetRemoteChangelog(localVersion.ToString(), remoteVersion.ToString());
+        var appendix = string.IsNullOrEmpty(changelog) ? "" : $"\nThe update contains the following changes:\n {changelog}";
+
         Title = "Update available";
         Body =
-            $"An update to version {_latestVersionTag} is available on the {_settingsManager.UpdateChannel} release channel";
+            $"An update to version {_latestVersionTag} is available on the {_settingsManager.UpdateChannel} release channel.{appendix}";
         Buttons = new List<string>() { "Update", "Ignore" };
     }
 
