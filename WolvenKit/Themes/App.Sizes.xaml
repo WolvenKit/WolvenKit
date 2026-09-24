@@ -58,6 +58,7 @@
     <Thickness x:Key="WolvenKitMarginTinyLeft">4,0,0,0</Thickness>
     <Thickness x:Key="WolvenKitMarginTinyRight">0,0,4,0</Thickness>
     <Thickness x:Key="WolvenKitMarginTinyTop">0,4,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyTopLeft">4,4,0,0</Thickness>
     <Thickness x:Key="WolvenKitMarginTinyBottom">0,0,0,4</Thickness>
     <Thickness x:Key="WolvenKitMarginTinyHorizontal">4,0</Thickness>
     <Thickness x:Key="WolvenKitMarginTinyVertical">0,4</Thickness>
