@@ -161,6 +161,56 @@ public partial class ChunkViewModel
 
             #endregion
 
+            // workspot
+            case workWorkspotResource:
+                if (GetPropertyChild("workspotTree") is ChunkViewModel workspotTree)
+                {
+                    workspotTree.IsExpanded = true;
+                    workspotTree.SetChildExpansionStates(true, false);
+                }
+
+                break;
+            case workWorkspotAnimsetEntry:
+                if (GetPropertyChild("loadingHandles") is ChunkViewModel loadingHandles)
+                {
+                    loadingHandles.IsExpanded = true;
+                }
+
+                if (GetPropertyChild("animations") is ChunkViewModel animations)
+                {
+                    animations.IsExpanded = true;
+                    animations.SetChildExpansionStates(true, false);
+                }
+
+                break;
+            case animAnimSetup:
+                if (GetPropertyChild("cinematics") is ChunkViewModel cinematics)
+                {
+                    cinematics.IsExpanded = true;
+                }
+
+                break;
+            case workWorkspotTree:
+                if (GetPropertyChild("finalAnimsets") is ChunkViewModel finalAnimsets)
+                {
+                    finalAnimsets.IsExpanded = true;
+                    finalAnimsets.SetChildExpansionStates(true, false);
+                }
+
+                if (GetPropertyChild("rootEntry") is ChunkViewModel rootEntry)
+                {
+                    rootEntry.IsExpanded = true;
+                    rootEntry.SetChildExpansionStates(true, false);
+                }
+
+                break;
+            case workSequence:
+                if (GetPropertyChild("list") is { TVProperties.Count: > 0 } list)
+                {
+                    list.IsExpanded = true;
+                }
+
+                break;
             // streamingsector
             case worldStreamingSector:
                 // will run into stack overflow due to race conditions if we do this straight away. Let's wait a bit!
@@ -502,6 +552,9 @@ public partial class ChunkViewModel
 
                     break;
                 }
+                case animAnimSet when GetPropertyChild("animations") is ChunkViewModel child:
+                    child.IsExpanded = true;
+                    break;
                 /*
                  * Generic array, or stuff with just one property
                  */
