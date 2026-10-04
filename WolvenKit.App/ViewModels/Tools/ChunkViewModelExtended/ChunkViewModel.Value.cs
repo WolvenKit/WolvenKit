@@ -623,6 +623,19 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case workExitAnim exitAnim:
+                Value = $"{exitAnim.AnimName.GetResolvedText()}".Trim();
+                IsValueExtrapolated = !string.IsNullOrWhiteSpace(Value);
+                break;
+            case workEntryAnim entryAnim:
+                Value = $"{entryAnim.AnimName.GetResolvedText()}".Trim();
+                IsValueExtrapolated = !string.IsNullOrWhiteSpace(Value);
+                break;
+            case workFastExit fastExit:
+                Value = $"{fastExit.AnimName.GetResolvedText()}".Trim();
+                Value = $"{Value} ({fastExit.MovementType.ToEnumString()})";
+                IsValueExtrapolated = true;
+                break;
             case scnEffectInstanceId scnEffectInstance
                 when Tab?.Parent.Cr2wFile.RootChunk is scnSceneResource sceneForEffect:
                 Value = $"{scnEffectInstance.Id}";
@@ -664,14 +677,55 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case scnPlaySkAnimRootMotionData { OriginMarker: { } om }:
+                Value = $"{om.NodeRef.GetResolvedText()}".Split("/").Last();
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case scnPlayerActorDef playerActorDef:
                 Value = $"NodeId: {playerActorDef.SpecCharacterRecordId.GetResolvedText()}";
+                IsValueExtrapolated = true;
+                break;
+            case scnPlayerAnimData { TierData: { Chunk: { } td } }:
+                Value = $"{td.Tier}";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case scnSceneTime sceneTime:
+                Value = $"{sceneTime.Stu}";
+                IsValueExtrapolated = true;
+                break;
+            case scnfppGenderSpecificParams scnfppGenderSpecificParams:
+                Value = $"GenderMask: {scnfppGenderSpecificParams.GenderMask.Mask}";
                 IsValueExtrapolated = true;
                 break;
             case workWorkEntryId id:
                 Value = $"{id.Id}";
                 IsValueExtrapolated = true;
                 break;
+            case EulerAngles eulerAngles:
+                Value = $"Pitch: {eulerAngles.Pitch}, Roll: {eulerAngles.Roll}, Yaw: {eulerAngles.Yaw}";
+                IsValueExtrapolated = true;
+                break;
+
+            #region workspot
+
+            case workLookAtDrivenTurn lookat:
+                Value = $"Angle: {lookat.TurnAngle}, blend time: {lookat.BlendTime}";
+                IsValueExtrapolated = true;
+                break;
+            case workSequence workSequence:
+                Value = StringHelper.Stringify(workSequence.List);
+                IsValueExtrapolated = true;
+                break;
+            case workRandomList randomList:
+                Value = StringHelper.Stringify(randomList.List);
+                IsValueExtrapolated = true;
+                break;
+            case IRedArray<IRedHandle<workIEntry>> workEntryList:
+                Value = StringHelper.Stringify(workEntryList);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+
+            #endregion
             case CArray<entSlot> entSlots:
                 var entSlotDescriptors = entSlots
                     .Select(slotsOption => slotsOption.SlotName.GetResolvedText() ?? "")
