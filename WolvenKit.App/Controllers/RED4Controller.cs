@@ -309,7 +309,7 @@ public class RED4Controller : ObservableObject, IGameController
         var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
 
         // Shift prevents save game load (CET doesn't initialize
-        if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
+        if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && SaveGameHelper.GetLastSaveName() is string lastSavegame)
         {
             arguments = $"{arguments} -save={lastSavegame}";
         }

@@ -13,7 +13,7 @@ public partial class SaveGameSelectionDialogModel : DialogViewModel
     [ObservableProperty] private string? _selectedSave;
     [ObservableProperty] private List<SaveGame> _saveGames;
 
-    public SaveGameSelectionDialogModel() => SaveGames = ISettingsManager.GetSaveGames();
+    public SaveGameSelectionDialogModel() => SaveGames = SaveGameHelper.GetSaveGames();
 
     [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(OkCommand))]
     private SaveGame? _selectedEntry;
