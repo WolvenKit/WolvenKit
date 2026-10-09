@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Newtonsoft.Json;
 using WolvenKit.Core.Services;
 
@@ -65,6 +66,18 @@ public class InstanceSettings : IInstanceSettings
         }
 
         Directory.CreateDirectory(AppDataPath);
+    }
+
+    /// <summary>
+    /// Returns the instance settings as command line arguments.
+    /// </summary>
+    /// <returns></returns>
+    public string AsArgs()
+    {
+        var args = new StringBuilder();
+        args.Append("--AppDataPath ");
+        args.Append($"\"{AppDataPath}\"");
+        return args.ToString();
     }
 
     private static string CleanPath(string path) => path.Replace("/", Path.DirectorySeparatorChar.ToString())

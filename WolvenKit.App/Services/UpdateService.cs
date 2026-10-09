@@ -22,6 +22,7 @@ public class UpdateService : IUpdateService
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
     private readonly IApplicationDirectoriesService _appDirectoriesService;
+    private readonly IInstanceSettings _instanceSettings;
     private readonly HttpClient _httpClient;
 
     private string LocalChangelogPath => Path.Join(_appDirectoriesService.AppDataDir, "changelog.md");
@@ -29,11 +30,13 @@ public class UpdateService : IUpdateService
 
     public UpdateService(ILoggerService loggerService,
         ISettingsManager settingsManager,
-        IApplicationDirectoriesService appDirectoriesService)
+        IApplicationDirectoriesService appDirectoriesService,
+        IInstanceSettings instanceSettings)
     {
         _loggerService = loggerService;
         _settingsManager = settingsManager;
         _appDirectoriesService = appDirectoriesService;
+        _instanceSettings = instanceSettings;
         _httpClient = new HttpClient();
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "WolvenKit");
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
@@ -139,7 +142,7 @@ public class UpdateService : IUpdateService
         var startInfo = new ProcessStartInfo()
         {
             FileName = unpackerExePath,
-            Arguments = $"--wolvenkit-exe-path \"{wolvenKitExePath}\" --unzipped-path \"{unzipPath}\"",
+            Arguments = $"--wolvenkit-exe-path \"{wolvenKitExePath}\" --unzipped-path \"{unzipPath}\" {_instanceSettings.AsArgs()}",
             UseShellExecute = false,
             CreateNoWindow = true
         };
