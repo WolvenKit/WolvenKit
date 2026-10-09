@@ -87,47 +87,47 @@ public class UpdateService : IUpdateService
         ZipFile.ExtractToDirectory(downloadZipPath, unzipPath);
         File.Delete(downloadZipPath);
 
-        var unpackerExePath = Path.Combine(_appDirectoriesService.AppDataDir, "Updater" ,"WolvenKit.Unpacker.exe");
-        if (!File.Exists(unpackerExePath))
+        // clean up previous persistent unpacker location
+        var oldUnpackerDirectory = Path.Combine(_appDirectoriesService.AppDataDir, "Updater");
+        if (Directory.Exists(oldUnpackerDirectory))
         {
-            if (Directory.Exists(Path.GetDirectoryName(unpackerExePath)!))
-            {
-                Directory.Delete(Path.GetDirectoryName(unpackerExePath)!, true);
-            }
-            Directory.CreateDirectory(Path.GetDirectoryName(unpackerExePath)!);
-            var unpackerReleaseAsset = latestRelease.Assets.FirstOrDefault(a => a.Name == $"WolvenKit.Unpacker-{latestRelease.TagName}.zip");
-            if (unpackerReleaseAsset is null)
-            {
-                Directory.Delete(tempPath, true);
-                _loggerService.Error("Could not find Unpacker Asset in releases! Aborting update.");
-                throw new Exception("Could not find Unpacker Asset in releases! Aborting update.");
-            }
-
-            var unpackerZipPath = Path.Join(tempPath, "unpacker.zip");
-
-            try
-            {
-                var responseAsset = await _httpClient.GetAsync(unpackerReleaseAsset.DownloadUrl);
-                responseAsset.EnsureSuccessStatusCode();
-                await File.WriteAllBytesAsync(unpackerZipPath, await responseAsset.Content.ReadAsByteArrayAsync());
-            }
-            catch (HttpRequestException)
-            {
-                Directory.Delete(tempPath, true);
-                _loggerService.Error($"Failed to download unpacker from: {unpackerReleaseAsset.DownloadUrl}");
-                throw;
-            }
-
-            if (await Task.Run(() => unpackerReleaseAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(unpackerZipPath))).Replace("-", "").ToLowerInvariant()))
-            {
-                Directory.Delete(tempPath, true);
-                _loggerService.Error("Downloaded unpacker asset is invalid! Aborting update.");
-                throw new Exception("Downloaded unpacker asset is invalid! Aborting update.");
-            }
-
-            ZipFile.ExtractToDirectory(unpackerZipPath, Path.GetDirectoryName(unpackerExePath)!);
-            File.Delete(unpackerZipPath);
+            Directory.Delete(oldUnpackerDirectory, true);
         }
+
+        var unpackerExePath = Path.Combine(tempPath, "Updater" ,"WolvenKit.Unpacker.exe");
+
+        var unpackerReleaseAsset = latestRelease.Assets.FirstOrDefault(a => a.Name == $"WolvenKit.Unpacker-{latestRelease.TagName}.zip");
+        if (unpackerReleaseAsset is null)
+        {
+            Directory.Delete(tempPath, true);
+            _loggerService.Error("Could not find Unpacker Asset in releases! Aborting update.");
+            throw new Exception("Could not find Unpacker Asset in releases! Aborting update.");
+        }
+
+        var unpackerZipPath = Path.Join(tempPath, "unpacker.zip");
+
+        try
+        {
+            var responseAsset = await _httpClient.GetAsync(unpackerReleaseAsset.DownloadUrl);
+            responseAsset.EnsureSuccessStatusCode();
+            await File.WriteAllBytesAsync(unpackerZipPath, await responseAsset.Content.ReadAsByteArrayAsync());
+        }
+        catch (HttpRequestException)
+        {
+            Directory.Delete(tempPath, true);
+            _loggerService.Error($"Failed to download unpacker from: {unpackerReleaseAsset.DownloadUrl}");
+            throw;
+        }
+
+        if (await Task.Run(() => unpackerReleaseAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(unpackerZipPath))).Replace("-", "").ToLowerInvariant()))
+        {
+            Directory.Delete(tempPath, true);
+            _loggerService.Error("Downloaded unpacker asset is invalid! Aborting update.");
+            throw new Exception("Downloaded unpacker asset is invalid! Aborting update.");
+        }
+
+        await ZipFile.ExtractToDirectoryAsync(unpackerZipPath, Path.GetDirectoryName(unpackerExePath)!);
+        File.Delete(unpackerZipPath);
 
         var relevantChangelog = await GetRemoteChangeLog(GetLocalVersion()?.ToString() ?? "", latestRelease.TagName);
         if (!string.IsNullOrEmpty(relevantChangelog))
