@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3185
+      author: "notaspirit"
+      description: "Update dialog will now show the changelog when asking the user for confirmation before updating"
