@@ -5,19 +5,19 @@ namespace WolvenKit.App.Services;
 
 public class ApplicationDirectoriesService : IApplicationDirectoriesService
 {
-    private string appDataRoot;
+    private IInstanceSettings _instanceSettings;
 
     public ApplicationDirectoriesService(IInstanceSettings instanceSettings)
     {
-        appDataRoot = instanceSettings.AppDataPath;
+        _instanceSettings = instanceSettings;
     }
 
     public string AppDataDir
     {
         get
         {
-            Directory.CreateDirectory(appDataRoot);
-            return appDataRoot;
+            Directory.CreateDirectory(_instanceSettings.AppDataPath);
+            return _instanceSettings.AppDataPath;
         }
     }
 
@@ -25,7 +25,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Logs");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Logs");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -35,7 +35,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Config");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Config");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -45,7 +45,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "tmp_workdir");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "tmp_workdir");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -55,7 +55,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Temp_Audio");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Temp_Audio");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -65,7 +65,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Temp_OBJ");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Temp_OBJ");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -75,7 +75,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Temp_Audio_Import");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Temp_Audio_Import");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -85,7 +85,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Temp_Video_Preview");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Temp_Video_Preview");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -95,7 +95,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "WScript");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "WScript");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -105,7 +105,7 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Templates");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Templates");
             Directory.CreateDirectory(dir);
             return dir;
         }
@@ -115,13 +115,13 @@ public class ApplicationDirectoriesService : IApplicationDirectoriesService
     {
         get
         {
-            var dir = Path.Combine(appDataRoot, "Depot");
+            var dir = Path.Combine(_instanceSettings.AppDataPath, "Depot");
             Directory.CreateDirectory(dir);
             return dir;
         }
     }
 
-    public string ConfigFile => Path.Combine(appDataRoot, "config.json");
-    public string DockStatesFile => Path.Combine(appDataRoot, "DockStates.xml");
-    public string RecentItemsFile => Path.Combine(appDataRoot, "recentItems.json");
+    public string ConfigFile => Path.Combine(_instanceSettings.AppDataPath, "config.json");
+    public string DockStatesFile => Path.Combine(_instanceSettings.AppDataPath, "DockStates.xml");
+    public string RecentItemsFile => Path.Combine(_instanceSettings.AppDataPath, "recentItems.json");
 }
