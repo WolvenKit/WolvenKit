@@ -55,11 +55,10 @@ public partial class ConsoleFunctions
         if (compress)
         {
             var inbuffer = File.ReadAllBytes(path.FullName);
-            IEnumerable<byte> outBuffer = new List<byte>();
 
-            var r = Oodle.Compress(inbuffer, ref outBuffer, true);
+            Oodle.Compress(inbuffer, out var outBuffer, true);
 
-            File.WriteAllBytes(outpath.FullName, outBuffer.ToArray());
+            File.WriteAllBytes(outpath.FullName, outBuffer);
 
             _loggerService.Success($"Finished compressing: {outpath}");
         }
