@@ -70,6 +70,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.AddPlayerHeadCommand,
                     view => view.MenuItemAddPlayerHead)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.AddNPVCommand,
+                    view => view.MenuItemAddNPV)
+                .DisposeWith(disposables);
 
             // Archive
             this.BindCommand(ViewModel,

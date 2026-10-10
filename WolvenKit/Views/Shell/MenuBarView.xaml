@@ -200,6 +200,21 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <!-- Player head -->
+                    <MenuItem
+                        x:Name="MenuItemAddNPV"
+                        Margin="2,1"
+                        Header="Custom NPC (NPV)"
+                        ToolTip="Adds all necessary files for a custom NPC (NPV)">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="AccountPlus"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
 
                 <MenuItem
