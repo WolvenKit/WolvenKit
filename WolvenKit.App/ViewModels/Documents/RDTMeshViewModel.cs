@@ -1440,6 +1440,47 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 sm.IsTransparent = true;
             }
             list.Add(sm);
+
+            // TODO: Keeping that here, even if currently unused
+            // The code below will simply add a second submesh for the damaged mesh, if it exists.
+            // This is why I disabled it for now until someone else comes up with something better to show it
+            
+            /*if (mesh.vehDmgPositions?.Length > 0)
+            {
+                var vehicleDmgPositions = new Vector3Collection(mesh.vehDmgPositions.Length);
+                for (var i = 0; i < mesh.vehDmgPositions.Length; i++)
+                {
+                    vehicleDmgPositions.Add(mesh.vehDmgPositions[i].ToVector3());
+                }
+
+                var vehicleDmgNormals = new Vector3Collection(mesh.vehDmgNormals!.Length);
+                for (var i = 0; i < mesh.vehDmgNormals.Length; i++)
+                {
+                    vehicleDmgNormals.Add(mesh.vehDmgNormals[i].ToVector3());
+                }
+
+                var vsm = new SubmeshComponent()
+                {
+                    Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}_damaged",
+                    Text = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}_damaged",
+                    LOD = meshesinfo.LODLvl[index],
+                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == (SelectedAppearance?.SelectedLOD ?? 1),
+                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
+                    Geometry = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
+                    {
+                        Positions = vehicleDmgPositions,
+                        Indices = indices,
+                        Normals = vehicleDmgNormals
+                    },
+                    DepthBias = sm.DepthBias,
+                    MaterialName = sm.MaterialName,
+                    Material = sm.Material,
+                    IsTransparent = sm.IsTransparent
+                };
+
+                list.Add(vsm);
+            }*/
+
             index++;
         }
 

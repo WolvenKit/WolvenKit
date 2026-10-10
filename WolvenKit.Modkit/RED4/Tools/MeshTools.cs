@@ -273,6 +273,14 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshesInfo.tex1Offsets[i] = cv.ByteOffsets[element.StreamIndex];
                         }
                     }
+                    if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_VehicleDmgNormal)
+                    {
+                        meshesInfo.vehDmgNormalOffsets[i] = cv.ByteOffsets[element.StreamIndex];
+                    }
+                    if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_VehicleDmgPosition)
+                    {
+                        meshesInfo.vehDmgPositionOffsets[i] = cv.ByteOffsets[element.StreamIndex];
+                    }
                 }
 
                 if (info.ChunkIndices.TeOffset == 0)
@@ -553,6 +561,47 @@ namespace WolvenKit.Modkit.RED4.Tools
                         var y = Converters.hfconvert(gbr.ReadUInt16());
                         var z = Converters.hfconvert(gbr.ReadUInt16());
                         meshContainer.garmentMorph[i] = new Vec3(x, z, -y);
+                    }
+                }
+
+                // getting vehicle damage normals
+                meshContainer.vehDmgNormals = [];
+                if (info.vehDmgNormalOffsets[index] != 0)
+                {
+                    meshContainer.vehDmgNormals = new Vec3[info.vertCounts[index]];
+
+                    gfs.Position = info.vehDmgNormalOffsets[index];
+                    for (var i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        var read = gbr.ReadUInt32();
+                        var vec = Converters.TenBitShifted(read);
+
+                        // Z up to Y up and LHCS to RHCS
+                        meshContainer.vehDmgNormals[i] = new Vec3(vec.X, vec.Z, -vec.Y);
+                        meshContainer.vehDmgNormals[i] = Vec3.Normalize(meshContainer.vehDmgNormals[i]);
+
+                        gfs.Position += 16;
+                    }
+                }
+
+                // getting vehicle damage positions
+                meshContainer.vehDmgPositions = [];
+                if (info.vehDmgPositionOffsets[index] != 0)
+                {
+                    meshContainer.vehDmgPositions = new Vec3[info.vertCounts[index]];
+
+                    gfs.Position = info.vehDmgPositionOffsets[index];
+                    for (var i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        gfs.Position += 4;
+
+                        var x = gbr.ReadSingle() * 100;
+                        var y = gbr.ReadSingle() * 100;
+                        var z = gbr.ReadSingle() * 100;
+                        var w = gbr.ReadSingle() * 100;
+
+                        // Z up to Y up and LHCS to RHCS
+                        meshContainer.vehDmgPositions[i] = new Vec3(x, z, -y);
                     }
                 }
 
@@ -870,6 +919,31 @@ namespace WolvenKit.Modkit.RED4.Tools
                         bw.Write(mesh.garmentMorph[i].Z);
                     }
                 }
+                if (mesh.vehDmgNormals is { Length: > 0 })
+                {
+                    if (mesh.vehDmgNormals.Length != mesh.vehDmgPositions!.Length)
+                    {
+                        throw new Exception();
+                    }
+
+                    for (var i = 0; i < mesh.vehDmgNormals.Length; i++)
+                    {
+                        var normal = mesh.normals[i];
+
+                        bw.Write(mesh.vehDmgNormals[i].X - normal.X);
+                        bw.Write(mesh.vehDmgNormals[i].Y - normal.Y);
+                        bw.Write(mesh.vehDmgNormals[i].Z - normal.Z);
+                    }
+
+                    for (var i = 0; i < mesh.vehDmgPositions.Length; i++)
+                    {
+                        var position = mesh.positions[i];
+
+                        bw.Write(mesh.vehDmgPositions[i].X - position.X);
+                        bw.Write(mesh.vehDmgPositions[i].Y - position.Y);
+                        bw.Write(mesh.vehDmgPositions[i].Z - position.Z);
+                    }
+                }
             }
             var buffer = model.UseBuffer(ms.ToArray());
             var buffViewOffset = 0;
@@ -1047,18 +1121,15 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 var meshExtras = new MeshExtras
                 {
-                    MaterialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray()
+                    MaterialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray(),
                 };
 
-                if (mesh.garmentMorph.Length > 0)
-                {
-                    meshExtras.TargetNames = ["GarmentSupport"];
-                }
-
-                mes.Extras = JsonSerializer.SerializeToNode(meshExtras, Gltf.SerializationOptions());
+                var targetNames = new List<string>();
 
                 if (mesh.garmentMorph.Length > 0)
                 {
+                    targetNames.Add("GarmentSupport");
+
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, buffViewOffset, mesh.garmentMorph.Length * 12);
                     acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
@@ -1066,9 +1137,39 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         { "POSITION", acc }
                     };
-                    prim.SetMorphTargetAccessors(0, dict);
+                    prim.SetMorphTargetAccessors(targetNames.Count - 1, dict);
                     buffViewOffset += mesh.garmentMorph.Length * 12;
                 }
+
+                if (mesh.vehDmgNormals is { Length: > 0 })
+                {
+                    targetNames.Add("VehicleDamageSupport");
+
+                    var normalBuff = model.UseBufferView(buffer, buffViewOffset, mesh.vehDmgNormals!.Length * 12);
+                    var normalAcc = model.CreateAccessor();
+                    normalAcc.SetData(normalBuff, 0, mesh.vehDmgNormals!.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    buffViewOffset += mesh.vehDmgNormals!.Length * 12;
+
+                    var positionBuff = model.UseBufferView(buffer, buffViewOffset, mesh.vehDmgPositions!.Length * 12);
+                    var positionAcc = model.CreateAccessor();
+                    positionAcc.SetData(positionBuff, 0, mesh.vehDmgPositions!.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    buffViewOffset += mesh.vehDmgPositions!.Length * 12;
+
+                    var dict = new Dictionary<string, Accessor>
+                    {
+                        { "NORMAL", normalAcc },
+                        { "POSITION", positionAcc }
+                    };
+                    prim.SetMorphTargetAccessors(targetNames.Count - 1, dict);
+                }
+
+                if (targetNames.Count > 0)
+                {
+                    meshExtras.TargetNames = [.. targetNames];
+                }
+
+                mes.Extras = JsonSerializer.SerializeToNode(meshExtras, Gltf.SerializationOptions());
+
                 meshCounter++;
             }
         }

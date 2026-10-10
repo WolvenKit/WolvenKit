@@ -15,6 +15,7 @@ using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
 using Vec2 = System.Numerics.Vector2;
@@ -1027,6 +1028,8 @@ namespace WolvenKit.Modkit.RED4
             }
 
             meshContainer.garmentMorph = [];
+            meshContainer.vehDmgNormals = [];
+            meshContainer.vehDmgPositions = [];
 
             if (mesh.Extras?.Deserialize<MeshExtras>() is { } extras)
             {
@@ -1056,6 +1059,27 @@ namespace WolvenKit.Modkit.RED4
                 if (args.ImportGarmentSupport && extras.TargetNames[i] is "GarmentSupport")
                 {
                     meshContainer.garmentMorph = GetVector3List(i, "POSITION").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+                }
+
+                if (extras.TargetNames[i] is "VehicleDamageSupport")
+                {
+                    meshContainer.vehDmgNormals = GetVector3List(i, "NORMAL").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+                    for (var j = 0; j < meshContainer.vehDmgNormals.Length; j++)
+                    {
+                        meshContainer.vehDmgNormals[j] = new Vec3(
+                            meshContainer.vehDmgNormals[j].X + meshContainer.normals![j].X,
+                            meshContainer.vehDmgNormals[j].Y + meshContainer.normals[j].Y,
+                            meshContainer.vehDmgNormals[j].Z + meshContainer.normals[j].Z);
+                    }
+                    
+                    meshContainer.vehDmgPositions = GetVector3List(i, "POSITION").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+                    for (var j = 0; j < meshContainer.vehDmgNormals.Length; j++)
+                    {
+                        meshContainer.vehDmgPositions[j] = new Vec3(
+                            meshContainer.vehDmgPositions[j].X + meshContainer.positions![j].X,
+                            meshContainer.vehDmgPositions[j].Y + meshContainer.positions[j].Y,
+                            meshContainer.vehDmgPositions[j].Z + meshContainer.positions[j].Z);
+                    }
                 }
             }
 
@@ -1087,6 +1111,8 @@ namespace WolvenKit.Modkit.RED4
             ArgumentNullException.ThrowIfNull(mesh.weights);
             ArgumentNullException.ThrowIfNull(mesh.garmentMorph);
             ArgumentNullException.ThrowIfNull(mesh.indices);
+            ArgumentNullException.ThrowIfNull(mesh.vehDmgNormals);
+            ArgumentNullException.ThrowIfNull(mesh.vehDmgPositions);
 
             var vertCount = mesh.positions.Length;
             re4Mesh.ExpVerts = new short[vertCount, 3];
@@ -1175,6 +1201,25 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
+            // vehicle damage support
+            re4Mesh.vehDmgNor32s = new uint[0];
+            re4Mesh.vehDmgPos = new float[0, 0];
+            if (mesh.vehDmgNormals.Length > 0)
+            {
+                re4Mesh.vehDmgNor32s = new uint[vertCount];
+                re4Mesh.vehDmgPos = new float[vertCount, 4];
+
+                for (var i = 0; i < vertCount; i++)
+                {
+                    re4Mesh.vehDmgNor32s[i] = Converters.Vec3ToU32(mesh.vehDmgNormals[i]);
+
+                    re4Mesh.vehDmgPos[i, 0] = mesh.vehDmgPositions[i].X / 100;
+                    re4Mesh.vehDmgPos[i, 1] = mesh.vehDmgPositions[i].Y / 100;
+                    re4Mesh.vehDmgPos[i, 2] = mesh.vehDmgPositions[i].Z / 100;
+                    re4Mesh.vehDmgPos[i, 3] = 0;
+                }
+            }
+
             re4Mesh.indices = new ushort[mesh.indices.Length];
             for (var i = 0; i < mesh.indices.Length; i++)
             {
@@ -1209,6 +1254,8 @@ namespace WolvenKit.Modkit.RED4
                 ArgumentNullException.ThrowIfNull(expMesh.Tan32s);
                 ArgumentNullException.ThrowIfNull(expMesh.colors);
                 ArgumentNullException.ThrowIfNull(expMesh.uv1s);
+                ArgumentNullException.ThrowIfNull(expMesh.vehDmgNor32s);
+                ArgumentNullException.ThrowIfNull(expMesh.vehDmgPos);
 
                 var vertCount = expMesh.ExpVerts.Length / 3;
 
@@ -1304,6 +1351,26 @@ namespace WolvenKit.Modkit.RED4
                 // 16 bytes Padding if necessary
                 paddingLen = ((ms.Length + 15U) & (~15)) - ms.Length;
                 bw.Write(new byte[paddingLen]);
+
+                // writing vehicle damage support normals and positions
+                if (expMesh.vehDmgNor32s.Length > 0)
+                {
+                    meshesInfo.vehDmgNormalOffsets[i] = (uint)ms.Position;
+
+                    for (var e = 0; e < vertCount; e++)
+                    {
+                        bw.Write(expMesh.vehDmgNor32s[e]);
+
+                        bw.Write(expMesh.vehDmgPos[e, 0]);
+                        bw.Write(expMesh.vehDmgPos[e, 1]);
+                        bw.Write(expMesh.vehDmgPos[e, 2]);
+                        bw.Write(expMesh.vehDmgPos[e, 3]);
+                    }
+
+                    // 16 bytes Padding if necessary
+                    paddingLen = ((ms.Length + 15U) & (~15)) - ms.Length;
+                    bw.Write(new byte[paddingLen]);
+                }
 
                 // for the unusual lightblocker data
                 /*
@@ -1466,7 +1533,14 @@ namespace WolvenKit.Modkit.RED4
                 chunk.ChunkVertices.ByteOffsets.Add(info.tex0Offsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.normalOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.colorOffsets[i]);
-                chunk.ChunkVertices.ByteOffsets.Add(info.unknownOffsets[i]);
+
+                // Should refactor this, multiple types uses index 5
+                if (info.unknownOffsets[i] != 0 && info.vehDmgNormalOffsets[i] != 0)
+                {
+                    throw new TodoException();
+                }
+                var offset5 = Math.Max(info.unknownOffsets[i], info.vehDmgNormalOffsets[i]);
+                chunk.ChunkVertices.ByteOffsets.Add(offset5);
 
                 chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc
                 {
@@ -1632,6 +1706,28 @@ namespace WolvenKit.Modkit.RED4
                         Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4,
                         StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance
                     });
+                }
+
+                // VehicleDamage data
+                if (info.vehDmgNormalOffsets[i] != 0)
+                {
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 4,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_VehicleDmgNormal,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4
+                    });
+
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 4,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_VehicleDmgPosition,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4
+                    });
+
+                    chunk.VertexFactory += 21;
                 }
 
                 // LightBlockerIntensity
