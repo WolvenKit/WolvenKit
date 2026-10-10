@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 2964
+      author: "manavortex"
+      description: "'Copy Mesh Materials': When copying materials from an ArchiveXL patch mesh, scopes will now be considered (as read from .xl files). If patch target file isn't found by file path, try matching by file name (only works for exactly one match)."
