@@ -128,7 +128,7 @@ public static class ProcessHelper
             }
         };
         //process.OutputDataReceived += (sender, e) =>
-        //    { loggerService.LogString($"O: {e.Data}", Logtype.Normal); };
+        //    { loggerService.LogString($"O: {e.Data}", LogType.Normal); };
 
         var started = process.Start();
         if (!started)
@@ -162,7 +162,7 @@ public static class ProcessHelper
             {
                 result = 1;
             }
-            //loggerService.LogString($"Process exited with code {result}", Logtype.Important);
+            //loggerService.LogString($"Process exited with code {result}", LogType.Important);
             //await process.WaitForExitAsync();
         }
 
