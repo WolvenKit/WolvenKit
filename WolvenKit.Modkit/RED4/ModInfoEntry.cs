@@ -1,4 +1,4 @@
-namespace WolvenKit.App.Models;
+namespace WolvenKit.Modkit.RED4;
 
 public class ModInfoEntry
 {

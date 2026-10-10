@@ -1,6 +1,7 @@
 using System;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
+using WolvenKit.Modkit.RED4.Project;
 
 namespace WolvenKit.App.Controllers;
 
@@ -49,12 +50,12 @@ public class GameControllerFactory : IGameControllerFactory
     public IGameController GetController() =>
         _projectManager.ActiveProject == null
             ? _mockGameController
-            : Models.ProjectManagement.Project.Cp77Project.GameType switch
+            : Cp77Project.GameType switch
             {
                 //GameType.Witcher3 => _tw3Controller,
                 GameType.Cyberpunk2077 => _cp77Controller,
                 _ => throw new ArgumentOutOfRangeException(
-                    nameof(Models.ProjectManagement.Project.Cp77Project.GameType),
-                    Models.ProjectManagement.Project.Cp77Project.GameType, null)
+                    nameof(Cp77Project.GameType),
+                    Cp77Project.GameType, null)
             };
 }

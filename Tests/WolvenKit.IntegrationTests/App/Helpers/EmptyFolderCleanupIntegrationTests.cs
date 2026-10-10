@@ -3,6 +3,7 @@ using System.IO;
 using Moq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.IntegrationTests.Helpers;

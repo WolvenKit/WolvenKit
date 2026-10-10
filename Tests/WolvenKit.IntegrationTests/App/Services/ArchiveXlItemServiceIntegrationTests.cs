@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using WolvenKit.App;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.Services;
 using WolvenKit.IntegrationTests.Helpers;
 using WolvenKit.RED4.Archive.CR2W;

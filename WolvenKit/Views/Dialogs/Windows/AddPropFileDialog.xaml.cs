@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using ReactiveUI;
 using Syncfusion.Windows.Controls.Input;
-using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
 
