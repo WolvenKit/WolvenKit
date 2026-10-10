@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3183
+      author: "manavortex"
+      description: "Journal path dropdown in Journal nodes will populate even without filter text"
