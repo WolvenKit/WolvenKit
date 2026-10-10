@@ -291,6 +291,13 @@ namespace WolvenKit.App.Helpers
                 options?.Select(option => ItemIdOf(option?.ItemId)) ?? [],
                 FirstChoiceOptionItemId);
 
+        /// <summary>
+        /// Whether an item id is present and not the unassigned sentinel.
+        /// </summary>
+        /// <param name="itemId">The item id to check.</param>
+        public static bool HasAssignedItemId(scnscreenplayItemId? itemId) =>
+            itemId is not null && itemId.Id != UnassignedScreenplayItemId;
+
         /// <summary>An entry's id, or the unassigned one where the raw editor left it without.</summary>
         private static uint ItemIdOf(scnscreenplayItemId? itemId) =>
             itemId is null ? UnassignedScreenplayItemId : itemId.Id;
