@@ -7,3 +7,8 @@ Template changelog entry:
       description: ""
 
 changes:
+    - type: "security | deprecated | removed | added | fixed | changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 0
+      author: ""
+      description: ""

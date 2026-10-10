@@ -1,3 +1,8 @@
-[b]9.0.1 — 2026-09-07[/b]
+[b]9.1.0 — 2026-10-10[/b]
 
-The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/9.0.1]GitHub releases page[/url]
+[b]App[/b]
+
+[*] [i]Added[/i]: Added editor descriptions for various node types in the editor by @manavortex
+[*] [i]Added[/i]: Added node expansion support for workspot files by @manavortex
+[*] [i]Added[/i]: Update dialog will now show the changelog when asking the user for confirmation before updating by @notaspirit
+[*] [i]Changed[/i]: The auto update process at startup will now no longer be able to automatically update to a major version, requiring user confirmation by @notaspirit
