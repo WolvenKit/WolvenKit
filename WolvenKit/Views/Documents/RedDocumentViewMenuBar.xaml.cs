@@ -88,7 +88,8 @@ namespace WolvenKit.Views.Documents
                 _cvmTools,
                 _loggerService,
                 _notificationService,
-                _archiveManager) { CurrentTab = _currentTab };
+                _archiveManager,
+                Locator.Current.GetService<SceneLipsyncTools>()!) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
