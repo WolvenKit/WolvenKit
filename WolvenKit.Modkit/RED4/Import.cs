@@ -12,6 +12,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
+using WolvenKit.Modkit.RED4.Tools.MeshHandler;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -479,28 +480,37 @@ namespace WolvenKit.Modkit.RED4
             try
             {
                 var result = false;
-                switch (importFormat)
+
+                if (args.MeshImporter == MeshImporterType.Default)
                 {
-                    case GltfImportAsFormat.Mesh:
-                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
-                        break;
-                    case GltfImportAsFormat.Morphtarget:
-                        result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
-                        break;
-                    case GltfImportAsFormat.Anims:
-                        result = ImportAnims(rawRelative.ToFileInfo(), redFs, args);
-                        break;
-                    case GltfImportAsFormat.MeshWithRig:
-                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
-                        break;
-                    case GltfImportAsFormat.Rig:
-                        result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
-                        break;
-                    case GltfImportAsFormat.PhysicalScene:
-                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
-                        break;
-                    default:
-                        break;
+                    switch (importFormat)
+                    {
+                        case GltfImportAsFormat.Mesh:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        case GltfImportAsFormat.Morphtarget:
+                            result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        case GltfImportAsFormat.Anims:
+                            result = ImportAnims(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        case GltfImportAsFormat.MeshWithRig:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        case GltfImportAsFormat.Rig:
+                            result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        case GltfImportAsFormat.PhysicalScene:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (args.MeshImporter == MeshImporterType.Experimental2)
+                {
+                    result = MeshImporterNext.ToMesh(rawRelative.ToFileInfo(), redFs, args);
                 }
 
                 if (result)
