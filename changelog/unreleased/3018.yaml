@@ -1,0 +1,16 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3018
+      author: "misterchedda"
+      description: "Graph editor property panels can now be displayed side by side or stacked under Settings > Display > Graph Editor Properties Layout"
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3018
+      author: "misterchedda"
+      description: "The scene editor now remembers the section timeline height after it is resized"
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3018
+      author: "misterchedda"
+      description: "Section timelines now fit their content on first selection and remember their individual zoom levels while the scene is open"

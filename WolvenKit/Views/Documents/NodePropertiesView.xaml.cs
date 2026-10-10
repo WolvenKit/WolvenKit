@@ -15,13 +15,13 @@ namespace WolvenKit.Views.Documents
         public NodePropertiesView()
         {
             InitializeComponent();
-            
+
             // Subscribe to property panel refresh requests (e.g., from timeline editor)
             NodePropertyUpdateService.PropertyPanelRefreshRequested += OnPropertyPanelRefreshRequested;
             NodePropertyUpdateService.EventSelectionRequested += OnEventSelectionRequested;
             Unloaded += OnUnloaded;
         }
-        
+
         private void OnPropertyPanelRefreshRequested(object? sender, EventArgs e)
         {
             // Trigger a re-evaluation of the property panel by notifying the selection service
