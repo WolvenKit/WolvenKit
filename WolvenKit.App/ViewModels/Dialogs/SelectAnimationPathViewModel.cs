@@ -35,7 +35,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
             @"base\characters\head\player_base_heads\player_man_average\h0_000_pma_c__basehead\h0_000_pma_c__basehead_rigsetup.facialsetup"
         },
     };
-    
+
     public SelectAnimationPathViewModel(List<string> facialSetupPaths)
     {
         var animGraphOpts = _animGraphOptions.ToDictionary();
@@ -69,7 +69,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
     public const string FacialAnimPathMale =
         @"base\animations\facial\_facial_graphs\player_man_photomode_sermo.animgraph";
-    
+
     private Dictionary<string, string> _facialAnimOptions = new()
     {
         // Photo mode
@@ -77,15 +77,13 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         { "Photo Mode: Player Man", FacialAnimPathMale },
 
         // Spawned NPC
-        { "NPV: Woman Player", @"base\animations\facial\_facial_graphs\player_woman_paperdoll_sermo.animgraph" },
         { "NPV: Woman Average", @"base\animations\facial\_facial_graphs\woman_average_sermo.animgraph" },
         { "NPV: Woman Average (LC)", @"base\animations\facial\_facial_graphs\woman_average_sermo_lc.animgraph" },
-        { "NPV: Man Player", @"base\animations\facial\_facial_graphs\player_man_paperdoll_sermo.animgraph" },
-        { "NPV: Man Big", @"base\animations\facial\_facial_graphs\man_big_sermo.animgraph" },
         { "NPV: Man Average", @"base\animations\facial\_facial_graphs\man_average_sermo.animgraph" },
+        { "NPV: Man Big", @"base\animations\facial\_facial_graphs\man_big_sermo.animgraph" },
         { "NPV: Fat", @"base\animations\facial\_facial_graphs\man_fat_sermo.animgraph" },
     };
-   
+
     public static readonly List<string> PhotomodeAnimEntriesFemaleDefault =
     [
         "base\\animations\\ui\\photomode\\photomode_female_facial.anims",
@@ -110,7 +108,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     public static readonly List<string> PhotomodeAnimEntriesMaleDefault = PhotomodeAnimEntriesFemaleDefault.Select(
         str => str.Replace("photomode_female_facial.anims", "photomode_male_facial.anims")
     ).ToList();
-   
+
 
     private static readonly List<string> NPCAnimEntries =
     [
@@ -183,7 +181,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
     private const string s_animEntryNpc = "NPC";
     private const string s_animEntryPhotomode = "Photomode";
-    
+
     // ReSharper disable once UnusedMember.Global used in xaml
     public Dictionary<string, List<string>> AnimEntryOptions { get; } = new()
     {
