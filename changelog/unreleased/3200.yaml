@@ -1,0 +1,6 @@
+changes:
+    - type: "removed"
+      packages: ["App"]
+      pr-number: 3200
+      author: "manavortex"
+      description: "Removed two facial animsets from the dropdown that only worked because AMM patched them"
