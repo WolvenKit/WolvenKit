@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -614,10 +616,18 @@ public partial class RedGraph : IDisposable
     private void CommentsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         UpdateCommentZIndices();
-        RebuildCanvasItems();
+        ApplyCanvasDelta(e);
     }
 
-    private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => ApplyCanvasDelta(e);
+
+    /// <summary>
+    /// Mirrors a <see cref="Nodes"/> or <see cref="Comments"/> change onto <see cref="CanvasItems"/>.
+    /// </summary>
+    /// <remarks>
+    /// Only the delta is applied.
+    /// </remarks>
+    private void ApplyCanvasDelta(NotifyCollectionChangedEventArgs e)
     {
         // Apply just the delta.
         switch (e.Action)
@@ -625,7 +635,7 @@ public partial class RedGraph : IDisposable
             case NotifyCollectionChangedAction.Add when e.NewItems is not null:
                 foreach (var item in e.NewItems)
                 {
-                    CanvasItems.Add(item);
+                    AddCanvasItem(item);
                 }
 
                 return;
@@ -633,7 +643,7 @@ public partial class RedGraph : IDisposable
             case NotifyCollectionChangedAction.Remove when e.OldItems is not null:
                 foreach (var item in e.OldItems)
                 {
-                    CanvasItems.Remove(item);
+                    RemoveCanvasItem(item);
                 }
 
                 return;
@@ -644,8 +654,39 @@ public partial class RedGraph : IDisposable
         }
     }
 
+    private void AddCanvasItem(object item)
+    {
+        if (_pendingCanvasItems is { } pending)
+        {
+            pending.Add(item);
+            return;
+        }
+
+        CanvasItems.Add(item);
+    }
+
+    private void RemoveCanvasItem(object item)
+    {
+        if (_pendingCanvasItems is { } pending && pending.Remove(item))
+        {
+            return;
+        }
+
+        CanvasItems.Remove(item);
+    }
+
     private void RebuildCanvasItems()
     {
+        if (_pendingCanvasItems is { } pending)
+        {
+            // Still realizing: everything goes back into the queue rather than onto the canvas.
+            CanvasItems.Clear();
+            pending.Clear();
+            pending.AddRange(Comments);
+            pending.AddRange(Nodes);
+            return;
+        }
+
         CanvasItems.Clear();
 
         foreach (var comment in Comments)
@@ -658,6 +699,103 @@ public partial class RedGraph : IDisposable
             CanvasItems.Add(node);
         }
     }
+
+    #region progressive canvas realization
+
+    /// <summary>
+    /// How long a single realization frame should take.
+    /// </summary>
+    private const long CanvasRealizationFrameBudgetMs = 100;
+
+    private const int MinCanvasRealizationBatchSize = 1;
+    private const int MaxCanvasRealizationBatchSize = 64;
+
+    /// <summary>
+    /// Items held back from <see cref="CanvasItems"/>, or null when the canvas is live.
+    /// </summary>
+    private List<object>? _pendingCanvasItems;
+
+    /// <summary>
+    /// Bumped by every <see cref="DeferCanvasRealization"/> so an in-flight
+    /// <see cref="RealizeCanvasAsync"/> can tell it has been superseded and bow out.
+    /// </summary>
+    private int _canvasGeneration;
+
+    /// <summary>
+    /// Empties the canvas and remembers its contents.
+    /// </remarks>
+    public void DeferCanvasRealization()
+    {
+        unchecked
+        {
+            _canvasGeneration++;
+        }
+
+        _pendingCanvasItems ??= new List<object>(Comments.Count + Nodes.Count);
+        RebuildCanvasItems();
+    }
+
+    /// <summary>
+    /// Puts the deferred items back on the canvasl, one batch at a time.
+    /// </summary>
+    /// <returns>
+    /// True once the canvas holds everything; false if this run was cancelled or superseded by a
+    /// later <see cref="DeferCanvasRealization"/>, in which case the caller owns nothing.
+    /// </returns>
+    public async Task<bool> RealizeCanvasAsync(
+        IProgress<double>? progress = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (_pendingCanvasItems is not { } pending)
+        {
+            return true;
+        }
+
+        var generation = _canvasGeneration;
+        var batchSize = 8;
+        var realized = 0;
+
+        while (pending.Count > 0)
+        {
+            var take = Math.Min(batchSize, pending.Count);
+            for (var i = 0; i < take; i++)
+            {
+                CanvasItems.Add(pending[i]);
+            }
+
+            pending.RemoveRange(0, take);
+            realized += take;
+            progress?.Report(realized / (double)(realized + pending.Count));
+
+            var frameSw = System.Diagnostics.Stopwatch.StartNew();
+            await Dispatcher.Yield(DispatcherPriority.Background);
+            var frameMs = frameSw.ElapsedMilliseconds;
+
+            if (generation != _canvasGeneration || cancellationToken.IsCancellationRequested)
+            {
+                return false;
+            }
+
+            if (frameMs > CanvasRealizationFrameBudgetMs)
+            {
+                batchSize = Math.Max(MinCanvasRealizationBatchSize, batchSize / 2);
+            }
+            else if (frameMs * 2 < CanvasRealizationFrameBudgetMs)
+            {
+                batchSize = Math.Min(MaxCanvasRealizationBatchSize, batchSize * 2);
+            }
+        }
+
+        if (generation != _canvasGeneration)
+        {
+            return false;
+        }
+
+        _pendingCanvasItems = null;
+        return true;
+    }
+
+    #endregion
 
     private void CommentOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -689,7 +827,14 @@ public partial class RedGraph : IDisposable
         }
     }
 
-    public void GraphStateLoad()
+    public void GraphStateLoad() => GraphStateLoadFinish(GraphStateLoadLayout());
+
+    /// <summary>
+    /// Restores everything the saved layout can give us before the nodes are on screen: node
+    /// locations, socket visibility and the viewport.
+    /// </summary>
+    /// <returns>True if a saved layout was applied.</returns>
+    public bool GraphStateLoadLayout()
     {
         var loaded = false;
         _allowGraphSave = false;
@@ -763,6 +908,15 @@ public partial class RedGraph : IDisposable
             }
         }
 
+        return loaded;
+    }
+
+    /// <summary>
+    /// Second half of <see cref="GraphStateLoadLayout"/>, run once the nodes are realized: auto
+    /// arranges when there was no saved layout, loads comments and re-enables state saving.
+    /// </summary>
+    public void GraphStateLoadFinish(bool loaded)
+    {
         if (!loaded)
         {
             var rect = ArrangeNodes();
