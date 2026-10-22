@@ -25,6 +25,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4.Project;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;

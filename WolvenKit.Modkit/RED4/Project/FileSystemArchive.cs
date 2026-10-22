@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
-using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -11,7 +10,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.App.Models;
+namespace WolvenKit.Modkit.RED4.Project;
 
 public class FileSystemArchive : ICyberGameArchive
 {
@@ -71,7 +70,7 @@ public class FileSystemArchive : ICyberGameArchive
         var modDirectory = Project.ModDirectory;
         foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
         {
-            // the full relative path after "archive\", e.g. "base\characters..." 
+            // the full relative path after "archive\", e.g. "base\characters..."
             var hash = ResourcePath.CalculateHash(filePath[(modDirectory.Length + 1)..]);
 
             result.Add(hash, new FileEntry
