@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorFindLaneTaskDefinition()
 		{
+			PointOnLane = new AIArgumentMapping { Type = Enums.AIArgumentType.Vector, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Vector3" };
+
 			PostConstruct();
 		}
 

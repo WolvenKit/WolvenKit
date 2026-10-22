@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("blockSkipByLine")] 
+		public CBool BlockSkipByLine
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("forcedApply")] 
 		public CBool ForcedApply
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("forcedApplySource")] 
 		public CName ForcedApplySource
 		{
@@ -30,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public questSetPhoneRestriction_NodeType()
 		{
+			BlockSkipByLine = true;
+
 			PostConstruct();
 		}
 

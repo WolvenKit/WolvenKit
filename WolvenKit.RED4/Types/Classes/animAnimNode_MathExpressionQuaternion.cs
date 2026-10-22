@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_MathExpressionQuaternion : animAnimNode_QuaternionValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("expressionData")] 
 		public animMathExpressionNodeData ExpressionData
 		{
@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_MathExpressionQuaternion()
 		{
 			Id = uint.MaxValue;
-			ExpressionData = new animMathExpressionNodeData { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
+			ExpressionData = new animMathExpressionNodeData();
 
 			PostConstruct();
 		}

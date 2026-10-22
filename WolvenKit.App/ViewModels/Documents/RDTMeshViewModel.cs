@@ -2381,7 +2381,7 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
         var groups = new List<Element3D>();
         foreach (var (handleIndex, transforms) in ssTransforms)
         {
-            var handle = data.Nodes[handleIndex].NotNull();
+            var handle = data.Nodes[(int)handleIndex].NotNull();
             var name = handle.Chunk.NotNull().DebugName.ToString().NotNull();
             name = "_" + name.Replace(" ", "_").Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
@@ -2431,13 +2431,12 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                 if (handle.Chunk is worldInstancedMeshNode wimn)
                 {
-                    if (wimn.WorldTransformsBuffer.SharedDataBuffer.Chunk.NotNull().Buffer.Data is not WorldTransformsBuffer wtb)
+                    if (wimn.CookedWorldTransformsBuffer.Buffer.Data is not WorldTransformsBuffer wtb)
                     {
                         continue;
                     }
 
-                    var wtbTransforms = wtb.Transforms;
-                    for (var i = 0; i < wimn.WorldTransformsBuffer.NumElements; i++)
+                    for (var i = 0; i < wtb.Transforms.Count; i++)
                     {
                         var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
 
@@ -2445,7 +2444,7 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
                         {
                             Name = name + $"_instance_{i:D2}",
                             Text = name + $"_instance_{i:D2}",
-                            AppearanceName = wimn.MeshAppearance,
+                            //AppearanceName = wimn.MeshAppearance,
                             DepotPath = irmn.Mesh.DepotPath
                         };
 
@@ -2461,18 +2460,18 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                         var matrix = new Matrix3D();
                         matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Position));
+                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                         var wtbMatrix = new Matrix3D();
-                        if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is worldNodeTransform wte)
+                        if (wtb.Transforms[i] is { } wte)
                         {
                             wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
                         }
 
-                        var transform = wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].NotNull();
-                        wtbMatrix.Rotate(ToQuaternion(transform.Rotation));
-                        wtbMatrix.Translate(ToVector3D(transform.Translation));
+                        var transform = wtb.Transforms[i].NotNull();
+                        wtbMatrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        wtbMatrix.Translate(ToVector3D(transform.Transform.Position));
 
                         wtbMatrix.Append(matrix);
 
@@ -2483,13 +2482,7 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
                 }
                 else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
                 {
-                    if (widmn.CookedInstanceTransforms.SharedDataBuffer?.Chunk.NotNull().Buffer.Data is not CookedInstanceTransformsBuffer citb)
-                    {
-                        continue;
-                    }
-
-                    var citbTransforms = citb.Transforms;
-                    for (var i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
+                    for (var i = 0; i < widmn.InstanceTransforms.Count; i++)
                     {
                         //for (int j = 0; j < transforms.Count; j++)
                         //{
@@ -2515,11 +2508,11 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                         var matrix = new Matrix3D();
                         matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Position));
+                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                         var citbMatrix = new Matrix3D();
-                        var transform = citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].NotNull();
+                        var transform = widmn.InstanceTransforms[i].NotNull();
                         citbMatrix.Rotate(ToQuaternion(transform.Orientation));
                         citbMatrix.Translate(ToVector3D(transform.Position));
 
@@ -2558,8 +2551,8 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                         var matrix = new Matrix3D();
                         matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Position));
+                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        matrix.Translate(ToVector3D(transform.Transform.Position));
 
                         if (irmn is worldBendedMeshNode wbmn)
                         {
@@ -2892,10 +2885,10 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                             var q = new System.Numerics.Quaternion()
                             {
-                                W = transforms[0].Orientation.R,
-                                X = transforms[0].Orientation.I,
-                                Y = transforms[0].Orientation.J,
-                                Z = transforms[0].Orientation.K
+                                W = transforms[0].Transform.Orientation.R,
+                                X = transforms[0].Transform.Orientation.I,
+                                Y = transforms[0].Transform.Orientation.J,
+                                Z = transforms[0].Transform.Orientation.K
                             };
 
                             //q = Shell.ChunkViewModel.FixRotation(q);
@@ -2904,7 +2897,7 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
                             var matrix = new Matrix3D();
                             matrix.Scale(ToScaleVector3D(transforms[0].Scale));
                             matrix.Rotate(qq);
-                            matrix.Translate(ToVector3D(transforms[0].Position));
+                            matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                             entity.Transform = new MatrixTransform3D(matrix);
 
@@ -2970,8 +2963,8 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                 var matrix = new Matrix3D();
                 matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                matrix.Translate(ToVector3D(transforms[0].Position));
+                matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                 var group = new MeshComponent()
                 {

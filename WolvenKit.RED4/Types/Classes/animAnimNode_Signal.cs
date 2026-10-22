@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_Signal : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("blendIn")] 
 		public CFloat BlendIn
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("blendOut")] 
 		public CFloat BlendOut
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("startEvent")] 
 		public CName StartEvent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("endEvent")] 
 		public CName EndEvent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("defaultState")] 
 		public CBool DefaultState
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{

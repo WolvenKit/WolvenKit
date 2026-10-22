@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public gameHitShape_ColliderComponent()
 		{
 			Translation = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			LocalTransform = new CMatrix();
 			ComponentNames = new();
 

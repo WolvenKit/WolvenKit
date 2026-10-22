@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public SecurityGateControllerPS()
 		{
 			DeviceName = "Gameplay-Devices-DisplayNames-Terminal";
-			SecurityGateDetectionProperties = new SecurityGateDetectionProperties { PerformWeaponCheck = true, PerformCheckOnPlayerOnly = true };
-			SecurityGateResponseProperties = new SecurityGateResponseProperties { SecurityGateResponseType = Enums.ESecurityGateResponseType.SEC_SYS_REPRIMAND, SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_3 };
+			SecurityGateDetectionProperties = new SecurityGateDetectionProperties();
+			SecurityGateResponseProperties = new SecurityGateResponseProperties();
 			TrespassersDataList = new();
 
 			PostConstruct();

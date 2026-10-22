@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_ParentConstraint : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("parentTransform")] 
 		public CHandle<animIAnimNodeSourceChannel_QsTransform> ParentTransform
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animIAnimNodeSourceChannel_QsTransform>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("isParentTransformResaved")] 
 		public CBool IsParentTransformResaved
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("parentTransformIndex")] 
 		public animTransformIndex ParentTransformIndex
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("interpolationType")] 
 		public CEnum<animEInterpolationType> InterpolationType
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animEInterpolationType>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("useBoneReferencePoseAsDefaultOffset")] 
 		public CBool UseBoneReferencePoseAsDefaultOffset
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("offsetTranslationLS")] 
 		public animVectorLink OffsetTranslationLS
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(12)] 
 		[RED("offsetEulerRotationLS")] 
 		public animVectorLink OffsetEulerRotationLS
 		{

@@ -142,10 +142,10 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeOption()
 		{
-			ScreenplayOptionId = new scnscreenplayItemId { Id = 4294967040 };
+			ScreenplayOptionId = new scnscreenplayItemId();
 			Type = new gameinteractionsChoiceTypeWrapper();
 			IconTagIds = new();
-			MappinReferencePointId = new scnReferencePointId { Id = uint.MaxValue };
+			MappinReferencePointId = new scnReferencePointId();
 
 			PostConstruct();
 		}

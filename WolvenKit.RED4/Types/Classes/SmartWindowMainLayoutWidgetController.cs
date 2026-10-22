@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SmartWindowMainLayoutWidgetController : ComputerMainLayoutWidgetController
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("menuMailsSlot")] 
 		public inkWidgetReference MenuMailsSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("menuFilesSlot")] 
 		public inkWidgetReference MenuFilesSlot
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("menuNewsFeedSlot")] 
 		public inkWidgetReference MenuNewsFeedSlot
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("menuDevicesSlot")] 
 		public inkWidgetReference MenuDevicesSlot
 		{

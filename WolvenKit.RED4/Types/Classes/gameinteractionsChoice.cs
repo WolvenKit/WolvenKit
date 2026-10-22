@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsChoice()
 		{
-			CaptionParts = new gameinteractionsChoiceCaption { Parts = new() };
+			CaptionParts = new gameinteractionsChoiceCaption();
 			Data = new();
-			ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() };
-			LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() };
+			ChoiceMetaData = new gameinteractionsChoiceMetaData();
+			LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor();
 
 			PostConstruct();
 		}

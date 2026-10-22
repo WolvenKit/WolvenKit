@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public DetermineInteractionStateTaskData()
 		{
-			Context = new gameGetActionsContext { RequestorID = new entEntityID(), ActionPrereqs = new() };
+			Context = new gameGetActionsContext();
 
 			PostConstruct();
 		}

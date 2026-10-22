@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public entAnimationSetupExtensionComponent()
 		{
 			Name = "Component";
-			Animations = new animAnimSetup { Cinematics = new(), Gameplay = new() };
+			Animations = new animAnimSetup();
 
 			PostConstruct();
 		}

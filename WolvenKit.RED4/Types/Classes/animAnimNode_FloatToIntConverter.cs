@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_FloatToIntConverter : animAnimNode_IntValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_VectorJoin : animAnimNode_VectorValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("input")] 
 		public animVectorLink Input
 		{

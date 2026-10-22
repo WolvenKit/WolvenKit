@@ -78,11 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public inkButtonController()
 		{
-			ButtonClick = new inkButtonClickCallback();
-			ButtonHoldComplete = new inkButtonHoldCompleteCallback();
-			ButtonStateChanged = new inkButtonStateChangeCallback();
+			ButtonClick = new inkButtonClickCallback { CallbackName = "OnButtonClick" };
+			ButtonHoldComplete = new inkButtonHoldCompleteCallback { CallbackName = "OnButtonHoldComplete" };
+			ButtonStateChanged = new inkButtonStateChangeCallback { CallbackName = "OnButtonStateChanged" };
 			ButtonSelectionChanged = new inkButtonSelectionCallback();
-			ButtonHoldProgressChanged = new inkButtonProgressChangedCallback();
+			ButtonHoldProgressChanged = new inkButtonProgressChangedCallback { CallbackName = "OnButtonHoldProgressChanged" };
 
 			PostConstruct();
 		}

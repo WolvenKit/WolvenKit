@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entDistanceLODsPresets()
 		{
-			Definitions = new(0);
+			Definitions = new(4);
 
 			PostConstruct();
 		}

@@ -79,9 +79,9 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemDataMosh()
 		{
 			TimeDuration = 1.000000F;
-			Intensity = new effectEffectParameterEvaluatorFloat();
+			Intensity = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
 			GlitchColor = new effectEffectParameterEvaluatorVector();
-			PixelsortIntensity = new effectEffectParameterEvaluatorFloat();
+			PixelsortIntensity = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
 
 			PostConstruct();
 		}

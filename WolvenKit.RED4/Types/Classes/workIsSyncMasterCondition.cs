@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public workIsSyncMasterCondition()
 		{
-			Equals_ = true;
+			Equals = true;
 
 			PostConstruct();
 		}

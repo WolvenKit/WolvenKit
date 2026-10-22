@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -137,6 +137,11 @@ public sealed class ArchiveManagerLoader: IArchiveManagerLoader
 
                     CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
                 });
+
+                // Not in the file, still used in-game...
+                CNamePool.AddOrGetHash("character_cyberware.physmat");
+                CNamePool.AddOrGetHash("default.physmat");
+                CNamePool.AddOrGetHash("default_material.physmat");
             }
         }
 

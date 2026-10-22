@@ -52,6 +52,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("isMinorArcana")] 
+		public CBool IsMinorArcana
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TarotCardData()
 		{
 			PostConstruct();

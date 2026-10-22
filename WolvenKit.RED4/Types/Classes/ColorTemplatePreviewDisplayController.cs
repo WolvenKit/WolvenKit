@@ -183,7 +183,7 @@ namespace WolvenKit.RED4.Types
 			FrameSelected = new inkImageWidgetReference();
 			GenericColor = new HDRColor();
 			UniqueColor = new HDRColor();
-			CurrentTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
+			CurrentTemplate = new VehicleVisualCustomizationTemplate();
 
 			PostConstruct();
 		}

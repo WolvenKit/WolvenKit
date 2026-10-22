@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIGateSignal()
 		{
-			Tags = new(0);
+			Tags = new(4);
 			Priority = 1.000000F;
 
 			PostConstruct();

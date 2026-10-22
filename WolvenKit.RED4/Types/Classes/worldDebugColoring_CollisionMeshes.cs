@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_CollisionMeshes()
 		{
-			DefaultColor = new CColor();
-			PrefabColor = new CColor();
-			CollisionMeshColor = new CColor();
+			DefaultColor = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
+			PrefabColor = new CColor { Red = 255, Green = 255, Alpha = 255 };
+			CollisionMeshColor = new CColor { Red = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

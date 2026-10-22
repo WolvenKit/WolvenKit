@@ -72,8 +72,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Color = new CColor();
 			Actions = new();
-			Tags = new redTagList { Tags = new() };
-			RandomizationInfo = new gameuiCharacterRandomizationInfo { MinRating = 1, MaxRating = 10 };
+			Tags = new redTagList();
+			RandomizationInfo = new gameuiCharacterRandomizationInfo();
 
 			PostConstruct();
 		}

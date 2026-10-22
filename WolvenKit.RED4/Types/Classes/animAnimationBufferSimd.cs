@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimationBufferSimd()
 		{
-			DataAddress = new animAnimDataAddress { UnkIndex = uint.MaxValue, FsetInBytes = uint.MaxValue, ZeInBytes = uint.MaxValue };
+			DataAddress = new animAnimDataAddress();
 			FallbackFrameIndices = new();
 			ExtraDataNames = new();
 

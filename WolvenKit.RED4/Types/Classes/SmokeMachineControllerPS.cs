@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#146";
 			TweakDBRecord = "Devices.SmokeMachine";
-			TweakDBDescriptionRecord = 139901527839;
+			TweakDBDescriptionRecord = "device_descriptions.SmokeMachine";
 
 			PostConstruct();
 		}

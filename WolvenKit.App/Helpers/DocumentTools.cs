@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -907,10 +907,10 @@ public class DocumentTools
                 .Where(m => m is CMaterialParameterTexture)
                 .Select(m => m.ParameterName.GetResolvedText() ?? "")
                 .ToList(),
-            CResourceReference<Multilayer_Mask> => templateMaterials.Where(m => m is CMaterialParameterMultilayerMask)
+            CResourceReference<Multilayer_Mask> => templateMaterials.Where(m => m is CMaterialParameterMultilayerMask or CMaterialParameterMultilayerMaskOverride)
                 .Select(m => m.ParameterName.GetResolvedText() ?? "")
                 .ToList(),
-            CResourceReference<Multilayer_Setup> => templateMaterials.Where(m => m is CMaterialParameterMultilayerSetup)
+            CResourceReference<Multilayer_Setup> => templateMaterials.Where(m => m is CMaterialParameterMultilayerSetup or CMaterialParameterMultilayerSetupOverride)
                 .Select(m => m.ParameterName.GetResolvedText() ?? "")
                 .ToList(),
             CColor => templateMaterials.Where(m => m is CMaterialParameterColor)

@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioAudioFoliageMaterialDictionary()
 		{
 			Entries = new();
+			EntryType = new audioAudioFoliageMaterialDictionaryItem();
 
 			PostConstruct();
 		}

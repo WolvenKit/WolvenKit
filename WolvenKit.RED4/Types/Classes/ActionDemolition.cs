@@ -16,12 +16,12 @@ namespace WolvenKit.RED4.Types
 		{
 			RequesterID = new entEntityID();
 			CostComponents = new();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
+			InteractionChoice = new gameinteractionsChoice();
+			ActionWidgetPackage = new SActionWidgetPackage();
 			CanTriggerStim = true;
 			SkillCheckName = Enums.EDeviceChallengeSkill.Athletics;
 			LocalizedName = "LocKey#22271";
-			SkillcheckDescription = new UIInteractionSkillCheck { AdditionalRequirements = new(), OwnerID = new entEntityID() };
+			SkillcheckDescription = new UIInteractionSkillCheck();
 			SlotID = new gamemountingMountingSlotId();
 
 			PostConstruct();

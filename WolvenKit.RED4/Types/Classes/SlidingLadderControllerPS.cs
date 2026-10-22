@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#2128";
 			TweakDBRecord = "Devices.SlidingLadder";
-			TweakDBDescriptionRecord = 144242295596;
+			TweakDBDescriptionRecord = "device_descriptions.SlidingLadder";
 			ShouldScannerShowStatus = false;
 			IsShootable = true;
 			AnimationTime = 1.000000F;

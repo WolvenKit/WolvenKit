@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_Root : animAnimNode_Container
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("outputNode")] 
 		public animPoseLink OutputNode
 		{

@@ -196,10 +196,10 @@ namespace WolvenKit.RED4.Types
 			BodyWeight = 1.000000F;
 			HeadWeight = 1.000000F;
 			EyesWeight = 1.000000F;
-			SingleLimits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
-			BodyLimits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
-			HeadLimits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
-			EyesLimits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
+			SingleLimits = new animLookAtLimits();
+			BodyLimits = new animLookAtLimits();
+			HeadLimits = new animLookAtLimits();
+			EyesLimits = new animLookAtLimits();
 
 			PostConstruct();
 		}

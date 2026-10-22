@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkSyncedMasterAnimByTime : animAnimNode_SkFrameAnim
 	{
-		[Ordinal(34)] 
+		[Ordinal(22)] 
 		[RED("syncTag")] 
 		public CName SyncTag
 		{

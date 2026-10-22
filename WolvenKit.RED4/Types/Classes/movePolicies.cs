@@ -274,8 +274,8 @@ namespace WolvenKit.RED4.Types
 			DestinationTangent = new Vector3();
 			StartTangent = new Vector3();
 			TargetSmartObject = new AIObjectId();
-			StrafingTarget = new moveStrafingTarget { Position = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
-			FollowSlotOverrides = new(0);
+			StrafingTarget = new moveStrafingTarget();
+			FollowSlotOverrides = new(4);
 			LocalTargetOffset = new Vector3();
 			MinFollowerDistance = 1.000000F;
 			MaxFollowerDistance = 3.000000F;

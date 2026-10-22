@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Inital rotation 3D";
 			EditorGroup = "Rotation";
 			IsEnabled = true;
+			Rotation = new CEvaluatorVectorConst();
 
 			PostConstruct();
 		}

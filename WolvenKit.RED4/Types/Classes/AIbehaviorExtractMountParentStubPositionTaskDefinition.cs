@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorExtractMountParentStubPositionTaskDefinition()
 		{
+			MountData = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "handle:ISerializable" };
+			Position = new AIArgumentMapping { Type = Enums.AIArgumentType.Vector, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Vector3" };
+
 			PostConstruct();
 		}
 

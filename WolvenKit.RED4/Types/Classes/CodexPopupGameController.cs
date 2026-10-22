@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("closeButtonRef")] 
+		public inkWidgetReference CloseButtonRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("entryViewController")] 
 		public CWeakHandle<CodexEntryViewController> EntryViewController
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CodexEntryViewController>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("characterEntryViewController")] 
 		public CWeakHandle<CodexEntryViewController> CharacterEntryViewController
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CodexEntryViewController>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("data")] 
 		public CHandle<CodexPopupData> Data
 		{
@@ -73,6 +81,7 @@ namespace WolvenKit.RED4.Types
 			EntryViewRef = new inkCompoundWidgetReference();
 			CharacterEntryViewRef = new inkCompoundWidgetReference();
 			ImageViewRef = new inkImageWidgetReference();
+			CloseButtonRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

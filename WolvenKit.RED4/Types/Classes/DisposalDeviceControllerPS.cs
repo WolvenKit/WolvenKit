@@ -68,9 +68,9 @@ namespace WolvenKit.RED4.Types
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;
-			DisposalDeviceSetup = new DisposalDeviceSetup { NumberOfUses = 1, IsBodyRequired = true };
-			DistractionSetup = new DistractionSetup { StimuliRange = 10.000000F, ExplosionDefinition = new() };
-			ExplosionSetup = new DistractionSetup { StimuliRange = 10.000000F, ExplosionDefinition = new() };
+			DisposalDeviceSetup = new DisposalDeviceSetup();
+			DistractionSetup = new DistractionSetup();
+			ExplosionSetup = new DistractionSetup();
 
 			PostConstruct();
 		}

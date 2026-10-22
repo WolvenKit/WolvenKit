@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.Types
 		public vgVectorGraphicShape_Group()
 		{
 			CalTransform = new CMatrix();
+			Yle = new vgVectorGraphicStyle();
 			ChildShapes = new();
 
 			PostConstruct();

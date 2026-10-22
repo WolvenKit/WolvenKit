@@ -119,12 +119,13 @@ namespace WolvenKit.RED4.Types
 		public gameprojectileComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			OnCollisionAction = Enums.gameprojectileOnCollisionAction.Stop;
 			CollisionsFilterClosest = true;
-			RotationOffset = new Quaternion { R = 1.000000F };
+			RotationOffset = new Quaternion();
 			DeriveOwnerVelocity = true;
-			DerivedVelocityParams = new gameprojectileVelocityParams { XFactor = 1.000000F, YFactor = 1.000000F, ZFactor = 1.000000F };
+			DerivedVelocityParams = new gameprojectileVelocityParams();
+			FilterData = new physicsFilterData();
 			QueryPreset = new physicsQueryPreset();
 			GameEffectRef = new gameEffectRef();
 

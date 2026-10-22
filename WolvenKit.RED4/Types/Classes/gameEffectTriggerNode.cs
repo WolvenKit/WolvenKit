@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameEffectTriggerNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("effectDescs")] 
 		public CArray<CHandle<gameEffectTriggerEffectDesc>> EffectDescs
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectTriggerNode()
 		{
+			Color = new CColor { Green = 237, Blue = 255, Alpha = 170 };
 			EffectDescs = new();
 
 			PostConstruct();

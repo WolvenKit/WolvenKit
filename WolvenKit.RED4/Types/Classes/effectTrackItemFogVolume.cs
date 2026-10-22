@@ -56,6 +56,9 @@ namespace WolvenKit.RED4.Types
 		{
 			TimeDuration = 1.000000F;
 			Priority = 5;
+			Density = new CEvaluatorFloatConst { Value = 100.000000F };
+			Size = new CEvaluatorVectorConst { Value = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			Color = new CEvaluatorColorConst();
 
 			PostConstruct();
 		}

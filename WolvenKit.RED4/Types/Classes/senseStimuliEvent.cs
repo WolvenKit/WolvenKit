@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public senseStimuliEvent()
 		{
-			StimInvestigateData = new senseStimInvestigateData { DistrationPoint = new Vector4(), AttackInstigatorPosition = new Vector4(), InvestigationSpots = new() };
+			StimInvestigateData = new senseStimInvestigateData();
 			MovePositions = new();
 			SourcePosition = new Vector4 { W = 1.000000F };
 			StimType = Enums.gamedataStimType.Invalid;

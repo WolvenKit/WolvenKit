@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorStoryTierConditionDefinition()
 		{
+			StoryTier = new AIArgumentMapping { Type = Enums.AIArgumentType.Enum, DefaultValue = new CVariant(), CustomTypeName = "gameStoryTier" };
+
 			PostConstruct();
 		}
 

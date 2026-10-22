@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIHumanComponentPS()
 		{
-			SpotUsageToken = new AISpotUsageToken { UsedSpotId = new worldGlobalNodeID(), SpotUserId = new entEntityID() };
+			SpotUsageToken = new AISpotUsageToken();
 
 			PostConstruct();
 		}

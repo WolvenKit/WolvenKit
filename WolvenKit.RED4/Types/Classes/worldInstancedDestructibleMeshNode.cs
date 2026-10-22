@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldInstancedDestructibleMeshNode : worldMeshNode
 	{
-		[Ordinal(1000)] 
+		[Ordinal(16)] 
 		[RED("staticMesh")] 
 		public CResourceAsyncReference<CMesh> StaticMesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(1001)] 
+		[Ordinal(17)] 
 		[RED("staticMeshAppearance")] 
 		public CName StaticMeshAppearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(1002)] 
+		[Ordinal(18)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
-		[Ordinal(1003)] 
+		[Ordinal(19)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
-		[Ordinal(1004)] 
+		[Ordinal(20)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1005)] 
+		[Ordinal(21)] 
 		[RED("turnDynamicOnImpulse")] 
 		public CBool TurnDynamicOnImpulse
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1006)] 
+		[Ordinal(22)] 
 		[RED("useAggregate")] 
 		public CBool UseAggregate
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1007)] 
+		[Ordinal(23)] 
 		[RED("enableSelfCollisionInAggregate")] 
 		public CBool EnableSelfCollisionInAggregate
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1008)] 
+		[Ordinal(24)] 
 		[RED("isDestructible")] 
 		public CBool IsDestructible
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1009)] 
+		[Ordinal(25)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
-		[Ordinal(1010)] 
+		[Ordinal(26)] 
 		[RED("damageThreshold")] 
 		public CFloat DamageThreshold
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(1011)] 
+		[Ordinal(27)] 
 		[RED("damageEndurance")] 
 		public CFloat DamageEndurance
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(1012)] 
+		[Ordinal(28)] 
 		[RED("accumulateDamage")] 
 		public CBool AccumulateDamage
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1013)] 
+		[Ordinal(29)] 
 		[RED("impulseToDamage")] 
 		public CFloat ImpulseToDamage
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(1014)] 
+		[Ordinal(30)] 
 		[RED("fracturingEffect")] 
 		public CResourceAsyncReference<worldEffect> FracturingEffect
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(1015)] 
+		[Ordinal(31)] 
 		[RED("idleEffect")] 
 		public CResourceAsyncReference<worldEffect> IdleEffect
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(1016)] 
+		[Ordinal(32)] 
 		[RED("instanceTransforms")] 
 		public CArray<Transform> InstanceTransforms
 		{
@@ -140,15 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<Transform>>(value);
 		}
 
-		[Ordinal(1017)] 
-		[RED("cookedInstanceTransforms")] 
-		public worldTransformBuffer CookedInstanceTransforms
-		{
-			get => GetPropertyValue<worldTransformBuffer>();
-			set => SetPropertyValue<worldTransformBuffer>(value);
-		}
-
-		[Ordinal(1018)] 
+		[Ordinal(33)] 
 		[RED("isPierceable")] 
 		public CBool IsPierceable
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1019)] 
+		[Ordinal(34)] 
 		[RED("isWorkspot")] 
 		public CBool IsWorkspot
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1020)] 
+		[Ordinal(35)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
-		[Ordinal(1021)] 
+		[Ordinal(36)] 
 		[RED("useMeshNavmeshSettings")] 
 		public CBool UseMeshNavmeshSettings
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1022)] 
+		[Ordinal(37)] 
 		[RED("systemsToNotifyFlags")] 
 		public CUInt16 SystemsToNotifyFlags
 		{
@@ -192,13 +184,13 @@ namespace WolvenKit.RED4.Types
 		{
 			SimulationType = Enums.physicsSimulationType.Dynamic;
 			StartInactive = true;
+			FilterData = new physicsFilterData();
 			DamageThreshold = 1.000000F;
 			DamageEndurance = 10.000000F;
 			AccumulateDamage = true;
 			ImpulseToDamage = 1.000000F;
 			InstanceTransforms = new();
-			CookedInstanceTransforms = new worldTransformBuffer();
-			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			NavigationSetting = new NavGenNavigationSetting();
 			UseMeshNavmeshSettings = true;
 
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimVariableBool : animAnimVariable
 	{
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("value")] 
 		public CBool Value
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("default")] 
 		public CBool Default
 		{

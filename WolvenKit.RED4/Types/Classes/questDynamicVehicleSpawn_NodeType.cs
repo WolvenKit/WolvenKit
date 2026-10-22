@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questDynamicVehicleSpawn_NodeType()
 		{
-			VehicleData = new() { 0 };
+			VehicleData = new();
 			WaveTag = "DefaultWave";
 			SpawnDirectionPreference = Enums.questSpawnDirectionPreference.InFront;
 			DistanceRange = new Vector2 { X = 100.000000F, Y = 250.000000F };

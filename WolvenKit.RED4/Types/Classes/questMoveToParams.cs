@@ -118,6 +118,8 @@ namespace WolvenKit.RED4.Types
 
 		public questMoveToParams()
 		{
+			MovementTargetRef = new questUniversalRef { RefLocalPlayer = false };
+			FacingTargetRef = new questUniversalRef { RefLocalPlayer = false };
 			UseStart = true;
 			UseStop = true;
 			FinishWhenDestinationReached = true;

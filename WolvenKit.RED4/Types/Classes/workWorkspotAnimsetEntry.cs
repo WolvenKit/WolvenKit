@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public workWorkspotAnimsetEntry()
 		{
-			Animations = new animAnimSetup { Cinematics = new(), Gameplay = new() };
+			Animations = new animAnimSetup();
 			LoadingHandles = new();
 
 			PostConstruct();

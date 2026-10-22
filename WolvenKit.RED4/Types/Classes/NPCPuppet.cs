@@ -615,14 +615,14 @@ namespace WolvenKit.RED4.Types
 		public NPCPuppet()
 		{
 			HitEventLock = new ScriptReentrantRWLock();
-			RagdollDamageData = new RagdollDamagePollData { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, WorldNormal = new Vector4() };
+			RagdollDamageData = new RagdollDamagePollData();
 			RagdollInitialPosition = new Vector4();
 			RagdollImpactedNPCs = new();
 			ThrownNPCNearbyCrowdNPCs = new();
 			NpcMountedToPlayerComponents = new();
 			CachedPlayerID = new entEntityID();
 			ResendStatusEffectSignalDelayID = new gameDelayID();
-			Bounty = new Bounty { Transgressions = new() };
+			Bounty = new Bounty();
 			CachedVFXList = new();
 			CachedSFXList = new();
 			ThrowingGrenadeDelayEventID = new gameDelayID();

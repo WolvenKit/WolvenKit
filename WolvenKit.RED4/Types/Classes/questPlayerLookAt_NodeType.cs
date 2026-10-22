@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPlayerLookAt_NodeType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			OffsetPos = new Vector3();
 			Duration = 0.250000F;
 			AdjustPitch = true;

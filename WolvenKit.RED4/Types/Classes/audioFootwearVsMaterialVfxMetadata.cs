@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public audioFootwearVsMaterialVfxMetadata()
 		{
+			LocomotionStates = new audioLocomotionStateVfxDictionary { EntryType = new audioLocomotionStateVfxDictionaryItem() };
+			CustomActionVfx = new audioLocomotionCustomActionVfxDictionary { EntryType = new audioLocomotionCustomActionVfxDictionaryItem() };
+
 			PostConstruct();
 		}
 

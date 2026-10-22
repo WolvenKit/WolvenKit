@@ -800,7 +800,7 @@ internal static class BufferHelper
     {
         writer.WriteNumber("Flags", value.Buffer.Flags);
 
-        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer or CR2WWrapper or FoliageBuffer or AnimFacialSetupBakedDataBuffer or AnimFacialSetupMainPosesDataBuffer or AnimFacialSetupCorrectivePosesDataBuffer or RazerChromaAnimationBuffer)
+        if (value.Buffer.Data is not null and not CGIDataBuffer and not GeometryCacheBuffer and not TilesBuffer)
         {
             writer.WriteString("Type", value.Buffer.Data.GetType().AssemblyQualifiedName);
 

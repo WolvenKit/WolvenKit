@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("leftHandWeapon")] 
+		public CString LeftHandWeapon
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("rightHandWeapon")] 
+		public CString RightHandWeapon
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("quality")] 
 		public CEnum<gamedataQuality> Quality
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("iconic")] 
 		public CBool Iconic
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("itemLevel")] 
 		public CInt32 ItemLevel
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("isSilenced")] 
 		public CBool IsSilenced
 		{

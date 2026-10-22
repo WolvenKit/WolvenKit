@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_CriticalSpringDamp : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("smoothTime")] 
 		public CFloat SmoothTime
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("useRange")] 
 		public CBool UseRange
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("rangeMin")] 
 		public CFloat RangeMin
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("rangeMax")] 
 		public CFloat RangeMax
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("useRawTime")] 
 		public CBool UseRawTime
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{

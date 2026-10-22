@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_FloatConstant : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{

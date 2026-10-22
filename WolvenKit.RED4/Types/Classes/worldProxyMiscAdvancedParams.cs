@@ -233,7 +233,7 @@ namespace WolvenKit.RED4.Types
 			BcFilterSensitivity = 0.250000F;
 			BcBoundsRatioLimit = 0.250000F;
 			RemoveIslands = true;
-			BackgroundColor = new CColor();
+			BackgroundColor = new CColor { Red = 51, Green = 51, Blue = 51, Alpha = 255 };
 
 			PostConstruct();
 		}

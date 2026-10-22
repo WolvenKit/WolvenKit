@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questUpdateEntityHealthListeners_NodeType()
 		{
-			EntityRef = new gameEntityReference { Names = new() };
+			EntityRef = new gameEntityReference();
 
 			PostConstruct();
 		}

@@ -12,8 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("listenedWeapons")] 
+		public CArray<CString> ListenedWeapons
+		{
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
 		public ReloadFromEmptyPrereq()
 		{
+			ListenedWeapons = new();
+
 			PostConstruct();
 		}
 

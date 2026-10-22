@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckFactInterruptCondition()
 		{
-			Params = new scnCheckFactInterruptConditionParams();
+			Params = new scnCheckFactInterruptConditionParams { FactCondition = new scnVarComparison_FactConditionType() };
 
 			PostConstruct();
 		}

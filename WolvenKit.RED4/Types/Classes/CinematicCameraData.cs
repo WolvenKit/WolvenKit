@@ -110,13 +110,13 @@ namespace WolvenKit.RED4.Types
 
 		public CinematicCameraData()
 		{
-			ShotInitialTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			VehicleInitialTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			ReferenceLocalBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
-			CurrentLocalBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
-			ShotRootTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			ShotSpaceTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			VehicleTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			ShotInitialTransform = new WorldTransform();
+			VehicleInitialTransform = new WorldTransform();
+			ReferenceLocalBoundingBox = new Box();
+			CurrentLocalBoundingBox = new Box();
+			ShotRootTransform = new WorldTransform();
+			ShotSpaceTransform = new WorldTransform();
+			VehicleTransform = new WorldTransform();
 
 			PostConstruct();
 		}

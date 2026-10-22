@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorSlotOccupiedConditionDefinition()
 		{
+			Slot = new AIArgumentMapping { Type = Enums.AIArgumentType.CName, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "CName" };
+
 			PostConstruct();
 		}
 

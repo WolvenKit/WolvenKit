@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldStaticFogVolumeNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("absolute")] 
 		public CBool Absolute
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("applyHeightFalloff")] 
 		public CBool ApplyHeightFalloff
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("densityFalloff")] 
 		public CFloat DensityFalloff
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("blendFalloff")] 
 		public CFloat BlendFalloff
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("densityFactor")] 
 		public CFloat DensityFactor
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("absorption")] 
 		public CFloat Absorption
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("ambientScale")] 
 		public CFloat AmbientScale
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("envColorGroup")] 
 		public CEnum<EEnvColorGroup> EnvColorGroup
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EEnvColorGroup>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("color")] 
 		public CColor Color
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("lightChannels")] 
 		public CBitField<rendLightChannel> LightChannels
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			Absorption = -1.000000F;
 			StreamingDistance = 1000.000000F;
 			AmbientScale = 1.000000F;
-			Color = new CColor();
+			Color = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

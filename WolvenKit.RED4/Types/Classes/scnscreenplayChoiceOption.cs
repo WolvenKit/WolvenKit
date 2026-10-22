@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnscreenplayChoiceOption()
 		{
-			ItemId = new scnscreenplayItemId { Id = 4294967040 };
-			Usage = new scnscreenplayOptionUsage { PlayerGenderMask = new scnGenderMask { Mask = 128 } };
+			ItemId = new scnscreenplayItemId();
+			Usage = new scnscreenplayOptionUsage();
 			LocstringId = new scnlocLocstringId();
 
 			PostConstruct();

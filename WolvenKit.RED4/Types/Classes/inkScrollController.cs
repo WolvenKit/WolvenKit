@@ -124,6 +124,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("resetToDesiredOnSetup")] 
+		public CBool ResetToDesiredOnSetup
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public inkScrollController()
 		{
 			ScrollArea = new inkScrollAreaWidgetReference();
@@ -136,6 +144,7 @@ namespace WolvenKit.RED4.Types
 			ContentSmallerThanViewport = true;
 			ViewportSize = new Vector2();
 			ContentSize = new Vector2();
+			ResetToDesiredOnSetup = true;
 
 			PostConstruct();
 		}

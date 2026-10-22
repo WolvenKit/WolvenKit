@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIThrowGrenadeCommand()
 		{
-			TargetOverridePuppetRef = new gameEntityReference { Names = new() };
+			TargetOverridePuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

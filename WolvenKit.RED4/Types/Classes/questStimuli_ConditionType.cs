@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public questStimuli_ConditionType()
 		{
-			InstigatorRef = new gameEntityReference { Names = new() };
+			InstigatorRef = new gameEntityReference();
 			IsPlayerInstigator = true;
-			TargetRef = new gameEntityReference { Names = new() };
+			TargetRef = new gameEntityReference();
 			Type = Enums.gamedataStimType.FootStepRegular;
 
 			PostConstruct();

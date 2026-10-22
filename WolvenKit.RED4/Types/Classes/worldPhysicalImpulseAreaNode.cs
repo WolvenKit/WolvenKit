@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldPhysicalImpulseAreaNode : worldPhysicalTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("impulse")] 
 		public Vector3 Impulse
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("impulseRadius")] 
 		public CFloat ImpulseRadius
 		{

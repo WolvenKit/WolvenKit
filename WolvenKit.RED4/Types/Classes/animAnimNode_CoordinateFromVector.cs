@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_CoordinateFromVector : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("vectorCoodrinateType")] 
 		public CEnum<animVectorCoordinateType> VectorCoodrinateType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animVectorCoordinateType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("input")] 
 		public animVectorLink Input
 		{

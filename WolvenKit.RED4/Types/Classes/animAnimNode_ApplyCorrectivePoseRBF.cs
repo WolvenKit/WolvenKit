@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_ApplyCorrectivePoseRBF : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("rbfCoefficient")] 
 		public CFloat RbfCoefficient
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("rbfPowValue")] 
 		public CFloat RbfPowValue
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("correctiveFrame")] 
 		public CFloat CorrectiveFrame
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("correctives")] 
 		public CArray<animCorrectivePoseEntry> Correctives
 		{

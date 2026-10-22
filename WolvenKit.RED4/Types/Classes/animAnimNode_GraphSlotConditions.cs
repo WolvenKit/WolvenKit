@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_GraphSlotConditions : animAnimNode_GraphSlot
 	{
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("conditions")] 
 		public CArray<animGraphSlotCondition> Conditions
 		{

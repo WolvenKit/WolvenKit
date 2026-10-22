@@ -136,9 +136,9 @@ namespace WolvenKit.RED4.Types
 		{
 			IsTerrainNode = true;
 			NodeScale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			NodeTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			NodeTransform = new Transform();
 			NodeCellResScale = 1.000000F;
-			NodeIDPath = new toolsEditorObjectIDPath { Elements = new() };
+			NodeIDPath = new toolsEditorObjectIDPath();
 
 			PostConstruct();
 		}

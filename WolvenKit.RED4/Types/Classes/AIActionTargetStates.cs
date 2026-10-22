@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIActionTargetStates()
 		{
-			NpcStates = new AIActionNPCStates { HighLevelStates = new(), UpperBodyStates = new(), StanceStates = new(), BehaviorStates = new(), DefenseMode = new(), LocomotionMode = new() };
-			PlayerStates = new AIActionPlayerStates { LocomotionStates = new(), UpperBodyStates = new(), MeleeStates = new(), ZoneStates = new(), BodyCarryStates = new(), CombatStates = new() };
+			NpcStates = new AIActionNPCStates();
+			PlayerStates = new AIActionPlayerStates();
 
 			PostConstruct();
 		}

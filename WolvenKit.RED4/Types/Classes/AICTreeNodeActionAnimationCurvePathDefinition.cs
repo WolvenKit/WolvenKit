@@ -134,22 +134,22 @@ namespace WolvenKit.RED4.Types
 
 		public AICTreeNodeActionAnimationCurvePathDefinition()
 		{
-			NodeReference = new LibTreeDefNodeRef { VariableId = ushort.MaxValue };
-			ControllersSetupName = new LibTreeDefCName { VariableId = ushort.MaxValue };
-			UseStart = new LibTreeDefBool { VariableId = ushort.MaxValue };
-			UseStop = new LibTreeDefBool { VariableId = ushort.MaxValue };
-			BlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
-			GlobalInBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
-			GlobalOutBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
-			TurnCharacterToMatchVelocity = new LibTreeDefBool { VariableId = ushort.MaxValue };
-			CustomStartAnimationName = new LibTreeDefCName { VariableId = ushort.MaxValue };
-			CustomMainAnimationName = new LibTreeDefCName { VariableId = ushort.MaxValue };
-			CustomStopAnimationName = new LibTreeDefCName { VariableId = ushort.MaxValue };
-			StartSnapToTerrain = new LibTreeDefBool { VariableId = ushort.MaxValue };
-			MainSnapToTerrain = new LibTreeDefBool { VariableId = ushort.MaxValue };
-			StopSnapToTerrain = new LibTreeDefBool { VariableId = ushort.MaxValue };
-			StartSnapToTerrainBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
-			StopSnapToTerrainBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
+			NodeReference = new LibTreeDefNodeRef();
+			ControllersSetupName = new LibTreeDefCName();
+			UseStart = new LibTreeDefBool();
+			UseStop = new LibTreeDefBool();
+			BlendTime = new LibTreeDefFloat();
+			GlobalInBlendTime = new LibTreeDefFloat();
+			GlobalOutBlendTime = new LibTreeDefFloat();
+			TurnCharacterToMatchVelocity = new LibTreeDefBool();
+			CustomStartAnimationName = new LibTreeDefCName();
+			CustomMainAnimationName = new LibTreeDefCName();
+			CustomStopAnimationName = new LibTreeDefCName();
+			StartSnapToTerrain = new LibTreeDefBool();
+			MainSnapToTerrain = new LibTreeDefBool();
+			StopSnapToTerrain = new LibTreeDefBool();
+			StartSnapToTerrainBlendTime = new LibTreeDefFloat();
+			StopSnapToTerrainBlendTime = new LibTreeDefFloat();
 
 			PostConstruct();
 		}

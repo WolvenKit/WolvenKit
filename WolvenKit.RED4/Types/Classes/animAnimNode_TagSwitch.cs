@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_TagSwitch : animAnimNode_BaseSwitch
 	{
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{

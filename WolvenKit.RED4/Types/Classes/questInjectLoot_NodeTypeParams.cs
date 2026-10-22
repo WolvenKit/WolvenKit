@@ -30,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questInjectLoot_NodeTypeParams()
 		{
+			ObjectRef = new questUniversalRef();
 			LootOperations = new();
 			Operations = new();
 

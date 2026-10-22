@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsPlayAnimEventExData()
 		{
-			Basic = new scneventsPlayAnimEventData { Stretch = 1.000000F, BlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, BlendOutCurve = Enums.scnEasingType.SinusoidalEaseInOut };
+			Basic = new scneventsPlayAnimEventData();
 			Weight = 1.000000F;
 
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldMinimapConfigAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("streamingRadius")] 
 		public CFloat StreamingRadius
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldMinimapConfigAreaNode()
 		{
+			Color = new CColor { Red = 255, Green = 178, Blue = 102, Alpha = 120 };
 			StreamingRadius = 650.000000F;
 
 			PostConstruct();

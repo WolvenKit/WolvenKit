@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkFrameAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(30)] 
+		[Ordinal(18)] 
 		[RED("progressLink")] 
 		public animFloatLink ProgressLink
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(19)] 
 		[RED("timeLink")] 
 		public animFloatLink TimeLink
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(20)] 
 		[RED("frameLink")] 
 		public animFloatLink FrameLink
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(21)] 
 		[RED("fireAnimEndOnceOnAnimEnd")] 
 		public CBool FireAnimEndOnceOnAnimEnd
 		{

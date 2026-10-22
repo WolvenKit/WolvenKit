@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsPlayerLookAtEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			Performer = new scnPerformerId { Id = 4294967040 };
-			LookAtParams = new scneventsPlayerLookAtEventParams { OffsetPos = new Vector3(), Duration = 0.250000F, EaseIn = true, EaseOut = true };
+			Id = new scnSceneEventId();
+			Performer = new scnPerformerId();
+			LookAtParams = new scneventsPlayerLookAtEventParams();
 
 			PostConstruct();
 		}

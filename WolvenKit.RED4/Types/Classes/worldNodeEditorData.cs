@@ -175,8 +175,8 @@ namespace WolvenKit.RED4.Types
 		public worldNodeEditorData()
 		{
 			Name = "node";
-			Transform = new worldNodeTransform { Translation = new Vector3(), Rotation = new Quaternion { R = 1.000000F }, Scale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F } };
-			PivotTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			Transform = new worldNodeTransform();
+			PivotTransform = new Transform();
 			IsSnapTarget = true;
 			IsSnapSource = true;
 			MaxStreamingDistance = float.MaxValue;

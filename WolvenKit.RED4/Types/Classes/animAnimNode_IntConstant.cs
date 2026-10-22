@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_IntConstant : animAnimNode_IntValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{

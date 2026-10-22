@@ -65,6 +65,9 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Noise";
 			EditorGroup = "Position";
 			IsEnabled = true;
+			Amplitude = new CEvaluatorVectorConst { Value = new Vector4 { X = 4.000000F, Y = 4.000000F, Z = 4.000000F, W = 1.000000F } };
+			Offset = new CEvaluatorVectorConst { Value = new Vector4 { W = 1.000000F } };
+			Frequency = new CEvaluatorVectorConst { Value = new Vector4 { X = 6.000000F, Y = 6.000000F, Z = 6.000000F, W = 1.000000F } };
 			ChangeRate = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 
 			PostConstruct();

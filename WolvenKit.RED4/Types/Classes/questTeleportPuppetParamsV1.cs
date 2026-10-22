@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questTeleportPuppetParamsV1()
 		{
+			DestinationRef = new questUniversalRef();
 			DestinationOffset = new Vector3();
 			HealAtTeleport = true;
 

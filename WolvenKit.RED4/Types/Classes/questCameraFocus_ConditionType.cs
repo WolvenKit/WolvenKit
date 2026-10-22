@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCameraFocus_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			TimeInterval = 1.000000F;
 			AngleTolerance = 30.000000F;
 

@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldBlockoutData()
 		{
-			Points = new() { new worldBlockoutPoint(), new worldBlockoutPoint(), new worldBlockoutPoint(), new worldBlockoutPoint() };
-			Edges = new() { new worldBlockoutEdge(), new worldBlockoutEdge(), new worldBlockoutEdge(), new worldBlockoutEdge() };
-			Areas = new() { new worldBlockoutArea { Name = "area_0", Color = new CColor(), Parent = uint.MaxValue, Children = new(), Outlines = new() { null } } };
+			Points = new() { new worldBlockoutPoint { Position = new Vector2 { X = -8000.000000F, Y = -8000.000000F }, Edges = new() { 0, 2 }, Constraint = 3 }, new worldBlockoutPoint { Position = new Vector2 { X = -8000.000000F, Y = 8000.000000F }, Edges = new() { 1, 2 }, Constraint = 9 }, new worldBlockoutPoint { Position = new Vector2 { X = 8000.000000F, Y = -8000.000000F }, Edges = new() { 0, 3 }, Constraint = 6 }, new worldBlockoutPoint { Position = new Vector2 { X = 8000.000000F, Y = 8000.000000F }, Edges = new() { 1, 3 }, Constraint = 12 } };
+			Edges = new() { new worldBlockoutEdge { Points = new(2), Areas = new(2) }, new worldBlockoutEdge { Points = new(2), Areas = new(2) }, new worldBlockoutEdge { Points = new(2), Areas = new(2) }, new worldBlockoutEdge { Points = new(2), Areas = new(2) } };
+			Areas = new() { new worldBlockoutArea { Name = "area_0", Color = new CColor { Red = 84, Green = 28, Blue = 124, Alpha = 127 }, Outlines = new() { new worldBlockoutAreaOutline { Points = new() { 0, 2, 3, 1 }, Edges = new() { 0, 3, 1, 2 } } } } };
 			WorldSize = new Vector2 { X = 8000.000000F, Y = 8000.000000F };
 			FreePoints = new();
 			FreeEdges = new();

@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public DamageEntry()
 		{
-			DamageInfo = new gameuiDamageInfo { HitPosition = new Vector4(), DamageType = Enums.gamedataDamageType.Invalid };
-			DamageOverTimeInfo = new gameuiDamageInfo { HitPosition = new Vector4(), DamageType = Enums.gamedataDamageType.Invalid };
+			DamageInfo = new gameuiDamageInfo();
+			DamageOverTimeInfo = new gameuiDamageInfo();
 
 			PostConstruct();
 		}

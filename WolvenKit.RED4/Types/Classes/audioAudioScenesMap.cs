@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioAudioScenesMap()
 		{
+			ScenesToActivateByQuestEvent = new audioAudioSceneDictionary { EntryType = new audioAudioSceneDictionaryItem() };
+
 			PostConstruct();
 		}
 

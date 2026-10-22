@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.Types
 		public vgVectorGraphicShape_Rect()
 		{
 			CalTransform = new CMatrix();
+			Yle = new vgVectorGraphicStyle();
 			Mensions = new Vector2();
 
 			PostConstruct();

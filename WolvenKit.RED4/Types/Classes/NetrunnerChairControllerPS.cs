@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#17884";
 			TweakDBRecord = "Devices.NetrunnerChair";
-			TweakDBDescriptionRecord = 149097016357;
+			TweakDBDescriptionRecord = "device_descriptions.NetrunnerChair";
 			KillDelay = 1.000000F;
 
 			PostConstruct();

@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPatrolParams()
 		{
+			PathParams = new AIPatrolPathParameters();
 			RepeatCommandOnInterrupt = true;
 
 			PostConstruct();

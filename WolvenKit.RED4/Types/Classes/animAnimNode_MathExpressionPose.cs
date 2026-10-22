@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_MathExpressionPose : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("expressionData")] 
 		public animMathExpressionNodeData ExpressionData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animMathExpressionNodeData>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("outputFloatTrack")] 
 		public animNamedTrackIndex OutputFloatTrack
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = uint.MaxValue;
 			InputLink = new animPoseLink();
-			ExpressionData = new animMathExpressionNodeData { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
+			ExpressionData = new animMathExpressionNodeData();
 			OutputFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();

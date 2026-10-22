@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_StateMachine : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("states")] 
 		public CArray<CHandle<animAnimNode_State>> States
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<animAnimNode_State>>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("frozenState")] 
 		public CHandle<animAnimNode_StateFrozen> FrozenState
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animAnimNode_StateFrozen>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("transitions")] 
 		public CArray<CHandle<animAnimStateTransitionDescription>> Transitions
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<animAnimStateTransitionDescription>>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("conditionalEntries")] 
 		public CArray<CHandle<animAnimStateMachineConditionalEntry>> ConditionalEntries
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<animAnimStateMachineConditionalEntry>>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("globalTransitions")] 
 		public CArray<CHandle<animAnimStateTransitionDescription>> GlobalTransitions
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<animAnimStateTransitionDescription>>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("anyStateInterpolator")] 
 		public CHandle<animIAnimStateTransitionInterpolator> AnyStateInterpolator
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animIAnimStateTransitionInterpolator>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("defaultStateIndex")] 
 		public CUInt32 DefaultStateIndex
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("notifyOnEnterState")] 
 		public CBool NotifyOnEnterState
 		{

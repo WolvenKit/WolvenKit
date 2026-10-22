@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldReflectionProbeNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("probeDataRef")] 
 		public CResourceAsyncReference<CReflectionProbeDataResource> ProbeDataRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CReflectionProbeDataResource>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("globalProbe")] 
 		public CBool GlobalProbe
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("boxProjection")] 
 		public CBool BoxProjection
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("neighborMode")] 
 		public CEnum<envUtilsNeighborMode> NeighborMode
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<envUtilsNeighborMode>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("edgeScale")] 
 		public Vector3 EdgeScale
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("lightChannels")] 
 		public CBitField<rendLightChannel> LightChannels
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("emissiveScale")] 
 		public CFloat EmissiveScale
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("reflectionDimming")] 
 		public CFloat ReflectionDimming
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("simpleFogColor")] 
 		public HDRColor SimpleFogColor
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("simpleFogDensity")] 
 		public CFloat SimpleFogDensity
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("skyScale")] 
 		public CFloat SkyScale
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("allInShadow")] 
 		public CBool AllInShadow
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("hideSkyColor")] 
 		public CBool HideSkyColor
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("volFogAmbient")] 
 		public CBool VolFogAmbient
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("brightnessEVClamp")] 
 		public CInt8 BrightnessEVClamp
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt8>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(18)] 
 		[RED("ambientMode")] 
 		public CEnum<envUtilsReflectionProbeAmbientContributionMode> AmbientMode
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<envUtilsReflectionProbeAmbientContributionMode>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(19)] 
 		[RED("captureOffset")] 
 		public Vector3 CaptureOffset
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(20)] 
 		[RED("nearClipDistance")] 
 		public CFloat NearClipDistance
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(21)] 
 		[RED("farClipDistance")] 
 		public CFloat FarClipDistance
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(22)] 
 		[RED("volumeChannels")] 
 		public CBitField<rendLightChannel> VolumeChannels
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(23)] 
 		[RED("blendRange")] 
 		public CUInt8 BlendRange
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(24)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(25)] 
 		[RED("streamingHeight")] 
 		public CFloat StreamingHeight
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(26)] 
 		[RED("subScene")] 
 		public CBool SubScene
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(27)] 
 		[RED("noFadeBlend")] 
 		public CBool NoFadeBlend
 		{

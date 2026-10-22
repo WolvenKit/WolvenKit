@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public scnReferencePointDef()
 		{
-			Id = new scnReferencePointId { Id = uint.MaxValue };
+			Id = new scnReferencePointId();
 			Offset = new Vector3();
-			OriginMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
+			OriginMarker = new scnMarker();
 
 			PostConstruct();
 		}

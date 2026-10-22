@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public EnableDocumentEvent()
 		{
-			DocumentAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
+			DocumentAdress = new SDocumentAdress();
 			Enable = true;
 
 			PostConstruct();

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInputHintController()
 		{
-			InputDisplayLibRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			InputDisplayLibRef = new inkWidgetLibraryReference();
 			InputDisplayContainer = new inkCompoundWidgetReference();
 			TextWidgetRef = new inkTextWidgetReference();
 

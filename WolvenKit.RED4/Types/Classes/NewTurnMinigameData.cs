@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.Types
 			NewPlayerBufferContent = new();
 			NewEnemyBufferContent = new();
 			RegeneratedGridData = new();
-			BasicAccessCompletionState = new ProgramProgressData { CompletionProgress = new() };
+			BasicAccessCompletionState = new ProgramProgressData();
 			PlayerProgramsCompletionState = new();
 			EnemyProgramsCompletionState = new();
 			PlayerProgramsAdded = new();

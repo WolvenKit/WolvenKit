@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTutorialBracketShowEvent()
 		{
-			Data = new gameTutorialBracketData { Offset = new Vector2(), Size = new Vector2() };
+			Data = new gameTutorialBracketData();
 
 			PostConstruct();
 		}

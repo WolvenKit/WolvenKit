@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ReadyEvents : WeaponEventsTransition
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("timeStamp")] 
 		public CFloat TimeStamp
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public ReadyEvents()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

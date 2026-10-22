@@ -133,6 +133,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(22)] 
+		[RED("baseGameButtonHovered")] 
+		public CBool BaseGameButtonHovered
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("standaloneButtonHovered")] 
+		public CBool StandaloneButtonHovered
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("baseGameButton")] 
 		public inkWidgetReference BaseGameButton
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("standaloneButton")] 
 		public inkWidgetReference StandaloneButton
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("isInputLocked")] 
 		public CBool IsInputLocked
 		{

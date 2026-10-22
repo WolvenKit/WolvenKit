@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_RuntimeSwitch : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("condition")] 
 		public CHandle<animIRuntimeCondition> Condition
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animIRuntimeCondition>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("True")] 
 		public animPoseLink True
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoseLink>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("False")] 
 		public animPoseLink False
 		{

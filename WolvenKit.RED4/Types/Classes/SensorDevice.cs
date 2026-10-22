@@ -608,7 +608,7 @@ namespace WolvenKit.RED4.Types
 			LightScanRefs = new();
 			LightAttitudeRefs = new();
 			LightInfoRefs = new();
-			LightColors = new LedColors_SensorDevice { Off = new ScriptLightSettings { Color = new CColor() }, Red = new ScriptLightSettings { Color = new CColor() }, Green = new ScriptLightSettings { Color = new CColor() }, Blue = new ScriptLightSettings { Color = new CColor() }, Yellow = new ScriptLightSettings { Color = new CColor() }, White = new ScriptLightSettings { Color = new CColor() } };
+			LightColors = new LedColors_SensorDevice();
 			ScanFXSlotName = "laser";
 			DefaultSensePreset = "Senses.BasicCamera";
 			ElementsToHideOnTCS = new();

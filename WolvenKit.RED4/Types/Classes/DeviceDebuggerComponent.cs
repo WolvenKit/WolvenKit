@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceDebuggerComponent()
 		{
-			CurrentDeviceProperties = new DebuggerProperties { LayerIDs = new() };
+			CurrentDeviceProperties = new DebuggerProperties();
 			PreviousContext = "NONE";
 			CachedContext = "NONE";
 			LayerIDs = new();

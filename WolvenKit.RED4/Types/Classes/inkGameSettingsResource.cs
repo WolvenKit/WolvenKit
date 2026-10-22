@@ -85,6 +85,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("permanentTextureAtlasesSwitch")] 
+		public CArray<CResourceAsyncReference<inkTextureAtlas>> PermanentTextureAtlasesSwitch
+		{
+			get => GetPropertyValue<CArray<CResourceAsyncReference<inkTextureAtlas>>>();
+			set => SetPropertyValue<CArray<CResourceAsyncReference<inkTextureAtlas>>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("permanentTextureAtlasesSwitchTouch")] 
+		public CArray<CResourceAsyncReference<inkTextureAtlas>> PermanentTextureAtlasesSwitchTouch
+		{
+			get => GetPropertyValue<CArray<CResourceAsyncReference<inkTextureAtlas>>>();
+			set => SetPropertyValue<CArray<CResourceAsyncReference<inkTextureAtlas>>>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("themes")] 
 		public CArray<inkStyleThemeDescriptor> Themes
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkStyleThemeDescriptor>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("layersResource")] 
 		public CResourceReference<inkLayersResource> LayersResource
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<inkLayersResource>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("iconReferenceFallbackTextureAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> IconReferenceFallbackTextureAtlas
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("initLoadingScreenLogoLoopVideo")] 
 		public CResourceAsyncReference<Bink> InitLoadingScreenLogoLoopVideo
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("npcNameplateResource")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> NpcNameplateResource
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("defaultShapeCollectionResource")] 
 		public CResourceReference<inkShapeCollectionResource> DefaultShapeCollectionResource
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<inkShapeCollectionResource>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("globalTVBinkLengthDataResource")] 
 		public CResourceAsyncReference<JsonResource> GlobalTVBinkLengthDataResource
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<JsonResource>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("worldMapFloorplanWidgetResource")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> WorldMapFloorplanWidgetResource
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("gpsAugmentedRealitySignEntity")] 
 		public CResourceAsyncReference<entEntityTemplate> GpsAugmentedRealitySignEntity
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<entEntityTemplate>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("gpsAugmentedRealityWidgetTurnLeft")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> GpsAugmentedRealityWidgetTurnLeft
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("gpsAugmentedRealityWidgetTurnRight")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> GpsAugmentedRealityWidgetTurnRight
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("gpsAugmentedRealityWidgetTurnBack")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> GpsAugmentedRealityWidgetTurnBack
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("malePresetResource")] 
 		public CResourceAsyncReference<CResource> MalePresetResource
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("femalePresetResource")] 
 		public CResourceAsyncReference<CResource> FemalePresetResource
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("fallbackHeadCustomizationFpp")] 
 		public CResourceAsyncReference<CResource> FallbackHeadCustomizationFpp
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("fallbackHeadCustomizationTpp")] 
 		public CResourceAsyncReference<CResource> FallbackHeadCustomizationTpp
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("fallbackHeadCustomizationTppFaceRig")] 
 		public CResourceAsyncReference<CResource> FallbackHeadCustomizationTppFaceRig
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("fallbackBodyCustomization")] 
 		public CResourceAsyncReference<CResource> FallbackBodyCustomization
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("fallbackArmsCustomization")] 
 		public CResourceAsyncReference<CResource> FallbackArmsCustomization
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("vsetSceneResource")] 
 		public CResourceAsyncReference<CResource> VsetSceneResource
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("keyboardIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> KeyboardIconsAtlas
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("steamIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> SteamIconsAtlas
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("durangoIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> DurangoIconsAtlas
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("orbisIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> OrbisIconsAtlas
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("prosperoIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> ProsperoIconsAtlas
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("nintendoSwitchIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> NintendoSwitchIconsAtlas
 		{
@@ -292,7 +308,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
+		[RED("nintendoSwitchTouchIconsAtlas")] 
+		public CResourceAsyncReference<inkTextureAtlas> NintendoSwitchTouchIconsAtlas
+		{
+			get => GetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>();
+			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("stadiaIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> StadiaIconsAtlas
 		{
@@ -300,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("stadiaDurangoIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> StadiaDurangoIconsAtlas
 		{
@@ -308,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("stadiaOrbisIconsAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> StadiaOrbisIconsAtlas
 		{
@@ -327,6 +351,8 @@ namespace WolvenKit.RED4.Types
 			PermanentTextureAtlasesStadia = new();
 			PermanentTextureAtlasesStadiaDurango = new();
 			PermanentTextureAtlasesStadiaOrbis = new();
+			PermanentTextureAtlasesSwitch = new();
+			PermanentTextureAtlasesSwitchTouch = new();
 			Themes = new();
 
 			PostConstruct();

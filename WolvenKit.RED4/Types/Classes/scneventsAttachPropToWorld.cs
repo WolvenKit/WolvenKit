@@ -70,11 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsAttachPropToWorld()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			PropId = new scnPropId { Id = uint.MaxValue };
+			Id = new scnSceneEventId();
+			PropId = new scnPropId();
 			CustomOffsetPos = new Vector3();
-			CustomOffsetRot = new Quaternion { R = 1.000000F };
-			ReferencePerformer = new scnPerformerId { Id = 4294967040 };
+			CustomOffsetRot = new Quaternion();
+			ReferencePerformer = new scnPerformerId();
 			FallbackData = new();
 
 			PostConstruct();

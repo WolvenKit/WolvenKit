@@ -397,6 +397,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(49)] 
+		[RED("isLeftWeapon")] 
+		public CBool IsLeftWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(50)] 
+		[RED("hasPairedWeapon")] 
+		public CBool HasPairedWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(51)] 
+		[RED("canDualWield")] 
+		public CBool CanDualWield
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(52)] 
 		[RED("displayContextData")] 
 		public CHandle<ItemDisplayContextData> DisplayContextData
 		{
@@ -404,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
@@ -412,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
@@ -420,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DEBUG_IconErrorInfo>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("statsManager")] 
 		public CHandle<UIInventoryItemStatsManager> StatsManager
 		{
@@ -428,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemStatsManager>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("statsManagerFetched")] 
 		public CBool StatsManagerFetched
 		{
@@ -436,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("managerRef")] 
 		public CWeakHandle<UIInventoryItemsManager> ManagerRef
 		{

@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioLocomotionStateVfxDictionary()
 		{
 			Entries = new();
+			EntryType = new audioLocomotionStateVfxDictionaryItem();
 
 			PostConstruct();
 		}

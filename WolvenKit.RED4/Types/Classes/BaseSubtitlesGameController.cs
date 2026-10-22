@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(21)] 
+		[RED("bbLeftWeaponVisibleHUD")] 
+		public CHandle<redCallbackObject> BbLeftWeaponVisibleHUD
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("showBackgroud")] 
 		public CBool ShowBackgroud
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("isCreoleUnlocked")] 
 		public CBool IsCreoleUnlocked
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("isPlayerJohnny")] 
 		public CBool IsPlayerJohnny
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("disabledBySettings")] 
 		public CBool DisabledBySettings
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("forceForeignLines")] 
 		public CBool ForceForeignLines
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("isRadioSubtitleEnabled")] 
 		public CBool IsRadioSubtitleEnabled
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("backgroundOpacity")] 
 		public CFloat BackgroundOpacity
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("fontSize")] 
 		public CInt32 FontSize
 		{
@@ -164,12 +172,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("factlistenerId")] 
 		public CUInt32 FactlistenerId
 		{
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("isLeftWeaponVisibleHUD")] 
+		public CBool IsLeftWeaponVisibleHUD
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public BaseSubtitlesGameController()

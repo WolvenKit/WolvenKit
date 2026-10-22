@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Position = new Vector2();
 			Element = new ElementData();
-			Properties = new SpecialProperties { Traps = new() };
+			Properties = new SpecialProperties();
 
 			PostConstruct();
 		}

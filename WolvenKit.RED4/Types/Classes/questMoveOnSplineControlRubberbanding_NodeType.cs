@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public questMoveOnSplineControlRubberbanding_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
-			KeepDistanceFromRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
+			KeepDistanceFromRef = new gameEntityReference();
 			ReduceSpeedOnTurns = true;
 
 			PostConstruct();

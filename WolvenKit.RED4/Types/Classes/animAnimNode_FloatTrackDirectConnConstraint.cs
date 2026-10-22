@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_FloatTrackDirectConnConstraint : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("floatTrackIndex")] 
 		public animNamedTrackIndex FloatTrackIndex
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("channel")] 
 		public CEnum<animTransformChannel> Channel
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animTransformChannel>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("mulFactor")] 
 		public CFloat MulFactor
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("mulFactorNode")] 
 		public animFloatLink MulFactorNode
 		{

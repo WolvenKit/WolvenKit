@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public JournalWrapper()
 		{
-			JournalContext = new gameJournalRequestContext { StateFilter = new gameJournalRequestStateFilter(), ClassFilter = new gameJournalRequestClassFilter() };
-			JournalSubQuestContext = new gameJournalRequestContext { StateFilter = new gameJournalRequestStateFilter(), ClassFilter = new gameJournalRequestClassFilter() };
+			JournalContext = new gameJournalRequestContext();
+			JournalSubQuestContext = new gameJournalRequestContext();
 			ListOfJournalEntries = new();
 			GameInstance = new ScriptGameInstance();
 

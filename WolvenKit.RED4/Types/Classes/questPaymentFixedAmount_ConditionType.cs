@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public questPaymentFixedAmount_ConditionType()
 		{
+			ScriptCondition = new PaymentFixedAmount_ScriptConditionType();
+
 			PostConstruct();
 		}
 

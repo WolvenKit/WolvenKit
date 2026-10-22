@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class QuickMeleeEvents : WeaponEventsTransition
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("gameEffect")] 
 		public CHandle<gameEffectInstance> GameEffect
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("targetObject")] 
 		public CWeakHandle<gameObject> TargetObject
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("targetComponent")] 
 		public CHandle<entIPlacedComponent> TargetComponent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("quickMeleeAttackCreated")] 
 		public CBool QuickMeleeAttackCreated
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("quickMeleeAttackData")] 
 		public QuickMeleeAttackData QuickMeleeAttackData
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuickMeleeEvents()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
 			QuickMeleeAttackData = new QuickMeleeAttackData();
 
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldTrafficCompiledNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("aabb")] 
 		public Box Aabb
 		{

@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public effectBoneEntry()
 		{
 			RelativePosition = new Vector3();
-			RelativeRotation = new Quaternion { R = 1.000000F };
+			RelativeRotation = new Quaternion();
 
 			PostConstruct();
 		}

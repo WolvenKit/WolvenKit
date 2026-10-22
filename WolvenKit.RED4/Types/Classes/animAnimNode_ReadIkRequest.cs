@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_ReadIkRequest : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("ikChain")] 
 		public CName IkChain
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("outTransform")] 
 		public animTransformIndex OutTransform
 		{

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questUnassignAll_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 
 			PostConstruct();
 		}

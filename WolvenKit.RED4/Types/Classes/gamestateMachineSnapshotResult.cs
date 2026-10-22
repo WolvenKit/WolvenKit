@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineSnapshotResult()
 		{
-			Snapshot = new gamestateMachineStateSnapshot { InstanceData = new gamestateMachineStateMachineInstanceData() };
+			Snapshot = new gamestateMachineStateSnapshot();
 
 			PostConstruct();
 		}

@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class ApplyStatGroupEffector : gameEffector
 	{
 		[Ordinal(0)] 
-		[RED("target")] 
-		public gameStatsObjectID Target
+		[RED("targets")] 
+		public CArray<gameStatsObjectID> Targets
 		{
-			get => GetPropertyValue<gameStatsObjectID>();
-			set => SetPropertyValue<gameStatsObjectID>(value);
+			get => GetPropertyValue<CArray<gameStatsObjectID>>();
+			set => SetPropertyValue<CArray<gameStatsObjectID>>(value);
 		}
 
 		[Ordinal(1)] 
@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("targetRequiredTag")] 
+		public CName TargetRequiredTag
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("modGroupID")] 
 		public CUInt64 ModGroupID
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("stackCount")] 
 		public CUInt8 StackCount
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("removeWithEffector")] 
 		public CBool RemoveWithEffector
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("reapplyOnWeaponChange")] 
 		public CBool ReapplyOnWeaponChange
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("ownerSlotCallback")] 
 		public CHandle<ApplyStatGroupEffectorCallback> OwnerSlotCallback
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ApplyStatGroupEffectorCallback>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("ownerSlotListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> OwnerSlotListener
 		{
@@ -86,7 +94,7 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyStatGroupEffector()
 		{
-			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+			Targets = new();
 
 			PostConstruct();
 		}

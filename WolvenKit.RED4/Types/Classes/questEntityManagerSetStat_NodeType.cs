@@ -46,10 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerSetStat_NodeType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
-			StatType = Enums.gamedataStatType.Invalid;
-			SetExactValue = true;
-
 			PostConstruct();
 		}
 

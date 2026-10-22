@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -607,7 +607,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     [ObservableProperty] private System.Windows.Point _location;
 
-    public bool ShouldShowWorldNodeDataImport => Data is worldNodeData;
+    public bool ShouldShowWorldNodeDataImport => Data is worldCompiledNodeInstanceSetupInfo;
 
     public bool ShouldShowExportNodeData =>
         Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
@@ -1044,7 +1044,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     count += pis.Length;
                 }
 
-                if (Data is worldNodeData)
+                if (Data is worldCompiledNodeInstanceSetupInfo)
                 {
                     count += 1;
                 }
@@ -1720,13 +1720,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             if (db.GetValue().Data is worldNodeDataBuffer nodeBuffer)
             {
-                if (_redTypeTemplateService.IsOnlyNoneOrDefaultAvailable(typeof(worldNodeData)))
+                if (_redTypeTemplateService.IsOnlyNoneOrDefaultAvailable(typeof(worldCompiledNodeInstanceSetupInfo)))
                 {
-                    nodeBuffer.Add(_redTypeTemplateService.CreateTypeInstance(typeof(worldNodeData)));
+                    nodeBuffer.Add(_redTypeTemplateService.CreateTypeInstance(typeof(worldCompiledNodeInstanceSetupInfo)));
                     return;
                 }
 
-                types.Add(new TypeEntry(typeof(worldNodeData).Name, "", typeof(worldNodeData)));
+                types.Add(new TypeEntry(typeof(worldCompiledNodeInstanceSetupInfo).Name, "", typeof(worldCompiledNodeInstanceSetupInfo)));
             }
 
             if (Parent?.ResolvedData is entEntityInstanceData)
@@ -1803,7 +1803,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     list.Files.RemoveAll(x => x.RootChunk == Data);
                     break;
                 case IRedBufferPointer db3 when db3.GetValue().Data is worldNodeDataBuffer dict:
-                    dict.Remove((worldNodeData)Data);
+                    dict.Remove((worldCompiledNodeInstanceSetupInfo)Data);
                     //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
                     break;
                 default:
@@ -1837,7 +1837,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     private bool CanImportWorldNodeData() =>
-        Data is worldNodeData && PropertyCount > 0; // TODO RelayCommand check notify
+        Data is worldCompiledNodeInstanceSetupInfo && PropertyCount > 0; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]
     private async Task ImportWorldNodeData() => await ImportWorldNodeDataAsync(true);
@@ -2863,6 +2863,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                 }
 
+                if (Data is worldCompiledNodeInstanceSetupInfo sst && Tab is { } dvm &&
+                    dvm.Chunks[0].Data is worldStreamingSector wss &&
+                    (int)(ulong)sst.NodeIdx < wss.Nodes.Count)
+                {
+                    try
+                    {
+                        var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(
+                            wss.Nodes[(int)(ulong)sst.NodeIdx].NotNull(), "Node",
+                            _appViewModel,
+                            this, isreadonly);
+                        nodeChunk.CalculateProperties();
+                        Properties.Add(nodeChunk);
+                    }
+                    catch (Exception ex) { _loggerService?.Error(ex); }
+                }
+
                 break;
             }
             case SerializationDeferredDataBuffer { Data: RedPackage p4 }:
@@ -3024,22 +3040,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                 _loggerService?.Error(
                                     $"Failed to create child ChunkViewModel for property {pi.Name}: {ex.Message}");
                             }
-                        }
-
-                        if (Data is worldNodeData sst && Tab is { } dvm &&
-                            dvm.Chunks[0].Data is worldStreamingSector wss &&
-                            sst.NodeIndex < wss.Nodes.Count)
-                        {
-                            try
-                            {
-                                var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(
-                                    wss.Nodes[sst.NodeIndex].NotNull(), "Node",
-                                    _appViewModel,
-                                    this, isreadonly);
-                                nodeChunk.CalculateProperties();
-                                Properties.Add(nodeChunk);
-                            }
-                            catch (Exception ex) { _loggerService?.Error(ex); }
                         }
 
                         break;
@@ -3840,7 +3840,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Data);
 
         var tr = RedJsonSerializer.Serialize(Data);
-        var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+        var current = RedJsonSerializer.Deserialize<worldCompiledNodeInstanceSetupInfo>(tr);
         //deepcopy of Data but not really
 
         var text = File.ReadAllText(openFileDialog.FileName);
@@ -3876,6 +3876,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedArray ira && json4.Count == ira.Count)
             {
                 AddFromBlender(json4, tr);
+            }
+            else
+            {
+                _loggerService.Warning("nodeData and your JSON must contain the same number of elements");
+                return false;
+            }
+        }
+        else if (RedJsonSerializer.TryDeserialize<List<worldCompiledNodeInstanceSetupInfo>>(text, out var json5) &&
+                 json5 is not null)
+        {
+            if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedArray ira && json5.Count == ira.Count)
+            {
+                AddFromBlender(json5, tr);
             }
             else
             {
@@ -4005,12 +4018,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 RedDocumentTabViewModel.AddToCopiedChunks((IRedType)irc.DeepCopy());
             }
-            else if (elem is worldNodeData)
+            else if (elem is worldCompiledNodeInstanceSetupInfo)
             {
                 /*dynamic t = elem.GetType().GetProperty("Value").GetValue(elem, null);
                 var v = System.Activator.CreateInstance(t);*/
                 var tr = RedJsonSerializer.Serialize(elem);
-                var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+                var copied = RedJsonSerializer.Deserialize<worldCompiledNodeInstanceSetupInfo>(tr);
                 if (copied is not null)
                 {
                     RedDocumentTabViewModel.AddToCopiedChunks(copied);
@@ -4341,7 +4354,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (line.template_path is not null && Parent?.Parent?.Data is worldStreamingSector wss)
         {
             //var wss = (worldStreamingSector)Parent.Parent.Data;
-            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr).NotNull();
+
+            worldNodeData? oldCurrent = null;
+            worldCompiledNodeInstanceSetupInfo? currentCurrent = null;
+
+            if (!RedJsonSerializer.TryDeserialize(tr, out oldCurrent) && !RedJsonSerializer.TryDeserialize(tr, out currentCurrent))
+            {
+                _loggerService.Error("Could not deserialize worldNodeData or worldCompiledNodeInstanceSetupInfo");
+                return;
+            }
 
             var wen = new worldEntityNode();
             var wenh = new CHandle<worldNode>(wen);
@@ -4352,9 +4373,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             wen.EntityTemplate = new CResourceAsyncReference<entEntityTemplate>(line.template_path);
             wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
             wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
-
-            current.QuestPrefabRefHash =
-                Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
 
             if (line.isdoor is bool b && b)
             {
@@ -4374,15 +4392,33 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
             ((IRedArray)wss.Nodes).Insert(index, wenh);
-            SetCoords(current, index, line, updatecoords);
+
+            if (oldCurrent != null)
+            {
+                oldCurrent.QuestPrefabRefHash = Convert.ToUInt64(oldCurrent.GetHashCode()); // Add hash to make object interactible and persistent
+                SetCoords(oldCurrent, index, line, updatecoords);
+            }
+            else if (currentCurrent != null)
+            {
+                currentCurrent.GlobalNodeId.Hash = Convert.ToUInt64(currentCurrent.GetHashCode()); // Add hash to make object interactible and persistent
+                SetCoords(currentCurrent, index, line, updatecoords);
+            }
         }
     }
 
     private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
     {
-        if (Parent?.Parent?.Data is not worldStreamingSector wss ||
-            RedJsonSerializer.Deserialize<worldNodeData>(tr) is not worldNodeData current)
+        if (Parent?.Parent?.Data is not worldStreamingSector wss)
         {
+            return;
+        }
+
+        worldNodeData? oldCurrent = null;
+        worldCompiledNodeInstanceSetupInfo? currentCurrent = null;
+
+        if (!RedJsonSerializer.TryDeserialize(tr, out oldCurrent) && !RedJsonSerializer.TryDeserialize(tr, out currentCurrent))
+        {
+            _loggerService.Error("Could not deserialize worldNodeData or worldCompiledNodeInstanceSetupInfo");
             return;
         }
 
@@ -4403,10 +4439,35 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         cmesh.MeshAppearance = string.IsNullOrEmpty(line.app) ? "default" : line.app;
 
         ((IRedArray)wss.Nodes).Insert(index, wenh);
-        SetCoords(current, index, line, updatecoords, pos, rot);
+
+        if (oldCurrent != null)
+        {
+            SetCoords(oldCurrent, index, line, updatecoords);
+        }
+        else if (currentCurrent != null)
+        {
+            SetCoords(currentCurrent, index, line, updatecoords);
+        }
     }
 
     private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default,
+        Quat rot = default)
+    {
+        var newData = new worldCompiledNodeInstanceSetupInfo();
+
+        newData.Transform.Position.X = current.Position.X;
+        newData.Transform.Position.Y = current.Position.Y;
+        newData.Transform.Position.Z = current.Position.Z;
+        newData.Transform.Position.W = current.Position.W;
+
+        newData.SecondaryRefPointPosition.X = current.Pivot.X;
+        newData.SecondaryRefPointPosition.Y = current.Pivot.Y;
+        newData.SecondaryRefPointPosition.Z = current.Pivot.Z;
+
+        SetCoords(newData, index, line, updatecoords, pos, rot);
+    }
+
+    private void SetCoords(worldCompiledNodeInstanceSetupInfo current, int index, Prop line, bool updatecoords = true, Vec4 pos = default,
         Quat rot = default)
     {
         if (pos == default || rot == default)
@@ -4421,43 +4482,44 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (line.center != default && updatecoords)
         {
             pos = UpdateCoords(pos, line.center);
-            current.Position.X += s * pos.X * f;
-            current.Position.Y += pos.Y * f;
-            current.Position.Z += pos.Z * f;
-            current.Position.W *= pos.W * f;
+            current.Transform.Position.X += s * pos.X * f;
+            current.Transform.Position.Y += pos.Y * f;
+            current.Transform.Position.Z += pos.Z * f;
+            current.Transform.Position.W *= pos.W * f;
         }
         else
         {
-            current.Position = Vec4.Multiply(f, pos);
-            current.Position.X = s * current.Position.X;
+            current.Transform.Position = Vec4.Multiply(f, pos);
+            current.Transform.Position.X = s * current.Transform.Position.X;
         }
 
-        current.Orientation = rot;
+        current.Transform.Orientation = rot;
         //doesn't do anything in ents ?!?
         current.Scale = scale;
-        current.Pivot.X = current.Position.X;
-        current.Pivot.Y = current.Position.Y;
-        current.Pivot.Z = current.Position.Z;
+        current.SecondaryRefPointPosition.X = current.Transform.Position.X;
+        current.SecondaryRefPointPosition.Y = current.Transform.Position.Y;
+        current.SecondaryRefPointPosition.Z = current.Transform.Position.Z;
         //definitely does not go to 5000
-        current.MaxStreamingDistance = 20000;
+        current.SecondaryRefPointDistance = 20000;
         //seem to be doing something to the max distance, kinda
-        current.UkFloat1 = 20000;
-        current.Uk11 = 20000;
-        current.NodeIndex = (CUInt16)index;
+        current.StreamingDistance = 20000;
+        // TODO: 2.5 check what this is now
+        //current.Uk11 = 20000;
+        current.NodeIdx = (ulong)index;
         AddCurrent(current);
     }
 
-    private void AddCurrent(worldNodeData current)
+    private void AddCurrent(worldCompiledNodeInstanceSetupInfo current)
     {
         if (Parent?.Data is DataBuffer db00 &&
             db00.Buffer.Data is worldNodeDataBuffer db0)
         {
-            if (!db0.Lookup.ContainsKey(current.NodeIndex))
+            if (!db0.Lookup.ContainsKey(current.NodeIdx))
             {
-                db0.Lookup[current.NodeIndex] = new();
+                db0.Lookup[current.NodeIdx] = new();
             }
 
-            db0.Lookup[current.NodeIndex].Add(current);
+            db0.Lookup[current.NodeIdx].Add(current);
         }
 
         if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
@@ -4546,8 +4608,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     line.center = center;
                 }
-
-                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
                 var scale = GetScale(line);
                 var door = line.isdoor is bool b && b;
@@ -4693,6 +4753,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     private void AddFromBlender(List<worldNodeData> json, string tr, bool updatecoords = false)
+    {
+        if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
+        {
+            for (var i = 0; i < json.Count; i++)
+            {
+                var line = json[i];
+                ira[i] = line;
+            }
+        }
+    }
+
+    private void AddFromBlender(List<worldCompiledNodeInstanceSetupInfo> json, string tr, bool updatecoords = false)
     {
         if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
         {

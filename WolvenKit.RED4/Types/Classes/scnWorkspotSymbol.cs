@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public scnWorkspotSymbol()
 		{
-			WsInstance = new scnSceneWorkspotInstanceId { Id = uint.MaxValue };
-			WsNodeId = new scnNodeId { Id = uint.MaxValue };
-			WsEditorEventId = long.MaxValue;
+			WsInstance = new scnSceneWorkspotInstanceId();
+			WsNodeId = new scnNodeId();
+			WsEditorEventId = ulong.MaxValue;
 
 			PostConstruct();
 		}

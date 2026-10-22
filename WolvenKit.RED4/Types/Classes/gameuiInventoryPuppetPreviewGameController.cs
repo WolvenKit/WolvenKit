@@ -21,6 +21,46 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("image")] 
+		public inkImageWidgetReference Image
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("animLib")] 
+		public inkWidgetLibraryReference AnimLib
+		{
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("animName")] 
+		public CName AnimName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("animRoot")] 
+		public CWeakHandle<inkWidget> AnimRoot
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("animProxy")] 
+		public CHandle<inkanimProxy> AnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("collider")] 
 		public inkWidgetReference Collider
 		{
@@ -28,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(17)] 
 		[RED("rotationIsMouseDown")] 
 		public CBool RotationIsMouseDown
 		{
@@ -36,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(18)] 
 		[RED("maxMousePointerOffset")] 
 		public CFloat MaxMousePointerOffset
 		{
@@ -44,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(19)] 
 		[RED("mouseRotationSpeed")] 
 		public CFloat MouseRotationSpeed
 		{
@@ -55,6 +95,8 @@ namespace WolvenKit.RED4.Types
 		public gameuiInventoryPuppetPreviewGameController()
 		{
 			RotationSpeed = 60.000000F;
+			Image = new inkImageWidgetReference();
+			AnimLib = new inkWidgetLibraryReference();
 			Collider = new inkWidgetReference();
 			MaxMousePointerOffset = 40.000000F;
 			MouseRotationSpeed = 250.000000F;

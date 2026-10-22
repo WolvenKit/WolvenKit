@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_DampFloat : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("defaultIncreaseSpeed")] 
 		public CFloat DefaultIncreaseSpeed
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("defaultDecreaseSpeed")] 
 		public CFloat DefaultDecreaseSpeed
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("startFromDefaultValue")] 
 		public CBool StartFromDefaultValue
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("defaultInitialValue")] 
 		public CFloat DefaultInitialValue
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("wrapAroundRange")] 
 		public CBool WrapAroundRange
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("rangeMin")] 
 		public CFloat RangeMin
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("rangeMax")] 
 		public CFloat RangeMax
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("increaseSpeedNode")] 
 		public animFloatLink IncreaseSpeedNode
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("decreaseSpeedNode")] 
 		public animFloatLink DecreaseSpeedNode
 		{

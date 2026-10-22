@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			EntityReference = new gameEntityReference { Names = new() };
-			Params = new questUnequipItemParams { UnequipDurationOverride = -1.000000F };
+			EntityReference = new gameEntityReference();
+			Params = new questUnequipItemParams();
 
 			PostConstruct();
 		}

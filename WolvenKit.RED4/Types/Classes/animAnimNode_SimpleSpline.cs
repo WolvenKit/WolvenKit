@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SimpleSpline : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("areSourceChannelsResaved")] 
 		public CBool AreSourceChannelsResaved
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("startTransform")] 
 		public animTransformIndex StartTransform
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("middleTransform")] 
 		public animTransformIndex MiddleTransform
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("endTransform")] 
 		public animTransformIndex EndTransform
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("constrainedTransform")] 
 		public animTransformIndex ConstrainedTransform
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("progressMode")] 
 		public CEnum<animConstraintWeightMode> ProgressMode
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animConstraintWeightMode>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("defaultProgress")] 
 		public CFloat DefaultProgress
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("progressTrack")] 
 		public animNamedTrackIndex ProgressTrack
 		{

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleBrokenTire_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 			Val = true;
 
 			PostConstruct();

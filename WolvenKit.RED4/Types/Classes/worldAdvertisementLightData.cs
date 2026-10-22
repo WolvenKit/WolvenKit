@@ -454,8 +454,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldAdvertisementLightData()
 		{
-			Transform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
-			Color = new CColor();
+			Transform = new Transform();
+			Color = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
 			Radius = 5.000000F;
 			Intensity = 100.000000F;
 			Temperature = -1.000000F;
@@ -481,7 +481,7 @@ namespace WolvenKit.RED4.Types
 			ShadowSoftnessMode = Enums.ELightShadowSoftnessMode.LSSM_Default;
 			RayTracingLightSourceRadius = -1.000000F;
 			RayTracingContactShadowRange = -1.000000F;
-			Flicker = new rendSLightFlickering { FlickerPeriod = 0.200000F };
+			Flicker = new rendSLightFlickering();
 			ColorGroupSaturation = 100;
 			AllowDistantLight = true;
 			RayTracingIntensityScale = 1.000000F;

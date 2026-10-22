@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public entImpactPointData()
 		{
-			WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			WorldPosition = new WorldPosition();
 			WorldNormal = new Vector4 { W = 1.000000F };
 
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_Ik2 : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("firstBone")] 
 		public animTransformIndex FirstBone
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("secondBone")] 
 		public animTransformIndex SecondBone
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("endBone")] 
 		public animTransformIndex EndBone
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("hingeAxis")] 
 		public CEnum<animAxis> HingeAxis
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animAxis>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("minHingeAngleDegrees")] 
 		public CFloat MinHingeAngleDegrees
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("maxHingeAngleDegrees")] 
 		public CFloat MaxHingeAngleDegrees
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("firstBoneIkGain")] 
 		public CFloat FirstBoneIkGain
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("secondBoneIkGain")] 
 		public CFloat SecondBoneIkGain
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("endBoneIkGain")] 
 		public CFloat EndBoneIkGain
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("enforceEndPosition")] 
 		public CBool EnforceEndPosition
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("enforceEndOrientation")] 
 		public CBool EnforceEndOrientation
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(12)] 
 		[RED("endBoneOffsetPositionLS")] 
 		public Vector4 EndBoneOffsetPositionLS
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(13)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(14)] 
 		[RED("floatTrack")] 
 		public animNamedTrackIndex FloatTrack
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(15)] 
 		[RED("inputPoseNode")] 
 		public animPoseLink InputPoseNode
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoseLink>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(16)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(17)] 
 		[RED("endTargetPositionNode")] 
 		public animVectorLink EndTargetPositionNode
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(18)] 
 		[RED("endTargetOrientationNode")] 
 		public animQuaternionLink EndTargetOrientationNode
 		{

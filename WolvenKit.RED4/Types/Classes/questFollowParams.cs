@@ -70,6 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public questFollowParams()
 		{
+			CompanionRef = new questUniversalRef();
 			CompanionDistance = 5.000000F;
 			DestinationPointTolerance = 2.000000F;
 			MatchSpeed = true;

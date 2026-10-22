@@ -142,13 +142,15 @@ namespace WolvenKit.RED4.Types
 
 		public audioLocomotionWaterSettings()
 		{
+			LocomotionStatesLegVfx = new audioLocomotionStateVfxDictionary { EntryType = new audioLocomotionStateVfxDictionaryItem() };
+			CustomActionLegVfx = new audioLocomotionCustomActionVfxDictionary { EntryType = new audioLocomotionCustomActionVfxDictionaryItem() };
 			MinSpeedToApplyImpulses = 0.050000F;
 			MinHeelDepthToApplyImpulses = -0.050000F;
 			ShallowWaterDepth = 0.200000F;
 			IntermediateWaterDepth = 0.700000F;
-			ShallowSettings = new audioLocomotionWaterContextSettings { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
-			IntermediateSettings = new audioLocomotionWaterContextSettings { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
-			DeepSettings = new audioLocomotionWaterContextSettings { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
+			ShallowSettings = new audioLocomotionWaterContextSettings();
+			IntermediateSettings = new audioLocomotionWaterContextSettings();
+			DeepSettings = new audioLocomotionWaterContextSettings();
 			MinHeelDepthToSpawnFallFx = 0.500000F;
 			MinDownwardSpeedForRegularFall = 2.500000F;
 			MinDownwardSpeedForFastFall = 9.000000F;

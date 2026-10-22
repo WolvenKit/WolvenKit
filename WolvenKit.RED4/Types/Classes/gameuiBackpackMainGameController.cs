@@ -453,6 +453,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(59)] 
+		[RED("isComparisonSwapped")] 
+		public CBool IsComparisonSwapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(60)] 
 		[RED("immediateNotificationListener")] 
 		public CHandle<BakcpackImmediateNotificationListener> ImmediateNotificationListener
 		{
@@ -460,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BakcpackImmediateNotificationListener>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("lastDisassembledWidget")] 
 		public CWeakHandle<InventoryItemDisplayController> LastDisassembledWidget
 		{
@@ -468,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("cursorData")] 
 		public CHandle<MenuCursorUserData> CursorData
 		{
@@ -476,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MenuCursorUserData>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("pressedItemDisplay")] 
 		public CWeakHandle<InventoryItemDisplayController> PressedItemDisplay
 		{
@@ -484,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("delayedOutfitCooldownResetCallbackId")] 
 		public gameDelayID DelayedOutfitCooldownResetCallbackId
 		{
@@ -492,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("outfitInCooldown")] 
 		public CBool OutfitInCooldown
 		{
@@ -500,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("outfitCooldownPeroid")] 
 		public CFloat OutfitCooldownPeroid
 		{
@@ -508,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(67)] 
 		[RED("virtualWidgets")] 
 		public CHandle<inkScriptWeakHashMap> VirtualWidgets
 		{
@@ -516,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("allWidgets")] 
 		public CHandle<inkScriptWeakHashMap> AllWidgets
 		{
@@ -524,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("itemPreviewPopupToken")] 
 		public CHandle<inkGameNotificationToken> ItemPreviewPopupToken
 		{
@@ -532,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("afterCloseRequest")] 
 		public CBool AfterCloseRequest
 		{

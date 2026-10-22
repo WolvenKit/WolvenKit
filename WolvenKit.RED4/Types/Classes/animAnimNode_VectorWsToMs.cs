@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_VectorWsToMs : animAnimNode_VectorValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<animEVectorWsToMsType> Type
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animEVectorWsToMsType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("vectorWs")] 
 		public animVectorLink VectorWs
 		{

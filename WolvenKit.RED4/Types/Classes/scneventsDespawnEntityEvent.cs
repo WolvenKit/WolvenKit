@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsDespawnEntityEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			Params = new scneventsDespawnEntityEventParams { Performer = new scnPerformerId { Id = 4294967040 } };
+			Id = new scnSceneEventId();
+			Params = new scneventsDespawnEntityEventParams();
 
 			PostConstruct();
 		}

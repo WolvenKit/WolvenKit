@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_MergedMeshes()
 		{
-			DefaultColor = new CColor();
-			MergedMeshColor = new CColor();
+			DefaultColor = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
+			MergedMeshColor = new CColor { Red = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

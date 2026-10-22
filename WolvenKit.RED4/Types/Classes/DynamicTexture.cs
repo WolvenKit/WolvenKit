@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("viewportScale")] 
+		public CFloat ViewportScale
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("mipChain")] 
 		public CBool MipChain
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("samplesCount")] 
 		public CUInt8 SamplesCount
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("dataFormat")] 
 		public CEnum<DynamicTextureDataFormat> DataFormat
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<DynamicTextureDataFormat>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("generator")] 
 		public CHandle<IDynamicTextureGenerator> Generator
 		{
@@ -64,6 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Width = 256;
 			Height = 256;
+			ViewportScale = 1.000000F;
 			SamplesCount = 1;
 			DataFormat = Enums.DynamicTextureDataFormat.RGBA_Uint8_SRGB;
 

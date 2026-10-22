@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AICombatGuardAreaConnectedCommunity()
 		{
-			CommunityArea = new gameEntityReference { Names = new() };
+			CommunityArea = new gameEntityReference();
 			Conditions = new();
 
 			PostConstruct();

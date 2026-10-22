@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_DampQuaternion : animAnimNode_QuaternionValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("defaultRotationSpeed")] 
 		public CFloat DefaultRotationSpeed
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("defaultInitialValue")] 
 		public EulerAngles DefaultInitialValue
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<EulerAngles>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("inputNode")] 
 		public animQuaternionLink InputNode
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("initialValueNode")] 
 		public animQuaternionLink InitialValueNode
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("rotationSpeedNode")] 
 		public animFloatLink RotationSpeedNode
 		{

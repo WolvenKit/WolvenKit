@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class animDangleConstraint_SimulationSingleBone : animDangleConstraint_Simulation
 	{
-		[Ordinal(13)] 
+		[Ordinal(8)] 
 		[RED("dangleBone")] 
 		public animTransformIndex DangleBone
 		{

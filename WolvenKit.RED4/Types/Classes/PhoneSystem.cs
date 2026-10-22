@@ -132,6 +132,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("cinematicCameraBBId")] 
+		public CHandle<redCallbackObject> CinematicCameraBBId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("cinematicCameraActive")] 
+		public CBool CinematicCameraActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PhoneSystem()
 		{
 			LastCallInformation = new questPhoneCallInformation();

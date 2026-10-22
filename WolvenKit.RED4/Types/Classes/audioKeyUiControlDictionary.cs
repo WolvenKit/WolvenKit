@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioKeyUiControlDictionary()
 		{
 			Entries = new();
+			EntryType = new audioKeyUiControlPairDictionaryItem { Value = new audioUiControl { UiEventsByAction = new audioKeyUiSoundDictionary { EntryType = new audioKeyUiSoundPairDictionaryItem() } } };
 
 			PostConstruct();
 		}

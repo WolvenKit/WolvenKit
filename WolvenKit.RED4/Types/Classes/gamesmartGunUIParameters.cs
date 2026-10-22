@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.Types
 		public gamesmartGunUIParameters()
 		{
 			Targets = new();
-			Sight = new gamesmartGunUISightParameters { Center = new Vector2(), TargetableRegionSize = new Vector2(), ReticleSize = new Vector2() };
+			Sight = new gamesmartGunUISightParameters();
 			CrosshairPos = new Vector2();
 			SmartAudioEvents = new();
 			SmartAudioEventsDelays = new();

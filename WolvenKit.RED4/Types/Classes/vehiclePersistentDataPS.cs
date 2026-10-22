@@ -71,10 +71,10 @@ namespace WolvenKit.RED4.Types
 		public vehiclePersistentDataPS()
 		{
 			IsHackable = true;
-			WheelRuntimeData = new(4);
-			QuestEnforcedTransform = new Transform { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Orientation = new Quaternion { R = 1.000000F } };
-			Destruction = new vehicleDestructionPSData { GridValues = new(30), WindshieldPoints = new(), DetachedParts = new() };
-			Audio = new vehicleAudioPSData { AcousticIsolationFactor = float.MinValue, GlassAcousticIsolationFactor = float.MinValue, OpenedWindows = new(0) };
+			WheelRuntimeData = new(4) { new vehicleWheelRuntimePSData(), new vehicleWheelRuntimePSData(), new vehicleWheelRuntimePSData(), new vehicleWheelRuntimePSData() };
+			QuestEnforcedTransform = new Transform { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Destruction = new vehicleDestructionPSData();
+			Audio = new vehicleAudioPSData();
 
 			PostConstruct();
 		}

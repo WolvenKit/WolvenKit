@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_BlendOverride : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoseLink>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("overrideInputNode")] 
 		public animPoseLink OverrideInputNode
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoseLink>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("bones")] 
 		public CArray<animOverrideBlendBoneInfo> Bones
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<animOverrideBlendBoneInfo>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("blendAllTracks")] 
 		public CBool BlendAllTracks
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("blendTrackMode")] 
 		public CEnum<animEBlendTracksMode> BlendTrackMode
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animEBlendTracksMode>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("tracks")] 
 		public CArray<animOverrideBlendTrackInfo> Tracks
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<animOverrideBlendTrackInfo>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("getDeltaMotionFromOverride")] 
 		public CBool GetDeltaMotionFromOverride
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("timeWarpingEnabled")] 
 		public CBool TimeWarpingEnabled
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("syncMethod")] 
 		public CHandle<animISyncMethod> SyncMethod
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animISyncMethod>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("blendMethod")] 
 		public CHandle<animIPoseBlendMethod> BlendMethod
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animIPoseBlendMethod>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(12)] 
 		[RED("postProcess")] 
 		public CHandle<animIAnimNode_PostProcess> PostProcess
 		{

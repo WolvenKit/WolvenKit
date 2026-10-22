@@ -23,7 +23,8 @@ namespace WolvenKit.RED4.Types
 		public entCorpseComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
+			FilterData = new physicsFilterData { SimulationFilter = new physicsSimulationFilter { Mask1 = 114696, Mask2 = 23627 }, QueryFilter = new physicsQueryFilter { Mask2 = 139837704 }, Preset = "Device solid visible" };
 			Material = "flesh.physmat";
 
 			PostConstruct();

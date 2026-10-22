@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_CurveVectorValue : animAnimNode_VectorValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("curveData")] 
 		public CLegacySingleChannelCurve<Vector4> CurveData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CLegacySingleChannelCurve<Vector4>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("argument")] 
 		public animFloatLink Argument
 		{

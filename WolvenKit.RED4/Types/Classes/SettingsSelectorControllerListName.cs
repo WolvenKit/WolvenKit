@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SettingsSelectorControllerListName : SettingsSelectorControllerList
 	{
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("realValue")] 
 		public CWeakHandle<userSettingsVarListName> RealValue
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<userSettingsVarListName>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("currentIndex")] 
 		public CInt32 CurrentIndex
 		{

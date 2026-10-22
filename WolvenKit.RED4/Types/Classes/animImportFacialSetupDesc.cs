@@ -103,7 +103,7 @@ namespace WolvenKit.RED4.Types
 		public animImportFacialSetupDesc()
 		{
 			InitialPose = new();
-			InitialControls = new animImportFacialInitialControlsDesc { TransformIds = new(), TransformNames = new(), TransformRegions = new() };
+			InitialControls = new animImportFacialInitialControlsDesc();
 			MainPoses = new();
 			MainPosesInfo = new();
 			JawAreaTrackIndices = new();

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldPatrolSplinePointDefinition()
 		{
-			Target = new gameEntityReference { Names = new() };
+			Target = new gameEntityReference();
 
 			PostConstruct();
 		}

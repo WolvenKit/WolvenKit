@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnRidAnimationSRRef()
 		{
-			ResourceId = new scnRidResourceId { Id = uint.MaxValue };
-			AnimationSN = new scnRidSerialNumber { SerialNumber = uint.MaxValue };
+			ResourceId = new scnRidResourceId();
+			AnimationSN = new scnRidSerialNumber();
 
 			PostConstruct();
 		}

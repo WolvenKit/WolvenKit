@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.Types
 		{
 			MountParentEntityId = new entEntityID();
 			EntrySlotName = "default";
-			InitialTransformLS = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			InitialTransformLS = new Transform();
 			RemovePitchRollRotationOnDismount = true;
 			SwitchRenderPlane = true;
 

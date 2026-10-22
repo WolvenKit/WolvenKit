@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioEventOverrides()
 		{
+			EventOverrides = new audioEventOverrideDictionary { EntryType = new audioEventOverrideDictionaryItem() };
+
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldSceneRecordingContentObserverNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("filter")] 
 		public worldSceneRecordingNodeFilter Filter
 		{
@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldSceneRecordingContentObserverNode()
 		{
-			Filter = new worldSceneRecordingNodeFilter { MeshNodesOnly = true, MeshResourceFilter = new worldSceneRecordingNodeMeshResourceFilter { ForceFilterIgnore = new(), ForceFilterMatch = new() } };
+			Filter = new worldSceneRecordingNodeFilter();
 
 			PostConstruct();
 		}

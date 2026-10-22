@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIRootMotionCommand()
 		{
+			Params = new gameSceneAnimationMotionActionParams();
+
 			PostConstruct();
 		}
 

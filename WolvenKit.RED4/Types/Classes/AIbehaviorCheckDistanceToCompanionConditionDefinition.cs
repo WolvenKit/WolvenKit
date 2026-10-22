@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorCheckDistanceToCompanionConditionDefinition()
 		{
+			Spline = new AIArgumentMapping { Type = Enums.AIArgumentType.NodeRef, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "NodeRef" };
+			Companion = new AIArgumentMapping { Type = Enums.AIArgumentType.Object, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "whandle:gameObject" };
+			Distance = new AIArgumentMapping { Type = Enums.AIArgumentType.Float, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Float" };
 			ComparisonOperator = Enums.EComparisonType.Less;
 
 			PostConstruct();

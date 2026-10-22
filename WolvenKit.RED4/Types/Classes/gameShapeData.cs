@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameShapeData()
 		{
-			Result = new gameHitResult { HitPositionEnter = new Vector4 { W = 1.000000F }, HitPositionExit = new Vector4 { W = 1.000000F } };
+			Result = new gameHitResult();
 
 			PostConstruct();
 		}

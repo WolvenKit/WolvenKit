@@ -40,8 +40,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			PuppetRef = new gameEntityReference { Names = new() };
-			TargetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
+			TargetRef = new gameEntityReference();
 			CanLookAtDrivenTurnsInterruptGesture = true;
 
 			PostConstruct();

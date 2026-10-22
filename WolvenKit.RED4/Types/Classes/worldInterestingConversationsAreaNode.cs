@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldInterestingConversationsAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("conversationGroups")] 
 		public CArray<CResourceReference<scnInterestingConversationsResource>> ConversationGroups
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CResourceReference<scnInterestingConversationsResource>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("conversationResources")] 
 		public CArray<CHandle<worldConversationGroupData>> ConversationResources
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<worldConversationGroupData>>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("conversations")] 
 		public CArray<CHandle<worldConversationData>> Conversations
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<worldConversationData>>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("workspots")] 
 		public CArray<NodeRef> Workspots
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("savingStrategy")] 
 		public CEnum<audioConversationSavingStrategy> SavingStrategy
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldInterestingConversationsAreaNode()
 		{
+			Color = new CColor { Red = 255, Blue = 255, Alpha = 255 };
 			ConversationGroups = new();
 			ConversationResources = new();
 			Conversations = new();

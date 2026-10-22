@@ -394,7 +394,7 @@ namespace WolvenKit.RED4.Types
 			LastItemOwnerId = new entEntityID();
 			CurrentItemOwnerId = new entEntityID();
 			BufferedOwnerId = new entEntityID();
-			CurrendData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
+			CurrendData = new gameinteractionsvisLootData();
 			ActiveWeaponID = new gameItemID();
 
 			PostConstruct();

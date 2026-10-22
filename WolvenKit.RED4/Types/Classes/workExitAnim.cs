@@ -94,9 +94,9 @@ namespace WolvenKit.RED4.Types
 
 		public workExitAnim()
 		{
-			Id = new workWorkEntryId { Id = uint.MaxValue };
+			Id = new workWorkEntryId();
 			Flags = 8;
-			SyncOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			SyncOffset = new Transform();
 
 			PostConstruct();
 		}

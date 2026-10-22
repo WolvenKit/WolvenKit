@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldNavigationNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("navigationTileResource")] 
 		public CResourceAsyncReference<worldNavigationTileResource> NavigationTileResource
 		{

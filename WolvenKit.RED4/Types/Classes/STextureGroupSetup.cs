@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("astcQuality")] 
+		public CEnum<EAstcQuality> AstcQuality
+		{
+			get => GetPropertyValue<CEnum<EAstcQuality>>();
+			set => SetPropertyValue<CEnum<EAstcQuality>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("isStreamable")] 
 		public CBool IsStreamable
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("hasMipchain")] 
 		public CBool HasMipchain
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("isGamma")] 
 		public CBool IsGamma
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("platformMipBiasPC")] 
 		public CUInt8 PlatformMipBiasPC
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("platformMipBiasConsole")] 
 		public CUInt8 PlatformMipBiasConsole
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("allowTextureDowngrade")] 
 		public CBool AllowTextureDowngrade
 		{

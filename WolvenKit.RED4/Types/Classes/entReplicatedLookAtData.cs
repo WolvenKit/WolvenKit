@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entReplicatedLookAtData()
 		{
-			CreationNetTime = new netTime { MilliSecs = long.MaxValue };
+			CreationNetTime = new netTime { MilliSecs = ulong.MaxValue };
 
 			PostConstruct();
 		}

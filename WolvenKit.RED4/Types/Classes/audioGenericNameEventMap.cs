@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioGenericNameEventMap()
 		{
+			EventOverrides = new audioGenericNameEventDictionary { EntryType = new audioGenericNameEventItem() };
+
 			PostConstruct();
 		}
 

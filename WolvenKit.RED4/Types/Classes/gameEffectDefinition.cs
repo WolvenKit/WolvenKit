@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Types
 			PostActions = new();
 			NoTargetsActions = new();
 			Settings = new gameEffectSettings();
-			DebugSettings = new gameEffectDebugSettings { Duration = 1.000000F, Color = new CColor() };
+			DebugSettings = new gameEffectDebugSettings();
 
 			PostConstruct();
 		}

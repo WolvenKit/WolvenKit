@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		{
 			RequesterID = new entEntityID();
 			CostComponents = new();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
+			InteractionChoice = new gameinteractionsChoice();
+			ActionWidgetPackage = new SActionWidgetPackage();
 			Duration = 2.733000F;
 			CanTriggerStim = true;
 

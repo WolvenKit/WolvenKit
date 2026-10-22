@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryCyberwareDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(120)] 
+		[Ordinal(122)] 
 		[RED("ownedFrame")] 
 		public inkWidgetReference OwnedFrame
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(123)] 
 		[RED("selectedFrame")] 
 		public inkWidgetReference SelectedFrame
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(124)] 
 		[RED("amountPanel")] 
 		public inkWidgetReference AmountPanel
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(125)] 
 		[RED("amount")] 
 		public inkTextWidgetReference Amount
 		{

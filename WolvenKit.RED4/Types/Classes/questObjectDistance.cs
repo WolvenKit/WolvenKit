@@ -22,7 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questObjectDistance()
 		{
-			NodeRef2 = new gameEntityReference { Names = new() };
+			EntityRef = new questUniversalRef();
+			NodeRef2 = new gameEntityReference();
 
 			PostConstruct();
 		}

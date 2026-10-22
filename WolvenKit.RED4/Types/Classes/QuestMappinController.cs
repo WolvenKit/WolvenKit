@@ -163,7 +163,7 @@ namespace WolvenKit.RED4.Types
 			Selector = new inkWidgetReference();
 			ScanningDiamond = new inkWidgetReference();
 			PortalIcon = new inkWidgetReference();
-			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptions = new inkanimPlaybackOptions();
 			VehicleAlreadySummonedTime = new EngineTime();
 
 			PostConstruct();

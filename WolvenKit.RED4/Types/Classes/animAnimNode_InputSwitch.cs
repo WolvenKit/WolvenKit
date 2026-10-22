@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_InputSwitch : animAnimNode_BaseSwitch
 	{
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("selectIntNode")] 
 		public animIntLink SelectIntNode
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animIntLink>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("selectFloatNode")] 
 		public animFloatLink SelectFloatNode
 		{

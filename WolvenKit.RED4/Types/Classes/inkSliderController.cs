@@ -230,8 +230,8 @@ namespace WolvenKit.RED4.Types
 			PercentHandleSize = 0.100000F;
 			MaximumValue = 1.000000F;
 			SliderInput = new inkSliderControllerInputCallback();
-			SliderValueChanged = new inkSliderControllerValueChangeCallback();
-			SliderHandleReleased = new inkSliderControllerHandleReleasedCallback();
+			SliderValueChanged = new inkSliderControllerValueChangeCallback { CallbackName = "OnSliderValueChanged" };
+			SliderHandleReleased = new inkSliderControllerHandleReleasedCallback { CallbackName = "OnSliderHandleReleased" };
 			DefaultScale = new Vector2();
 			PressedScale = new Vector2();
 			DefaultColor = "MainColors.Red";
