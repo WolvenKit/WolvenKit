@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3187
+      author: "manavortex"
+      description: "Auto-update on file name now updates references when renaming .questphase files"
