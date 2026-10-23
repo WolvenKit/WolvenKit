@@ -25,37 +25,37 @@ public partial class worldCookedCollisionNode
         var count = size / 48;
         for (var i = 0; i < count; i++)
         {
-            var entry = new worldCookedCollisionNode_Class1();
+            var entry = new worldCookedCollisionNodeInfo();
 
-            entry.Unknown1[0] = br.ReadCFloat();
-            entry.Unknown1[1] = br.ReadCFloat();
-            entry.Unknown1[2] = br.ReadCFloat();
-            entry.Unknown1[3] = br.ReadCFloat();
+            entry.Extents[0] = br.ReadCFloat();
+            entry.Extents[1] = br.ReadCFloat();
+            entry.Extents[2] = br.ReadCFloat();
+            entry.Extents[3] = br.ReadCFloat();
 
-            entry.Unknown2 = br.ReadCUInt64();
-            entry.Unknown3 = br.ReadCUInt32();
-            entry.Unknown4 = br.ReadCUInt16();
-            entry.Unknown5 = br.ReadCUInt16();
-            entry.Unknown6 = br.ReadCUInt16();
-            entry.Unknown7 = br.ReadCUInt16();
-            entry.Unknown8 = br.ReadCUInt16();
-            entry.Unknown9 = br.ReadCUInt16();
-            entry.Unknown10 = br.ReadCUInt16();
-            entry.Unknown11 = br.ReadCUInt16();
-            entry.Unknown12 = br.ReadCUInt16();
-            entry.Unknown13 = br.ReadCUInt8();
+            entry.SectorHash = br.ReadCUInt64();
+            entry.DataOffset = br.ReadCUInt32();
+            entry.NumActors = br.ReadCUInt16();
+            entry.NumShapeInfos = br.ReadCUInt16();
+            entry.NumShapePositions = br.ReadCUInt16();
+            entry.NumShapeRotations = br.ReadCUInt16();
+            entry.NumScales = br.ReadCUInt16();
+            entry.NumMaterials = br.ReadCUInt16();
+            entry.NumPresets = br.ReadCUInt16();
+            entry.NumShapeIndices = br.ReadCUInt16();
+            entry.NumMaterialIndices = br.ReadCUInt16();
+            entry.Lod = br.ReadCUInt8();
 
             br.BaseReader.ReadByte(); // padding
 
-            result.Unknown1.Add(entry);
+            result.CollisionNodeInfos.Add(entry);
         }
 
         Buffer.Data = result;
 
-        LoadCompiledData(result.Unknown1);
+        LoadCompiledData(result.CollisionNodeInfos);
     }
 
-    protected void LoadCompiledData(CArray<worldCookedCollisionNode_Class1> infos)
+    protected void LoadCompiledData(CArray<worldCookedCollisionNodeInfo> infos)
     {
         using var ms = new MemoryStream(CompiledData.Buffer.GetBytes());
         using var br = new Red4Reader(ms);
@@ -64,60 +64,60 @@ public partial class worldCookedCollisionNode
 
         foreach (var info in infos)
         {
-            if (br.BaseStream.Position != info.Unknown3)
+            if (br.BaseStream.Position != info.DataOffset)
             {
                 return;
             }
 
-            var entry = new worldCookedCollisionNode_Class3();
+            var entry = new CollisionNode();
 
-            for (var i = 0; i < info.Unknown4; i++)
+            for (var i = 0; i < info.NumActors; i++)
             {
-                var subEntry = new worldCookedCollisionNode_Class4();
+                var subEntry = new worldCollisionActor();
 
-                subEntry.Unknown1.Position.X.Bits = br.ReadCInt32();
-                subEntry.Unknown1.Position.Y.Bits = br.ReadCInt32();
-                subEntry.Unknown1.Position.Z.Bits = br.ReadCInt32();
+                subEntry.Transform.Position.X.Bits = br.ReadCInt32();
+                subEntry.Transform.Position.Y.Bits = br.ReadCInt32();
+                subEntry.Transform.Position.Z.Bits = br.ReadCInt32();
                 br.BaseReader.ReadBytes(4); // padding
 
-                subEntry.Unknown1.Orientation.I = br.ReadCFloat();
-                subEntry.Unknown1.Orientation.J = br.ReadCFloat();
-                subEntry.Unknown1.Orientation.K = br.ReadCFloat();
-                subEntry.Unknown1.Orientation.R = br.ReadCFloat();
+                subEntry.Transform.Orientation.I = br.ReadCFloat();
+                subEntry.Transform.Orientation.J = br.ReadCFloat();
+                subEntry.Transform.Orientation.K = br.ReadCFloat();
+                subEntry.Transform.Orientation.R = br.ReadCFloat();
 
-                subEntry.Unknown2 = br.ReadCUInt16();
-                subEntry.Unknown3 = br.ReadCUInt16();
-                subEntry.Unknown4 = br.ReadCInt16();
-                subEntry.Unknown5 = br.ReadCUInt8();
+                subEntry.ShapeStartIndex = br.ReadCUInt16();
+                subEntry.ShapeCount = br.ReadCUInt16();
+                subEntry.ScaleIndex = br.ReadCInt16();
+                subEntry.Uk1 = br.ReadCUInt8();
                 br.BaseReader.ReadBytes(9); // padding
 
-                entry.Unknown1.Add(subEntry);
+                entry.Actors.Add(subEntry);
             }
 
-            for (var i = 0; i < info.Unknown5; i++)
+            for (var i = 0; i < info.NumShapeInfos; i++)
             {
-                var subEntry = new worldCookedCollisionNode_Class5();
+                var subEntry = new worldCollisionShape();
 
-                subEntry.Unknown1.Pe = br.ReadCUInt8();
+                subEntry.CollisionSourceKey.Pe = br.ReadCUInt8();
 
                 for (var j = 0; j < 12; j++)
                 {
-                    subEntry.Unknown1.Ta[j] = br.ReadCUInt8();
+                    subEntry.CollisionSourceKey.Ta[j] = br.ReadCUInt8();
                 }
                 br.BaseReader.ReadBytes(3); // padding
 
-                subEntry.Unknown2 = br.ReadCUInt16();
-                subEntry.Unknown3 = br.ReadCUInt16();
-                subEntry.Unknown4 = br.ReadCInt16();
-                subEntry.Unknown5 = br.ReadCInt16();
-                subEntry.Unknown6 = br.ReadCUInt8();
-                subEntry.Unknown7 = br.ReadCUInt8();
+                subEntry.Index = br.ReadCUInt16();
+                subEntry.MaterialCount = br.ReadCUInt16();
+                subEntry.ShapePositionIndex = br.ReadCInt16();
+                subEntry.ShapeRotationIndex = br.ReadCInt16();
+                subEntry.ShapePresetIndex = br.ReadCUInt8();
+                subEntry.ProxyType = br.ReadCUInt8();
                 br.BaseReader.ReadBytes(6); // padding
 
-                entry.Unknown2.Add(subEntry);
+                entry.Shapes.Add(subEntry);
             }
 
-            for (var i = 0; i < info.Unknown6; i++)
+            for (var i = 0; i < info.NumShapePositions; i++)
             {
                 var subEntry = new Vector3();
 
@@ -125,10 +125,10 @@ public partial class worldCookedCollisionNode
                 subEntry.Y = br.ReadCFloat();
                 subEntry.Z = br.ReadCFloat();
 
-                entry.Unknown3.Add(subEntry);
+                entry.ShapePositions.Add(subEntry);
             }
 
-            for (var i = 0; i < info.Unknown7; i++)
+            for (var i = 0; i < info.NumShapeRotations; i++)
             {
                 var subEntry = new Quaternion();
 
@@ -137,10 +137,10 @@ public partial class worldCookedCollisionNode
                 subEntry.K = br.ReadCFloat();
                 subEntry.R = br.ReadCFloat();
 
-                entry.Unknown4.Add(subEntry);
+                entry.ShapeRotations.Add(subEntry);
             }
 
-            for (var i = 0; i < info.Unknown8; i++)
+            for (var i = 0; i < info.NumScales; i++)
             {
                 var subEntry = new Vector3();
 
@@ -148,33 +148,33 @@ public partial class worldCookedCollisionNode
                 subEntry.Y = br.ReadCFloat();
                 subEntry.Z = br.ReadCFloat();
 
-                entry.Unknown5.Add(subEntry);
+                entry.Scales.Add(subEntry);
             }
 
-            for (var i = 0; i < info.Unknown9; i++)
+            for (var i = 0; i < info.NumMaterials; i++)
             {
-                entry.Unknown6.Add((CName)br.BaseReader.ReadUInt64());
+                entry.Materials.Add((CName)br.BaseReader.ReadUInt64());
             }
 
-            for (var i = 0; i < info.Unknown10; i++)
+            for (var i = 0; i < info.NumPresets; i++)
             {
-                entry.Unknown7.Add((CName)br.BaseReader.ReadUInt64());
+                entry.Presets.Add((CName)br.BaseReader.ReadUInt64());
             }
 
-            for (var i = 0; i < info.Unknown11; i++)
+            for (var i = 0; i < info.NumShapeIndices; i++)
             {
-                entry.Unknown8.Add(br.ReadCUInt32());
+                entry.ShapeIndices.Add(br.ReadCUInt32());
             }
 
-            for (var i = 0; i < info.Unknown12; i++)
+            for (var i = 0; i < info.NumMaterialIndices; i++)
             {
-                entry.Unknown9.Add(br.ReadCUInt8());
+                entry.MaterialIndices.Add(br.ReadCUInt8());
             }
 
             var paddingLen = ((ms.Position + 15U) & (~15)) - ms.Position;
             br.BaseReader.ReadBytes((int)paddingLen); // padding to 16 bytes
 
-            result.Unknown1.Add(entry);
+            result.CollisionNodes.Add(entry);
         }
 
         CompiledData.Data = result;
@@ -187,31 +187,31 @@ public partial class worldCookedCollisionNode
             throw new Exception();
         }
 
-        StoreCompiledData(data.Unknown1);
+        StoreCompiledData(data.CollisionNodeInfos);
 
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count * 48);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.CollisionNodeInfos.Count * 48);
+        foreach (var entry in data.CollisionNodeInfos)
         {
-            bw.Write(entry.Unknown1[0]);
-            bw.Write(entry.Unknown1[1]);
-            bw.Write(entry.Unknown1[2]);
-            bw.Write(entry.Unknown1[3]);
+            bw.Write(entry.Extents[0]);
+            bw.Write(entry.Extents[1]);
+            bw.Write(entry.Extents[2]);
+            bw.Write(entry.Extents[3]);
 
-            bw.Write(entry.Unknown2);
-            bw.Write(entry.Unknown3);
-            bw.Write(entry.Unknown4);
-            bw.Write(entry.Unknown5);
-            bw.Write(entry.Unknown6);
-            bw.Write(entry.Unknown7);
-            bw.Write(entry.Unknown8);
-            bw.Write(entry.Unknown9);
-            bw.Write(entry.Unknown10);
-            bw.Write(entry.Unknown11);
-            bw.Write(entry.Unknown12);
-            bw.Write(entry.Unknown13);
+            bw.Write(entry.SectorHash);
+            bw.Write(entry.DataOffset);
+            bw.Write(entry.NumActors);
+            bw.Write(entry.NumShapeInfos);
+            bw.Write(entry.NumShapePositions);
+            bw.Write(entry.NumShapeRotations);
+            bw.Write(entry.NumScales);
+            bw.Write(entry.NumMaterials);
+            bw.Write(entry.NumPresets);
+            bw.Write(entry.NumShapeIndices);
+            bw.Write(entry.NumMaterialIndices);
+            bw.Write(entry.Lod);
 
             bw.BaseWriter.Write((byte)0); // padding
         }
@@ -222,14 +222,14 @@ public partial class worldCookedCollisionNode
         Buffer.Buffer.SetBytes(ms.ToArray());
     }
 
-    protected void StoreCompiledData(CArray<worldCookedCollisionNode_Class1> infos)
+    protected void StoreCompiledData(CArray<worldCookedCollisionNodeInfo> infos)
     {
         if(CompiledData.Data is not worldCookedCollisionNode_Class2 data)
         {
             throw new Exception();
         }
 
-        if (infos.Count != data.Unknown1.Count)
+        if (infos.Count != data.CollisionNodes.Count)
         {
             throw new Exception("Mismatch between collision node infos and compiled data entries count.");
         }
@@ -237,65 +237,65 @@ public partial class worldCookedCollisionNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        for (var i = 0; i < data.Unknown1.Count; i++)
+        for (var i = 0; i < data.CollisionNodes.Count; i++)
         {
-            var entry = data.Unknown1[i];
+            var entry = data.CollisionNodes[i];
 
             var paddingLen = ((ms.Position + 15U) & (~15)) - ms.Position;
             bw.BaseWriter.Write(new byte[paddingLen]); // padding to 16 bytes
 
-            infos[i].Unknown3 = (CUInt32)bw.BaseStream.Position;
+            infos[i].DataOffset = (CUInt32)bw.BaseStream.Position;
 
-            infos[i].Unknown4 = (CUInt16)entry.Unknown1.Count;
-            foreach (var actor in entry.Unknown1)
+            infos[i].NumActors = (CUInt16)entry.Actors.Count;
+            foreach (var actor in entry.Actors)
             {
-                bw.Write(actor.Unknown1.Position.X.Bits);
-                bw.Write(actor.Unknown1.Position.Y.Bits);
-                bw.Write(actor.Unknown1.Position.Z.Bits);
+                bw.Write(actor.Transform.Position.X.Bits);
+                bw.Write(actor.Transform.Position.Y.Bits);
+                bw.Write(actor.Transform.Position.Z.Bits);
                 bw.BaseWriter.Write(new byte[4]); // padding
 
-                bw.Write(actor.Unknown1.Orientation.I);
-                bw.Write(actor.Unknown1.Orientation.J);
-                bw.Write(actor.Unknown1.Orientation.K);
-                bw.Write(actor.Unknown1.Orientation.R);
+                bw.Write(actor.Transform.Orientation.I);
+                bw.Write(actor.Transform.Orientation.J);
+                bw.Write(actor.Transform.Orientation.K);
+                bw.Write(actor.Transform.Orientation.R);
 
-                bw.Write(actor.Unknown2);
-                bw.Write(actor.Unknown3);
-                bw.Write(actor.Unknown4);
-                bw.Write(actor.Unknown5);
+                bw.Write(actor.ShapeStartIndex);
+                bw.Write(actor.ShapeCount);
+                bw.Write(actor.ScaleIndex);
+                bw.Write(actor.Uk1);
                 bw.BaseWriter.Write(new byte[9]); // padding
             }
 
-            infos[i].Unknown5 = (CUInt16)entry.Unknown2.Count;
-            foreach (var shapeInfo in entry.Unknown2)
+            infos[i].NumShapeInfos = (CUInt16)entry.Shapes.Count;
+            foreach (var shapeInfo in entry.Shapes)
             {
-                bw.Write(shapeInfo.Unknown1.Pe);
-                foreach (var ta in shapeInfo.Unknown1.Ta)
+                bw.Write(shapeInfo.CollisionSourceKey.Pe);
+                foreach (var ta in shapeInfo.CollisionSourceKey.Ta)
                 {
                     bw.Write(ta);
                 }
 
                 bw.BaseWriter.Write(new byte[3]); // padding
 
-                bw.Write(shapeInfo.Unknown2);
-                bw.Write(shapeInfo.Unknown3);
-                bw.Write(shapeInfo.Unknown4);
-                bw.Write(shapeInfo.Unknown5);
-                bw.Write(shapeInfo.Unknown6);
-                bw.Write(shapeInfo.Unknown7);
+                bw.Write(shapeInfo.Index);
+                bw.Write(shapeInfo.MaterialCount);
+                bw.Write(shapeInfo.ShapePositionIndex);
+                bw.Write(shapeInfo.ShapeRotationIndex);
+                bw.Write(shapeInfo.ShapePresetIndex);
+                bw.Write(shapeInfo.ProxyType);
                 bw.BaseWriter.Write(new byte[6]); // padding
             }
 
-            infos[i].Unknown6 = (CUInt16)entry.Unknown3.Count;
-            foreach (var shapePosition in entry.Unknown3)
+            infos[i].NumShapePositions = (CUInt16)entry.ShapePositions.Count;
+            foreach (var shapePosition in entry.ShapePositions)
             {
                 bw.Write(shapePosition.X);
                 bw.Write(shapePosition.Y);
                 bw.Write(shapePosition.Z);
             }
 
-            infos[i].Unknown7 = (CUInt16)entry.Unknown4.Count;
-            foreach (var shapeRotation in entry.Unknown4)
+            infos[i].NumShapeRotations = (CUInt16)entry.ShapeRotations.Count;
+            foreach (var shapeRotation in entry.ShapeRotations)
             {
                 bw.Write(shapeRotation.I);
                 bw.Write(shapeRotation.J);
@@ -303,34 +303,34 @@ public partial class worldCookedCollisionNode
                 bw.Write(shapeRotation.R);
             }
 
-            infos[i].Unknown8 = (CUInt16)entry.Unknown5.Count;
-            foreach (var scale in entry.Unknown5)
+            infos[i].NumScales = (CUInt16)entry.Scales.Count;
+            foreach (var scale in entry.Scales)
             {
                 bw.Write(scale.X);
                 bw.Write(scale.Y);
                 bw.Write(scale.Z);
             }
 
-            infos[i].Unknown9 = (CUInt16)entry.Unknown6.Count;
-            foreach (var material in entry.Unknown6)
+            infos[i].NumMaterials = (CUInt16)entry.Materials.Count;
+            foreach (var material in entry.Materials)
             {
                 bw.BaseWriter.Write((ulong)material);
             }
 
-            infos[i].Unknown10 = (CUInt16)entry.Unknown7.Count;
-            foreach (var preset in entry.Unknown7)
+            infos[i].NumPresets = (CUInt16)entry.Presets.Count;
+            foreach (var preset in entry.Presets)
             {
                 bw.BaseWriter.Write((ulong)preset);
             }
 
-            infos[i].Unknown11 = (CUInt16)entry.Unknown8.Count;
-            foreach (var shapeIndex in entry.Unknown8)
+            infos[i].NumShapeIndices = (CUInt16)entry.ShapeIndices.Count;
+            foreach (var shapeIndex in entry.ShapeIndices)
             {
                 bw.Write(shapeIndex);
             }
 
-            infos[i].Unknown12 = (CUInt16)entry.Unknown9.Count;
-            foreach (var materialIndex in entry.Unknown9)
+            infos[i].NumMaterialIndices = (CUInt16)entry.MaterialIndices.Count;
+            foreach (var materialIndex in entry.MaterialIndices)
             {
                 bw.Write(materialIndex);
             }
@@ -347,118 +347,118 @@ public class worldCookedCollisionNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedCollisionNode_Class1> Unknown1 { get; set; } = new();
+    public CArray<worldCookedCollisionNodeInfo> CollisionNodeInfos { get; set; } = new();
 }
 
-public class worldCookedCollisionNode_Class1 : RedBaseClass
+public class worldCookedCollisionNodeInfo : RedBaseClass
 {
-    [RED("unknown1", 4)]
+    [RED("extents", 4)]
     [REDProperty(IsIgnored = true)]
-    public CArrayFixedSize<CFloat> Unknown1
+    public CArrayFixedSize<CFloat> Extents
     {
         get => GetPropertyValue<CArrayFixedSize<CFloat>>();
         set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
     }
 
-    [RED("unknown2")]
+    [RED("sectorHash")]
     [REDProperty(IsIgnored = true)]
-    public CUInt64 Unknown2
+    public CUInt64 SectorHash
     {
         get => GetPropertyValue<CUInt64>();
         set => SetPropertyValue<CUInt64>(value);
     }
 
-    [RED("unknown3")]
+    [RED("dataOffset")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 Unknown3
+    public CUInt32 DataOffset
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("unknown4")]
+    [RED("numActors")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown4
+    public CUInt16 NumActors
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown5")]
+    [RED("numShapeInfos")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown5
+    public CUInt16 NumShapeInfos
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown6")]
+    [RED("numShapePositions")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown6
+    public CUInt16 NumShapePositions
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown7")]
+    [RED("numShapeRotations")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown7
+    public CUInt16 NumShapeRotations
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown8")]
+    [RED("numScales")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown8
+    public CUInt16 NumScales
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown9")]
+    [RED("numMaterials")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown9
+    public CUInt16 NumMaterials
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown10")]
+    [RED("numPresets")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown10
+    public CUInt16 NumPresets
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown11")]
+    [RED("numShapeIndices")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown11
+    public CUInt16 NumShapeIndices
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown12")]
+    [RED("numMaterialIndices")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown12
+    public CUInt16 NumMaterialIndices
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown13")]
+    [RED("lod")]
     [REDProperty(IsIgnored = true)]
-    public CUInt8 Unknown13
+    public CUInt8 Lod
     {
         get => GetPropertyValue<CUInt8>();
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    public worldCookedCollisionNode_Class1()
+    public worldCookedCollisionNodeInfo()
     {
-        Unknown1 = new CArrayFixedSize<CFloat>(4);
+        Extents = new CArrayFixedSize<CFloat>(4);
     }
 }
 
@@ -466,205 +466,205 @@ public class worldCookedCollisionNode_Class2 : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedCollisionNode_Class3> Unknown1 { get; set; } = new();
+    public CArray<CollisionNode> CollisionNodes { get; set; } = new();
 }
 
-public class worldCookedCollisionNode_Class3 : RedBaseClass
+public class CollisionNode : RedBaseClass
 {
-    [RED("unknown1")]
+    [RED("actors")]
     [REDProperty(IsIgnored = true)]
-    public CArray<worldCookedCollisionNode_Class4> Unknown1
+    public CArray<worldCollisionActor> Actors
     {
-        get => GetPropertyValue<CArray<worldCookedCollisionNode_Class4>>();
-        set => SetPropertyValue<CArray<worldCookedCollisionNode_Class4>>(value);
+        get => GetPropertyValue<CArray<worldCollisionActor>>();
+        set => SetPropertyValue<CArray<worldCollisionActor>>(value);
     }
 
-    [RED("unknown2")]
+    [RED("shapes")]
     [REDProperty(IsIgnored = true)]
-    public CArray<worldCookedCollisionNode_Class5> Unknown2
+    public CArray<worldCollisionShape> Shapes
     {
-        get => GetPropertyValue<CArray<worldCookedCollisionNode_Class5>>();
-        set => SetPropertyValue<CArray<worldCookedCollisionNode_Class5>>(value);
+        get => GetPropertyValue<CArray<worldCollisionShape>>();
+        set => SetPropertyValue<CArray<worldCollisionShape>>(value);
     }
 
-    [RED("unknown3")]
+    [RED("shapePositions")]
     [REDProperty(IsIgnored = true)]
-    public CArray<Vector3> Unknown3
+    public CArray<Vector3> ShapePositions
     {
         get => GetPropertyValue<CArray<Vector3>>();
         set => SetPropertyValue<CArray<Vector3>>(value);
     }
 
-    [RED("unknown4")]
+    [RED("shapeRotations")]
     [REDProperty(IsIgnored = true)]
-    public CArray<Quaternion> Unknown4
+    public CArray<Quaternion> ShapeRotations
     {
         get => GetPropertyValue<CArray<Quaternion>>();
         set => SetPropertyValue<CArray<Quaternion>>(value);
     }
 
-    [RED("unknown5")]
+    [RED("scales")]
     [REDProperty(IsIgnored = true)]
-    public CArray<Vector3> Unknown5
+    public CArray<Vector3> Scales
     {
         get => GetPropertyValue<CArray<Vector3>>();
         set => SetPropertyValue<CArray<Vector3>>(value);
     }
 
-    [RED("unknown6")]
+    [RED("materials")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CName> Unknown6
+    public CArray<CName> Materials
     {
         get => GetPropertyValue<CArray<CName>>();
         set => SetPropertyValue<CArray<CName>>(value);
     }
 
-    [RED("unknown7")]
+    [RED("presets")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CName> Unknown7
+    public CArray<CName> Presets
     {
         get => GetPropertyValue<CArray<CName>>();
         set => SetPropertyValue<CArray<CName>>(value);
     }
 
-    [RED("unknown8")]
+    [RED("shapeIndices")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CUInt32> Unknown8
+    public CArray<CUInt32> ShapeIndices
     {
         get => GetPropertyValue<CArray<CUInt32>>();
         set => SetPropertyValue<CArray<CUInt32>>(value);
     }
 
-    [RED("unknown9")]
+    [RED("materialIndices")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CUInt8> Unknown9
+    public CArray<CUInt8> MaterialIndices
     {
         get => GetPropertyValue<CArray<CUInt8>>();
         set => SetPropertyValue<CArray<CUInt8>>(value);
     }
 
-    public worldCookedCollisionNode_Class3()
+    public CollisionNode()
     {
-        Unknown1 = new();
-        Unknown2 = new();
-        Unknown3 = new();
-        Unknown4 = new();
-        Unknown5 = new();
-        Unknown6 = new();
-        Unknown7 = new();
-        Unknown8 = new();
-        Unknown9 = new();
+        Actors = new();
+        Shapes = new();
+        ShapePositions = new();
+        ShapeRotations = new();
+        Scales = new();
+        Materials = new();
+        Presets = new();
+        ShapeIndices = new();
+        MaterialIndices = new();
     }
 }
 
-public class worldCookedCollisionNode_Class4 : RedBaseClass
+public class worldCollisionActor : RedBaseClass
 {
-    [RED("unknown1")]
+    [RED("transform")]
     [REDProperty(IsIgnored = true)]
-    public WorldTransform Unknown1
+    public WorldTransform Transform
     {
         get => GetPropertyValue<WorldTransform>();
         set => SetPropertyValue<WorldTransform>(value);
     }
 
-    [RED("unknown2")]
+    [RED("shapeStartIndex")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown2
+    public CUInt16 ShapeStartIndex
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown3")]
+    [RED("shapeCount")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown3
+    public CUInt16 ShapeCount
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown4")]
+    [RED("scaleIndex")]
     [REDProperty(IsIgnored = true)]
-    public CInt16 Unknown4
+    public CInt16 ScaleIndex
     {
         get => GetPropertyValue<CInt16>();
         set => SetPropertyValue<CInt16>(value);
     }
 
-    [RED("unknown5")]
+    [RED("uk1")]
     [REDProperty(IsIgnored = true)]
-    public CUInt8 Unknown5
+    public CUInt8 Uk1
     {
         get => GetPropertyValue<CUInt8>();
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    public worldCookedCollisionNode_Class4()
+    public worldCollisionActor()
     {
-        Unknown1 = new();
+        Transform = new();
     }
 }
 
-public class worldCookedCollisionNode_Class5 : RedBaseClass
+public class worldCollisionShape : RedBaseClass
 {
-    [RED("unknwon1")]
+    [RED("collisionSourceKey")]
     [REDProperty(IsIgnored = true)]
-    public physicsGeometryKey Unknown1
+    public physicsGeometryKey CollisionSourceKey
     {
         get => GetPropertyValue<physicsGeometryKey>();
         set => SetPropertyValue<physicsGeometryKey>(value);
     }
 
-    [RED("unknown2")]
+    [RED("index")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown2
+    public CUInt16 Index
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown3")]
+    [RED("materialCount")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown3
+    public CUInt16 MaterialCount
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown4")]
+    [RED("shapePositionIndex")]
     [REDProperty(IsIgnored = true)]
-    public CInt16 Unknown4
+    public CInt16 ShapePositionIndex
     {
         get => GetPropertyValue<CInt16>();
         set => SetPropertyValue<CInt16>(value);
     }
 
-    [RED("unknown5")]
+    [RED("shapeRotationIndex")]
     [REDProperty(IsIgnored = true)]
-    public CInt16 Unknown5
+    public CInt16 ShapeRotationIndex
     {
         get => GetPropertyValue<CInt16>();
         set => SetPropertyValue<CInt16>(value);
     }
 
-    [RED("unknown6")]
+    [RED("shapePresetIndex")]
     [REDProperty(IsIgnored = true)]
-    public CUInt8 Unknown6
+    public CUInt8 ShapePresetIndex
     {
         get => GetPropertyValue<CUInt8>();
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    [RED("unknown7")]
+    [RED("proxyType")]
     [REDProperty(IsIgnored = true)]
-    public CUInt8 Unknown7
+    public CUInt8 ProxyType
     {
         get => GetPropertyValue<CUInt8>();
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    public worldCookedCollisionNode_Class5()
+    public worldCollisionShape()
     {
-        Unknown1 = new();
+        CollisionSourceKey = new();
     }
 }
