@@ -12,7 +12,7 @@ public partial class worldCookedFoliageDestructionNode
             throw new Exception();
         }
 
-        var result = new worldCookedFoliageDestructionNode_Buffer();
+        var result = new WorldCookedFoliageDestructionInfoBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -68,7 +68,7 @@ public partial class worldCookedFoliageDestructionNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldCookedFoliageDestructionNode_Buffer data)
+        if (Buffer.Data is not WorldCookedFoliageDestructionInfoBuffer data)
         {
             throw new Exception();
         }
@@ -123,7 +123,7 @@ public partial class worldCookedFoliageDestructionNode
     }
 }
 
-public class worldCookedFoliageDestructionNode_Buffer : worldCookedCollisionNode_Buffer
+public class WorldCookedFoliageDestructionInfoBuffer : worldCookedCollisionInfoBuffer
 {
     public CArray<CUInt32> PopulationIndex { get; set; } = new();
     public CUInt32 DataVersion { get; set; }

@@ -13,7 +13,7 @@ public partial class worldCookedCollisionNode
             throw new Exception();
         }
 
-        var result = new worldCookedCollisionNode_Buffer();
+        var result = new worldCookedCollisionInfoBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -60,7 +60,7 @@ public partial class worldCookedCollisionNode
         using var ms = new MemoryStream(CompiledData.Buffer.GetBytes());
         using var br = new Red4Reader(ms);
 
-        var result = new worldCookedCollisionNode_Class2();
+        var result = new worldCookedCollisionNodeBuffer();
 
         foreach (var info in infos)
         {
@@ -69,11 +69,11 @@ public partial class worldCookedCollisionNode
                 return;
             }
 
-            var entry = new CollisionNode();
+            var entry = new worldCookedCollisionInnerNode();
 
             for (var i = 0; i < info.NumActors; i++)
             {
-                var subEntry = new worldCollisionActor();
+                var subEntry = new worldCookedCollisionActor();
 
                 subEntry.Transform.Position.X.Bits = br.ReadCInt32();
                 subEntry.Transform.Position.Y.Bits = br.ReadCInt32();
@@ -96,7 +96,7 @@ public partial class worldCookedCollisionNode
 
             for (var i = 0; i < info.NumShapeInfos; i++)
             {
-                var subEntry = new worldCollisionShape();
+                var subEntry = new worldCookedCollisionShape();
 
                 subEntry.CollisionSourceKey.Pe = br.ReadCUInt8();
 
@@ -182,7 +182,7 @@ public partial class worldCookedCollisionNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldCookedCollisionNode_Buffer data)
+        if (Buffer.Data is not worldCookedCollisionInfoBuffer data)
         {
             throw new Exception();
         }
@@ -224,7 +224,7 @@ public partial class worldCookedCollisionNode
 
     protected void StoreCompiledData(CArray<worldCookedCollisionNodeInfo> infos)
     {
-        if(CompiledData.Data is not worldCookedCollisionNode_Class2 data)
+        if(CompiledData.Data is not worldCookedCollisionNodeBuffer data)
         {
             throw new Exception();
         }
@@ -343,7 +343,7 @@ public partial class worldCookedCollisionNode
     }
 }
 
-public class worldCookedCollisionNode_Buffer : IParseableBuffer
+public class worldCookedCollisionInfoBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
@@ -462,29 +462,29 @@ public class worldCookedCollisionNodeInfo : RedBaseClass
     }
 }
 
-public class worldCookedCollisionNode_Class2 : IParseableBuffer
+public class worldCookedCollisionNodeBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<CollisionNode> CollisionNodes { get; set; } = new();
+    public CArray<worldCookedCollisionInnerNode> CollisionNodes { get; set; } = new();
 }
 
-public class CollisionNode : RedBaseClass
+public class worldCookedCollisionInnerNode : RedBaseClass
 {
     [RED("actors")]
     [REDProperty(IsIgnored = true)]
-    public CArray<worldCollisionActor> Actors
+    public CArray<worldCookedCollisionActor> Actors
     {
-        get => GetPropertyValue<CArray<worldCollisionActor>>();
-        set => SetPropertyValue<CArray<worldCollisionActor>>(value);
+        get => GetPropertyValue<CArray<worldCookedCollisionActor>>();
+        set => SetPropertyValue<CArray<worldCookedCollisionActor>>(value);
     }
 
     [RED("shapes")]
     [REDProperty(IsIgnored = true)]
-    public CArray<worldCollisionShape> Shapes
+    public CArray<worldCookedCollisionShape> Shapes
     {
-        get => GetPropertyValue<CArray<worldCollisionShape>>();
-        set => SetPropertyValue<CArray<worldCollisionShape>>(value);
+        get => GetPropertyValue<CArray<worldCookedCollisionShape>>();
+        set => SetPropertyValue<CArray<worldCookedCollisionShape>>(value);
     }
 
     [RED("shapePositions")]
@@ -543,7 +543,7 @@ public class CollisionNode : RedBaseClass
         set => SetPropertyValue<CArray<CUInt8>>(value);
     }
 
-    public CollisionNode()
+    public worldCookedCollisionInnerNode()
     {
         Actors = new();
         Shapes = new();
@@ -557,7 +557,7 @@ public class CollisionNode : RedBaseClass
     }
 }
 
-public class worldCollisionActor : RedBaseClass
+public class worldCookedCollisionActor : RedBaseClass
 {
     [RED("transform")]
     [REDProperty(IsIgnored = true)]
@@ -599,13 +599,13 @@ public class worldCollisionActor : RedBaseClass
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    public worldCollisionActor()
+    public worldCookedCollisionActor()
     {
         Transform = new();
     }
 }
 
-public class worldCollisionShape : RedBaseClass
+public class worldCookedCollisionShape : RedBaseClass
 {
     [RED("collisionSourceKey")]
     [REDProperty(IsIgnored = true)]
@@ -663,7 +663,7 @@ public class worldCollisionShape : RedBaseClass
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    public worldCollisionShape()
+    public worldCookedCollisionShape()
     {
         CollisionSourceKey = new();
     }

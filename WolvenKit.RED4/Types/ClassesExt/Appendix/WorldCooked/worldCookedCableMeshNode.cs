@@ -13,7 +13,7 @@ public partial class worldCookedCableMeshNode
             throw new Exception();
         }
 
-        var result = new worldCookedBendedMeshNode_Buffer();
+        var result = new worldCookedBendedMeshNodeBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -25,7 +25,7 @@ public partial class worldCookedCableMeshNode
         var count1 = size / 46;
         for (var i = 0; i < count1; i++)
         {
-            var entry = new WorldCookedCableMeshNodeInner();
+            var entry = new WorldCookedCableMeshInnerNode();
 
             entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
             entry.MeshAppearance = br.BaseReader.ReadUInt64();
@@ -93,7 +93,7 @@ public partial class worldCookedCableMeshNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldCookedBendedMeshNode_Buffer data)
+        if (Buffer.Data is not worldCookedBendedMeshNodeBuffer data)
         {
             throw new Exception();
         }
@@ -104,7 +104,7 @@ public partial class worldCookedCableMeshNode
         bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 46);
         foreach (var entry in data.InnerNodes)
         {
-            var castedEntry = (WorldCookedCableMeshNodeInner)entry;
+            var castedEntry = (WorldCookedCableMeshInnerNode)entry;
 
             bw.BaseWriter.Write((ulong)castedEntry.Mesh.DepotPath);
             bw.BaseWriter.Write((ulong)castedEntry.MeshAppearance);
@@ -164,7 +164,7 @@ public partial class worldCookedCableMeshNode
     }
 }
 
-public class WorldCookedCableMeshNodeInner : worldCookedBendedMeshNodeInner
+public class WorldCookedCableMeshInnerNode : worldCookedBendedMeshInnerNode
 {
     [RED("destructionHashes", 2)]
     [REDProperty(IsIgnored = true)]
@@ -174,7 +174,7 @@ public class WorldCookedCableMeshNodeInner : worldCookedBendedMeshNodeInner
         set => SetPropertyValue<CArrayFixedSize<NodeRef>>(value);
     }
 
-    public WorldCookedCableMeshNodeInner()
+    public WorldCookedCableMeshInnerNode()
     {
         DestructionHashes = new(2);
     }

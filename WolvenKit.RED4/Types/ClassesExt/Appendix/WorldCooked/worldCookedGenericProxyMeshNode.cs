@@ -24,9 +24,9 @@ public partial class worldCookedGenericProxyMeshNode
         var count = size / 41;
         for (var i = 0; i < count; i++)
         {
-            var entry = new worldCookedGenericProxyMeshNodeInner();
+            var entry = new WorldCookedGenericProxyMeshInnerNode();
 
-            var castedEntry = (worldCookedMeshNodeInner)entry;
+            var castedEntry = (worldCookedMeshInnerNode)entry;
             ReadEntry(br, in castedEntry);
 
             entry.NbNodesUnderProxy = br.ReadCUInt32();
@@ -51,7 +51,7 @@ public partial class worldCookedGenericProxyMeshNode
         bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 41);
         foreach (var entry in data.InnerNodes)
         {
-            var castedEntry = (worldCookedMeshNodeInner)entry;
+            var castedEntry = (worldCookedMeshInnerNode)entry;
             WriteEntry(bw, castedEntry);
 
             bw.Write(entry.NbNodesUnderProxy);
@@ -69,10 +69,10 @@ public class worldCookedGenericProxyMeshNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedGenericProxyMeshNodeInner> InnerNodes { get; set; } = new();
+    public CArray<WorldCookedGenericProxyMeshInnerNode> InnerNodes { get; set; } = new();
 }
 
-public class worldCookedGenericProxyMeshNodeInner : worldCookedMeshNodeInner
+public class WorldCookedGenericProxyMeshInnerNode : worldCookedMeshInnerNode
 {
     [RED("nbNodesUnderProxy")]
     [REDProperty(IsIgnored = true)]

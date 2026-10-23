@@ -13,7 +13,7 @@ public partial class worldCookedBendedMeshNode
             throw new Exception();
         }
 
-        var result = new worldCookedBendedMeshNode_Buffer();
+        var result = new worldCookedBendedMeshNodeBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -25,7 +25,7 @@ public partial class worldCookedBendedMeshNode
         var count1 = size / 30;
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldCookedBendedMeshNodeInner();
+            var entry = new worldCookedBendedMeshInnerNode();
 
             entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
             entry.MeshAppearance = br.BaseReader.ReadUInt64();
@@ -91,7 +91,7 @@ public partial class worldCookedBendedMeshNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldCookedBendedMeshNode_Buffer data)
+        if (Buffer.Data is not worldCookedBendedMeshNodeBuffer data)
         {
             throw new Exception();
         }
@@ -158,16 +158,16 @@ public partial class worldCookedBendedMeshNode
     }
 }
 
-public class worldCookedBendedMeshNode_Buffer : IParseableBuffer
+public class worldCookedBendedMeshNodeBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedBendedMeshNodeInner> InnerNodes { get; set; } = new();
+    public CArray<worldCookedBendedMeshInnerNode> InnerNodes { get; set; } = new();
     public CArray<CMatrix> DeformationData { get; set; } = new();
     public CArray<Box> DeformedBoxes { get; set; } = new();
 }
 
-public class worldCookedBendedMeshNodeInner : RedBaseClass
+public class worldCookedBendedMeshInnerNode : RedBaseClass
 {
     [RED("mesh")]
     [REDProperty(IsIgnored = true)]

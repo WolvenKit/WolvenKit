@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 public partial class worldCookedMeshNode
 {
-    protected void ReadEntry(Red4Reader br, in worldCookedMeshNodeInner entry)
+    protected void ReadEntry(Red4Reader br, in worldCookedMeshInnerNode entry)
     {
         entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
         entry.MeshAppearance = br.BaseReader.ReadUInt64();
@@ -26,7 +26,7 @@ public partial class worldCookedMeshNode
         entry.RemoveFromRainMap = br.ReadCBool();
     }
 
-    protected void WriteEntry(Red4Writer bw, worldCookedMeshNodeInner entry)
+    protected void WriteEntry(Red4Writer bw, worldCookedMeshInnerNode entry)
     {
         bw.BaseWriter.Write((ulong)entry.Mesh.DepotPath);
         bw.BaseWriter.Write((ulong)entry.MeshAppearance);
@@ -48,7 +48,7 @@ public partial class worldCookedMeshNode
     }
 }
 
-public class worldCookedMeshNodeInner : RedBaseClass
+public class worldCookedMeshInnerNode : RedBaseClass
 {
     [RED("mesh")]
     [REDProperty(IsIgnored = true)]

@@ -13,7 +13,7 @@ public partial class worldCookedStaticDecalNode
             throw new Exception();
         }
 
-        var result = new worldCookedStaticDecalNode_Buffer();
+        var result = new worldCookedStaticDecalNodeBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -25,7 +25,7 @@ public partial class worldCookedStaticDecalNode
         var count1 = size1 / 36;
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldCookedStaticDecalNodeInner();
+            var entry = new worldCookedStaticDecalInnerNode();
 
             entry.Material = new CResourceAsyncReference<IMaterial>(br.BaseReader.ReadUInt64());
             entry.ForcedAutoHideDistance = br.ReadCFloat();
@@ -61,7 +61,7 @@ public partial class worldCookedStaticDecalNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldCookedStaticDecalNode_Buffer data)
+        if (Buffer.Data is not worldCookedStaticDecalNodeBuffer data)
         {
             throw new Exception();
         }
@@ -102,15 +102,15 @@ public partial class worldCookedStaticDecalNode
     }
 }
 
-public class worldCookedStaticDecalNode_Buffer : IParseableBuffer
+public class worldCookedStaticDecalNodeBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedStaticDecalNodeInner> InnerNodes { get; set; } = new();
+    public CArray<worldCookedStaticDecalInnerNode> InnerNodes { get; set; } = new();
     public CArray<HDRColor> DiffuseColorScales { get; set; } = new();
 }
 
-public class worldCookedStaticDecalNodeInner : RedBaseClass
+public class worldCookedStaticDecalInnerNode : RedBaseClass
 {
     [RED("material")]
     [REDProperty(IsIgnored = true)]

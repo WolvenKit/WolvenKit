@@ -12,7 +12,7 @@ public partial class worldCookedAcousticSectorNode
             throw new Exception();
         }
 
-        var result = new worldCookedAcousticSectorNode_Buffer();
+        var result = new worldCookedAcousticSectorNodeBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -24,7 +24,7 @@ public partial class worldCookedAcousticSectorNode
         var count = size / 21;
         for (var i = 0; i < count; i++)
         {
-            var entry = new worldCookedAcousticSectorNodeInner();
+            var entry = new worldCookedAcousticSectorInnerNode();
 
             entry.Data = new CResourceAsyncReference<worldAcousticDataResource>(br.BaseReader.ReadUInt64());
             entry.InSectorCoordsX = br.ReadCUInt32();
@@ -42,7 +42,7 @@ public partial class worldCookedAcousticSectorNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldCookedAcousticSectorNode_Buffer data)
+        if (Buffer.Data is not worldCookedAcousticSectorNodeBuffer data)
         {
             throw new Exception();
         }
@@ -68,15 +68,15 @@ public partial class worldCookedAcousticSectorNode
     }
 }
 
-public class worldCookedAcousticSectorNode_Buffer : IParseableBuffer
+public class worldCookedAcousticSectorNodeBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedAcousticSectorNodeInner> InnerNodes { get; set; } = new();
+    public CArray<worldCookedAcousticSectorInnerNode> InnerNodes { get; set; } = new();
     public CUInt32 GeneratorId { get; set; }
 }
 
-public class worldCookedAcousticSectorNodeInner : RedBaseClass
+public class worldCookedAcousticSectorInnerNode : RedBaseClass
 {
     [RED("data")]
     [REDProperty(IsIgnored = true)]

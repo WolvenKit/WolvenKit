@@ -10,7 +10,7 @@ public partial class worldInstancedMeshNode
 
     public override void LoadData(RedBaseClass cls)
     {
-        var result = new worldInstancedMeshNode_Buffer();
+        var result = new worldInstancedMeshNodeBuffer();
 
         //var relatedNodes = GetRelatedNodes(wss);
 
@@ -22,7 +22,7 @@ public partial class worldInstancedMeshNode
         var count1 = br.BaseReader.ReadVLQInt32(); // relatedNodes.Count
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldInstancedMeshNodeInner();
+            var entry = new worldInstancedMeshInnerNode();
 
             entry.GroupWorldBoundingBox.Min.X = br.ReadCFloat();
             entry.GroupWorldBoundingBox.Min.Y = br.ReadCFloat();
@@ -68,7 +68,7 @@ public partial class worldInstancedMeshNode
 
     public override void StoreData()
     {
-        if (Buffer.Data is not worldInstancedMeshNode_Buffer data)
+        if (Buffer.Data is not worldInstancedMeshNodeBuffer data)
         {
             throw new Exception();
         }
@@ -121,15 +121,15 @@ public partial class worldInstancedMeshNode
     }
 }
 
-public class worldInstancedMeshNode_Buffer : IParseableBuffer
+public class worldInstancedMeshNodeBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldInstancedMeshNodeInner> InnerNodes { get; set; } = new();
+    public CArray<worldInstancedMeshInnerNode> InnerNodes { get; set; } = new();
     public CArray<TransformRange> TransformRanges { get; set; } = new();
 }
 
-public class worldInstancedMeshNodeInner : RedBaseClass
+public class worldInstancedMeshInnerNode : RedBaseClass
 {
     [RED("groupWorldBoundingBox")]
     [REDProperty(IsIgnored = true)]
@@ -218,7 +218,7 @@ public class worldInstancedMeshNodeInner : RedBaseClass
         set => SetPropertyValue<CBool>(value);
     }
 
-    public worldInstancedMeshNodeInner()
+    public worldInstancedMeshInnerNode()
     {
         GroupWorldBoundingBox = new Box();
     }
