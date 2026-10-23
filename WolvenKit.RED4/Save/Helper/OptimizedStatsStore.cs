@@ -55,6 +55,7 @@ public class OptimizedStatsStore
         public List<gamedataStatType> BaselineInactive { get; set; } = new();
         public TweakDBID BaselineRecordId { get; set; }
         public uint BaselineSeed { get; set; }
+        public CArray<CHandle<gameStatModifierData_Deprecated>> BaselineStatModifiers { get; set; } = new();
     }
 
     public OptimizedStatsStore(gameStatsStateMapStructure map) => _map = map;
@@ -77,7 +78,7 @@ public class OptimizedStatsStore
 
         var data = new gameSavedStatsData
         {
-            StatModifiers = source.StatModifiers,
+            StatModifiers = CopyStatModifiers(source.StatModifiers),
             Seed = source.Seed,
             RecordID = source.RecordIDIndex < _map.SharedRecordId.Count ? _map.SharedRecordId[source.RecordIDIndex] : default,
             ModifiersBuffer = new DataBuffer { Data = new ModifiersBuffer() },
@@ -118,6 +119,7 @@ public class OptimizedStatsStore
         entry.BaselineInactive = data.InactiveStats.Select(x => (gamedataStatType)x).ToList();
         entry.BaselineRecordId = data.RecordID;
         entry.BaselineSeed = data.Seed;
+        entry.BaselineStatModifiers = CopyStatModifiers(data.StatModifiers);
 
         _materialized.Add((idType, entityHash), entry);
         return data;
@@ -150,13 +152,11 @@ public class OptimizedStatsStore
     /// <summary>Writes all changed entities back into the optimized tables.</summary>
     public void Commit()
     {
-        foreach (var entry in _materialized.Values)
-        {
-            if (entry.Source != null && !IsDirty(entry))
-            {
-                continue;
-            }
+        var changed = _materialized.Values.Where(x => x.Source == null || IsDirty(x)).ToList();
+        ValidateCapacity(changed);
 
+        foreach (var entry in changed)
+        {
             var isNew = entry.Source == null;
             var target = entry.Source;
             if (target == null)
@@ -164,14 +164,18 @@ public class OptimizedStatsStore
                 target = new gameSavedStatsDataOptimized
                 {
                     EntityHash = entry.EntityHash,
-                    IdType = entry.IdType,
-                    StatModifiers = entry.Data.StatModifiers
+                    IdType = entry.IdType
                 };
                 _map.ValuesOptimized.Add(target);
                 entry.Source = target;
             }
 
             var data = entry.Data;
+
+            if (isNew || !Equals(entry.BaselineStatModifiers, data.StatModifiers))
+            {
+                target.StatModifiers = CopyStatModifiers(data.StatModifiers);
+            }
 
             if (isNew || entry.BaselineSeed != data.Seed)
             {
@@ -180,7 +184,7 @@ public class OptimizedStatsStore
 
             if (isNew || !entry.BaselineRecordId.Equals(data.RecordID))
             {
-                target.RecordIDIndex = (ushort)IndexOfOrAdd(_map.SharedRecordId, data.RecordID);
+                target.RecordIDIndex = IndexOfOrAdd(_map.SharedRecordId, data.RecordID);
             }
 
             var inactive = data.InactiveStats.Select(x => (gamedataStatType)x).ToList();
@@ -189,7 +193,7 @@ public class OptimizedStatsStore
                 target.InactiveStatsIndices.Clear();
                 foreach (var stat in inactive)
                 {
-                    target.InactiveStatsIndices.Add((ushort)IndexOfOrAdd(_map.SharedInactiveStats, (CEnum<gamedataStatType>)stat));
+                    target.InactiveStatsIndices.Add(IndexOfOrAdd(_map.SharedInactiveStats, (CEnum<gamedataStatType>)stat));
                 }
             }
 
@@ -199,6 +203,7 @@ public class OptimizedStatsStore
             entry.BaselineInactive = inactive;
             entry.BaselineRecordId = data.RecordID;
             entry.BaselineSeed = data.Seed;
+            entry.BaselineStatModifiers = CopyStatModifiers(data.StatModifiers);
         }
     }
 
@@ -235,7 +240,7 @@ public class OptimizedStatsStore
         }
         else
         {
-            var sliceIndex = (ushort)FindOrAppendSlice(bytes, list.Flag);
+            var sliceIndex = checked((ushort)FindOrAppendSlice(bytes, list.Flag));
             if (position >= 0)
             {
                 target.BufferSliceIndices[position] = sliceIndex;
@@ -252,7 +257,8 @@ public class OptimizedStatsStore
     private bool IsDirty(Materialized entry)
     {
         var data = entry.Data;
-        if (entry.BaselineSeed != data.Seed || !entry.BaselineRecordId.Equals(data.RecordID))
+        if (entry.BaselineSeed != data.Seed || !entry.BaselineRecordId.Equals(data.RecordID) ||
+            !Equals(entry.BaselineStatModifiers, data.StatModifiers))
         {
             return true;
         }
@@ -266,17 +272,18 @@ public class OptimizedStatsStore
     private static bool IsListDirty(ModifierList list, DataBuffer buffer) =>
         list.Editable && buffer.Data is ModifiersBuffer modifiers && !WriteModifiers(modifiers).AsSpan().SequenceEqual(list.Baseline);
 
-    private static int IndexOfOrAdd<T>(CArray<T> array, T value) where T : IRedType
+    private static ushort IndexOfOrAdd<T>(CArray<T> array, T value) where T : IRedType
     {
         for (var i = 0; i < array.Count; i++)
         {
             if (Equals(array[i], value))
             {
-                return i;
+                return checked((ushort)i);
             }
         }
+        EnsureCanAppend(array.Count);
         array.Add(value);
-        return array.Count - 1;
+        return checked((ushort)(array.Count - 1));
     }
 
     // sharedDataBuffer is only set for maps read from a save
@@ -286,16 +293,13 @@ public class OptimizedStatsStore
     {
         var arena = GetArena();
 
-        // Reuse an identical slice (the game deduplicates them as well)
-        for (var i = 0; i < _map.SharedBufferSlices.Count; i++)
+        // Reuse an identical slice (the game deduplicates them as well).
+        var existing = FindSlice(arena, bytes, flag);
+        if (existing >= 0)
         {
-            var slice = _map.SharedBufferSlices[i];
-            if ((slice.Combined & SliceSizeMask) == bytes.Length && (slice.Combined & ForcedSliceFlag) == flag &&
-                arena.AsSpan((int)(uint)slice.Offset, bytes.Length).SequenceEqual(bytes))
-            {
-                return i;
-            }
+            return existing;
         }
+        EnsureCanAppend(_map.SharedBufferSlices.Count);
 
         var used = _map.SharedBufferSlices.Count == 0 ? 0 : _map.SharedBufferSlices.Max(x => (int)((uint)x.Offset + (x.Combined & SliceSizeMask)));
         if (used + bytes.Length > arena.Length)
@@ -314,6 +318,84 @@ public class OptimizedStatsStore
         _map.SharedBufferSlices.Add(new gameBufferSlice { Offset = (uint)used, Combined = (uint)bytes.Length | flag });
         return _map.SharedBufferSlices.Count - 1;
     }
+
+    private int FindSlice(byte[] arena, byte[] bytes, uint flag)
+    {
+        for (var i = 0; i < _map.SharedBufferSlices.Count; i++)
+        {
+            var slice = _map.SharedBufferSlices[i];
+            if ((slice.Combined & SliceSizeMask) == bytes.Length && (slice.Combined & ForcedSliceFlag) == flag &&
+                arena.AsSpan((int)(uint)slice.Offset, bytes.Length).SequenceEqual(bytes))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Check the entire batch before changing any entity, shared table or arena.
+    private void ValidateCapacity(List<Materialized> changed)
+    {
+        if (changed.Count == 0)
+        {
+            return;
+        }
+
+        ValidateTableCapacity(_map.SharedRecordId, changed
+            .Where(x => x.Source == null || !x.BaselineRecordId.Equals(x.Data.RecordID))
+            .Select(x => x.Data.RecordID));
+        ValidateTableCapacity(_map.SharedInactiveStats, changed
+            .Where(x => x.Source == null || !x.Data.InactiveStats.Select(v => (gamedataStatType)v).SequenceEqual(x.BaselineInactive))
+            .SelectMany(x => x.Data.InactiveStats));
+
+        var arena = GetArena();
+        var pending = new List<(uint Flag, byte[] Bytes)>();
+        foreach (var entry in changed)
+        {
+            foreach (var (list, buffer) in new[] { (entry.Normal, entry.Data.ModifiersBuffer), (entry.Forced, entry.Data.ForcedModifiersBuffer) })
+            {
+                if (!list.Editable || buffer.Data is not ModifiersBuffer modifiers)
+                {
+                    continue;
+                }
+                var bytes = WriteModifiers(modifiers);
+                if (bytes.Length == 0 || bytes.AsSpan().SequenceEqual(list.Baseline) ||
+                    FindSlice(arena, bytes, list.Flag) >= 0 ||
+                    pending.Any(x => x.Flag == list.Flag && x.Bytes.AsSpan().SequenceEqual(bytes)))
+                {
+                    continue;
+                }
+
+                EnsureCanAppend(_map.SharedBufferSlices.Count + pending.Count);
+                pending.Add((list.Flag, bytes));
+            }
+        }
+    }
+
+    private static void ValidateTableCapacity<T>(CArray<T> table, IEnumerable<T> additions) where T : IRedType
+    {
+        var values = new HashSet<T>(table);
+        var count = table.Count;
+        foreach (var value in additions)
+        {
+            if (values.Add(value))
+            {
+                EnsureCanAppend(count);
+                count++;
+            }
+        }
+    }
+
+    private static void EnsureCanAppend(int count)
+    {
+        if (count > ushort.MaxValue)
+        {
+            throw new InvalidOperationException("The optimized stats shared table is full; its indices must fit in UInt16.");
+        }
+    }
+
+    private static CArray<CHandle<gameStatModifierData_Deprecated>> CopyStatModifiers(CArray<CHandle<gameStatModifierData_Deprecated>> modifiers) =>
+        (CArray<CHandle<gameStatModifierData_Deprecated>>)modifiers.DeepCopy();
 
     private static ModifiersBuffer ReadModifiers(byte[] bytes)
     {
