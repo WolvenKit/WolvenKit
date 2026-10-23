@@ -5,62 +5,62 @@ namespace WolvenKit.RED4.Types;
 
 public partial class worldCookedMeshNode
 {
-    protected void ReadEntry(Red4Reader br, in worldCookedMeshNode_Class1 entry)
+    protected void ReadEntry(Red4Reader br, in worldCookedMeshNodeInner entry)
     {
-        entry.Unknown1 = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
-        entry.Unknown2 = br.BaseReader.ReadUInt64();
+        entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
+        entry.MeshAppearance = br.BaseReader.ReadUInt64();
 
         entry.Unknown3 = br.ReadCFloat();
-        entry.Unknown4 = br.ReadCUInt32();
+        entry.LodLevelScales = br.ReadCUInt32();
 
-        entry.Unknown5 = (visWorldOccluderType)br.BaseReader.ReadByte();
-        entry.Unknown6 = br.ReadCUInt8();
-        entry.Unknown7 = (RenderSceneLayerMask)br.BaseReader.ReadByte();
+        entry.OccluderType = (visWorldOccluderType)br.BaseReader.ReadByte();
+        entry.OccluderAutohideDistanceScale = br.ReadCUInt8();
+        entry.RenderSceneLayerMask = (RenderSceneLayerMask)br.BaseReader.ReadByte();
 
-        entry.Unknown8 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-        entry.Unknown9 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-        entry.Unknown10 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-        entry.Unknown11 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+        entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+        entry.CastLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+        entry.CastRayTracedGlobalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+        entry.CastRayTracedLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
 
-        entry.Unknown12 = br.ReadCBool();
-        entry.Unknown13 = br.ReadCBool();
+        entry.WindImpulseEnabled = br.ReadCBool();
+        entry.RemoveFromRainMap = br.ReadCBool();
     }
 
-    protected void WriteEntry(Red4Writer bw, worldCookedMeshNode_Class1 entry)
+    protected void WriteEntry(Red4Writer bw, worldCookedMeshNodeInner entry)
     {
-        bw.BaseWriter.Write((ulong)entry.Unknown1.DepotPath);
-        bw.BaseWriter.Write((ulong)entry.Unknown2);
+        bw.BaseWriter.Write((ulong)entry.Mesh.DepotPath);
+        bw.BaseWriter.Write((ulong)entry.MeshAppearance);
 
         bw.Write(entry.Unknown3);
-        bw.Write(entry.Unknown4);
+        bw.Write(entry.LodLevelScales);
 
-        bw.BaseWriter.Write((byte)(visWorldOccluderType)entry.Unknown5);
-        bw.Write(entry.Unknown6);
-        bw.BaseWriter.Write((byte)(RenderSceneLayerMask)entry.Unknown7);
+        bw.BaseWriter.Write((byte)(visWorldOccluderType)entry.OccluderType);
+        bw.Write(entry.OccluderAutohideDistanceScale);
+        bw.BaseWriter.Write((byte)(RenderSceneLayerMask)entry.RenderSceneLayerMask);
 
-        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown8);
-        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown9);
-        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown10);
-        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown11);
+        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastShadows);
+        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastLocalShadows);
+        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastRayTracedGlobalShadows);
+        bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastRayTracedLocalShadows);
 
-        bw.Write(entry.Unknown12);
-        bw.Write(entry.Unknown13);
+        bw.Write(entry.WindImpulseEnabled);
+        bw.Write(entry.RemoveFromRainMap);
     }
 }
 
-public class worldCookedMeshNode_Class1 : RedBaseClass
+public class worldCookedMeshNodeInner : RedBaseClass
 {
-    [RED("unknown1")]
+    [RED("mesh")]
     [REDProperty(IsIgnored = true)]
-    public CResourceAsyncReference<CMesh> Unknown1
+    public CResourceAsyncReference<CMesh> Mesh
     {
         get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
         set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
     }
 
-    [RED("unknown2")]
+    [RED("meshAppearance")]
     [REDProperty(IsIgnored = true)]
-    public CName Unknown2
+    public CName MeshAppearance
     {
         get => GetPropertyValue<CName>();
         set => SetPropertyValue<CName>(value);
@@ -74,81 +74,81 @@ public class worldCookedMeshNode_Class1 : RedBaseClass
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown4")]
+    [RED("lodLevelScales")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 Unknown4
+    public CUInt32 LodLevelScales
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("unknown5")]
+    [RED("occluderType")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<visWorldOccluderType> Unknown5
+    public CEnum<visWorldOccluderType> OccluderType
     {
         get => GetPropertyValue<CEnum<visWorldOccluderType>>();
         set => SetPropertyValue<CEnum<visWorldOccluderType>>(value);
     }
 
-    [RED("unknown6")]
+    [RED("occluderAutohideDistanceScale")]
     [REDProperty(IsIgnored = true)]
-    public CUInt8 Unknown6
+    public CUInt8 OccluderAutohideDistanceScale
     {
         get => GetPropertyValue<CUInt8>();
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    [RED("unknown7")]
+    [RED("renderSceneLayerMask")]
     [REDProperty(IsIgnored = true)]
-    public CBitField<RenderSceneLayerMask> Unknown7
+    public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
     {
         get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
         set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
     }
 
-    [RED("unknown8")]
+    [RED("castShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown8
+    public CEnum<shadowsShadowCastingMode> CastShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown9")]
+    [RED("castLocalShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown9
+    public CEnum<shadowsShadowCastingMode> CastLocalShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown10")]
+    [RED("castRayTracedGlobalShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown10
+    public CEnum<shadowsShadowCastingMode> CastRayTracedGlobalShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown11")]
+    [RED("castRayTracedLocalShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown11
+    public CEnum<shadowsShadowCastingMode> CastRayTracedLocalShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown12")]
+    [RED("windImpulseEnabled")]
     [REDProperty(IsIgnored = true)]
-    public CBool Unknown12
+    public CBool WindImpulseEnabled
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);
     }
 
-    [RED("unknown13")]
+    [RED("removeFromRainMap")]
     [REDProperty(IsIgnored = true)]
-    public CBool Unknown13
+    public CBool RemoveFromRainMap
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);

@@ -24,15 +24,15 @@ public partial class worldCookedGenericProxyMeshNode
         var count = size / 41;
         for (var i = 0; i < count; i++)
         {
-            var entry = new worldCookedGenericProxyMeshNode_Class1();
+            var entry = new worldCookedGenericProxyMeshNodeInner();
 
-            var castedEntry = (worldCookedMeshNode_Class1)entry;
+            var castedEntry = (worldCookedMeshNodeInner)entry;
             ReadEntry(br, in castedEntry);
 
-            entry.Unknown14 = br.ReadCUInt32();
-            entry.Unknown15 = br.ReadCFloat();
+            entry.NbNodesUnderProxy = br.ReadCUInt32();
+            entry.NearAutoHideDistance = br.ReadCFloat();
 
-            result.Unknown1.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         Buffer.Data = result;
@@ -48,14 +48,14 @@ public partial class worldCookedGenericProxyMeshNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count * 41);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 41);
+        foreach (var entry in data.InnerNodes)
         {
-            var castedEntry = (worldCookedMeshNode_Class1)entry;
+            var castedEntry = (worldCookedMeshNodeInner)entry;
             WriteEntry(bw, castedEntry);
 
-            bw.Write(entry.Unknown14);
-            bw.Write(entry.Unknown15);
+            bw.Write(entry.NbNodesUnderProxy);
+            bw.Write(entry.NearAutoHideDistance);
         }
 
         bw.BaseWriter.Flush();
@@ -69,22 +69,22 @@ public class worldCookedGenericProxyMeshNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedGenericProxyMeshNode_Class1> Unknown1 { get; set; } = new();
+    public CArray<worldCookedGenericProxyMeshNodeInner> InnerNodes { get; set; } = new();
 }
 
-public class worldCookedGenericProxyMeshNode_Class1 : worldCookedMeshNode_Class1
+public class worldCookedGenericProxyMeshNodeInner : worldCookedMeshNodeInner
 {
-    [RED("unknown14")]
+    [RED("nbNodesUnderProxy")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 Unknown14
+    public CUInt32 NbNodesUnderProxy
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("unknown15")]
+    [RED("nearAutoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown15
+    public CFloat NearAutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);

@@ -24,12 +24,12 @@ public partial class worldCookedStaticMeshNode
         var count = size / 33;
         for (var i = 0; i < count; i++)
         {
-            var entry = new worldCookedGenericProxyMeshNode_Class1();
+            var entry = new worldCookedGenericProxyMeshNodeInner();
 
-            var cookedMeshNodeEntryData = (worldCookedMeshNode_Class1)entry;
+            var cookedMeshNodeEntryData = (worldCookedMeshNodeInner)entry;
             ReadEntry(br, in cookedMeshNodeEntryData);
 
-            result.Unknown1.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         Buffer.Data = result;
@@ -45,10 +45,10 @@ public partial class worldCookedStaticMeshNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count * 33);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 33);
+        foreach (var entry in data.InnerNodes)
         {
-            var cookedMeshNodeEntryData = (worldCookedMeshNode_Class1)entry;
+            var cookedMeshNodeEntryData = (worldCookedMeshNodeInner)entry;
             WriteEntry(bw, cookedMeshNodeEntryData);
         }
 
@@ -63,5 +63,5 @@ public class worldCookedStaticMeshNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedMeshNode_Class1> Unknown1 { get; set; } = new();
+    public CArray<worldCookedMeshNodeInner> InnerNodes { get; set; } = new();
 }
