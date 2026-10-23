@@ -1,0 +1,21 @@
+changes:
+    - type: "added"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3208
+      author: "AtfastrSlushyMaker"
+      description: "Support the patch 2.5 optimized save stats layout and add OptimizedStatsStore for editing shared stats data"
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3208
+      author: "AtfastrSlushyMaker"
+      description: "Preserve serialized default fields, field order, dynamic package edits and PersistencySystem2 trailing bytes when rewriting saves and packages"
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3208
+      author: "AtfastrSlushyMaker"
+      description: "Add the missing ArmsCWStyle equipment area and correct subsequent gamedataEquipmentArea values"
+    - type: "changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3208
+      author: "AtfastrSlushyMaker"
+      description: "Decode PersistencySystem2 entries on first access and expose optional package parsing diagnostics"
