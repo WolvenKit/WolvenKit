@@ -25,22 +25,22 @@ public partial class worldCookedStaticDecalNode
         var count1 = size1 / 36;
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldCookedStaticDecalNode_Class1();
+            var entry = new worldCookedStaticDecalNodeInner();
 
-            entry.Unknown1 = new CResourceAsyncReference<IMaterial>(br.BaseReader.ReadUInt64());
-            entry.Unknown2 = br.ReadCFloat();
-            entry.Unknown3 = br.ReadCFloat();
-            entry.Unknown4 = br.ReadCFloat();
-            entry.Unknown5 = br.ReadCFloat();
-            entry.Unknown6 = br.ReadCFloat();
-            entry.Unknown7 = br.ReadCUInt16();
+            entry.Material = new CResourceAsyncReference<IMaterial>(br.BaseReader.ReadUInt64());
+            entry.ForcedAutoHideDistance = br.ReadCFloat();
+            entry.AutoHideDistance = br.ReadCFloat();
+            entry.NormalThreshold = br.ReadCFloat();
+            entry.RoughnessScale = br.ReadCFloat();
+            entry.Alpha = br.ReadCFloat();
+            entry.OrderNo = br.ReadCUInt16();
             entry.Unknown8 = br.ReadCUInt16();
-            entry.Unknown9 = (ERenderObjectType)br.BaseReader.ReadByte();
-            entry.Unknown10 = (EDecalRenderMode)br.BaseReader.ReadByte();
-            entry.Unknown11 = (RenderDecalNormalsBlendingMode)br.BaseReader.ReadByte();
-            entry.Unknown12 = (CookedStaticDecalNodeEntryData_EMiscFlags)br.BaseReader.ReadByte();
+            entry.SurfaceType = (ERenderObjectType)br.BaseReader.ReadByte();
+            entry.DecalRenderMode = (EDecalRenderMode)br.BaseReader.ReadByte();
+            entry.NormalsBlendingMode = (RenderDecalNormalsBlendingMode)br.BaseReader.ReadByte();
+            entry.Flags = (CookedStaticDecalNodeEntryData_EMiscFlags)br.BaseReader.ReadByte();
 
-            result.Unknown1.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         var count2 = br.BaseReader.ReadVLQInt32(); // WHY????
@@ -53,7 +53,7 @@ public partial class worldCookedStaticDecalNode
             entry.Blue = br.ReadCFloat();
             entry.Alpha = br.ReadCFloat();
 
-            result.Unknown2.Add(entry);
+            result.DiffuseColorScale.Add(entry);
         }
 
         Buffer.Data = result;
@@ -69,25 +69,25 @@ public partial class worldCookedStaticDecalNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count * 36);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 36);
+        foreach (var entry in data.InnerNodes)
         {
-            bw.BaseWriter.Write((ulong)entry.Unknown1.DepotPath);
-            bw.Write(entry.Unknown2);
-            bw.Write(entry.Unknown3);
-            bw.Write(entry.Unknown4);
-            bw.Write(entry.Unknown5);
-            bw.Write(entry.Unknown6);
-            bw.Write(entry.Unknown7);
+            bw.BaseWriter.Write((ulong)entry.Material.DepotPath);
+            bw.Write(entry.ForcedAutoHideDistance);
+            bw.Write(entry.AutoHideDistance);
+            bw.Write(entry.NormalThreshold);
+            bw.Write(entry.RoughnessScale);
+            bw.Write(entry.Alpha);
+            bw.Write(entry.OrderNo);
             bw.Write(entry.Unknown8);
-            bw.BaseWriter.Write((byte)(ERenderObjectType)entry.Unknown9);
-            bw.BaseWriter.Write((byte)(EDecalRenderMode)entry.Unknown10);
-            bw.BaseWriter.Write((byte)(RenderDecalNormalsBlendingMode)entry.Unknown11);
-            bw.BaseWriter.Write((byte)(CookedStaticDecalNodeEntryData_EMiscFlags)entry.Unknown12);
+            bw.BaseWriter.Write((byte)(ERenderObjectType)entry.SurfaceType);
+            bw.BaseWriter.Write((byte)(EDecalRenderMode)entry.DecalRenderMode);
+            bw.BaseWriter.Write((byte)(RenderDecalNormalsBlendingMode)entry.NormalsBlendingMode);
+            bw.BaseWriter.Write((byte)(CookedStaticDecalNodeEntryData_EMiscFlags)entry.Flags);
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown2.Count);
-        foreach (var entry in data.Unknown2)
+        bw.BaseWriter.WriteVLQInt32(data.DiffuseColorScale.Count);
+        foreach (var entry in data.DiffuseColorScale)
         {
             bw.Write(entry.Red);
             bw.Write(entry.Green);
@@ -106,63 +106,63 @@ public class worldCookedStaticDecalNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedStaticDecalNode_Class1> Unknown1 { get; set; } = new();
-    public CArray<HDRColor> Unknown2 { get; set; } = new();
+    public CArray<worldCookedStaticDecalNodeInner> InnerNodes { get; set; } = new();
+    public CArray<HDRColor> DiffuseColorScale { get; set; } = new();
 }
 
-public class worldCookedStaticDecalNode_Class1 : RedBaseClass
+public class worldCookedStaticDecalNodeInner : RedBaseClass
 {
-    [RED("unknown1")]
+    [RED("material")]
     [REDProperty(IsIgnored = true)]
-    public CResourceAsyncReference<IMaterial> Unknown1
+    public CResourceAsyncReference<IMaterial> Material
     {
         get => GetPropertyValue<CResourceAsyncReference<IMaterial>>();
         set => SetPropertyValue<CResourceAsyncReference<IMaterial>>(value);
     }
 
-    [RED("unknown2")]
+    [RED("forcedAutoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown2
+    public CFloat ForcedAutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown3")]
+    [RED("autoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown3
+    public CFloat AutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown4")]
+    [RED("normalThreshold")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown4
+    public CFloat NormalThreshold
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown5")]
+    [RED("roughnessScale")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown5
+    public CFloat RoughnessScale
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown6")]
+    [RED("alpha")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown6
+    public CFloat Alpha
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown7")]
+    [RED("orderNo")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown7
+    public CUInt16 OrderNo
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
@@ -176,33 +176,33 @@ public class worldCookedStaticDecalNode_Class1 : RedBaseClass
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown9")]
+    [RED("surfaceType")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<ERenderObjectType> Unknown9
+    public CEnum<ERenderObjectType> SurfaceType
     {
         get => GetPropertyValue<CEnum<ERenderObjectType>>();
         set => SetPropertyValue<CEnum<ERenderObjectType>>(value);
     }
 
-    [RED("unknown10")]
+    [RED("decalRenderMode")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<EDecalRenderMode> Unknown10
+    public CEnum<EDecalRenderMode> DecalRenderMode
     {
         get => GetPropertyValue<CEnum<EDecalRenderMode>>();
         set => SetPropertyValue<CEnum<EDecalRenderMode>>(value);
     }
 
-    [RED("unknown11")]
+    [RED("normalsBlendingMode")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<RenderDecalNormalsBlendingMode> Unknown11
+    public CEnum<RenderDecalNormalsBlendingMode> NormalsBlendingMode
     {
         get => GetPropertyValue<CEnum<RenderDecalNormalsBlendingMode>>();
         set => SetPropertyValue<CEnum<RenderDecalNormalsBlendingMode>>(value);
     }
 
-    [RED("unknown12")]
+    [RED("flags")]
     [REDProperty(IsIgnored = true)]
-    public CBitField<CookedStaticDecalNodeEntryData_EMiscFlags> Unknown12
+    public CBitField<CookedStaticDecalNodeEntryData_EMiscFlags> Flags
     {
         get => GetPropertyValue<CBitField<CookedStaticDecalNodeEntryData_EMiscFlags>>();
         set => SetPropertyValue<CBitField<CookedStaticDecalNodeEntryData_EMiscFlags>>(value);
