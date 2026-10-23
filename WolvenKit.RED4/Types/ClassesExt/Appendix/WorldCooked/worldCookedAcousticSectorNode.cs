@@ -24,7 +24,7 @@ public partial class worldCookedAcousticSectorNode
         var count = size / 21;
         for (var i = 0; i < count; i++)
         {
-            var entry = new AcousticSectorNodeBox();
+            var entry = new worldCookedAcousticSectorNodeInner();
 
             entry.Data = new CResourceAsyncReference<worldAcousticDataResource>(br.BaseReader.ReadUInt64());
             entry.InSectorCoordsX = br.ReadCUInt32();
@@ -32,7 +32,7 @@ public partial class worldCookedAcousticSectorNode
             entry.InSectorCoordsZ = br.ReadCUInt32();
             entry.EdgeMask = br.ReadCUInt8();
 
-            result.Boxes.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         result.GeneratorId = br.ReadCUInt32();
@@ -50,8 +50,8 @@ public partial class worldCookedAcousticSectorNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Boxes.Count * 21);
-        foreach (var entry in data.Boxes)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 21);
+        foreach (var entry in data.InnerNodes)
         {
             bw.BaseWriter.Write((ulong)entry.Data.DepotPath);
             bw.Write(entry.InSectorCoordsX);
@@ -72,11 +72,11 @@ public class worldCookedAcousticSectorNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<AcousticSectorNodeBox> Boxes { get; set; } = new();
+    public CArray<worldCookedAcousticSectorNodeInner> InnerNodes { get; set; } = new();
     public CUInt32 GeneratorId { get; set; }
 }
 
-public class AcousticSectorNodeBox : RedBaseClass
+public class worldCookedAcousticSectorNodeInner : RedBaseClass
 {
     [RED("data")]
     [REDProperty(IsIgnored = true)]
