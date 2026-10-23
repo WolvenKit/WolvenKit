@@ -8,10 +8,88 @@ using Activator = System.Activator;
 
 namespace WolvenKit.RED4.Save;
 
+/// <summary>
+/// One persistent state object. Entries are decoded lazily: the raw payload is kept on load and only parsed when
+/// <see cref="Data"/> is first read (a save holds ~100k entries, and parsing all of them dominated load time).
+/// Entries that were never read are written back from their original bytes.
+/// </summary>
 public class PS2Entry
 {
+    private RedBaseClass? _data;
+    private byte[]? _raw;
+
     public ulong Id { get; set; }
-    public RedBaseClass Data { get; set; }
+
+    /// <summary>Hash of the entry's class name (0 for entries without data).</summary>
+    public ulong ClassHash { get; set; }
+
+    /// <summary>The decoded object, or <see cref="UnknownRedClass"/> if it could not be decoded. Null for empty entries.</summary>
+    public RedBaseClass Data
+    {
+        get
+        {
+            if (_data == null && _raw != null)
+            {
+                _data = Decode(ClassHash, _raw, out var trailing);
+                Trailing = trailing;
+                _raw = null;
+            }
+            return _data!;
+        }
+        set
+        {
+            _data = value;
+            _raw = null;
+        }
+    }
+
+    /// <summary>True once <see cref="Data"/> has been decoded or assigned.</summary>
+    public bool IsDecoded => _raw == null;
+
+    /// <summary>
+    /// Bytes stored after the last property of <see cref="Data"/> (the terminator and any padding),
+    /// kept so unmodified entries are written back unchanged.
+    /// </summary>
+    public byte[] Trailing { get; set; } = Array.Empty<byte>();
+
+    internal byte[]? RawPayload => _raw;
+
+    internal void SetRaw(ulong classHash, byte[] raw)
+    {
+        ClassHash = classHash;
+        _raw = raw;
+        _data = null;
+    }
+
+    /// <summary>True if this entry holds an object of exactly type <typeparamref name="T"/>, without decoding it.</summary>
+    public bool Is<T>() where T : RedBaseClass => Id != 0 && ClassHash == SaveHashHelper.GetHashFromType(typeof(T));
+
+    private static RedBaseClass Decode(ulong classHash, byte[] raw, out byte[] trailing)
+    {
+        trailing = Array.Empty<byte>();
+
+        var type = classHash != 0 ? SaveHashHelper.GetTypeFromHash(classHash) : null;
+        if (type != null)
+        {
+            try
+            {
+                var instance = RedTypeManager.Create(type);
+                if (raw.Length != 0)
+                {
+                    using var subReader = new PersistencySystem2Reader(new MemoryStream(raw));
+                    subReader.ReadClass(instance, (uint)raw.Length);
+                    trailing = raw[(int)subReader.LastPropertyEnd..];
+                }
+                return instance;
+            }
+            catch (Exception)
+            {
+                // could not resolve a property, fall back to Unknown cls
+            }
+        }
+
+        return new UnknownRedClass { Hash = classHash, Buffer = raw };
+    }
 }
 
 public class PersistencySystem2 : INodeData
@@ -19,6 +97,10 @@ public class PersistencySystem2 : INodeData
     public List<uint> Ids { get; set; } = new();
     public uint Unk1 { get; set; }
     public List<PS2Entry> Entries { get; set; } = new();
+
+    /// <summary>Entries holding exactly type <typeparamref name="T"/>; only these are decoded.</summary>
+    public IEnumerable<T> OfType<T>() where T : RedBaseClass =>
+        Entries.Where(e => e.Is<T>()).Select(e => e.Data).OfType<T>();
 }
 
 public class UnknownRedClass : RedBaseClass
@@ -47,10 +129,16 @@ public class PersistencySystem2Reader : Red4Reader
 
     public long Remaining => BaseStream.Length - BaseStream.Position;
 
+    /// <summary>
+    /// Stream position right after the last property value of the most recently finished ReadClass call.
+    /// </summary>
+    public long LastPropertyEnd { get; private set; }
+
     public override void ReadClass(RedBaseClass instance, uint size)
     {
         while (Remaining != 0)
         {
+            LastPropertyEnd = BaseStream.Position;
             var propNameHash = BaseReader.ReadUInt64();
             if (propNameHash == 0)
             {
@@ -73,6 +161,7 @@ public class PersistencySystem2Reader : Red4Reader
             var value = Read(redTypeInfos, (uint)Remaining);
             instance.SetProperty(propertyInfo.RedName, value);
             instance.MarkPropertySerialized(propertyInfo.RedName);
+            LastPropertyEnd = BaseStream.Position;
         }
     }
 
@@ -247,45 +336,7 @@ public class PersistencySystem2Parser : INodeParser
             {
                 var classHash = reader.ReadUInt64();
                 var size = reader.ReadUInt32();
-
-                Type? type = null;
-                if (classHash != 0)
-                {
-                    type = SaveHashHelper.GetTypeFromHash(classHash)!;
-                }
-
-                var startPos = reader.BaseStream.Position;
-                if (type != null)
-                {
-                    try
-                    {
-                        var instance1 = RedTypeManager.Create(type);
-                        if (size != 0)
-                        {
-                            using var subMemory = new MemoryStream(reader.ReadBytes((int)size));
-                            using var subReader = new PersistencySystem2Reader(subMemory);
-
-                            subReader.ReadClass(instance1, size);
-                        }
-                        entry.Data = instance1;
-
-                        result.Entries.Add(entry);
-                        continue;
-                    }
-                    catch (Exception)
-                    {
-                        // could not resolve a property, fall back to Unknown cls
-                    }
-                }
-
-                reader.BaseStream.Position = startPos;
-
-                var instance2 = new UnknownRedClass { Hash = classHash };
-                if (size != 0)
-                {
-                    instance2.Buffer = reader.ReadBytes((int)size);
-                }
-                entry.Data = instance2;
+                entry.SetRaw(classHash, reader.ReadBytes((int)size));
             }
 
             result.Entries.Add(entry);
@@ -312,7 +363,14 @@ public class PersistencySystem2Parser : INodeParser
             writer.Write(entry.Id);
             if (entry.Id != 0)
             {
-                if (entry.Data is UnknownRedClass unk)
+                if (entry.RawPayload is { } raw)
+                {
+                    // never decoded, so unchanged
+                    writer.Write(entry.ClassHash);
+                    writer.Write(raw.Length);
+                    writer.Write(raw);
+                }
+                else if (entry.Data is UnknownRedClass unk)
                 {
                     writer.Write(unk.Hash);
                     writer.Write(unk.Buffer.Length);
@@ -327,9 +385,11 @@ public class PersistencySystem2Parser : INodeParser
 
                     subWriter.WriteClass(entry.Data);
 
+                    // WriteClass always appends a terminator; the original one (if any) is part of Trailing
                     var bytes = subMemory.ToArray()[..^8];
-                    writer.Write(bytes.Length);
+                    writer.Write(bytes.Length + entry.Trailing.Length);
                     writer.Write(bytes);
+                    writer.Write(entry.Trailing);
                 }
             }
         }
