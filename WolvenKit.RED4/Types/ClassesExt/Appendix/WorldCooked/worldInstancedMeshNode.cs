@@ -36,7 +36,7 @@ public partial class worldInstancedMeshNode
 
             entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
             entry.MeshAppearance = br.BaseReader.ReadUInt64();
-            entry.Unknown4 = br.ReadCFloat();
+            entry.ForcedAutoHideDistance = br.ReadCFloat();
             entry.LodLevelScales = br.ReadCUInt32();
 
             entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
@@ -93,7 +93,7 @@ public partial class worldInstancedMeshNode
 
             bw.BaseWriter.Write((ulong)entry.Mesh.DepotPath);
             bw.BaseWriter.Write((ulong)entry.MeshAppearance);
-            bw.Write(entry.Unknown4);
+            bw.Write(entry.ForcedAutoHideDistance);
             bw.Write(entry.LodLevelScales);
 
             bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastShadows);
@@ -155,9 +155,9 @@ public class worldInstancedMeshNodeInner : RedBaseClass
         set => SetPropertyValue<CName>(value);
     }
 
-    [RED("unknown4")]
+    [RED("forcedAutoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown4
+    public CFloat ForcedAutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);

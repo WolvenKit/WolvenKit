@@ -10,7 +10,7 @@ public partial class worldCookedMeshNode
         entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
         entry.MeshAppearance = br.BaseReader.ReadUInt64();
 
-        entry.Unknown3 = br.ReadCFloat();
+        entry.ForcedAutoHideDistance = br.ReadCFloat();
         entry.LodLevelScales = br.ReadCUInt32();
 
         entry.OccluderType = (visWorldOccluderType)br.BaseReader.ReadByte();
@@ -31,7 +31,7 @@ public partial class worldCookedMeshNode
         bw.BaseWriter.Write((ulong)entry.Mesh.DepotPath);
         bw.BaseWriter.Write((ulong)entry.MeshAppearance);
 
-        bw.Write(entry.Unknown3);
+        bw.Write(entry.ForcedAutoHideDistance);
         bw.Write(entry.LodLevelScales);
 
         bw.BaseWriter.Write((byte)(visWorldOccluderType)entry.OccluderType);
@@ -66,9 +66,9 @@ public class worldCookedMeshNodeInner : RedBaseClass
         set => SetPropertyValue<CName>(value);
     }
 
-    [RED("unknown3")]
+    [RED("forcedAutoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat Unknown3
+    public CFloat ForcedAutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
