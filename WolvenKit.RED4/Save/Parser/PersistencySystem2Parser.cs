@@ -40,6 +40,8 @@ public class PS2Entry
         {
             _data = value;
             _raw = null;
+            ClassHash = value is UnknownRedClass unknown ? unknown.Hash :
+                value != null ? SaveHashHelper.GetHashFromType(value.GetType()) : 0;
         }
     }
 

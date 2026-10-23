@@ -300,12 +300,13 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
         var pristine = s_pristineInstances.GetOrAdd(GetType(), t => (RedBaseClass)System.Activator.CreateInstance(t)!);
         foreach (var info in writable)
         {
-            if (!remaining.ContainsKey(info.RedName!) || info.IsDynamic)
+            if (!remaining.ContainsKey(info.RedName!))
             {
                 continue;
             }
 
-            if (!Equals(GetProperty(info.RedName!), pristine.GetProperty(info.RedName!)))
+            // Dynamic properties added or renamed after loading have no constructor default.
+            if (info.IsDynamic || !Equals(GetProperty(info.RedName!), pristine.GetProperty(info.RedName!)))
             {
                 yield return (info, true);
             }
