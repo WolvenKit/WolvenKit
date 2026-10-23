@@ -25,19 +25,19 @@ public partial class worldCookedBendedMeshNode
         var count1 = size / 30;
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldCookedBendedMeshNode_Class1();
+            var entry = new worldCookedBendedMeshNodeInner();
 
-            entry.Unknown1 = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
-            entry.Unknown2 = br.BaseReader.ReadUInt64();
-            entry.Unknown3 = br.ReadCUInt32();
-            entry.Unknown4 = br.ReadCUInt32();
-            entry.Unknown5 = br.ReadCUInt16();
-            entry.Unknown6 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-            entry.Unknown7 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-            entry.Unknown8 = br.ReadCBool();
-            entry.Unknown9 = br.ReadCBool();
+            entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
+            entry.MeshAppearance = br.BaseReader.ReadUInt64();
+            entry.DeformationDataStartIndex = br.ReadCUInt32();
+            entry.DeformationDataCount = br.ReadCUInt32();
+            entry.Index = br.ReadCUInt16();
+            entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+            entry.CastLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+            entry.RemoveFromRainMap = br.ReadCBool();
+            entry.IsBendedRoad = br.ReadCBool();
 
-            result.Unknown1.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         var count2 = br.BaseReader.ReadVLQInt32();
@@ -65,7 +65,7 @@ public partial class worldCookedBendedMeshNode
             entry.W.Z = br.ReadCFloat();
             entry.W.W = br.ReadCFloat();
 
-            result.Unknown2.Add(entry);
+            result.DeformationData.Add(entry);
         }
 
         var count3 = br.BaseReader.ReadVLQInt32();
@@ -83,7 +83,7 @@ public partial class worldCookedBendedMeshNode
             entry.Max.Z = br.ReadCFloat();
             entry.Max.W = br.ReadCFloat();
 
-            result.Unknown3.Add(entry);
+            result.DeformedBoxes.Add(entry);
         }
 
         Buffer.Data = result;
@@ -99,22 +99,22 @@ public partial class worldCookedBendedMeshNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count * 30);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 30);
+        foreach (var entry in data.InnerNodes)
         {
-            bw.BaseWriter.Write((ulong)entry.Unknown1.DepotPath);
-            bw.BaseWriter.Write((ulong)entry.Unknown2);
-            bw.Write(entry.Unknown3);
-            bw.Write(entry.Unknown4);
-            bw.Write(entry.Unknown5);
-            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown6);
-            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown7);
-            bw.Write(entry.Unknown8);
-            bw.Write(entry.Unknown9);
+            bw.BaseWriter.Write((ulong)entry.Mesh.DepotPath);
+            bw.BaseWriter.Write((ulong)entry.MeshAppearance);
+            bw.Write(entry.DeformationDataStartIndex);
+            bw.Write(entry.DeformationDataCount);
+            bw.Write(entry.Index);
+            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastShadows);
+            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastLocalShadows);
+            bw.Write(entry.RemoveFromRainMap);
+            bw.Write(entry.IsBendedRoad);
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown2.Count);
-        foreach (var entry in data.Unknown2)
+        bw.BaseWriter.WriteVLQInt32(data.DeformationData.Count);
+        foreach (var entry in data.DeformationData)
         {
             bw.Write(entry.X.X);
             bw.Write(entry.X.Y);
@@ -137,8 +137,8 @@ public partial class worldCookedBendedMeshNode
             bw.Write(entry.W.W);
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown3.Count);
-        foreach (var entry in data.Unknown3)
+        bw.BaseWriter.WriteVLQInt32(data.DeformedBoxes.Count);
+        foreach (var entry in data.DeformedBoxes)
         {
             bw.Write(entry.Min.X);
             bw.Write(entry.Min.Y);
@@ -162,80 +162,80 @@ public class worldCookedBendedMeshNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldCookedBendedMeshNode_Class1> Unknown1 { get; set; } = new();
-    public CArray<CMatrix> Unknown2 { get; set; } = new();
-    public CArray<Box> Unknown3 { get; set; } = new();
+    public CArray<worldCookedBendedMeshNodeInner> InnerNodes { get; set; } = new();
+    public CArray<CMatrix> DeformationData { get; set; } = new();
+    public CArray<Box> DeformedBoxes { get; set; } = new();
 }
 
-public class worldCookedBendedMeshNode_Class1 : RedBaseClass
+public class worldCookedBendedMeshNodeInner : RedBaseClass
 {
-    [RED("unknown1")]
+    [RED("mesh")]
     [REDProperty(IsIgnored = true)]
-    public CResourceAsyncReference<CMesh> Unknown1
+    public CResourceAsyncReference<CMesh> Mesh
     {
         get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
         set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
     }
 
-    [RED("unknown2")]
+    [RED("meshAppearance")]
     [REDProperty(IsIgnored = true)]
-    public CName Unknown2
+    public CName MeshAppearance
     {
         get => GetPropertyValue<CName>();
         set => SetPropertyValue<CName>(value);
     }
 
-    [RED("unknown3")]
+    [RED("deformationDataStartIndex")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 Unknown3
+    public CUInt32 DeformationDataStartIndex
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("unknown4")]
+    [RED("deformationDataCount")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 Unknown4
+    public CUInt32 DeformationDataCount
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("unknown5")]
+    [RED("index")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown5
+    public CUInt16 Index
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown6")]
+    [RED("castShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown6
+    public CEnum<shadowsShadowCastingMode> CastShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown7")]
+    [RED("castLocalShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown7
+    public CEnum<shadowsShadowCastingMode> CastLocalShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown8")]
+    [RED("removeFromRainMap")]
     [REDProperty(IsIgnored = true)]
-    public CBool Unknown8
+    public CBool RemoveFromRainMap
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);
     }
 
-    [RED("unknown9")]
+    [RED("isBendedRoad")]
     [REDProperty(IsIgnored = true)]
-    public CBool Unknown9   
+    public CBool IsBendedRoad
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);

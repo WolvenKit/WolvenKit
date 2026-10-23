@@ -25,21 +25,21 @@ public partial class worldCookedCableMeshNode
         var count1 = size / 46;
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldCookedCableMeshNode_Class1();
+            var entry = new WorldCookedCableMeshNodeInner();
 
-            entry.Unknown1 = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
-            entry.Unknown2 = br.BaseReader.ReadUInt64();
-            entry.Unknown3 = br.ReadCUInt32();
-            entry.Unknown4 = br.ReadCUInt32();
-            entry.Unknown5 = br.ReadCUInt16();
-            entry.Unknown6 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-            entry.Unknown7 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-            entry.Unknown8 = br.ReadCBool();
-            entry.Unknown9 = br.ReadCBool();
-            entry.Unknown10[0] = br.BaseReader.ReadUInt64();
-            entry.Unknown10[1] = br.BaseReader.ReadUInt64();
+            entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
+            entry.MeshAppearance = br.BaseReader.ReadUInt64();
+            entry.DeformationDataStartIndex = br.ReadCUInt32();
+            entry.DeformationDataCount = br.ReadCUInt32();
+            entry.Index = br.ReadCUInt16();
+            entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+            entry.CastLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+            entry.RemoveFromRainMap = br.ReadCBool();
+            entry.IsBendedRoad = br.ReadCBool();
+            entry.DestructionHashes[0] = br.BaseReader.ReadUInt64();
+            entry.DestructionHashes[1] = br.BaseReader.ReadUInt64();
 
-            result.Unknown1.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         var count2 = br.BaseReader.ReadVLQInt32();
@@ -67,7 +67,7 @@ public partial class worldCookedCableMeshNode
             entry.W.Z = br.ReadCFloat();
             entry.W.W = br.ReadCFloat();
 
-            result.Unknown2.Add(entry);
+            result.DeformationData.Add(entry);
         }
 
         var count3 = br.BaseReader.ReadVLQInt32();
@@ -85,7 +85,7 @@ public partial class worldCookedCableMeshNode
             entry.Max.Z = br.ReadCFloat();
             entry.Max.W = br.ReadCFloat();
 
-            result.Unknown3.Add(entry);
+            result.DeformedBoxes.Add(entry);
         }
 
         Buffer.Data = result;
@@ -101,26 +101,26 @@ public partial class worldCookedCableMeshNode
         using var ms = new MemoryStream();
         using var bw = new Red4Writer(ms);
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count * 46);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count * 46);
+        foreach (var entry in data.InnerNodes)
         {
-            var castedEntry = (worldCookedCableMeshNode_Class1)entry;
+            var castedEntry = (WorldCookedCableMeshNodeInner)entry;
 
-            bw.BaseWriter.Write((ulong)castedEntry.Unknown1.DepotPath);
-            bw.BaseWriter.Write((ulong)castedEntry.Unknown2);
-            bw.Write(castedEntry.Unknown3);
-            bw.Write(castedEntry.Unknown4);
-            bw.Write(castedEntry.Unknown5);
-            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)castedEntry.Unknown6);
-            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)castedEntry.Unknown7);
-            bw.Write(castedEntry.Unknown8);
-            bw.Write(castedEntry.Unknown9);
-            bw.BaseWriter.Write((ulong)castedEntry.Unknown10[0]);
-            bw.BaseWriter.Write((ulong)castedEntry.Unknown10[1]);
+            bw.BaseWriter.Write((ulong)castedEntry.Mesh.DepotPath);
+            bw.BaseWriter.Write((ulong)castedEntry.MeshAppearance);
+            bw.Write(castedEntry.DeformationDataStartIndex);
+            bw.Write(castedEntry.DeformationDataCount);
+            bw.Write(castedEntry.Index);
+            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)castedEntry.CastShadows);
+            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)castedEntry.CastLocalShadows);
+            bw.Write(castedEntry.RemoveFromRainMap);
+            bw.Write(castedEntry.IsBendedRoad);
+            bw.BaseWriter.Write((ulong)castedEntry.DestructionHashes[0]);
+            bw.BaseWriter.Write((ulong)castedEntry.DestructionHashes[1]);
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown2.Count);
-        foreach (var entry in data.Unknown2)
+        bw.BaseWriter.WriteVLQInt32(data.DeformationData.Count);
+        foreach (var entry in data.DeformationData)
         {
             bw.Write(entry.X.X);
             bw.Write(entry.X.Y);
@@ -143,8 +143,8 @@ public partial class worldCookedCableMeshNode
             bw.Write(entry.W.W);
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown3.Count);
-        foreach (var entry in data.Unknown3)
+        bw.BaseWriter.WriteVLQInt32(data.DeformedBoxes.Count);
+        foreach (var entry in data.DeformedBoxes)
         {
             bw.Write(entry.Min.X);
             bw.Write(entry.Min.Y);
@@ -164,18 +164,18 @@ public partial class worldCookedCableMeshNode
     }
 }
 
-public class worldCookedCableMeshNode_Class1 : worldCookedBendedMeshNode_Class1
+public class WorldCookedCableMeshNodeInner : worldCookedBendedMeshNodeInner
 {
-    [RED("unknown10", 2)]
+    [RED("destructionHashes", 2)]
     [REDProperty(IsIgnored = true)]
-    public CArrayFixedSize<NodeRef> Unknown10
+    public CArrayFixedSize<NodeRef> DestructionHashes
     {
         get => GetPropertyValue<CArrayFixedSize<NodeRef>>();
         set => SetPropertyValue<CArrayFixedSize<NodeRef>>(value);
     }
 
-    public worldCookedCableMeshNode_Class1()
+    public WorldCookedCableMeshNodeInner()
     {
-        Unknown10 = new(2);
+        DestructionHashes = new(2);
     }
 }
