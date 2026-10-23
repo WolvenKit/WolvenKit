@@ -65,6 +65,7 @@ public partial class RedPackageReader : Red4Reader
                         }
 
                         SetProperty(cls, prop.RedName, args.Value);
+                        cls.MarkPropertySerialized(prop.RedName);
                         continue;
                     }
                 }
@@ -74,6 +75,7 @@ public partial class RedPackageReader : Red4Reader
                 if (TryReadValue(varName, propRedType, compiledPropertyData, out value))
                 {
                     SetProperty(cls, prop.RedName, value);
+                    cls.MarkPropertySerialized(prop.RedName);
                     continue;
                 }
 
@@ -110,6 +112,7 @@ public partial class RedPackageReader : Red4Reader
             }
 
             SetProperty(cls, varName, value);
+            cls.MarkPropertySerialized(varName);
         }
     }
 

@@ -45,12 +45,12 @@ public partial class RedPackageWriter : Red4Writer
         var typeInfo = RedReflection.GetTypeInfo(cls);
 
         var nonDefaultProperties = new List<ExtendedPropertyInfo>();
-        foreach (var propertyInfo in cls.GetWritableProperties())
+        foreach (var (propertyInfo, force) in cls.GetPropertiesInSerializedOrder())
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 
             var value = cls.GetProperty(propertyInfo.RedName);
-            if (!propertyInfo.IsDynamic)
+            if (!propertyInfo.IsDynamic && !force)
             {
                 if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && propertyInfo.IsDefault(value))
                 {

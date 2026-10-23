@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types.Exceptions;
@@ -251,6 +252,64 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
         }
 
         _dynamicProperties.Remove(redName);
+    }
+
+    /// <summary>
+    /// Names of the properties this instance had in the data it was read from, in their original order.
+    /// Null for instances created in code. Save writers use it to reproduce the original field set,
+    /// since the game also serializes properties that hold default values.
+    /// </summary>
+    private List<string>? _serializedPropertyNames;
+
+    internal void MarkPropertySerialized(string redName)
+    {
+        _serializedPropertyNames ??= new List<string>();
+        _serializedPropertyNames.Add(redName);
+    }
+
+    private static readonly ConcurrentDictionary<Type, RedBaseClass> s_pristineInstances = new();
+
+    /// <summary>
+    /// Returns the properties a writer should consider, with <c>Force</c> = true for ones that must be
+    /// written even if they hold a default value.
+    /// For instances read from data, that is the original properties in their original order, followed by
+    /// any other property whose value has been changed since construction. Other instances return all
+    /// writable properties with <c>Force</c> = false, leaving the default check to the writer.
+    /// </summary>
+    public IEnumerable<(ExtendedPropertyInfo Info, bool Force)> GetPropertiesInSerializedOrder()
+    {
+        var writable = GetWritableProperties().ToList();
+        if (_serializedPropertyNames == null)
+        {
+            foreach (var info in writable)
+            {
+                yield return (info, false);
+            }
+            yield break;
+        }
+
+        var remaining = writable.ToDictionary(x => x.RedName!);
+        foreach (var name in _serializedPropertyNames)
+        {
+            if (remaining.Remove(name, out var info))
+            {
+                yield return (info, true);
+            }
+        }
+
+        var pristine = s_pristineInstances.GetOrAdd(GetType(), t => (RedBaseClass)System.Activator.CreateInstance(t)!);
+        foreach (var info in writable)
+        {
+            if (!remaining.ContainsKey(info.RedName!) || info.IsDynamic)
+            {
+                continue;
+            }
+
+            if (!Equals(GetProperty(info.RedName!), pristine.GetProperty(info.RedName!)))
+            {
+                yield return (info, true);
+            }
+        }
     }
 
     public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()

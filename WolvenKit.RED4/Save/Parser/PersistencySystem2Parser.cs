@@ -72,6 +72,7 @@ public class PersistencySystem2Reader : Red4Reader
 
             var value = Read(redTypeInfos, (uint)Remaining);
             instance.SetProperty(propertyInfo.RedName, value);
+            instance.MarkPropertySerialized(propertyInfo.RedName);
         }
     }
 
@@ -152,12 +153,12 @@ public class PersistencySystem2Writer : Red4Writer
     public override void WriteClass(RedBaseClass instance)
     {
         var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
-        foreach (var propertyInfo in typeInfo.GetWritableProperties())
+        foreach (var (propertyInfo, force) in instance.GetPropertiesInSerializedOrder())
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 
             var value = instance.GetProperty(propertyInfo.RedName);
-            if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && propertyInfo.IsDefault(value))
+            if (!force && !typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && propertyInfo.IsDefault(value))
             {
                 continue;
             }
