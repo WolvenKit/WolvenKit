@@ -1,3 +1,4 @@
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Save.IO;
@@ -31,12 +32,17 @@ public class PackageParser : INodeParser, IErrorHandler
         node.Value = new Package { Content = dummyBuffer.Data! };
     }
 
+    /// <summary>
+    /// Optional logger for package parsing diagnostics (e.g. RTTI types missing for a new game patch).
+    /// </summary>
+    public static ILoggerService? Logger { get; set; }
+
     protected RedPackageReader GetSubReader(BinaryReader reader, NodeEntry node)
     {
         var dataSize = reader.ReadInt32();
         var buffer = reader.ReadBytes(dataSize);
 
-        return new RedPackageReader(new MemoryStream(buffer));
+        return new RedPackageReader(new MemoryStream(buffer)) { LoggerService = Logger };
     }
 
     public virtual void Write(NodeWriter writer, NodeEntry node) => Write(writer, node, RedPackageType.InkLibResource);
