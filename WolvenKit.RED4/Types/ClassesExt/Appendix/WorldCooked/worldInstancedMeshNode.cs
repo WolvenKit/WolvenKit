@@ -22,45 +22,45 @@ public partial class worldInstancedMeshNode
         var count1 = br.BaseReader.ReadVLQInt32(); // relatedNodes.Count
         for (var i = 0; i < count1; i++)
         {
-            var entry = new worldInstancedMeshNode_Class1();
+            var entry = new worldInstancedMeshNodeInner();
 
-            entry.Unknown1.Min.X = br.ReadCFloat();
-            entry.Unknown1.Min.Y = br.ReadCFloat();
-            entry.Unknown1.Min.Z = br.ReadCFloat();
-            entry.Unknown1.Min.W = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Min.X = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Min.Y = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Min.Z = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Min.W = br.ReadCFloat();
 
-            entry.Unknown1.Max.X = br.ReadCFloat();
-            entry.Unknown1.Max.Y = br.ReadCFloat();
-            entry.Unknown1.Max.Z = br.ReadCFloat();
-            entry.Unknown1.Max.W = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Max.X = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Max.Y = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Max.Z = br.ReadCFloat();
+            entry.GroupWorldBoundingBox.Max.W = br.ReadCFloat();
 
-            entry.Unknown2 = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
-            entry.Unknown3 = br.BaseReader.ReadUInt64();
+            entry.Mesh = new CResourceAsyncReference<CMesh>(br.BaseReader.ReadUInt64());
+            entry.MeshAppearance = br.BaseReader.ReadUInt64();
             entry.Unknown4 = br.ReadCFloat();
-            entry.Unknown5 = br.ReadCUInt32();
+            entry.LodLevelScales = br.ReadCUInt32();
 
-            entry.Unknown6 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
-            entry.Unknown7 = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+            entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
+            entry.CastLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
 
-            entry.Unknown8 = (RenderSceneLayerMask)br.BaseReader.ReadByte();
-            entry.Unknown9 = (visWorldOccluderType)br.BaseReader.ReadByte();
-            entry.Unknown10 = br.ReadCUInt8();
-            entry.Unknown11 = br.ReadCBool();
+            entry.RenderSceneLayerMask = (RenderSceneLayerMask)br.BaseReader.ReadByte();
+            entry.OccluderType = (visWorldOccluderType)br.BaseReader.ReadByte();
+            entry.OccluderAutohideDistanceScale = br.ReadCUInt8();
+            entry.RemoveFromRainMap = br.ReadCBool();
 
             br.BaseReader.ReadBytes(2); // unused
 
-            result.Unknown1.Add(entry);
+            result.InnerNodes.Add(entry);
         }
 
         var count2 = br.BaseReader.ReadVLQInt32(); // relatedNodes.Count
         for (var i = 0; i < count2; i++)
         {
-            var entry = new worldInstancedMeshNode_Class2();
+            var entry = new TransformRange();
 
-            entry.Unknown1 = br.ReadCUInt16();
-            entry.Unknown2 = br.ReadCUInt16();
+            entry.TransformIndex = br.ReadCUInt16();
+            entry.TransformCount = br.ReadCUInt16();
 
-            result.Unknown2.Add(entry);
+            result.TransformRanges.Add(entry);
         }
 
         Buffer.Data = result;
@@ -78,40 +78,40 @@ public partial class worldInstancedMeshNode
 
         bw.BaseWriter.Write((byte)0); // Unknown byte
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown1.Count);
-        foreach (var entry in data.Unknown1)
+        bw.BaseWriter.WriteVLQInt32(data.InnerNodes.Count);
+        foreach (var entry in data.InnerNodes)
         {
-            bw.Write(entry.Unknown1.Min.X);
-            bw.Write(entry.Unknown1.Min.Y);
-            bw.Write(entry.Unknown1.Min.Z);
-            bw.Write(entry.Unknown1.Min.W);
+            bw.Write(entry.GroupWorldBoundingBox.Min.X);
+            bw.Write(entry.GroupWorldBoundingBox.Min.Y);
+            bw.Write(entry.GroupWorldBoundingBox.Min.Z);
+            bw.Write(entry.GroupWorldBoundingBox.Min.W);
 
-            bw.Write(entry.Unknown1.Max.X);
-            bw.Write(entry.Unknown1.Max.Y);
-            bw.Write(entry.Unknown1.Max.Z);
-            bw.Write(entry.Unknown1.Max.W);
+            bw.Write(entry.GroupWorldBoundingBox.Max.X);
+            bw.Write(entry.GroupWorldBoundingBox.Max.Y);
+            bw.Write(entry.GroupWorldBoundingBox.Max.Z);
+            bw.Write(entry.GroupWorldBoundingBox.Max.W);
 
-            bw.BaseWriter.Write((ulong)entry.Unknown2.DepotPath);
-            bw.BaseWriter.Write((ulong)entry.Unknown3);
+            bw.BaseWriter.Write((ulong)entry.Mesh.DepotPath);
+            bw.BaseWriter.Write((ulong)entry.MeshAppearance);
             bw.Write(entry.Unknown4);
-            bw.Write(entry.Unknown5);
+            bw.Write(entry.LodLevelScales);
 
-            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown6);
-            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.Unknown7);
+            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastShadows);
+            bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastLocalShadows);
 
-            bw.BaseWriter.Write((byte)(RenderSceneLayerMask)entry.Unknown8);
-            bw.BaseWriter.Write((byte)(visWorldOccluderType)entry.Unknown9);
-            bw.Write(entry.Unknown10);
-            bw.Write(entry.Unknown11);
+            bw.BaseWriter.Write((byte)(RenderSceneLayerMask)entry.RenderSceneLayerMask);
+            bw.BaseWriter.Write((byte)(visWorldOccluderType)entry.OccluderType);
+            bw.Write(entry.OccluderAutohideDistanceScale);
+            bw.Write(entry.RemoveFromRainMap);
 
             bw.BaseWriter.Write(new byte[2]); // unused
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.Unknown2.Count);
-        foreach (var entry in data.Unknown2)
+        bw.BaseWriter.WriteVLQInt32(data.TransformRanges.Count);
+        foreach (var entry in data.TransformRanges)
         {
-            bw.Write(entry.Unknown1);
-            bw.Write(entry.Unknown2);
+            bw.Write(entry.TransformIndex);
+            bw.Write(entry.TransformCount);
         }
 
         bw.BaseWriter.Flush();
@@ -125,31 +125,31 @@ public class worldInstancedMeshNode_Buffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldInstancedMeshNode_Class1> Unknown1 { get; set; } = new();
-    public CArray<worldInstancedMeshNode_Class2> Unknown2 { get; set; } = new();
+    public CArray<worldInstancedMeshNodeInner> InnerNodes { get; set; } = new();
+    public CArray<TransformRange> TransformRanges { get; set; } = new();
 }
 
-public class worldInstancedMeshNode_Class1 : RedBaseClass
+public class worldInstancedMeshNodeInner : RedBaseClass
 {
-    [RED("unknown1")]
+    [RED("groupWorldBoundingBox")]
     [REDProperty(IsIgnored = true)]
-    public Box Unknown1
+    public Box GroupWorldBoundingBox
     {
         get => GetPropertyValue<Box>();
         set => SetPropertyValue<Box>(value);
     }
 
-    [RED("unknown2")]
+    [RED("mesh")]
     [REDProperty(IsIgnored = true)]
-    public CResourceAsyncReference<CMesh> Unknown2
+    public CResourceAsyncReference<CMesh> Mesh
     {
         get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
         set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
     }
 
-    [RED("unknown3")]
+    [RED("meshAppearance")]
     [REDProperty(IsIgnored = true)]
-    public CName Unknown3
+    public CName MeshAppearance
     {
         get => GetPropertyValue<CName>();
         set => SetPropertyValue<CName>(value);
@@ -163,72 +163,72 @@ public class worldInstancedMeshNode_Class1 : RedBaseClass
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("unknown5")]
+    [RED("lodLevelScales")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 Unknown5
+    public CUInt32 LodLevelScales
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("unknown6")]
+    [RED("castShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown6
+    public CEnum<shadowsShadowCastingMode> CastShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown7")]
+    [RED("castLocalShadows")]
     [REDProperty(IsIgnored = true)]
-    public CEnum<shadowsShadowCastingMode> Unknown7
+    public CEnum<shadowsShadowCastingMode> CastLocalShadows
     {
         get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
         set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
     }
 
-    [RED("unknown8")]
-    public CBitField<RenderSceneLayerMask> Unknown8
+    [RED("renderSceneLayerMask")]
+    public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
     {
         get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
         set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
     }
 
     [Ordinal(8)]
-    [RED("unknown9")]
-    public CEnum<visWorldOccluderType> Unknown9
+    [RED("occluderType")]
+    public CEnum<visWorldOccluderType> OccluderType
     {
         get => GetPropertyValue<CEnum<visWorldOccluderType>>();
         set => SetPropertyValue<CEnum<visWorldOccluderType>>(value);
     }
 
-    [RED("unknown10")]
+    [RED("occluderAutohideDistanceScale")]
     [REDProperty(IsIgnored = true)]
-    public CUInt8 Unknown10
+    public CUInt8 OccluderAutohideDistanceScale
     {
         get => GetPropertyValue<CUInt8>();
         set => SetPropertyValue<CUInt8>(value);
     }
 
-    [RED("unknown11")]
+    [RED("removeFromRainMap")]
     [REDProperty(IsIgnored = true)]
-    public CBool Unknown11
+    public CBool RemoveFromRainMap
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);
     }
 
-    public worldInstancedMeshNode_Class1()
+    public worldInstancedMeshNodeInner()
     {
-        Unknown1 = new Box();
+        GroupWorldBoundingBox = new Box();
     }
 }
 
-public class worldInstancedMeshNode_Class2 : RedBaseClass
+public class TransformRange : RedBaseClass
 {
     [RED("transformIndex")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown1
+    public CUInt16 TransformIndex
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
@@ -236,7 +236,7 @@ public class worldInstancedMeshNode_Class2 : RedBaseClass
 
     [RED("transformCount")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown2
+    public CUInt16 TransformCount
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
