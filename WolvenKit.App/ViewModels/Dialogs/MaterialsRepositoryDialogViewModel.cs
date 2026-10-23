@@ -36,6 +36,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
     private readonly IGameControllerFactory _gameControllerFactory;
     private readonly IProgressService<double> _progress;
     private readonly IModTools _modTools;
+    private readonly IArchiveManagerLoader _archiveManagerLoader;
 
     public MaterialsRepositoryViewModel(
         ISettingsManager settingsManager,
@@ -43,7 +44,8 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         IAppArchiveManager archiveManager,
         IGameControllerFactory gameControllerFactory,
         IProgressService<double> progress,
-        IModTools modTools)
+        IModTools modTools,
+        IArchiveManagerLoader archiveManagerLoader)
     {
         _settingsManager = settingsManager;
         _loggerService = loggerService;
@@ -51,6 +53,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         _gameControllerFactory = gameControllerFactory;
         _progress = progress;
         _modTools = modTools;
+        _archiveManagerLoader = archiveManagerLoader;
 
         ArgumentNullException.ThrowIfNull(_settingsManager.MaterialRepositoryPath);
 
@@ -150,7 +153,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
             ".mlmask"
         };
 
-        await _gameControllerFactory.GetRed4Controller().HandleStartup();
+        await _archiveManagerLoader.LoadArchiveManagerAsync();
 
         var groupedFiles = _archiveManager.GetGroupedFiles();
 
@@ -342,7 +345,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
         if (depotPath.Exists)
         {
-            await _gameControllerFactory.GetRed4Controller().HandleStartup();
+            await _archiveManagerLoader.LoadArchiveManagerAsync();
 
             await Task.Run(() =>
             {
@@ -385,7 +388,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
 
     public static bool UseNewParallelism { get; set; } = true;
 
-   
+
     private void OpenDepotFolder()
     {
         if (_settingsManager.MaterialRepositoryPath is null)

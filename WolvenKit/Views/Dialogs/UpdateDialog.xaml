@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:markdown="clr-namespace:Syncfusion.UI.Xaml.Markdown;assembly=Syncfusion.SfMarkdownViewer.WPF"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=dialogs:UpdateDialogViewModel}"
     d:DesignWidth="800"
@@ -37,11 +38,16 @@
             Grid.Row="1"
             Margin="{DynamicResource WolvenKitMarginSmall}"
             VerticalScrollBarVisibility="Auto"
+            MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+            MaxHeight="{DynamicResource WolvenKitDialogHeightLarge}"
             Focusable="False">
-            <TextBlock
+            <markdown:SfMarkdownViewer
+                Margin="{DynamicResource WolvenKitMarginSmall}"
+                Padding="0"
+                Source="{Binding Body}"
                 FontSize="{DynamicResource WolvenKitFontBody}"
-                TextWrapping="Wrap"
-                Text="{Binding Body}" />
+                Background="{StaticResource ContentBackgroundAlt3}">
+            </markdown:SfMarkdownViewer>
         </ScrollViewer>
 
         <!-- Actions -->

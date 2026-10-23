@@ -243,6 +243,17 @@ public static class Interactions
 
 
     /// <summary>
+    /// Shows the dialogue import dialog: takes an export written by another tool and lets the user
+    /// pick which of its lines go into the scene. Null when the user cancelled.
+    /// </summary>
+    public static Func<DialogueImportDialogOptions, DialogueImportDialogViewModel?> ShowDialogueImport
+    {
+        get;
+        set;
+    } = _ => throw new NotImplementedException();
+
+
+    /// <summary>
     /// Ask user for folder path. Will enforce validity for path-type arguments and check if directory exists.
     /// </summary>
     public static Func<(string, Cp77Project), string> AskForFolderPathInput { get; set; } = _ => throw new NotImplementedException();

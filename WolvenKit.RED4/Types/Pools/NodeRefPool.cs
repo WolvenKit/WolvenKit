@@ -42,9 +42,17 @@ public static class NodeRefPool
     public static void SetNative(LookupTable lookupTable)
     {
         s_pool.SetNative(lookupTable);
-        foreach (var (_, value) in lookupTable)
+
+        for (var i = 0; i < lookupTable.Count; i++)
         {
-            CacheAliases(value);
+            var utf8 = lookupTable.GetUtf8(i);
+
+            if (utf8.Length == 0 || utf8[0] != (byte)'$' || utf8.IndexOf((byte)'#') < 0)
+            {
+                continue;
+            }
+
+            CacheAliases(lookupTable.GetString(i));
         }
     }
 

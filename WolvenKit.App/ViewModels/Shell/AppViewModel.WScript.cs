@@ -315,9 +315,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 }
 
                 File.Delete(destPath);
+                _projectEvents.PublishFileDeleted(destPath);
             }
 
             File.Copy(filePath, destPath);
+            _projectEvents.PublishFileImported(destPath);
         }
 
         try
@@ -341,7 +343,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         try
         {
             File.Delete(destPath);
-            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject);
+            _projectEvents.PublishFileDeleted(destPath);
+            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject, _projectEvents);
         }
         catch
         {

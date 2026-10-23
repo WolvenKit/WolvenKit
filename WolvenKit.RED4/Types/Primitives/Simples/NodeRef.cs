@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types.Pools;
 
@@ -93,6 +94,14 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
 
     public static ulong CalculateHash(string nodeRef) =>
         FNV1A64HashAlgorithm.HashStringWithoutAliases(nodeRef);
+
+    /// <summary>
+    /// Hashes a node ref straight from its UTF-8 bytes, allocating nothing.
+    /// </summary>
+    public static ulong CalculateHashUtf8(ReadOnlySpan<byte> utf8) =>
+        Ascii.IsValid(utf8)
+            ? FNV1A64HashAlgorithm.HashStringWithoutAliasesAscii(utf8)
+            : CalculateHash(Encoding.UTF8.GetString(utf8));
 
     public string? GetString() => this;
     public override string ToString() => TryGetResolvedText(out var text) ? text : _hash.ToString();

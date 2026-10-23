@@ -120,7 +120,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             var proc = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusdec.exe"))
             {
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                Arguments = $" \"{path}\" \"{path.Replace("opus", "wav")}\"",
+                Arguments = $" \"{path}\" \"{Path.ChangeExtension(path, ".wav")}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,

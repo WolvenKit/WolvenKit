@@ -19,6 +19,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
@@ -41,6 +42,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
     private readonly ICvmTools _cvmTools;
+    private readonly INotificationService _notificationService;
     private readonly IAppArchiveManager _archiveManager;
 
     public RedDocumentViewToolbarModel(
@@ -51,6 +53,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         CRUIDService cruidService,
         ICvmTools cvmTools,
         ILoggerService loggerService,
+        INotificationService notificationService,
         IAppArchiveManager archiveManager
     )
     {
@@ -61,6 +64,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _documentTools = documentTools;
         _cvmTools = cvmTools;
         _loggerService = loggerService;
+        _notificationService = notificationService;
         _archiveManager = archiveManager;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
@@ -389,27 +393,67 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(IsInEntOrAppFile))]
     private void RegenerateVisualControllers()
     {
-        if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })
+        try
         {
-            _cvmTools.RegenerateVisualControllers(SelectedChunk);
-            return;
-        }
-
-        // app file
-        if (RootChunk?.ResolvedData is appearanceAppearanceResource appRoot &&
-            RootChunk.GetPropertyChild("appearances") is ChunkViewModel appearances)
-        {
-            appearances.CalculateProperties();
-            foreach (var app in appearances.TVProperties.Where(x => x.ResolvedData is appearanceAppearanceDefinition))
+            var numChanges = 0;
+            if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })
             {
-                _cvmTools.RegenerateVisualControllers(app);
+                numChanges = _cvmTools.RegenerateVisualControllers(SelectedChunk);
+                if (numChanges > 0)
+                {
+                    _notificationService.Success($"Regenerated visual dependencies for {numChanges} components");
+                    _loggerService.Success($"Regenerated visual dependencies for {numChanges} components");
+                }
+                else
+                {
+                    _notificationService.Info($"No visual dependencies were regenerated");
+                }
+                return;
             }
 
-            return;
-        }
+            // app file
+            if (RootChunk?.ResolvedData is appearanceAppearanceResource appRoot &&
+                RootChunk.GetPropertyChild("appearances") is ChunkViewModel appearances)
+            {
+                appearances.CalculateProperties();
+                var numApps = 0;
+                foreach (var app in appearances.TVProperties.Where(x =>
+                             x.ResolvedData is appearanceAppearanceDefinition))
+                {
+                    numApps++;
+                    numChanges += _cvmTools.RegenerateVisualControllers(app);
+                }
 
-        // .ent file
-        _cvmTools.RegenerateVisualControllers(RootChunk?.GetPropertyChild("components"));
+                if (numChanges > 0)
+                {
+                    _notificationService.Success($"Regenerated visual dependencies across {numApps} appearances for {numChanges} components");
+                    _loggerService.Success($"Regenerated visual dependencies across {numApps} appearances for {numChanges} components");
+                }
+                else
+                {
+                    _notificationService.Info($"No visual dependencies were regenerated");
+                }
+
+                return;
+            }
+
+            // .ent file
+            numChanges = _cvmTools.RegenerateVisualControllers(RootChunk?.GetPropertyChild("components"));
+            if (numChanges <= 0)
+            {
+                _notificationService.Info($"No visual dependencies were regenerated");
+                return;
+            }
+
+            _notificationService.Success($"Regenerated visual dependencies for {numChanges} components");
+            _loggerService.Success($"Regenerated visual dependencies for {numChanges} components");
+        }
+        catch (WolvenKitException e)
+        {
+            _notificationService.Error("Failed to regenerate visual controllers. Check the log for detail.");
+            _loggerService.Error("Failed to regenerate visual controllers:");
+            _loggerService.Error(e.ToString());
+        }
     }
 
     /// <summary>
@@ -429,7 +473,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         List<ChunkViewModel?> chunksToRefresh = [];
         switch (RootChunk.ResolvedData)
         {
-            case entEntityTemplate template:
+            case entEntityTemplate { Components.Count: > 0 } template:
                 components.AddRange(template.Components.OfType<entIVisualComponent>());
                 chunksToRefresh.Add(RootChunk.GetPropertyChild("components"));
                 break;
@@ -454,10 +498,18 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
                 components.AddRange(app.Appearances
                     .Select(a => a.Chunk?.Components ?? [])
+                    .Where(c => c.Count > 0)
                     .SelectMany(c => c.OfType<entIVisualComponent>()));
 
                 break;
             }
+        }
+
+        if (components.Count == 0)
+        {
+            _loggerService.Info("No visual components found. Please make sure that there are valid components in your .ent or .app file.");
+            _notificationService.Info("No visual components found.");
+            return;
         }
 
         var lodLevelsChanged = 0;
@@ -473,7 +525,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         if (lodLevelsChanged == 0)
         {
-            _loggerService.Info($"No LOD levels left to change.");
+            _loggerService.Info("No LOD levels left to change.");
+            _notificationService.Info("No LOD levels left to change.");
             return;
         }
 
@@ -483,6 +536,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         _loggerService.Success($"Changed LOD level for {lodLevelsChanged} components.");
+        _notificationService.Success($"Changed LOD level for {lodLevelsChanged} components.");
         RootChunk.Tab?.Parent.SetIsDirty(true);
     }
 
@@ -493,6 +547,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(IsInEntOrAppFile))]
     private void RegenerateResolvedDependencies()
     {
+        var refCount = 0;
         if (RootChunk?.ResolvedData is entEntityTemplate template)
         {
             var refs = template.FindType(typeof(IRedRef))
@@ -503,12 +558,23 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                         _projectManager.ActiveProject))
                 .Distinct();
 
-            var refCount = template.ResolvedDependencies.Count;
+             refCount = template.ResolvedDependencies.Count;
 
             template.ResolvedDependencies.Clear();
             foreach (var path in refs)
             {
                 template.ResolvedDependencies.Add(new CResourceAsyncReference<CResource>(path));
+            }
+
+            if (refCount > 0)
+            {
+                _loggerService.Success($"Regenerated {refCount} resolved dependencies");
+                _notificationService.Success($"Regenerated {refCount} resolved dependencies");
+            }
+            else
+            {
+                _loggerService.Info("No resolved dependencies found");
+                _notificationService.Info("No resolved dependencies found");
             }
 
             RootChunk.GetPropertyChild("resolvedDependencies")?.RecalculateProperties();
@@ -543,7 +609,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 continue;
             }
 
-            var refCount = appearance.ResolvedDependencies.Count;
+            var appearanceRefCount = appearance.ResolvedDependencies.Count;
             var refs = appearance.FindType(typeof(IRedRef))
                 .Select(f => f.Value).OfType<IRedRef>()
                 .SelectMany(r => _documentTools.CollectDependencies(r))
@@ -566,7 +632,19 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
             appChunk.RecalculateProperties();
 
-            isDirty |= appearance.ResolvedDependencies.Count > 0 || refCount > 0;
+            isDirty |= appearance.ResolvedDependencies.Count > 0 || appearanceRefCount > 0;
+            refCount += appearanceRefCount;
+        }
+
+        if (refCount > 0)
+        {
+            _loggerService.Success($"Regenerated {refCount} resolved dependencies");
+            _notificationService.Success($"Regenerated {refCount} resolved dependencies");
+        }
+        else
+        {
+            _loggerService.Info("No resolved dependencies found");
+            _notificationService.Info("No resolved dependencies found");
         }
 
         RootChunk?.Tab?.Parent?.SetIsDirty(isDirty);

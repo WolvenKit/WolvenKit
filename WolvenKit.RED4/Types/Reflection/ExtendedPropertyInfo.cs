@@ -77,6 +77,9 @@ public class ExtendedPropertyInfo
     public Type? GenericType { get; }
     public Type? DisplayEnumType { get; internal set; } = null;
 
+    /// <summary>Whether to display the property's values as depot paths.</summary>
+    public bool DisplayAsResourcePath { get; internal set; }
+
     public bool SerializeDefault { get; private set; }
     public object? DefaultValue { get; internal set; }
 
@@ -113,6 +116,11 @@ public class ExtendedPropertyInfo
         if (attribute is DisplayAsEnumAttribute enumAttribute)
         {
             DisplayEnumType = enumAttribute.EnumType();
+        }
+
+        if (attribute is DisplayAsResourcePathAttribute)
+        {
+            DisplayAsResourcePath = true;
         }
     }
 

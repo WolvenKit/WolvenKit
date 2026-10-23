@@ -50,26 +50,13 @@ public static class RedReflection
         {
             var type = value.GetType();
 
-            if (!s_typeInfoCache.TryGetValue(type, out var result))
-            {
-                result = new ExtendedTypeInfo(type);
-                s_typeInfoCache.TryAdd(type, result);
-            }
-
-            return result;
+            // GetOrAdd guarantees everyone sees the one that actually got cached.
+            return s_typeInfoCache.GetOrAdd(type, static t => new ExtendedTypeInfo(t));
         }
     }
 
-    public static ExtendedTypeInfo GetTypeInfo(Type type)
-    {
-        if (!s_typeInfoCache.TryGetValue(type, out var result))
-        {
-            result = new ExtendedTypeInfo(type);
-            s_typeInfoCache.TryAdd(type, result);
-        }
-
-        return result;
-    }
+    public static ExtendedTypeInfo GetTypeInfo(Type type) =>
+        s_typeInfoCache.GetOrAdd(type, static t => new ExtendedTypeInfo(t));
 
     public static Dictionary<string, Type> GetTypes() => new(s_redTypeCache);
 
@@ -329,23 +316,7 @@ public static class RedReflection
             s_redTypeCacheReverse.TryAdd(type, type.Name);
         }
 
-        BuildTypeCache(type);
         return true;
-
-        static void BuildTypeCache(Type innerType)
-        {
-            if (s_typeInfoCache.ContainsKey(innerType))
-            {
-                return;
-            }
-
-            var typeInfo = new ExtendedTypeInfo(innerType);
-            s_typeInfoCache.TryAdd(innerType, typeInfo);
-            foreach (var propertyInfo in typeInfo.PropertyInfos)
-            {
-                BuildTypeCache(propertyInfo.Type);
-            }
-        }
     }
 
     public static bool AddEnumType(Type type)

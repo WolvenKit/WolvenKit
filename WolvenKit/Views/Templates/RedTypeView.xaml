@@ -471,6 +471,12 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.FilterableDropdownRedRefEditor>
 
+                <converters:RedEditorTemplateSelector.FilterableDropdownResourcePathHashEditor>
+                    <DataTemplate>
+                        <editors:FilterableDropdownResourcePathHashMenu DataContext="{Binding}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.FilterableDropdownResourcePathHashEditor>
+
                 <converters:RedEditorTemplateSelector.FilterableDropdownIntegerEditor>
                     <DataTemplate>
                         <editors:ScnActorIdDropdown DataContext="{Binding}" />
@@ -523,6 +529,12 @@
                         <templates:DisplayAsEnumEditor EnumType="{Binding DisplayAsEnumType, Mode=OneWay}" RedInteger="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.UIntAsEnumEditor>
+
+                <converters:RedEditorTemplateSelector.UlongAsResourcePathEditor>
+                    <DataTemplate>
+                        <templates:DisplayAsResourcePathEditor RedNumber="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.UlongAsResourcePathEditor>
 
                 <converters:RedEditorTemplateSelector.RedBoolEditor>
                     <DataTemplate>

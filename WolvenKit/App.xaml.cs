@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -113,21 +114,30 @@ namespace WolvenKit
                 .Skip(1)
                 .Subscribe(_ => OnUiScaleChanged());
 
-            // Improve FCP (~5 000 ms)
-            _ = Task.Run(() =>
-            {
-                var hashService = Locator.Current.GetService<IHashService>();
-                hashService?.Load();
-            });
-
-            // Improve FCP (~250 ms)
-            _ = Task.Run(() =>
-            {
-                var cruidService = Locator.Current.GetService<CRUIDService>();
-                cruidService?.Load();
-            });
+            StartDeferredServiceLoad();
 
             base.OnStartup(e);
+        }
+
+        private static void StartDeferredServiceLoad()
+        {
+            var thread = new Thread(() =>
+            {
+                // ~250 ms; cheap, so get it out of the way first
+                var cruidService = Locator.Current.GetService<CRUIDService>();
+                cruidService?.Load();
+
+                // ~5 000 ms
+                var hashService = Locator.Current.GetService<IHashService>();
+                hashService?.Load();
+            })
+            {
+                Name = "WolvenKit.DeferredServiceLoad",
+                Priority = ThreadPriority.BelowNormal,
+                IsBackground = true
+            };
+
+            thread.Start();
         }
 
         protected override void OnExit(ExitEventArgs e)

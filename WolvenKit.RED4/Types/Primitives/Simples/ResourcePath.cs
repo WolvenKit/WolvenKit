@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -101,6 +102,13 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
         return true;
     }
 
+    /// <summary>Leading/trailing characters stripped before normalizing. A literal span, so no array is allocated.</summary>
+    private static ReadOnlySpan<char> TrimChars => ['\'', '"', '/', '\\', ' ', '\n', '\r'];
+
+    /// <summary>
+    /// Trims quotes/slashes/whitespace, collapses runs of separators into a single
+    /// <see cref="DirectorySeparatorChar"/>, and lowercases the result.
+    /// </summary>
     public static string SanitizePath(string? text)
     {
         if (string.IsNullOrEmpty(text))
@@ -108,37 +116,101 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
             return "";
         }
 
-        var strResult = new StringBuilder();
-
-        // strip all leading and trailing slashes and quotes
-        char[] trimChars = { '\'', '"', '/', '\\', ' ', '\n', '\r' };
-        text = text.Trim(trimChars);
-
-        // append all remaining characters except repeated slashes
-        for (var i = 0; i < text.Length; i++)
+        var trimmed = text.AsSpan().Trim(TrimChars);
+        if (trimmed.IsEmpty)
         {
-            if (strResult.Length == 0)
-            {
-                strResult.Append(text[i]);
-                continue;
-            }
-
-            if (text[i] == '\\' || text[i] == '/')
-            {
-                if (strResult[^1] != DirectorySeparatorChar)
-                {
-                    strResult.Append(DirectorySeparatorChar);
-                }
-                continue;
-            }
-
-            strResult.Append(text[i]);
+            return "";
         }
-        return strResult.ToString().ToLowerInvariant();
+
+        // Nothing to change? Hand back the instance we were given.
+        if (trimmed.Length == text.Length && IsAlreadySanitized(trimmed))
+        {
+            return text;
+        }
+
+        char[]? rented = null;
+        Span<char> buffer = trimmed.Length <= 256
+            ? stackalloc char[256]
+            : (rented = ArrayPool<char>.Shared.Rent(trimmed.Length)).AsSpan();
+
+        try
+        {
+            buffer = buffer[..trimmed.Length];
+
+            // Lowercase first, then collapse in place.
+            trimmed.ToLowerInvariant(buffer);
+
+            // The first character is always copied verbatim
+            // ... after trimming it can never be a separator.
+            var written = 1;
+            for (var i = 1; i < buffer.Length; i++)
+            {
+                var c = buffer[i];
+
+                if (c == '\\' || c == '/')
+                {
+                    if (buffer[written - 1] != DirectorySeparatorChar)
+                    {
+                        buffer[written++] = DirectorySeparatorChar;
+                    }
+
+                    continue;
+                }
+
+                // written <= i always
+                // so this never clears a chara we have not read yet
+                buffer[written++] = c;
+            }
+
+            return new string(buffer[..written]);
+        }
+        finally
+        {
+            if (rented is not null)
+            {
+                ArrayPool<char>.Shared.Return(rented);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Deliberately bails out on any non-ASCII character so
+    /// that casing decisions are always left to the exact <see cref="MemoryExtensions.ToLowerInvariant"/> path.
+    /// </summary>
+    private static bool IsAlreadySanitized(ReadOnlySpan<char> value)
+    {
+        var previousWasSeparator = false;
+
+        foreach (var c in value)
+        {
+            if (c > 0x7F || c == '/' || c is >= 'A' and <= 'Z')
+            {
+                return false;
+            }
+
+            var isSeparator = c == DirectorySeparatorChar;
+            if (isSeparator && previousWasSeparator)
+            {
+                return false;
+            }
+
+            previousWasSeparator = isSeparator;
+        }
+
+        return true;
     }
 
     public static ulong CalculateHash(string resourcePath, bool sanitize = true) =>
         FNV1A64HashAlgorithm.HashString(sanitize ? SanitizePath(resourcePath) : resourcePath);
+
+    /// <summary>
+    /// Hashes an already-sanitized resource path straight from its UTF-8 bytes, allocating nothing.
+    /// Equivalent to <c>CalculateHash(text, sanitize: false)</c>.
+    /// </summary>
+    public static ulong CalculateHashUtf8(ReadOnlySpan<byte> utf8) =>
+        Ascii.IsValid(utf8)
+            ? FNV1A64HashAlgorithm.HashReadOnlySpan(utf8)
+            : CalculateHash(Encoding.UTF8.GetString(utf8), false);
 
     public string? GetString() => this;
     public override string? ToString() => GetResolvedText();

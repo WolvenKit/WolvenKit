@@ -47,6 +47,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Homepage', link: '/maintaining/home' },
+          { text: 'Reviewing Pull Requests', link: '/maintaining/pull-request-reviews' },
           { text: 'Release Process', link: '/maintaining/release-process' },
         ]
       },

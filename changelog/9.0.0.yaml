@@ -1,0 +1,166 @@
+Template changelog entry:
+- type: security | deprecated | removed | added | fixed | changed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 0
+  author: ''
+  description: ''
+changes:
+- type: added
+  packages: [App, Nuget Packages]
+  pr-number: 2998
+  author: notaspirit
+  description: Template Service is now exposed to the WScript environment
+- type: breaking
+  packages: [Nuget Packages]
+  pr-number: 2998
+  author: notaspirit
+  description: 'WolvenKit.Modkit: ScriptFunctions now depends on RedTypeTemplateService'
+- type: changed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 3044
+  author: gistya
+  description: Updates WolvenKit to .NET SDK 10 targeting Windows 11. Includes security-related
+    NuGet dependency changes.
+- type: fixed
+  packages: [App]
+  pr-number: 3045
+  author: manavortex
+  description: Fixed an exception when trying to recalculate components on something
+    that didn't have any.
+- type: changed
+  packages: [App]
+  pr-number: 3045
+  author: manavortex
+  description: Better user feedback for 'force LOD level 0' and 'regenerate resolved
+    dependencies'.
+- type: feature
+  packages: [App]
+  pr-number: 3049
+  author: Ametis81
+  description: Typing in the filter field of ProjectExplorer now updates automatically
+    when stop typing instead of requiring return to be pressed.
+- type: changed
+  packages: [App]
+  pr-number: 3090
+  author: gistya
+  description: Updated the version of WolvenKit's SyncFusion dependencies to 34.2.2.
+- type: changed
+  packages: [App]
+  pr-number: 3093
+  author: manavortex
+  description: 'CVM: restored forced search initialization on shift+enter'
+- type: changed
+  packages: [App]
+  pr-number: 3096
+  author: gistya
+  description: Archive loading now starts at app launch and finishes much faster,
+    speeding up the time to start working on a project.
+- type: fixed
+  packages: [App]
+  pr-number: 3106
+  author: gistya
+  description: Fixed an issue where very large projects would freeze the app on loading.
+    Vastly improved project loading speeds.
+- type: fixed
+  packages: [App]
+  pr-number: 3111
+  author: gistya
+  description: Fixed an issue where drag-and-drop would fail to work when dragging
+    a single unselected file. Now the file with become selected by the action before
+    you drop it.
+- type: fixed
+  packages: [App]
+  pr-number: 3112
+  author: gistya
+  description: Fixed an issue where items added to the Project Explorer tree would
+    not appear in proper order until project reload. Now, items will sort instantly,
+    and files will always be displayed below folders for ease of navigation (this
+    was always the intended behavior).
+- type: removed
+  packages: [Nuget Packages]
+  pr-number: 3116
+  author: notaspirit
+  description: Removed previously deprecated file path validaton methods, use FilePathValidationTools
+    or the equivalent StringPathExtnesions methods instead
+- type: fixed
+  packages: [App]
+  pr-number: 3120
+  author: gistya
+  description: Fixed tab filters not working in Project Explorer flat tree mode ('archive',
+    'raw', 'resources').
+- type: fixed
+  packages: [App]
+  pr-number: 3122
+  author: gistya
+  description: Project Explorer will now show Loading... pane earlier in the process
+    for smoother UX, and during long batch operations when the tree should not be
+    interacted with.
+- type: added
+  packages: [App]
+  pr-number: 3123
+  author: Akiway
+  description: Scene Editor has a new 'Import Dialogue' button and popup in the Dialogue
+    tab. It reads a json from the clipboard or a .json file, to import lines with
+    all their properties, matching each line's speaker and addressee to the scene's
+    actors by name. For use with CET mod Dialogue Browser.
+- type: removed
+  packages: [Nuget Packages]
+  pr-number: 3131
+  author: notaspirit
+  description: Previously deprecated RedTypeFactory has been removed, use RedTypeManager
+    instead.
+- type: removed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 3132
+  author: notaspirit
+  description: Legacy mesh bone rotation import has been removed, old exports pre
+    8.19.0 will need to be reexported.
+- type: fixed
+  packages: [App]
+  pr-number: 3137
+  author: gistya
+  description: Fixed numerous bugs with drag-and-drop within WolvenKit's ProjectExplorer
+    file tree.
+- type: fixed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 3148
+  author: Zhincore
+  description: Fixed exporting all sounds from OpusPaks skipping the last pak, leaving
+    some sounds unexported.
+- type: fixed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 3148
+  author: Zhincore
+  description: Fixed opus export and import writing .wav files to a wrong path when
+    the used directory contains 'opus' in its name.
+- type: fixed
+  packages: [App]
+  pr-number: 3151
+  author: gistya
+  description: Fixed an issue where the app could create a new copy of a file when
+    saving if the underlying file had been moved before the document had unsaved changes.
+    Added warning logs for situations where a document is moved while it has unsaved
+    changes, clarifying some existing behavior.
+- type: added
+  packages: [App]
+  pr-number: 3153
+  author: notaspirit
+  description: After a successful update of the app using the build in updater the
+    changelog is now shown
+- type: removed
+  packages: [App]
+  pr-number: 3155
+  author: notaspirit
+  description: Removed mod manager
+- type: fixed
+  packages: [CLI]
+  pr-number: 3164
+  author: poirierlouis
+  description: Build command will will now correctly pack the source archive subfolder
+    instead of the root folder.
+- type: fixed
+  packages: [Nuget Packages]
+  pr-number: 3164
+  author: poirierlouis
+  description: ModTools.Build() in ModKit.RED4 will now correctly pack the source
+    archive subfolder instead of the root folder.
