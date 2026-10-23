@@ -30,11 +30,11 @@ public partial class worldCookedStaticDecalNode
             entry.Material = new CResourceAsyncReference<IMaterial>(br.BaseReader.ReadUInt64());
             entry.ForcedAutoHideDistance = br.ReadCFloat();
             entry.AutoHideDistance = br.ReadCFloat();
+            entry.Alpha = br.ReadCFloat();
             entry.NormalThreshold = br.ReadCFloat();
             entry.RoughnessScale = br.ReadCFloat();
-            entry.Alpha = br.ReadCFloat();
             entry.OrderNo = br.ReadCUInt16();
-            entry.Unknown8 = br.ReadCUInt16();
+            entry.DiffuseColorScaleIndex = br.ReadCUInt16();
             entry.SurfaceType = (ERenderObjectType)br.BaseReader.ReadByte();
             entry.DecalRenderMode = (EDecalRenderMode)br.BaseReader.ReadByte();
             entry.NormalsBlendingMode = (RenderDecalNormalsBlendingMode)br.BaseReader.ReadByte();
@@ -53,7 +53,7 @@ public partial class worldCookedStaticDecalNode
             entry.Blue = br.ReadCFloat();
             entry.Alpha = br.ReadCFloat();
 
-            result.DiffuseColorScale.Add(entry);
+            result.DiffuseColorScales.Add(entry);
         }
 
         Buffer.Data = result;
@@ -75,19 +75,19 @@ public partial class worldCookedStaticDecalNode
             bw.BaseWriter.Write((ulong)entry.Material.DepotPath);
             bw.Write(entry.ForcedAutoHideDistance);
             bw.Write(entry.AutoHideDistance);
+            bw.Write(entry.Alpha);
             bw.Write(entry.NormalThreshold);
             bw.Write(entry.RoughnessScale);
-            bw.Write(entry.Alpha);
             bw.Write(entry.OrderNo);
-            bw.Write(entry.Unknown8);
+            bw.Write(entry.DiffuseColorScaleIndex);
             bw.BaseWriter.Write((byte)(ERenderObjectType)entry.SurfaceType);
             bw.BaseWriter.Write((byte)(EDecalRenderMode)entry.DecalRenderMode);
             bw.BaseWriter.Write((byte)(RenderDecalNormalsBlendingMode)entry.NormalsBlendingMode);
             bw.BaseWriter.Write((byte)(CookedStaticDecalNodeEntryData_EMiscFlags)entry.Flags);
         }
 
-        bw.BaseWriter.WriteVLQInt32(data.DiffuseColorScale.Count);
-        foreach (var entry in data.DiffuseColorScale)
+        bw.BaseWriter.WriteVLQInt32(data.DiffuseColorScales.Count);
+        foreach (var entry in data.DiffuseColorScales)
         {
             bw.Write(entry.Red);
             bw.Write(entry.Green);
@@ -107,7 +107,7 @@ public class worldCookedStaticDecalNode_Buffer : IParseableBuffer
     public IRedType? Data => null;
 
     public CArray<worldCookedStaticDecalNodeInner> InnerNodes { get; set; } = new();
-    public CArray<HDRColor> DiffuseColorScale { get; set; } = new();
+    public CArray<HDRColor> DiffuseColorScales { get; set; } = new();
 }
 
 public class worldCookedStaticDecalNodeInner : RedBaseClass
@@ -136,6 +136,14 @@ public class worldCookedStaticDecalNodeInner : RedBaseClass
         set => SetPropertyValue<CFloat>(value);
     }
 
+    [RED("alpha")]
+    [REDProperty(IsIgnored = true)]
+    public CFloat Alpha
+    {
+        get => GetPropertyValue<CFloat>();
+        set => SetPropertyValue<CFloat>(value);
+    }
+
     [RED("normalThreshold")]
     [REDProperty(IsIgnored = true)]
     public CFloat NormalThreshold
@@ -152,14 +160,6 @@ public class worldCookedStaticDecalNodeInner : RedBaseClass
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("alpha")]
-    [REDProperty(IsIgnored = true)]
-    public CFloat Alpha
-    {
-        get => GetPropertyValue<CFloat>();
-        set => SetPropertyValue<CFloat>(value);
-    }
-
     [RED("orderNo")]
     [REDProperty(IsIgnored = true)]
     public CUInt16 OrderNo
@@ -168,9 +168,9 @@ public class worldCookedStaticDecalNodeInner : RedBaseClass
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unknown8")]
+    [RED("diffuseColorScaleIndex")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Unknown8
+    public CUInt16 DiffuseColorScaleIndex
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
