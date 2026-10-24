@@ -1,8 +1,7 @@
-## 9.1.0 — 2026-10-10
+## 10.0.0-beta.1 — 2026-10-24
 
-**App**
+**App, CLI & Nuget Packages**
 
-* *Added*: Added editor descriptions for various node types in the editor by @manavortex
-* *Added*: Added node expansion support for workspot files by @manavortex
-* *Added*: Update dialog will now show the changelog when asking the user for confirmation before updating by @notaspirit
-* *Changed*: The auto update process at startup will now no longer be able to automatically update to a major version, requiring user confirmation by @notaspirit
+* *Removed*: Removed two facial animsets from the dropdown that only worked because AMM patched them by @manavortex
+* *Added*: Early support for game version 2.5 by @seberoth, @notaspirit
+* *Changed*: Improved many game type and property names by @seberoth

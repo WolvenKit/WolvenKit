@@ -1,0 +1,23 @@
+Template changelog entry:
+- type: security | deprecated | removed | added | fixed | changed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 0
+  author: ''
+  description: ''
+changes:
+- type: removed
+  packages: [App]
+  pr-number: 3200
+  author: manavortex
+  description: Removed two facial animsets from the dropdown that only worked because
+    AMM patched them
+- type: added
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 3209
+  author: seberoth, notaspirit
+  description: Early support for game version 2.5
+- type: changed
+  packages: [App, CLI, Nuget Packages]
+  pr-number: 3209
+  author: seberoth
+  description: Improved many game type and property names
