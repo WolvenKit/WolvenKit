@@ -32,9 +32,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>9.1.1</VersionPrefix>
+    <VersionPrefix>10.0.0-beta.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>9.1.1</InformationalVersion>
+    <InformationalVersion>10.0.0-beta.1</InformationalVersion>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
