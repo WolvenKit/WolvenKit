@@ -46,16 +46,22 @@ jobs:
       ##########################################
       # VERSIONS
 
-      # get the version from the app project
+      # Read the NuGet/SemVer version from the app project, including prerelease suffixes.
       - name: Get app version
-        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version
-        with:
-          proj-path: ${{env.PROJ}}
+        shell: pwsh
+        run: |
+          $version = (dotnet msbuild "$env:PROJ" -getProperty:Version).Trim()
+          if (-not $version) {
+            throw "Could not determine Version from $env:PROJ"
+          }
 
-      - name: change version
-        shell: bash
-        run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
+          "VERSION_APP=$version" >> $env:GITHUB_ENV
+
+          $isPrerelease = $version -match '(alpha|beta|rc|preview)'
+          "IS_PRERELEASE=$($isPrerelease.ToString().ToLowerInvariant())" >> $env:GITHUB_ENV
+          "Detected version: $version"
+          "Is prerelease: $isPrerelease"
 
       - name: Create Release Tag
         run: |
@@ -147,6 +153,7 @@ jobs:
         with:
           tag_name: ${{ env.VERSION_APP }}
           draft: false
+          prerelease: ${{ env.IS_PRERELEASE }}
           generate_release_notes: false
           body_path: "RELEASE.md"
           files: |
@@ -156,6 +163,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Portable to Nexus Mods
+        if: ${{ env.IS_PRERELEASE != 'true' }}
         uses: Nexus-Mods/upload-action@v1.0.0-beta.5
         with:
           api_key: ${{ secrets.NEXUSMODS_API_KEY }}
@@ -166,6 +174,7 @@ jobs:
           description: ${{ steps.bb_changelog.outputs.content }}
 
       - name: Upload Installer to Nexus Mods
+        if: ${{ env.IS_PRERELEASE != 'true' }}
         uses: Nexus-Mods/upload-action@v1.0.0-beta.5
         with:
           api_key: ${{ secrets.NEXUSMODS_API_KEY }}
