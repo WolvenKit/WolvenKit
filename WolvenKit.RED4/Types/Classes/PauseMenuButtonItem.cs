@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(34)] 
+		[RED("TrophyIcon")] 
+		public inkWidgetReference TrophyIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("animLoop")] 
 		public CHandle<inkanimProxy> AnimLoop
 		{
@@ -23,6 +31,7 @@ namespace WolvenKit.RED4.Types
 		public PauseMenuButtonItem()
 		{
 			Fluff = new inkTextWidgetReference();
+			TrophyIcon = new inkWidgetReference();
 
 			PostConstruct();
 		}

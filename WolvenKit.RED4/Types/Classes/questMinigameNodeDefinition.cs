@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.Types
 			Sockets = new();
 			Id = ushort.MaxValue;
 			Start = true;
-			NetworkRef = new gameEntityReference { Names = new() };
+			NetworkRef = new gameEntityReference();
 
 			PostConstruct();
 		}

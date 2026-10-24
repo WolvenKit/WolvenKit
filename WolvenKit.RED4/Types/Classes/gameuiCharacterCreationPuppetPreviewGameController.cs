@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("puppetColliderWidget")] 
+		public inkWidgetReference PuppetColliderWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("characterCustomizationSystem")] 
 		public CWeakHandle<gameuiICharacterCustomizationSystem> CharacterCustomizationSystem
 		{
@@ -76,11 +84,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiICharacterCustomizationSystem>>(value);
 		}
 
+		[Ordinal(19)] 
+		[RED("rotationPanDown")] 
+		public CBool RotationPanDown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("maxMousePointerOffset")] 
+		public CFloat MaxMousePointerOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("mouseRotationSpeed")] 
+		public CFloat MouseRotationSpeed
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public gameuiCharacterCreationPuppetPreviewGameController()
 		{
 			Root = new inkCompoundWidgetReference();
 			Image = new inkImageWidgetReference();
-			AnimLib = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			AnimLib = new inkWidgetLibraryReference();
+			PuppetColliderWidget = new inkWidgetReference();
+			MaxMousePointerOffset = 100.000000F;
+			MouseRotationSpeed = 70.000000F;
 
 			PostConstruct();
 		}

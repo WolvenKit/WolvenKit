@@ -31,7 +31,8 @@ namespace WolvenKit.RED4.Types
 		public gamestateMachineComponentReplicatedState()
 		{
 			Enabled = true;
-			StateContext = new gamestateMachineStateContext { Snapshot = new gamestateMachineStateSnapshotsContainer { Snapshot = new() }, PermanentParameters = new gamestateMachineStateContextParameters { BoolParameters = new(0), IntParameters = new(0), FloatParameters = new(0), DoubleParameters = new(0), VectorParameters = new(0), CNameParameters = new(0), IScriptableParameters = new(0), TweakDBIDParameters = new(0) } };
+			StateContext = new gamestateMachineStateContext();
+			EnterLadderParameter = new gamestateMachineparameterTypeLadderDescription();
 
 			PostConstruct();
 		}

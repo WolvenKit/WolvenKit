@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipWidgetReference()
 		{
-			WidgetLibraryReference = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			WidgetLibraryReference = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public worldVehicleForbiddenAreaNode()
 		{
+			Color = new CColor { Red = 32, Green = 32, Blue = 32, Alpha = 128 };
+
 			PostConstruct();
 		}
 

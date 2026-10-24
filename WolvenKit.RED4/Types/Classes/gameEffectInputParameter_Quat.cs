@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectInputParameter_Quat()
 		{
+			Evaluator = new gameEffectParameter_QuatEvaluator_Blackboard();
+
 			PostConstruct();
 		}
 

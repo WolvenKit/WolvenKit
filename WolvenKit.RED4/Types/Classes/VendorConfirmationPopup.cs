@@ -161,7 +161,7 @@ namespace WolvenKit.RED4.Types
 			Background = new inkWidgetReference();
 			ButtonOk = new inkWidgetReference();
 			ButtonCancel = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			LibraryPath = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

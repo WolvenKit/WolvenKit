@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSetFocusClueState_NodeType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			ClueId = -1;
 
 			PostConstruct();

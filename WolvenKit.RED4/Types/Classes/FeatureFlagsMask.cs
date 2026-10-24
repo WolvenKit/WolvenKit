@@ -6,8 +6,8 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("flags")]
-		[DisplayAsEnum<EFeatureFlagMask>]
-		public CUInt64 Flags
+        [DisplayAsEnum<EFeatureFlagMask>]
+        public CUInt64 Flags
 		{
 			get => GetPropertyValue<CUInt64>();
 			set => SetPropertyValue<CUInt64>(value);

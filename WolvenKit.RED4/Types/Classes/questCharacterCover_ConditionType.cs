@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterCover_ConditionType()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldMinimapModeOverrideAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("streamingOcclusion")] 
 		public CEnum<worldPrefabStreamingOcclusion> StreamingOcclusion
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldMinimapModeOverrideAreaNode()
 		{
+			Color = new CColor { Red = 64, Green = 144, Blue = 160, Alpha = 128 };
 			StreamingOcclusion = Enums.worldPrefabStreamingOcclusion.Interior;
 
 			PostConstruct();

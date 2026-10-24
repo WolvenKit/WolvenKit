@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			MaxAngularVelocity = -1.000000F;
 			MaxContactImpulse = -1.000000F;
 			Inertia = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			ComOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			ComOffset = new Transform();
 
 			PostConstruct();
 		}

@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioAnimationOverrideMetadata()
 		{
+			AnimationOverrides = new audioAnimationOverrideDictionary { EntryType = new audioAnimationOverrideDictionaryItem() };
+
 			PostConstruct();
 		}
 

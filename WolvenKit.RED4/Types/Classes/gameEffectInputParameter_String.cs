@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectInputParameter_String()
 		{
+			Evaluator = new gameEffectParameter_StringEvaluator_Blackboard();
+
 			PostConstruct();
 		}
 

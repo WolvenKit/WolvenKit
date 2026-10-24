@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public GenericDeviceActionsData()
 		{
-			StateActionsOverrides = new SGenericDeviceActionsData { ToggleON = new SDeviceActionBoolData(), TogglePower = new SDeviceActionBoolData() };
-			CustomActions = new SCustomDeviceActionsData { Actions = new() };
+			StateActionsOverrides = new SGenericDeviceActionsData();
+			CustomActions = new SCustomDeviceActionsData();
 
 			PostConstruct();
 		}

@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("DetachTutorialPopup_IsShown")] 
+		public gamebbScriptID_Bool DetachTutorialPopup_IsShown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("Popup_Data")] 
 		public gamebbScriptID_Variant Popup_Data
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("Popup_Settings")] 
 		public gamebbScriptID_Variant Popup_Settings
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("Controller_Disconnected")] 
 		public gamebbScriptID_Bool Controller_Disconnected
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("ActivityLog")] 
 		public gamebbScriptID_Variant ActivityLog
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("RightWeaponRecordID")] 
 		public gamebbScriptID_Variant RightWeaponRecordID
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("LeftWeaponRecordID")] 
 		public gamebbScriptID_Variant LeftWeaponRecordID
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("UIVendorContextRequest")] 
 		public gamebbScriptID_Bool UIVendorContextRequest
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("UIjailbreakData")] 
 		public gamebbScriptID_Variant UIjailbreakData
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("QuestTimerInitialDuration")] 
 		public gamebbScriptID_Float QuestTimerInitialDuration
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("QuestTimerCurrentDuration")] 
 		public gamebbScriptID_Float QuestTimerCurrentDuration
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("Tutorial_EnableHighlight")] 
 		public gamebbScriptID_Bool Tutorial_EnableHighlight
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("Tutorial_EntityRefToHighlight")] 
 		public gamebbScriptID_Variant Tutorial_EntityRefToHighlight
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("WeaponSway")] 
 		public gamebbScriptID_Vector2 WeaponSway
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Vector2>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("ApplyWeaponSwayToCamera")] 
 		public gamebbScriptID_Bool ApplyWeaponSwayToCamera
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("NormalizedWeaponSway")] 
 		public gamebbScriptID_Vector2 NormalizedWeaponSway
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Vector2>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("DriverCombatCrosshairReticle")] 
 		public gamebbScriptID_Variant DriverCombatCrosshairReticle
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("NotificationJournalHash")] 
 		public gamebbScriptID_Int32 NotificationJournalHash
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("IsBriefingActive")] 
 		public gamebbScriptID_Bool IsBriefingActive
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("MuppetStats")] 
 		public gamebbScriptID_Variant MuppetStats
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("ActiveNotificationsQueue")] 
 		public gamebbScriptID_Int32 ActiveNotificationsQueue
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("BerserkActive")] 
 		public gamebbScriptID_Bool BerserkActive
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("Popup_VehiclesManager_IsShown")] 
 		public gamebbScriptID_Bool Popup_VehiclesManager_IsShown
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("Popup_Radio_IsShown")] 
 		public gamebbScriptID_Bool Popup_Radio_IsShown
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("Popup_Radio_Enabled")] 
 		public gamebbScriptID_Bool Popup_Radio_Enabled
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("Popup_CarColorPicker_IsShown")] 
 		public gamebbScriptID_Bool Popup_CarColorPicker_IsShown
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("Popup_TwintoneOverride_IsShown")] 
 		public gamebbScriptID_Bool Popup_TwintoneOverride_IsShown
 		{
@@ -292,9 +300,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("Popup_FrameSwitcher_IsShown")] 
 		public gamebbScriptID_Bool Popup_FrameSwitcher_IsShown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("LeftWeaponHUD_IsShown")] 
+		public gamebbScriptID_Bool LeftWeaponHUD_IsShown
 		{
 			get => GetPropertyValue<gamebbScriptID_Bool>();
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
@@ -312,6 +328,7 @@ namespace WolvenKit.RED4.Types
 			ShowSubtitlesBackground = new gamebbScriptID_Bool();
 			Popup_IsModal = new gamebbScriptID_Bool();
 			Popup_IsShown = new gamebbScriptID_Bool();
+			DetachTutorialPopup_IsShown = new gamebbScriptID_Bool();
 			Popup_Data = new gamebbScriptID_Variant();
 			Popup_Settings = new gamebbScriptID_Variant();
 			Controller_Disconnected = new gamebbScriptID_Bool();
@@ -339,6 +356,7 @@ namespace WolvenKit.RED4.Types
 			Popup_CarColorPicker_IsShown = new gamebbScriptID_Bool();
 			Popup_TwintoneOverride_IsShown = new gamebbScriptID_Bool();
 			Popup_FrameSwitcher_IsShown = new gamebbScriptID_Bool();
+			LeftWeaponHUD_IsShown = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

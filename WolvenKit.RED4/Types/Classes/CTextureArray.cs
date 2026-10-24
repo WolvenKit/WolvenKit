@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public CTextureArray()
 		{
-			Setup = new STextureGroupSetup { Group = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color, RawFormat = Enums.ETextureRawFormat.TRF_TrueColor, IsStreamable = true, HasMipchain = true, AllowTextureDowngrade = true };
+			Setup = new STextureGroupSetup();
 			RenderTextureResource = new rendRenderTextureResource();
 
 			PostConstruct();

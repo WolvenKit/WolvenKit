@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Inital rotation";
 			EditorGroup = "Rotation";
 			IsEnabled = true;
+			Rotation = new CEvaluatorFloatConst();
 
 			PostConstruct();
 		}

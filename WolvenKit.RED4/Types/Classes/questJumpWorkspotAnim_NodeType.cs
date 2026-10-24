@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questJumpWorkspotAnim_NodeType()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

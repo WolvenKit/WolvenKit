@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public vehicleVehiclePartsClearCoatOverrides()
 		{
 			PartsName = new();
-			Overrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F };
+			Overrides = new vehicleVehicleClearCoatOverrides();
 
 			PostConstruct();
 		}

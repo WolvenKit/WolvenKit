@@ -52,12 +52,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("formatOverride")] 
+		public CEnum<GpuWrapApieTextureFormat> FormatOverride
+		{
+			get => GetPropertyValue<CEnum<GpuWrapApieTextureFormat>>();
+			set => SetPropertyValue<CEnum<GpuWrapApieTextureFormat>>(value);
+		}
+
 		public rendRenderTextureBlobHeader()
 		{
-			SizeInfo = new rendRenderTextureBlobSizeInfo { Depth = 1 };
+			SizeInfo = new rendRenderTextureBlobSizeInfo();
 			TextureInfo = new rendRenderTextureBlobTextureInfo();
 			MipMapInfo = new();
 			HistogramData = new();
+			FormatOverride = Enums.GpuWrapApieTextureFormat.TEXFMT_NULL;
 
 			PostConstruct();
 		}

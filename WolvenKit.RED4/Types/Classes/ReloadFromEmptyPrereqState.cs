@@ -21,24 +21,48 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("listenerWeaponInt")] 
-		public CHandle<redCallbackObject> ListenerWeaponInt
+		[RED("listenerRightWeaponInt")] 
+		public CHandle<redCallbackObject> ListenerRightWeaponInt
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("listenerActiveWeaponVariant")] 
-		public CHandle<redCallbackObject> ListenerActiveWeaponVariant
+		[RED("listenerEquipmentRight")] 
+		public CHandle<redCallbackObject> ListenerEquipmentRight
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(4)] 
-		[RED("reloadingInProgress")] 
-		public CBool ReloadingInProgress
+		[RED("listenerLeftWeaponInt")] 
+		public CHandle<redCallbackObject> ListenerLeftWeaponInt
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("listenerEquipmentLeft")] 
+		public CHandle<redCallbackObject> ListenerEquipmentLeft
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("reloadingInProgressRight")] 
+		public CBool ReloadingInProgressRight
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("reloadingInProgressLeft")] 
+		public CBool ReloadingInProgressLeft
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

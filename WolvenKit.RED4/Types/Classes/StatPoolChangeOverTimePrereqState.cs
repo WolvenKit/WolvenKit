@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public StatPoolChangeOverTimePrereqState()
 		{
-			OwnerID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+			OwnerID = new gameStatsObjectID();
 			History = new();
 			GameInstance = new ScriptGameInstance();
 

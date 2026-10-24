@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataRangedAttackPackage_Record>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("weaponAttachmentSource")] 
+		public CHandle<gamedataItem_Record> WeaponAttachmentSource
+		{
+			get => GetPropertyValue<CHandle<gamedataItem_Record>>();
+			set => SetPropertyValue<CHandle<gamedataItem_Record>>(value);
+		}
+
 		public OverrideRangedAttackPackageEffector()
 		{
 			PostConstruct();

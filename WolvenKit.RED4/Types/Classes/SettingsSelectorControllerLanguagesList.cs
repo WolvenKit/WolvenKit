@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SettingsSelectorControllerLanguagesList : SettingsSelectorControllerListName
 	{
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("downloadButton")] 
 		public inkWidgetReference DownloadButton
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("isVoiceOverInstalled")] 
 		public CBool IsVoiceOverInstalled
 		{
@@ -28,12 +28,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
+		[RED("isVoiceOverInstallEnabled")] 
+		public CBool IsVoiceOverInstallEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("currentSetIndex")] 
 		public CInt32 CurrentSetIndex
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("ctrl")] 
+		public CWeakHandle<SettingsMainGameController> Ctrl
+		{
+			get => GetPropertyValue<CWeakHandle<SettingsMainGameController>>();
+			set => SetPropertyValue<CWeakHandle<SettingsMainGameController>>(value);
 		}
 
 		public SettingsSelectorControllerLanguagesList()

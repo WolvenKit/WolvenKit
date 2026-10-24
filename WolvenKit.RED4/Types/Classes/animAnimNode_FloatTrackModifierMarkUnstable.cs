@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_FloatTrackModifierMarkUnstable : animAnimNode_FloatTrackModifier
 	{
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("requiredQualityDistanceCategory")] 
 		public CUInt32 RequiredQualityDistanceCategory
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questStartVehicle_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 
 			PostConstruct();
 		}

@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiIndexedMorphName()
 		{
-			Tags = new redTagList { Tags = new() };
-			RandomizationInfo = new gameuiCharacterRandomizationInfo { MinRating = 1, MaxRating = 10 };
+			Tags = new redTagList();
+			RandomizationInfo = new gameuiCharacterRandomizationInfo();
 
 			PostConstruct();
 		}

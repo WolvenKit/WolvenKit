@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnExitPoint()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 
 			PostConstruct();
 		}

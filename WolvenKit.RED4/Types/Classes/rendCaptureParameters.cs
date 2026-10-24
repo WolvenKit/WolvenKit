@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			RecordingFPS = 30;
 			CustomResolution = new Point();
 			ResolutionMultiplier = Enums.rendResolutionMultiplier.X2;
-			OutputPath = new();
+			OutputPath = new AbsolutePathSerializable { Path = @"C:\\Users\\gpasquereau\\Documents\\CD Projekt Red\\Cyberpunk 2077\\screenshots\\" };
 			FovMultiplier = 1.000000F;
 			SaveFormat = Enums.ESaveFormat.SF_PNG;
 

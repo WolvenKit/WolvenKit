@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questUseWeapon_NodeType()
 		{
+			ObjectRef = new questUniversalRef();
 			WeaponSlotName = "AttachmentSlots.WeaponRight";
 
 			PostConstruct();

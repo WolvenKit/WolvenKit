@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_BoolVariable : animAnimNode_BoolValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("variableName")] 
 		public CName VariableName
 		{

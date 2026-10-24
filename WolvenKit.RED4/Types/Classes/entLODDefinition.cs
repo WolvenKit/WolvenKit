@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public entLODDefinition()
 		{
-			BackgroundDistanceLODs = new(0);
-			RegularDistanceLODs = new(0);
-			CinematicDistanceLODs = new(0);
-			VehicleDistanceLODs = new(0);
-			CinematicVehicleDistanceLODs = new(0);
-			VehicleInteriorDistanceLODs = new(0);
-			VehicleDecorationDistanceLODs = new(0);
-			ConsoleDistanceLODs = new(0);
+			BackgroundDistanceLODs = new(4);
+			RegularDistanceLODs = new(4);
+			CinematicDistanceLODs = new(4);
+			VehicleDistanceLODs = new(4);
+			CinematicVehicleDistanceLODs = new(4);
+			VehicleInteriorDistanceLODs = new(4);
+			VehicleDecorationDistanceLODs = new(4);
+			ConsoleDistanceLODs = new(4);
 
 			PostConstruct();
 		}

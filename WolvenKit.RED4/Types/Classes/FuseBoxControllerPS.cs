@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#2013";
 			TweakDBRecord = "Devices.FuseBox";
-			TweakDBDescriptionRecord = 118337989519;
+			TweakDBDescriptionRecord = "device_descriptions.FuseBox";
 
 			PostConstruct();
 		}

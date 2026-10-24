@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkShapePresetWraper()
 		{
-			ShapePreset = new inkShapePreset { Points = new() };
+			ShapePreset = new inkShapePreset();
 
 			PostConstruct();
 		}

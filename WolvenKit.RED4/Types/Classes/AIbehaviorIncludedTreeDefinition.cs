@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			LateInitialization = true;
 			InitializeOnEvent = new();
+			TreeReference = new AIArgumentMapping { Type = Enums.AIArgumentType.TreeRef, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "handle:AIbehaviorParameterizedBehavior" };
 
 			PostConstruct();
 		}

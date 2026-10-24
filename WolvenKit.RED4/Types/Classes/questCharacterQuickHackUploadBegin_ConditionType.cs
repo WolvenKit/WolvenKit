@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterQuickHackUploadBegin_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 
 			PostConstruct();
 		}

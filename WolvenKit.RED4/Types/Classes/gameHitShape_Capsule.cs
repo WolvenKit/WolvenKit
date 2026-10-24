@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public gameHitShape_Capsule()
 		{
 			Translation = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			LocalTransform = new CMatrix();
 			Radius = 0.200000F;
 			Height = 0.400000F;

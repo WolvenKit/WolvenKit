@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceState = Enums.EDeviceStatus.OFF;
 			TweakDBRecord = "Devices.AOE_Effector";
-			TweakDBDescriptionRecord = 139452770593;
+			TweakDBDescriptionRecord = "device_descriptions.AOE_Effector";
 			EffectsToPlay = new();
 
 			PostConstruct();

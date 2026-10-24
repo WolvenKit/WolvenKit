@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public grsGatherAreaReplicatedInfo()
 		{
-			EnteredPlayerIDs = new(0);
+			EnteredPlayerIDs = new(7);
 
 			PostConstruct();
 		}

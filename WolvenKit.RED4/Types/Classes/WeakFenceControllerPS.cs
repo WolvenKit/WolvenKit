@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#189";
 			TweakDBRecord = "Devices.WeakFence";
-			TweakDBDescriptionRecord = 128236067982;
+			TweakDBDescriptionRecord = "device_descriptions.WeakFence";
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;

@@ -55,6 +55,8 @@ namespace WolvenKit.RED4.Types
 		public gameinteractionsCHotSpotLayerDefinition()
 		{
 			PriorityMultiplier = 1.000000F;
+			AreaFilterDefinition = new gameinteractionsCHotSpotAreaFilterDefinition { Functor = new gameinteractionsCFunctorDefinition() };
+			GameLogicFilterDefinition = new gameinteractionsCHotSpotGameLogicFilterDefinition();
 
 			PostConstruct();
 		}

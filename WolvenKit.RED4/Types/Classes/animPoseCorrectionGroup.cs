@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animPoseCorrectionGroup()
 		{
-			PoseCorrections = new(0);
+			PoseCorrections = new(2);
 
 			PostConstruct();
 		}

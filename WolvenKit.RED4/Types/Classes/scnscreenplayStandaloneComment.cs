@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnscreenplayStandaloneComment()
 		{
-			ItemId = new scnscreenplayItemId { Id = 4294967040 };
+			ItemId = new scnscreenplayItemId();
 
 			PostConstruct();
 		}

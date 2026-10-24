@@ -74,6 +74,17 @@ public partial class CR2WWriter : Red4Writer
 
         if (cls is IRedAppendix app)
         {
+            switch (app.GetProcessTime())
+            {
+                case ProcessTime.OnAccess:
+                    app.StoreData();
+                    break;
+                case ProcessTime.OnFileProcessing:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             app.Write(this);
         }
     }

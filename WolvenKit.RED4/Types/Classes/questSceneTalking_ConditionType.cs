@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSceneTalking_ConditionType()
 		{
-			GlobalEntityRef = new gameEntityReference { Names = new() };
+			GlobalEntityRef = new gameEntityReference();
 
 			PostConstruct();
 		}

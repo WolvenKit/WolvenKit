@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Types
 		public ScannerQuestCluesGameController()
 		{
 			ScannerQuestPanel = new inkCompoundWidgetReference();
-			ScannerData = new scannerDataStructure { QuestEntries = new() };
+			ScannerData = new scannerDataStructure();
 			AsyncSpawnRequests = new();
 
 			PostConstruct();

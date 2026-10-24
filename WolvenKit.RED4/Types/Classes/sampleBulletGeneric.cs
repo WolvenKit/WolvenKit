@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(52)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_424
+		public CFloat Lifetime
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

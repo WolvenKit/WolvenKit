@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerRemoteControlVehicle_NodeType()
 		{
-			ParentRef = new gameEntityReference { Names = new() };
+			ParentRef = new gameEntityReference();
 			Enable = true;
 
 			PostConstruct();

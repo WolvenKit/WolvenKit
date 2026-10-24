@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("isOneTimeReward")] 
+		public CBool IsOneTimeReward
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("genericData")] 
 		public GenericTemplatePersistentData GenericData
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GenericTemplatePersistentData>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("uniqueData")] 
 		public UniqueTemplateData UniqueData
 		{
@@ -31,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public VehicleVisualCustomizationTemplate()
 		{
 			GenericData = new GenericTemplatePersistentData();
-			UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() };
+			UniqueData = new UniqueTemplateData();
 
 			PostConstruct();
 		}

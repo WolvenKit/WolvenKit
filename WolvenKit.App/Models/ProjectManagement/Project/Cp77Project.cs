@@ -63,6 +63,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     public static GameType GameType => GameType.Cyberpunk2077;
 
+    public int ModIoId { get; set; } = -1;
+
+    public string? ModIoLogo { get; set; }
+
 
     /// <summary>
     /// Returns all files inside <see cref="FileDirectory"/>

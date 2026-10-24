@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			SceneLocation = new scnWorldMarker { Type = Enums.scnWorldMarkerType.NodeRef };
+			SceneLocation = new scnWorldMarker();
 			InterruptionOperations = new();
 
 			PostConstruct();

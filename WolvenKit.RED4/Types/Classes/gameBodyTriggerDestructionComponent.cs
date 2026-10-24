@@ -40,6 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "Component";
 			StartActive = true;
+			FilterData = new physicsFilterData();
 			ImpulseForce = 10.000000F;
 			ImpulseRadius = 5.000000F;
 

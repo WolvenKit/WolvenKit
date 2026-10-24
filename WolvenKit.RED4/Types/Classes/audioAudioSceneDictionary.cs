@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioAudioSceneDictionary()
 		{
 			Entries = new();
+			EntryType = new audioAudioSceneDictionaryItem();
 
 			PostConstruct();
 		}

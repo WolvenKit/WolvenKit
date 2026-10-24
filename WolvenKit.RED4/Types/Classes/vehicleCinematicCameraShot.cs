@@ -83,8 +83,8 @@ namespace WolvenKit.RED4.Types
 			Duration = 1.000000F;
 			ScaleForVehicle = true;
 			Effects = new();
-			StopConditions = new() { null, null, null };
-			RuntimeData = new CinematicCameraData { ShotInitialTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } }, VehicleInitialTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } }, ReferenceLocalBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() }, CurrentLocalBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() }, ShotRootTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } }, ShotSpaceTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } }, VehicleTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } } };
+			StopConditions = new() { new vehicleCinematicCameraShotStopCondition_VehicleNotVisible(), new vehicleCinematicCameraShotStopCondition_VehicleDistanceFromCamera(), new vehicleCinematicCameraShotStopCondition_CollisionWithEnvironment() };
+			RuntimeData = new CinematicCameraData();
 
 			PostConstruct();
 		}

@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.Types
 			SectorEntries = new();
 			SectorGeometries = new();
 			SectorCacheEntries = new();
-			AlwaysLoadedSector = new physicsSectorEntry { SectorBounds = new Box { Min = new Vector4(), Max = new Vector4() } };
+			AlwaysLoadedSector = new physicsSectorEntry();
 
 			PostConstruct();
 		}

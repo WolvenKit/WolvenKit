@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -168,7 +169,7 @@ public static class RedJsonSerializer
     }
 
 
-    public static bool TryDeserialize<T>(string json, out T? result, RedJsonSerializerOptions? redOptions = null)
+    public static bool TryDeserialize<T>(string json, [NotNullWhen(true)] out T? result, RedJsonSerializerOptions? redOptions = null)
     {
         RedOptions = redOptions ?? new RedJsonSerializerOptions();
 
@@ -181,7 +182,7 @@ public static class RedJsonSerializer
 
         try
         {
-            result = Deserialize<T>(json);
+            result = Deserialize<T>(json)!;
             return true;
         }
         catch (Exception)

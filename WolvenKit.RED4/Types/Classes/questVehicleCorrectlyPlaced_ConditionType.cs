@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questVehicleCorrectlyPlaced_ConditionType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 			CheckIsUpsideDown = true;
 			CheckIsOnTheSide = true;
 			CheckAreAllWheelsOnGround = true;

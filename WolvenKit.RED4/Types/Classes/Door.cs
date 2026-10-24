@@ -367,7 +367,7 @@ namespace WolvenKit.RED4.Types
 		public Door()
 		{
 			ControllerTypeName = "DoorController";
-			Colors = new LedColors { Off = new ScriptLightSettings { Color = new CColor() }, Red = new ScriptLightSettings { Color = new CColor() }, Green = new ScriptLightSettings { Color = new CColor() } };
+			Colors = new LedColors();
 			ActiveSkillcheckLights = new();
 			AllActiveLights = new();
 			ClosingAnimationLength = 1.100000F;

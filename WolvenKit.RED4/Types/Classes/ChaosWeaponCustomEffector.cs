@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("target")] 
-		public gameStatsObjectID Target
+		[RED("targets")] 
+		public CArray<gameStatsObjectID> Targets
 		{
-			get => GetPropertyValue<gameStatsObjectID>();
-			set => SetPropertyValue<gameStatsObjectID>(value);
+			get => GetPropertyValue<CArray<gameStatsObjectID>>();
+			set => SetPropertyValue<CArray<gameStatsObjectID>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public ChaosWeaponCustomEffector()
 		{
 			EffectorOwnerID = new entEntityID();
-			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+			Targets = new();
 
 			PostConstruct();
 		}

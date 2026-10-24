@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldPatrolSplineNode : worldSplineNode
 	{
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("patrolPointDefs")] 
 		public CArray<CHandle<worldPatrolSplinePointDefinition>> PatrolPointDefs
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<worldPatrolSplinePointDefinition>>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("patrolPoints")] 
 		public CArray<NodeRef> PatrolPoints
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("spots")] 
 		public CArray<CHandle<worldTrafficSpotDefinition>> Spots
 		{

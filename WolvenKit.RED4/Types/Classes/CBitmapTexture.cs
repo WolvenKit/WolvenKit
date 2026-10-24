@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.Types
 		public CBitmapTexture()
 		{
 			Depth = 1;
-			Setup = new STextureGroupSetup { Group = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color, RawFormat = Enums.ETextureRawFormat.TRF_TrueColor, IsStreamable = true, HasMipchain = true, AllowTextureDowngrade = true };
+			Setup = new STextureGroupSetup();
 			HistBiasMulCoef = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			HistBiasAddCoef = new Vector3();
 			RenderTextureResource = new rendRenderTextureResource();

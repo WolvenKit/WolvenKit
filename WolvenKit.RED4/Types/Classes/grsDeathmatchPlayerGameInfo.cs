@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public grsDeathmatchPlayerGameInfo()
 		{
-			PeerID = new netPeerID { Value = 255 };
+			PeerID = new netPeerID();
 			SpawnTime = new netTime();
-			LastShooter = new netPeerID { Value = 255 };
+			LastShooter = new netPeerID();
 
 			PostConstruct();
 		}

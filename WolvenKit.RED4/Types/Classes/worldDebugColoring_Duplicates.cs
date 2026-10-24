@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_Duplicates()
 		{
-			DefaultColor = new CColor();
-			DuplicateColor = new CColor();
+			DefaultColor = new CColor { Red = 192, Green = 192, Blue = 192, Alpha = 255 };
+			DuplicateColor = new CColor { Red = 255, Green = 127, Blue = 127, Alpha = 255 };
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldCollisionAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("material")] 
 		public CName Material
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -30,7 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldCollisionAreaNode()
 		{
-			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			Color = new CColor { Red = 100, Green = 100, Blue = 100, Alpha = 100 };
+			NavigationSetting = new NavGenNavigationSetting();
+			FilterData = new physicsFilterData { SimulationFilter = new physicsSimulationFilter { Mask1 = 376836, Mask2 = 5070 }, QueryFilter = new physicsQueryFilter { Mask2 = 143769604 }, Preset = "World Static" };
 
 			PostConstruct();
 		}

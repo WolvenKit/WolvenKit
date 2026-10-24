@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DepthStencilModeDesc = new PSODescDepthStencilModeDesc { DepthTestEnable = true, DepthWriteEnable = true, DepthFunc = Enums.PSODescDepthStencilModeComparisonMode.COMPARISON_LessEqual, StencilEnable = true, FrontFace = new PSODescStencilFuncDesc { StencilFunc = Enums.PSODescDepthStencilModeComparisonMode.COMPARISON_LessEqual } };
 			RasterizerModeDesc = new PSODescRasterizerModeDesc { FrontWinding = Enums.PSODescRasterizerModeFrontFaceWinding.FRONTFACE_CW, CullMode = Enums.PSODescRasterizerModeCullMode.CULL_Back };
-			BlendModeDesc = new PSODescBlendModeDesc { NumTargets = 1, RenderTarget = new(8) };
+			BlendModeDesc = new PSODescBlendModeDesc { RenderTarget = new(8) };
 
 			PostConstruct();
 		}

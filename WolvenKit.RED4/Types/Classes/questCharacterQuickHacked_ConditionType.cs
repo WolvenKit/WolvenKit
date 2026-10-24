@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterQuickHacked_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			QuickHacked = true;
 
 			PostConstruct();

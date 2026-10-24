@@ -142,7 +142,7 @@ namespace WolvenKit.RED4.Types
 			SelectionMarkerWidget = new inkWidgetReference();
 			DefaultStyle = new redResourceReferenceScriptToken();
 			SelectionStyle = new redResourceReferenceScriptToken();
-			SoundData = new SSoundData { WidgetAudioName = "Button" };
+			SoundData = new SSoundData();
 
 			PostConstruct();
 		}

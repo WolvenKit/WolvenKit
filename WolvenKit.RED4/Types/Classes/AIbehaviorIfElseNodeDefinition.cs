@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorIfElseNodeDefinition()
 		{
 			Children = new();
+			Condition = new AIbehaviorExpressionSocket();
 
 			PostConstruct();
 		}

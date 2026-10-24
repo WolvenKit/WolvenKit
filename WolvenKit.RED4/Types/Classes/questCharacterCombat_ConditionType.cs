@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterCombat_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
-			IsPlayer = true;
-
 			PostConstruct();
 		}
 

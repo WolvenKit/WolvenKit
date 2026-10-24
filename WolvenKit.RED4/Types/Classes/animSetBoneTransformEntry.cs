@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.Types
 			SetMethod = Enums.animSetBoneTransformEntry_SetMethod.WholeTransform;
 			SourceBone = new animTransformIndex();
 			OffsetSpaceBone = new animTransformIndex();
-			Offset = new QsTransform { Translation = new Vector4 { W = 1.000000F }, Rotation = new Quaternion { R = 1.000000F }, Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			Offset = new QsTransform { Translation = new Vector4 { W = 1.000000F } };
 
 			PostConstruct();
 		}

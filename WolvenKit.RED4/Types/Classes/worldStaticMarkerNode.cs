@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldStaticMarkerNode : worldSocketNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("data")] 
 		public CHandle<worldIMarker> Data
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public worldStaticMarkerNode()
 		{
 			IsEnabled = true;
-			Tags = new redTagList { Tags = new() };
+			Tags = new redTagList();
 
 			PostConstruct();
 		}

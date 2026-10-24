@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("selectorWidget")] 
-		public inkWidgetReference SelectorWidget
+		[RED("groupsSelectorWidget")] 
+		public inkWidgetReference GroupsSelectorWidget
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
@@ -181,6 +181,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(25)] 
+		[RED("controlsStyleContainer")] 
+		public inkWidgetReference ControlsStyleContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("controlsStyleWidget")] 
+		public inkWidgetReference ControlsStyleWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("descriptionWarningRichColor")] 
 		public CString DescriptionWarningRichColor
 		{
@@ -188,7 +204,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
+		[RED("globalPreloaderContainer")] 
+		public inkWidgetReference GlobalPreloaderContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(29)] 
 		[RED("languageInstallProgressBar")] 
 		public CWeakHandle<SettingsLanguageInstallProgressBar> LanguageInstallProgressBar
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<SettingsLanguageInstallProgressBar>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("settingsElements")] 
 		public CArray<CWeakHandle<inkSettingsSelectorController>> SettingsElements
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkSettingsSelectorController>>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("data")] 
 		public CArray<SettingsCategory> Data
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SettingsCategory>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("menusList")] 
 		public CArray<CName> MenusList
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("settingsListener")] 
 		public CHandle<SettingsVarListener> SettingsListener
 		{
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SettingsVarListener>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("settingsNotificationListener")] 
 		public CHandle<SettingsNotificationListener> SettingsNotificationListener
 		{
@@ -252,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SettingsNotificationListener>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
@@ -260,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("isPreGame")] 
 		public CBool IsPreGame
 		{
@@ -268,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("benchmarkNotificationToken")] 
 		public CHandle<inkGameNotificationToken> BenchmarkNotificationToken
 		{
@@ -276,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("safezonesEditorToken")] 
 		public CHandle<inkGameNotificationToken> SafezonesEditorToken
 		{
@@ -284,7 +308,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
+		[RED("onInputStyleChangedCallbackID")] 
+		public CHandle<redCallbackObject> OnInputStyleChangedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("applyButtonEnabled")] 
 		public CBool ApplyButtonEnabled
 		{
@@ -292,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(43)] 
 		[RED("resetButtonEnabled")] 
 		public CBool ResetButtonEnabled
 		{
@@ -300,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(44)] 
 		[RED("closeSettingsRequest")] 
 		public CBool CloseSettingsRequest
 		{
@@ -308,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(45)] 
 		[RED("resetSettingsRequest")] 
 		public CBool ResetSettingsRequest
 		{
@@ -316,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(46)] 
 		[RED("isDlcSettings")] 
 		public CBool IsDlcSettings
 		{
@@ -324,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(47)] 
 		[RED("isBenchmarkSettings")] 
 		public CBool IsBenchmarkSettings
 		{
@@ -332,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(48)] 
 		[RED("showHdrButton")] 
 		public CBool ShowHdrButton
 		{
@@ -340,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(49)] 
 		[RED("showBrightnessButton")] 
 		public CBool ShowBrightnessButton
 		{
@@ -348,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(50)] 
 		[RED("useRightAligned")] 
 		public CBool UseRightAligned
 		{
@@ -356,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(51)] 
 		[RED("currentHDRindex")] 
 		public CInt32 CurrentHDRindex
 		{
@@ -364,18 +396,98 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(48)] 
-		[RED("selectorCtrl")] 
-		public CWeakHandle<inkListController> SelectorCtrl
+		[Ordinal(52)] 
+		[RED("groupsSelectorCtrl")] 
+		public CWeakHandle<inkListController> GroupsSelectorCtrl
 		{
 			get => GetPropertyValue<CWeakHandle<inkListController>>();
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
+		[Ordinal(53)] 
+		[RED("showControlsStyle")] 
+		public CBool ShowControlsStyle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("controlsStyleCtrl")] 
+		public CWeakHandle<inkListController> ControlsStyleCtrl
+		{
+			get => GetPropertyValue<CWeakHandle<inkListController>>();
+			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("controlsStyleConfigVar")] 
+		public CHandle<userSettingsVarListString> ControlsStyleConfigVar
+		{
+			get => GetPropertyValue<CHandle<userSettingsVarListString>>();
+			set => SetPropertyValue<CHandle<userSettingsVarListString>>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("requestHandler")] 
+		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
+		{
+			get => GetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>();
+			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("globalPreloader")] 
+		public CWeakHandle<inkWidget> GlobalPreloader
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("interactionsBlocked")] 
+		public CBool InteractionsBlocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("telemetryUpdatePopupToken")] 
+		public CHandle<inkGameNotificationToken> TelemetryUpdatePopupToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("delayPopupProxy")] 
+		public CHandle<inkanimProxy> DelayPopupProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("preventNextTelemetryLog")] 
+		public CBool PreventNextTelemetryLog
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(62)] 
+		[RED("currentSelectLanguage")] 
+		public CName CurrentSelectLanguage
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public SettingsMainGameController()
 		{
 			ScrollPanel = new inkWidgetReference();
-			SelectorWidget = new inkWidgetReference();
+			GroupsSelectorWidget = new inkWidgetReference();
 			ButtonHintsManagerRef = new inkWidgetReference();
 			SettingsOptionsList = new inkCompoundWidgetReference();
 			ApplyButton = new inkWidgetReference();
@@ -396,6 +508,9 @@ namespace WolvenKit.RED4.Types
 			SettingGroupName_Controls = "/controls";
 			SettingGroupName_Language = "/language";
 			SettingGroupName_KeyBindings = "/key_bindings";
+			ControlsStyleContainer = new inkWidgetReference();
+			ControlsStyleWidget = new inkWidgetReference();
+			GlobalPreloaderContainer = new inkWidgetReference();
 			SettingsElements = new();
 			Data = new();
 			MenusList = new();

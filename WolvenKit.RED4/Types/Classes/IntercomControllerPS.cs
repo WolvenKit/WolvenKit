@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#163";
 			TweakDBRecord = "Devices.Intercom";
-			TweakDBDescriptionRecord = 123510029761;
+			TweakDBDescriptionRecord = "device_descriptions.Intercom";
 			ForceLookAt = new entEntityID();
 
 			PostConstruct();

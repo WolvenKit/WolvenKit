@@ -79,6 +79,7 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorCommandHandlerNodeDefinition()
 		{
 			Contexts = new();
+			CommandOut = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, DefaultValue = new CVariant() };
 			ResultIfNoCommand = Enums.AIbehaviorCompletionStatus.SUCCESS;
 
 			PostConstruct();

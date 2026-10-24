@@ -637,6 +637,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(88)] 
+		[RED("uiMoveActionAxisAllowed")] 
+		public CBool UiMoveActionAxisAllowed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(89)] 
 		[RED("axisInputConsumed")] 
 		public CBool AxisInputConsumed
 		{

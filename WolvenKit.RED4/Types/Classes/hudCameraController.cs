@@ -341,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			Yaw = new inkCanvasWidgetReference();
 			Tele = new inkCanvasWidgetReference();
 			TeleScale = new inkCanvasWidgetReference();
-			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

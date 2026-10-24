@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class animAnimNode_Container : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("nodes")] 
 		public CArray<CHandle<animAnimNode_Base>> Nodes
 		{

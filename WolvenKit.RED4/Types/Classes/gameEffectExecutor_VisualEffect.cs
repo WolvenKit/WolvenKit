@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectExecutor_VisualEffect()
 		{
+			VectorEvaluator = new gameEffectVectorEvaluator_HitDirection();
+
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldNode : ISerializable
 	{
-		[Ordinal(2)] 
+		[Ordinal(0)] 
 		[RED("isVisibleInGame")] 
 		public CBool IsVisibleInGame
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(1)] 
 		[RED("isHostOnly")] 
 		public CBool IsHostOnly
 		{

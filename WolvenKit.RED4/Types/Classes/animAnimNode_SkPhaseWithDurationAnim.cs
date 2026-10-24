@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkPhaseWithDurationAnim : animAnimNode_SkPhaseAnim
 	{
-		[Ordinal(31)] 
+		[Ordinal(19)] 
 		[RED("durationLink")] 
 		public animFloatLink DurationLink
 		{

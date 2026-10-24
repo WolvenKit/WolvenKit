@@ -94,9 +94,9 @@ namespace WolvenKit.RED4.Types
 
 		public navgendebugHeightfield()
 		{
-			Bounds = new Box { Min = new Vector4(), Max = new Vector4() };
-			RawSpans = new navgendebugSpansData { Spans = new(), Areas = new(), FilteredAreas = new() };
-			CompactSpans = new navgendebugSpansData { Spans = new(), Areas = new(), FilteredAreas = new() };
+			Bounds = new Box();
+			RawSpans = new navgendebugSpansData();
+			CompactSpans = new navgendebugSpansData();
 			Cells = new();
 			Regions = new();
 			Distancefield = new();

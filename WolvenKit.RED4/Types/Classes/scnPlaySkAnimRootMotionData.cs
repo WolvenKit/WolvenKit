@@ -118,8 +118,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnPlaySkAnimRootMotionData()
 		{
-			OriginMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
-			OriginOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			OriginMarker = new scnMarker();
+			OriginOffset = new Transform();
 			CustomBlendInTime = -1.000000F;
 			CustomBlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut;
 			RemovePitchRollRotation = true;

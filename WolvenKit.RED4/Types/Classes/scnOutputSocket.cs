@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnOutputSocket()
 		{
-			Stamp = new scnOutputSocketStamp { Name = ushort.MaxValue, Ordinal = ushort.MaxValue };
+			Stamp = new scnOutputSocketStamp();
 			Destinations = new();
 
 			PostConstruct();

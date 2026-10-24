@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleCustomTemplatePersistentData()
 		{
-			Template = new SavedVehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData() };
+			Template = new SavedVehicleVisualCustomizationTemplate();
 
 			PostConstruct();
 		}

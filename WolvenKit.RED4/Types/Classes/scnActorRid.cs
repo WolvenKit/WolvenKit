@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnActorRid()
 		{
-			Tag = new scnRidTag { SerialNumber = new scnRidSerialNumber { SerialNumber = uint.MaxValue } };
+			Tag = new scnRidTag();
 			Animations = new();
 			FacialAnimations = new();
 			CyberwareAnimations = new();

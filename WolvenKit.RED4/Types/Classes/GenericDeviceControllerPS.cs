@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public GenericDeviceControllerPS()
 		{
-			TweakDBDescriptionRecord = 143157997633;
-			GenericDeviceActionsSetup = new GenericDeviceActionsData { StateActionsOverrides = new SGenericDeviceActionsData { ToggleON = new SDeviceActionBoolData(), TogglePower = new SDeviceActionBoolData() }, CustomActions = new SCustomDeviceActionsData { Actions = new() } };
+			TweakDBDescriptionRecord = "device_descriptions.GenericDevice";
+			GenericDeviceActionsSetup = new GenericDeviceActionsData();
 			PerformedCustomActionsIDs = new();
 
 			PostConstruct();

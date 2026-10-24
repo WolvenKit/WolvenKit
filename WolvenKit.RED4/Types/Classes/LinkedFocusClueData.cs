@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.Types
 		{
 			OwnerID = new entEntityID();
 			ExtendedClueRecords = new();
-			PsData = new PSOwnerData { Id = new gamePersistentID() };
+			PsData = new PSOwnerData();
 
 			PostConstruct();
 		}

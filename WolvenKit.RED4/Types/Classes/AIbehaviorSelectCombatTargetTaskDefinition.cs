@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorSelectCombatTargetTaskDefinition()
 		{
+			Target = new AIArgumentMapping { Type = Enums.AIArgumentType.Object, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "whandle:gameObject" };
 			TargetClosest = true;
 
 			PostConstruct();

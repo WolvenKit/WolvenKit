@@ -41,8 +41,8 @@ namespace WolvenKit.RED4.Types
 			TimeDuration = 1.000000F;
 			Scale = 1.000000F;
 			IntensityMultiplier = new effectEffectParameterEvaluatorFloat();
-			Intensity = new effectEffectParameterEvaluatorFloat();
-			Radius = new effectEffectParameterEvaluatorFloat();
+			Intensity = new effectEffectParameterEvaluatorFloat { Evaluator = null };
+			Radius = new effectEffectParameterEvaluatorFloat { Evaluator = null };
 
 			PostConstruct();
 		}

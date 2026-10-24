@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldWorldGlobalLightOverrideWithColorParameters()
 		{
-			LightDirOverride = new GlobalLightingTrajectoryOverride { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
+			LightDirOverride = new GlobalLightingTrajectoryOverride();
 			LightColorOverride = new HDRColor();
 
 			PostConstruct();

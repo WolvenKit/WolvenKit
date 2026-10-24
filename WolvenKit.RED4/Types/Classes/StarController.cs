@@ -182,8 +182,8 @@ namespace WolvenKit.RED4.Types
 
 		public StarController()
 		{
-			AnimIntroOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
-			AnimBlinkOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimIntroOptions = new inkanimPlaybackOptions();
+			AnimBlinkOptions = new inkanimPlaybackOptions();
 			AnimBlinkLoops = new(3);
 			BlinkAnimLoopType = Enums.inkanimLoopType.Cycle;
 			BlinkDuration = 1.000000F;

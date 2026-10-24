@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_GraphSlot_Test : animAnimNode_GraphSlot
 	{
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("graph_TEST")] 
 		public CResourceReference<animAnimGraph> Graph_TEST
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<animAnimGraph>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("copyAnimInputsAtAttachTime")] 
 		public CBool CopyAnimInputsAtAttachTime
 		{

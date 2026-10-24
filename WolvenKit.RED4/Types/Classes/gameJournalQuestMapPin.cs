@@ -49,9 +49,9 @@ namespace WolvenKit.RED4.Types
 			JournalEntryOverrideDataList = new();
 			Entries = new();
 			EnableGPS = true;
-			Reference = new gameEntityReference { Names = new() };
+			Reference = new gameEntityReference();
 			SlotName = "UI_Interaction";
-			MappinData = new gamemappinsMappinData { MappinType = "Mappins.QuestStaticMappinDefinition", Variant = Enums.gamedataMappinVariant.DefaultQuestVariant, Active = true, LocalizedCaption = new() { Unk1 = 0, Value = "" }, VisibleThroughWalls = true };
+			MappinData = new gamemappinsMappinData { MappinType = "Mappins.QuestStaticMappinDefinition" };
 			Offset = new Vector3 { Z = 0.500000F };
 
 			PostConstruct();

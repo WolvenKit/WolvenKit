@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			FeatureIndex = -1;
 			LocalPosition = new Vector3();
-			LocalRotation = new Quaternion { R = 1.000000F };
+			LocalRotation = new Quaternion();
 
 			PostConstruct();
 		}

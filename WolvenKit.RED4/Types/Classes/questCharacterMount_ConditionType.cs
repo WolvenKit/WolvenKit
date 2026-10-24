@@ -118,8 +118,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterMount_ConditionType()
 		{
-			ParentRef = new gameEntityReference { Names = new() };
-			ChildRef = new gameEntityReference { Names = new() };
+			ParentRef = new gameEntityReference();
+			ChildRef = new gameEntityReference();
 			Role = Enums.gameMountingSlotRole.Invalid;
 			VehicleAfiliation = Enums.gamedataAffiliation.Invalid;
 

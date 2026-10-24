@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public ChargeReadyEvents()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

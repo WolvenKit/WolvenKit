@@ -188,8 +188,35 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(23)] 
+		[RED("glamdocScreen")] 
+		public CBool GlamdocScreen
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("glamdocScreen_Cyberware")] 
+		public CInt32 GlamdocScreen_Cyberware
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("glamdocScreen_CameraMode")] 
+		public CInt32 GlamdocScreen_CameraMode
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public AnimFeature_Paperdoll()
 		{
+			GlamdocScreen_Cyberware = -1;
+			GlamdocScreen_CameraMode = -1;
+
 			PostConstruct();
 		}
 

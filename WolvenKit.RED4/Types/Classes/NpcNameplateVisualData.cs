@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public NpcNameplateVisualData()
 		{
-			NpcNextToCrosshair = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
+			NpcNextToCrosshair = new gameuiNPCNextToTheCrosshair();
 
 			PostConstruct();
 		}

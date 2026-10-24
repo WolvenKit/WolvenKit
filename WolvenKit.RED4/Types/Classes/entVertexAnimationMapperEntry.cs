@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public entVertexAnimationMapperEntry()
 		{
-			Sources = new(4);
+			Sources = new(4) { new entVertexAnimationMapperSource(), new entVertexAnimationMapperSource(), new entVertexAnimationMapperSource(), new entVertexAnimationMapperSource() };
 			Destination = new entVertexAnimationMapperDestination();
 
 			PostConstruct();

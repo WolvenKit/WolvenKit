@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.Types
 			Enable = true;
 			VignetteRadius = 0.500000F;
 			VignetteExp = 2.000000F;
-			VignetteColor = new CColor();
+			VignetteColor = new CColor { Alpha = 255 };
 
 			PostConstruct();
 		}

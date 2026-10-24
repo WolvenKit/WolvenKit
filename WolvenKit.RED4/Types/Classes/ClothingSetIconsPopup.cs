@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IconGrid = new inkWidgetReference();
 			ButtonHintsRoot = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			LibraryPath = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

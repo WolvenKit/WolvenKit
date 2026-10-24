@@ -215,8 +215,8 @@ namespace WolvenKit.RED4.Types
 		public audioGeneralVoiceGruntSettings()
 		{
 			VariationsCount = 1;
-			ContextualVoiceGruntSettings = new audioContextualVoiceGruntSettings { PainShort = new audioContextualVoiceGrunt(), Effort = new audioContextualVoiceGrunt() };
-			GruntVariations = new audioVoiceGruntVariations { CachedVariations = new() };
+			ContextualVoiceGruntSettings = new audioContextualVoiceGruntSettings();
+			GruntVariations = new audioVoiceGruntVariations();
 
 			PostConstruct();
 		}

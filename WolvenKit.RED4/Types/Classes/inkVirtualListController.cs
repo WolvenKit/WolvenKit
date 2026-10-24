@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkVirtualListController()
 		{
-			ItemSelected = new inkVirtualCompoundControllerCallback();
-			ItemActivated = new inkVirtualCompoundControllerCallback();
-			AllElementsSpawned = new inkEmptyCallback();
+			ItemSelected = new inkVirtualCompoundControllerCallback { CallbackName = "OnItemSelected" };
+			ItemActivated = new inkVirtualCompoundControllerCallback { CallbackName = "OnItemActivated" };
+			AllElementsSpawned = new inkEmptyCallback { CallbackName = "OnAllElementsSpawned" };
 			ItemTemplates = new();
 			CycleNavigation = true;
 

@@ -691,7 +691,7 @@ namespace WolvenKit.RED4.Types
 			DestructionProperties = new DestructionData();
 			CurrentlyAuthorizedUsers = new();
 			PerformedActions = new();
-			IllegalActions = new IllegalActionTypes { SkillChecks = true };
+			IllegalActions = new IllegalActionTypes();
 			AvailableQuickHacks = new();
 			ActionsWithDisabledRPGChecks = new();
 			AvailableSpiderbotActions = new();

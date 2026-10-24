@@ -118,13 +118,13 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsCameraParamsEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
+			Id = new scnSceneEventId();
 			FovValue = 51.000000F;
 			FovWeigh = 1.000000F;
 			UseNearPlane = true;
 			UseFarPlane = true;
-			CameraOverrideSettings = new scneventsCameraOverrideSettings { OverrideFov = true, OverrideDof = true };
-			TargetActor = new scnPerformerId { Id = 4294967040 };
+			CameraOverrideSettings = new scneventsCameraOverrideSettings();
+			TargetActor = new scnPerformerId();
 
 			PostConstruct();
 		}

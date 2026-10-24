@@ -212,23 +212,24 @@ namespace WolvenKit.RED4.Types
 			ExecutionTagEntries = new();
 			Actors = new();
 			PlayerActors = new();
+			SceneGraph = new scnSceneGraph();
 			LocalMarkers = new();
 			Props = new();
 			RidResources = new();
 			Workspots = new();
 			WorkspotInstances = new();
-			ResouresReferences = new scnSRRefCollection { RidAnimations = new(), RidAnimSets = new(), RidFacialAnimSets = new(), RidCyberwareAnimSets = new(), RidDeformationAnimSets = new(), LipsyncAnimSets = new(), RidCameraAnimations = new(), CinematicAnimSets = new(), GameplayAnimSets = new(), DynamicAnimSets = new(), CinematicAnimNames = new(), GameplayAnimNames = new(), DynamicAnimNames = new(), RidAnimationContainers = new() };
-			ScreenplayStore = new scnscreenplayStore { Lines = new(), Options = new() };
-			LocStore = new scnlocLocStoreEmbedded { VdEntries = new(), VpEntries = new() };
+			ResouresReferences = new scnSRRefCollection();
+			ScreenplayStore = new scnscreenplayStore();
+			LocStore = new scnlocLocStoreEmbedded();
 			VoInfo = new();
 			EffectDefinitions = new();
 			EffectInstances = new();
 			ExecutionTags = new();
 			ReferencePoints = new();
 			InterruptionScenarios = new();
-			SceneSolutionHash = new scnSceneSolutionHash { SceneSolutionHash = new scnSceneSolutionHashHash() };
+			SceneSolutionHash = new scnSceneSolutionHash();
 			SceneCategoryTag = Enums.scnSceneCategoryTag.other;
-			DebugSymbols = new scnDebugSymbols { PerformersDebugSymbols = new(), WorkspotsDebugSymbols = new(), SceneEventsDebugSymbols = new(), SceneNodesDebugSymbols = new() };
+			DebugSymbols = new scnDebugSymbols();
 
 			PostConstruct();
 		}

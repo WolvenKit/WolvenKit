@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_LocoState : animAnimNode_State
 	{
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("type")] 
 		public CEnum<animLocoStateType> Type
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animLocoStateType>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("locoTag")] 
 		public CName LocoTag
 		{

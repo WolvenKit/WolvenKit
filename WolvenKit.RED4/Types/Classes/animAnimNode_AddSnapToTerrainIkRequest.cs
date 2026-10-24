@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_AddSnapToTerrainIkRequest : animAnimNode_OnePoseInput
 	{
-		[Ordinal(13)] 
+		[Ordinal(2)] 
 		[RED("animDeltaZ")] 
 		public animFloatLink AnimDeltaZ
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(3)] 
 		[RED("leftFootRequest")] 
 		public animSnapToTerrainIkRequest LeftFootRequest
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animSnapToTerrainIkRequest>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(4)] 
 		[RED("rightFootRequest")] 
 		public animSnapToTerrainIkRequest RightFootRequest
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animSnapToTerrainIkRequest>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(5)] 
 		[RED("hipsRequest")] 
 		public animHipsIkRequest HipsRequest
 		{
@@ -41,9 +41,9 @@ namespace WolvenKit.RED4.Types
 			Id = uint.MaxValue;
 			InputLink = new animPoseLink();
 			AnimDeltaZ = new animFloatLink();
-			LeftFootRequest = new animSnapToTerrainIkRequest { FootTransformIndex = new animTransformIndex(), PoleVectorRefTransformIndex = new animTransformIndex(), EnableFootLockFloatTrack = new animNamedTrackIndex() };
-			RightFootRequest = new animSnapToTerrainIkRequest { FootTransformIndex = new animTransformIndex(), PoleVectorRefTransformIndex = new animTransformIndex(), EnableFootLockFloatTrack = new animNamedTrackIndex() };
-			HipsRequest = new animHipsIkRequest { HipsTransformIndex = new animTransformIndex(), LeftFootTransformIndex = new animTransformIndex(), RightFootTransformIndex = new animTransformIndex() };
+			LeftFootRequest = new animSnapToTerrainIkRequest();
+			RightFootRequest = new animSnapToTerrainIkRequest();
+			HipsRequest = new animHipsIkRequest();
 
 			PostConstruct();
 		}

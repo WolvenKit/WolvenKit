@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "3D rotation over life";
 			EditorGroup = "Rotation";
 			IsEnabled = true;
+			Rotation = new CEvaluatorVectorConst();
 			Modulate = true;
 
 			PostConstruct();

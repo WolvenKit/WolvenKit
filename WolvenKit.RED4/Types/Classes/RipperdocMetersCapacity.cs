@@ -321,7 +321,7 @@ namespace WolvenKit.RED4.Types
 			OverchargeGlowAnimName = "overchargeGlow_pulse";
 			OverchargeVisibilityThreshold = 0.200000F;
 			OverchargeValue = 50;
-			OverchargeGlowAnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			OverchargeGlowAnimOptions = new inkanimPlaybackOptions();
 			C_costLabelAnchorPoint_ADD = new Vector2();
 			C_costLabelAnchorPoint_SUBTRACT = new Vector2();
 			C_costLabelAnchorPoint_EQUIPPED = new Vector2();

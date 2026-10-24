@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public workActorTagCondition()
 		{
-			Equals_ = true;
+			Equals = true;
 
 			PostConstruct();
 		}

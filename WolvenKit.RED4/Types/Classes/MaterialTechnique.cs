@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(2)] 
 		[RED("streamsToBind")]
-		[DisplayAsEnum<ERenderMeshStreamsMask>]
-		public CUInt32 StreamsToBind
+        [DisplayAsEnum<ERenderMeshStreamsMask>]
+        public CUInt32 StreamsToBind
 		{
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);

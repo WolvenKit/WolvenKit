@@ -108,6 +108,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("isTapped")] 
+		public CBool IsTapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PerksMenuAttributeItemController()
 		{
 			AttributeDisplay = new inkWidgetReference();

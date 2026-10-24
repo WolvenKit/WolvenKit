@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_ExplorationAdjuster : animAnimNode_MotionAdjuster
 	{
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("targetPosition2")] 
 		public animVectorLink TargetPosition2
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("targetDirection2")] 
 		public animVectorLink TargetDirection2
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("totalTimeToAdjust2")] 
 		public animFloatLink TotalTimeToAdjust2
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("targetPosition3")] 
 		public animVectorLink TargetPosition3
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("targetDirection3")] 
 		public animVectorLink TargetDirection3
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("totalTimeToAdjust3")] 
 		public animFloatLink TotalTimeToAdjust3
 		{

@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DistrictName = new inkTextWidgetReference();
 			LocationName = new inkTextWidgetReference();
-			SoundData = new SSoundData { WidgetAudioName = "Button" };
+			SoundData = new SSoundData();
 
 			PostConstruct();
 		}

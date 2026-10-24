@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questdbgRuntimeData()
 		{
-			SelectedBlockId = long.MaxValue;
+			SelectedBlockId = ulong.MaxValue;
 			Objects = new();
 
 			PostConstruct();

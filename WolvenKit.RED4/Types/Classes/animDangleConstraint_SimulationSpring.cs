@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDangleConstraint_SimulationSpring : animDangleConstraint_SimulationSingleBone
 	{
-		[Ordinal(14)] 
+		[Ordinal(9)] 
 		[RED("constraintSphereRadius")] 
 		public CFloat ConstraintSphereRadius
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(10)] 
 		[RED("constraintScale1")] 
 		public CFloat ConstraintScale1
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(11)] 
 		[RED("constraintScale2")] 
 		public CFloat ConstraintScale2
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(12)] 
 		[RED("mass")] 
 		public CFloat Mass
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(13)] 
 		[RED("damping")] 
 		public CFloat Damping
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(14)] 
 		[RED("pullForceFactor")] 
 		public CFloat PullForceFactor
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(15)] 
 		[RED("externalForceWS")] 
 		public Vector3 ExternalForceWS
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(16)] 
 		[RED("externalForceWsLink")] 
 		public animVectorLink ExternalForceWsLink
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(17)] 
 		[RED("collisionSphereRadius")] 
 		public CFloat CollisionSphereRadius
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(18)] 
 		[RED("invertedMass")] 
 		public CFloat InvertedMass
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(19)] 
 		[RED("simulationFps")] 
 		public CFloat SimulationFps
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(20)] 
 		[RED("gravityWS")] 
 		public CFloat GravityWS
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(21)] 
 		[RED("pullForceOriginLS")] 
 		public Vector3 PullForceOriginLS
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(22)] 
 		[RED("projectionType")] 
 		public CEnum<animSpringProjectionType> ProjectionType
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animSpringProjectionType>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(23)] 
 		[RED("constraintOrientation")] 
 		public Vector2 ConstraintOrientation
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(24)] 
 		[RED("cosOfHalfXAngle")] 
 		public CFloat CosOfHalfXAngle
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(25)] 
 		[RED("cosOfHalfYAngle")] 
 		public CFloat CosOfHalfYAngle
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(26)] 
 		[RED("sinOfHalfXAngle")] 
 		public CFloat SinOfHalfXAngle
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(27)] 
 		[RED("sinOfHalfYAngle")] 
 		public CFloat SinOfHalfYAngle
 		{

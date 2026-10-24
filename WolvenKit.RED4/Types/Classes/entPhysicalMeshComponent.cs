@@ -55,6 +55,7 @@ namespace WolvenKit.RED4.Types
 		public entPhysicalMeshComponent()
 		{
 			SimulationType = Enums.physicsSimulationType.Kinematic;
+			FilterData = new physicsFilterData();
 
 			PostConstruct();
 		}

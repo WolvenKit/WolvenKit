@@ -76,6 +76,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("gogContainerController")] 
+		public CWeakHandle<GogContainerController> GogContainerController
+		{
+			get => GetPropertyValue<CWeakHandle<GogContainerController>>();
+			set => SetPropertyValue<CWeakHandle<GogContainerController>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("registerURL")] 
+		public CString RegisterURL
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		public GOGProfileGameController()
 		{
 			RetryButton = new inkWidgetReference();

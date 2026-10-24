@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameWorldBoundaryNode()
 		{
+			Color = new CColor { Red = 255, Green = 237, Alpha = 170 };
+
 			PostConstruct();
 		}
 

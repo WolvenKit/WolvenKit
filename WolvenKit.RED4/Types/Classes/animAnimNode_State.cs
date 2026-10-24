@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_State : animAnimNode_Container
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("name")] 
 		public CName Name
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("outTransitionIndices")] 
 		public CArray<CInt16> OutTransitionIndices
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("preventTransitionsInActivationFrame")] 
 		public CBool PreventTransitionsInActivationFrame
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("requiredQualityDistanceCategory")] 
 		public CUInt32 RequiredQualityDistanceCategory
 		{

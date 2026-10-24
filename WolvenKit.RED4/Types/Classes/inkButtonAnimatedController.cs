@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.Types
 			AnimTargetPulse = new inkWidgetReference();
 			NormalRootOpacity = 1.000000F;
 			HoverRootOpacity = 1.000000F;
-			AnimPulseOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimPulseOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

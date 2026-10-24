@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleMinimapVisibility_NodeSubType()
 		{
-			EntityReference = new gameEntityReference { Names = new() };
+			EntityReference = new gameEntityReference();
 			Show = true;
 
 			PostConstruct();

@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public gsmGameDefinition()
 		{
 			MainQuests = new();
-			SpawnPointTags = new redTagList { Tags = new() };
+			SpawnPointTags = new redTagList();
 
 			PostConstruct();
 		}

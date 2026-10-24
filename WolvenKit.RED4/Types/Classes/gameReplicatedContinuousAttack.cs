@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameReplicatedContinuousAttack()
 		{
-			StartTimeStamp = new netTime { MilliSecs = long.MaxValue };
-			StopTimeStamp = new netTime { MilliSecs = long.MaxValue };
+			StartTimeStamp = new netTime { MilliSecs = ulong.MaxValue };
+			StopTimeStamp = new netTime { MilliSecs = ulong.MaxValue };
 
 			PostConstruct();
 		}

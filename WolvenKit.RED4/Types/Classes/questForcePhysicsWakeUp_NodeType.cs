@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questForcePhysicsWakeUp_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 
 			PostConstruct();
 		}

@@ -374,13 +374,14 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleAutonomousData()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 			TargetPosition = new Vector3 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue };
 			DistanceMin = 0.500000F;
 			DistanceMax = 1.000000F;
 			StopHasReachedTarget = true;
 			StartFromClosest = true;
 			SecureTimeOut = 60.000000F;
+			PortalsList = new vehiclePortalsList();
 			ClearTrafficOnPath = true;
 			EmergencyPatrol = true;
 			NumPatrolLoops = 1;

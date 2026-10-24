@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_FloorIkBase : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("requiredAnimEvent")] 
 		public CName RequiredAnimEvent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("blockAnimEvent")] 
 		public CName BlockAnimEvent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("canBeDisabledDueToFrameRate")] 
 		public CBool CanBeDisabledDueToFrameRate
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("useFixedVersion")] 
 		public CBool UseFixedVersion
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("slopeAngleDamp")] 
 		public CFloat SlopeAngleDamp
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("common")] 
 		public animSBehaviorConstraintNodeFloorIKCommonData Common
 		{
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.Types
 			BlockAnimEvent = "AlignToGround";
 			UseFixedVersion = true;
 			SlopeAngleDamp = 0.200000F;
-			Common = new animSBehaviorConstraintNodeFloorIKCommonData { GravityCentreBone = new animTransformIndex(), RootRotationBlendTime = 0.200000F, VerticalVelocityOffsetUpBlendTime = 0.080000F, VerticalVelocityOffsetDownBlendTime = 0.030000F, SlidingOnSlopeBlendTime = 0.200000F };
+			Common = new animSBehaviorConstraintNodeFloorIKCommonData();
 
 			PostConstruct();
 		}

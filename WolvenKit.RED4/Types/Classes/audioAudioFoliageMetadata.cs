@@ -83,6 +83,7 @@ namespace WolvenKit.RED4.Types
 			MinFoliageMeshVolumeThreshold = 5.000000F;
 			MaxFoliageMeshHeight = 7.000000F;
 			PlayerInsideRequiredPercentage = 0.500000F;
+			FoliageMaterials = new audioAudioFoliageMaterialDictionary { EntryType = new audioAudioFoliageMaterialDictionaryItem() };
 
 			PostConstruct();
 		}

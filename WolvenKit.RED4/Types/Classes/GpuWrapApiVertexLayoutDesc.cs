@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public GpuWrapApiVertexLayoutDesc()
 		{
-			Elements = new(0);
-			SlotStrides = new(0);
+			Elements = new(32);
+			SlotStrides = new(8);
 			Hash = uint.MaxValue;
 
 			PostConstruct();

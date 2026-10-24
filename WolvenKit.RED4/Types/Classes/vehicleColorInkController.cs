@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			SecondaryColor = new();
 			CachedPrimaryColor = new CColor();
 			CachedSecondaryColor = new CColor();
-			CachedTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
+			CachedTemplate = new VehicleVisualCustomizationTemplate();
 
 			PostConstruct();
 		}

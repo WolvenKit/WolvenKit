@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public navgendebugTileGenerationDebugData()
 		{
-			Heightfield = new navgendebugHeightfield { Bounds = new Box { Min = new Vector4(), Max = new Vector4() }, RawSpans = new navgendebugSpansData { Spans = new(), Areas = new(), FilteredAreas = new() }, CompactSpans = new navgendebugSpansData { Spans = new(), Areas = new(), FilteredAreas = new() }, Cells = new(), Regions = new(), Distancefield = new() };
-			Contours = new navgendebugContourSet { Contours = new(), BoundingBox = new Box { Min = new Vector4(), Max = new Vector4() } };
-			PolyMesh = new navgendebugPolyMesh { Vertices = new(), Polygons = new(), Bounds = new Box { Min = new Vector4(), Max = new Vector4() } };
+			Heightfield = new navgendebugHeightfield();
+			Contours = new navgendebugContourSet();
+			PolyMesh = new navgendebugPolyMesh();
 
 			PostConstruct();
 		}

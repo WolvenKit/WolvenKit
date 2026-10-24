@@ -32,8 +32,9 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			EntityReference = new gameEntityReference { Names = new() };
+			EntityReference = new gameEntityReference();
 			MoveType = "questMoveOnSplineParams";
+			NodeParams = new questMoveOnSplineParams { AdditionalParams = new questMoveOnSplineAdditionalParams { SimpleParams = new questSimpleMoveOnSplineParams { FacingTargetRef = new questUniversalRef { RefLocalPlayer = false } } } };
 
 			PostConstruct();
 		}

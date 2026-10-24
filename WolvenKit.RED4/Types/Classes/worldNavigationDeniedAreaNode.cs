@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldNavigationDeniedAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("human")] 
 		public CBool Human
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("vehicle")] 
 		public CBool Vehicle
 		{
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldNavigationDeniedAreaNode()
 		{
+			Color = new CColor { Red = 255, Green = 178, Blue = 102, Alpha = 120 };
 			Human = true;
 			Vehicle = true;
 

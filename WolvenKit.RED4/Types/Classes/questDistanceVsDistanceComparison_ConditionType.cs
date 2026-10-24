@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public questDistanceVsDistanceComparison_ConditionType()
 		{
+			DistanceDefinition1 = new questObjectDistance { EntityRef = new questUniversalRef() };
+			DistanceDefinition2 = new questObjectDistance { EntityRef = new questUniversalRef() };
+
 			PostConstruct();
 		}
 

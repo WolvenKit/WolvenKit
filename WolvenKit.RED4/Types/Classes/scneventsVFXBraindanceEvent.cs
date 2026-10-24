@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsVFXBraindanceEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			PerformerId = new scnPerformerId { Id = 4294967040 };
-			EffectEntry = new scnEffectEntry { EffectInstanceId = new scnEffectInstanceId { EffectId = new scnEffectId { Id = uint.MaxValue }, Id = uint.MaxValue } };
-			GlitchEffectEntry = new scnEffectEntry { EffectInstanceId = new scnEffectInstanceId { EffectId = new scnEffectId { Id = uint.MaxValue }, Id = uint.MaxValue } };
+			Id = new scnSceneEventId();
+			PerformerId = new scnPerformerId();
+			EffectEntry = new scnEffectEntry();
+			GlitchEffectEntry = new scnEffectEntry();
 
 			PostConstruct();
 		}

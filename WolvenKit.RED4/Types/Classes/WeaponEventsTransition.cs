@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class WeaponEventsTransition : WeaponTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("scriptInterface")] 
 		public CHandle<gamestateMachineGameScriptInterface> ScriptInterface
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamestateMachineGameScriptInterface>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("statusEffectListener")] 
 		public CHandle<DefaultTransitionStatusEffectListener> StatusEffectListener
 		{

@@ -78,11 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerCombat_Kill()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
-			SkipDefeatedState = true;
-			WoundType = Enums.entdismembermentWoundTypeE.COARSE;
-			DismembermentStrenght = 8.000000F;
-
 			PostConstruct();
 		}
 

@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsSpawnEntityEventParams()
 		{
-			Performer = new scnPerformerId { Id = 4294967040 };
-			ReferencePerformer = new scnPerformerId { Id = 4294967040 };
+			Performer = new scnPerformerId();
+			ReferencePerformer = new scnPerformerId();
 			FallbackData = new();
 
 			PostConstruct();

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public GameObjectScanStats()
 		{
-			ScannerData = new scannerDataStructure { QuestEntries = new() };
+			ScannerData = new scannerDataStructure();
 
 			PostConstruct();
 		}

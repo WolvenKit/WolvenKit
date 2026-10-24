@@ -132,6 +132,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("IsLeftWeapon")] 
+		public CBool IsLeftWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("HasPairedWeapon")] 
+		public CBool HasPairedWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("CanDualWield")] 
+		public CBool CanDualWield
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public UIInventoryWeaponInternalData()
 		{
 			EmptySlots = new();

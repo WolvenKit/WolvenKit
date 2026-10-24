@@ -118,17 +118,17 @@ namespace WolvenKit.RED4.Types
 
 		public scnPropDef()
 		{
-			PropId = new scnPropId { Id = uint.MaxValue };
+			PropId = new scnPropId();
 			AnimSets = new();
 			CinematicAnimSets = new();
 			DynamicAnimSets = new();
-			FindEntityInEntityParams = new scnFindEntityInEntityParams { ActorId = new scnActorId { Id = uint.MaxValue }, PerformerId = new scnPerformerId { Id = 4294967040 }, OwnershipTransferOptions = new scnPropOwnershipTransferOptions { DettachFromSlot = true, RemoveFromInventory = true } };
-			SpawnDespawnParams = new scnSpawnDespawnEntityParams { SpawnOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } }, ItemOwnerId = new scnPerformerId { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
+			FindEntityInEntityParams = new scnFindEntityInEntityParams();
+			SpawnDespawnParams = new scnSpawnDespawnEntityParams();
 			SpawnSetParams = new scnSpawnSetParams();
 			CommunityParams = new scnCommunityParams();
 			SpawnerParams = new scnSpawnerParams();
 			FindEntityInNodeParams = new scnFindEntityInNodeParams();
-			FindEntityInWorldParams = new scnFindEntityInWorldParams { ActorRef = new gameEntityReference { Names = new() } };
+			FindEntityInWorldParams = new scnFindEntityInWorldParams();
 
 			PostConstruct();
 		}

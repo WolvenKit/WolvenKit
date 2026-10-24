@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			AcousticIsolationFactor = float.MinValue;
 			GlassAcousticIsolationFactor = float.MinValue;
-			OpenedWindows = new(0);
+			OpenedWindows = new(6);
 
 			PostConstruct();
 		}

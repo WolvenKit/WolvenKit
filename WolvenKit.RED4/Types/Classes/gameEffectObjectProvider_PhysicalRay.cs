@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.Types
 			InputPosition = new gameEffectInputParameter_Vector();
 			InputForward = new gameEffectInputParameter_Vector();
 			InputRange = new gameEffectInputParameter_Float();
-			OutputRaycastEnd = new gameEffectOutputParameter_Vector { BlackboardProperty = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() } };
+			OutputRaycastEnd = new gameEffectOutputParameter_Vector();
 			QueryPreset = new physicsQueryPreset();
 
 			PostConstruct();

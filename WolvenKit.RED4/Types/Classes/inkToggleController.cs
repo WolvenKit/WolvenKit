@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkToggleController()
 		{
-			ToggleChanged = new inkToggleChangedCallback();
+			ToggleChanged = new inkToggleChangedCallback { CallbackName = "OnToggleChanged" };
 
 			PostConstruct();
 		}

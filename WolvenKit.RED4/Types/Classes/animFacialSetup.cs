@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DataBuffer>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("usedTransformIndices")] 
 		public CArray<CUInt16> UsedTransformIndices
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("useFemaleAnimSet")] 
 		public CBool UseFemaleAnimSet
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public animFacialSetup()
 		{
-			Info = new animFacialSetup_BufferInfo { TracksMapping = new animFacialSetup_TracksMapping(), Face = new animFacialSetup_OneSermoBufferInfo(), Eyes = new animFacialSetup_OneSermoBufferInfo(), Tongue = new animFacialSetup_OneSermoBufferInfo() };
-			PosesInfo = new animFacialSetup_PosesBufferInfo { Face = new animFacialSetup_OneSermoPoseBufferInfo(), Tongue = new animFacialSetup_OneSermoPoseBufferInfo(), Eyes = new animFacialSetup_OneSermoPoseBufferInfo() };
+			Info = new animFacialSetup_BufferInfo();
+			PosesInfo = new animFacialSetup_PosesBufferInfo();
 			UsedTransformIndices = new();
 
 			PostConstruct();

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AISpotPersistentData()
 		{
-			WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			WorldPosition = new WorldPosition();
 			GlobalNodeId = new worldGlobalNodeID();
 			IsEnabled = true;
 
