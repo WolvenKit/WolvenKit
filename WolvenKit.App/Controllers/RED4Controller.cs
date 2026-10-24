@@ -274,13 +274,13 @@ public partial class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        if (options.PublishOnModIo && !await PublishOnModIo(cp77Proj))
+        /*if (options.PublishOnModIo && !await PublishOnModIo(cp77Proj))
         {
             _progressService.IsIndeterminate = false;
             _loggerService.Error("Publishing on mod.io failed, aborting.");
             _notificationService.Error("Publishing on mod.io failed, aborting.");
             return false;
-        }
+        }*/
 
         // backup
         if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
