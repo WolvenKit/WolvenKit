@@ -1,6 +1,6 @@
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
-using WolvenKit.RED4.Types.Exceptions;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types;
 
@@ -98,12 +98,74 @@ public partial class worldCookedCollisionNode
             {
                 var subEntry = new worldCookedCollisionShape();
 
-                subEntry.CollisionSourceKey.Pe = br.ReadCUInt8();
+                var keyData = br.BaseReader.ReadBytes(12);
+                var keyType = (physicsShapeType)br.BaseReader.ReadByte();
 
-                for (var j = 0; j < 12; j++)
+                switch (keyType)
                 {
-                    subEntry.CollisionSourceKey.Ta[j] = br.ReadCUInt8();
+                    case physicsShapeType.Box:
+                    {
+                        var tmp = new PhysicsGeometryBoxData();
+                        tmp.Size.X = BitConverter.ToSingle(keyData, 0);
+                        tmp.Size.Y = BitConverter.ToSingle(keyData, 4);
+                        tmp.Size.Z = BitConverter.ToSingle(keyData, 8);
+                        subEntry.CollisionSourceKey = tmp;
+                        break;
+                    }
+                    case physicsShapeType.Sphere:
+                    {
+                        var tmp = new PhysicsGeometrySphereData();
+                        tmp.Size.X = BitConverter.ToSingle(keyData, 0);
+                        tmp.Size.Y = BitConverter.ToSingle(keyData, 4); // need to confirm, test file just contains 0
+                        tmp.Size.Z = BitConverter.ToSingle(keyData, 8); // need to confirm, test file just contains 0
+                        subEntry.CollisionSourceKey = tmp;
+                        break;
+                    }
+                    case physicsShapeType.Capsule:
+                    {
+                        var tmp = new PhysicsGeometryCapsuleData();
+                        tmp.Size.X = BitConverter.ToSingle(keyData, 0);
+                        tmp.Size.Y = BitConverter.ToSingle(keyData, 4);
+                        tmp.Size.Z = BitConverter.ToSingle(keyData, 8); // need to confirm, test file just contains 0
+                        subEntry.CollisionSourceKey = tmp;
+                        break;
+                    }
+                    case physicsShapeType.ConvexMesh:
+                    {
+                        var tmp = new PhysicsGeometryConvexMeshData();
+                        tmp.Hash = BitConverter.ToUInt64(keyData, 0);
+                        for (var j = 0; j < 4; j++) // need to confirm, test file just contains 0
+                        {
+                            tmp.Data[j] = keyData[j+8];
+                        }
+                        subEntry.CollisionSourceKey = tmp;
+                        break;
+                    }
+                    case physicsShapeType.TriangleMesh:
+                    {
+                        var tmp = new PhysicsGeometryTriangleMeshData();
+                        tmp.Hash = BitConverter.ToUInt64(keyData, 0);
+                        for (var j = 0; j < 4; j++) // need to confirm, test file just contains 0
+                        {
+                            tmp.Data[j] = keyData[j+8];
+                        }
+                        subEntry.CollisionSourceKey = tmp;
+                        break;
+                    }
+                    case physicsShapeType.Invalid: // shouldn't be in a file...
+                    {
+                        var tmp = new PhysicsGeometryInvalidData();
+                        for (var j = 0; j < 12; j++)
+                        {
+                            tmp.Data[j] = keyData[j];
+                        }
+                        subEntry.CollisionSourceKey = tmp;
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
+
                 br.BaseReader.ReadBytes(3); // padding
 
                 subEntry.Index = br.ReadCUInt16();
@@ -269,10 +331,59 @@ public partial class worldCookedCollisionNode
             infos[i].NumShapeInfos = (CUInt16)entry.Shapes.Count;
             foreach (var shapeInfo in entry.Shapes)
             {
-                bw.Write(shapeInfo.CollisionSourceKey.Pe);
-                foreach (var ta in shapeInfo.CollisionSourceKey.Ta)
+                switch (shapeInfo.CollisionSourceKey)
                 {
-                    bw.Write(ta);
+                    case PhysicsGeometryBoxData boxData:
+                    {
+                        bw.Write(boxData.Size.X);
+                        bw.Write(boxData.Size.Y);
+                        bw.Write(boxData.Size.Z);
+                        bw.BaseWriter.Write((byte)physicsShapeType.Box);
+                        break;
+                    }
+
+                    case PhysicsGeometrySphereData sphereData:
+                    {
+                        bw.Write(sphereData.Size.X);
+                        bw.Write(sphereData.Size.Y);
+                        bw.Write(sphereData.Size.Z);
+                        bw.BaseWriter.Write((byte)physicsShapeType.Sphere);
+                        break;
+                    }
+
+                    case PhysicsGeometryCapsuleData capsuleData:
+                    {
+                        bw.Write(capsuleData.Size.X);
+                        bw.Write(capsuleData.Size.Y);
+                        bw.Write(capsuleData.Size.Z);
+                        bw.BaseWriter.Write((byte)physicsShapeType.Capsule);
+                        break;
+                    }
+
+                    case PhysicsGeometryConvexMeshData convexMeshData:
+                    {
+                        bw.Write(convexMeshData.Hash);
+                        for (var j = 0; j < 4; j++)
+                        {
+                            bw.Write(convexMeshData.Data[j]);
+                        }
+                        bw.BaseWriter.Write((byte)physicsShapeType.ConvexMesh);
+                        break;
+                    }
+
+                    case PhysicsGeometryTriangleMeshData triangleMeshData:
+                    {
+                        bw.Write(triangleMeshData.Hash);
+                        for (var j = 0; j < 4; j++)
+                        {
+                            bw.Write(triangleMeshData.Data[j]);
+                        }
+                        bw.BaseWriter.Write((byte)physicsShapeType.TriangleMesh);
+                        break;
+                    }
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 bw.BaseWriter.Write(new byte[3]); // padding
@@ -609,10 +720,10 @@ public class worldCookedCollisionShape : RedBaseClass
 {
     [RED("collisionSourceKey")]
     [REDProperty(IsIgnored = true)]
-    public physicsGeometryKey CollisionSourceKey
+    public PhysicsGeometryBaseData CollisionSourceKey
     {
-        get => GetPropertyValue<physicsGeometryKey>();
-        set => SetPropertyValue<physicsGeometryKey>(value);
+        get => GetPropertyValue<PhysicsGeometryBaseData>();
+        set => SetPropertyValue<PhysicsGeometryBaseData>(value);
     }
 
     [RED("index")]
@@ -666,5 +777,122 @@ public class worldCookedCollisionShape : RedBaseClass
     public worldCookedCollisionShape()
     {
         CollisionSourceKey = new();
+    }
+}
+
+public class PhysicsGeometryBaseData : RedBaseClass
+{
+
+}
+
+public class PhysicsGeometryBoxData : PhysicsGeometryBaseData
+{
+    [RED("size")]
+    [REDProperty(IsIgnored = true)]
+    public Vector3 Size
+    {
+        get => GetPropertyValue<Vector3>();
+        set => SetPropertyValue<Vector3>(value);
+    }
+
+    public PhysicsGeometryBoxData()
+    {
+        Size = new();
+    }
+}
+
+public class PhysicsGeometrySphereData : PhysicsGeometryBaseData
+{
+    [RED("size")]
+    [REDProperty(IsIgnored = true)]
+    public Vector3 Size
+    {
+        get => GetPropertyValue<Vector3>();
+        set => SetPropertyValue<Vector3>(value);
+    }
+
+    public PhysicsGeometrySphereData()
+    {
+        Size = new();
+    }
+}
+
+public class PhysicsGeometryCapsuleData : PhysicsGeometryBaseData
+{
+    [RED("size")]
+    [REDProperty(IsIgnored = true)]
+    public Vector3 Size
+    {
+        get => GetPropertyValue<Vector3>();
+        set => SetPropertyValue<Vector3>(value);
+    }
+
+    public PhysicsGeometryCapsuleData()
+    {
+        Size = new();
+    }
+}
+
+public class PhysicsGeometryConvexMeshData : PhysicsGeometryBaseData
+{
+    [RED("hash")]
+    [REDProperty(IsIgnored = true)]
+    public CUInt64 Hash
+    {
+        get => GetPropertyValue<CUInt64>();
+        set => SetPropertyValue<CUInt64>(value);
+    }
+
+    [RED("data", 4)]
+    [REDProperty(IsIgnored = true)]
+    public CArrayFixedSize<CUInt8> Data
+    {
+        get => GetPropertyValue<CArrayFixedSize<CUInt8>>();
+        set => SetPropertyValue<CArrayFixedSize<CUInt8>>(value);
+    }
+
+    public PhysicsGeometryConvexMeshData()
+    {
+        Data = new(4);
+    }
+}
+
+public class PhysicsGeometryTriangleMeshData : PhysicsGeometryBaseData
+{
+    [RED("hash")]
+    [REDProperty(IsIgnored = true)]
+    public CUInt64 Hash
+    {
+        get => GetPropertyValue<CUInt64>();
+        set => SetPropertyValue<CUInt64>(value);
+    }
+
+    [RED("data", 4)]
+    [REDProperty(IsIgnored = true)]
+    public CArrayFixedSize<CUInt8> Data
+    {
+        get => GetPropertyValue<CArrayFixedSize<CUInt8>>();
+        set => SetPropertyValue<CArrayFixedSize<CUInt8>>(value);
+    }
+
+    public PhysicsGeometryTriangleMeshData()
+    {
+        Data = new(4);
+    }
+}
+
+public class PhysicsGeometryInvalidData : PhysicsGeometryBaseData
+{
+    [RED("data", 12)]
+    [REDProperty(IsIgnored = true)]
+    public CArrayFixedSize<CUInt8> Data
+    {
+        get => GetPropertyValue<CArrayFixedSize<CUInt8>>();
+        set => SetPropertyValue<CArrayFixedSize<CUInt8>>(value);
+    }
+
+    public PhysicsGeometryInvalidData()
+    {
+        Data = new(12);
     }
 }
