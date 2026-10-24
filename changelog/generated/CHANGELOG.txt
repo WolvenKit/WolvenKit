@@ -1,3 +1,17 @@
-[b]9.1.0 — 2026-10-10[/b]
+[b]10.0.0-beta.1 — 2026-10-24[/b]
 
-The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/9.1.0]GitHub releases page[/url]
+[b]App[/b]
+
+[*] [i]Removed[/i]: Removed two facial animsets from the dropdown that only worked because AMM patched them by @manavortex
+[*] [i]Added[/i]: Early support for game version 2.5 by @seberoth, notaspirit
+[*] [i]Changed[/i]: Improved many game type and property names by @seberoth
+
+[b]CLI[/b]
+
+[*] [i]Added[/i]: Early support for game version 2.5 by @seberoth, notaspirit
+[*] [i]Changed[/i]: Improved many game type and property names by @seberoth
+
+[b]Nuget Packages[/b]
+
+[*] [i]Added[/i]: Early support for game version 2.5 by @seberoth, notaspirit
+[*] [i]Changed[/i]: Improved many game type and property names by @seberoth
