@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.Types
 			AdditionalDataTextWidget = new inkTextWidgetReference();
 			ConfirmButton = new inkWidgetReference();
 			CancelButton = new inkWidgetReference();
-			DataSetByToken = new inkEmptyCallback();
+			DataSetByToken = new inkEmptyCallback { CallbackName = "OnDataSetByToken" };
 
 			PostConstruct();
 		}

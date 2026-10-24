@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.Types
 			StatLabelRef = new inkTextWidgetReference();
 			StatValueRef = new inkTextWidgetReference();
 			Icon = new inkImageWidgetReference();
-			Stat = new gameStatViewData { Type = Enums.gamedataStatType.Invalid };
+			Stat = new gameStatViewData();
 
 			PostConstruct();
 		}

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
 using WolvenKit.Core.Services;
@@ -78,6 +80,69 @@ public static class ProcessUtil
             return p.ExitCode == 0;
         }
     }
+
+    public class ProcessResult
+    {
+        public int ExitCode { get; set; } = -1;
+        public bool Success => ExitCode == 0;
+
+        public List<string> Output { get; } = new();
+        public List<string> Error { get;  } = new();
+    }
+
+    public static ProcessResult RunProcess2(string fileName, string arguments, string? workingDir = null)
+    {
+        using var timeoutSignal = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+        var result = new ProcessResult();
+
+
+        using var process = new Process();
+
+        process.StartInfo = new ProcessStartInfo()
+        {
+            FileName = fileName,
+            Arguments = arguments,
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+
+        if (!string.IsNullOrEmpty(workingDir))
+        {
+            process.StartInfo.WorkingDirectory = workingDir;
+        }
+
+        process.EnableRaisingEvents = true;
+
+        process.OutputDataReceived += (s, e) =>
+        {
+            if (e.Data is not null)
+            {
+                result.Output.Add(e.Data);
+            }
+        };
+        process.ErrorDataReceived += (s, e) =>
+        {
+            if (e.Data is not null)
+            {
+                result.Error.Add(e.Data);
+            }
+        };
+
+        process.Start();
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+
+        process.WaitForExit(TimeSpan.FromSeconds(30));
+
+        result.ExitCode = process.ExitCode;
+
+        return result;
+    }
+
+    public static async Task<ProcessResult> RunProcess2Async(string fileName, string arguments, string? workingDir = null) => await Task.Run(() => RunProcess2(fileName, arguments, workingDir));
 
     /// <summary>
     /// runs a process async and returns if completed successfully

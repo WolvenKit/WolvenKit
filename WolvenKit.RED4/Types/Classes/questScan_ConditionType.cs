@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questScan_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			EventType = Enums.questObjectScanEventType.Started;
 
 			PostConstruct();

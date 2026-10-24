@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public workTimeOfDayCondition()
 		{
-			Equals_ = true;
+			Equals = true;
 			ActiveAfter = new GameTime();
 			ActiveUntil = new GameTime();
 

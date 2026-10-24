@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public questVehicleWater_ConditionType()
 		{
 			AnyVehicle = true;
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 			SubmergedOnly = true;
 			OnEnter = true;
 

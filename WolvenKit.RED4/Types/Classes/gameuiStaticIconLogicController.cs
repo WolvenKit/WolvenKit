@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiStaticIconLogicController()
 		{
-			IconReference = 61952742650;
+			IconReference = "UIItem.Default";
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldSmartObjectNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("object")] 
 		public CHandle<gameSmartObjectDefinition> Object
 		{

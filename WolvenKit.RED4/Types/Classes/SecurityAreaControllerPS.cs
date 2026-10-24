@@ -112,13 +112,13 @@ namespace WolvenKit.RED4.Types
 		{
 			RevealDevicesGrid = false;
 			TweakDBRecord = "Devices.SecurityArea";
-			TweakDBDescriptionRecord = 138700257142;
+			TweakDBDescriptionRecord = "device_descriptions.SecurityArea";
 			UsersInPerimeter = new();
 			SecurityAreaType = Enums.ESecurityAreaType.DANGEROUS;
-			EventsFilters = new EventsFilters { IncomingEventsFilter = Enums.EFilterType.ALLOW_ALL, OutgoingEventsFilter = Enums.EFilterType.ALLOW_ALL };
+			EventsFilters = new EventsFilters();
 			AreaTransitions = new();
 			RuntimeTransitions = new();
-			LastOutput = new OutputPersistentData { LastKnownPosition = new Vector4(), ObjectOfInterest = new entEntityID(), WhoBreached = new entEntityID(), Reporter = new gamePersistentID() };
+			LastOutput = new OutputPersistentData();
 
 			PostConstruct();
 		}

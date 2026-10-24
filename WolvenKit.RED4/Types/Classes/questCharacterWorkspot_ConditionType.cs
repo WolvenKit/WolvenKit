@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterWorkspot_ConditionType()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

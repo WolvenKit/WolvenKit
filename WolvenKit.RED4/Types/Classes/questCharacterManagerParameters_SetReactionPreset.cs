@@ -22,7 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_SetReactionPreset()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
+			RecordSelector = new questReactionPresetRecordSelector();
 
 			PostConstruct();
 		}

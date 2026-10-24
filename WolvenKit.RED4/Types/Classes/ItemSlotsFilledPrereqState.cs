@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("inverted")] 
+		public CBool Inverted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ItemSlotsFilledPrereqState()
 		{
 			EquipAreas = new();

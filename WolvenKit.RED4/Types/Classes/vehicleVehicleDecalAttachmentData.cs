@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class vehicleVehicleDecalAttachmentData : RedBaseClass
 	{
 		[Ordinal(0)] 
+		[RED("onlyForPlayerVehicleAppearances")] 
+		public CArray<CName> OnlyForPlayerVehicleAppearances
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("componentToAttachTo")] 
 		public CName ComponentToAttachTo
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("decalReference")] 
 		public redResourceReferenceScriptToken DecalReference
 		{
@@ -22,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleVehicleDecalAttachmentData()
 		{
+			OnlyForPlayerVehicleAppearances = new();
 			DecalReference = new redResourceReferenceScriptToken();
 
 			PostConstruct();

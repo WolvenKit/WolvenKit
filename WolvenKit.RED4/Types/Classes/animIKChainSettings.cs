@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public animIKChainSettings()
 		{
 			IkEndPointOffset = new Vector3();
-			IkEndRotationOffset = new Quaternion { R = 1.000000F };
+			IkEndRotationOffset = new Quaternion();
 
 			PostConstruct();
 		}

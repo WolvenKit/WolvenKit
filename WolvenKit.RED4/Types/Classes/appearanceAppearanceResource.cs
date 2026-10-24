@@ -147,7 +147,7 @@ namespace WolvenKit.RED4.Types
 			CensorshipMapping = new();
 			Wounds = new();
 			DismEffects = new();
-			DismWoundConfig = new entdismembermentWoundsConfigSet { Configs = new() };
+			DismWoundConfig = new entdismembermentWoundsConfigSet();
 			Appearances = new();
 			ProxyPolyCount = 1400;
 

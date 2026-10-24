@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#17851";
 			TweakDBRecord = "Devices.HoloTable";
-			TweakDBDescriptionRecord = 128182655022;
+			TweakDBDescriptionRecord = "device_descriptions.HoloTable";
 
 			PostConstruct();
 		}

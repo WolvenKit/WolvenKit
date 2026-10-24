@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldLocationAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("locationName")] 
 		public CString LocationName
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldLocationAreaNode()
 		{
+			Color = new CColor { Green = 255, Blue = 255, Alpha = 255 };
+
 			PostConstruct();
 		}
 

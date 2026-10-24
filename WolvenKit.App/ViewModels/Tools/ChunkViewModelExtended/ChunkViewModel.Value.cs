@@ -552,10 +552,10 @@ public partial class ChunkViewModel
 
             #endregion
 
-            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
-                                        sst.NodeIndex < wss.Nodes.Count:
-                var node = wss.Nodes[sst.NodeIndex].Chunk;
-                Value = $"#{sst.NodeIndex}";
+            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
+                                                             (int)(ulong)sst.NodeIdx < wss.Nodes.Count:
+                var node = wss.Nodes[(int)(ulong)sst.NodeIdx].Chunk;
+                Value = $"#{(int)(ulong)sst.NodeIdx}";
                 if (node?.GetType().Name is string nodeName && !string.IsNullOrEmpty(nodeName))
                 {
                     Value = $"{Value} => {nodeName}";

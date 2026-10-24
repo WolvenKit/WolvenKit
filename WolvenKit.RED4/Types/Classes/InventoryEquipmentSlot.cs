@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			BackgroundFrame = new inkImageWidgetReference();
 			UnavailableIcon = new inkWidgetReference();
 			ToggleHighlight = new inkImageWidgetReference();
-			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			ItemData = new gameInventoryItemData();
 			SmallSize = new Vector2();
 			BigSize = new Vector2();
 

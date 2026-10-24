@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questChoiceSection_ConditionType()
 		{
-			ChoiceSectionId = new scnNodeId { Id = uint.MaxValue };
+			ChoiceSectionId = new scnNodeId();
 
 			PostConstruct();
 		}

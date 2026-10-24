@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayBinkEvent()
 		{
-			Data = new SBinkperationData { BinkPath = new redResourceReferenceScriptToken() };
+			Data = new SBinkperationData();
 
 			PostConstruct();
 		}

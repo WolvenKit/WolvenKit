@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioGenericNameEventDictionary()
 		{
 			Entries = new();
+			EntryType = new audioGenericNameEventItem();
 
 			PostConstruct();
 		}

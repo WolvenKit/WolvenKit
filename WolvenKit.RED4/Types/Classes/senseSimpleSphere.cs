@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public senseSimpleSphere()
 		{
-			Sphere = new Sphere { CenterRadius2 = new Vector4() };
+			Sphere = new Sphere();
 
 			PostConstruct();
 		}

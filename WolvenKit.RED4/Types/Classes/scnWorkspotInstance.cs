@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public scnWorkspotInstance()
 		{
-			WorkspotInstanceId = new scnSceneWorkspotInstanceId { Id = uint.MaxValue };
-			DataId = new scnSceneWorkspotDataId { Id = uint.MaxValue };
-			LocalTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
-			OriginMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
+			WorkspotInstanceId = new scnSceneWorkspotInstanceId();
+			DataId = new scnSceneWorkspotDataId();
+			LocalTransform = new Transform();
+			OriginMarker = new scnMarker();
 
 			PostConstruct();
 		}

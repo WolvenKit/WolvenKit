@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineStateContextParameters()
 		{
-			BoolParameters = new(0);
-			IntParameters = new(0);
-			FloatParameters = new(0);
-			DoubleParameters = new(0);
-			VectorParameters = new(0);
-			CNameParameters = new(0);
-			IScriptableParameters = new(0);
-			TweakDBIDParameters = new(0);
+			BoolParameters = new(128);
+			IntParameters = new(128);
+			FloatParameters = new(128);
+			DoubleParameters = new(128);
+			VectorParameters = new(128);
+			CNameParameters = new(128);
+			IScriptableParameters = new(128);
+			TweakDBIDParameters = new(128);
 
 			PostConstruct();
 		}

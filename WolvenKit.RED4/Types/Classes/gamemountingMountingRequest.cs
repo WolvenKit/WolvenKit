@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamemountingMountingRequest()
 		{
-			LowLevelMountingInfo = new gamemountingMountingInfo { ChildId = new entEntityID(), ParentId = new entEntityID(), SlotId = new gamemountingMountingSlotId() };
+			LowLevelMountingInfo = new gamemountingMountingInfo();
 			PreservePositionAfterMounting = true;
 
 			PostConstruct();

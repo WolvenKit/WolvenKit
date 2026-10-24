@@ -54,7 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterKilled_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
+			ComparisonParams = new questComparisonParam { ComparisonType = Enums.EComparisonType.GreaterOrEqual };
 			Killed = true;
 			Unconscious = true;
 			Defeated = true;

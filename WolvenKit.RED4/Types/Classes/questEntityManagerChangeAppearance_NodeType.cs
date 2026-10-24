@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerChangeAppearance_NodeType()
 		{
-			EntityRef = new gameEntityReference { Names = new() };
+			EntityRef = new gameEntityReference();
 
 			PostConstruct();
 		}

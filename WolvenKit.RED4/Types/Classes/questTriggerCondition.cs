@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public questTriggerCondition()
 		{
 			Type = Enums.questTriggerConditionType.IsInside;
-			ActivatorRef = new gameEntityReference { Names = new() };
+			ActivatorRef = new gameEntityReference();
 			IsPlayerActivator = true;
 
 			PostConstruct();

@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public questTransferItems_NodeTypeParams()
 		{
+			Giver = new questUniversalRef();
+			Receiver = new questUniversalRef();
 			ItemOperations = new();
 			TagOperations = new();
 

@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorRepeatNodeDefinition()
 		{
+			Limit = new AIArgumentMapping { Type = Enums.AIArgumentType.Int, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Int32" };
+
 			PostConstruct();
 		}
 

@@ -78,14 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public audioWeaponAmmoSettingsMap()
 		{
-			StandardFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			SniperFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			ShotFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			RailFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			AutomaticFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			SmartFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			SmartSniperFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
-			HmgFlyby = new audioFlybySettings { MovementSpeed = 15.000000F };
+			StandardFlyby = new audioFlybySettings();
+			SniperFlyby = new audioFlybySettings();
+			ShotFlyby = new audioFlybySettings();
+			RailFlyby = new audioFlybySettings();
+			AutomaticFlyby = new audioFlybySettings();
+			SmartFlyby = new audioFlybySettings();
+			SmartSniperFlyby = new audioFlybySettings();
+			HmgFlyby = new audioFlybySettings();
 			FlybyMinDistance = 5.000000F;
 
 			PostConstruct();

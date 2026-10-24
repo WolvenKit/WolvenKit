@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scndevEvent()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 
 			PostConstruct();
 		}

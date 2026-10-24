@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#153";
 			TweakDBRecord = "Devices.Billboard";
-			TweakDBDescriptionRecord = 126200537756;
+			TweakDBDescriptionRecord = "device_descriptions.Billboard";
 			GlitchSFX = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
 			UseLights = true;
 			LightsSettings = new();

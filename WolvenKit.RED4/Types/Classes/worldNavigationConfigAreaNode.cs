@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldNavigationConfigAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("generateVariantsNavmesh")] 
 		public CBool GenerateVariantsNavmesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("detailSamplingDensity")] 
 		public CEnum<NavGenSamplingDensity> DetailSamplingDensity
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<NavGenSamplingDensity>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("smoothWalkableAreas")] 
 		public CBool SmoothWalkableAreas
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("generateCrouchableAreas")] 
 		public CBool GenerateCrouchableAreas
 		{
@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldNavigationConfigAreaNode()
 		{
+			Color = new CColor { Red = 127, Green = 255, Blue = 127, Alpha = 120 };
+
 			PostConstruct();
 		}
 

@@ -18,10 +18,10 @@ public partial class worldStaticMeshNode : IRedMeshNode
 
 }
 
-public partial class worldInstancedMeshNode : IRedMeshNode
+/*public partial class worldInstancedMeshNode : IRedMeshNode
 {
 
-}
+}*/
 
 public partial class worldPrefabProxyMeshNode : IRedMeshNode
 {

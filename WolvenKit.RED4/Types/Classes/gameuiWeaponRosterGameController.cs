@@ -5,46 +5,150 @@ namespace WolvenKit.RED4.Types
 	public partial class gameuiWeaponRosterGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
-		[RED("weaponName")] 
-		public inkTextWidgetReference WeaponName
+		[RED("rightWeaponName")] 
+		public inkTextWidgetReference RightWeaponName
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
-		[RED("weaponIcon")] 
-		public inkImageWidgetReference WeaponIcon
+		[RED("rightWeaponIcon")] 
+		public inkImageWidgetReference RightWeaponIcon
 		{
 			get => GetPropertyValue<inkImageWidgetReference>();
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
-		[RED("weaponCurrentAmmo")] 
-		public inkTextWidgetReference WeaponCurrentAmmo
+		[RED("rightWeaponCurrentAmmo")] 
+		public inkTextWidgetReference RightWeaponCurrentAmmo
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
-		[RED("weaponTotalAmmo")] 
-		public inkTextWidgetReference WeaponTotalAmmo
+		[RED("rightWeaponTotalAmmo")] 
+		public inkTextWidgetReference RightWeaponTotalAmmo
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
-		[RED("weaponAmmoWrapper")] 
-		public inkWidgetReference WeaponAmmoWrapper
+		[RED("rightWeaponAmmoWrapper")] 
+		public inkWidgetReference RightWeaponAmmoWrapper
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
+		[RED("leftWeaponName")] 
+		public inkTextWidgetReference LeftWeaponName
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("leftWeaponIcon")] 
+		public inkImageWidgetReference LeftWeaponIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("leftWeaponCurrentAmmo")] 
+		public inkTextWidgetReference LeftWeaponCurrentAmmo
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("leftWeaponTotalAmmo")] 
+		public inkTextWidgetReference LeftWeaponTotalAmmo
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("widgetsToActivateWithLeftWeapon")] 
+		public CArray<inkWidgetReference> WidgetsToActivateWithLeftWeapon
+		{
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("rightWeaponHolder")] 
+		public inkWidgetReference RightWeaponHolder
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("leftWeaponHolder")] 
+		public inkWidgetReference LeftWeaponHolder
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("weaponIconsScaleWhenDualWielding")] 
+		public Vector2 WeaponIconsScaleWhenDualWielding
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("weaponIconsTopMarginWhenSingleWielding")] 
+		public CFloat WeaponIconsTopMarginWhenSingleWielding
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("weaponIconsTopMarginWhenDualWielding")] 
+		public CFloat WeaponIconsTopMarginWhenDualWielding
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("rightWeaponWrapper")] 
+		public inkHorizontalPanelWidgetReference RightWeaponWrapper
+		{
+			get => GetPropertyValue<inkHorizontalPanelWidgetReference>();
+			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("childMarginWhenSingleWielding")] 
+		public CFloat ChildMarginWhenSingleWielding
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("childMarginWhenDualWielding")] 
+		public CFloat ChildMarginWhenDualWielding
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("onFootContainer")] 
 		public inkWidgetReference OnFootContainer
 		{
@@ -52,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(28)] 
 		[RED("weaponizedVehicleContainer")] 
 		public inkWidgetReference WeaponizedVehicleContainer
 		{
@@ -60,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(29)] 
 		[RED("weaponizedVehicleMissileLauncherContainer")] 
 		public inkWidgetReference WeaponizedVehicleMissileLauncherContainer
 		{
@@ -68,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(30)] 
 		[RED("weaponizedVehicleMachinegunContainer")] 
 		public inkWidgetReference WeaponizedVehicleMachinegunContainer
 		{
@@ -76,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(31)] 
 		[RED("machinegunAmmo")] 
 		public inkTextWidgetReference MachinegunAmmo
 		{
@@ -84,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(32)] 
 		[RED("machinegunReloadingProgressBar")] 
 		public inkWidgetReference MachinegunReloadingProgressBar
 		{
@@ -92,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(33)] 
 		[RED("machinegunReloadingProgressBarFill")] 
 		public inkWidgetReference MachinegunReloadingProgressBarFill
 		{
@@ -100,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(34)] 
 		[RED("missileLauncherAmmo")] 
 		public inkTextWidgetReference MissileLauncherAmmo
 		{
@@ -108,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(35)] 
 		[RED("missileLauncherReloadingProgressBar")] 
 		public inkWidgetReference MissileLauncherReloadingProgressBar
 		{
@@ -116,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(36)] 
 		[RED("missileLauncherReloadingProgressBarFill")] 
 		public inkWidgetReference MissileLauncherReloadingProgressBarFill
 		{
@@ -124,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(37)] 
 		[RED("smartLinkFirmwareOnline")] 
 		public inkCompoundWidgetReference SmartLinkFirmwareOnline
 		{
@@ -132,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("smartLinkFirmwareOffline")] 
 		public inkCompoundWidgetReference SmartLinkFirmwareOffline
 		{
@@ -140,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("uiEquipmentDataBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UiEquipmentDataBlackboard
 		{
@@ -148,7 +252,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
+		[RED("uiBlackboard")] 
+		public CWeakHandle<gameIBlackboard> UiBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(41)] 
 		[RED("ammoHackedListenerId")] 
 		public CHandle<redCallbackObject> AmmoHackedListenerId
 		{
@@ -156,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(42)] 
 		[RED("BBWeaponList")] 
 		public CHandle<redCallbackObject> BBWeaponList
 		{
@@ -164,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(43)] 
 		[RED("BBAmmoLooted")] 
 		public CHandle<redCallbackObject> BBAmmoLooted
 		{
@@ -172,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(44)] 
 		[RED("dataListenerId")] 
 		public CHandle<redCallbackObject> DataListenerId
 		{
@@ -180,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(45)] 
 		[RED("onMagazineAmmoCount")] 
 		public CHandle<redCallbackObject> OnMagazineAmmoCount
 		{
@@ -188,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(46)] 
 		[RED("remoteControlledVehicleDataCallback")] 
 		public CHandle<redCallbackObject> RemoteControlledVehicleDataCallback
 		{
@@ -196,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(47)] 
 		[RED("psmWeaponStateChangedCallback")] 
 		public CHandle<redCallbackObject> PsmWeaponStateChangedCallback
 		{
@@ -204,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(48)] 
 		[RED("VisionStateBlackboardId")] 
 		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
@@ -212,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(49)] 
 		[RED("weaponParamsListenerId")] 
 		public CHandle<redCallbackObject> WeaponParamsListenerId
 		{
@@ -220,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(50)] 
 		[RED("weaponizedVehicleMachineGunAmmoChangedCallback")] 
 		public CHandle<redCallbackObject> WeaponizedVehicleMachineGunAmmoChangedCallback
 		{
@@ -228,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(51)] 
 		[RED("weaponizedVehicleMissileLauncherChargesChangedCallback")] 
 		public CHandle<redCallbackObject> WeaponizedVehicleMissileLauncherChargesChangedCallback
 		{
@@ -236,23 +348,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(38)] 
-		[RED("weaponRecord")] 
-		public CHandle<gamedataWeaponItem_Record> WeaponRecord
+		[Ordinal(52)] 
+		[RED("rightWeaponRecord")] 
+		public CHandle<gamedataWeaponItem_Record> RightWeaponRecord
 		{
 			get => GetPropertyValue<CHandle<gamedataWeaponItem_Record>>();
 			set => SetPropertyValue<CHandle<gamedataWeaponItem_Record>>(value);
 		}
 
-		[Ordinal(39)] 
-		[RED("activeWeapon")] 
-		public gameSlotWeaponData ActiveWeapon
+		[Ordinal(53)] 
+		[RED("activeRightWeapon")] 
+		public gameSlotWeaponData ActiveRightWeapon
 		{
 			get => GetPropertyValue<gameSlotWeaponData>();
 			set => SetPropertyValue<gameSlotWeaponData>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(54)] 
+		[RED("leftWeaponRecord")] 
+		public CHandle<gamedataWeaponItem_Record> LeftWeaponRecord
+		{
+			get => GetPropertyValue<CHandle<gamedataWeaponItem_Record>>();
+			set => SetPropertyValue<CHandle<gamedataWeaponItem_Record>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("activeLeftWeapon")] 
+		public gameSlotWeaponData ActiveLeftWeapon
+		{
+			get => GetPropertyValue<gameSlotWeaponData>();
+			set => SetPropertyValue<gameSlotWeaponData>(value);
+		}
+
+		[Ordinal(56)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -260,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(57)] 
 		[RED("PlayerMuppet")] 
 		public CWeakHandle<gameMuppet> PlayerMuppet
 		{
@@ -268,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameMuppet>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(58)] 
 		[RED("transitionAnimProxy")] 
 		public CHandle<inkanimProxy> TransitionAnimProxy
 		{
@@ -276,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(59)] 
 		[RED("outOfAmmoAnim")] 
 		public CHandle<inkanimProxy> OutOfAmmoAnim
 		{
@@ -284,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(60)] 
 		[RED("folded")] 
 		public CBool Folded
 		{
@@ -292,7 +420,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(61)] 
+		[RED("isLeftWeaponVisible")] 
+		public CBool IsLeftWeaponVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(62)] 
 		[RED("isUnholstered")] 
 		public CBool IsUnholstered
 		{
@@ -300,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(63)] 
 		[RED("inVehicle")] 
 		public CBool InVehicle
 		{
@@ -308,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(64)] 
 		[RED("inWeaponizedVehicle")] 
 		public CBool InWeaponizedVehicle
 		{
@@ -316,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(65)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -324,15 +460,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(49)] 
-		[RED("weaponItemData")] 
-		public gameInventoryItemData WeaponItemData
+		[Ordinal(66)] 
+		[RED("rightWeaponItemData")] 
+		public gameInventoryItemData RightWeaponItemData
 		{
 			get => GetPropertyValue<gameInventoryItemData>();
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(67)] 
+		[RED("leftWeaponItemData")] 
+		public gameInventoryItemData LeftWeaponItemData
+		{
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
+		}
+
+		[Ordinal(68)] 
 		[RED("weaponizedVehiclePowerWeaponReloadTime")] 
 		public CFloat WeaponizedVehiclePowerWeaponReloadTime
 		{
@@ -340,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(69)] 
 		[RED("weaponizedVehiclePowerWeaponReloadElapsedTime")] 
 		public CFloat WeaponizedVehiclePowerWeaponReloadElapsedTime
 		{
@@ -348,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(70)] 
 		[RED("weaponizedVehicleMissileLauncherMaxCharges")] 
 		public CUInt32 WeaponizedVehicleMissileLauncherMaxCharges
 		{
@@ -356,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(71)] 
 		[RED("weaponizedVehicleMissileLauncherRechargeTime")] 
 		public CFloat WeaponizedVehicleMissileLauncherRechargeTime
 		{
@@ -364,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(72)] 
 		[RED("weaponizedVehicleMissileLauncherRechargeElapsedTime")] 
 		public CFloat WeaponizedVehicleMissileLauncherRechargeElapsedTime
 		{
@@ -374,11 +518,20 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWeaponRosterGameController()
 		{
-			WeaponName = new inkTextWidgetReference();
-			WeaponIcon = new inkImageWidgetReference();
-			WeaponCurrentAmmo = new inkTextWidgetReference();
-			WeaponTotalAmmo = new inkTextWidgetReference();
-			WeaponAmmoWrapper = new inkWidgetReference();
+			RightWeaponName = new inkTextWidgetReference();
+			RightWeaponIcon = new inkImageWidgetReference();
+			RightWeaponCurrentAmmo = new inkTextWidgetReference();
+			RightWeaponTotalAmmo = new inkTextWidgetReference();
+			RightWeaponAmmoWrapper = new inkWidgetReference();
+			LeftWeaponName = new inkTextWidgetReference();
+			LeftWeaponIcon = new inkImageWidgetReference();
+			LeftWeaponCurrentAmmo = new inkTextWidgetReference();
+			LeftWeaponTotalAmmo = new inkTextWidgetReference();
+			WidgetsToActivateWithLeftWeapon = new();
+			RightWeaponHolder = new inkWidgetReference();
+			LeftWeaponHolder = new inkWidgetReference();
+			WeaponIconsScaleWhenDualWielding = new Vector2();
+			RightWeaponWrapper = new inkHorizontalPanelWidgetReference();
 			OnFootContainer = new inkWidgetReference();
 			WeaponizedVehicleContainer = new inkWidgetReference();
 			WeaponizedVehicleMissileLauncherContainer = new inkWidgetReference();
@@ -391,9 +544,11 @@ namespace WolvenKit.RED4.Types
 			MissileLauncherReloadingProgressBarFill = new inkWidgetReference();
 			SmartLinkFirmwareOnline = new inkCompoundWidgetReference();
 			SmartLinkFirmwareOffline = new inkCompoundWidgetReference();
-			ActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			ActiveRightWeapon = new gameSlotWeaponData();
+			ActiveLeftWeapon = new gameSlotWeaponData();
 			Folded = true;
-			WeaponItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			RightWeaponItemData = new gameInventoryItemData();
+			LeftWeaponItemData = new gameInventoryItemData();
 			WeaponizedVehiclePowerWeaponReloadTime = -1.000000F;
 			WeaponizedVehiclePowerWeaponReloadElapsedTime = -1.000000F;
 			WeaponizedVehicleMissileLauncherRechargeTime = -1.000000F;

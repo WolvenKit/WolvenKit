@@ -1,27 +1,37 @@
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
 
-public partial class WorldSharedDataBufferReader
+public class WorldTransformsReader : Red4Reader, IBufferReader
 {
-    public EFileReadErrorCodes ReadWorldTransformsBuffer(RedBuffer buffer)
+    public WorldTransformsReader(MemoryStream ms) : base(ms)
     {
+
+    }
+
+    public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
+    {
+        if (buffer.Parent is not worldInstancedMeshNode node)
+        {
+            throw new Exception();
+        }
+
         var data = new WorldTransformsBuffer();
         while (_reader.BaseStream.Position < _reader.BaseStream.Length)
         {
-            var t = new worldNodeTransform();
+            var t = new RenderProxyTransform();
 
-            t.Translation.X = _reader.ReadInt32() * 0.0000076293945F;
-            t.Translation.Y = _reader.ReadInt32() * 0.0000076293945F;
-            t.Translation.Z = _reader.ReadInt32() * 0.0000076293945F;
-
+            t.Transform.Position.X.Bits = _reader.ReadInt32();
+            t.Transform.Position.Y.Bits = _reader.ReadInt32();
+            t.Transform.Position.Z.Bits = _reader.ReadInt32();
             _reader.ReadInt32();
 
-            t.Rotation.I = _reader.ReadSingle();
-            t.Rotation.J = _reader.ReadSingle();
-            t.Rotation.K = _reader.ReadSingle();
-            t.Rotation.R = _reader.ReadSingle();
+            t.Transform.Orientation.I = _reader.ReadSingle();
+            t.Transform.Orientation.J = _reader.ReadSingle();
+            t.Transform.Orientation.K = _reader.ReadSingle();
+            t.Transform.Orientation.R = _reader.ReadSingle();
 
             t.Scale.X = _reader.ReadSingle();
             t.Scale.Y = _reader.ReadSingle();

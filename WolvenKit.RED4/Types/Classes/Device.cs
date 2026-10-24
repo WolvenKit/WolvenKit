@@ -426,7 +426,7 @@ namespace WolvenKit.RED4.Types
 			NetworkGridBeamOffset = new Vector4();
 			AreaEffectsData = new();
 			AreaEffectsInFocusMode = new();
-			DebugOptions = new DebuggerProperties { LayerIDs = new() };
+			DebugOptions = new DebuggerProperties();
 
 			PostConstruct();
 		}

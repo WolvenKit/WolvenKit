@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public worldDebugColoring_ResourceName()
 		{
 			Names = new();
-			DefaultColor = new CColor();
+			DefaultColor = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

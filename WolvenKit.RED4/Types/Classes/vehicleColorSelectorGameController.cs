@@ -1124,6 +1124,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(142)] 
+		[RED("deletionPopup")] 
+		public CHandle<inkGameNotificationToken> DeletionPopup
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
 		public vehicleColorSelectorGameController()
 		{
 			CursorRootContainerRef = new inkWidgetReference();
@@ -1140,12 +1148,12 @@ namespace WolvenKit.RED4.Types
 			ColorWheelColorLightsCircle = new inkWidgetReference();
 			ColorWheelColorLightsFixedCircleContainer = new inkWidgetReference();
 			ColorWheelColorLightsFixedCircle = new inkWidgetReference();
-			ColorPickerA = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
-			SelectedColorPointerA = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
-			ColorPickerB = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
-			SelectedColorPointerB = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
-			ColorPickerLights = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
-			SelectedColorPointerLights = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
+			ColorPickerA = new vehicleColorSelectorPointerDef();
+			SelectedColorPointerA = new vehicleColorSelectorPointerDef();
+			ColorPickerB = new vehicleColorSelectorPointerDef();
+			SelectedColorPointerB = new vehicleColorSelectorPointerDef();
+			ColorPickerLights = new vehicleColorSelectorPointerDef();
+			SelectedColorPointerLights = new vehicleColorSelectorPointerDef();
 			SwapColorHint = new inkWidgetReference();
 			ChangeSliderHint = new inkWidgetReference();
 			TwintoneApplyHintText = new inkTextWidgetReference();
@@ -1193,7 +1201,7 @@ namespace WolvenKit.RED4.Types
 			VehicleUnknownPane = new inkWidgetReference();
 			VehicleBrandIcon = new inkImageWidgetReference();
 			VehicleNameText = new inkTextWidgetReference();
-			TemplatePreviewLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			TemplatePreviewLibraryRef = new inkWidgetLibraryReference();
 			UniqueColorPanel = new inkWidgetReference();
 			UniqueColorErrorPanel = new inkWidgetReference();
 			GenericPatternsGrid = new inkVirtualCompoundWidgetReference();
@@ -1210,8 +1218,8 @@ namespace WolvenKit.RED4.Types
 			CachedNewColorA = new CColor();
 			CachedNewColorB = new CColor();
 			CachedNewColorLights = new CColor();
-			CurrentTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
-			ToggledTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
+			CurrentTemplate = new VehicleVisualCustomizationTemplate();
+			ToggledTemplate = new VehicleVisualCustomizationTemplate();
 
 			PostConstruct();
 		}

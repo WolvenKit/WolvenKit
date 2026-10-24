@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.Types
 			ProgressHolder = new inkWidgetReference();
 			PostprogressHolder = new inkWidgetReference();
 			HintTextHolder = new inkCompoundWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			LibraryPath = new inkWidgetLibraryReference();
 			PostprogressText = new inkTextWidgetReference();
 
 			PostConstruct();

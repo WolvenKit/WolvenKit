@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldTriggerAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("notifiers")] 
 		public CArray<CHandle<worldITriggerAreaNotifer>> Notifiers
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldTriggerAreaNode()
 		{
+			Color = new CColor { Red = 255, Green = 160, Blue = 160, Alpha = 128 };
 			Notifiers = new();
 
 			PostConstruct();

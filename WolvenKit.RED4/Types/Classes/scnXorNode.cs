@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public scnXorNode()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			OutputSockets = new();
 
 			PostConstruct();

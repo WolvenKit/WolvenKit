@@ -116,6 +116,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("tapCount")] 
+		public CInt32 TapCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public NewPerksPerkItemLogicController()
 		{
 			Icon = new inkImageWidgetReference();

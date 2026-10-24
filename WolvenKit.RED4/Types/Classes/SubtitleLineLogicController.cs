@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SubtitleLineLogicController : BaseSubtitleLineLogicController
 	{
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("speakerNameWidget")] 
 		public inkTextWidgetReference SpeakerNameWidget
 		{
@@ -12,25 +12,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
-		[RED("subtitleWidget")] 
-		public inkTextWidgetReference SubtitleWidget
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("radioSpeaker")] 
 		public inkTextWidgetReference RadioSpeaker
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(8)] 
-		[RED("radioSubtitle")] 
-		public inkTextWidgetReference RadioSubtitle
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
@@ -95,9 +79,7 @@ namespace WolvenKit.RED4.Types
 		public SubtitleLineLogicController()
 		{
 			SpeakerNameWidget = new inkTextWidgetReference();
-			SubtitleWidget = new inkTextWidgetReference();
 			RadioSpeaker = new inkTextWidgetReference();
-			RadioSubtitle = new inkTextWidgetReference();
 			Background = new inkWidgetReference();
 			BackgroundSpeaker = new inkWidgetReference();
 			KiroshiAnimationContainer = new inkWidgetReference();

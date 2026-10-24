@@ -28,11 +28,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("IsMouserActive")] 
+		public gamebbScriptID_Bool IsMouserActive
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("IsJoyconDualStyle")] 
+		public gamebbScriptID_Bool IsJoyconDualStyle
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("ActiveStyle")] 
+		public gamebbScriptID_CName ActiveStyle
+		{
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
+		}
+
 		public InputSchemesDef()
 		{
 			Device = new gamebbScriptID_Uint32();
 			Scheme = new gamebbScriptID_Uint32();
 			InitializedInputHintManagerList = new gamebbScriptID_Variant();
+			IsMouserActive = new gamebbScriptID_Bool();
+			IsJoyconDualStyle = new gamebbScriptID_Bool();
+			ActiveStyle = new gamebbScriptID_CName();
 
 			PostConstruct();
 		}

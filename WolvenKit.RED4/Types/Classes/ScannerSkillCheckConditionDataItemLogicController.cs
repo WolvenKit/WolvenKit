@@ -71,9 +71,9 @@ namespace WolvenKit.RED4.Types
 		public ScannerSkillCheckConditionDataItemLogicController()
 		{
 			ConditionDataDescriptionName = "ConditionDataDescription";
-			ParentConditionTextPath = new inkWidgetPath { Names = new() };
-			OwnConditionTextPath = new inkWidgetPath { Names = new() };
-			ConditionDescriptionListPath = new inkWidgetPath { Names = new() };
+			ParentConditionTextPath = new inkWidgetPath();
+			OwnConditionTextPath = new inkWidgetPath();
+			ConditionDescriptionListPath = new inkWidgetPath();
 			ConditionDescriptions = new();
 
 			PostConstruct();

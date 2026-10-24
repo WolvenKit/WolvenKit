@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.Types
 			IncomingCallElement = new gameuiLocalPhoneElement();
 			ContactsElement = new gameuiLocalPhoneElement();
 			SmsMessengerElement = new gameuiExternalPhoneElement();
-			NotificationsElement = new gameuiPhoneElementVisibility { Slot = new inkCompoundWidgetReference() };
+			NotificationsElement = new gameuiPhoneElementVisibility();
 			PhoneIconElement = new gameuiLocalPhoneElement();
 			ResolutionSensitiveWidgets = new();
 			HudScalingSensitiveWidgets = new();

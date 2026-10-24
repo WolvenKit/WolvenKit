@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_StaticSwitch : animAnimNode_MotionTableSwitch
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("condition")] 
 		public CHandle<animIStaticCondition> Condition
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animIStaticCondition>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("motionProvider")] 
 		public CHandle<animIMotionTableProvider> MotionProvider
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animIMotionTableProvider>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("True")] 
 		public animPoseLink True
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoseLink>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("False")] 
 		public animPoseLink False
 		{

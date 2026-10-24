@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldMirrorNode : worldMeshNode
 	{
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("cullingBoxExtents")] 
 		public Vector3 CullingBoxExtents
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("cullingBoxOffset")] 
 		public Vector3 CullingBoxOffset
 		{

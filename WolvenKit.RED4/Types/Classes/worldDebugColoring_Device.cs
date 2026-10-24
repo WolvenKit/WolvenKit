@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_Device()
 		{
-			DefaultColor = new CColor();
+			DefaultColor = new CColor { Red = 252, Green = 161, Blue = 3, Alpha = 255 };
 
 			PostConstruct();
 		}

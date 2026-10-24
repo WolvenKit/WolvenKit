@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnWalkToEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			ActorId = new scnActorId { Id = uint.MaxValue };
+			Id = new scnSceneEventId();
+			ActorId = new scnActorId();
 
 			PostConstruct();
 		}

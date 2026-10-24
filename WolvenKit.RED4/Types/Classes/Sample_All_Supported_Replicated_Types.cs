@@ -153,7 +153,7 @@ namespace WolvenKit.RED4.Types
 			Double = 0.000000;
 			Struct = new Sample_Replicated_Struct();
 			DynamicArray = new();
-			StaticArray = new(0);
+			StaticArray = new(10);
 
 			PostConstruct();
 		}

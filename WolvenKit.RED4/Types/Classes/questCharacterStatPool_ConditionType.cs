@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterStatPool_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			IsPlayer = true;
 			ComparisonType = Enums.EComparisonType.Equal;
 			StatPoolType = Enums.gamedataStatPoolType.Invalid;

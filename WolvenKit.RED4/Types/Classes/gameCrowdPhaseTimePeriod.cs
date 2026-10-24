@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(2)] 
 		[RED("density")] 
-		public CFloat Density_52
+		public CFloat Density
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameCrowdPhaseTimePeriod()
 		{
-			Density_52 = 0.500000F;
+			Density = 0.500000F;
 			Density_56 = "Zero";
 			WorkspotsUsage = 0.500000F;
 			CharactersData = new();

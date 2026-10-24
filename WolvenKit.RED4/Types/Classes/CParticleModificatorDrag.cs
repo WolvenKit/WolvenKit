@@ -24,6 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			EditorName = "Drag";
 			IsEnabled = true;
+			DragCoefficient = new CEvaluatorFloatConst();
 			Scale = 1.000000F;
 
 			PostConstruct();

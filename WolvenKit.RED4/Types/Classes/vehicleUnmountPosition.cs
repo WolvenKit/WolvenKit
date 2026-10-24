@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleUnmountPosition()
 		{
-			Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			Position = new WorldPosition();
 
 			PostConstruct();
 		}

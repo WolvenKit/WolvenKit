@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAmbientPaletteExclusionAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("exclusionPaletteEntries")] 
 		public CArray<audioAmbientPaletteEntry> ExclusionPaletteEntries
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldAmbientPaletteExclusionAreaNode()
 		{
+			Color = new CColor { Red = 255, Green = 127, Blue = 127, Alpha = 255 };
 			ExclusionPaletteEntries = new();
 
 			PostConstruct();

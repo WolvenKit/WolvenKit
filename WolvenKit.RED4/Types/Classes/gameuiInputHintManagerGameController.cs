@@ -48,8 +48,8 @@ namespace WolvenKit.RED4.Types
 		{
 			BaseGroupContainer = new inkCompoundWidgetReference();
 			GroupsContainer = new inkCompoundWidgetReference();
-			HintLibRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-			GroupLibRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			HintLibRef = new inkWidgetLibraryReference();
+			GroupLibRef = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiGenericNotificationReceiverGameController()
 		{
-			ItemChanged = new inkEmptyCallback();
-			NotificationPaused = new inkEmptyCallback();
-			NotificationResumed = new inkEmptyCallback();
+			ItemChanged = new inkEmptyCallback { CallbackName = "OnItemChanged" };
+			NotificationPaused = new inkEmptyCallback { CallbackName = "OnNotificationPaused" };
+			NotificationResumed = new inkEmptyCallback { CallbackName = "OnNotificationResumed" };
 
 			PostConstruct();
 		}

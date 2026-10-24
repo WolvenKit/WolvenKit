@@ -157,6 +157,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(21)] 
+		[RED("lastLeftActiveWeapon")] 
+		public gameSlotWeaponData LastLeftActiveWeapon
+		{
+			get => GetPropertyValue<gameSlotWeaponData>();
+			set => SetPropertyValue<gameSlotWeaponData>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("lastLeftActiveWeaponID")] 
+		public gameItemID LastLeftActiveWeaponID
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("previousData")] 
 		public gameinteractionsvisLootData PreviousData
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsvisLootData>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("lastActiveOwnerId")] 
 		public entEntityID LastActiveOwnerId
 		{
@@ -174,9 +190,11 @@ namespace WolvenKit.RED4.Types
 
 		public LootingGameController()
 		{
-			LastActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			LastActiveWeapon = new gameSlotWeaponData();
 			LastActiveWeaponID = new gameItemID();
-			PreviousData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
+			LastLeftActiveWeapon = new gameSlotWeaponData();
+			LastLeftActiveWeaponID = new gameItemID();
+			PreviousData = new gameinteractionsvisLootData();
 			LastActiveOwnerId = new entEntityID();
 
 			PostConstruct();

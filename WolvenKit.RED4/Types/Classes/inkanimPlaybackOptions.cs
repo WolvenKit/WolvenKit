@@ -92,6 +92,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("pauseInPhotoMode")] 
+		public CBool PauseInPhotoMode
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public inkanimPlaybackOptions()
 		{
 			CustomTimeDilation = 1.000000F;

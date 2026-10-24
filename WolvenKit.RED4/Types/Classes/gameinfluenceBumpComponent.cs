@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.Types
 		public gameinfluenceBumpComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			MovementSpreadDistance = 2.000000F;
 			MovementSpreadRadius = 0.750000F;
 			DistanceToReactBack = 0.600000F;

@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TrackedCombatSquads = new();
 			TrackedCombatSquadsCounters = new();
-			ThreatPersistanceMemory = new ThreatPersistanceMemory { Threats = new(), IsPersistent = new() };
+			ThreatPersistanceMemory = new ThreatPersistanceMemory();
 
 			PostConstruct();
 		}

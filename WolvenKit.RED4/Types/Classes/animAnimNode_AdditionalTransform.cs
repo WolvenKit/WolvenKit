@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_AdditionalTransform : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("additionalTransforms")] 
 		public animAdditionalTransformContainer AdditionalTransforms
 		{
@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = uint.MaxValue;
 			InputLink = new animPoseLink();
-			AdditionalTransforms = new animAdditionalTransformContainer { Entries = new() };
+			AdditionalTransforms = new animAdditionalTransformContainer();
 
 			PostConstruct();
 		}

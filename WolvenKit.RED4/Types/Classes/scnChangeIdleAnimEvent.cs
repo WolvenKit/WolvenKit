@@ -54,16 +54,16 @@ namespace WolvenKit.RED4.Types
 
 		public scnChangeIdleAnimEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
+			Id = new scnSceneEventId();
 			Duration = 1000;
-			AnimData = new scneventsPlayAnimEventExData { Basic = new scneventsPlayAnimEventData { Stretch = 1.000000F, BlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, BlendOutCurve = Enums.scnEasingType.SinusoidalEaseInOut }, Weight = 1.000000F };
-			Performer = new scnPerformerId { Id = 4294967040 };
+			AnimData = new scneventsPlayAnimEventExData();
+			Performer = new scnPerformerId();
 			NeckWeight = 1.000000F;
 			UpperFaceBlendAdditive = true;
 			LowerFaceBlendAdditive = true;
 			EyesBlendAdditive = true;
 			IsEnabled = true;
-			BakedFacialTransition = new animFacialEmotionTransitionBaked { TransitionType = Enums.animFacialEmotionTransitionType.Fast, ToIdleWeight = 1.000000F };
+			BakedFacialTransition = new animFacialEmotionTransitionBaked();
 
 			PostConstruct();
 		}

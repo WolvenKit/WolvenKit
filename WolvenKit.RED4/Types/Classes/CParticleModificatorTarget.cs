@@ -41,6 +41,9 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Target";
 			EditorGroup = "Velocity";
 			IsEnabled = true;
+			Position = new CEvaluatorVectorConst { Value = new Vector4 { Z = 1.000000F } };
+			ForceScale = new CEvaluatorFloatConst();
+			KillRadius = new CEvaluatorFloatConst { Value = 0.000000F };
 			MaxForce = 100.000000F;
 
 			PostConstruct();

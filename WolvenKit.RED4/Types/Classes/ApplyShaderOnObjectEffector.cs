@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("applicationTarget")] 
-		public CWeakHandle<gameObject> ApplicationTarget
+		[RED("applicationTargets")] 
+		public CArray<CWeakHandle<gameObject>> ApplicationTargets
 		{
-			get => GetPropertyValue<CWeakHandle<gameObject>>();
-			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameObject>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameObject>>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -53,14 +53,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("effectInstance")] 
-		public CHandle<gameEffectInstance> EffectInstance
-		{
-			get => GetPropertyValue<CHandle<gameEffectInstance>>();
-			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("ownerEffect")] 
 		public CHandle<gameEffectInstance> OwnerEffect
 		{
@@ -78,6 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyShaderOnObjectEffector()
 		{
+			ApplicationTargets = new();
 			Effects = new();
 
 			PostConstruct();

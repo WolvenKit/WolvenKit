@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public VendingTerminalControllerPS()
 		{
-			TweakDBRecord = 98928467386;
-			TweakDBDescriptionRecord = 152448345865;
-			VendingTerminalSetup = new VendingTerminalSetup { VendingBlacklist = new(), TimeToCompletePurchase = 3.000000F };
+			TweakDBRecord = "Devices.VendingTerminal";
+			TweakDBDescriptionRecord = "device_descriptions.VendingTerminal";
+			VendingTerminalSetup = new VendingTerminalSetup();
 
 			PostConstruct();
 		}

@@ -989,6 +989,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(123)] 
+		[RED("GyroRestrictions")] 
+		public CHandle<GyroRestrictionsDef> GyroRestrictions
+		{
+			get => GetPropertyValue<CHandle<GyroRestrictionsDef>>();
+			set => SetPropertyValue<CHandle<GyroRestrictionsDef>>(value);
+		}
+
+		[Ordinal(124)] 
 		[RED("InputSchemes")] 
 		public CHandle<InputSchemesDef> InputSchemes
 		{
@@ -996,7 +1004,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InputSchemesDef>>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("PoliceChaseParams")] 
 		public CHandle<PoliceChaseParamsDef> PoliceChaseParams
 		{

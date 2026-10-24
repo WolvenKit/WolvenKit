@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSetFadeInOut_NodeType()
 		{
-			FadeColor = new CColor();
+			FadeColor = new CColor { Alpha = 255 };
 			FadeIn = true;
 			Duration = 2.000000F;
 

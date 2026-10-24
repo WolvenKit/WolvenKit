@@ -151,7 +151,7 @@ namespace WolvenKit.RED4.Types
 		public animAnimationBufferCompressed()
 		{
 			FallbackFrameIndices = new();
-			DataAddress = new animAnimDataAddress { UnkIndex = uint.MaxValue, FsetInBytes = uint.MaxValue, ZeInBytes = uint.MaxValue };
+			DataAddress = new animAnimDataAddress();
 			ExtraDataNames = new();
 
 			PostConstruct();

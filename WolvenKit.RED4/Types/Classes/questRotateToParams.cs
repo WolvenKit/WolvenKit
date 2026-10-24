@@ -30,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questRotateToParams()
 		{
+			FacingTargetRef = new questUniversalRef();
 			Speed = 180.000000F;
 
 			PostConstruct();

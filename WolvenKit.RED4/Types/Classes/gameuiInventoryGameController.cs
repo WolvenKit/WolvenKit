@@ -357,6 +357,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(47)] 
+		[RED("transactionSystem")] 
+		public CWeakHandle<gameTransactionSystem> TransactionSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameTransactionSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
+		}
+
+		[Ordinal(48)] 
 		[RED("EquipAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
 		{
@@ -364,31 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(48)] 
-		[RED("CyberwareAreas")] 
-		public CArray<CEnum<gamedataEquipmentArea>> CyberwareAreas
-		{
-			get => GetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>();
-			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
-		}
-
 		[Ordinal(49)] 
-		[RED("WeaponAreas")] 
-		public CArray<CEnum<gamedataItemType>> WeaponAreas
-		{
-			get => GetPropertyValue<CArray<CEnum<gamedataItemType>>>();
-			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
-		}
-
-		[Ordinal(50)] 
-		[RED("PocketAreas")] 
-		public CArray<CEnum<gamedataEquipmentArea>> PocketAreas
-		{
-			get => GetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>();
-			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
-		}
-
-		[Ordinal(51)] 
 		[RED("ConsumablesAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> ConsumablesAreas
 		{
@@ -396,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(50)] 
 		[RED("UIBBEquipment")] 
 		public CHandle<UI_EquipmentDef> UIBBEquipment
 		{
@@ -404,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(51)] 
 		[RED("UIBBItemMod")] 
 		public CHandle<UI_ItemModSystemDef> UIBBItemMod
 		{
@@ -412,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ItemModSystemDef>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(52)] 
 		[RED("DisassembleCallback")] 
 		public CHandle<UI_CraftingDef> DisassembleCallback
 		{
@@ -420,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_CraftingDef>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(53)] 
 		[RED("UIBBEquipmentBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UIBBEquipmentBlackboard
 		{
@@ -428,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(54)] 
 		[RED("UIBBItemModBlackbord")] 
 		public CWeakHandle<gameIBlackboard> UIBBItemModBlackbord
 		{
@@ -436,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(55)] 
 		[RED("DisassembleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> DisassembleBlackboard
 		{
@@ -444,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(56)] 
 		[RED("InventoryBBID")] 
 		public CHandle<redCallbackObject> InventoryBBID
 		{
@@ -452,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(57)] 
 		[RED("EquipmentBBID")] 
 		public CHandle<redCallbackObject> EquipmentBBID
 		{
@@ -460,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(58)] 
 		[RED("SubEquipmentBBID")] 
 		public CHandle<redCallbackObject> SubEquipmentBBID
 		{
@@ -468,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(59)] 
 		[RED("ItemModBBID")] 
 		public CHandle<redCallbackObject> ItemModBBID
 		{
@@ -476,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(60)] 
 		[RED("DisassembleBBID")] 
 		public CHandle<redCallbackObject> DisassembleBBID
 		{
@@ -484,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(61)] 
 		[RED("isE3Demo")] 
 		public CBool IsE3Demo
 		{
@@ -492,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(62)] 
 		[RED("inventoryStatsListener")] 
 		public CHandle<InventoryStatsListener> InventoryStatsListener
 		{
@@ -500,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryStatsListener>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(63)] 
 		[RED("quantityPickerPopupToken")] 
 		public CHandle<inkGameNotificationToken> QuantityPickerPopupToken
 		{
@@ -508,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(64)] 
 		[RED("psmBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PsmBlackboard
 		{
@@ -516,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(65)] 
 		[RED("cyberdeckInventoryStatsController")] 
 		public CWeakHandle<CyberdeckInventoryStatsController> CyberdeckInventoryStatsController
 		{
@@ -524,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CyberdeckInventoryStatsController>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(66)] 
 		[RED("equipmentAreaCategoryEventQueue")] 
 		public CArray<CHandle<EquipmentAreaCategoryCreated>> EquipmentAreaCategoryEventQueue
 		{
@@ -532,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<EquipmentAreaCategoryCreated>>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(67)] 
 		[RED("cyberwareItems")] 
 		public CArray<gameInventoryItemData> CyberwareItems
 		{
@@ -540,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameInventoryItemData>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(68)] 
 		[RED("equipmentAreaCategories")] 
 		public CArray<CHandle<EquipmentAreaCategory>> EquipmentAreaCategories
 		{
@@ -548,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<EquipmentAreaCategory>>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(69)] 
 		[RED("wardrobeOutfitAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> WardrobeOutfitAreas
 		{
@@ -556,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(70)] 
 		[RED("lastClothingSetIndex")] 
 		public CInt32 LastClothingSetIndex
 		{
@@ -564,7 +548,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(71)] 
+		[RED("registeredAttachmentSlotListener")] 
+		public CHandle<gameAttachmentSlotsScriptListener> RegisteredAttachmentSlotListener
+		{
+			get => GetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>();
+			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
+		}
+
+		[Ordinal(72)] 
+		[RED("attachmentSlotListener")] 
+		public CHandle<InventoryAttachmentSlotsScriptCallback> AttachmentSlotListener
+		{
+			get => GetPropertyValue<CHandle<InventoryAttachmentSlotsScriptCallback>>();
+			set => SetPropertyValue<CHandle<InventoryAttachmentSlotsScriptCallback>>(value);
+		}
+
 		[Ordinal(73)] 
+		[RED("previewPuppet")] 
+		public CWeakHandle<gamePuppet> PreviewPuppet
+		{
+			get => GetPropertyValue<CWeakHandle<gamePuppet>>();
+			set => SetPropertyValue<CWeakHandle<gamePuppet>>(value);
+		}
+
+		[Ordinal(74)] 
 		[RED("telemetrySystem")] 
 		public CWeakHandle<gameTelemetryTelemetrySystem> TelemetrySystem
 		{
@@ -572,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameTelemetryTelemetrySystem>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("CyberwareScreenUserData")] 
 		public CHandle<CyberwareDisplayWrapper> CyberwareScreenUserData
 		{
@@ -580,9 +588,33 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CyberwareDisplayWrapper>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("openItemMode")] 
 		public CBool OpenItemMode
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(77)] 
+		[RED("isInputLockedForSelect")] 
+		public CBool IsInputLockedForSelect
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(78)] 
+		[RED("isInputLockedForClick")] 
+		public CBool IsInputLockedForClick
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(79)] 
+		[RED("canToggleWeapon")] 
+		public CBool CanToggleWeapon
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -617,9 +649,6 @@ namespace WolvenKit.RED4.Types
 			ConsumablesList = new();
 			AnimationList = new();
 			EquipAreas = new();
-			CyberwareAreas = new();
-			WeaponAreas = new();
-			PocketAreas = new();
 			ConsumablesAreas = new();
 			EquipmentAreaCategoryEventQueue = new();
 			CyberwareItems = new();

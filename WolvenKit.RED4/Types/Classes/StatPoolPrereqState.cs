@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public StatPoolPrereqState()
 		{
-			StatsObjID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+			StatsObjID = new gameStatsObjectID();
 
 			PostConstruct();
 		}

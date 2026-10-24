@@ -42,6 +42,7 @@ namespace WolvenKit.RED4.Types
 			EditorGroup = "Velocity";
 			IsEnabled = true;
 			InheritVelocity = true;
+			Restitution = new CEvaluatorFloatConst();
 
 			PostConstruct();
 		}

@@ -80,10 +80,10 @@ namespace WolvenKit.RED4.Types
 		{
 			GameplayActiveFlagsRefreshPolicy = new PlayerCombatControllerRefreshPolicy();
 			BlackboardIds = new PlayerCombatControllerBBIds();
-			BlackboardValuesIds = new PlayerCombatControllerBBValuesIds { CrouchActive = new gamebbScriptID_Int32() };
+			BlackboardValuesIds = new PlayerCombatControllerBBValuesIds();
 			BlackboardListenersFunctions = new PlayerCombatControllerBlackboardListenersFunctions();
 			BlackboardListeners = new PlayerCombatControllerBBListeners();
-			DelayEventsIds = new PlayerCombatControllerDelayCallbacksIds { Crouch = new gameDelayID() };
+			DelayEventsIds = new PlayerCombatControllerDelayCallbacksIds();
 			GameplayActiveFlags = new PlayerCombatControllerActiveFlags();
 			OtherVars = new PlayerCombatControllerOtherVars();
 

@@ -136,7 +136,7 @@ namespace WolvenKit.RED4.Types
 		{
 			SourceHitPosition = new Vector4();
 			TargetHitPosition = new Vector4();
-			SourceAttackDebugData = new gameAttackDebugData { PointOfViewTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } }, ProjectileHitplaneSpread = new Vector4(), BulletStartPosition = new Vector4() };
+			SourceAttackDebugData = new gameAttackDebugData();
 			CalculatedDamages = new();
 			AppliedDamages = new();
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_HumanIk : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("ikTargetsControllers")] 
 		public CArray<animTEMP_IKTargetsControllerBodyType> IkTargetsControllers
 		{

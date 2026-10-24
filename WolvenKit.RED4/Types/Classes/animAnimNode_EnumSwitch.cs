@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_EnumSwitch : animAnimNode_InputSwitch
 	{
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("enumName")] 
 		public CName EnumName
 		{

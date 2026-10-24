@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_ConditionalSegmentBegin : animAnimNode_OnePoseInput
 	{
-		[Ordinal(13)] 
+		[Ordinal(2)] 
 		[RED("condition")] 
 		public animConditionalSegmentCondition Condition
 		{
@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = uint.MaxValue;
 			InputLink = new animPoseLink();
-			Condition = new animConditionalSegmentCondition { Lod = -1 };
+			Condition = new animConditionalSegmentCondition();
 
 			PostConstruct();
 		}

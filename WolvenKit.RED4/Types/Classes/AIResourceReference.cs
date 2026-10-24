@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public AIResourceReference()
 		{
-			Parameters = new LibTreeParameterList { Parameters = new() };
+			Parameters = new LibTreeParameterList();
 
 			PostConstruct();
 		}

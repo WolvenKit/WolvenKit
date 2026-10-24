@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameReplicatedShotData()
 		{
-			TimeStamp = new netTime { MilliSecs = long.MaxValue };
+			TimeStamp = new netTime { MilliSecs = ulong.MaxValue };
 			TargetLocalOffset = new Vector3();
 
 			PostConstruct();

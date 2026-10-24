@@ -32,8 +32,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			EntityReference = new gameEntityReference { Names = new() };
-			Params = new questTeleportPuppetParams { DestinationOffset = new Vector3() };
+			EntityReference = new gameEntityReference();
+			Params = new questTeleportPuppetParams { DestinationRef = new questUniversalRef { RefLocalPlayer = false } };
 			ResetVelocities = true;
 
 			PostConstruct();

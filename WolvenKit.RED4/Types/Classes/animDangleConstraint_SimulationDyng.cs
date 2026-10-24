@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDangleConstraint_SimulationDyng : animDangleConstraint_Simulation
 	{
-		[Ordinal(13)] 
+		[Ordinal(8)] 
 		[RED("HACK_checkDangleTeleport")] 
 		public CBool HACK_checkDangleTeleport
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(9)] 
 		[RED("substepTime")] 
 		public CFloat SubstepTime
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(10)] 
 		[RED("solverIterations")] 
 		public CUInt32 SolverIterations
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(11)] 
 		[RED("particlesContainer")] 
 		public animDyngParticlesContainer ParticlesContainer
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animDyngParticlesContainer>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(12)] 
 		[RED("dyngConstraint")] 
 		public CHandle<animIDyngConstraint> DyngConstraint
 		{
@@ -52,7 +52,8 @@ namespace WolvenKit.RED4.Types
 			RotateParentToLookAtDangle = true;
 			SubstepTime = 0.010000F;
 			SolverIterations = 1;
-			ParticlesContainer = new animDyngParticlesContainer { ExternalForceWS = new Vector3(), ExternalForceWsLink = new animVectorLink(), Particles = new(), GravityWS = 9.810000F };
+			ParticlesContainer = new animDyngParticlesContainer();
+			DyngConstraint = new animDyngConstraintMulti();
 
 			PostConstruct();
 		}

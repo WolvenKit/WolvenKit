@@ -24,7 +24,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			EntityReference = new gameEntityReference { Names = new() };
+			EntityReference = new gameEntityReference();
+			ParamsV1 = new questUseWorkspotParamsV1();
 
 			PostConstruct();
 		}

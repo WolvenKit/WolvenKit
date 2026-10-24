@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIFollowerRole()
 		{
-			FollowerRef = new gameEntityReference { Names = new() };
+			FollowerRef = new gameEntityReference();
 			FollowTargetSquads = new();
 			LastStealthLeaveTimeStamp = new EngineTime();
 

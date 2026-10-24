@@ -6,5 +6,5 @@ public class WorldTransformsBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
-    public CArray<worldNodeTransform> Transforms { get; set; } = new();
+    public CArray<RenderProxyTransform> Transforms { get; set; } = new();
 }

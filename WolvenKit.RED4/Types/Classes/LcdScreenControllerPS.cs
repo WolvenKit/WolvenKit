@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#193";
 			TweakDBRecord = "Devices.LcdScreen";
-			TweakDBDescriptionRecord = 126712954239;
+			TweakDBDescriptionRecord = "device_descriptions.LcdScreen";
 			DisableQuickHacks = true;
 
 			PostConstruct();

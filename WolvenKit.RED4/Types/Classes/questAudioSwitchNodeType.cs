@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public questAudioSwitchNodeType()
 		{
 			Switch = new audioAudSwitch();
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 
 			PostConstruct();
 		}

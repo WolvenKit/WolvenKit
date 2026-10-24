@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorMovementPolicyTaskItemDefinition()
 		{
-			Params = new(1);
+			Params = new(4) { new AIbehaviorExpressionSocket { TypeHint = new AIbehaviorTypeRef { IsSet = true, CustomType = "moveMovementType" } } };
 
 			PostConstruct();
 		}

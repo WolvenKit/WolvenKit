@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorSavePatrolProgressTaskDefinition()
 		{
+			PatrolProgress = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, DefaultValue = new CVariant(), CustomTypeName = "gamePatrolSplineProgress" };
+			SavedState = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, DefaultValue = new CVariant(), CustomTypeName = "gameSavedPatrolProgressState" };
+
 			PostConstruct();
 		}
 

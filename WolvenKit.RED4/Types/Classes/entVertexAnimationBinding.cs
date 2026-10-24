@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public entVertexAnimationBinding()
 		{
 			Enabled = true;
-			EnableMask = new entTagMask { HardTags = new redTagList { Tags = new() }, SoftTags = new redTagList { Tags = new() }, ExcludedTags = new redTagList { Tags = new() { "NoBinding" } } };
+			EnableMask = new entTagMask { ExcludedTags = new redTagList { Tags = new() { "NoBinding" } } };
 
 			PostConstruct();
 		}

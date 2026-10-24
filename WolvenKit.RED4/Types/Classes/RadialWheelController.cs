@@ -53,6 +53,94 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("toPatternTabHideWidgetRef", 6)] 
+		public CArrayFixedSize<inkWidgetReference> ToPatternTabHideWidgetRef
+		{
+			get => GetPropertyValue<CArrayFixedSize<inkWidgetReference>>();
+			set => SetPropertyValue<CArrayFixedSize<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("patternPanelWidgetRef")] 
+		public inkWidgetReference PatternPanelWidgetRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("prevTabButtonRef")] 
+		public inkWidgetReference PrevTabButtonRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("nextTabButtonRef")] 
+		public inkWidgetReference NextTabButtonRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("tabButtonRef", 2)] 
+		public CArrayFixedSize<inkWidgetReference> TabButtonRef
+		{
+			get => GetPropertyValue<CArrayFixedSize<inkWidgetReference>>();
+			set => SetPropertyValue<CArrayFixedSize<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("tabButtonLabelRef", 2)] 
+		public CArrayFixedSize<inkTextWidgetReference> TabButtonLabelRef
+		{
+			get => GetPropertyValue<CArrayFixedSize<inkTextWidgetReference>>();
+			set => SetPropertyValue<CArrayFixedSize<inkTextWidgetReference>>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("tabButtonBkgRef", 2)] 
+		public CArrayFixedSize<inkWidgetReference> TabButtonBkgRef
+		{
+			get => GetPropertyValue<CArrayFixedSize<inkWidgetReference>>();
+			set => SetPropertyValue<CArrayFixedSize<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("prevTabButton")] 
+		public CWeakHandle<inkButtonController> PrevTabButton
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("nextTabButton")] 
+		public CWeakHandle<inkButtonController> NextTabButton
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("activeTab")] 
+		public CInt32 ActiveTab
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("patternWheelInkWidget")] 
+		public CWeakHandle<inkWidget> PatternWheelInkWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("activeSlot")] 
 		public CHandle<WeaponRadialSlot> ActiveSlot
 		{
@@ -60,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<WeaponRadialSlot>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(27)] 
 		[RED("pointer")] 
 		public CWeakHandle<PointerController> Pointer
 		{
@@ -68,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PointerController>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(28)] 
 		[RED("activeIndex")] 
 		public CInt32 ActiveIndex
 		{
@@ -76,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(29)] 
 		[RED("initialized")] 
 		public CBool Initialized
 		{
@@ -84,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(30)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -92,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(31)] 
 		[RED("pendingRadialSlotAsyncSpawnCount")] 
 		public CInt32 PendingRadialSlotAsyncSpawnCount
 		{
@@ -100,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(32)] 
 		[RED("consSlotCachedData")] 
 		public gameInventoryItemData ConsSlotCachedData
 		{
@@ -108,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(33)] 
 		[RED("gadgetSlotCachedData")] 
 		public gameInventoryItemData GadgetSlotCachedData
 		{
@@ -116,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(34)] 
 		[RED("cyclingActionRegistered")] 
 		public CName CyclingActionRegistered
 		{
@@ -124,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(35)] 
 		[RED("registeredInputHints")] 
 		public CArray<gameuiInputHintData> RegisteredInputHints
 		{
@@ -132,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiInputHintData>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(36)] 
 		[RED("applyInputHint")] 
 		public gameuiInputHintData ApplyInputHint
 		{
@@ -140,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameuiInputHintData>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(37)] 
 		[RED("cycleInputHintDataLeft")] 
 		public gameuiInputHintData CycleInputHintDataLeft
 		{
@@ -148,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameuiInputHintData>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(38)] 
 		[RED("cycleInputHintDataRight")] 
 		public gameuiInputHintData CycleInputHintDataRight
 		{
@@ -156,7 +244,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameuiInputHintData>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(39)] 
+		[RED("UI_MoveUpInputHint")] 
+		public gameuiInputHintData UI_MoveUpInputHint
+		{
+			get => GetPropertyValue<gameuiInputHintData>();
+			set => SetPropertyValue<gameuiInputHintData>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("UI_MoveDownInputHint")] 
+		public gameuiInputHintData UI_MoveDownInputHint
+		{
+			get => GetPropertyValue<gameuiInputHintData>();
+			set => SetPropertyValue<gameuiInputHintData>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("inspectWeaponsInputHint")] 
+		public gameuiInputHintData InspectWeaponsInputHint
+		{
+			get => GetPropertyValue<gameuiInputHintData>();
+			set => SetPropertyValue<gameuiInputHintData>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("radialMode")] 
 		public CEnum<ERadialMode> RadialMode
 		{
@@ -164,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERadialMode>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(43)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -172,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(44)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -180,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(45)] 
 		[RED("transactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
@@ -188,7 +300,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(46)] 
+		[RED("playerPuppet")] 
+		public CWeakHandle<PlayerPuppet> PlayerPuppet
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(47)] 
 		[RED("quickSlotBlackboard")] 
 		public CWeakHandle<gameIBlackboard> QuickSlotBlackboard
 		{
@@ -196,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(48)] 
 		[RED("QuickSlotBlackboardDef")] 
 		public CHandle<UI_QuickSlotsDataDef> QuickSlotBlackboardDef
 		{
@@ -204,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_QuickSlotsDataDef>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(49)] 
 		[RED("axisInputCallbackID")] 
 		public CHandle<redCallbackObject> AxisInputCallbackID
 		{
@@ -212,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(50)] 
 		[RED("UISystemBB")] 
 		public CWeakHandle<gameIBlackboard> UISystemBB
 		{
@@ -220,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(51)] 
 		[RED("UISystemDef")] 
 		public CHandle<UI_SystemDef> UISystemDef
 		{
@@ -228,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(52)] 
 		[RED("isInMenuCallbackID")] 
 		public CHandle<redCallbackObject> IsInMenuCallbackID
 		{
@@ -236,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(53)] 
 		[RED("equipmentUIBlackboard")] 
 		public CWeakHandle<gameIBlackboard> EquipmentUIBlackboard
 		{
@@ -244,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(54)] 
 		[RED("EquipmentBlackboardDef")] 
 		public CHandle<UI_EquipmentDef> EquipmentBlackboardDef
 		{
@@ -252,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(55)] 
 		[RED("equipmentUICallbackID")] 
 		public CHandle<redCallbackObject> EquipmentUICallbackID
 		{
@@ -260,17 +380,78 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(56)] 
+		[RED("cineCamUIBlackboard")] 
+		public CWeakHandle<gameIBlackboard> CineCamUIBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("AutodriveBlackboardDef")] 
+		public CHandle<UI_AutodriveDataDef> AutodriveBlackboardDef
+		{
+			get => GetPropertyValue<CHandle<UI_AutodriveDataDef>>();
+			set => SetPropertyValue<CHandle<UI_AutodriveDataDef>>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("cineCamUICallbackID")] 
+		public CHandle<redCallbackObject> CineCamUICallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("dbg_int")] 
+		public CInt32 Dbg_int
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("dbg_layers")] 
+		public CArray<CUInt32> Dbg_layers
+		{
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("dbg_activeSlotLayers")] 
+		public CArray<CUInt32> Dbg_activeSlotLayers
+		{
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
+		}
+
 		public RadialWheelController()
 		{
 			RadialWeapons = new();
 			PointerRef = new inkWidgetReference();
-			ConsSlotCachedData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
-			GadgetSlotCachedData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			ToPatternTabHideWidgetRef = new(6);
+			PatternPanelWidgetRef = new inkWidgetReference();
+			PrevTabButtonRef = new inkWidgetReference();
+			NextTabButtonRef = new inkWidgetReference();
+			TabButtonRef = new(2);
+			TabButtonLabelRef = new(2);
+			TabButtonBkgRef = new(2);
+			ActiveTab = -1;
+			ConsSlotCachedData = new gameInventoryItemData();
+			GadgetSlotCachedData = new gameInventoryItemData();
 			RegisteredInputHints = new();
-			ApplyInputHint = new gameuiInputHintData { HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press };
-			CycleInputHintDataLeft = new gameuiInputHintData { HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press };
-			CycleInputHintDataRight = new gameuiInputHintData { HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press };
+			ApplyInputHint = new gameuiInputHintData();
+			CycleInputHintDataLeft = new gameuiInputHintData();
+			CycleInputHintDataRight = new gameuiInputHintData();
+			UI_MoveUpInputHint = new gameuiInputHintData();
+			UI_MoveDownInputHint = new gameuiInputHintData();
+			InspectWeaponsInputHint = new gameuiInputHintData();
 			RadialMode = Enums.ERadialMode.ApplyActiveSlotAndConsumables;
+			Dbg_layers = new();
+			Dbg_activeSlotLayers = new();
 
 			PostConstruct();
 		}

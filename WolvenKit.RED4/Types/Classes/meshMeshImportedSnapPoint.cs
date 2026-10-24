@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public meshMeshImportedSnapPoint()
 		{
 			LocalToCloud = new CMatrix();
-			SnapTags = new meshImportedSnapTags { IncludeTags = new(), ExcludeTags = new() };
+			SnapTags = new meshImportedSnapTags();
 
 			PostConstruct();
 		}

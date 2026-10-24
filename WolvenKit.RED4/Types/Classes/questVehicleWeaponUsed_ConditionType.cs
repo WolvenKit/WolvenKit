@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questVehicleWeaponUsed_ConditionType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 
 			PostConstruct();
 		}

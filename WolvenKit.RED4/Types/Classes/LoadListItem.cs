@@ -45,8 +45,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(38)] 
-		[RED("level")] 
-		public inkTextWidgetReference Level
+		[RED("lifePathText")] 
+		public inkTextWidgetReference LifePathText
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
@@ -101,6 +101,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(45)] 
+		[RED("fileSize")] 
+		public inkTextWidgetReference FileSize
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("trophyIcon")] 
+		public inkImageWidgetReference TrophyIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("modIcon")] 
+		public inkImageWidgetReference ModIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(48)] 
 		[RED("emptySlotWrapper")] 
 		public inkWidgetReference EmptySlotWrapper
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("wrapper")] 
 		public inkWidgetReference Wrapper
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("versionParams")] 
 		public CHandle<textTextParameterSet> VersionParams
 		{
@@ -124,15 +148,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(48)] 
-		[RED("index")] 
-		public CInt32 Index
+		[Ordinal(51)] 
+		[RED("SaveIndex")] 
+		public CInt32 SaveIndex
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
+		[RED("buttonIndex")] 
+		public CInt32 ButtonIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(53)] 
 		[RED("emptySlot")] 
 		public CBool EmptySlot
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(54)] 
 		[RED("validSlot")] 
 		public CBool ValidSlot
 		{
@@ -148,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(55)] 
 		[RED("initialLoadingID")] 
 		public CUInt64 InitialLoadingID
 		{
@@ -156,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(56)] 
 		[RED("metadata")] 
 		public CHandle<inkSaveMetadataInfo> Metadata
 		{
@@ -164,7 +196,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkSaveMetadataInfo>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(57)] 
+		[RED("isMetadataSet")] 
+		public CBool IsMetadataSet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(58)] 
 		[RED("defaultAtlasPath")] 
 		public redResourceReferenceScriptToken DefaultAtlasPath
 		{
@@ -172,12 +212,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(59)] 
 		[RED("tranistionAnimProxy")] 
 		public CHandle<inkanimProxy> TranistionAnimProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("tapped")] 
+		public CBool Tapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("ownerMenu")] 
+		public CWeakHandle<LoadGameMenuGameController> OwnerMenu
+		{
+			get => GetPropertyValue<CWeakHandle<LoadGameMenuGameController>>();
+			set => SetPropertyValue<CWeakHandle<LoadGameMenuGameController>>(value);
 		}
 
 		public LoadListItem()
@@ -187,13 +243,16 @@ namespace WolvenKit.RED4.Types
 			LabelDate = new inkTextWidgetReference();
 			Type = new inkTextWidgetReference();
 			Quest = new inkTextWidgetReference();
-			Level = new inkTextWidgetReference();
+			LifePathText = new inkTextWidgetReference();
 			Lifepath = new inkImageWidgetReference();
 			CloudStatus = new inkImageWidgetReference();
 			PlayTime = new inkTextWidgetReference();
 			CharacterLevel = new inkTextWidgetReference();
 			CharacterLevelLabel = new inkTextWidgetReference();
 			GameVersion = new inkTextWidgetReference();
+			FileSize = new inkTextWidgetReference();
+			TrophyIcon = new inkImageWidgetReference();
+			ModIcon = new inkImageWidgetReference();
 			EmptySlotWrapper = new inkWidgetReference();
 			Wrapper = new inkWidgetReference();
 			DefaultAtlasPath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\fullscreen\load_game\save_game.inkatlas") };

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPlayEnv_NodeType()
 		{
-			Params = new questPlayEnv_NodeTypeParams { Enable = true };
+			Params = new questPlayEnv_NodeTypeParams();
 
 			PostConstruct();
 		}

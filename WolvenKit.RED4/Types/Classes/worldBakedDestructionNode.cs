@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldBakedDestructionNode : worldMeshNode
 	{
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("meshFractured")] 
 		public CResourceAsyncReference<CMesh> MeshFractured
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("meshFracturedAppearance")] 
 		public CName MeshFracturedAppearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(18)] 
 		[RED("numFrames")] 
 		public CFloat NumFrames
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(19)] 
 		[RED("frameRate")] 
 		public CFloat FrameRate
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(20)] 
 		[RED("playOnlyOnce")] 
 		public CBool PlayOnlyOnce
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(21)] 
 		[RED("restartOnTrigger")] 
 		public CBool RestartOnTrigger
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(22)] 
 		[RED("disableCollidersOnTrigger")] 
 		public CBool DisableCollidersOnTrigger
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(23)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(24)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(25)] 
 		[RED("damageThreshold")] 
 		public CFloat DamageThreshold
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(26)] 
 		[RED("damageEndurance")] 
 		public CFloat DamageEndurance
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(27)] 
 		[RED("impulseToDamage")] 
 		public CFloat ImpulseToDamage
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(28)] 
 		[RED("contactToDamage")] 
 		public CFloat ContactToDamage
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(29)] 
 		[RED("accumulateDamage")] 
 		public CBool AccumulateDamage
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(30)] 
 		[RED("fractureFieldMask")] 
 		public CBitField<physicsFractureFieldType> FractureFieldMask
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<physicsFractureFieldType>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(31)] 
 		[RED("destructionEffect")] 
 		public CResourceAsyncReference<worldEffect> DestructionEffect
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(32)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(33)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(34)] 
 		[RED("useMeshNavmeshSettings")] 
 		public CBool UseMeshNavmeshSettings
 		{
@@ -161,13 +161,14 @@ namespace WolvenKit.RED4.Types
 			FrameRate = 24.000000F;
 			PlayOnlyOnce = true;
 			DisableCollidersOnTrigger = true;
+			FilterData = new physicsFilterData();
 			DamageThreshold = 10.000000F;
 			DamageEndurance = 20.000000F;
 			ImpulseToDamage = 1.000000F;
 			ContactToDamage = 1.000000F;
 			AccumulateDamage = true;
 			FractureFieldMask = Enums.physicsFractureFieldType.FF_Default;
-			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			NavigationSetting = new NavGenNavigationSetting();
 			UseMeshNavmeshSettings = true;
 
 			PostConstruct();

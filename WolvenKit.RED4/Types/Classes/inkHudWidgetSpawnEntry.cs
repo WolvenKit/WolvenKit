@@ -163,7 +163,7 @@ namespace WolvenKit.RED4.Types
 			GameContextVisibility = Enums.gameuiContext.Default | Enums.gameuiContext.QuickHack | Enums.gameuiContext.Scanning | Enums.gameuiContext.BraindanceEditor | Enums.gameuiContext.BraindancePlayback | Enums.gameuiContext.VehicleMounted;
 			AnchorPoint = new Vector2();
 			Margins = new inkMargin();
-			SlotParams = new inkWidgetSlotAttachmentParams { UseSlotLayout = true, LayoutOverride = new inkWidgetLayout { Padding = new inkMargin(), Margin = new inkMargin(), AnchorPoint = new Vector2(), SizeCoefficient = 1.000000F } };
+			SlotParams = new inkWidgetSlotAttachmentParams();
 			HudScalingInterpolationValue = 1.000000F;
 			HudScalingMarginCorrection = new inkMargin();
 

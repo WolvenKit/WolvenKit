@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldPhysicalDestructionNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("forceLODLevel")] 
 		public CInt32 ForceLODLevel
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("forceAutoHideDistance")] 
 		public CFloat ForceAutoHideDistance
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("destructionParams")] 
 		public physicsDestructionParams DestructionParams
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<physicsDestructionParams>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("destructionLevelData")] 
 		public CArray<physicsDestructionLevelData> DestructionLevelData
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<physicsDestructionLevelData>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("useMeshNavmeshSettings")] 
 		public CBool UseMeshNavmeshSettings
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("systemsToNotifyFlags")] 
 		public CUInt16 SystemsToNotifyFlags
 		{
@@ -88,9 +88,9 @@ namespace WolvenKit.RED4.Types
 		{
 			MeshAppearance = "default";
 			ForceLODLevel = -1;
-			DestructionParams = new physicsDestructionParams { DamageThreshold = 25.000000F, DamageEndurance = 10.000000F, BondEndurance = 20.000000F, AccumulateDamage = true, EnableImpulseDamage = true, ImpulseToDamage = 1.000000F, ContactToDamage = 10.000000F, MaxContactImpulseRatio = 1.000000F, ImpulseChildPropagationFactor = 1.000000F, ImpulsePropagationFactor = 0.500000F, ImpulseDiminishingFactor = 0.500000F, DebrisMaxSeparation = 50.000000F, MaxAngularVelocity = -1.000000F, FractureFieldMask = Enums.physicsFractureFieldType.FF_Default };
+			DestructionParams = new physicsDestructionParams();
 			DestructionLevelData = new();
-			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			NavigationSetting = new NavGenNavigationSetting();
 			UseMeshNavmeshSettings = true;
 
 			PostConstruct();

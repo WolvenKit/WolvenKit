@@ -134,8 +134,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnSpawnDespawnEntityParams()
 		{
-			SpawnOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
-			ItemOwnerId = new scnPerformerId { Id = 4294967040 };
+			SpawnOffset = new Transform();
+			ItemOwnerId = new scnPerformerId();
 			SpawnOnStart = true;
 			IsEnabled = true;
 			ValidateSpawnPostion = true;

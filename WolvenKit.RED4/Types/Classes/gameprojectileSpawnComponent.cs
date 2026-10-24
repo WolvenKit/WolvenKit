@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public gameprojectileSpawnComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			SpawnOffset = new Vector3();
 			ProjectileTemplates = new();
 

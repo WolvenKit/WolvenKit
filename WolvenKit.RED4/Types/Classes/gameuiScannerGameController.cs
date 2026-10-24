@@ -327,8 +327,8 @@ namespace WolvenKit.RED4.Types
 		public gameuiScannerGameController()
 		{
 			CurrentTarget = new entEntityID();
-			ScannerData = new scannerDataStructure { QuestEntries = new() };
-			CurObj = new GameObjectScanStats { ScannerData = new scannerDataStructure { QuestEntries = new() } };
+			ScannerData = new scannerDataStructure();
+			CurObj = new GameObjectScanStats();
 			Squares = new();
 			SquaresFilled = new();
 			SoundFinishedOn = "ui_generic_set_11_navigation";

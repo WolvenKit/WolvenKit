@@ -55,8 +55,8 @@ namespace WolvenKit.RED4.Types
 		public CSkinProfile()
 		{
 			BlurSize = 1.200000F;
-			Diffuse = new CColor();
-			Falloff = new CColor();
+			Diffuse = new CColor { Red = 184, Green = 172, Blue = 144, Alpha = 255 };
+			Falloff = new CColor { Red = 255, Green = 164, Blue = 149, Alpha = 255 };
 			Roughness0 = 0.750000F;
 			Roughness1 = 1.250000F;
 			LobeMix = 0.800000F;

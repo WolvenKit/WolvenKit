@@ -244,8 +244,8 @@ namespace WolvenKit.RED4.Types
 			LeftHandLoadout = new gameItemID();
 			RightHandLoadout = new gameItemID();
 			CustomWeaponLoadout = new();
-			GenericMeleeLoadout = new CachedItemLoadout { ItemID = new gameItemID() };
-			GenericRangedLoadout = new CachedItemLoadout { ItemID = new gameItemID() };
+			GenericMeleeLoadout = new CachedItemLoadout();
+			GenericRangedLoadout = new CachedItemLoadout();
 			Transgressions = new();
 
 			PostConstruct();

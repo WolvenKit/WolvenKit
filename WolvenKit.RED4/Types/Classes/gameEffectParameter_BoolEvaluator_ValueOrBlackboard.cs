@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectParameter_BoolEvaluator_ValueOrBlackboard()
 		{
-			BlackboardProperty = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() };
+			BlackboardProperty = new gameBlackboardPropertyBindingDefinition();
 
 			PostConstruct();
 		}

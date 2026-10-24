@@ -173,6 +173,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(30)] 
+		[RED("upperBodyStateCallbackHandle")] 
+		public CHandle<redCallbackObject> UpperBodyStateCallbackHandle
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("playerVehicleStateCallbackHandle")] 
 		public CHandle<redCallbackObject> PlayerVehicleStateCallbackHandle
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("q000StartedListenerId")] 
 		public CUInt32 Q000StartedListenerId
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("dpadHintsVisibilityEnabledListenerId")] 
 		public CUInt32 DpadHintsVisibilityEnabledListenerId
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("remainingDistanceCounterTextParams")] 
 		public CHandle<textTextParameterSet> RemainingDistanceCounterTextParams
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("remainingTimeCounterTextParams")] 
 		public CHandle<textTextParameterSet> RemainingTimeCounterTextParams
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("inputHintVisibilityAnimProxy")] 
 		public CHandle<inkanimProxy> InputHintVisibilityAnimProxy
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("inputHintVisible")] 
 		public CBool InputHintVisible
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("wheelIconAnimProxy")] 
 		public CHandle<inkanimProxy> WheelIconAnimProxy
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("wheelAnimationEnabled")] 
 		public CBool WheelAnimationEnabled
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("isHoldingDirectionInput")] 
 		public CBool IsHoldingDirectionInput
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("slowCloseAnimProxy")] 
 		public CHandle<inkanimProxy> SlowCloseAnimProxy
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("slowCloseAnimIsReversed")] 
 		public CBool SlowCloseAnimIsReversed
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("containerAnimProxy")] 
 		public CHandle<inkanimProxy> ContainerAnimProxy
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("containerVisible")] 
 		public CBool ContainerVisible
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("containerAnimationPlaying")] 
 		public CBool ContainerAnimationPlaying
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("rootAnimProxy")] 
 		public CHandle<inkanimProxy> RootAnimProxy
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("rootVisible")] 
 		public CBool RootVisible
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("activeDriveType")] 
 		public CEnum<AutoDriveDriveType> ActiveDriveType
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<AutoDriveDriveType>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("headerAnimProxy")] 
 		public CHandle<inkanimProxy> HeaderAnimProxy
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("inputHintDriveTypeAnimProxy")] 
 		public CHandle<inkanimProxy> InputHintDriveTypeAnimProxy
 		{

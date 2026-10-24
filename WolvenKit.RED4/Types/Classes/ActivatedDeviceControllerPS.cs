@@ -40,10 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "ActivatedDevice";
 			TweakDBRecord = "Devices.ActivatedDeviceTrap";
-			TweakDBDescriptionRecord = 171165425479;
+			TweakDBDescriptionRecord = "device_descriptions.ActivatedDeviceTrap";
 			ShouldScannerShowRole = true;
-			AnimationSetup = new ActivatedDeviceAnimSetup { AnimationTime = 0.500000F };
-			ActivatedDeviceSetup = new ActivatedDeviceSetup { ActionName = "LocKey#233", VfxResource = new gameFxResource(), ShouldRagdollOnAttack = true, ThumbnailIconRecord = "DeviceIcons.GenenericDeviceIcon" };
+			AnimationSetup = new ActivatedDeviceAnimSetup();
+			ActivatedDeviceSetup = new ActivatedDeviceSetup();
 			IndustrialArmAnimationOverride = -1;
 
 			PostConstruct();

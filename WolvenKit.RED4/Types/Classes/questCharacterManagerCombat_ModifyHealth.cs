@@ -54,9 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerCombat_ModifyHealth()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
-			DamageSourceRef = new gameEntityReference { Names = new() };
-
 			PostConstruct();
 		}
 

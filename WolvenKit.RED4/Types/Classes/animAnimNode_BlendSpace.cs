@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_BlendSpace : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("inputLinks")] 
 		public CArray<animFloatLink> InputLinks
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<animFloatLink>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("blendSpace")] 
 		public animAnimNode_BlendSpace_InternalsBlendSpace BlendSpace
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animAnimNode_BlendSpace_InternalsBlendSpace>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("progressLink")] 
 		public animFloatLink ProgressLink
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("fireAnimEndEvent")] 
 		public CBool FireAnimEndEvent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("animEndEventName")] 
 		public CName AnimEndEventName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("isLooped")] 
 		public CBool IsLooped
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = uint.MaxValue;
 			InputLinks = new() { new animFloatLink() };
-			BlendSpace = new animAnimNode_BlendSpace_InternalsBlendSpace { SpaceDimension = 1, CoordinatesDescriptions = new() { new animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription() }, SpacePoints = new(), IsLooped = true, NeedsRuntimeTriangulation = true, CachedSpacePoints_coordinates = new(), CachedSpaceSimplexes_pointsIndices = new(), CachedSamplesForGridPoints_simplexIndex = new(), CachedSamplesForGridPoints_weightsForPoints = new() };
+			BlendSpace = new animAnimNode_BlendSpace_InternalsBlendSpace();
 			ProgressLink = new animFloatLink();
 			IsLooped = true;
 

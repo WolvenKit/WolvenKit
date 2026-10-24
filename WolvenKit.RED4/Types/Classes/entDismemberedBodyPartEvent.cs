@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entDismemberedBodyPartEvent()
 		{
-			Bones = new(0);
+			Bones = new(32);
 
 			PostConstruct();
 		}

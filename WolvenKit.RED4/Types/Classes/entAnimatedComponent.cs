@@ -119,9 +119,9 @@ namespace WolvenKit.RED4.Types
 		public entAnimatedComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			Animations = new animAnimSetup { Cinematics = new(), Gameplay = new() };
-			AnimTags = new redTagList { Tags = new() };
+			LocalTransform = new WorldTransform();
+			Animations = new animAnimSetup();
+			AnimTags = new redTagList();
 			AnimParameters = new();
 			ServerForcedLod = -1;
 			ClientForcedLod = -1;

@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("mouserInputPanel")] 
+		public inkWidgetReference MouserInputPanel
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("selectorWidget")] 
 		public inkWidgetReference SelectorWidget
 		{
@@ -60,7 +68,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
+		[RED("commonGraphicsPanel")] 
+		public inkWidgetReference CommonGraphicsPanel
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("mouserGraphicsPanel")] 
+		public inkWidgetReference MouserGraphicsPanel
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("schemeLegacyRef")] 
 		public inkWidgetReference SchemeLegacyRef
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("schemeAgileRef")] 
 		public inkWidgetReference SchemeAgileRef
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("schemeAlternativeRef")] 
 		public inkWidgetReference SchemeAlternativeRef
 		{
@@ -84,15 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
-		[RED("inputSettingSelectorRef")] 
-		public inkWidgetReference InputSettingSelectorRef
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("inputSettingGroupName")] 
 		public CName InputSettingGroupName
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("inputSettingVarName")] 
 		public CName InputSettingVarName
 		{
@@ -108,7 +124,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
+		[RED("inputSettingSelectorRef")] 
+		public inkWidgetReference InputSettingSelectorRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("selectorCtrl")] 
 		public CWeakHandle<inkListController> SelectorCtrl
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("inputPanel")] 
 		public CArray<inkWidgetReference> InputPanel
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("currentTab")] 
 		public CInt32 CurrentTab
 		{
@@ -148,7 +172,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
+		[RED("settingsAvailable")] 
+		public CBool SettingsAvailable
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("inputSettingSelector")] 
 		public CWeakHandle<SettingsSelectorControllerListString> InputSettingSelector
 		{
@@ -156,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<SettingsSelectorControllerListString>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("inputSettingsListener")] 
 		public CHandle<InputSettingsVarListener> InputSettingsListener
 		{
@@ -164,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InputSettingsVarListener>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
@@ -172,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("inputSettingGroup")] 
 		public CHandle<userSettingsGroup> InputSettingGroup
 		{
@@ -180,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<userSettingsGroup>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(29)] 
 		[RED("inputSettingVar")] 
 		public CHandle<userSettingsVar> InputSettingVar
 		{
@@ -196,13 +228,16 @@ namespace WolvenKit.RED4.Types
 			GeneralInputPanel = new inkWidgetReference();
 			VehicleInputPanel = new inkWidgetReference();
 			VehicleCombatInputPanel = new inkWidgetReference();
+			MouserInputPanel = new inkWidgetReference();
 			SelectorWidget = new inkWidgetReference();
+			CommonGraphicsPanel = new inkWidgetReference();
+			MouserGraphicsPanel = new inkWidgetReference();
 			SchemeLegacyRef = new inkWidgetReference();
 			SchemeAgileRef = new inkWidgetReference();
 			SchemeAlternativeRef = new inkWidgetReference();
-			InputSettingSelectorRef = new inkWidgetReference();
 			InputSettingGroupName = "/controls/controller";
 			InputSettingVarName = "InputSchemesMode";
+			InputSettingSelectorRef = new inkWidgetReference();
 			ButtonHintsManagerRef = new inkWidgetReference();
 			InputPanel = new();
 

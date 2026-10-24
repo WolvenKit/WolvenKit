@@ -105,6 +105,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Spawn sphere";
 			EditorGroup = "Location";
 			IsEnabled = true;
+			InnerRadius = new CEvaluatorFloatConst { Value = 0.000000F };
+			OuterRadius = new CEvaluatorFloatConst { Value = 0.200000F };
 			SpawnPositiveX = true;
 			SpawnNegativeX = true;
 			SpawnPositiveY = true;
@@ -112,6 +114,7 @@ namespace WolvenKit.RED4.Types
 			SpawnPositiveZ = true;
 			SpawnNegativeZ = true;
 			WorldSpace = true;
+			ForceScale = new CEvaluatorFloatConst();
 
 			PostConstruct();
 		}

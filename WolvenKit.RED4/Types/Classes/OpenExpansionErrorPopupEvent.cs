@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("modMenu")] 
+		public CWeakHandle<BrowserModsMenuGameController> ModMenu
+		{
+			get => GetPropertyValue<CWeakHandle<BrowserModsMenuGameController>>();
+			set => SetPropertyValue<CWeakHandle<BrowserModsMenuGameController>>(value);
+		}
+
 		public OpenExpansionErrorPopupEvent()
 		{
 			PostConstruct();

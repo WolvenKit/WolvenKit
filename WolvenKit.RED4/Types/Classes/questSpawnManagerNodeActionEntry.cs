@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public questSpawnManagerNodeActionEntry()
 		{
+			Type = new questSpawnSet_NodeType();
+
 			PostConstruct();
 		}
 

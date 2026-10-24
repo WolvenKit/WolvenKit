@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
 			TintColor = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			ShadowOffset = new Vector2();
 			ShadowColor = new HDRColor { Alpha = 1.000000F };
-			FontStyle = new textTextBlockFontStyle { OutlineColor = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F } };
+			FontStyle = new textTextBlockFontStyle();
 			FontSize = 22;
 
 			PostConstruct();

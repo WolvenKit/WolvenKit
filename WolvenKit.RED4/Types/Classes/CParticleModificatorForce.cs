@@ -43,6 +43,8 @@ namespace WolvenKit.RED4.Types
 			IsEnabled = true;
 			Pivot = new Vector3();
 			Radius = 10.000000F;
+			Scale = new CEvaluatorFloatConst();
+			Damp = new CEvaluatorVectorConst { Value = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 
 			PostConstruct();
 		}

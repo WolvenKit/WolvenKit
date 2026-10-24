@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioVehicleGridDestruction()
 		{
-			BottomLayer = new audioVehicleDestructionGridLayer { BackLeft = new audioVehicleDestructionGridCell(), BackRight = new audioVehicleDestructionGridCell(), CenterBackLeft = new audioVehicleDestructionGridCell(), CenterBackRight = new audioVehicleDestructionGridCell(), CenterForwardLeft = new audioVehicleDestructionGridCell(), CenterForwardRight = new audioVehicleDestructionGridCell(), FrontLeft = new audioVehicleDestructionGridCell(), FrontRight = new audioVehicleDestructionGridCell() };
-			UpperLayer = new audioVehicleDestructionGridLayer { BackLeft = new audioVehicleDestructionGridCell(), BackRight = new audioVehicleDestructionGridCell(), CenterBackLeft = new audioVehicleDestructionGridCell(), CenterBackRight = new audioVehicleDestructionGridCell(), CenterForwardLeft = new audioVehicleDestructionGridCell(), CenterForwardRight = new audioVehicleDestructionGridCell(), FrontLeft = new audioVehicleDestructionGridCell(), FrontRight = new audioVehicleDestructionGridCell() };
+			BottomLayer = new audioVehicleDestructionGridLayer();
+			UpperLayer = new audioVehicleDestructionGridLayer();
 
 			PostConstruct();
 		}

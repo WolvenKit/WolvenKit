@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public LibTreeCMetanodeIfDefinition()
 		{
-			IfCondition = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			IfCondition = new LibTreeDefBool();
 
 			PostConstruct();
 		}

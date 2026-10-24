@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldGuardAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("communityEntries")] 
 		public CArray<AIGuardAreaConnectedCommunity> CommunityEntries
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<AIGuardAreaConnectedCommunity>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("combatCommunityEntries")] 
 		public CArray<AICombatGuardAreaConnectedCommunity> CombatCommunityEntries
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<AICombatGuardAreaConnectedCommunity>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("pursuitArea")] 
 		public NodeRef PursuitArea
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("pursuitRange")] 
 		public CFloat PursuitRange
 		{
@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldGuardAreaNode()
 		{
+			Color = new CColor { Red = 255, Green = 127, Blue = 255, Alpha = 128 };
 			CommunityEntries = new();
 			CombatCommunityEntries = new();
 

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterHealth_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			IsPlayer = true;
 			ComparisonType = Enums.EComparisonType.Equal;
 

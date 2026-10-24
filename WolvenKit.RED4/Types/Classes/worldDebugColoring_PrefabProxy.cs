@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_PrefabProxy()
 		{
-			RegularMeshColor = new CColor();
-			InstancedMeshColor = new CColor();
-			PrefabProxyMeshColor = new CColor();
+			RegularMeshColor = new CColor { Red = 255, Alpha = 255 };
+			InstancedMeshColor = new CColor { Red = 255, Green = 255, Alpha = 255 };
+			PrefabProxyMeshColor = new CColor { Green = 255, Alpha = 255 };
 			DistinguishInstancedMesh = true;
 
 			PostConstruct();

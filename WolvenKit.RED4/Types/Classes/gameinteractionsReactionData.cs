@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.Types
 			EndDuration = 1.000000F;
 			InteractionDuration = -1.000000F;
 			RequiredEquips = new();
-			InteractionPoint = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			InteractionPoint = new Transform();
 			IKPoint = new Vector4();
 
 			PostConstruct();

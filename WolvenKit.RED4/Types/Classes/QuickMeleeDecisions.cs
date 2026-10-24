@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public QuickMeleeDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

@@ -23,6 +23,9 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
             this.Bind(ViewModel, x => x.Project.ModName, x => x.ModNameTextBox.Text)
                 .DisposeWith(disposables);
 
+            this.Bind(ViewModel, x => x.Project.Description, x => x.DescriptionTextBox.Text)
+                .DisposeWith(disposables);
+
             this.Bind(ViewModel, x => x.Project.Author, x => x.AuthorTextBox.Text)
                 .DisposeWith(disposables);
 
@@ -30,6 +33,12 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
                 .DisposeWith(disposables);
 
             this.Bind(ViewModel, x => x.Project.Version, x => x.VersionTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.Bind(ViewModel, x => x.Project.ModIoId, x => x.ModIoIdTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.Bind(ViewModel, x => x.Project.ModIoLogo, x => x.ModIoLogoTextBox.Text)
                 .DisposeWith(disposables);
 
             this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
@@ -47,6 +56,13 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
                     if (name == "General")
                     {
                         GeneralPanel.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                        ModIoPanel.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+                    }
+
+                    if (name == "mod.io")
+                    {
+                        GeneralPanel.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+                        ModIoPanel.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     }
                 }
             });

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questVehicleAVArrived_ConditionType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerManageBinkComponent_NodeTypeParams()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			Action = Enums.gameBinkVideoAction.Start;
 
 			PostConstruct();

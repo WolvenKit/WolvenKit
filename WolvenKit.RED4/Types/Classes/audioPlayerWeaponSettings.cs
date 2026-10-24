@@ -187,6 +187,7 @@ namespace WolvenKit.RED4.Types
 			TimeLimitForAutoFireSingleShot = 0.250000F;
 			PadVibrationGain = 1.000000F;
 			PadVibrationReloadGain = 1.000000F;
+			AnimEventOverrides = new audioWeaponEventOverrides { EntryType = new audioWeaponEventOverride() };
 			PerfectChargePerkSounds = new audioPerfectChargePerkSounds();
 
 			PostConstruct();

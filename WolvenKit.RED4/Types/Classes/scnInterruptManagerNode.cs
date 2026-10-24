@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnInterruptManagerNode()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			OutputSockets = new();
 			InterruptionOperations = new();
 

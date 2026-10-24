@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_AddIkRequest : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("ikChain")] 
 		public CName IkChain
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("targetBone")] 
 		public animTransformIndex TargetBone
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("positionOffset")] 
 		public Vector3 PositionOffset
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("rotationOffset")] 
 		public Quaternion RotationOffset
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Quaternion>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("poleVector")] 
 		public animPoleVectorDetails PoleVector
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoleVectorDetails>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("weightPosition")] 
 		public CFloat WeightPosition
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(8)] 
 		[RED("weightRotation")] 
 		public CFloat WeightRotation
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("blendTimeIn")] 
 		public CFloat BlendTimeIn
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("blendTimeOut")] 
 		public CFloat BlendTimeOut
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("priority")] 
 		public CInt32 Priority
 		{
@@ -90,8 +90,8 @@ namespace WolvenKit.RED4.Types
 			InputLink = new animPoseLink();
 			TargetBone = new animTransformIndex();
 			PositionOffset = new Vector3();
-			RotationOffset = new Quaternion { R = 1.000000F };
-			PoleVector = new animPoleVectorDetails { TargetBone = new animTransformIndex(), PositionOffset = new Vector3() };
+			RotationOffset = new Quaternion();
+			PoleVector = new animPoleVectorDetails();
 			WeightPosition = 1.000000F;
 			WeightRotation = 1.000000F;
 			BlendTimeIn = 0.500000F;

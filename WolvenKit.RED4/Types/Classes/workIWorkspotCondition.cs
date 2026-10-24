@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(1)] 
 		[RED("equals")] 
-		public CBool Equals_
+		public CBool Equals
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

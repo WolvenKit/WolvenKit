@@ -21,8 +21,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("list")] 
-		public inkCompoundWidgetReference List
+		[RED("grid")] 
+		public inkCompoundWidgetReference Grid
 		{
 			get => GetPropertyValue<inkCompoundWidgetReference>();
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
@@ -93,24 +93,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
-		[RED("numberOfCardsInTarotDeck")] 
-		public CInt32 NumberOfCardsInTarotDeck
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("baseCards")] 
-		public CInt32 BaseCards
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("ep1Cards")] 
-		public CInt32 Ep1Cards
+		[RED("totalCards")] 
+		public CInt32 TotalCards
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
@@ -120,9 +104,8 @@ namespace WolvenKit.RED4.Types
 		{
 			ButtonHintsManagerRef = new inkWidgetReference();
 			TooltipsManagerRef = new inkWidgetReference();
-			List = new inkCompoundWidgetReference();
-			BaseCards = 22;
-			Ep1Cards = 26;
+			Grid = new inkCompoundWidgetReference();
+			TotalCards = 38;
 
 			PostConstruct();
 		}

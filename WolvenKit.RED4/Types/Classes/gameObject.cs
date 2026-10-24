@@ -279,7 +279,7 @@ namespace WolvenKit.RED4.Types
 		public gameObject()
 		{
 			PlayerSocket = new gamePlayerSocket();
-			Tags = new redTagList { Tags = new() };
+			Tags = new redTagList();
 			DisplayName = new() { Unk1 = 0, Value = "" };
 			DisplayDescription = new() { Unk1 = 0, Value = "" };
 			VisibilityCheckDistance = 16000.000000F;

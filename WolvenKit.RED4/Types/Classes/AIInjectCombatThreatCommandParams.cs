@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIInjectCombatThreatCommandParams()
 		{
-			TargetPuppetRef = new gameEntityReference { Names = new() };
+			TargetPuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

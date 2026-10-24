@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			Circle = new inkCircleWidgetReference();
 			Shape = new inkShapeWidgetReference();
 			BasicInputFields = new FUNC_TEST_Container_2();
-			AdditionalFields = new FUNC_TEST_Container { BasePanel = new inkBasePanelWidgetReference(), Compound = new inkCompoundWidgetReference(), Leaf = new inkLeafWidgetReference(), Widget = new inkWidgetReference() };
+			AdditionalFields = new FUNC_TEST_Container();
 
 			PostConstruct();
 		}

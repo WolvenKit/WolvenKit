@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public worldFoliageRawItem()
 		{
 			Position = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			Scale = 1.000000F;
 
 			PostConstruct();

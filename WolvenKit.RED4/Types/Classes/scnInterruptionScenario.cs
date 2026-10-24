@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnInterruptionScenario()
 		{
-			Id = new scnInterruptionScenarioId { Id = uint.MaxValue };
+			Id = new scnInterruptionScenarioId();
 			Enabled = true;
 			TalkOnReturn = true;
 			PlayInterruptLine = true;

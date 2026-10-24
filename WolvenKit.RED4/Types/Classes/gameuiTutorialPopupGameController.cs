@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("fullscreenButtonContainerWidgetPath")] 
+		public CName FullscreenButtonContainerWidgetPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("popupBlockingPanel")] 
 		public inkWidgetReference PopupBlockingPanel
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("popupFullscreenRightPanel")] 
 		public inkWidgetReference PopupFullscreenRightPanel
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("data")] 
 		public CWeakHandle<TutorialPopupData> Data
 		{
@@ -52,7 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<TutorialPopupData>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("prevData")] 
+		public CHandle<TutorialPopupData> PrevData
+		{
+			get => GetPropertyValue<CHandle<TutorialPopupData>>();
+			set => SetPropertyValue<CHandle<TutorialPopupData>>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("inputBlocked")] 
 		public CBool InputBlocked
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("gamePaused")] 
 		public CBool GamePaused
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("isShownBbId")] 
 		public CHandle<redCallbackObject> IsShownBbId
 		{
@@ -76,7 +92,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
+		[RED("isHoldAction")] 
+		public CBool IsHoldAction
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("isJoyconDetachPatternTutorial")] 
+		public CBool IsJoyconDetachPatternTutorial
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("animIntroPopup")] 
 		public CName AnimIntroPopup
 		{
@@ -84,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("animIntroPopupModal")] 
 		public CName AnimIntroPopupModal
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("animIntroFullscreenLeft")] 
 		public CName AnimIntroFullscreenLeft
 		{
@@ -100,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("animIntroFullscreenRight")] 
 		public CName AnimIntroFullscreenRight
 		{
@@ -108,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("animOutroPopup")] 
 		public CName AnimOutroPopup
 		{
@@ -116,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("animOutroPopupModal")] 
 		public CName AnimOutroPopupModal
 		{
@@ -124,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("animOutroFullscreenLeft")] 
 		public CName AnimOutroFullscreenLeft
 		{
@@ -132,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("animOutroFullscreenRight")] 
 		public CName AnimOutroFullscreenRight
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("animIntro")] 
 		public CName AnimIntro
 		{
@@ -148,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("animOutro")] 
 		public CName AnimOutro
 		{
@@ -156,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("targetPopup")] 
 		public inkWidgetReference TargetPopup
 		{
@@ -164,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -172,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("targetPosition")] 
 		public CEnum<gamePopupPosition> TargetPosition
 		{
@@ -180,12 +212,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePopupPosition>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("onInputDeviceChangedCallbackID")] 
 		public CHandle<redCallbackObject> OnInputDeviceChangedCallbackID
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("joyconDualStyleChangedListener")] 
+		public CHandle<redCallbackObject> JoyconDualStyleChangedListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("uiContextIsActive")] 
+		public CBool UiContextIsActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameuiTutorialPopupGameController()
