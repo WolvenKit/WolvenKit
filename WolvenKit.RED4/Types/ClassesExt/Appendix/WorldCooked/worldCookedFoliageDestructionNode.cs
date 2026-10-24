@@ -48,7 +48,7 @@ public partial class worldCookedFoliageDestructionNode
 
             entry.FoliageResourceHash = br.ReadCUInt64();
             entry.PopulationIndex = br.ReadCUInt32();
-            entry.DataVersion = br.ReadCUInt32();
+            entry.PopulationCount = br.ReadCUInt32();
 
             result.CollisionNodeInfos.Add(entry);
         }
@@ -105,7 +105,7 @@ public partial class worldCookedFoliageDestructionNode
 
             bw.Write(castedEntry.FoliageResourceHash);
             bw.Write(castedEntry.PopulationIndex);
-            bw.Write(castedEntry.DataVersion);
+            bw.Write(castedEntry.PopulationCount);
         }
 
         bw.BaseWriter.WriteVLQInt32(data.PopulationIndex.Count);
@@ -147,9 +147,9 @@ public class worldCookedFoliageDestructionNodeInfo : worldCookedCollisionNodeInf
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("dataVersion")]
+    [RED("populationCount")]
     [REDProperty(IsIgnored = true)]
-    public CUInt32 DataVersion
+    public CUInt32 PopulationCount
     {
         get => GetPropertyValue<CUInt32>();
         set => SetPropertyValue<CUInt32>(value);
