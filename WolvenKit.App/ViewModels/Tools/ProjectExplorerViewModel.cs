@@ -1713,6 +1713,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public AppViewModel GetAppViewModel() => _appViewModel;
 
+    public IAsyncRelayCommand<string> NewFileCommand => _appViewModel.NewFileCommand;
+
     #endregion
 
     #region responders
