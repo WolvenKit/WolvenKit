@@ -43,6 +43,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public uint[] vpStrides { get; set; }
         public uint[] weightCounts { get; set; }
         public bool[] garmentSupportExists { get; set; }
+        public uint[] vehDmgNormalOffsets { get; set; }
+        public uint[] vehDmgPositionOffsets { get; set; }
         public Vector4 quantTrans { get; set; }
         public Vector4 quantScale { get; set; }
         public int meshCount { get; set; }
@@ -70,6 +72,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             vpStrides = new uint[meshCount];
             weightCounts = new uint[meshCount];
             garmentSupportExists = new bool[meshCount];
+            vehDmgNormalOffsets = new uint[meshCount];
+            vehDmgPositionOffsets = new uint[meshCount];
             LODLvl = new uint[meshCount];
 
         }
@@ -91,6 +95,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Vector4[]? garmentSupportWeight { get; set; }
         public Vector4[]? garmentSupportCap { get; set; }
         public uint weightCount { get; set; }
+        public Vector3[]? vehDmgNormals { get; set; }
+        public Vector3[]? vehDmgPositions { get; set; }
         public string[]? materialNames { get; set; }
         public uint lod { get; set; }
     }
@@ -108,6 +114,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public string? name { get; set; }
         public uint weightcount { get; set; }
         public ushort[,]? garmentMorph { get; set; }
+        public uint[]? vehDmgNor32s { get; set; }
+        public float[,]? vehDmgPos { get; set; }
     }
 
     public class RawTargetContainer
