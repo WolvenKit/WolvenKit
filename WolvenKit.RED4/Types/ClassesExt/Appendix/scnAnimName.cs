@@ -6,17 +6,17 @@ namespace WolvenKit.RED4.Types;
 
 public partial class scnAnimName : IRedAppendix
 {
-    [RED("unk1")]
+    [RED("animNames")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CName> Unk1
+    public CArray<CName> AnimNames
     {
         get => GetPropertyValue<CArray<CName>>();
         set => SetPropertyValue<CArray<CName>>(value);
     }
 
-    [RED("unk2")]
+    [RED("referenceIndices")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CUInt16> Unk2
+    public CArray<CUInt16> ReferenceIndices
     {
         get => GetPropertyValue<CArray<CUInt16>>();
         set => SetPropertyValue<CArray<CUInt16>>(value);
@@ -24,8 +24,8 @@ public partial class scnAnimName : IRedAppendix
 
     partial void PostConstruct()
     {
-        Unk1 = new CArray<CName>();
-        Unk2 = new CArray<CUInt16>();
+        AnimNames = new CArray<CName>();
+        ReferenceIndices = new CArray<CUInt16>();
     }
 
     public void Read(Red4Reader reader, uint size)
@@ -39,18 +39,18 @@ public partial class scnAnimName : IRedAppendix
 
         if (Type == Enums.scnAnimNameType.reference || Type == Enums.scnAnimNameType.container)
         {
-            Unk2 = new CArray<CUInt16>();
+            ReferenceIndices = new CArray<CUInt16>();
             for (int i = 0; i < cnt; i++)
             {
-                Unk2.Add(reader.BaseReader.ReadUInt16());
+                ReferenceIndices.Add(reader.BaseReader.ReadUInt16());
             }
         }
         else
         {
-            Unk1 = new CArray<CName>();
+            AnimNames = new CArray<CName>();
             for (int i = 0; i < cnt; i++)
             {
-                Unk1.Add(reader.ReadCName());
+                AnimNames.Add(reader.ReadCName());
             }
         }
     }
@@ -59,14 +59,14 @@ public partial class scnAnimName : IRedAppendix
     {
         if (Type == Enums.scnAnimNameType.reference || Type == Enums.scnAnimNameType.container)
         {
-            foreach (var val in Unk2)
+            foreach (var val in ReferenceIndices)
             {
                 writer.Write(val);
             }
         }
         else
         {
-            foreach (var val in Unk1)
+            foreach (var val in AnimNames)
             {
                 writer.Write(val);
             }
