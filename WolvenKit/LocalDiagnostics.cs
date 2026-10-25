@@ -11,9 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 
