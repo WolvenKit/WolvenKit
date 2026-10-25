@@ -944,11 +944,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             if (BeginDeferredRefreshContext == null)
             {
-                await ConvertToJsonInternal(selection);
+                await ConvertToJsonInternal(selection, askOverwrite: true);
                 return;
             }
 
-            await BeginDeferredRefreshContext(() => ConvertToJsonInternal(selection));
+            await BeginDeferredRefreshContext(() => ConvertToJsonInternal(selection, askOverwrite: true));
 
             return;
         }
@@ -970,7 +970,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         await BeginDeferredRefreshContext(() => ConvertToJsonInternal(convertSelection));
     }
 
-    private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
+    private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection, bool askOverwrite = false)
     {
         var createdJsonFiles = new ConcurrentBag<FileInfo>();
 
@@ -997,6 +997,31 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+            var skipExisting = false;
+            if (askOverwrite)
+            {
+                var existingCount = allFiles.Count(file => File.Exists(file) &&
+                    validExtensions.Contains(Path.GetExtension(file).TrimStart('.')) &&
+                    File.Exists(Path.Combine(ActiveProject.NotNull().RawDirectory,
+                        ActiveProject.GetRelativePath(file)) + ".json"));
+                if (existingCount > 0)
+                {
+                    var answer = WMessageBoxResult.None;
+                    await DispatcherHelper.RunOnMainThreadAsync(() =>
+                    {
+                        answer = Interactions.ShowMessageBox(
+                            $"{existingCount} JSON file(s) already exist.\n\nYes: overwrite existing JSON files.\nNo: skip existing JSON files and export new files.\nCancel: stop the export.",
+                            "Export to JSON", WMessageBoxButtons.YesNoCancel);
+                        return Task.CompletedTask;
+                    });
+                    if (answer is not (WMessageBoxResult.Yes or WMessageBoxResult.No))
+                    {
+                        _progressService.Completed();
+                        return;
+                    }
+                    skipExisting = answer == WMessageBoxResult.No;
+                }
+            }
 
             int progress = 0;
             _progressService.Report(0);
@@ -1026,6 +1051,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                         var rawOutPath = Path.Combine(
                             ActiveProject.NotNull().RawDirectory,
                             ActiveProject.NotNull().GetRelativePath(file));
+
+                        if (skipExisting && File.Exists(rawOutPath + ".json"))
+                        {
+                            return;
+                        }
 
                         var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
 
