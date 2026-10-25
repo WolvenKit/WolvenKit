@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3213
+      author: "manavortex"
+      description: "Inkatlas generator can now generate placeholder icons from text."
