@@ -1987,6 +1987,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CreateCCXLHairFilesCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
@@ -2007,6 +2008,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CreateCCXLHairFilesCommand))]
     private EAppStatus? _status;
 
     [ObservableProperty]

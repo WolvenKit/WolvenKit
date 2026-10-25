@@ -472,4 +472,29 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             _notificationService.Success($"Successfully added {filesToAdd.Count} files to your project.");
         }
     }
+
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void CreateCCXLHairFiles() {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
+        {
+            return;
+        }
+
+        var dialogModel = Interactions.ShowCCXLHairDialog((activeProject, SettingsManager));
+
+        if (dialogModel is null)
+        {
+            return;
+        }
+
+    }
+    
+
 }

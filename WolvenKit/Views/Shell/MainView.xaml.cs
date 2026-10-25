@@ -184,7 +184,16 @@ namespace WolvenKit.Views.Shell
 
                     return dialog.ViewModel;
                 };
+                Interactions.ShowCCXLHairDialog = (p) =>
+                {
+                    var dialog = new CreateCCXLHairFilesDialog(p.activeProject, p.settingsManager, projectResourceTools);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
 
+                    return dialog.ViewModel;
+                };
                 Interactions.ShowGenerateInkatlasDialogue = (activeProject) =>
                 {
                     var dialog = new AddInkatlasDialog(activeProject);
