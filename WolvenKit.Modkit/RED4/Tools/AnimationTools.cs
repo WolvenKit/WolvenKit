@@ -636,7 +636,7 @@ namespace WolvenKit.Modkit.RED4
 
                 foreach (var original in originalAnimsToCopy)
                 {
-                    CopyOldAnim(ref anims, original, ref newAnimSetEntries, ref newAnimChunks);
+                    CopyAnimation(anims, original, newAnimSetEntries, newAnimChunks);
                     _loggerService.Debug($"{gltfFileName}: keep: `{original.Animation!.Chunk!.Name.GetResolvedText()}`, copied to new animset");
                 }
             }
@@ -676,20 +676,28 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private static void CopyOldAnim(ref animAnimSet anims, animAnimSetEntry oldAnim, ref CArray<CHandle<animAnimSetEntry>> newAnimSetEntries, ref CArray<animAnimDataChunk> newAnimChunks)
+        /// <summary>Checks whether an animation uses a supported buffer stored in the anim set.</summary>
+        public static bool CanCopyAnimation(animAnimSet anims, animAnimSetEntry anim) =>
+            GetDataChunkAddress(anim) is { } dataAddress && (uint)dataAddress.UnkIndex < anims.AnimationDataChunks.Count;
+
+        /// <summary>
+        /// Copies an animation and its data into another anim set's collections.
+        /// </summary>
+        /// <remarks>The copy gets a data chunk containing only its bytes.</remarks>
+        /// <exception cref="NotSupportedException">The animation buffer cannot be copied.</exception>
+        public static void CopyAnimation(animAnimSet anims, animAnimSetEntry oldAnim, CArray<CHandle<animAnimSetEntry>> newAnimSetEntries, CArray<animAnimDataChunk> newAnimChunks)
         {
+            if (!CanCopyAnimation(anims, oldAnim))
+            {
+                // TODO: Support inplace and directly serialized buffers (#1660).
+                throw new NotSupportedException(
+                    $"Cannot copy animation '{oldAnim.Animation?.Chunk?.Name.GetResolvedText()}': only compressed and SIMD buffers stored in a data chunk can be copied.");
+            }
+
             var copiedAnim = (animAnimSetEntry)oldAnim.DeepCopy();
 
             // Manually polyed morphs
-            var copiedDataAddress = copiedAnim.Animation!.Chunk!.AnimBuffer!.Chunk! switch
-                {
-                    animAnimationBufferCompressed compressed => compressed.DataAddress,
-                    animAnimationBufferSimd simd => simd.DataAddress,
-                    // TODO https://github.com/WolvenKit/WolvenKit/issues/1660
-                    //      Implement Copying for Anime InplaceBuffers and Direct SerializedBuffers.
-                    //      Can steal code from export, but better to refactor it properly.
-                    _ => throw new Exception("Unexpected animation buffer type"),
-                };
+            var copiedDataAddress = GetDataChunkAddress(copiedAnim)!;
 
             // Need to extract just the part of the old buffer we need
             var oldChunk = anims.AnimationDataChunks[(int)(uint)copiedDataAddress.UnkIndex].Buffer.Buffer;
@@ -709,6 +717,15 @@ namespace WolvenKit.Modkit.RED4
             newAnimChunks.Add(newChunk);
             newAnimSetEntries.Add(copiedAnim);
         }
+
+        /// <summary>Gets the data-chunk address of a supported animation buffer.</summary>
+        private static animAnimDataAddress? GetDataChunkAddress(animAnimSetEntry anim) =>
+            anim.Animation?.Chunk?.AnimBuffer?.Chunk switch
+            {
+                animAnimationBufferCompressed { DataAddress: { } address } when address.UnkIndex != uint.MaxValue => address,
+                animAnimationBufferSimd { DataAddress: { } address } when address.UnkIndex != uint.MaxValue => address,
+                _ => null,
+            };
 
         #region animEventHelpers
 

@@ -394,19 +394,9 @@ public partial class ArchiveXlItemService
         }
 
         var onscreensNode = YamlHelper.EnsureNestedMapping(xlFileContent, "localization", "onscreens");
-        if (!onscreensNode.Children.TryGetValue("en-us", out var enUsNode) ||
-            enUsNode is not YamlSequenceNode enUsSeqNode)
-        {
-            onscreensNode.Children.Remove("en-us");
-            onscreensNode.Children.Add("en-us", new YamlSequenceNode() { clothingItemData.TranslationFileRelPath });
-        }
-        else
-        {
-            if (enUsSeqNode.Children.All(n => n.ToString() != clothingItemData.TranslationFileRelPath))
-            {
-                enUsSeqNode.Children.Add(clothingItemData.TranslationFileRelPath);
-            }
-        }
+        YamlHelper.AddToScalarOrSequence(onscreensNode, "en-us", clothingItemData.TranslationFileRelPath,
+            StringComparison.OrdinalIgnoreCase);
+
         YamlHelper.WriteYaml(xlFileAbsPath, xlFileContent);
     }
 
