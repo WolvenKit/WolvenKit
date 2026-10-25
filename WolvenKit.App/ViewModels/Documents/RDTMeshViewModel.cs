@@ -2568,50 +2568,304 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
 
                 groups.Add(group);
             }
-            else if (handle.Chunk is worldCollisionNode wcn)
+            else if (handle.Chunk is worldInstancedMeshNode imn)
             {
-                if (wcn.CompiledData.Data is not CollisionBuffer cb)
+                if (imn.Buffer.Data is not worldInstancedMeshNodeBuffer imnb || imn.CookedWorldTransformsBuffer.Data is not WorldTransformsBuffer wtb)
                 {
                     continue;
                 }
 
-                var mesh = new MeshComponent()
+                for (var i = 0; i < imnb.InnerNodes.Count; i++)
                 {
-                    WorldNodeIndex = $"{handleIndex}",
-                    WorldNodeType = typeStr,
-                    WorldNodeDataIndices = indexStr,
-                    Name = "collisionNode_" + wcn.SectorHash,
-                    Text = "collisionNode_" + wcn.SectorHash
-                };
+                    var node = imnb.InnerNodes[i];
+                    var transformRange = imnb.TransformRanges[i];
 
-                if (mesh.WorldNodeIndex == SelectedNodeIndex)
+                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
+
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+                    {
+                        continue;
+                    }
+
+                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
+
+                    var group = new MeshComponent()
+                    {
+                        Name = name,
+                        Text = name,
+                        WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
+                        AppearanceName = node.MeshAppearance,
+                        DepotPath = node.Mesh.DepotPath
+                    };
+
+                    if (group.WorldNodeIndex == SelectedNodeIndex)
+                    {
+                        SelectedItem = group;
+                    }
+
+                    var model = new LoadableModel(name)
+                    {
+                        MeshFile = Parent.Cr2wFile,
+                        AppearanceIndex = 0,
+                        AppearanceName = node.MeshAppearance,
+                        Materials = appMaterials,
+                        IsEnabled = true,
+                    };
+
+                    foreach (var material in model.Materials)
+                    {
+                        app.RawMaterials[material.Name] = material;
+                    }
+
+                    for (var j = transformRange.TransformIndex; j < transformRange.TransformIndex + transformRange.TransformCount; j++)
+                    {
+                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                        var subgroup = new MeshComponent()
+                        {
+                            Name = name + $"_instance_{j:D2}",
+                            Text = name + $"_instance_{j:D2}",
+                            //AppearanceName = wimn.MeshAppearance,
+                            DepotPath = node.Mesh.DepotPath
+                        };
+
+                        foreach (var submesh in meshes)
+                        {
+                            if (!app.LODLUT.ContainsKey(submesh.LOD))
+                            {
+                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                            }
+                            app.LODLUT[submesh.LOD].Add(submesh);
+                            subgroup.Children.Add(submesh);
+                        }
+
+                        var matrix = new Matrix3D();
+                        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
+
+                        var wtbMatrix = new Matrix3D();
+                        if (wtb.Transforms[j] is { } wte)
+                        {
+                            wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
+                        }
+
+                        var transform = wtb.Transforms[j].NotNull();
+                        wtbMatrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        wtbMatrix.Translate(ToVector3D(transform.Transform.Position));
+
+                        wtbMatrix.Append(matrix);
+
+                        subgroup.Transform = new MatrixTransform3D(wtbMatrix);
+
+                        group.Children.Add(subgroup);
+                    }
+
+                    groups.Add(group);
+                }
+            }
+            else if (handle.Chunk is worldCookedAcousticSectorNode wcasn)
+            {
+
+            }
+            else if (handle.Chunk is worldCookedBendedMeshNode wcbmn)
+            {
+                if (wcbmn.Buffer.Data is not worldCookedBendedMeshNodeBuffer wcbmnb)
                 {
-                    SelectedItem = mesh;
+                    continue;
                 }
 
-                var colliderMaterial = new PBRMaterial()
+                for (var i = 0; i < wcbmnb.InnerNodes.Count; i++)
                 {
-                    EnableAutoTangent = true,
-                    RenderShadowMap = true,
-                    RenderEnvironmentMap = true,
-                    //AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f),
-                    AlbedoColor = new SharpDX.Color4(0.5f, 0f, 0.5f, 1f),
-                    RoughnessFactor = 0.5,
-                    MetallicFactor = 0
-                };
+                    var node = wcbmnb.InnerNodes[i];
+                    var box = wcbmnb.DeformedBoxes[node.DeformedBoxIndex];
 
-                for (var k = 0; k < cb.Actors.Count; k++)
+                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
+
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+                    {
+                        continue;
+                    }
+
+                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
+
+                    var group = new MeshComponent()
+                    {
+                        Name = name,
+                        Text = name,
+                        WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
+                        AppearanceName = node.MeshAppearance,
+                        DepotPath = node.Mesh.DepotPath
+                    };
+
+                    if (group.WorldNodeIndex == SelectedNodeIndex)
+                    {
+                        SelectedItem = group;
+                    }
+
+                    var model = new LoadableModel(name)
+                    {
+                        MeshFile = Parent.Cr2wFile,
+                        AppearanceIndex = 0,
+                        AppearanceName = node.MeshAppearance,
+                        Materials = appMaterials,
+                        IsEnabled = true,
+                    };
+
+                    foreach (var material in model.Materials)
+                    {
+                        app.RawMaterials[material.Name] = material;
+                    }
+
+                    var j = 0;
+                    foreach (var transform in transforms)
+                    {
+                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                        var subgroup = new MeshComponent()
+                        {
+                            Name = name + $"_instance_{j:D2}",
+                            Text = name + $"_instance_{j:D2}",
+                            AppearanceName = node.MeshAppearance,
+                            DepotPath = node.Mesh.DepotPath
+                        };
+
+                        foreach (var submesh in meshes)
+                        {
+                            if (!app.LODLUT.ContainsKey(submesh.LOD))
+                            {
+                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                            }
+                            app.LODLUT[submesh.LOD].Add(submesh);
+                            subgroup.Children.Add(submesh);
+                        }
+
+                        var matrix = new Matrix3D();
+                        matrix.Scale(ToScaleVector3D(transform.Scale));
+                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        matrix.Translate(ToVector3D(transform.Transform.Position));
+
+                        //matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
+
+                        subgroup.Transform = new MatrixTransform3D(matrix);
+
+                        group.Children.Add(subgroup);
+                        j++;
+                    }
+
+                    groups.Add(group);
+                }
+            }
+            else if (handle.Chunk is worldCookedCableMeshNode wccmn)
+            {
+                if (wccmn.Buffer.Data is not worldCookedBendedMeshNodeBuffer wcbmnb)
                 {
-                    var actor = cb.Actors[k];
+                    continue;
+                }
 
-                    var actorGroup = new MeshComponent()
+                for (var i = 0; i < wcbmnb.InnerNodes.Count; i++)
+                {
+                    var node = wcbmnb.InnerNodes[i];
+
+                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
+
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+                    {
+                        continue;
+                    }
+
+                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
+
+                    var group = new MeshComponent()
+                    {
+                        Name = name,
+                        Text = name,
+                        WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
+                        AppearanceName = node.MeshAppearance,
+                        DepotPath = node.Mesh.DepotPath
+                    };
+
+                    if (group.WorldNodeIndex == SelectedNodeIndex)
+                    {
+                        SelectedItem = group;
+                    }
+
+                    var model = new LoadableModel(name)
+                    {
+                        MeshFile = Parent.Cr2wFile,
+                        AppearanceIndex = 0,
+                        AppearanceName = node.MeshAppearance,
+                        Materials = appMaterials,
+                        IsEnabled = true,
+                    };
+
+                    foreach (var material in model.Materials)
+                    {
+                        app.RawMaterials[material.Name] = material;
+                    }
+
+                    var j = 0;
+                    foreach (var transform in transforms)
+                    {
+                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                        var subgroup = new MeshComponent()
+                        {
+                            Name = name + $"_instance_{j:D2}",
+                            Text = name + $"_instance_{j:D2}",
+                            AppearanceName = node.MeshAppearance,
+                            DepotPath = node.Mesh.DepotPath
+                        };
+
+                        foreach (var submesh in meshes)
+                        {
+                            if (!app.LODLUT.ContainsKey(submesh.LOD))
+                            {
+                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                            }
+                            app.LODLUT[submesh.LOD].Add(submesh);
+                            subgroup.Children.Add(submesh);
+                        }
+
+                        var matrix = new Matrix3D();
+                        matrix.Scale(ToScaleVector3D(transform.Scale));
+                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        matrix.Translate(ToVector3D(transform.Transform.Position));
+
+                        subgroup.Transform = new MatrixTransform3D(matrix);
+
+                        group.Children.Add(subgroup);
+                        i++;
+                    }
+
+                    groups.Add(group);
+                }
+            }
+            else if (handle.Chunk is worldCookedCollisionNode wcn)
+            {
+                if (wcn.Buffer.Data is not worldCookedCollisionInfoBuffer b || wcn.CompiledData.Data is not worldCookedCollisionNodeBuffer cb)
+                {
+                    continue;
+                }
+
+                for (var m = 0; m < b.CollisionNodeInfos.Count; m++)
+                {
+                    var nodeInfo = b.CollisionNodeInfos[m];
+                    var node = cb.CollisionNodes[m];
+
+                    var mesh = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
                         WorldNodeType = typeStr,
                         WorldNodeDataIndices = indexStr,
-                        Name = "actor_" + cb.Actors.IndexOf(actor),
-                        Text = "actor_" + cb.Actors.IndexOf(actor),
-                        CollisionActorId = $"{k}"
+                        Name = "collisionNode_" + nodeInfo.SectorHash,
+                        Text = "collisionNode_" + nodeInfo.SectorHash
                     };
 
                     if (mesh.WorldNodeIndex == SelectedNodeIndex)
@@ -2619,185 +2873,423 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
                         SelectedItem = mesh;
                     }
 
-                    foreach (var shape in actor.Shapes)
+                    var colliderMaterial = new PBRMaterial()
                     {
-                        HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
+                        EnableAutoTangent = true,
+                        RenderShadowMap = true,
+                        RenderEnvironmentMap = true,
+                        //AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f),
+                        AlbedoColor = new SharpDX.Color4(0.5f, 0f, 0.5f, 1f),
+                        RoughnessFactor = 0.5,
+                        MetallicFactor = 0
+                    };
 
-                        if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
+                    for (var k = 0; k < node.Actors.Count; k++)
+                    {
+                        var actor = node.Actors[k];
+
+                        var actorGroup = new MeshComponent()
                         {
-                            var mb = new MeshBuilder
-                            {
-                                CreateNormals = true
-                            };
-                            mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Y * 2, simpleShape.Size.Z * 2);
-
-                            mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
-
-                            geometry = mb.ToMeshGeometry3D();
-                        }
-                        else if (shape is CollisionShapeMesh meshShape)
-                        {
-                            var geo = _geometryCacheService.GetEntry(wcn.SectorHash, meshShape.Hash);
-
-                            if (geo == null)
-                            {
-                                //_loggerService.Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
-                                continue;
-                            }
-
-                            if (geo is ConvexMesh convexMesh)
-                            {
-                                var mb = new MeshBuilder
-                                {
-                                    CreateNormals = true
-                                };
-
-                                var positions = new Vector3Collection();
-                                for (var i = 0; i < convexMesh.HullData.HullVertices.Count; i++)
-                                {
-                                    positions.Add(convexMesh.HullData.HullVertices[i]);
-                                }
-
-                                var faceIndex = 0;
-                                for (var i = 0; i < convexMesh.HullData.Polygons.Count; i++)
-                                {
-                                    var count = mb.Positions.Count;
-                                    var faceData = convexMesh.HullData.Polygons[i];
-
-                                    switch (faceData.NbVerts)
-                                    {
-                                        case 3:
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.TriangleIndices.Add(count);
-                                            mb.TriangleIndices.Add(count + 1);
-                                            mb.TriangleIndices.Add(count + 2);
-                                            break;
-                                        case 4:
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 3]]);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.TriangleIndices.Add(count);
-                                            mb.TriangleIndices.Add(count + 1);
-                                            mb.TriangleIndices.Add(count + 2);
-                                            mb.TriangleIndices.Add(count + 2);
-                                            mb.TriangleIndices.Add(count + 3);
-                                            mb.TriangleIndices.Add(count);
-                                            break;
-                                        default:
-                                            for (var j = 0; j < faceData.NbVerts; j++)
-                                            {
-                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[j]]);
-                                                mb.Normals.Add(faceData.Plane.N);
-                                            }
-                                            for (var j = 0; j + 2 < faceData.NbVerts; j++)
-                                            {
-                                                mb.TriangleIndices.Add(count);
-                                                mb.TriangleIndices.Add(count + j + 1);
-                                                mb.TriangleIndices.Add(count + j + 2);
-                                            }
-                                            break;
-                                    }
-
-                                    faceIndex += faceData.NbVerts;
-                                }
-
-                                geometry = mb.ToMeshGeometry3D();
-                            }
-
-                            if (geo is BV4TriangleMesh bv4TriangleMesh)
-                            {
-                                var mb = new MeshBuilder
-                                {
-                                    CreateNormals = true
-                                };
-
-                                var positions = new Vector3Collection();
-                                for (var i = 0; i < bv4TriangleMesh.Vertices.Count; i++)
-                                {
-                                    positions.Add(bv4TriangleMesh.Vertices[i]);
-                                }
-
-                                foreach (var face in bv4TriangleMesh.Triangles)
-                                {
-                                    var points = new List<SharpDX.Vector3>();
-                                    foreach (var point in face)
-                                    {
-                                        points.Add(positions[(int)point]);
-                                    }
-                                    mb.AddTriangle(points[0], points[1], points[2]);
-                                }
-
-                                //mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
-                                geometry = mb.ToMeshGeometry3D();
-                            }
-                        }
-
-                        if (geometry == null)
-                        {
-                            continue;
-                        }
-
-                        ulong hash = 0;
-                        if (shape is CollisionShapeMesh meshShape2)
-                        {
-                            hash = meshShape2.Hash;
-                        }
-
-                        var shapeGroup = new SubmeshComponent()
-                        {
-                            Name = "shape_" + hash,
-                            Text = "shape_" + hash,
-                            IsRendering = true,
-                            Geometry = geometry,
-                            Material = colliderMaterial,
-                            IsTransparent = true,
+                            WorldNodeIndex = $"{handleIndex}",
+                            WorldNodeType = typeStr,
+                            WorldNodeDataIndices = indexStr,
+                            Name = "actor_" + node.Actors.IndexOf(actor),
+                            Text = "actor_" + node.Actors.IndexOf(actor),
                             CollisionActorId = $"{k}"
                         };
 
-                        var shapeMatrix = new Matrix3D();
+                        if (mesh.WorldNodeIndex == SelectedNodeIndex)
+                        {
+                            SelectedItem = mesh;
+                        }
 
-                        var shapeQuat = new System.Numerics.Quaternion(shape.Rotation.I, shape.Rotation.J, shape.Rotation.K, shape.Rotation.R);
-                        var conversionQuat =
-                            System.Numerics.Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.UnitX, -MathF.PI / 2);
-                        var adjustedQuat = conversionQuat * shapeQuat;
+                        for (int j = actor.ShapeStartIndex; j < actor.ShapeStartIndex + actor.ShapeCount; j++)
+                        {
+                            var shape = node.Shapes[j];
 
-                        shapeMatrix.Rotate(new System.Windows.Media.Media3D.Quaternion(adjustedQuat.X, adjustedQuat.Y, adjustedQuat.Z, adjustedQuat.W));
-                        shapeMatrix.Translate(ToVector3D(shape.Position));
+                            HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
 
-                        shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
+                            ulong hash = 0;
 
-                        actorGroup.Children.Add(shapeGroup);
+                            if (shape.CollisionSourceKey is PhysicsGeometryBoxData boxData)
+                            {
+                                var mb = new MeshBuilder
+                                {
+                                    CreateNormals = true
+                                };
+                                mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), boxData.Size.X * 2, boxData.Size.Y * 2, boxData.Size.Z * 2);
+
+                                mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
+
+                                geometry = mb.ToMeshGeometry3D();
+                            }
+                            else if (shape.CollisionSourceKey is PhysicsGeometryConvexMeshData convexMesh2)
+                            {
+                                hash = convexMesh2.Hash;
+
+                                var geo = _geometryCacheService.GetEntry(nodeInfo.SectorHash, convexMesh2.Hash);
+
+                                if (geo == null)
+                                {
+                                    //_loggerService.Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
+                                    continue;
+                                }
+
+                                if (geo is ConvexMesh convexMesh)
+                                {
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
+
+                                    var positions = new Vector3Collection();
+                                    for (var l = 0; l < convexMesh.HullData.HullVertices.Count; l++)
+                                    {
+                                        positions.Add(convexMesh.HullData.HullVertices[l]);
+                                    }
+
+                                    var faceIndex = 0;
+                                    for (var l = 0; l < convexMesh.HullData.Polygons.Count; l++)
+                                    {
+                                        var count = mb.Positions.Count;
+                                        var faceData = convexMesh.HullData.Polygons[l];
+
+                                        switch (faceData.NbVerts)
+                                        {
+                                            case 3:
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.TriangleIndices.Add(count);
+                                                mb.TriangleIndices.Add(count + 1);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                break;
+                                            case 4:
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 3]]);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.TriangleIndices.Add(count);
+                                                mb.TriangleIndices.Add(count + 1);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                mb.TriangleIndices.Add(count + 3);
+                                                mb.TriangleIndices.Add(count);
+                                                break;
+                                            default:
+                                                for (var n = 0; n < faceData.NbVerts; n++)
+                                                {
+                                                    mb.Positions.Add(positions[convexMesh.HullData.VertexData8[n]]);
+                                                    mb.Normals.Add(faceData.Plane.N);
+                                                }
+                                                for (var n = 0; n + 2 < faceData.NbVerts; n++)
+                                                {
+                                                    mb.TriangleIndices.Add(count);
+                                                    mb.TriangleIndices.Add(count + n + 1);
+                                                    mb.TriangleIndices.Add(count + n + 2);
+                                                }
+                                                break;
+                                        }
+
+                                        faceIndex += faceData.NbVerts;
+                                    }
+
+                                    geometry = mb.ToMeshGeometry3D();
+                                }
+                            }
+                            else if (shape.CollisionSourceKey is PhysicsGeometryTriangleMeshData triangleMesh)
+                            {
+                                hash = triangleMesh.Hash;
+
+                                var geo = _geometryCacheService.GetEntry(nodeInfo.SectorHash, triangleMesh.Hash);
+
+                                if (geo == null)
+                                {
+                                    //_loggerService.Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
+                                    continue;
+                                }
+
+                                if (geo is BV4TriangleMesh bv4TriangleMesh)
+                                {
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
+
+                                    var positions = new Vector3Collection();
+                                    for (var i = 0; i < bv4TriangleMesh.Vertices.Count; i++)
+                                    {
+                                        positions.Add(bv4TriangleMesh.Vertices[i]);
+                                    }
+
+                                    foreach (var face in bv4TriangleMesh.Triangles)
+                                    {
+                                        var points = new List<SharpDX.Vector3>();
+                                        foreach (var point in face)
+                                        {
+                                            points.Add(positions[(int)point]);
+                                        }
+                                        mb.AddTriangle(points[0], points[1], points[2]);
+                                    }
+
+                                    //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                                    geometry = mb.ToMeshGeometry3D();
+                                }
+                            }
+
+                            if (geometry == null)
+                            {
+                                continue;
+                            }
+
+                            var shapeGroup = new SubmeshComponent()
+                            {
+                                Name = "shape_" + hash,
+                                Text = "shape_" + hash,
+                                IsRendering = true,
+                                Geometry = geometry,
+                                Material = colliderMaterial,
+                                IsTransparent = true,
+                                CollisionActorId = $"{k}"
+                            };
+
+                            var shapeMatrix = new Matrix3D();
+
+                            var shapeQuat = new System.Numerics.Quaternion(0, 0, 0, 1); // check this
+                            if (shape.ShapeRotationIndex != -1)
+                            {
+                                var rotation = node.ShapeRotations[shape.ShapeRotationIndex];
+                                shapeQuat = new System.Numerics.Quaternion(rotation.I, rotation.J, rotation.K, rotation.R);
+                            }
+
+                            var conversionQuat = System.Numerics.Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.UnitX, -MathF.PI / 2);
+                            var adjustedQuat = conversionQuat * shapeQuat;
+
+                            shapeMatrix.Rotate(new System.Windows.Media.Media3D.Quaternion(adjustedQuat.X, adjustedQuat.Y, adjustedQuat.Z, adjustedQuat.W));
+
+                            var shapePos = new Vector3();
+                            if (shape.ShapePositionIndex != -1)
+                            {
+                                shapePos = node.ShapePositions[shape.ShapePositionIndex];
+                            }
+
+                            shapeMatrix.Translate(ToVector3D(shapePos));
+
+                            shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
+
+                            actorGroup.Children.Add(shapeGroup);
+                        }
+
+                        var matrix = new Matrix3D();
+
+                        if (actor.ScaleIndex != -1)
+                        {
+                            matrix.Scale(ToScaleVector3D(node.Scales[actor.ScaleIndex]));
+                        }
+                        matrix.Rotate(ToQuaternion(actor.Transform.Orientation));
+                        matrix.Translate(ToVector3D(actor.Transform.Position));
+
+                        actorGroup.Transform = new MatrixTransform3D(matrix);
+
+                        mesh.Children.Add(actorGroup);
                     }
 
-                    var matrix = new Matrix3D();
-                    matrix.Scale(ToScaleVector3D(actor.Scale));
-                    matrix.Rotate(ToQuaternion(actor.Orientation));
-                    matrix.Translate(ToVector3D(actor.Position));
-
-                    actorGroup.Transform = new MatrixTransform3D(matrix);
-
-                    mesh.Children.Add(actorGroup);
+                    groups.Add(mesh);
+                }
+            }
+            /*else if (handle.Chunk is worldCookedFoliageDestructionNode wcfdn)
+            {
+                // worldCookedCollisionNode
+            }*/
+            else if (handle.Chunk is worldCookedGenericProxyMeshNode wcgpmn)
+            {
+                if (wcgpmn.Buffer.Data is not worldCookedGenericProxyMeshNode_Buffer wcgpmnb)
+                {
+                    continue;
                 }
 
-                // not used?
-                //var meshMatrix = new Matrix3D();
-                //meshMatrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                //meshMatrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                //meshMatrix.Translate(ToVector3D(transforms[0].Position));
+                for (var i = 0; i < wcgpmnb.InnerNodes.Count; i++)
+                {
+                    var node = wcgpmnb.InnerNodes[i];
 
-                //mesh.Transform = new MatrixTransform3D(meshMatrix);
-                groups.Add(mesh);
+                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
+
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+                    {
+                        continue;
+                    }
+
+                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
+
+                    var group = new MeshComponent()
+                    {
+                        Name = name,
+                        Text = name,
+                        WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
+                        AppearanceName = node.MeshAppearance,
+                        DepotPath = node.Mesh.DepotPath
+                    };
+
+                    if (group.WorldNodeIndex == SelectedNodeIndex)
+                    {
+                        SelectedItem = group;
+                    }
+
+                    var model = new LoadableModel(name)
+                    {
+                        MeshFile = Parent.Cr2wFile,
+                        AppearanceIndex = 0,
+                        AppearanceName = node.MeshAppearance,
+                        Materials = appMaterials,
+                        IsEnabled = true,
+                    };
+
+                    foreach (var material in model.Materials)
+                    {
+                        app.RawMaterials[material.Name] = material;
+                    }
+
+                    var j = 0;
+                    foreach (var transform in transforms)
+                    {
+                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                        var subgroup = new MeshComponent()
+                        {
+                            Name = name + $"_instance_{j:D2}",
+                            Text = name + $"_instance_{j:D2}",
+                            AppearanceName = node.MeshAppearance,
+                            DepotPath = node.Mesh.DepotPath
+                        };
+
+                        foreach (var submesh in meshes)
+                        {
+                            if (!app.LODLUT.ContainsKey(submesh.LOD))
+                            {
+                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                            }
+                            app.LODLUT[submesh.LOD].Add(submesh);
+                            subgroup.Children.Add(submesh);
+                        }
+
+                        var matrix = new Matrix3D();
+                        matrix.Scale(ToScaleVector3D(transform.Scale));
+                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        matrix.Translate(ToVector3D(transform.Transform.Position));
+
+                        subgroup.Transform = new MatrixTransform3D(matrix);
+
+                        group.Children.Add(subgroup);
+                        i++;
+                    }
+
+                    groups.Add(group);
+                }
+            }
+            else if (handle.Chunk is worldCookedStaticDecalNode wcsdn)
+            {
+
+            }
+            else if (handle.Chunk is worldCookedStaticMeshNode wcsmn)
+            {
+                if (wcsmn.Buffer.Data is not worldCookedStaticMeshNodeBuffer wcsmnb)
+                {
+                    continue;
+                }
+
+                for (var i = 0; i < wcsmnb.InnerNodes.Count; i++)
+                {
+                    var node = wcsmnb.InnerNodes[i];
+
+                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
+
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+                    {
+                        continue;
+                    }
+
+                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
+
+                    var group = new MeshComponent()
+                    {
+                        Name = name,
+                        Text = name,
+                        WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
+                        AppearanceName = node.MeshAppearance,
+                        DepotPath = node.Mesh.DepotPath
+                    };
+
+                    if (group.WorldNodeIndex == SelectedNodeIndex)
+                    {
+                        SelectedItem = group;
+                    }
+
+                    var model = new LoadableModel(name)
+                    {
+                        MeshFile = Parent.Cr2wFile,
+                        AppearanceIndex = 0,
+                        AppearanceName = node.MeshAppearance,
+                        Materials = appMaterials,
+                        IsEnabled = true,
+                    };
+
+                    foreach (var material in model.Materials)
+                    {
+                        app.RawMaterials[material.Name] = material;
+                    }
+
+                    var j = 0;
+                    foreach (var transform in transforms)
+                    {
+                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                        var subgroup = new MeshComponent()
+                        {
+                            Name = name + $"_instance_{j:D2}",
+                            Text = name + $"_instance_{j:D2}",
+                            AppearanceName = node.MeshAppearance,
+                            DepotPath = node.Mesh.DepotPath
+                        };
+
+                        foreach (var submesh in meshes)
+                        {
+                            if (!app.LODLUT.ContainsKey(submesh.LOD))
+                            {
+                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                            }
+                            app.LODLUT[submesh.LOD].Add(submesh);
+                            subgroup.Children.Add(submesh);
+                        }
+
+                        var matrix = new Matrix3D();
+                        matrix.Scale(ToScaleVector3D(transform.Scale));
+                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        matrix.Translate(ToVector3D(transform.Transform.Position));
+
+                        subgroup.Transform = new MatrixTransform3D(matrix);
+
+                        group.Children.Add(subgroup);
+                        i++;
+                    }
+
+                    groups.Add(group);
+                }
+            }
+            else if (handle.Chunk is worldCookedMeshNode wcmn)
+            {
+
             }
             else if (handle.Chunk is worldNavigationNode wnm)
             {

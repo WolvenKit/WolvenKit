@@ -31,7 +31,7 @@ public partial class worldCookedBendedMeshNode
             entry.MeshAppearance = br.BaseReader.ReadUInt64();
             entry.DeformationDataStartIndex = br.ReadCUInt32();
             entry.DeformationDataCount = br.ReadCUInt32();
-            entry.Index = br.ReadCUInt16();
+            entry.DeformedBoxIndex = br.ReadCUInt16();
             entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
             entry.CastLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
             entry.RemoveFromRainMap = br.ReadCBool();
@@ -106,7 +106,7 @@ public partial class worldCookedBendedMeshNode
             bw.BaseWriter.Write((ulong)entry.MeshAppearance);
             bw.Write(entry.DeformationDataStartIndex);
             bw.Write(entry.DeformationDataCount);
-            bw.Write(entry.Index);
+            bw.Write(entry.DeformedBoxIndex);
             bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastShadows);
             bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)entry.CastLocalShadows);
             bw.Write(entry.RemoveFromRainMap);
@@ -201,9 +201,9 @@ public class worldCookedBendedMeshInnerNode : RedBaseClass
         set => SetPropertyValue<CUInt32>(value);
     }
 
-    [RED("index")]
+    [RED("deformedBoxIndex")]
     [REDProperty(IsIgnored = true)]
-    public CUInt16 Index
+    public CUInt16 DeformedBoxIndex
     {
         get => GetPropertyValue<CUInt16>();
         set => SetPropertyValue<CUInt16>(value);
