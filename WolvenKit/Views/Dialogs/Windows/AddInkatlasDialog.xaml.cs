@@ -63,6 +63,10 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.PngFolderBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
+                    x => x.CreateIconsByName,
+                    x => x.GenerateIconsTextBox.Text)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
                     x => x.ExistingFile,
                     x => x.ExistingFileBox.Text)
                 .DisposeWith(disposables);
@@ -78,11 +82,14 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.RememberValues,
                     x => x.RememberValuesCheckBox.IsChecked)
                 .DisposeWith(disposables);
+            IconSizeDropdown.SelectionChanged += OnIconSizeSelected;
 
             ClearExistingFileButton.Click += ClearFileButton_Click;
 
             disposables.Add(Disposable.Create(() =>
                 ClearExistingFileButton.Click -= ClearFileButton_Click));
+            disposables.Add(Disposable.Create(() =>
+                IconSizeDropdown.SelectionChanged -= OnIconSizeSelected));
         });
     }
 
@@ -159,7 +166,7 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
 
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter)
+        if (e.Key != Key.Enter || GenerateIconsTextBox.IsFocused)
         {
             return;
         }

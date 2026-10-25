@@ -15,7 +15,39 @@ namespace WolvenKit.App.Helpers;
 public static class InkatlasImageGenerator
 {
     /// <summary>
-    /// Generates an inkatlas from input parameters.
+    /// Checks if the target folder exists and contains png files, throws exception if not.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// If the folder doesn't contain png files and no placeholders are set
+    /// </exception>
+    ///
+    /// <returns>Path to folder with .png files for inkatlas generation</returns>
+    public static string VerifyFolderAndGeneratePlaceholders(string pngFolder, List<string> variants,
+        string atlasFileName)
+    {
+        if (string.IsNullOrEmpty(pngFolder))
+        {
+            pngFolder = Path.Combine(Path.GetTempPath(), $"{atlasFileName}_icons");
+        }
+
+        Directory.CreateDirectory(pngFolder);
+        if (variants.Count == 0 && Directory.GetFiles(pngFolder, "*.png").Length == 0)
+        {
+            throw new InvalidOperationException("No variants provided and no png files found in the target folder.");
+        }
+
+        GenerateDummyIcons(pngFolder, "", variants.ToArray());
+
+        if (Directory.GetFiles(pngFolder, "*.png").Length == 0)
+        {
+            throw new InvalidOperationException("Failed to generate placeholder png files for the provided variants.");
+        }
+
+        return pngFolder;
+    }
+
+    /// <summary>
+    /// Generates an inkatlas from input parameters. Does not generate placeholders, this has to be done in <see cref="VerifyFolderAndGeneratePlaceholders"./>
     /// </summary>
     ///
     /// <returns>A boolean if the write operation to the original path was successful</returns>
@@ -28,6 +60,11 @@ public static class InkatlasImageGenerator
         Cr2WTools cr2WTools,
         Cp77Project activeProject)
     {
+        if (!Directory.Exists(pngFolder)) // shouldn't happen anymore at this point, but better safe than sorry
+        {
+            return false;
+        }
+
         var parts = CreateAtlasImages(pngFolder, relativeSourcePath, atlasFileName, activeProject, tileWidth,
             tileHeight);
 
@@ -60,48 +97,55 @@ public static class InkatlasImageGenerator
 
     public static void GenerateDummyIcons(string folderPath, string prefix, string[] variants)
     {
+        // nothing to do
+        if (variants.Length == 0)
+        {
+            return;
+        }
+
         Directory.CreateDirectory(folderPath);
-        try
+
+        foreach (var (variant, idx) in variants.Select((v, i) => (v, i)))
         {
-            foreach (var file in Directory.GetFiles(folderPath))
+            var safeVariant = variant.ToArchiveFileName();
+
+            if (string.IsNullOrWhiteSpace(safeVariant))
             {
-                File.Delete(file);
+                safeVariant = $"icon_{idx}";
             }
-        }
-        catch
-        {
-            // don't delete, we'll have extra items
-        }
 
-        foreach (var variant in variants)
-        {
-            var fileName = Path.Combine(folderPath, $"{prefix}{variant}.png");
+            var fileName = Path.Combine(folderPath, $"{prefix}{safeVariant}.png");
 
+            if (File.Exists(fileName))
+            {
+                continue;
+            }
 
             using var bmp = new Bitmap(160, 160);
             using var g = Graphics.FromImage(bmp);
-
-            // Use a simpler font constructor and ensure high quality rendering
-            using var font = new Font("Arial", 14, FontStyle.Bold); // Simplified font creation
-            using var brush = new SolidBrush(Color.Black); // Use SolidBrush instead of Brushes.Black
-            using var stringFormat = new StringFormat()
+            using var font = new Font("Arial", 14, FontStyle.Bold);
+            using var brush = new SolidBrush(Color.Black);
+            using var stringFormat = new StringFormat
             {
                 Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center
             };
 
-            // Clear background white
             g.Clear(Color.White);
-
-
-            // Set high quality rendering
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-
-            // Draw the text centered using StringFormat
             g.DrawString(variant, font, brush, new RectangleF(0, 0, bmp.Width, bmp.Height), stringFormat);
 
-            // Save as PNG
-            bmp.Save(fileName, ImageFormat.Png);
+            // write to temp file first to avoid A generic error occurred in GDI+
+            var tmp = fileName + ".tmp";
+            bmp.Save(tmp, ImageFormat.Png);
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            File.Move(tmp, fileName);
+            // bmp.Save(fileName, ImageFormat.Png);
         }
     }
 
@@ -420,4 +464,5 @@ public static class InkatlasImageGenerator
         public Rectangle PixelRect { get; init; }
         public RectangleF UvRect { get; init; }
     }
+
 }

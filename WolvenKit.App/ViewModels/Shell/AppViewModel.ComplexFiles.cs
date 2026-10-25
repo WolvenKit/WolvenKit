@@ -215,19 +215,26 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (!Directory.Exists(vm.PngSourceDir))
+        if ((string.IsNullOrEmpty(vm.PngSourceDir) || !Directory.Exists(vm.PngSourceDir)) &&
+            vm.CreateIconsByNameList.Count == 0)
         {
-            _loggerService.Error("PngSourceDir does not exist.");
+            _loggerService.Error("PngSourceDir does not exist, and no icon names are set for generation.");
             return;
         }
 
-        // Get all PNG files from source folder
-        var pngFiles = Directory.GetFiles(vm.PngSourceDir, "*.png");
-        if (pngFiles.Length == 0)
-        {
-            _loggerService.Error("The source folder does not contain any PNG files.");
-            return;
-        }
+        // try
+        // {
+            vm.PngSourceDir = InkatlasImageGenerator.VerifyFolderAndGeneratePlaceholders(
+                vm.PngSourceDir, vm.CreateIconsByNameList, vm.InkatlasFileName
+            );
+        // }
+        // catch (Exception ex)
+        // {
+        //     _notificationService.Error("Inkatlas generation failed. Please check the log for details.");
+        //     _loggerService.Error("Inkatlas generation failed: ");
+        //     _loggerService.Error(ex.Message);
+        //     return;
+        // }
 
         var fileSuccessfullyWritten = InkatlasImageGenerator.GenerateAtlas(
                 pngFolder: vm.PngSourceDir,
@@ -241,6 +248,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         if (fileSuccessfullyWritten)
         {
+            _notificationService.Success("Inkatlas generation complete! Now import the .png files via Import Tool.");
             _loggerService.Success("Done! Now import the .png files via Import Tool.");
         }
         else

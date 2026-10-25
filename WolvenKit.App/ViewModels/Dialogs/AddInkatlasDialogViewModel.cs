@@ -5,6 +5,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Interfaces.Extensions;
+using StringSplitOptions = System.StringSplitOptions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -17,12 +18,13 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         ExistingFiles = project.ModFiles.Where(f => f.HasFileExtension(".inkatlas"))
             .ToDictionary<string, string>(x => x);
         InkatlasFileName = $"{project.Name}_icons";
+        CreateIconsByName = "";
 
         IconFileSizes = new Dictionary<string, (int, int)>()
         {
             { "Clothing item (160x160)", (160, 160) },
             { "Weapon small (160x80)", (160, 80) },
-            { "Weapon (160x120)", (160, 80) },
+            { "Weapon (160x120)", (160, 120) },
             { "NPV", (200, 200) },
         };
     }
@@ -45,6 +47,11 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
                     InkatlasFileName = Path.GetFileNameWithoutExtension(ExistingFile);
                 }
 
+                break;
+            case nameof(CreateIconsByName):
+                CreateIconsByNameList.Clear();
+                CreateIconsByNameList.AddRange(CreateIconsByName.Split([',', ';', ' ', '\n'],
+                    StringSplitOptions.RemoveEmptyEntries));
                 break;
         }
 
@@ -91,4 +98,11 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// Source directory for raw png files
     /// </summary>
     [ObservableProperty] private string _pngSourceDir = "";
+
+    /// <summary>
+    /// List of icons to create by name
+    /// </summary>
+    [ObservableProperty] private string _createIconsByName = "";
+
+    public List<string> CreateIconsByNameList { get; set; } = [];
 }
