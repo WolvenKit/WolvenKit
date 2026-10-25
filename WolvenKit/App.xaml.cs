@@ -70,6 +70,19 @@ namespace WolvenKit
             _loggerService.Info("Starting application");
             _loggerService.Info($"Version: {_settingsManager.GetVersionNumber()}");
 
+#if LOCAL_DIAGNOSTICS
+            if (e.Args.Contains("--local-diagnostics"))
+            {
+                ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                Dispatcher.BeginInvoke(new Action(async () =>
+                {
+                    var exitCode = await LocalDiagnostics.RunAsync(e.Args, Container);
+                    Shutdown(exitCode);
+                }));
+                return;
+            }
+#endif
+
             // Register themes before loading any UI to avoid exceptions.
             try
             {
