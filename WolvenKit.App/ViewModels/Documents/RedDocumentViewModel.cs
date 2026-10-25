@@ -425,10 +425,7 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
 
         TabItemViewModels.Clear();
 
-        if (ReferenceEquals(NodeSelectionService.Instance.SelectedNode?.DocumentViewModel, this))
-        {
-            NodeSelectionService.Instance.SelectedNode = null;
-        }
+        NodeSelectionService.Instance.ClearSelectionForDocument(this);
 
         foreach (var disposableTab in previousTabs.OfType<IDisposable>())
         {
@@ -672,10 +669,7 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
 
         _disposed = true;
 
-        if (ReferenceEquals(NodeSelectionService.Instance.SelectedNode?.DocumentViewModel, this))
-        {
-            NodeSelectionService.Instance.SelectedNode = null;
-        }
+        NodeSelectionService.Instance.ClearSelectionForDocument(this);
 
         foreach (var disposableTab in TabItemViewModels.OfType<IDisposable>().ToList())
         {

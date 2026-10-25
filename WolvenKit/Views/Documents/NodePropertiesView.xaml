@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:services="clr-namespace:WolvenKit.App.Services;assembly=WolvenKit.App"
              xmlns:graphEditor="clr-namespace:WolvenKit.App.ViewModels.GraphEditor;assembly=WolvenKit.App"
+             xmlns:local="clr-namespace:WolvenKit.Views.Documents"
              xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
              xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -35,7 +36,7 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="Text" Value="Node Properties"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
+                                <DataTrigger Binding="{Binding SelectedNode, RelativeSource={RelativeSource AncestorType={x:Type local:NodePropertiesView}}}"
                                              Value="{x:Null}">
                                     <Setter Property="Text" Value="Node Properties"/>
                                 </DataTrigger>
@@ -44,8 +45,8 @@
                     </TextBlock.Style>
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} (ID: {1})">
-                            <Binding Source="{x:Static services:NodeSelectionService.Instance}" Path="SelectedNode.Title"/>
-                            <Binding Source="{x:Static services:NodeSelectionService.Instance}" Path="SelectedNode.UniqueId"/>
+                            <Binding Path="SelectedNode.Title" RelativeSource="{RelativeSource AncestorType={x:Type local:NodePropertiesView}}"/>
+                            <Binding Path="SelectedNode.UniqueId" RelativeSource="{RelativeSource AncestorType={x:Type local:NodePropertiesView}}"/>
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -57,7 +58,7 @@
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
+                        <DataTrigger Binding="{Binding SelectedNode, RelativeSource={RelativeSource AncestorType={x:Type local:NodePropertiesView}}}"
                                      Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
@@ -73,19 +74,20 @@
 
             <!-- Left: Property tree for the selected node -->
             <tools:RedTreeView Grid.Column="0" 
-                               SelectedItem="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty, Mode=TwoWay}"
-                               SelectedItems="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperties, Mode=TwoWay}">
+                               SelectedItem="{Binding PropertySelection.SelectedProperty, RelativeSource={RelativeSource AncestorType={x:Type local:NodePropertiesView}}, Mode=TwoWay}"
+                               SelectedItems="{Binding PropertySelection.SelectedProperties, RelativeSource={RelativeSource AncestorType={x:Type local:NodePropertiesView}}, Mode=TwoWay}">
                 <tools:RedTreeView.ItemsSource>
-                    <Binding Source="{x:Static services:NodeSelectionService.Instance}"
-                             Path="SelectedNode.Data"
-                             Converter="{StaticResource RedTypeToChunkViewModelCollectionConverter}"/>
+                    <MultiBinding Converter="{StaticResource RedTypeToChunkViewModelCollectionConverter}">
+                        <Binding Path="SelectedNode.Data" RelativeSource="{RelativeSource AncestorType={x:Type local:NodePropertiesView}}"/>
+                        <Binding Path="SelectedNode.DocumentViewModel" RelativeSource="{RelativeSource AncestorType={x:Type local:NodePropertiesView}}"/>
+                    </MultiBinding>
                 </tools:RedTreeView.ItemsSource>
             </tools:RedTreeView>
             
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
             
             <!-- Right: Detail editor for selected property -->
-            <editors:RedTypeView Grid.Column="2" DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
+            <editors:RedTypeView Grid.Column="2" DataContext="{Binding PropertySelection.SelectedProperty, RelativeSource={RelativeSource AncestorType={x:Type local:NodePropertiesView}}}"/>
         </Grid>
         
         <!-- No selection message -->
@@ -94,7 +96,7 @@
                 <Style TargetType="StackPanel">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
+                        <DataTrigger Binding="{Binding SelectedNode, RelativeSource={RelativeSource AncestorType={x:Type local:NodePropertiesView}}}"
                                      Value="{x:Null}">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
@@ -112,4 +114,4 @@
                        Foreground="Gray"/>
         </StackPanel>
     </Grid>
-</UserControl> 
+</UserControl>

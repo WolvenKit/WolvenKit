@@ -637,7 +637,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+D to duplicate currently selected node
             if (e.Key == Key.D && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                var selectedNode = NodeSelectionService.Instance.SelectedNode;
+                var selectedNode = SceneGraphEditor?.SelectedNode;
                 if (selectedNode != null)
                 {
                     viewModel.MainGraph.DuplicateNode(selectedNode);
@@ -652,7 +652,7 @@ namespace WolvenKit.Views.Documents
                 if (IsEditingContextActive())
                     return;
 
-                var selectedNode = NodeSelectionService.Instance.SelectedNode;
+                var selectedNode = SceneGraphEditor?.SelectedNode;
                 if (selectedNode != null)
                 {
                     GraphClipboardManager.CopyNode(selectedNode, viewModel.MainGraph.GraphType);
@@ -715,7 +715,7 @@ namespace WolvenKit.Views.Documents
                 if (IsEditingContextActive())
                     return;
 
-                var currentNode = NodeSelectionService.Instance.SelectedNode;
+                var currentNode = SceneGraphEditor?.SelectedNode;
                 if (currentNode == null)
                     return;
 
@@ -880,7 +880,9 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var currentSelectedNode = NodeSelectionService.Instance.SelectedNode;
+            var currentSelectedNode = document is RedDocumentViewModel redDocument
+                ? NodeSelectionService.Instance.GetSelectedNode(redDocument)
+                : null;
             if (currentSelectedNode != null)
             {
                 s_documentNodeSelections[documentKey] = currentSelectedNode.UniqueId;
@@ -905,7 +907,11 @@ namespace WolvenKit.Views.Documents
             // Check if we have a saved selection for this document
             if (!s_documentNodeSelections.TryGetValue(documentKey, out var nodeId))
             {
-                NodeSelectionService.Instance.SelectedNode = null;
+                if (document is RedDocumentViewModel redDocument)
+                {
+                    NodeSelectionService.Instance.ClearSelectionForDocument(redDocument);
+                }
+
                 return;
             }
 
@@ -928,7 +934,8 @@ namespace WolvenKit.Views.Documents
         private void RestoreSelectionIfReady(IDocumentViewModel? activeDocument)
         {
             if (activeDocument == null || _disposed ||
-                DataContext as SceneGraphViewModel is not SceneGraphViewModel viewModel)
+                DataContext as SceneGraphViewModel is not SceneGraphViewModel viewModel ||
+                !ReferenceEquals(viewModel.Parent, activeDocument))
             {
                 return;
             }
@@ -951,7 +958,7 @@ namespace WolvenKit.Views.Documents
                 string.IsNullOrEmpty(documentKey))
             {
                 SceneGraphEditor.Editor.SelectedItems?.Clear();
-                NodeSelectionService.Instance.SelectedNode = null;
+                NodeSelectionService.Instance.ClearSelectionForDocument(viewModel.Parent);
                 return;
             }
 
@@ -959,7 +966,7 @@ namespace WolvenKit.Views.Documents
             if (!s_documentNodeSelections.TryGetValue(documentKey, out var nodeId))
             {
                 SceneGraphEditor.Editor.SelectedItems?.Clear();
-                NodeSelectionService.Instance.SelectedNode = null;
+                NodeSelectionService.Instance.ClearSelectionForDocument(viewModel.Parent);
                 return;
             }
 
@@ -967,8 +974,14 @@ namespace WolvenKit.Views.Documents
             var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
             if (targetNode != null)
             {
+                if (ReferenceEquals(SceneGraphEditor.SelectedNode, targetNode))
+                {
+                    NodeSelectionService.Instance.SelectedNode = targetNode;
+                    return;
+                }
+
                 SceneGraphEditor.Editor.SelectedItems?.Clear();
-                NodeSelectionService.Instance.SelectedNode = null;
+                NodeSelectionService.Instance.ClearSelectionForDocument(viewModel.Parent);
 
                 SceneGraphEditor.Editor.SelectedItems?.Add(targetNode);
                 NodeSelectionService.Instance.SelectedNode = targetNode;
@@ -985,7 +998,7 @@ namespace WolvenKit.Views.Documents
             {
                 s_documentNodeSelections.Remove(documentKey);
                 SceneGraphEditor.Editor.SelectedItems?.Clear();
-                NodeSelectionService.Instance.SelectedNode = null;
+                NodeSelectionService.Instance.ClearSelectionForDocument(viewModel.Parent);
             }
         }
 
