@@ -10,7 +10,7 @@
     Title="Generate new inkatlas"
     Width="{StaticResource WolvenKitDialogWidth}"
     MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
-    MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
+    MinHeight="{StaticResource WolvenKitDialogHeightMedium}"
     Padding="{DynamicResource WolvenKitMarginTop}"
     Background="{StaticResource BackgroundColor_Control}"
     SizeToContent="WidthAndHeight"
@@ -76,6 +76,16 @@
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <!-- png raw folder -->
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <!-- Generate placeholders -->
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
@@ -222,12 +232,44 @@
                         Grid.Row="14"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        HorizontalAlignment="Left"
+                        Content="Remember values?" />
+
+                    <CheckBox
+                        x:Name="RememberValuesCheckBox"
+                        Grid.Row="14"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <Label
+                        Grid.Row="16"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Left"
+                        Content="Icon source" />
+
+                    <!-- PNG directory -->
+                    <Label
+                        Grid.Row="18"
+                        Grid.Column="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
                         Content="PNG raw folder" />
 
+                    <TextBlock
+                        Grid.Row="18"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="5"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Text="Folder to read PNG files from" />
+
                     <TextBox
                         x:Name="PngFolderBox"
-                        Grid.Row="14"
+                        Grid.Row="20"
                         Grid.Column="1"
                         Grid.ColumnSpan="4"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
@@ -241,7 +283,7 @@
                     </TextBox>
 
                     <Button
-                        Grid.Row="14"
+                        Grid.Row="20"
                         Grid.Column="5"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         Padding="0"
@@ -254,22 +296,46 @@
                             Size="{DynamicResource WolvenKitIconMicro}" />
                     </Button>
 
-
-                    <!-- Remember values? -->
                     <Label
-                        Grid.Row="16"
+                        Grid.Row="22"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
-                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                         HorizontalAlignment="Left"
-                        Content="Remember values?" />
+                        VerticalAlignment="Top"
+                        Content="Generate placeholders" />
 
-                    <CheckBox
-                        x:Name="RememberValuesCheckBox"
-                        Grid.Row="16"
+                    <TextBlock
+                        Grid.Row="22"
                         Grid.Column="1"
-                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
-                        KeyboardNavigation.TabIndex="-1" />
+                        Grid.ColumnSpan="5"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        TextWrapping="Wrap"
+                        Text="Separate by comma or newline. Icon names will be sanitized." />
+
+                    <TextBox
+                        x:Name="GenerateIconsTextBox"
+                        Grid.Row="24"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="5"
+                        MinHeight="50"
+                        MaxHeight="300"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        AcceptsReturn="True"
+                        MinLines="1"
+                        VerticalScrollBarVisibility="Auto"
+                        KeyboardNavigation.TabIndex="-1">
+                        <TextBox.ToolTip>
+                            <ToolTip>
+                                Generate icons
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+
+
+
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
