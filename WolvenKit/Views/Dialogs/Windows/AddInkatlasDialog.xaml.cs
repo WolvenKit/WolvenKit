@@ -82,11 +82,14 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.RememberValues,
                     x => x.RememberValuesCheckBox.IsChecked)
                 .DisposeWith(disposables);
+            IconSizeDropdown.SelectionChanged += OnIconSizeSelected;
 
             ClearExistingFileButton.Click += ClearFileButton_Click;
 
             disposables.Add(Disposable.Create(() =>
                 ClearExistingFileButton.Click -= ClearFileButton_Click));
+            disposables.Add(Disposable.Create(() =>
+                IconSizeDropdown.SelectionChanged -= OnIconSizeSelected));
         });
     }
 

@@ -24,7 +24,7 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         {
             { "Clothing item (160x160)", (160, 160) },
             { "Weapon small (160x80)", (160, 80) },
-            { "Weapon (160x120)", (160, 80) },
+            { "Weapon (160x120)", (160, 120) },
             { "NPV", (200, 200) },
         };
     }
