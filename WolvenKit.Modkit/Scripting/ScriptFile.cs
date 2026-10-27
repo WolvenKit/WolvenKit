@@ -111,7 +111,7 @@ public partial class ScriptFile
                         {
                             if (part != "global" && 
                                 !Enum.TryParse<ERedExtension>(part, true, out _) &&
-                                !Enum.TryParse<ERawFileFormat>(part, true, out _))
+                                !RawFileFormatParser.TryParse(part, out _))
                             {
                                 loggerService?.Error($"[WScript] \"{Name}\" contains an unknown hook extension \"{part}\"");
                                 continue;
