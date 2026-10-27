@@ -1,5 +1,6 @@
 <Project>
 	<PropertyGroup>
+		<DefineConstants Condition="'$(LocalDiagnostics)' == 'true'">$(DefineConstants);LOCAL_DIAGNOSTICS</DefineConstants>
 		<EnableSourceControlManagerQueries>true</EnableSourceControlManagerQueries>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 	</PropertyGroup>

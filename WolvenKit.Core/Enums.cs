@@ -182,7 +182,8 @@ namespace WolvenKit.Common
         masklist,
         csv,
         re,
-        cube
+        cube,
+        jpeg
     }
 
     public enum EConvertableOutput

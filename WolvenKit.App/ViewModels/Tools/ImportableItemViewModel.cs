@@ -47,6 +47,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             ERawFileFormat.tga
                 or ERawFileFormat.bmp
                 or ERawFileFormat.jpg
+                or ERawFileFormat.jpeg
                 or ERawFileFormat.png
                 or ERawFileFormat.tiff
                 or ERawFileFormat.dds

@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3221
+      author: "MORTEM3845"
+      description: "Expose and apply supported mesh appearance variants in entity previews."
