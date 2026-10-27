@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3215
+      author: "MORTEM3845"
+      description: "Preserve the selected file extension when creating a new file."
