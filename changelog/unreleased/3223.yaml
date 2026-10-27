@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3223
+      author: "MORTEM3845"
+      description: "Reduce project node insertion overhead in folders containing many files."
