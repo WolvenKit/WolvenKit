@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3227
+      author: "manavortex"
+      description: "moving effect files will now update in entEffectDesc and effectTrackItemParticles"
