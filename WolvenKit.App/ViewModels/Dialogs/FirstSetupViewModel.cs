@@ -156,7 +156,15 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     private delegate void StrDelegate(string value);
 
-    private static string ResolveExecutablePath(string path)
+    private static readonly string[] _knownDefaultLocations =
+    [
+        "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
+        "C:\\GOG Games\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe"
+    ];
+    private const string _uninstallKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+    private const string _uninstallKey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+
+    private static string? ResolveExecutablePath(string? path)
     {
         if (!string.IsNullOrEmpty(path) && Directory.Exists(path) && !File.Exists(path))
         {
@@ -169,14 +177,6 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
         return path;
     }
-
-    private static readonly string[] _knownDefaultLocations =
-    [
-        "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
-        "C:\\GOG Games\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe"
-    ];
-    private const string _uninstallKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
-    private const string _uninstallKey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
     private void TryToFindCP77ExecutableAutomatically()
     {
@@ -265,7 +265,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     public void ExecuteFinish()
     {
-        _settingsManager.CP77ExecutablePath = !string.IsNullOrEmpty(CP77ExePath) ? ResolveExecutablePath(CP77ExePath) : CP77ExePath;
+        _settingsManager.CP77ExecutablePath = ResolveExecutablePath(CP77ExePath);
         _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
         _settingsManager.Bounce();
     }

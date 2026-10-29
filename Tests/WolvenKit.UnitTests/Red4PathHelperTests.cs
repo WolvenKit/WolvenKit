@@ -198,10 +198,14 @@ namespace WolvenKit.UnitTests
         }
 
         [TestMethod]
-        public void GetDefaultXboxGameLocations_DoesNotThrow()
+        public void GetDefaultXboxGameLocations_WhenFound_PathsExistAndEndWithContent()
         {
             var locations = Red4PathHelper.GetDefaultXboxGameLocations().ToList();
-            Assert.IsNotNull(locations);
+            foreach (var loc in locations)
+            {
+                Assert.IsTrue(Directory.Exists(loc), $"Location does not exist: {loc}");
+                Assert.IsTrue(loc.EndsWith("Content", StringComparison.OrdinalIgnoreCase), $"Location should end with Content: {loc}");
+            }
         }
     }
 }

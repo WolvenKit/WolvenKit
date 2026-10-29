@@ -2,5 +2,5 @@ changes:
   - type: "added"
     packages: ["App", "CLI", "Nuget Packages"]
     pr-number: 0
-    author: ""
+    author: "CodeNameMeteor"
     description: "Added support for Xbox PC (Microsoft Store / GDK) installation layout and executables (cpLauncher.exe, gamelaunchhelper.exe)."

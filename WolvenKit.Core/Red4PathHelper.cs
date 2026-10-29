@@ -65,16 +65,7 @@ namespace WolvenKit.Core
                     continue;
                 }
 
-                string contentPath;
-                try
-                {
-                    contentPath = Path.Combine(drive.RootDirectory.FullName, "XboxGames", "Cyberpunk 2077", "Content");
-                }
-                catch
-                {
-                    continue;
-                }
-
+                var contentPath = Path.Combine(drive.RootDirectory.FullName, "XboxGames", "Cyberpunk 2077", "Content");
                 if (Directory.Exists(contentPath))
                 {
                     yield return contentPath;
@@ -150,11 +141,6 @@ namespace WolvenKit.Core
                     dirInfo.Parent.Parent is not null)
                 {
                     return dirInfo.Parent.Parent.FullName;
-                }
-
-                if (dirInfo.Name.Equals("Content", StringComparison.OrdinalIgnoreCase))
-                {
-                    return dirInfo.FullName;
                 }
 
                 return dirInfo.FullName;
