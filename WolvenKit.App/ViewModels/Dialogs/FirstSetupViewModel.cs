@@ -105,6 +105,30 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
     }
 
     [RelayCommand]
+    private void OpenCP77GameFolder()
+    {
+        var dlg = new FolderPicker
+        {
+            Title = "Select Cyberpunk 2077 installation folder",
+            ForceFileSystem = true
+        };
+
+        if (dlg.ShowDialog() != true)
+        {
+            return;
+        }
+
+        var result = dlg.ResultPath;
+        if (string.IsNullOrEmpty(result))
+        {
+            return;
+        }
+
+        var exe = Red4PathHelper.ResolveExecutable(result);
+        CP77ExePath = exe is not null ? exe.FullName : result;
+    }
+
+    [RelayCommand]
     private void OpenDepotPath()
     {
         var dlg = new FolderPicker
@@ -220,7 +244,17 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     public void ExecuteFinish()
     {
-        _settingsManager.CP77ExecutablePath = CP77ExePath;
+        var exePath = CP77ExePath;
+        if (!string.IsNullOrEmpty(exePath) && Directory.Exists(exePath) && !File.Exists(exePath))
+        {
+            var resolved = Red4PathHelper.ResolveExecutable(exePath);
+            if (resolved is not null)
+            {
+                exePath = resolved.FullName;
+            }
+        }
+
+        _settingsManager.CP77ExecutablePath = exePath;
         _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
         _settingsManager.Bounce();
     }
@@ -230,10 +264,32 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
     public void ValidateCP77ExePath()
     {
         ClearError(nameof(CP77ExePath));
-        if (File.Exists(CP77ExePath) && Red4PathHelper.IsRed4Executable(CP77ExePath))
+
+        if (string.IsNullOrWhiteSpace(CP77ExePath))
         {
-            var rootDir = Red4PathHelper.ResolveGameRootDir(CP77ExePath);
-            var oodle = Red4PathHelper.ResolveOodleDll(rootDir, CP77ExePath);
+            AddError(nameof(CP77ExePath), "Locate game executable (.exe) or installation folder for full WolvenKit functionality.");
+            return;
+        }
+
+        var path = CP77ExePath;
+        if (Directory.Exists(path) && !File.Exists(path))
+        {
+            var resolvedExe = Red4PathHelper.ResolveExecutable(path);
+            if (resolvedExe is not null && resolvedExe.Exists)
+            {
+                path = resolvedExe.FullName;
+            }
+            else
+            {
+                AddError(nameof(CP77ExePath), "No Cyberpunk 2077 executable found in the selected folder.");
+                return;
+            }
+        }
+
+        if (File.Exists(path) && Red4PathHelper.IsRed4Executable(path))
+        {
+            var rootDir = Red4PathHelper.ResolveGameRootDir(path);
+            var oodle = Red4PathHelper.ResolveOodleDll(rootDir, path);
             if (string.IsNullOrEmpty(oodle) || !File.Exists(oodle))
             {
                 AddError(nameof(CP77ExePath), $"Oodle dll was not found within the game installation. Please make sure you have {Core.Constants.Oodle} in your game installation.");
@@ -241,7 +297,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
         }
         else
         {
-            AddError(nameof(CP77ExePath), "Locate game executable (.exe) for full WolvenKit functionality.");
+            AddError(nameof(CP77ExePath), "Locate game executable (.exe) or installation folder for full WolvenKit functionality.");
         }
     }
 

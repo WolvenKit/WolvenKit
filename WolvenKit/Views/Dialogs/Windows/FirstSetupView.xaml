@@ -63,7 +63,7 @@
                         VerticalAlignment="Center"
                         Style="{StaticResource TextBoxExtendCustom}"
                         hc:InfoElement.Necessary="True"
-                        hc:InfoElement.Placeholder="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
+                        hc:InfoElement.Placeholder="Enter path to game folder or executable: e.g. Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
                         Text="{Binding CP77ExePath,
                                        Mode=TwoWay,
                                        UpdateSourceTrigger=PropertyChanged,
@@ -72,19 +72,35 @@
                         Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"
                         TextChanged="Field_TextChanged" />
 
-                    <Button
-                        x:Name="cp77ExeButton"
+                    <StackPanel
                         Grid.Row="0"
                         Grid.Column="2"
                         Margin="0,10,0,0"
-                        BorderBrush="{DynamicResource BorderBrush}"
-                        BorderThickness="1"
-                        Style="{DynamicResource WPFFlatButtonStyle}">
-                        <templates:IconBox
-                            IconPack="Codicons"
-                            Kind="FolderOpened"
-                            Size="{DynamicResource WolvenKitIconTiny}" />
-                    </Button>
+                        Orientation="Horizontal">
+                        <Button
+                            x:Name="cp77ExeButton"
+                            ToolTip="Browse for Cyberpunk 2077 executable (.exe)"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            Style="{DynamicResource WPFFlatButtonStyle}">
+                            <templates:IconBox
+                                IconPack="Codicons"
+                                Kind="FileBinary"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </Button>
+                        <Button
+                            x:Name="cp77FolderButton"
+                            Margin="4,0,0,0"
+                            ToolTip="Browse for Cyberpunk 2077 game directory"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            Style="{DynamicResource WPFFlatButtonStyle}">
+                            <templates:IconBox
+                                IconPack="Codicons"
+                                Kind="FolderOpened"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </Button>
+                    </StackPanel>
 
                     <TextBlock
                         x:Name="ValidationText"
