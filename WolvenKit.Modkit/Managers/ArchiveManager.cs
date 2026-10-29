@@ -1,4 +1,3 @@
-using WolvenKit.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +12,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
+using WolvenKit.Core;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;

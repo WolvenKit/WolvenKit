@@ -79,10 +79,10 @@
                         Orientation="Horizontal">
                         <Button
                             x:Name="cp77ExeButton"
-                            ToolTip="Browse for Cyberpunk 2077 executable (.exe)"
                             BorderBrush="{DynamicResource BorderBrush}"
                             BorderThickness="1"
-                            Style="{DynamicResource WPFFlatButtonStyle}">
+                            Style="{DynamicResource WPFFlatButtonStyle}"
+                            ToolTip="Browse for Cyberpunk 2077 executable (.exe)">
                             <templates:IconBox
                                 IconPack="Codicons"
                                 Kind="FileBinary"
@@ -91,10 +91,10 @@
                         <Button
                             x:Name="cp77FolderButton"
                             Margin="4,0,0,0"
-                            ToolTip="Browse for Cyberpunk 2077 game directory"
                             BorderBrush="{DynamicResource BorderBrush}"
                             BorderThickness="1"
-                            Style="{DynamicResource WPFFlatButtonStyle}">
+                            Style="{DynamicResource WPFFlatButtonStyle}"
+                            ToolTip="Browse for Cyberpunk 2077 game directory">
                             <templates:IconBox
                                 IconPack="Codicons"
                                 Kind="FolderOpened"

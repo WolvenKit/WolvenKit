@@ -466,13 +466,7 @@ public static class Oodle
         }
 
         // Check Xbox Games default paths
-        var xboxDefaultPaths = new[]
-        {
-            @"C:\XboxGames\Cyberpunk 2077\Content",
-            @"D:\XboxGames\Cyberpunk 2077\Content",
-            @"E:\XboxGames\Cyberpunk 2077\Content"
-        };
-        foreach (var xPath in xboxDefaultPaths)
+        foreach (var xPath in Red4PathHelper.GetDefaultXboxGameLocations())
         {
             if (File.Exists(Path.Combine(xPath, Constants.Oodle)))
             {

@@ -1,4 +1,3 @@
-using WolvenKit.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -87,7 +87,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
         {
             Title = "Select Cyberpunk 2077 executable",
             Multiselect = false,
-            Filter = "Cyberpunk 2077 Executable (Cyberpunk2077.exe, cpLauncher.exe)|Cyberpunk2077.exe;cpLauncher.exe;gamelaunchhelper.exe|Executable files (*.exe)|*.exe|All files (*.*)|*.*"
+            Filter = "Cyberpunk 2077 Executable (Cyberpunk2077.exe, cpLauncher.exe, gamelaunchhelper.exe)|Cyberpunk2077.exe;cpLauncher.exe;gamelaunchhelper.exe|Executable files (*.exe)|*.exe|All files (*.*)|*.*"
         };
 
         if (dlg.ShowDialog() != true)
@@ -124,8 +124,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
             return;
         }
 
-        var exe = Red4PathHelper.ResolveExecutable(result);
-        CP77ExePath = exe is not null ? exe.FullName : result;
+        CP77ExePath = ResolveExecutablePath(result);
     }
 
     [RelayCommand]
@@ -157,25 +156,47 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     private delegate void StrDelegate(string value);
 
+    private static string ResolveExecutablePath(string path)
+    {
+        if (!string.IsNullOrEmpty(path) && Directory.Exists(path) && !File.Exists(path))
+        {
+            var resolved = Red4PathHelper.ResolveExecutable(path);
+            if (resolved is not null)
+            {
+                return resolved.FullName;
+            }
+        }
+
+        return path;
+    }
+
     private static readonly string[] _knownDefaultLocations =
     [
         "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
-        "C:\\GOG Games\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
-        "C:\\XboxGames\\Cyberpunk 2077\\Content\\cpLauncher.exe",
-        "D:\\XboxGames\\Cyberpunk 2077\\Content\\cpLauncher.exe",
-        "E:\\XboxGames\\Cyberpunk 2077\\Content\\cpLauncher.exe"
+        "C:\\GOG Games\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe"
     ];
     private const string _uninstallKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
     private const string _uninstallKey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
     private void TryToFindCP77ExecutableAutomatically()
     {
-        // Try Known Default Locations (Steam, GOG, Xbox PC)
+        // Try Known Default Locations (Steam, GOG)
         foreach (var location in _knownDefaultLocations)
         {
             if (File.Exists(location))
             {
                 CP77ExePath = location;
+                return;
+            }
+        }
+
+        // Try dynamically detected Xbox PC installation locations across all ready drives
+        foreach (var xboxLocation in Red4PathHelper.GetDefaultXboxGameLocations())
+        {
+            var exe = Red4PathHelper.ResolveExecutable(xboxLocation);
+            if (exe is not null)
+            {
+                CP77ExePath = exe.FullName;
                 return;
             }
         }
@@ -244,17 +265,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     public void ExecuteFinish()
     {
-        var exePath = CP77ExePath;
-        if (!string.IsNullOrEmpty(exePath) && Directory.Exists(exePath) && !File.Exists(exePath))
-        {
-            var resolved = Red4PathHelper.ResolveExecutable(exePath);
-            if (resolved is not null)
-            {
-                exePath = resolved.FullName;
-            }
-        }
-
-        _settingsManager.CP77ExecutablePath = exePath;
+        _settingsManager.CP77ExecutablePath = !string.IsNullOrEmpty(CP77ExePath) ? ResolveExecutablePath(CP77ExePath) : CP77ExePath;
         _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
         _settingsManager.Bounce();
     }
@@ -275,7 +286,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
         if (Directory.Exists(path) && !File.Exists(path))
         {
             var resolvedExe = Red4PathHelper.ResolveExecutable(path);
-            if (resolvedExe is not null && resolvedExe.Exists)
+            if (resolvedExe is not null)
             {
                 path = resolvedExe.FullName;
             }

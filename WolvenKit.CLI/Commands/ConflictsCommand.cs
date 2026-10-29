@@ -1,4 +1,3 @@
-using WolvenKit.Core;
 using System;
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands;
@@ -37,9 +37,8 @@ internal class ConflictsCommand : CommandBase
         }
 
         // check if game dir
-        var rootDir = Red4PathHelper.ResolveGameRootDir(path.FullName);
-        var gameExe = Red4PathHelper.ResolveExecutable(rootDir ?? path.FullName);
-        if (gameExe is null || !gameExe.Exists)
+        var gameExe = Red4PathHelper.ResolveExecutable(path.FullName);
+        if (gameExe is null)
         {
             logger.Error("Incorrect input path: Not game folder");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
