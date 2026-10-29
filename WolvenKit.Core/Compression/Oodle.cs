@@ -465,6 +465,21 @@ public static class Oodle
             return cp77BinDir;
         }
 
+        // Check Xbox Games default paths
+        var xboxDefaultPaths = new[]
+        {
+            @"C:\XboxGames\Cyberpunk 2077\Content",
+            @"D:\XboxGames\Cyberpunk 2077\Content",
+            @"E:\XboxGames\Cyberpunk 2077\Content"
+        };
+        foreach (var xPath in xboxDefaultPaths)
+        {
+            if (File.Exists(Path.Combine(xPath, Constants.Oodle)))
+            {
+                return xPath;
+            }
+        }
+
         // else: look for install location
         const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
         const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
@@ -529,7 +544,9 @@ public static class Oodle
             return "";
         }
 
-        if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+        if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")) &&
+            !File.Exists(Path.Combine(cp77BinDir, Constants.Red4XboxExe)) &&
+            !File.Exists(Path.Combine(cp77BinDir, Constants.Oodle)))
         {
             return "";
         }

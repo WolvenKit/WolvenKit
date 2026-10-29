@@ -1,3 +1,4 @@
+using WolvenKit.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -124,12 +125,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="executable"></param>
         public virtual void LoadGameArchives(FileInfo executable)
         {
-            var di = executable.Directory;
-            if (di?.Parent?.Parent is null)
-            {
-                return;
-            }
-            if (!di.Exists)
+            var rootDir = Red4PathHelper.ResolveGameRootDir(executable);
+            if (string.IsNullOrEmpty(rootDir) || !Directory.Exists(rootDir))
             {
                 return;
             }
@@ -143,7 +140,13 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var cnt = 0;
 
-            var baseDir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
+            var baseDir = Path.Combine(rootDir, "archive", "pc", "content");
+            if (!Directory.Exists(baseDir))
+            {
+                IsManagerLoading = false;
+                return;
+            }
+
             var baseFiles = Directory.GetFiles(baseDir, "*.archive")
                 .Where(CheckFileName)
                 .ToList();
@@ -152,7 +155,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             var totalCnt = baseFiles.Count;
             var loadedArchives = new StringBuilder();
 
-            var ep1Dir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "ep1");
+            var ep1Dir = Path.Combine(rootDir, "archive", "pc", "ep1");
             if (Directory.Exists(ep1Dir))
             {
                 var ep1Files = Directory.GetFiles(ep1Dir, "*.archive")
@@ -305,12 +308,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         public virtual void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredArchives = null)
         {
-            var di = executable.Directory;
-            if (di?.Parent?.Parent is null)
-            {
-                return;
-            }
-            if (!di.Exists)
+            var rootDir = Red4PathHelper.ResolveGameRootDir(executable);
+            if (string.IsNullOrEmpty(rootDir) || !Directory.Exists(rootDir))
             {
                 return;
             }
@@ -326,9 +325,9 @@ namespace WolvenKit.RED4.CR2W.Archive
                 Archives.Remove(item);
             }
 
-            var redModBasePath = Path.Combine(di.Parent.Parent.FullName, "mods");
-            var legacyModPath = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod");
-            var redModModsJson = Path.Combine(di.Parent.Parent.FullName, "r6", "cache", "modded", "mods.json");
+            var redModBasePath = Path.Combine(rootDir, "mods");
+            var legacyModPath = Path.Combine(rootDir, "archive", "pc", "mod");
+            var redModModsJson = Path.Combine(rootDir, "r6", "cache", "modded", "mods.json");
             var legacyModlistTxt = Path.Combine(legacyModPath, "modlist.txt");
 
 

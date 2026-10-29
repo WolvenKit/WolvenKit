@@ -1,3 +1,4 @@
+using WolvenKit.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,7 +87,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
         {
             Title = "Select Cyberpunk 2077 executable",
             Multiselect = false,
-            Filter = "Cyberpunk2077.exe|*.exe"
+            Filter = "Cyberpunk 2077 Executable (Cyberpunk2077.exe, cpLauncher.exe)|Cyberpunk2077.exe;cpLauncher.exe;gamelaunchhelper.exe|Executable files (*.exe)|*.exe|All files (*.*)|*.*"
         };
 
         if (dlg.ShowDialog() != true)
@@ -132,17 +133,27 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     private delegate void StrDelegate(string value);
 
-    private const string _steamCommonInstallLocation = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe";
+    private static readonly string[] _knownDefaultLocations =
+    [
+        "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
+        "C:\\GOG Games\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
+        "C:\\XboxGames\\Cyberpunk 2077\\Content\\cpLauncher.exe",
+        "D:\\XboxGames\\Cyberpunk 2077\\Content\\cpLauncher.exe",
+        "E:\\XboxGames\\Cyberpunk 2077\\Content\\cpLauncher.exe"
+    ];
     private const string _uninstallKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
     private const string _uninstallKey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
     private void TryToFindCP77ExecutableAutomatically()
     {
-        // Try Steam Default
-        if (File.Exists(_steamCommonInstallLocation))
+        // Try Known Default Locations (Steam, GOG, Xbox PC)
+        foreach (var location in _knownDefaultLocations)
         {
-            CP77ExePath = _steamCommonInstallLocation;
-            return;
+            if (File.Exists(location))
+            {
+                CP77ExePath = location;
+                return;
+            }
         }
 
         // Parallel Lookup through Registry Uninstall SubKeys.
@@ -219,12 +230,13 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
     public void ValidateCP77ExePath()
     {
         ClearError(nameof(CP77ExePath));
-        if (File.Exists(CP77ExePath) && Path.GetFileName(CP77ExePath).Equals(Core.Constants.Red4Exe))
+        if (File.Exists(CP77ExePath) && Red4PathHelper.IsRed4Executable(CP77ExePath))
         {
-            var oodle = Path.Combine(new FileInfo(CP77ExePath).Directory!.FullName, Core.Constants.Oodle);
-            if (!File.Exists(oodle))
+            var rootDir = Red4PathHelper.ResolveGameRootDir(CP77ExePath);
+            var oodle = Red4PathHelper.ResolveOodleDll(rootDir, CP77ExePath);
+            if (string.IsNullOrEmpty(oodle) || !File.Exists(oodle))
             {
-                AddError(nameof(CP77ExePath), $"Oodle dll was not found within the game installation. Please make sure you have {Core.Constants.Oodle} next to your game executable.");
+                AddError(nameof(CP77ExePath), $"Oodle dll was not found within the game installation. Please make sure you have {Core.Constants.Oodle} in your game installation.");
             }
         }
         else

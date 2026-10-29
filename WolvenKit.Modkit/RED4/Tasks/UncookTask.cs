@@ -1,3 +1,4 @@
+using WolvenKit.Core;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,7 +47,7 @@ public partial class ConsoleFunctions
 
         if (options.gamepath is { Exists: true })
         {
-            var exePath = new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
+            var exePath = Red4PathHelper.ResolveExecutable(options.gamepath.ToString()) ?? new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
             _archiveManager.LoadGameArchives(exePath);
         }
 

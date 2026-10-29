@@ -1,3 +1,4 @@
+using WolvenKit.Core;
 using System;
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
@@ -36,13 +37,9 @@ internal class ConflictsCommand : CommandBase
         }
 
         // check if game dir
-        if (!path.Name.Equals("Cyberpunk 2077"))
-        {
-            logger.Error("Incorrect input path: Not game folder");
-            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
-        }
-        var gameExe = new FileInfo(Path.Combine(path.FullName, "bin", "x64", "Cyberpunk2077.exe"));
-        if (!gameExe.Exists)
+        var rootDir = Red4PathHelper.ResolveGameRootDir(path.FullName);
+        var gameExe = Red4PathHelper.ResolveExecutable(rootDir ?? path.FullName);
+        if (gameExe is null || !gameExe.Exists)
         {
             logger.Error("Incorrect input path: Not game folder");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
