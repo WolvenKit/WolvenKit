@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core;
 using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks;
@@ -46,8 +47,10 @@ public partial class ConsoleFunctions
 
         if (options.gamepath is { Exists: true })
         {
-            var exePath = new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
-            _archiveManager.LoadGameArchives(exePath);
+            if (Red4PathHelper.ResolveExecutable(options.gamepath.ToString()) is { } exePath)
+            {
+                _archiveManager.LoadGameArchives(exePath);
+            }
         }
 
         var result = 0;
