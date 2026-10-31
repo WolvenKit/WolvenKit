@@ -93,7 +93,8 @@
                     <Setter Property="HorizontalAlignment" Value="Left" />
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                     <Setter Property="Margin" Value="0" />
-                    <Setter Property="Width" Value="{DynamicResource WolvenKitLabelWidth}" />
+                    <Setter Property="Width" Value="Auto" />
+                    <Setter Property="Height" Value="Auto" />
                 </Style>
                 <Style
                     x:Key="InlineLabelStyle"
@@ -101,7 +102,6 @@
                     TargetType="{x:Type Label}">
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="0" />
-                    <Setter Property="Width" Value="10" />
                 </Style>
 
             </ResourceDictionary>
@@ -258,7 +258,6 @@
                     <Label
                         Grid.Row="12"
                         Grid.Column="0"
-                        Width="{DynamicResource WolvenKitLabelWidthLarge}"
                         VerticalAlignment="Top"
                         Style="{StaticResource LabelStyle}"
                         Content="Read from mesh(es)" />
@@ -326,7 +325,6 @@
                         Grid.Row="15"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        Width="{DynamicResource WolvenKitLabelWidthLarge}"
                         Style="{StaticResource LabelStyle}"
                         Content="Define appearances" />
 
@@ -358,7 +356,6 @@
                     <Label
                         Grid.Row="18"
                         Grid.Column="0"
-                        Width="{DynamicResource WolvenKitLabelWidthLarge}"
                         VerticalAlignment="Top"
                         Style="{StaticResource LabelStyle}"
                         Content="Write to mesh(es)" />
