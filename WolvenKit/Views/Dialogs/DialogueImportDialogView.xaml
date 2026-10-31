@@ -1,4 +1,4 @@
-<Window
+﻿<Window
     x:Class="WolvenKit.Views.Dialogs.DialogueImportDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -372,8 +372,9 @@
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="Status" />
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- A duplicate cannot be taken, so its box is locked rather
-                                         than merely cleared -->
+                                    <!-- A line the scene already has can still be taken, for a
+                                         section to play; a choice option cannot, so that box is
+                                         locked rather than merely cleared -->
                                     <CheckBox
                                         Grid.Column="0"
                                         Width="24"
@@ -381,7 +382,8 @@
                                         IsChecked="{Binding IsSelected,
                                                             Mode=TwoWay,
                                                             UpdateSourceTrigger=PropertyChanged}"
-                                        IsEnabled="{Binding CanImport}" />
+                                        IsEnabled="{Binding CanImport}"
+                                        ToolTip="{Binding StatusToolTip}" />
 
                                     <TextBlock
                                         Grid.Column="1"
@@ -442,7 +444,8 @@
                                     <TextBlock
                                         Grid.Column="6"
                                         Width="110"
-                                        Text="{Binding Status}">
+                                        Text="{Binding Status}"
+                                        ToolTip="{Binding StatusToolTip}">
                                         <TextBlock.Style>
                                             <Style
                                                 BasedOn="{StaticResource ImportCellStyle}"
@@ -490,29 +493,56 @@
                                 Command="{Binding SelectNoneCommand}" />
                         </StackPanel>
 
-                        <TextBlock
+                        <StackPanel
                             Grid.Column="1"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
                             VerticalAlignment="Center"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                             Visibility="{Binding HasEntries,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Run Text="{Binding SelectedCount, Mode=OneWay}" />
-                            <Run Text="of" />
-                            <Run Text="{Binding EntryCount, Mode=OneWay}" />
-                            <Run Text="selected," />
-                            <Run Text="{Binding DuplicateCount, Mode=OneWay}" />
-                            <Run Text="already in the scene" />
-                        </TextBlock>
+                            <TextBlock
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Foreground="{DynamicResource ForegroundColor_Grey_Dark}">
+                                <Run Text="{Binding SelectedCount, Mode=OneWay}" />
+                                <Run Text="of" />
+                                <Run Text="{Binding EntryCount, Mode=OneWay}" />
+                                <Run Text="selected," />
+                                <Run Text="{Binding SelectedNewCount, Mode=OneWay}" />
+                                <Run Text="to import," />
+                                <Run Text="{Binding DuplicateCount, Mode=OneWay}" />
+                                <Run Text="already in the scene" />
+                            </TextBlock>
 
-                        <CheckBox
+                            <!-- Taking a line the scene already has writes nothing on its own, so
+                                 what makes it worth taking is spelled out here -->
+                            <TextBlock
+                                Style="{StaticResource ImportHintStyle}"
+                                Foreground="{DynamicResource WolvenKitYellow}"
+                                Visibility="{Binding HasSectionOnlySelection,
+                                                     Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Run Text="{Binding SelectedExistingCount, Mode=OneWay}" />
+                                <Run Text="already in the scene - not imported again, only played by the section" />
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel
                             Grid.Column="2"
-                            VerticalAlignment="Center"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Content="Embed the text into the scene"
-                            ToolTip="Writes each line's subtitle into the scene's locStore, the way the Add Dialogue button does"
-                            IsChecked="{Binding CreateEmbeddedText}" />
+                            HorizontalAlignment="Right">
+                            <CheckBox
+                                HorizontalAlignment="Left"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Content="Embed the text into the scene"
+                                ToolTip="Writes each line's subtitle into the scene's locStore"
+                                IsChecked="{Binding CreateEmbeddedText}" />
+
+                            <CheckBox
+                                Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Content="Create a section node"
+                                ToolTip="Adds a section node to the graph that plays the imported lines"
+                                IsChecked="{Binding CreateSectionNode}" />
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </syncfusion:WizardPage>
