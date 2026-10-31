@@ -19,6 +19,7 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
     private static string s_lastFileName = "";
     private static int s_lastTileWidth = 0;
     private static int s_lastTileHeight = 0;
+    private static bool s_lastCropImage = false;
 
     public AddInkatlasDialog(Cp77Project activeProject)
     {
@@ -63,6 +64,10 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.PngFolderBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
+                    x => x.CreateIconsByName,
+                    x => x.GenerateIconsTextBox.Text)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
                     x => x.ExistingFile,
                     x => x.ExistingFileBox.Text)
                 .DisposeWith(disposables);
@@ -75,14 +80,21 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.TileHeightBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
+                    x => x.TileHeight,
+                    x => x.TileHeightBox.Text)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
                     x => x.RememberValues,
                     x => x.RememberValuesCheckBox.IsChecked)
                 .DisposeWith(disposables);
+            IconSizeDropdown.SelectionChanged += OnIconSizeSelected;
 
             ClearExistingFileButton.Click += ClearFileButton_Click;
 
             disposables.Add(Disposable.Create(() =>
                 ClearExistingFileButton.Click -= ClearFileButton_Click));
+            disposables.Add(Disposable.Create(() =>
+                IconSizeDropdown.SelectionChanged -= OnIconSizeSelected));
         });
     }
 
@@ -131,6 +143,11 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         {
             ViewModel.TileWidth = $"{s_lastTileWidth}";
         }
+
+        if (s_lastCropImage)
+        {
+            ViewModel.CropIcons = s_lastCropImage;
+        }
     }
 
     private void SaveLastSelection()
@@ -155,11 +172,12 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         s_lastRelativePath = ViewModel.RelativePath;
         s_lastTileHeight = int.Parse(ViewModel.TileHeight);
         s_lastTileWidth = int.Parse(ViewModel.TileWidth);
+        s_lastCropImage = ViewModel.CropIcons;
     }
 
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter)
+        if (e.Key != Key.Enter || GenerateIconsTextBox.IsFocused)
         {
             return;
         }
