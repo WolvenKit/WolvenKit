@@ -19,6 +19,7 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
     private static string s_lastFileName = "";
     private static int s_lastTileWidth = 0;
     private static int s_lastTileHeight = 0;
+    private static bool s_lastCropImage = false;
 
     public AddInkatlasDialog(Cp77Project activeProject)
     {
@@ -73,6 +74,10 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
             this.Bind(ViewModel,
                     x => x.TileWidth,
                     x => x.TileWidthBox.Text)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.TileHeight,
+                    x => x.TileHeightBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
                     x => x.TileHeight,
@@ -138,6 +143,11 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         {
             ViewModel.TileWidth = $"{s_lastTileWidth}";
         }
+
+        if (s_lastCropImage)
+        {
+            ViewModel.CropIcons = s_lastCropImage;
+        }
     }
 
     private void SaveLastSelection()
@@ -162,6 +172,7 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         s_lastRelativePath = ViewModel.RelativePath;
         s_lastTileHeight = int.Parse(ViewModel.TileHeight);
         s_lastTileWidth = int.Parse(ViewModel.TileWidth);
+        s_lastCropImage = ViewModel.CropIcons;
     }
 
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)

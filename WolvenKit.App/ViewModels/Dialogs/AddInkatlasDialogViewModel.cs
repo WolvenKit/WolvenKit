@@ -23,9 +23,9 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         IconFileSizes = new Dictionary<string, (int, int)>()
         {
             { "Clothing item (160x160)", (160, 160) },
-            { "Weapon small (160x80)", (160, 80) },
-            { "Weapon wide (180x80)", (180, 80) },
-            { "Weapon (160x120)", (160, 120) },
+            { "Weapon big (320x160)", (320, 160) },
+            { "Weapon gun (320x120)", (320, 120) },
+            { "Weapon Melee (Machete, 320x80)", (320, 80) },
             { "NPV", (200, 200) },
         };
     }
@@ -69,6 +69,11 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// Remember the last selection
     /// </summary>
     [ObservableProperty] private bool _rememberValues = true;
+
+    /// <summary>
+    /// Crop icons (instead of scaling them)?
+    /// </summary>
+    [ObservableProperty] private bool _cropIcons = false;
 
     /// <summary>
     /// Relative path to inkatlas folder

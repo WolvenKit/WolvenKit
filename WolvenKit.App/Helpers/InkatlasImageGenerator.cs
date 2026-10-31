@@ -57,6 +57,7 @@ public static class InkatlasImageGenerator
         string atlasFileName,
         int tileWidth,
         int tileHeight,
+        bool cropIcons,
         Cr2WTools cr2WTools,
         Cp77Project activeProject)
     {
@@ -66,7 +67,7 @@ public static class InkatlasImageGenerator
         }
 
         var parts = CreateAtlasImages(pngFolder, relativeSourcePath, atlasFileName, activeProject, tileWidth,
-            tileHeight);
+            tileHeight, cropIcons);
 
         var inkatlas = CreateInkatlas(relativeSourcePath, atlasFileName, parts);
 
@@ -149,8 +150,36 @@ public static class InkatlasImageGenerator
         }
     }
 
+    private static Bitmap RenderToTile(Image source, int tileWidth, int tileHeight, bool cropIcons)
+    {
+        var srcW = source.Width;
+        var srcH = source.Height;
+
+        var scaleX = (double)tileWidth / srcW;
+        var scaleY = (double)tileHeight / srcH;
+
+        // contain (no crop) vs cover (crop)
+        var scale = cropIcons ? Math.Max(scaleX, scaleY) : Math.Min(scaleX, scaleY);
+
+        var drawW = (int)Math.Round(srcW * scale);
+        var drawH = (int)Math.Round(srcH * scale);
+
+        var offsetX = (tileWidth - drawW) / 2;
+        var offsetY = (tileHeight - drawH) / 2;
+
+        var tile = new Bitmap(tileWidth, tileHeight);
+        using var g = Graphics.FromImage(tile);
+        g.Clear(Color.Transparent);
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+        g.DrawImage(source, new Rectangle(offsetX, offsetY, drawW, drawH));
+        return tile;
+    }
+
     private static List<AtlasPart> CreateAtlasImages(string pngFolder, string relativeSourcePath, string atlasFileName,
-        Cp77Project activeProject, int tileWidth, int tileHeight)
+        Cp77Project activeProject, int tileWidth, int tileHeight, bool cropIcons)
     {
         // Get all PNG files from source folder
         var pngFiles = Directory.GetFiles(pngFolder, "*.png");
@@ -166,45 +195,38 @@ public static class InkatlasImageGenerator
             try
             {
                 using var originalImage = Image.FromFile(file);
-                var originalWidth = originalImage.Width;
-                var originalHeight = originalImage.Height;
+                var sourceWidth = originalImage.Width;
+                var sourceHeight = originalImage.Height;
 
-                // Apply scaling if tile dimensions are specified
-                if (tileWidth > 0 || tileHeight > 0)
+                Bitmap preparedImage;
+                int originalWidth;
+                int originalHeight;
+
+// If tile size is explicitly provided, generate a fixed-size tile bitmap.
+                if (tileWidth > 0 && tileHeight > 0)
                 {
-                    var (scaledWidth, scaledHeight) = CalculateScaledDimensions(
-                        originalWidth,
-                        originalHeight,
-                        tileWidth,
-                        tileHeight
-                    );
-
-                    using var scaledImage = new Bitmap(scaledWidth, scaledHeight);
-                    using (var g = Graphics.FromImage(scaledImage))
-                    {
-                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                        g.DrawImage(originalImage, 0, 0, scaledWidth, scaledHeight);
-                    }
-
-                    originalWidth = scaledWidth;
-                    originalHeight = scaledHeight;
+                    preparedImage = RenderToTile(originalImage, tileWidth, tileHeight, cropIcons);
+                    originalWidth = tileWidth;
+                    originalHeight = tileHeight;
                 }
-
-                // Ensure image dimensions are divisible by 2
-                var paddedWidth = originalWidth + (originalWidth % 2);
-                var paddedHeight = originalHeight + (originalHeight % 2);
-
-                var paddedImage = new Bitmap(paddedWidth, paddedHeight);
-                using (var g = Graphics.FromImage(paddedImage))
+                else
                 {
+                    // Fallback: keep source dimensions, ensure divisible by 2 like before.
+                    originalWidth = sourceWidth;
+                    originalHeight = sourceHeight;
+
+                    var paddedWidth = originalWidth + (originalWidth % 2);
+                    var paddedHeight = originalHeight + (originalHeight % 2);
+
+                    preparedImage = new Bitmap(paddedWidth, paddedHeight);
+                    using var g = Graphics.FromImage(preparedImage);
                     g.Clear(Color.Transparent);
                     g.DrawImage(originalImage, 0, 0, originalWidth, originalHeight);
                 }
 
-                images.Add(new ImageData
-                (
+                images.Add(new ImageData(
                     file,
-                    paddedImage,
+                    preparedImage,
                     Path.GetFileNameWithoutExtension(file).ToArchiveFileName(),
                     originalWidth,
                     originalHeight

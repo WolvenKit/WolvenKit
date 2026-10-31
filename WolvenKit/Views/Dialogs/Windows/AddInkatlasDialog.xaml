@@ -89,6 +89,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="0" />
                     </Grid.RowDefinitions>
 
@@ -333,6 +335,30 @@
                             </ToolTip>
                         </TextBox.ToolTip>
                     </TextBox>
+
+
+                    <!-- Remember values? -->
+                    <Label
+                        Grid.Row="26"
+                        Grid.Column="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        HorizontalAlignment="Left"
+                        Content="Crop icons?" />
+
+                    <CheckBox
+                        x:Name="CropIconsCheckBox"
+                        Grid.Row="26"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        KeyboardNavigation.TabIndex="-1">
+
+                        <CheckBox.ToolTip>
+                            <ToolTip>
+                                Will attempt to scale icons instead
+                            </ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
 
 
 

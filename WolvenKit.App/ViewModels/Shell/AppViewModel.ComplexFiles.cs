@@ -242,6 +242,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 atlasFileName: vm.InkatlasFileName,
                 tileWidth: int.Parse(vm.TileWidth),
                 tileHeight: int.Parse(vm.TileHeight),
+                vm.CropIcons,
                 _cr2WTools,
                 activeProject
             );
