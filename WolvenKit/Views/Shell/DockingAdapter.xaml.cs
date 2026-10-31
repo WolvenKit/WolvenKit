@@ -41,7 +41,6 @@ namespace WolvenKit.Views.Shell
 
         private AppViewModel _viewModel;
         private Window _mainWindow;
-        private bool _stateChanged;
 
         private readonly bool _debuggingLayouts = false;
 
@@ -433,14 +432,6 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        private void PART_DockingManagerOnDockStateChanged(FrameworkElement sender, DockStateEventArgs e)
-        {
-            if (e.NewState == Syncfusion.Windows.Tools.Controls.DockState.Float)
-            {
-                _stateChanged = true;
-            }
-        }
-
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // set active property
@@ -569,25 +560,7 @@ namespace WolvenKit.Views.Shell
                 return;
             }
 
-            _mainWindow.Deactivated += OnMainWindowDeactivated;
             _mainWindow.Closing += OnMainWindowClosing;
-
-        }
-
-        private void OnMainWindowDeactivated(object sender, EventArgs e)
-        {
-            if (_stateChanged)
-            {
-                foreach (Window win in Application.Current.Windows)
-                {
-                    if (win is NativeFloatWindow && win.Owner != null)
-                    {
-                        win.Owner = null;
-                    }
-                }
-            }
-
-            _stateChanged = false;
         }
 
         private static void OnMainWindowClosing(object sender, CancelEventArgs e) => Application.Current.Windows.OfType<NativeFloatWindow>()

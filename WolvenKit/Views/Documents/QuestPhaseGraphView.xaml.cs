@@ -356,23 +356,7 @@ namespace WolvenKit.Views.Documents
                 StoreCurrentSelection(_lastActiveDocument);
             }
 
-            // Check if we should deselect based on document switching
-            if (ShouldDeselect(_lastActiveDocument, currentDocument))
-            {
-                // Clear node selection in editor
-                if (QuestPhaseGraphEditor?.Editor?.SelectedItems != null)
-                {
-                    QuestPhaseGraphEditor.Editor.SelectedItems.Clear();
-                }
-
-                // Clear NodeSelectionService - this is crucial for property panel
-                NodeSelectionService.Instance.SelectedNode = null;
-            }
-
-
-
-            // Restore selection when switching to quest phase documents FROM graph documents
-            // (Only restore if we're coming from a graph document where selection was cleared)
+            // Restore selection when this view's quest phase document becomes active.
             if (IsQuestPhaseDocument(currentDocument) && IsGraphDocument(_lastActiveDocument))
             {
                 // Use a delay to ensure the view and graph are ready
@@ -383,28 +367,6 @@ namespace WolvenKit.Views.Documents
             }
 
             _lastActiveDocument = currentDocument;
-        }
-
-        /// <summary>
-        /// Determine if we should deselect nodes based on document switching
-        /// Clear selection when switching between any graph documents (quest phase or scene) to prevent property panel confusion
-        /// </summary>
-        private bool ShouldDeselect(IDocumentViewModel? fromDocument, IDocumentViewModel? toDocument)
-        {
-            // Don't deselect if staying in the same document
-            if (fromDocument == toDocument)
-            {
-                return false;
-            }
-
-            // Check if we're switching away from a graph document (quest phase OR scene)
-            var switchingAwayFromGraph = IsQuestPhaseDocument(fromDocument) || IsSceneDocument(fromDocument);
-
-            // Check if we're switching to a graph document (quest phase OR scene)
-            var switchingToGraph = IsQuestPhaseDocument(toDocument) || IsSceneDocument(toDocument);
-
-            // Deselect if switching between any graph documents to clear property panel
-            return switchingAwayFromGraph && switchingToGraph;
         }
 
         /// <summary>
@@ -455,7 +417,9 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var currentSelectedNode = NodeSelectionService.Instance.SelectedNode;
+            var currentSelectedNode = document is RedDocumentViewModel redDocument
+                ? NodeSelectionService.Instance.GetSelectedNode(redDocument)
+                : null;
             if (currentSelectedNode != null)
             {
                 // Get the current graph level from the document's quest phase view model
@@ -507,6 +471,18 @@ namespace WolvenKit.Views.Documents
             }
 
             var (nodeId, graphLevel) = selection;
+
+            if (document is RedDocumentViewModel redDocument)
+            {
+                var selectedNode = NodeSelectionService.Instance.GetSelectedNode(redDocument);
+                if (selectedNode?.UniqueId == nodeId && GetCurrentGraphLevel(document) == graphLevel)
+                {
+                    NodeSelectionService.Instance.SelectedNode = selectedNode;
+                    return;
+                }
+
+                NodeSelectionService.Instance.ClearSelectionForDocument(redDocument);
+            }
 
             // Navigate to the correct graph level first
             var navigated = NavigateToGraphLevel(document, graphLevel);
@@ -1167,7 +1143,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+D to duplicate currently selected node
             if (e.Key == Key.D && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                var selectedNode = NodeSelectionService.Instance.SelectedNode;
+                var selectedNode = QuestPhaseGraphEditor?.SelectedNode;
                 if (selectedNode != null)
                 {
                     currentGraph.DuplicateNode(selectedNode);
@@ -1182,7 +1158,7 @@ namespace WolvenKit.Views.Documents
                 if (IsTextEditingControlFocused())
                     return;
 
-                var selectedNode = NodeSelectionService.Instance.SelectedNode;
+                var selectedNode = QuestPhaseGraphEditor?.SelectedNode;
                 if (selectedNode != null)
                 {
                     GraphClipboardManager.CopyNode(selectedNode, currentGraph.GraphType);
@@ -1245,7 +1221,7 @@ namespace WolvenKit.Views.Documents
                 if (IsTextEditingControlFocused())
                     return;
 
-                var currentNode = NodeSelectionService.Instance.SelectedNode;
+                var currentNode = QuestPhaseGraphEditor?.SelectedNode;
                 if (currentNode == null)
                 {
                     return;
