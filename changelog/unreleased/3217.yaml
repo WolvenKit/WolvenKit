@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3217
+      author: "MORTEM3845"
+      description: "Ask for confirmation before overwriting existing JSON exports, with options to overwrite, skip existing files or cancel."
