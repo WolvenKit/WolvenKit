@@ -27,17 +27,17 @@ namespace WolvenKit.Common.Services
     {
         #region Constructors
 
-        public LogStringEventArgs(string message, Logtype logtype)
+        public LogStringEventArgs(string message, LogType logType)
         {
             Message = message;
-            Logtype = logtype;
+            LogType = logType;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public Logtype Logtype { get; private set; }
+        public LogType LogType { get; private set; }
         public string Message { get; private set; }
 
         #endregion Properties
