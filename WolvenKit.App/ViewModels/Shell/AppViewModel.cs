@@ -211,7 +211,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         // We're compatible
-        if (new Version("2.5").CompareTo(currentVersion) >= 0)
+        if (currentVersion.CompareTo(new Version("2.31")) >= 0)
         {
             return;
         }
@@ -220,8 +220,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         [
             "You're using the wrong Wolvenkit version!",
             "",
-            "Wolvenkit 10 requires game version 2.5.",
-            "To make mods for older versions, please use Wolvenkit 9."
+            "Wolvenkit 9 is only compatible with game versions up to 2.31.",
+            "To make mods for newer versions, please update to Wolvenkit 10."
         ];
 
 
