@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -190,6 +191,49 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
 
+    private void CheckGameVersionCompatibility()
+    {
+        if (SettingsManager.GetRED4GameExecutablePath() is not string gameExecutablePath ||
+            !File.Exists(gameExecutablePath))
+        {
+            return;
+        }
+
+        var info = FileVersionInfo.GetVersionInfo(gameExecutablePath);
+
+        var raw = info.ProductVersion;
+        // remove anything that's not a number or a dot, then trim trailing dots (suffix, e.g. 2.5-dev)
+        raw = Regex.Replace(raw ?? string.Empty, @"[^0-9.]", "").Trim('.');
+
+        if (string.IsNullOrWhiteSpace(raw) || !Version.TryParse(raw, out var currentVersion))
+        {
+            return;
+        }
+
+        // We're compatible
+        if (new Version("2.5").CompareTo(currentVersion) >= 0)
+        {
+            return;
+        }
+
+        string[] warningMsg =
+        [
+            "You're using the wrong Wolvenkit version!",
+            "",
+            "Wolvenkit 10 requires game version 2.5.",
+            "To make mods for older versions, please use Wolvenkit 9."
+        ];
+
+
+        Interactions.ShowPopupWithWeblink((
+            string.Join('\n', warningMsg),
+            "Incompatible game version!",
+            "https://github.com/WolvenKit/WolvenKit/releases",
+            "Github Download",
+            WMessageBoxImage.Error
+        ));
+    }
+
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -349,6 +393,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForTemplateUpdatesCommand.SafeExecute();
+
+        CheckGameVersionCompatibility();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
 
