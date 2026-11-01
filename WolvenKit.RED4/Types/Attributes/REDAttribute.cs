@@ -41,13 +41,21 @@ public class REDAttribute : Attribute
         Flags = flags;
     }
 
+    public REDAttribute(string name, Enums.gameGameVersion gameVersion, params int[] flags)
+    {
+        Name = name;
+        GameVersion = gameVersion;
+        Flags = flags;
+    }
+
     #endregion Constructors
 
     #region Properties
 
-    public int[] Flags { get; private set; }
     public string Name { get; private set; }
-
+    public Enums.gameGameVersion GameVersion { get; private set; } = Enums.gameGameVersion.Current;
+    public int[] Flags { get; private set; }
+    
     #endregion Properties
 
     #region Methods

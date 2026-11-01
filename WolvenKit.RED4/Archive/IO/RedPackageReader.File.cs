@@ -115,22 +115,22 @@ public partial class RedPackageReader : IBufferReader
         BaseStream.Position = baseOff + header.chunkDescOffset;
         var chunkHeaders = BaseStream.ReadStructs<RedPackageChunkHeader>(chunkCount);
 
-        // Init before reading so CHandle/CWeakHandle can be resolved directly
-
-        var chunkPos = BaseStream.Position;
         for (var i = 0; i < chunkHeaders.Length; i++)
         {
-            _chunks.Add(i, InitChunk(chunkHeaders[i]));
-        }
+            var redTypeName = GetStringValue((ushort)chunkHeaders[i].typeID);
+            var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!, GameVersion);
 
-        BaseStream.Position = chunkPos;
-        for (var i = 0; i < _chunks.Count; i++)
-        {
-            ReadClass(_chunks[i].Instance, 0);
+            var instance = RedTypeManager.Create(type);
+            if (instance is DynamicBaseClass dbc)
+            {
+                dbc.ClassName = redTypeName!;
+            }
+
+            ReadClass(ref instance, 0);
 
 
             var endPos = BaseStream.Length;
-            if (i + 1 < _chunks.Count)
+            if (i + 1 < chunkHeaders.Length)
             {
                 endPos = baseOff + chunkHeaders[i + 1].offset;
             }
@@ -139,6 +139,18 @@ public partial class RedPackageReader : IBufferReader
             {
                 LoggerService?.Warning("Chunk size mismatch! Could lead to problems");
                 BaseStream.Position = endPos;
+            }
+
+            _chunks.Add(i, new ChunkInfo(instance));
+        }
+
+        foreach (var (index, handles) in _handles)
+        {
+            _chunks[index].IsUsed = true;
+
+            foreach (var handle in handles)
+            {
+                handle.SetValue(_chunks[index].Instance);
             }
         }
 
@@ -220,7 +232,7 @@ public partial class RedPackageReader : IBufferReader
     protected virtual ChunkInfo InitChunk(RedPackageChunkHeader c)
     {
         var redTypeName = GetStringValue((ushort)c.typeID);
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!, GameVersion);
 
         var instance = RedTypeManager.Create(type);
         if (instance is DynamicBaseClass dbc)

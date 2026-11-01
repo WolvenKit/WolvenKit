@@ -195,7 +195,7 @@ public class CVariantConverter : CustomRedConverter<CVariant>
                         throw new JsonException();
                     }
 
-                    (type, _) = RedReflection.GetCSTypeFromRedType(reader.GetString().NotNull());
+                    (type, _) = RedReflection.GetCSTypeFromRedType(reader.GetString().NotNull(), RedJsonSerializer.GetHeader().GameVersion);
                     break;
                 }
 
@@ -206,7 +206,7 @@ public class CVariantConverter : CustomRedConverter<CVariant>
                         throw new JsonException();
                     }
 
-                    (type, _) = RedReflection.GetCSTypeFromRedType(reader.GetString().NotNull());
+                    (type, _) = RedReflection.GetCSTypeFromRedType(reader.GetString().NotNull(), RedJsonSerializer.GetHeader().GameVersion);
                     break;
                 }
 

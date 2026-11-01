@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using WolvenKit.Core.Extensions;
@@ -25,6 +26,9 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
     public DataCollection DataCollection { get; } = new();
 
     protected readonly Dictionary<int, ChunkInfo> _chunks = new();
+    protected readonly Dictionary<int, List<IRedBaseHandle>> _handles = new();
+
+    public Enums.gameGameVersion GameVersion { get; set; } = Enums.gameGameVersion.Current;
 
 
     public Red4Reader(Stream input) : this(input, Encoding.UTF8, false)
@@ -136,7 +140,7 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
             dc.ClassName = redTypeInfos[0].RedObjectName;
         }
 
-        ReadClass(instance, size);
+        ReadClass(ref instance, size);
         return instance;
     }
 
@@ -148,7 +152,7 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
         }
 
         var instance = RedTypeManager.Create(type);
-        ReadClass(instance, size);
+        ReadClass(ref instance, size);
         return instance;
     }
 
@@ -423,34 +427,16 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
         var pointer = _reader.ReadInt32() - 1;
         var type = RedReflection.GetFullType(redTypeInfos);
 
-        RedBaseClass? instance = null;
-        if (pointer >= 0)
-        {
-            instance = _chunks[pointer].Instance;
-            _chunks[pointer].IsUsed = true;
-        }
-
-        if (instance is DynamicBaseClass dbc)
-        {
-            var innerType = type.GetGenericArguments()[0];
-            if (innerType == typeof(inkIWidgetController))
-            {
-                instance = dbc.ToDynamicWidgetController();
-                _chunks[pointer] = new ChunkInfo(instance);
-                _chunks[pointer].IsUsed = true;
-            }
-            else if (innerType == typeof(inkWidgetLogicController))
-            {
-                instance = dbc.ToDynamicWidgetLogicController();
-                _chunks[pointer] = new ChunkInfo(instance);
-                _chunks[pointer].IsUsed = true;
-            }
-        }
-
-        if (Activator.CreateInstance(type, instance) is not IRedHandle result)
+        if (Activator.CreateInstance(type) is not IRedHandle result)
         {
             throw new Exception();
         }
+
+        if (!_handles.ContainsKey(pointer))
+        {
+            _handles.Add(pointer, []);
+        }
+        _handles[pointer].Add(result);
 
         return result;
     }
@@ -458,15 +444,15 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
     public virtual IRedHandle ReadCHandle<T>() where T : RedBaseClass
     {
         var pointer = _reader.ReadInt32() - 1;
+        var handle = new CHandle<T>();
 
-        RedBaseClass? instance = null;
-        if (pointer >= 0)
+        if (!_handles.ContainsKey(pointer))
         {
-            instance = _chunks[pointer].Instance;
-            _chunks[pointer].IsUsed = true;
+            _handles.Add(pointer, []);
         }
+        _handles[pointer].Add(handle);
 
-        return new CHandle<T>((T?)instance);
+        return handle;
     }
 
     public virtual IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
@@ -474,17 +460,16 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
         var pointer = _reader.ReadInt32() - 1;
         var type = RedReflection.GetFullType(redTypeInfos);
 
-        RedBaseClass? instance = null;
-        if (pointer >= 0)
-        {
-            instance = _chunks[pointer].Instance;
-            _chunks[pointer].IsUsed = true;
-        }
-
-        if (Activator.CreateInstance(type, instance) is not IRedWeakHandle result)
+        if (Activator.CreateInstance(type) is not IRedWeakHandle result)
         {
             throw new Exception();
         }
+
+        if (!_handles.ContainsKey(pointer))
+        {
+            _handles.Add(pointer, []);
+        }
+        _handles[pointer].Add(result);
 
         return result;
     }
@@ -705,7 +690,7 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
 
     #endregion
 
-    public virtual void ReadClass(RedBaseClass cls, uint size)
+    public virtual void ReadClass(ref RedBaseClass cls, uint size)
     {
         ThrowNotImplemented();
     }
@@ -891,5 +876,17 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
         public bool IsUsed { get; set; }
 
         public ChunkInfo(RedBaseClass instance) => Instance = instance;
+    }
+
+    protected class HandleInfo
+    {
+        public IRedBaseHandle Handle { get; }
+        public int Position { get; }
+
+        public HandleInfo(IRedBaseHandle handle, int position)
+        {
+            Handle = handle;
+            Position = position;
+        }
     }
 }

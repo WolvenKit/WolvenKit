@@ -16,8 +16,9 @@ public class RedFileDto
     {
         Data = cr2w;
         Header.ArchiveFileName = cr2w.MetaData.FileName;
-
+        Header.GameVersion = (int)cr2w.MetaData.GameVersion;
         Header.DataType = DataTypes.CR2W;
+
         if (writeFlat)
         {
             Header.DataType = DataTypes.CR2WFlat;

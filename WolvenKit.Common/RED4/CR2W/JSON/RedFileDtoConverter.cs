@@ -273,7 +273,7 @@ public class RedFileDtoConverter : CustomRedConverter<RedFileDto>
                             throw new JsonException();
                         }
 
-                        _referenceResolver.AddReference(i.ToString(), RedTypeManager.Create(type));
+                        _referenceResolver.AddReference(i.ToString(), RedTypeManager.Create(type, RedJsonSerializer.GetHeader().GameVersion));
                     }
 
                     var conv = (RedClassConverter)options.GetConverter(typeof(RedBaseClass));

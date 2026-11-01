@@ -2,11 +2,11 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.Buffer;
 
-public class worldNodeDataBuffer : CArray<worldCompiledNodeInstanceSetupInfo>, IParseableBuffer, IRedType
+public class worldNodeDataBuffer : CArray<ICompiledNodeInstanceSetupInfo>, IParseableBuffer, IRedType
 {
     public IRedType? Data => null;
 
-    public Dictionary<ulong, List<worldCompiledNodeInstanceSetupInfo>> Lookup = new();
+    public Dictionary<ulong, List<ICompiledNodeInstanceSetupInfo>> Lookup = new();
 
     public worldNodeDataBuffer()
     {

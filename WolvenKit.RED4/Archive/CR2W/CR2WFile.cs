@@ -10,6 +10,7 @@ public class CR2WMetaData
     public uint BuildVersion { get; set; } = 0;
     public EHashVersion HashVersion { get; set; }
     public uint ObjectsEnd { get; set; }
+    public Enums.gameGameVersion GameVersion { get; set; } = Enums.gameGameVersion.Current;
 }
 
 public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
