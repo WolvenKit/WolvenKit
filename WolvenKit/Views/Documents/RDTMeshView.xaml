@@ -98,7 +98,7 @@
             ShowCoordinateSystem="True"
             UseDefaultGestures="False"
             Loaded="Viewport3DX_Loaded"
-            ZoomExtentsWhenLoaded="True">
+            ZoomExtentsWhenLoaded="True"
             OITRenderMode="DepthPeeling"
             OITDepthPeelingIteration="8">
 
