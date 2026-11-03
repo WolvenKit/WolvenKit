@@ -99,6 +99,9 @@
             UseDefaultGestures="False"
             Loaded="Viewport3DX_Loaded"
             ZoomExtentsWhenLoaded="True">
+            OITRenderMode="DepthPeeling"
+            OITDepthPeelingIteration="8">
+
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding
                     Command="hx:ViewportCommands.Rotate"
