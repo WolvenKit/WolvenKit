@@ -56,7 +56,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private readonly IArchiveManager? _archiveManager;
 
     // Short-lived cache for GetProjectOrDepotFile (cleared on material reload)
-    private readonly Dictionary<ResourcePath, CR2WFile?> _fileCache = new();
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<ResourcePath, CR2WFile?> _fileCache = new();
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, TextureModel> _textureCache = new();
 
     protected readonly RedBaseClass? _data;
 
@@ -183,7 +184,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             EffectsManager = new DefaultEffectsManager();
 
-            //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
+            //EnvironmentMap = GetOrCreateTexture(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
             {
                 FarPlaneDistance = 1E+8,
@@ -236,12 +237,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         catch (Exception ex)
         {
             Parent?.GetLoggerService().Error(ex);
+            return;
         }
+
         IsLoaded = true;
     }
 
     public override void Unload()
     {
+        _modifierSvc.ModifierStateChanged -= ModifierStateChanged;
+
         if (_data is not CMesh data)
         {
             return;
@@ -870,9 +875,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return list;
     }
 
-    private Material defaultMaterial = new("default")
+    private static Material CreateDefaultMaterial() => new("default")
     {
-        Instance = new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(@"engine\materials\metal_base.remt") }
+        Instance = new CMaterialInstance()
+        {
+            BaseMaterial = new CResourceReference<IMaterial>(@"engine\materials\metal_base.remt")
+        }
     };
 
 
@@ -980,15 +988,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (localList != null && localList.Files.Count > me.Index)
             {
-                inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                inst = localList.Files[me.Index].RootChunk as CMaterialInstance;
             }
             else if (mesh.PreloadLocalMaterialInstances.Count > me.Index)
             {
-                //foreach (var pme in data.PreloadLocalMaterialInstances)
-                //{
-                //inst = (CMaterialInstance)pme.GetValue();
-                //}
-                inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
+                inst = mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance;
             }
 
             //CMaterialInstance bm = null;
@@ -999,7 +1003,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             if (inst is null)
             {
                 _loggerService.Error($"Failed to load material {name}! Check your mesh materials!");
-                materials[name] = defaultMaterial;
+                materials[name] = CreateDefaultMaterial();
                 continue;
             }
 
@@ -1016,7 +1020,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (materials.Count == 0)
         {
-            materials.Add("default", defaultMaterial);
+            materials.Add("default", CreateDefaultMaterial());
         }
         var apps = new List<string>();
         foreach (var handle in mesh.Appearances)
@@ -1065,7 +1069,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (appMaterials.Count == 0)
         {
-            appMaterials.Add(defaultMaterial);
+            appMaterials.Add(CreateDefaultMaterial());
         }
 
         var modelName = (epc.Name.ToString() ?? "").Replace(".", "");
@@ -1420,41 +1424,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         xMin = Math.Min(xMin, chunk.Min.X);
                         yMin = Math.Min(yMin, chunk.Min.Y);
                     }
-                    if (xMax > 1024f || xMin < -1024f)
-                    {
-                        xMax = 2048;
-                        xMin = -2048;
-                        yMax = 2048;
-                        yMin = -2048;
-                    }
-                    if (xMax > 512f || xMin < -512f)
-                    {
-                        xMax = 1024;
-                        xMin = -1024;
-                        yMax = 1024;
-                        yMin = -1024;
-                    }
-                    if (xMax > 256f || xMin < -256f)
-                    {
-                        xMax = 512;
-                        xMin = -512;
-                        yMax = 512;
-                        yMin = -512;
-                    }
-                    else if (xMax > 128 || xMin < -128)
-                    {
-                        xMax = 256;
-                        xMin = -256;
-                        yMax = 256;
-                        yMin = -256;
-                    }
-                    else
-                    {
-                        xMax = 128;
-                        xMin = -128;
-                        yMax = 128;
-                        yMin = -128;
-                    }
+                    // Snap UV range to the next power-of-two tile (128..2048).
+                    var ext = Math.Max(Math.Max(xMax, -xMin), Math.Max(yMax, -yMin));
+                    var size = 128f;
+                    while (size < ext && size < 2048f)
+                        size *= 2f;
+                    xMin = yMin = -size;
+                    xMax = yMax = size;
                     for (var i = 0; i < mesh.positions.Length; i++)
                     {
                         textureCoordinates.Add(new SharpDX.Vector2(
@@ -1766,13 +1742,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 material.RenderEnvironmentMap = true;
                 if (File.Exists(filename_bd))
                 {
-                    material.AlbedoMap = TextureModel.Create(filename_bd);
+                    material.AlbedoMap = GetOrCreateTexture(filename_bd);
                     material.RenderAlbedoMap = true;
                     material.AlbedoColor = new SharpDX.Color4(0.9f, 0.95f, 1f, 0.6f);
                 }
                 if (File.Exists(filename_bn))
                 {
-                    material.NormalMap = TextureModel.Create(filename_bn);
+                    material.NormalMap = GetOrCreateTexture(filename_bn);
                     material.RenderNormalMap = true;
                 }
                 return material;
@@ -1801,20 +1777,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 if (File.Exists(filename_bd))
                 {
-                    material.AlbedoMap = TextureModel.Create(filename_bd);
+                    material.AlbedoMap = GetOrCreateTexture(filename_bd);
                     material.RenderAlbedoMap = true;
                     material.AlbedoColor = new SharpDX.Color4(0.8f, 0.8f, 0.8f, 1f);
                 }
                 if (File.Exists(filename_bn))
                 {
-                    material.NormalMap = TextureModel.Create(filename_bn);
+                    material.NormalMap = GetOrCreateTexture(filename_bn);
                     material.RenderNormalMap = true;
                 }
 
                 // Real roughness/metalness maps (cyberware etc.) override placeholder scale/bias
                 if (File.Exists(filename_rm))
                 {
-                    material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
+                    material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
                     material.RenderRoughnessMetallicMap = true;
                     material.RoughnessFactor = 1f;
                     material.MetallicFactor = 1f;
@@ -1833,22 +1809,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (File.Exists(filename_bd))
             {
-                material.AlbedoMap = TextureModel.Create(filename_bd);
+                material.AlbedoMap = GetOrCreateTexture(filename_bd);
                 material.RenderAlbedoMap = true;
             }
 
             if (File.Exists(filename_bn))
             {
-                material.NormalMap = TextureModel.Create(filename_bn);
+                material.NormalMap = GetOrCreateTexture(filename_bn);
                 material.RenderNormalMap = true;
             }
             if (File.Exists(filename_rm))
-                material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
+                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
         }
 
         if (isHair && File.Exists(filename_bd))
         {
-            material.AlbedoMap = TextureModel.Create(filename_bd);
+            material.AlbedoMap = GetOrCreateTexture(filename_bd);
             material.MetallicFactor = 0f;
             material.RoughnessFactor = 0.75f;
             material.RenderEnvironmentMap = false;
@@ -1862,19 +1838,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (isNail && File.Exists(filename_bd))
         {
-            material.AlbedoMap = TextureModel.Create(filename_bd);
+            material.AlbedoMap = GetOrCreateTexture(filename_bd);
             material.RenderAlbedoMap = true;
             material.MetallicFactor = 0.75f;
             material.RoughnessFactor = 0.55f;
 
             if (File.Exists(filename_bn))
             {
-                material.NormalMap = TextureModel.Create(filename_bn);
+                material.NormalMap = GetOrCreateTexture(filename_bn);
                 material.RenderNormalMap = true;
             }
             if (File.Exists(filename_rm))
             {
-                material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
+                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
                 material.RenderRoughnessMetallicMap = true;
             }
             return material;
@@ -1890,17 +1866,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (File.Exists(filename_bd))
             {
-                material.AlbedoMap = TextureModel.Create(filename_bd);
+                material.AlbedoMap = GetOrCreateTexture(filename_bd);
                 material.RenderAlbedoMap = true;
             }
             if (File.Exists(filename_bn))
             {
-                material.NormalMap = TextureModel.Create(filename_bn);
+                material.NormalMap = GetOrCreateTexture(filename_bn);
                 material.RenderNormalMap = true;
             }
             if (File.Exists(filename_rm))
             {
-                material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
+                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
                 material.RenderRoughnessMetallicMap = true;
             }
             return material;
@@ -1908,13 +1884,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (isOverlay && File.Exists(filename_bd))
         {
-            material.AlbedoMap = TextureModel.Create(filename_bd);
+            material.AlbedoMap = GetOrCreateTexture(filename_bd);
             material.AlbedoColor = new SharpDX.Color4(0.55f, 0.55f, 0.55f, 1f);
             material.RenderAlbedoMap = true;
 
             if (File.Exists(filename_bn))
             {
-                material.NormalMap = TextureModel.Create(filename_bn);
+                material.NormalMap = GetOrCreateTexture(filename_bn);
                 material.RenderNormalMap = true;
             }
 
@@ -1976,7 +1952,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (File.Exists(filename_bd))
             {
-                var tex = TextureModel.Create(filename_bd);
+                var tex = GetOrCreateTexture(filename_bd);
                 material.AlbedoMap = tex;
                 material.RenderAlbedoMap = true;
                 material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 1f);
@@ -2026,7 +2002,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 if (File.Exists(emissivePng))
                 {
-                    material.EmissiveMap = TextureModel.Create(emissivePng);
+                    material.EmissiveMap = GetOrCreateTexture(emissivePng);
                     material.RenderEmissiveMap = true;
                 }
 
@@ -2055,7 +2031,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             // Albedo (baked PNG only)
             if (File.Exists(filename_bd))
             {
-                material.AlbedoMap = TextureModel.Create(filename_bd);
+                material.AlbedoMap = GetOrCreateTexture(filename_bd);
                 material.RenderAlbedoMap = true;
 
                 // Apply BaseColorScale if present (e.g. nails use scale=0 for black)
@@ -2086,7 +2062,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
             else if (File.Exists(filename_rm))
             {
-                material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
+                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
                 material.RenderRoughnessMetallicMap = true;
                 // 1f so shader uses texture values at 100%
                 material.RoughnessFactor = 1f;
@@ -2096,7 +2072,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             // Normal (baked PNG only)
             if (File.Exists(filename_bn))
             {
-                material.NormalMap = TextureModel.Create(filename_bn);
+                material.NormalMap = GetOrCreateTexture(filename_bn);
                 material.RenderNormalMap = true;
             }
         }
@@ -2154,11 +2130,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 Directory.CreateDirectory(Path.GetDirectoryName(outPath)!);
 
+                // Write to a temp file then move, so readers never see a partial PNG.
+                var tmp = outPath + ".tmp";
                 using (var ms = new MemoryStream())
                 {
                     clone.Save(ms, ImageFormat.Png);
-                    File.WriteAllBytes(outPath, ms.ToArray());
+                    File.WriteAllBytes(tmp, ms.ToArray());
                 }
+                File.Move(tmp, outPath, overwrite: true);
             }
             catch (Exception ex)
             {
@@ -2294,7 +2273,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return result;
     }
 
-    private void ClearFileCache() => _fileCache.Clear();
+    private TextureModel GetOrCreateTexture(string path)
+    {
+        return _textureCache.GetOrAdd(path, p => TextureModel.Create(p));
+    }
+
+    private void ClearFileCache()
+    {
+        _fileCache.Clear();
+        _textureCache.Clear();
+    }
 
     private IArchiveManager? ResolveArchiveManager()
     {
@@ -2519,10 +2507,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return name;
         }
 
-        // Include a short hash of the full path so two meshes with the same
-        // filename in different folders don't share a cache.
+        // Stable hash so cache filenames survive process restarts
+        // (string.GetHashCode is randomized per process in .NET Core).
         var full = Parent?.FilePath ?? Parent?.ContentId ?? meshFile;
-        var hash = (uint)full.GetHashCode();
+        var hashBytes = System.Security.Cryptography.SHA256.HashData(
+            System.Text.Encoding.UTF8.GetBytes(full));
+        var hash = BitConverter.ToUInt32(hashBytes, 0);
         return $"{meshFile}_{hash:X8}__{name}";
     }
 
@@ -2589,8 +2579,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var inst = localList != null && localList.Files.Count > me.Index
-                ? (CMaterialInstance)localList.Files[me.Index].RootChunk
-                : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].NotNull().GetValue().NotNull();
+                ? localList.Files[me.Index].RootChunk as CMaterialInstance
+                : mesh.PreloadLocalMaterialInstances.Count > me.Index
+                    ? mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance
+                    : null;
 
             if (inst == null)
             {
@@ -2638,96 +2630,82 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     private void DeleteMaterialCache()
     {
-        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
-        {
+        var dir = ISettingsManager.GetTemp_OBJPath();
+        if (!Directory.Exists(dir))
             return;
-        }
 
-        try
+        // Only remove preview bake artifacts. Do not wipe the whole temp folder
+        // (ExtractShaders and other tools share it).
+        string[] suffixes = { "_d.png", "_n.png", "_rm.png", "_emissive.png", ".deps", ".hash" };
+        foreach (var file in Directory.GetFiles(dir))
         {
-            var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
-        catch
-        {
-            // Don't delete, then
+            var name = Path.GetFileName(file);
+            if (!suffixes.Any(s => name.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                continue;
+            try
+            { File.Delete(file); }
+            catch { /* skip locked files */ }
         }
     }
 
     [RelayCommand]
-
-    public void LoadMaterials()
+    public async Task LoadMaterials()
     {
-        if (SelectedAppearance == null)
+        if (IsLoadingMaterials || SelectedAppearance == null)
         {
-            Parent?.GetLoggerService()?.Warning("No material selected!");
+            if (SelectedAppearance == null)
+                Parent?.GetLoggerService()?.Warning("No material selected!");
             return;
         }
 
         IsLoadingMaterials = true;
-
-        // Always re-read mesh materials from disk so saved edits (EmissiveColor,
-        // scales, etc.) are picked up without requiring Ctrl.
-        RefreshMaterialsFromDisk();
-
-        var shift = ShiftKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
-        var ctrl = CtrlKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
-        var bakeMax = shift ? 4096 : 2048;
-        var forceBake = shift || ctrl;
-
-        if (ctrl)
+        try
         {
-            DeleteMaterialCache();
-            Parent?.GetLoggerService()?.Info("Clearing material cache...");
+            RefreshMaterialsFromDisk();
 
-            foreach (var (_, material) in SelectedAppearance.RawMaterials)
-            {
-                ClearMaterial(material);
-            }
-        }
+            var shift = ShiftKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
+            var ctrl = CtrlKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+            var bakeMax = shift ? 4096 : 2048;
+            var forceBake = shift || ctrl;
 
-        IEnumerable<KeyValuePair<string, Material>> batch = SelectedAppearance.RawMaterials;
-        if (SelectedAppearance.Models is { Count: > 0 } models)
-        {
-            var names = models.SelectMany(m => m.Materials.Select(x => x.Name)).ToHashSet();
-            if (names.Count > 0)
+            if (ctrl)
             {
-                batch = batch.Where(x => names.Contains(x.Key));
-            }
-        }
+                DeleteMaterialCache();
+                _textureCache.Clear();
+                Parent?.GetLoggerService()?.Info("Clearing material cache...");
 
-        var loadTask = Parallel.ForEachAsync(
-            batch.OrderBy(x => x.Key),
-            new ParallelOptions { MaxDegreeOfParallelism = 1 },
-            (material, ct) => LoadMaterial(material.Value, bakeMax, forceBake));
-
-        loadTask.ContinueWith(t =>
-        {
-            if (t.IsFaulted)
-            {
-                Parent?.GetLoggerService()?.Error(
-                    $"Material loading had errors: {t.Exception?.GetBaseException().Message}");
-            }
-            else
-            {
-                Parent?.GetLoggerService()?.Info("All materials loaded!");
+                foreach (var (_, material) in SelectedAppearance.RawMaterials)
+                    ClearMaterial(material);
             }
 
-            IsLoadingMaterials = false;
-
-            // Re-apply baked textures to the selected appearance on the UI thread
-            Application.Current?.Dispatcher.Invoke(() =>
+            IEnumerable<KeyValuePair<string, Material>> batch = SelectedAppearance.RawMaterials;
+            if (SelectedAppearance.Models is { Count: > 0 } models)
             {
-                if (SelectedAppearance != null)
-                {
-                    ApplyAppearancePreviewMaterials(SelectedAppearance);
-                }
+                var names = models.SelectMany(m => m.Materials.Select(x => x.Name)).ToHashSet();
+                if (names.Count > 0)
+                    batch = batch.Where(x => names.Contains(x.Key));
+            }
+
+            var ordered = batch.OrderBy(x => x.Key).ToList();
+            await Task.Run(async () =>
+            {
+                foreach (var (_, m) in ordered)
+                    await LoadMaterial(m, bakeMax, forceBake);
             });
 
-        }, TaskScheduler.Default);
+            Parent?.GetLoggerService()?.Info("All materials loaded!");
+        }
+        catch (Exception ex)
+        {
+            Parent?.GetLoggerService()?.Error($"Material loading had errors: {ex.Message}");
+        }
+        finally
+        {
+            IsLoadingMaterials = false;
+        }
+
+        if (SelectedAppearance != null)
+            ApplyAppearancePreviewMaterials(SelectedAppearance);
     }
 
     private void RefreshMaterialsFromDisk()
@@ -2808,8 +2786,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var dictionary = material.Values;
             var mat = material.Instance;
 
-            // Resolve base material chain (inheritance)
-            while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
+            // Resolve base material chain (inheritance).
+            // Track visited paths so a cycle or unexpected chunk type cannot loop forever.
+            var visited = new HashSet<ResourcePath>();
+            while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty
+                   && visited.Add(mat.BaseMaterial.DepotPath))
             {
                 var basePathText = mat.BaseMaterial.DepotPath.GetResolvedText() ?? "";
                 if (basePathText.EndsWith("skin.mt", StringComparison.OrdinalIgnoreCase))
@@ -2872,6 +2853,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 }
                             }
                         }
+                        mat = null;
+                        break;
+
+                    default:
                         mat = null;
                         break;
                 }
@@ -3261,11 +3246,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     a = px[3] * inv;
                 }
 
-                static void FractOffsetTile(float u, float v, float tile, float offU, float offV, bool flipVOffset,
+                static void FractOffsetTile(float u, float v, float tile, float offU, float offV, bool flipV,
                     out float uu, out float vv)
                 {
-                    var tu = (u + offU) * tile;
-                    var tv = flipVOffset ? (v - offV) * tile : (v + offV) * tile;
+                    var tu = u * tile + offU;
+                    var baseV = flipV ? (1f - v) : v;
+                    var tv = baseV * tile + offV;
                     uu = tu - MathF.Floor(tu);
                     vv = tv - MathF.Floor(tv);
                 }
@@ -3529,6 +3515,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         if (useMbMask)
                         {
                             microblendBmp = await GetTex(layer.Microblend.DepotPath);
+                            // XBM is stored unflipped; Blender exports flip V.
+                            // Flip so UV math matches the addon.
+                            if (microblendBmp != null)
+                                microblendBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
                         }
 
                         Bitmap? colorTexBmp = null;
@@ -3536,6 +3526,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         if (useColorTexture)
                         {
                             colorTexBmp = await GetTex(mllt.ColorTexture.DepotPath);
+                            if (colorTexBmp != null)
+                                colorTexBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
                             if (colorTexBmp == null)
                             {
                                 useColorTexture = false;
@@ -3585,7 +3577,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         if (mllt.RoughnessTexture.DepotPath != ResourcePath.Empty)
                         {
                             roughTexBmp = await GetTex(mllt.RoughnessTexture.DepotPath);
-                            if (roughTexBmp == null)
+                            if (roughTexBmp != null)
+                                roughTexBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                            else
                             {
 #if DEBUG
                                 System.Diagnostics.Debug.WriteLine($"[Tex] Failed to load roughness: {mllt.RoughnessTexture.DepotPath}");
@@ -3596,7 +3590,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         if (mllt.MetalnessTexture.DepotPath != ResourcePath.Empty)
                         {
                             metalTexBmp = await GetTex(mllt.MetalnessTexture.DepotPath);
-                            if (metalTexBmp == null)
+                            if (metalTexBmp != null)
+                                metalTexBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                            else
                             {
 #if DEBUG
                                 System.Diagnostics.Debug.WriteLine($"[Tex] Failed to load metalness: {mllt.MetalnessTexture.DepotPath}");
@@ -3610,6 +3606,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         if (mllt.NormalTexture.DepotPath != ResourcePath.Empty)
                         {
                             normalTexBmp = await GetTex(mllt.NormalTexture.DepotPath);
+                            if (normalTexBmp != null)
+                                normalTexBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
                         }
 
                         var destRect = new Rectangle(0, 0, maxWidth, maxHeight);
@@ -3747,7 +3745,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                         var mask = SampleChannelR(maskPtr, maskStride, smW, smH, mu, mv);
 
                                         {
-                                            FractOffsetTile(u, v, mbTile, mbOffU, mbOffV, flipVOffset: true,
+                                            // Blender Mapping: UV * Scale + Location.
+                                            // Image V is top-down; Blender UV V is bottom-up.
+                                            FractOffsetTile(u, v, mbTile, mbOffU, mbOffV,
+                                                flipV: true,
                                                 out var mbu, out var mbv);
                                             var mbA = SampleMicroblendWeight(
                                                 mbPtr, mbStride, mbW, mbH, mbu, mbv, mbMaskSource);
@@ -3763,7 +3764,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                                         layerHasCoverage = true;
 
-                                        FractOffsetTile(u, v, effectiveMatTile, offU, offV, flipVOffset: false,
+                                        FractOffsetTile(u, v, effectiveMatTile, offU, offV, flipV: true,
                                             out var su, out var sv);
 
                                         // ---- albedo ----
@@ -3904,7 +3905,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                                         if (applyMbNormalHere && mbPtr != null)
                                         {
-                                            FractOffsetTile(u, v, mbTile, mbOffU, mbOffV, flipVOffset: true,
+                                            // Blender Mapping: UV * Scale + Location.
+                                            // Image V is top-down; Blender UV V is bottom-up.
+                                            FractOffsetTile(u, v, mbTile, mbOffU, mbOffV,
+                                                flipV: true,
                                                 out var mbu, out var mbv);
                                             float nR, nG, nB;
                                             if (nearestMb)
@@ -6356,9 +6360,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 catch { /* ignore */ }
             }
 
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current?.Dispatcher.Invoke(() =>
             {
-                //SetupPBRMaterial(material?.Name ?? "unknown", true);
+                // intentionally empty — kept so a future UI refresh can land here
             });
 
             #endregion
@@ -6387,7 +6391,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (dictionary.TryGetValue("MetalnessScale", out var metalnessScale))
         {
-            material.Metalness = (CFloat)metalnessScale;
+            material.Metalness = ReadFloat(metalnessScale);
         }
 
         if (dictionary.TryGetValue("Roughness", out var roughness) && roughness is CResourceReference<ITexture> roughTexture)
@@ -6403,11 +6407,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (dictionary.TryGetValue("RoughnessScale", out var roughnessScale))
         {
-            material.Roughness = (CFloat)roughnessScale;
+            material.Roughness = ReadFloat(roughnessScale);
         }
     }
 
-    public byte ToBlue(byte r, byte g) => (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * (r / 255F * 2 - 1) * (g / 255F * 2 - 1)) + 1) / 2 * 255), 0, 255);
+    public byte ToBlue(byte r, byte g)
+    {
+        float x = r / 255f * 2f - 1f;
+        float y = g / 255f * 2f - 1f;
+        float z2 = 1f - x * x - y * y;
+        float z = z2 > 0f ? MathF.Sqrt(z2) : 0f;
+        return (byte)Math.Clamp(Math.Round((z + 1f) / 2f * 255f), 0, 255);
+    }
 
     /// <summary>
     /// Blender mask_mixer: safeC = max(c,1e-5), burn = mask+mb-1,
