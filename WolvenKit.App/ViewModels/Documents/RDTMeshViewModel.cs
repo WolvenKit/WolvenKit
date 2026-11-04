@@ -1633,10 +1633,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         for (int x = 0; x < bmp.Width; x += stepX)
                         {
                             int a = ptr[y * stride + x * 4 + 3];
-                            if (a < minA)
-                                minA = a;
-                            if (a > maxA)
-                                maxA = a;
+                            if (a < minA) minA = a;
+                            if (a > maxA) maxA = a;
                             if (maxA - minA > 16)
                                 return true;
                         }
@@ -1918,11 +1916,53 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return material;
         }
 
-        // glass
+        // glass (base\materials\glass.mt)
+        // Baked PNG already mixes TintColor glass with MaskTexture label.
         if (Has(kind, MaterialKind.Glass))
         {
-            material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 0.1f);
+            material.RenderEnvironmentMap = true;
+            material.MetallicFactor = 0.1f;
+            material.RoughnessFactor = 0.05f;
             material.RenderAlbedoMap = false;
+
+            float opacity = 1f;
+            float tr = 0.8f, tg = 0.8f, tb = 0.8f;
+            if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var glassMat) == true && glassMat?.Values != null)
+            {
+                if (glassMat.Values.TryGetValue("Opacity", out var opObj))
+                    opacity = Math.Clamp(ReadFloat(opObj), 0f, 1f);
+                if (glassMat.Values.TryGetValue("TintColor", out var tintObj))
+                {
+                    if (tintObj is CColor cc)
+                    {
+                        tr = cc.Red / 255f;
+                        tg = cc.Green / 255f;
+                        tb = cc.Blue / 255f;
+                    }
+                    else if (tintObj is Vector4 tv)
+                    {
+                        tr = tv.X; tg = tv.Y; tb = tv.Z;
+                    }
+                }
+            }
+
+            if (File.Exists(filename_bd))
+            {
+                material.AlbedoMap = GetOrCreateTexture(filename_bd);
+                material.RenderAlbedoMap = true;
+                // Alpha already baked (glass Opacity + label coverage).
+                material.AlbedoColor = new SharpDX.Color4(0.8f, 0.8f, 0.8f, 1f);
+            }
+            else
+            {
+                material.AlbedoColor = new SharpDX.Color4(tr, tg, tb, opacity);
+            }
+            if (File.Exists(filename_bn))
+            {
+                material.NormalMap = GetOrCreateTexture(filename_bn);
+                material.RenderNormalMap = true;
+            }
+            return material;
         }
 
         // Emissive: explicit markers or EmissiveEV > 0.
@@ -2159,9 +2199,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         catch
         {
-            try
-            { File.Delete(tmp); }
-            catch { /* ignore */ }
+            try { File.Delete(tmp); } catch { /* ignore */ }
             throw;
         }
     }
@@ -2297,9 +2335,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         // Key includes write time so a rebaked PNG is not served stale.
         long ticks = 0;
-        try
-        { ticks = File.GetLastWriteTimeUtc(path).Ticks; }
-        catch { /* missing */ }
+        try { ticks = File.GetLastWriteTimeUtc(path).Ticks; } catch { /* missing */ }
         var key = path + "|" + ticks;
         return _textureCache.GetOrAdd(key, _ => TextureModel.Create(path));
     }
@@ -2375,8 +2411,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 var count = 0;
                 foreach (var item in enumerable)
                 {
-                    if (count++ > 64)
-                        break; // safety
+                    if (count++ > 64) break; // safety
                     WriteValue(w, item, depth + 1);
                 }
                 w.Write(count);
@@ -2670,8 +2705,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var name = Path.GetFileName(file);
             if (!suffixes.Any(s => name.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                 continue;
-            try
-            { File.Delete(file); }
+            try { File.Delete(file); }
             catch { /* skip locked files */ }
         }
     }
@@ -3458,8 +3492,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             return null;
                         if (flipY)
                         {
-                            try
-                            { bmp.RotateFlip(RotateFlipType.RotateNoneFlipY); }
+                            try { bmp.RotateFlip(RotateFlipType.RotateNoneFlipY); }
                             catch { bmp.Dispose(); throw; }
                         }
                         texCache[key] = hit = bmp;
@@ -5064,6 +5097,187 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             // === END EYES ===
 
+            // === GLASS ===
+            // Addon: glass lobe (TintColor) mixed with surface lobe (MaskTexture)
+            // by Mask.Alpha * MaskOpacity. Missing Opacity defaults to 1 (addon scalar default).
+            if (Has(kind, MaterialKind.Glass))
+            {
+                try
+                {
+                    var (gBd, gBn, _) = GetMaterialFilePathsFromCache(material?.Name ?? "glass");
+                    if (forceBake || !File.Exists(gBd))
+                    {
+                        static bool IsPlaceholderTex(string path) =>
+                            path.Contains("white.xbm", StringComparison.OrdinalIgnoreCase)
+                            || path.Contains("black.xbm", StringComparison.OrdinalIgnoreCase)
+                            || path.Contains("grey.xbm", StringComparison.OrdinalIgnoreCase)
+                            || path.Contains("editor\\", StringComparison.OrdinalIgnoreCase)
+                            || path.Contains("editor/", StringComparison.OrdinalIgnoreCase)
+                            || path.Contains("placeholder", StringComparison.OrdinalIgnoreCase);
+
+                        // Addon default is 1, but we have no transmission shader.
+                        // Unspecified Opacity uses a lower alpha so glass still reads as glass.
+                        float op = 0.45f;
+                        if (dictionary.TryGetValue("Opacity", out var opObj))
+                            op = Math.Clamp(ReadFloat(opObj), 0f, 1f);
+                        float maskOp = 0f;
+                        if (dictionary.TryGetValue("MaskOpacity", out var moObj))
+                            maskOp = Math.Clamp(ReadFloat(moObj), 0f, 1f);
+
+                        float tr = 1f, tg = 1f, tb = 1f;
+                        if (dictionary.TryGetValue("TintColor", out var tcObj))
+                        {
+                            if (tcObj is CColor cc)
+                            {
+                                tr = cc.Red / 255f; tg = cc.Green / 255f; tb = cc.Blue / 255f;
+                            }
+                            else if (tcObj is Vector4 tv)
+                            {
+                                tr = tv.X; tg = tv.Y; tb = tv.Z;
+                            }
+                            else if (tcObj is System.Numerics.Vector4 ntv)
+                            {
+                                tr = ntv.X; tg = ntv.Y; tb = ntv.Z;
+                            }
+                        }
+
+                        float uvTX = 1f, uvTY = 1f, uvOX = 0f, uvOY = 0f;
+                        if (dictionary.TryGetValue("UvTilingX", out var uvtx)) uvTX = ReadFloat(uvtx);
+                        if (dictionary.TryGetValue("UvTilingY", out var uvty)) uvTY = ReadFloat(uvty);
+                        if (dictionary.TryGetValue("UvOffsetX", out var uvox)) uvOX = ReadFloat(uvox);
+                        if (dictionary.TryGetValue("UvOffsetY", out var uvoy)) uvOY = ReadFloat(uvoy);
+                        if (uvTX == 0) uvTX = 1f;
+                        if (uvTY == 0) uvTY = 1f;
+
+                        Bitmap? tintBmp = null;
+                        Bitmap? maskBmp = null;
+                        if (dictionary.TryGetValue("GlassTint", out var gtObj) &&
+                            gtObj is CResourceReference<ITexture> gtRef &&
+                            gtRef.DepotPath != ResourcePath.Empty)
+                        {
+                            var tintPath = gtRef.DepotPath.GetResolvedText() ?? "";
+                            if (!IsPlaceholderTex(tintPath))
+                                tintBmp = await LoadTextureAsBitmap(gtRef.DepotPath);
+                        }
+                        if (dictionary.TryGetValue("MaskTexture", out var mObj) &&
+                            mObj is CResourceReference<ITexture> mRef &&
+                            mRef.DepotPath != ResourcePath.Empty)
+                        {
+                            var maskPath = mRef.DepotPath.GetResolvedText() ?? "";
+                            if (!IsPlaceholderTex(maskPath))
+                                maskBmp = await LoadTextureAsBitmap(mRef.DepotPath);
+                        }
+
+                        var (gtTX, gtTY, gtOX, gtOY) = ReadTileOffset(dictionary, "GlassTintTileAndOffset");
+                        if (tintBmp != null)
+                            tintBmp = ApplyUvTileOffset(tintBmp, uvTX * gtTX, uvTY * gtTY, uvOX * gtTX + gtOX, uvOY * gtTY + gtOY);
+                        if (maskBmp != null)
+                            maskBmp = ApplyUvTileOffset(maskBmp, uvTX, uvTY, uvOX, uvOY);
+
+                        int w = maskBmp?.Width ?? tintBmp?.Width ?? 1024;
+                        int h = maskBmp?.Height ?? tintBmp?.Height ?? 1024;
+                        var colorBmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                        var rect = new Rectangle(0, 0, w, h);
+                        var dst = colorBmp.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        System.Drawing.Imaging.BitmapData? td = null, md = null;
+                        if (tintBmp != null)
+                            td = tintBmp.LockBits(new Rectangle(0, 0, tintBmp.Width, tintBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        if (maskBmp != null)
+                            md = maskBmp.LockBits(new Rectangle(0, 0, maskBmp.Width, maskBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        try
+                        {
+                            unsafe
+                            {
+                                byte* dp = (byte*)dst.Scan0;
+                                byte* tp = td == null ? null : (byte*)td.Scan0;
+                                byte* mp = md == null ? null : (byte*)md.Scan0;
+                                int dStride = dst.Stride;
+                                int tStride = td?.Stride ?? 0;
+                                int mStride = md?.Stride ?? 0;
+                                int tw = tintBmp?.Width ?? 1, th = tintBmp?.Height ?? 1;
+                                int mw = maskBmp?.Width ?? 1, mh = maskBmp?.Height ?? 1;
+                                byte glassA = (byte)(Math.Clamp(op, 0f, 1f) * 255f);
+                                byte br = (byte)(Math.Clamp(tr, 0f, 1f) * 255f);
+                                byte bg = (byte)(Math.Clamp(tg, 0f, 1f) * 255f);
+                                byte bb = (byte)(Math.Clamp(tb, 0f, 1f) * 255f);
+                                for (int y = 0; y < h; y++)
+                                {
+                                    byte* drow = dp + y * dStride;
+                                    for (int x = 0; x < w; x++)
+                                    {
+                                        // Glass base: TintColor * GlassTint
+                                        byte gr = br, gg = bg, gb = bb, ga = glassA;
+                                        if (tp != null)
+                                        {
+                                            int tx = x * tw / w;
+                                            int ty = y * th / h;
+                                            byte* tpx = tp + ty * tStride + tx * 4;
+                                            gb = (byte)(tpx[0] * tb);
+                                            gg = (byte)(tpx[1] * tg);
+                                            gr = (byte)(tpx[2] * tr);
+                                        }
+                                        // Label over glass by Mask.A * MaskOpacity (addon MixShader factor)
+                                        if (mp != null && maskOp > 0.001f)
+                                        {
+                                            int mx = x * mw / w;
+                                            int my = y * mh / h;
+                                            byte* mpx = mp + my * mStride + mx * 4;
+                                            float f = (mpx[3] / 255f) * maskOp;
+                                            gb = (byte)(gb * (1f - f) + mpx[0] * f);
+                                            gg = (byte)(gg * (1f - f) + mpx[1] * f);
+                                            gr = (byte)(gr * (1f - f) + mpx[2] * f);
+                                            ga = (byte)(ga * (1f - f) + 255f * f);
+                                        }
+                                        int o = x * 4;
+                                        drow[o + 0] = gb;
+                                        drow[o + 1] = gg;
+                                        drow[o + 2] = gr;
+                                        drow[o + 3] = ga;
+                                    }
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            colorBmp.UnlockBits(dst);
+                            if (td != null && tintBmp != null) tintBmp.UnlockBits(td);
+                            if (md != null && maskBmp != null) maskBmp.UnlockBits(md);
+                        }
+
+                        SavePngAtomic(colorBmp, gBd);
+                        colorBmp.Dispose();
+                        tintBmp?.Dispose();
+                        maskBmp?.Dispose();
+
+                        if (dictionary.TryGetValue("Normal", out var nObj) &&
+                            nObj is CResourceReference<ITexture> nRef &&
+                            nRef.DepotPath != ResourcePath.Empty)
+                        {
+                            var nPath = nRef.DepotPath.GetResolvedText() ?? "";
+                            if (!IsPlaceholderTex(nPath) && !nPath.Contains("flat_normal", StringComparison.OrdinalIgnoreCase)
+                                && !nPath.Contains("normal.xbm", StringComparison.OrdinalIgnoreCase))
+                            {
+                                var nBmp = await LoadTextureAsBitmap(nRef.DepotPath);
+                                if (nBmp != null)
+                                {
+                                    var (nTX, nTY, nOX, nOY) = ReadTileOffset(dictionary, "NormalTileAndOffset");
+                                    nBmp = ApplyUvTileOffset(nBmp, uvTX * nTX, uvTY * nTY, uvOX * nTX + nOX, uvOY * nTY + nOY);
+                                    SavePngAtomic(nBmp, gBn);
+                                    nBmp.Dispose();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Parent?.GetLoggerService()?.Warning(
+                        $"[Glass] Failed to bake '{material?.Name}': {ex.GetType().Name}: {ex.Message}");
+                }
+            }
+            // === END GLASS ===
+
             // === HAIR ===
             bool isHair = Has(kind, MaterialKind.Hair);
 
@@ -5077,6 +5291,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     var lastSepIdx = meshName.LastIndexOf("__", StringComparison.Ordinal);
                     if (lastSepIdx > 0)
                         meshName = meshName.Substring(0, lastSepIdx);
+                    // Strip the 8-char hash we append: name_HASH__mat → name
+                    var hashIdx = meshName.LastIndexOf('_');
+                    if (hashIdx > 0 && meshName.Length - hashIdx == 9 &&
+                        meshName.Skip(hashIdx + 1).All(c => "0123456789ABCDEFabcdef".Contains(c)))
+                        meshName = meshName.Substring(0, hashIdx);
                     var folderName = meshName.Replace("_cap", "", StringComparison.OrdinalIgnoreCase);
                     var meshPath = $"base\\characters\\common\\hair\\{folderName}\\{meshName}.mesh";
                     try
@@ -5367,7 +5586,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                     if (isCapMat && alphaBmp == null)
                     {
-                        Parent?.GetLoggerService()?.Warning($"[Hair] Cap material '{material?.Name}' has no MaskTexture / Strand_Alpha — alpha will be missing");
+                        // Cap materials (hat hair, beard) often bake alpha from the diffuse itself.
+                        // Missing Strand_Alpha is expected, not an error.
+                        Parent?.GetLoggerService()?.Debug($"[Hair] Cap material '{material?.Name}' has no MaskTexture / Strand_Alpha");
                     }
 
                     // === Apply gradients (not for cap) ===
@@ -6641,6 +6862,79 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// get edge artifacts when upscaled. Replace them with a solid 1024x1024
     /// of the same color, matching the Blender workflow.
     /// </summary>
+    /// <summary>
+    /// Bake Blender Mapping (Point): out = uv * scale + location, with wrap.
+    /// Used by glass UvTiling/UvOffset and *TileAndOffset vectors.
+    /// </summary>
+    private static Bitmap ApplyUvTileOffset(Bitmap src, float tileX, float tileY, float offX, float offY)
+    {
+        if (Math.Abs(tileX - 1f) < 0.001f && Math.Abs(tileY - 1f) < 0.001f
+            && Math.Abs(offX) < 0.001f && Math.Abs(offY) < 0.001f)
+            return src;
+
+        tileX = Math.Clamp(tileX, 0.05f, 16f);
+        tileY = Math.Clamp(tileY, 0.05f, 16f);
+        int w = src.Width, h = src.Height;
+        var dst = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+        var srcRect = new Rectangle(0, 0, w, h);
+        var srcData = src.LockBits(srcRect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        var dstData = dst.LockBits(srcRect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            unsafe
+            {
+                byte* sp = (byte*)srcData.Scan0;
+                byte* dp = (byte*)dstData.Scan0;
+                int sStride = srcData.Stride;
+                int dStride = dstData.Stride;
+                for (int y = 0; y < h; y++)
+                {
+                    float v = (y + 0.5f) / h;
+                    float tv = v * tileY + offY;
+                    tv -= MathF.Floor(tv);
+                    int sy = (int)(tv * h) % h;
+                    if (sy < 0) sy += h;
+                    byte* drow = dp + y * dStride;
+                    byte* srow = sp + sy * sStride;
+                    for (int x = 0; x < w; x++)
+                    {
+                        float u = (x + 0.5f) / w;
+                        float tu = u * tileX + offX;
+                        tu -= MathF.Floor(tu);
+                        int sx = (int)(tu * w) % w;
+                        if (sx < 0) sx += w;
+                        int so = sx * 4;
+                        int dof = x * 4;
+                        drow[dof + 0] = srow[so + 0];
+                        drow[dof + 1] = srow[so + 1];
+                        drow[dof + 2] = srow[so + 2];
+                        drow[dof + 3] = srow[so + 3];
+                    }
+                }
+            }
+        }
+        finally
+        {
+            src.UnlockBits(srcData);
+            dst.UnlockBits(dstData);
+        }
+        src.Dispose();
+        return dst;
+    }
+
+    private static (float tileX, float tileY, float offX, float offY) ReadTileOffset(
+        Dictionary<string, object> values, string key, float defTileX = 1f, float defTileY = 1f)
+    {
+        if (!values.TryGetValue(key, out var obj))
+            return (defTileX, defTileY, 0f, 0f);
+        if (obj is Vector4 v)
+            return (v.X == 0 ? defTileX : v.X, v.Y == 0 ? defTileY : v.Y, v.Z, v.W);
+        if (obj is System.Numerics.Vector4 nv)
+            return (nv.X == 0 ? defTileX : nv.X, nv.Y == 0 ? defTileY : nv.Y, nv.Z, nv.W);
+        return (defTileX, defTileY, 0f, 0f);
+    }
+
     private static Bitmap ExpandPlaceholder(Bitmap bmp)
     {
         const int placeholderMax = 32;
