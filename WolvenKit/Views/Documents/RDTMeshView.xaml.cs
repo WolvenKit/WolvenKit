@@ -3,17 +3,15 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using HelixToolkit.SharpDX.Core;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeGrid;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
-    /// Interaction logic for RDTTextureView.xaml
+    /// Interaction logic for RDTMeshView.xaml
     /// </summary>
     public partial class RDTMeshView : ReactiveUserControl<RDTMeshViewModel>
     {
@@ -23,21 +21,33 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            //hxViewport.DXSceneInitialized += delegate (object sender, EventArgs args)
-            //{
-            //    if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
-            //        return;
-
-            //    hxViewport.ZoomExtents();
-            //};
-
             this.WhenActivated(disposables =>
             {
-                HandleActivation();
+                if (DataContext is RDTMeshViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
 
-                Disposable
-                    .Create(HandleDeactivation)
-                    .DisposeWith(disposables);
+                    // The view model owns the EffectsManager (created in Load, disposed in Dispose).
+                    // The view only makes sure one exists; it never disposes it.
+                    vm.EnsureEffectsManager();
+
+                    // Subscribe once per activation and unsubscribe on deactivation,
+                    // otherwise every tab switch adds another handler.
+                    hxViewport.MouseDown3D += vm.MouseDown3D;
+                    Disposable
+                        .Create(() => hxViewport.MouseDown3D -= vm.MouseDown3D)
+                        .DisposeWith(disposables);
+
+                    // Modifier flags must not stay "pressed" when the tab is left mid-keypress.
+                    Disposable
+                        .Create(() => ResetModifierFlags(vm))
+                        .DisposeWith(disposables);
+                }
+
+                if (ViewModel is { } current && !ReferenceEquals(hxContentVisual.DataContext, DataContext))
+                {
+                    current.SelectedAppearance?.ModelGroup.RemoveSelf();
+                }
 
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.SelectedAppearance.ModelGroup,
@@ -46,30 +56,10 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private void HandleActivation()
+        private static void ResetModifierFlags(RDTMeshViewModel vm)
         {
-            if (DataContext is RDTMeshViewModel vm)
-            {
-                SetCurrentValue(ViewModelProperty, vm);
-                if (vm.EffectsManager == null || vm.EffectsManager.IsDisposed)
-                {
-                    vm.EffectsManager = new DefaultEffectsManager();
-                }
-                hxViewport.MouseDown3D += vm.MouseDown3D;
-            }
-
-            if (!ReferenceEquals(hxContentVisual.DataContext, DataContext))
-            {
-                ViewModel.SelectedAppearance?.ModelGroup.RemoveSelf();
-            }
-        }
-
-        private void HandleDeactivation()
-        {
-            if (ViewModel is { } vm)
-            {
-                vm.EffectsManager?.Dispose();
-            }
+            vm.CtrlKeyPressed = false;
+            vm.ShiftKeyPressed = false;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -101,35 +91,45 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (ViewModel.CtrlKeyPressed && e.Key is Key.LeftCtrl or Key.RightCtrl)
+            if (e.Key is Key.LeftCtrl or Key.RightCtrl)
             {
                 ViewModel.CtrlKeyPressed = false;
             }
 
-            if (ViewModel.ShiftKeyPressed && e.Key is Key.LeftShift or Key.RightShift)
+            if (e.Key is Key.LeftShift or Key.RightShift)
             {
                 ViewModel.ShiftKeyPressed = false;
             }
         }
 
-        private void HxViewport_MouseDown3D(object sender, RoutedEventArgs e) => throw new System.NotImplementedException();
-        private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();//if (ViewModel != null)//    LoadModels(ViewModel.SelectedAppearance);
+        // KeyUp never arrives if focus leaves while a modifier is held (Alt+Tab, dialog, etc.).
+        protected override void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnIsKeyboardFocusWithinChanged(e);
+
+            if (e.NewValue is false && ViewModel is { } vm)
+            {
+                ResetModifierFlags(vm);
+            }
+        }
+
+        private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();
+
+        // Referenced from XAML; intentionally empty.
         private void ComboBoxAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (ViewModel != null)
-            //    //LoadModels(ViewModel.SelectedAppearance);
-            //    ShowAppearance(ViewModel.SelectedAppearance, true);
         }
 
-        private void SfTreeGrid_NodeCheckStateChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.NodeCheckStateChangedEventArgs e)
+        // Referenced from XAML; intentionally empty.
+        private void SfTreeGrid_NodeCheckStateChanged(object sender, NodeCheckStateChangedEventArgs e)
         {
-            //if (ViewModel != null)
-            //    ShowAppearance(ViewModel.SelectedAppearance, true);
-            ////LoadModels(ViewModel.SelectedAppearance);
         }
 
-        private void CollapseAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) => 
+        private void CollapseAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) =>
             _currentNode?.TreeGrid.CollapseAllNodes(_currentNode.TreeNode);
+
+        private void ExpandAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+            _currentNode?.TreeGrid.ExpandAllNodes(_currentNode.TreeNode);
 
         private void CopyComponentNameMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
@@ -140,21 +140,6 @@ namespace WolvenKit.Views.Documents
             }
 
             Clipboard.SetDataObject(s);
-        }
-
-        private void ExpandAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-            _currentNode?.TreeGrid.ExpandAllNodes(_currentNode.TreeNode);
-
-        private void CollapseStateAllChildren(TreeNodes nodes, bool state, bool recursive)
-        {
-            foreach (var node in nodes)
-            {
-                node.IsExpanded = state;
-                if (recursive && node.HasChildNodes)
-                {
-                    CollapseStateAllChildren(node.ChildNodes, state, true);
-                }
-            }
         }
 
         private void CheckAllChildrenMenuItem_OnClick(object sender, RoutedEventArgs e)
@@ -189,7 +174,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private void ChangeStateAllChildren(TreeNodes nodes, bool state, bool recursive)
+        private static void ChangeStateAllChildren(TreeNodes nodes, bool state, bool recursive)
         {
             foreach (var node in nodes)
             {
@@ -203,11 +188,7 @@ namespace WolvenKit.Views.Documents
 
         private void SfTreeGrid_OnTreeGridContextMenuOpening(object sender, TreeGridContextMenuEventArgs e)
         {
-            _currentNode = null;
-            if (e.ContextMenuInfo is TreeGridNodeContextMenuInfo info)
-            {
-                _currentNode = info;
-            }
+            _currentNode = e.ContextMenuInfo as TreeGridNodeContextMenuInfo;
         }
 
         private void Viewport3DX_Loaded(object sender, RoutedEventArgs e)
@@ -215,5 +196,4 @@ namespace WolvenKit.Views.Documents
             ViewModel?.SelectWorldNode();
         }
     }
-    
 }
