@@ -99,6 +99,7 @@
             UseDefaultGestures="False"
             Loaded="Viewport3DX_Loaded"
             ZoomExtentsWhenLoaded="True"
+            
             OITRenderMode="DepthPeeling"
             OITDepthPeelingIteration="8">
 
@@ -341,8 +342,8 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Search Coordinate -->
-                <StackPanel Orientation="Vertical">
+                <!-- Search Coordinate (sector / block previews only) -->
+                <StackPanel Orientation="Vertical" Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}">
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginTiny}"
                         VerticalAlignment="Center"
@@ -589,7 +590,7 @@
                 ColumnSizer="AutoFillColumn"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
-                AutoExpandMode="AllNodesExpanded"
+                AutoExpandMode="RootNodesExpanded"
                 AutoGenerateColumns="False"
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
