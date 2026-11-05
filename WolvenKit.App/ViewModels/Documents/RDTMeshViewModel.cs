@@ -185,9 +185,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             EnsureEffectsManager();
 
             //EnvironmentMap = GetOrCreateTexture(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
+            // Depth precision depends on the near/far ratio. The old 1e8 far plane with the
+            // default tiny near plane left ~mm..cm depth resolution at character distance,
+            // so a body under clothes (or a leg under ripped pants) z-fought through them.
+            // Characters and props need fine depth; sectors and blocks need range.
+            var (near, far) = _data switch
+            {
+                worldStreamingBlock => (1.0, 1E+6),
+                worldStreamingSector => (0.1, 1E+5),
+                _ => (0.01, 1E+4),
+            };
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
             {
-                FarPlaneDistance = 1E+8,
+                NearPlaneDistance = near,
+                FarPlaneDistance = far,
                 LookDirection = new Vector3D(1f, -1f, -1f)
             };
 
@@ -200,6 +211,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 {
                     PanelVisibility.ShowSelectionPanel = true;
                     PanelVisibility.ShowToggleCollision = true;
+                    PanelVisibility.ShowSearchPanel = true;
                     var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
 
                     Appearances.Add(app);
@@ -421,6 +433,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
                 sm.Material = SetupPBRMaterial(sm.MaterialName, force: true);
+                // The albedo PNG may only exist now: re-decide transparency for it.
+                ApplyRenderFlags(sm);
             }
         }
     }
@@ -540,8 +554,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         var materials = new Dictionary<string, Material>();
 
-        var localList = data.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
-
         // If there are no local materials defined that we can use to render the mesh, generate one
         if (data.MaterialEntries.Count == 0 || data.MaterialEntries.All((entry) => !entry.IsLocalInstance))
         {
@@ -581,26 +593,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 materials[name] = extMaterial;
                 continue;
             }
-            CMaterialInstance? inst = null;
-
-            if (localList != null && localList.Files.Count > me.Index)
-            {
-                inst = localList.Files[me.Index].RootChunk as CMaterialInstance;
-            }
-            else
-            {
-                // No further materials are defined (user was lazy)
-                if (me.Index >= data.PreloadLocalMaterialInstances.Count)
-                {
-                    Parent?.GetLoggerService().Warning($"No material with index {me.Index} found. Not checking further entries…");
-                    break;
-                }
-
-                inst = data.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance;
-            }
-
+            var inst = GetLocalMaterialInstance(data, me.Index);
             if (inst == null)
             {
+                Parent?.GetLoggerService().Warning($"No local material with index {me.Index} found.");
                 continue;
             }
 
@@ -649,6 +645,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             appearance.BindableModels.Add(model);
             foreach (var material in materials.Values)
             {
+                _buildingAppearance = appearance;
                 appearance.RawMaterials[material.Name] = material;
             }
 
@@ -1013,7 +1010,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         var materials = new Dictionary<string, Material>();
 
-        var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
 
         foreach (var me in mesh.MaterialEntries)
         {
@@ -1026,16 +1022,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 continue;
             }
 
-            CMaterialInstance? inst = null;
-
-            if (localList != null && localList.Files.Count > me.Index)
-            {
-                inst = localList.Files[me.Index].RootChunk as CMaterialInstance;
-            }
-            else if (mesh.PreloadLocalMaterialInstances.Count > me.Index)
-            {
-                inst = mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance;
-            }
+            var inst = GetLocalMaterialInstance(mesh, me.Index);
 
             //CMaterialInstance bm = null;
             //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
@@ -1513,7 +1500,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     TextureCoordinates = textureCoordinates,
                     Tangents = tangents
                 },
-                DepthBias = -index * 2
+                // No per-submesh bias: a body submesh with a high index used to be pulled
+                // in front of the clothes over it. Only coplanar overlay layers get a bias below.
+                DepthBias = 0
                 //IsTransparent = true
             };
 
@@ -1541,81 +1530,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 sm.IsRendering = false;
             }
 
-            // Try to get base path for better classification
-            string? basePath = null;
-            if (SelectedAppearance?.RawMaterials.TryGetValue(sm.MaterialName, out var mat) == true &&
-                mat.Instance is CMaterialInstance inst &&
-                inst.BaseMaterial.DepotPath != ResourcePath.Empty)
-            {
-                basePath = inst.BaseMaterial.DepotPath.GetResolvedText();
-            }
+            ApplyRenderFlags(sm);
 
-            var kind = ClassifyMaterial(sm.MaterialName, basePath);
-
-            if (Has(kind, MaterialKind.Makeup) || Has(kind, MaterialKind.Eyebrow))
-            {
-                sm.DepthBias -= 20;
-                sm.IsTransparent = true;
-            }
-            else if (Has(kind, MaterialKind.Eye) || Has(kind, MaterialKind.Glass))
-            {
-                sm.IsTransparent = true;
-                sm.DepthBias -= 10;
-            }
-            else if (Has(kind, MaterialKind.Decal))
-            {
-                // Render just after the base mesh. Negative bias pulls toward
-                // camera; keep it tiny so the decal doesn't leap in front of
-                // other entity components and leave holes.
-                sm.DepthBias = -1;
-                sm.IsTransparent = true;
-            }
-            else if (Has(kind, MaterialKind.Hair))
-            {
-                // Transparent so Viewport OIT can sort cards; hard alpha clip is baked into the texture.
-                sm.IsTransparent = true;
-                sm.DepthBias = 0;
-                // Double-sided: hair cards must render from both sides (matches typical hair / EEVEE)
-                sm.CullMode = SharpDX.Direct3D11.CullMode.None;
-            }
-
-            // Cutout / masked materials (chains, fences).
-            // EnableMask + AlphaThreshold = alpha test in game, not blend.
-            // Setting IsTransparent here causes bilinear filtering to create
-            // a soft halo around edges. Leave opaque for sharp cutout look.
-            if (!sm.IsTransparent &&
-                SelectedAppearance?.RawMaterials.TryGetValue(sm.MaterialName, out var alphaMat) == true &&
-                alphaMat?.Values != null)
-            {
-                bool isCutout = false;
-
-                if (alphaMat.Instance is CMaterialInstance alphaInst && alphaInst.EnableMask)
-                    isCutout = true;
-
-                if (!isCutout && alphaMat.Values.TryGetValue("AlphaThreshold", out var atObj))
-                {
-                    float at = ReadFloat(atObj);
-                    isCutout = at > 0.001f && at < 0.99f;
-                }
-
-                // Cutout / chain: pull toward camera so the alpha edge
-                // doesn't blend into the body underneath.
-                if (isCutout)
-                {
-                    sm.IsTransparent = true;
-                    sm.DepthBias = -30;
-                }
-                else if (alphaMat.Values.ContainsKey("MaskTexture"))
-                {
-                    sm.IsTransparent = true;
-                }
-                else
-                {
-                    var (png, _, _) = GetMaterialFilePathsFromCache(sm.MaterialName);
-                    if (File.Exists(png) && PngHasAlphaVariation(png))
-                        sm.IsTransparent = true;
-                }
-            }
             list.Add(sm);
             index++;
         }
@@ -1625,9 +1541,387 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     /// <summary>
+    /// Transparency, depth bias and culling for a submesh, from its material kind, mask
+    /// settings and (once baked) the albedo PNG's alpha. Called when the mesh is built and
+    /// again after materials are generated, since the PNG may not exist on first build.
+    /// </summary>
+    private void ApplyRenderFlags(SubmeshComponent sm)
+    {
+        if (string.IsNullOrEmpty(sm.MaterialName))
+            return;
+
+        sm.IsTransparent = false;
+        sm.DepthBias = 0;
+
+        var kind = ClassifyMaterialFor(sm.MaterialName);
+
+        if (Has(kind, MaterialKind.Makeup) || Has(kind, MaterialKind.Eyebrow))
+        {
+            // Coplanar with the face/skin: just enough bias to win the depth test.
+            sm.DepthBias = -2;
+            sm.IsTransparent = true;
+        }
+        else if (Has(kind, MaterialKind.Eye))
+        {
+            TryGetRawMaterial(sm.MaterialName, out var eyeMat);
+            switch (GetEyePart(eyeMat, sm.MaterialName))
+            {
+                case EyePart.Eyeball:
+                    // Solid: sorting it as transparent let the shadow/wet shells flicker through.
+                    break;
+                case EyePart.Lashes:
+                    sm.IsTransparent = true;
+                    sm.DepthBias = -1;
+                    MakeTwoSided(sm);   // strands seen from both sides, lit correctly on each
+                    break;
+                default:
+                    // Shadow / wetness shells sit just over the eyeball.
+                    sm.IsTransparent = true;
+                    sm.DepthBias = -1;
+                    break;
+            }
+        }
+        else if (Has(kind, MaterialKind.Glass))
+        {
+            sm.IsTransparent = true;
+            sm.DepthBias = -1;
+        }
+        else if (Has(kind, MaterialKind.Decal))
+        {
+            // Lies on the base mesh: tiny bias only.
+            sm.DepthBias = -1;
+            sm.IsTransparent = true;
+        }
+        else if (Has(kind, MaterialKind.Hair))
+        {
+            // Transparent so Viewport OIT can sort cards; hard alpha clip is baked into the texture.
+            sm.IsTransparent = true;
+            // Double-sided: hair cards must render from both sides (matches typical hair / EEVEE)
+            MakeTwoSided(sm);
+        }
+
+        if (sm.IsTransparent || !TryGetRawMaterial(sm.MaterialName, out var alphaMat) || alphaMat.Values == null)
+            return;
+
+        // Cutout / masked materials (chains, fences). The bake makes their alpha binary,
+        // so blending it shows exactly the cut-out shape. Rendered opaque, the transparent
+        // parts of the strip would show as a solid band around the chain.
+        var isCutout = alphaMat.Name.Contains("chain", StringComparison.OrdinalIgnoreCase);
+        if (!isCutout && alphaMat.Instance is CMaterialInstance alphaInst && alphaInst.EnableMask)
+            isCutout = true;
+        if (!isCutout && alphaMat.Values.TryGetValue("AlphaThreshold", out var atObj))
+        {
+            var at = ReadFloat(atObj);
+            isCutout = at > 0.001f && at < 0.99f;
+        }
+
+        if (isCutout || alphaMat.Values.ContainsKey("MaskTexture"))
+        {
+            sm.IsTransparent = true;
+            return;
+        }
+
+        var png = Path.Combine(ISettingsManager.GetTemp_OBJPath(), sm.MaterialName + "_d.png");
+        if (PngHasAlphaVariationCached(png))
+            sm.IsTransparent = true;
+    }
+
+    // original geometry -> its two-sided version; and the set of two-sided results
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<HelixToolkit.SharpDX.Core.Geometry3D, TwoSidedGeometry> _twoSidedByOriginal = new();
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<HelixToolkit.SharpDX.Core.Geometry3D, TwoSidedGeometry> _twoSidedResults = new();
+
+    // Winding convention fallback for MakeTwoSided; see the note in BuildTwoSided.
+    private const bool TwoSidedInvertFront = false;
+
+    private sealed record TwoSidedGeometry(HelixToolkit.SharpDX.Core.MeshGeometry3D Geometry, bool FrontCounterClockwise);
+
+    /// <summary>
+    /// Proper double-sided rendering for strands (hair cards, lashes).
+    /// With CullMode.None the back of a card is drawn with the front's normal, so the side
+    /// facing the camera was lit as if facing away and the hidden side caught the highlight.
+    /// Instead the triangles are duplicated with reversed winding and flipped normals, and
+    /// back faces are culled: each side is drawn by its own copy, with its own normal.
+    /// Built once per geometry; clones and repeated calls reuse it.
+    /// </summary>
+    private void MakeTwoSided(SubmeshComponent sm)
+    {
+        if (sm.Geometry is not HelixToolkit.SharpDX.Core.MeshGeometry3D geometry ||
+            geometry.Positions == null || geometry.Indices == null || geometry.Indices.Count < 3)
+        {
+            sm.CullMode = SharpDX.Direct3D11.CullMode.None;
+            return;
+        }
+
+        if (!_twoSidedResults.TryGetValue(geometry, out var twoSided))
+        {
+            twoSided = _twoSidedByOriginal.GetValue(geometry, BuildTwoSided);
+            _twoSidedResults.GetValue(twoSided.Geometry, _ => twoSided);
+            sm.Geometry = twoSided.Geometry;
+        }
+
+        sm.FrontCounterClockwise = twoSided.FrontCounterClockwise;
+        sm.CullMode = SharpDX.Direct3D11.CullMode.Back;
+    }
+
+    private static TwoSidedGeometry BuildTwoSided(HelixToolkit.SharpDX.Core.Geometry3D source)
+    {
+        var src = (HelixToolkit.SharpDX.Core.MeshGeometry3D)source;
+        var positions = src.Positions!;
+        var indices = src.Indices!;
+        var n = positions.Count;
+        var normals = src.Normals != null && src.Normals.Count == n ? src.Normals : null;
+        var uvs = src.TextureCoordinates != null && src.TextureCoordinates.Count == n ? src.TextureCoordinates : null;
+        var tangents = src.Tangents != null && src.Tangents.Count == n ? src.Tangents : null;
+        var triCount = indices.Count / 3;
+
+        // Emulates the game's two-sided hair shading for preview lighting.
+        //
+        // Hair cards have (1) triangles with mixed winding inside one flat strand and
+        // (2) "shell" normals that point away from the head, nearly in the card plane.
+        // Per-triangle decisions made either seams (lit/dark triangles) or facets.
+        //
+        // 1. Weld vertices by position and orient every connected strand consistently
+        //    (like "recalculate normals"), then face each strand toward its vertex normals.
+        // 2. Per vertex, average the oriented face normals: a smooth "card side" direction.
+        // 3. Copy 1 = oriented winding, normals mirrored through the card onto that side;
+        //    copy 2 = reversed winding, normals mirrored onto the other side.
+        //    Mirroring keeps the in-plane (shell) part, so shading stays smooth along the
+        //    strand and the side facing the camera always has a normal toward the camera.
+
+        // --- 1a. weld by position
+        var weld = new int[n];
+        var weldIds = new Dictionary<(long, long, long), int>();
+        for (var v = 0; v < n; v++)
+        {
+            var p = positions[v];
+            var key = ((long)Math.Round(p.X * 1e5), (long)Math.Round(p.Y * 1e5), (long)Math.Round(p.Z * 1e5));
+            if (!weldIds.TryGetValue(key, out var id))
+            {
+                id = weldIds.Count;
+                weldIds[key] = id;
+            }
+            weld[v] = id;
+        }
+
+        var tris = new int[triCount * 3];
+        for (var k = 0; k < tris.Length; k++)
+            tris[k] = indices[k];
+
+        // --- 1b. edge adjacency on welded ids
+        var edges = new Dictionary<(int, int), List<int>>();
+        for (var t = 0; t < triCount; t++)
+        {
+            for (var e = 0; e < 3; e++)
+            {
+                var a = weld[tris[t * 3 + e]];
+                var b = weld[tris[t * 3 + (e + 1) % 3]];
+                if (a == b)
+                    continue;
+                var key = a < b ? (a, b) : (b, a);
+                if (!edges.TryGetValue(key, out var list))
+                {
+                    list = new List<int>(2);
+                    edges[key] = list;
+                }
+                list.Add(t);
+            }
+        }
+
+        bool HasDirectedEdge(int t, int a, int b)
+        {
+            for (var e = 0; e < 3; e++)
+            {
+                if (weld[tris[t * 3 + e]] == a && weld[tris[t * 3 + (e + 1) % 3]] == b)
+                    return true;
+            }
+            return false;
+        }
+
+        void FlipTriangle(int t) => (tris[t * 3 + 1], tris[t * 3 + 2]) = (tris[t * 3 + 2], tris[t * 3 + 1]);
+
+        SharpDX.Vector3 FaceNormal(int t)
+        {
+            var p0 = positions[tris[t * 3]];
+            return SharpDX.Vector3.Cross(positions[tris[t * 3 + 1]] - p0, positions[tris[t * 3 + 2]] - p0);
+        }
+
+        // --- 1c. orient each connected strand consistently, then toward its normals
+        var visited = new bool[triCount];
+        var queue = new Queue<int>();
+        var component = new List<int>();
+        for (var start = 0; start < triCount; start++)
+        {
+            if (visited[start])
+                continue;
+
+            component.Clear();
+            visited[start] = true;
+            queue.Enqueue(start);
+            while (queue.Count > 0)
+            {
+                var t = queue.Dequeue();
+                component.Add(t);
+                for (var e = 0; e < 3; e++)
+                {
+                    var a = weld[tris[t * 3 + e]];
+                    var b = weld[tris[t * 3 + (e + 1) % 3]];
+                    if (a == b || !edges.TryGetValue(a < b ? (a, b) : (b, a), out var neighbours))
+                        continue;
+                    foreach (var u in neighbours)
+                    {
+                        if (visited[u])
+                            continue;
+                        // consistent neighbours traverse a shared edge in opposite directions
+                        if (HasDirectedEdge(u, a, b))
+                            FlipTriangle(u);
+                        visited[u] = true;
+                        queue.Enqueue(u);
+                    }
+                }
+            }
+
+            if (normals == null)
+                continue;
+
+            var agreement = 0f;
+            foreach (var t in component)
+            {
+                var vn = normals[tris[t * 3]] + normals[tris[t * 3 + 1]] + normals[tris[t * 3 + 2]];
+                agreement += SharpDX.Vector3.Dot(FaceNormal(t), vn);
+            }
+            if (agreement < 0)
+            {
+                foreach (var t in component)
+                    FlipTriangle(t);
+            }
+        }
+
+        // --- 2. smooth card-side direction per welded vertex (area weighted)
+        var side = new SharpDX.Vector3[weldIds.Count];
+        for (var t = 0; t < triCount; t++)
+        {
+            var f = FaceNormal(t);
+            side[weld[tris[t * 3]]] += f;
+            side[weld[tris[t * 3 + 1]]] += f;
+            side[weld[tris[t * 3 + 2]]] += f;
+        }
+        for (var k = 0; k < side.Length; k++)
+        {
+            if (side[k].LengthSquared() > 1e-20f)
+                side[k].Normalize();
+        }
+
+        // --- 3. two copies
+        var outPositions = new Vector3Collection(n * 2);
+        var outNormals = new Vector3Collection(n * 2);
+        var outUv = uvs != null ? new Vector2Collection(n * 2) : null;
+        var outTangents = tangents != null ? new Vector3Collection(n * 2) : null;
+
+        for (var pass = 0; pass < 2; pass++)
+        {
+            for (var v = 0; v < n; v++)
+            {
+                var s = pass == 0 ? side[weld[v]] : -side[weld[v]];
+                var nv = normals != null ? normals[v] : s;
+                if (nv == SharpDX.Vector3.Zero)
+                    nv = s;
+                if (s != SharpDX.Vector3.Zero)
+                {
+                    var d = SharpDX.Vector3.Dot(nv, s);
+                    if (d < 0)
+                        nv -= 2f * d * s;   // mirror through the card plane
+                }
+                if (nv.LengthSquared() > 1e-20f)
+                    nv.Normalize();
+
+                outPositions.Add(positions[v]);
+                outNormals.Add(nv);
+                outUv?.Add(uvs![v]);
+                outTangents?.Add(tangents![v]);
+            }
+        }
+
+        var outIndices = new IntCollection(triCount * 6);
+        for (var t = 0; t < triCount; t++)
+        {
+            outIndices.Add(tris[t * 3]);
+            outIndices.Add(tris[t * 3 + 1]);
+            outIndices.Add(tris[t * 3 + 2]);
+        }
+        for (var t = 0; t < triCount; t++)
+        {
+            outIndices.Add(tris[t * 3] + n);
+            outIndices.Add(tris[t * 3 + 2] + n);
+            outIndices.Add(tris[t * 3 + 1] + n);
+        }
+
+        var doubled = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
+        {
+            Positions = outPositions,
+            Indices = outIndices,
+            Normals = outNormals,
+            TextureCoordinates = outUv,
+            Tangents = outTangents,
+        };
+
+        // Copy 1 triangles agree with the side direction (right-hand rule): counter-clockwise
+        // on screen when facing the camera in a right-handed view.
+        // If both sides ever look inverted (lit from behind again), flip TwoSidedInvertFront.
+        return new TwoSidedGeometry(doubled, FrontCounterClockwise: !TwoSidedInvertFront);
+    }
+
+    /// <summary>
+    /// Material lookup by cache name. SelectedAppearance is not set yet while a mesh or
+    /// entity is being built, so also look in the appearance under construction and in
+    /// every loaded appearance.
+    /// </summary>
+    private bool TryGetRawMaterial(string name, [System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out Material material)
+    {
+        var selected = SelectedAppearance;
+        if (selected != null && selected.RawMaterials.TryGetValue(name, out material))
+            return true;
+
+        var building = _buildingAppearance;
+        if (building != null && building.RawMaterials.TryGetValue(name, out material))
+            return true;
+
+        foreach (var app in Appearances)
+        {
+            if (app.RawMaterials.TryGetValue(name, out material))
+                return true;
+        }
+
+        material = null!;
+        return false;
+    }
+
+    private Appearance? _buildingAppearance;
+
+    /// <summary>
     /// Quick check: does the PNG contain meaningful alpha variation
     /// (not all opaque, not all transparent)? Samples a grid to stay fast.
     /// </summary>
+    // path|ticks -> result; decoding the PNG per submesh was a large part of sector load time
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, bool> s_alphaVariationCache = new();
+
+    private static bool PngHasAlphaVariationCached(string path)
+    {
+        long ticks;
+        try
+        {
+            var fi = new FileInfo(path);
+            if (!fi.Exists || fi.Length == 0)
+                return false;
+            ticks = fi.LastWriteTimeUtc.Ticks;
+        }
+        catch
+        {
+            return false;
+        }
+
+        return s_alphaVariationCache.GetOrAdd(path + "|" + ticks, _ => PngHasAlphaVariation(path));
+    }
+
     private static bool PngHasAlphaVariation(string path)
     {
         try
@@ -1654,8 +1948,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         for (int x = 0; x < bmp.Width; x += stepX)
                         {
                             int a = ptr[y * stride + x * 4 + 3];
-                            if (a < minA) minA = a;
-                            if (a > maxA) maxA = a;
+                            if (a < minA)
+                                minA = a;
+                            if (a > maxA)
+                                maxA = a;
                             if (maxA - minA > 16)
                                 return true;
                         }
@@ -1753,16 +2049,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         var (filename_bd, filename_bn, filename_rm) = GetMaterialFilePathsFromCache(name);
 
-        // Prefer base material path (like Blender addon registry) when available
-        string? basePath = null;
-        if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var mat) == true &&
-            mat.Instance is CMaterialInstance inst &&
-            inst.BaseMaterial.DepotPath != ResourcePath.Empty)
-        {
-            basePath = inst.BaseMaterial.DepotPath.GetResolvedText();
-        }
-
-        var kind = ClassifyMaterial(name, basePath);
+        // Root template of the instance chain (like the Blender addon registry) decides the kind.
+        // basePath keeps both the template and the direct base for the substring checks below.
+        TryGetRawMaterial(name, out var classMat);
+        var kind = ClassifyMaterialFor(name, classMat);
+        var basePath = GetClassificationPath(classMat);
 
         bool isSkin = Has(kind, MaterialKind.Skin);
         bool isHair = Has(kind, MaterialKind.Hair);
@@ -1801,7 +2092,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 decalHasEmissive = true;
             }
-            else if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var dMat) == true && dMat?.Values != null)
+            else if (TryGetRawMaterial(name, out var dMat) && dMat?.Values != null)
             {
                 if (dMat.Values.TryGetValue("EmissiveEV", out var evObj) && ReadFloat(evObj) > 0.01f)
                     decalHasEmissive = true;
@@ -1868,8 +2159,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.MetallicFactor = 0f;
             material.RoughnessFactor = 0.75f;
             material.RenderEnvironmentMap = false;
-            // User-tuned darkening for hair (in addition to baked ×0.6)
-            material.AlbedoColor = new SharpDX.Color4(0.55f, 0.55f, 0.55f, 1f);
+            // Preview-only darkening (on top of the baked ×0.6): the preview has plain PBR
+            // lighting, without the game's hair shading, so the base colour is toned down.
+            material.AlbedoColor = new SharpDX.Color4(HairPreviewAlbedo, HairPreviewAlbedo, HairPreviewAlbedo, 1f);
             material.EnableFlatShading = false;
             material.RenderAlbedoMap = true;
             // Hair/cap use texture alpha; geometry IsTransparent is set separately
@@ -1900,24 +2192,42 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             material.RenderEnvironmentMap = false;
             material.MetallicFactor = 0f;
-            // Lashes should be matte; eyeball / wetness stay glossy
-            bool isLash = name.Contains("lash", StringComparison.OrdinalIgnoreCase);
-            material.RoughnessFactor = isLash ? 0.85f : 0.3f;
+            // Constant roughness per part: the baked eye RM is grayscale in every channel,
+            // so as a map it would also drive metalness.
+            material.RenderRoughnessMetallicMap = false;
+
+            var part = GetEyePart(classMat, name);
+            switch (part)
+            {
+                case EyePart.Lashes:
+                    material.RoughnessFactor = EyeLashRoughness;     // matte strands
+                    break;
+                case EyePart.Shadow:
+                    material.RoughnessFactor = 1f;                   // pure darkening, no highlight
+                    break;
+                case EyePart.Wet:
+                    material.RoughnessFactor = EyeWetRoughness;      // thin glossy film
+                    break;
+                default:
+                    material.RoughnessFactor = EyeballRoughness;     // wet, glossy eyeball
+                    break;
+            }
 
             if (File.Exists(filename_bd))
             {
                 material.AlbedoMap = GetOrCreateTexture(filename_bd);
                 material.RenderAlbedoMap = true;
             }
-            if (File.Exists(filename_bn))
+            else if (part == EyePart.Wet)
+            {
+                // Wetness film without its own colour: almost invisible, only the highlight shows.
+                material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.15f);
+            }
+
+            if (File.Exists(filename_bn) && part != EyePart.Shadow)
             {
                 material.NormalMap = GetOrCreateTexture(filename_bn);
                 material.RenderNormalMap = true;
-            }
-            if (File.Exists(filename_rm))
-            {
-                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
-                material.RenderRoughnessMetallicMap = true;
             }
             return material;
         }
@@ -1948,7 +2258,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             float opacity = GlassDefaultOpacity;
             float tr = 1f, tg = 1f, tb = 1f;
-            if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var glassMat) == true && glassMat?.Values != null)
+            if (TryGetRawMaterial(name, out var glassMat) && glassMat?.Values != null)
             {
                 if (glassMat.Values.TryGetValue("Opacity", out var opObj))
                     opacity = Math.Clamp(ReadFloat(opObj), 0f, 1f);
@@ -1962,7 +2272,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     }
                     else if (tintObj is Vector4 tv)
                     {
-                        tr = tv.X; tg = tv.Y; tb = tv.Z;
+                        tr = tv.X;
+                        tg = tv.Y;
+                        tb = tv.Z;
                     }
                 }
             }
@@ -1995,7 +2307,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 "parallaxscreen", "simple_emissive") ||
             ContainsAny(name,
                 "billboard", "neon", "television", "emissive");
-        if (!isEmissive && SelectedAppearance?.RawMaterials.TryGetValue(name, out var emMat) == true &&
+        if (!isEmissive && TryGetRawMaterial(name, out var emMat) &&
             emMat?.Values != null)
         {
             if (emMat.Values.TryGetValue("EmissiveEV", out var evCheck) && ReadFloat(evCheck) > 0.01f)
@@ -2012,7 +2324,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             // Scalar metalness / roughness from the instance (billboards store them as floats)
             float metal = 0.1f, rough = 0.2f;
-            if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var emVals) == true && emVals?.Values != null)
+            if (TryGetRawMaterial(name, out var emVals) && emVals?.Values != null)
             {
                 if (emVals.Values.TryGetValue("Metalness", out var mObj))
                 {
@@ -2043,7 +2355,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // EmissiveEV → linear intensity (addon uses 2^EV).
             // EV <= 0 means the screen/panel is off: no glow.
             float ev = 0f;
-            if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var evMat) == true &&
+            if (TryGetRawMaterial(name, out var evMat) &&
                 evMat?.Values?.TryGetValue("EmissiveEV", out var evObj) == true)
             {
                 ev = ReadFloat(evObj);
@@ -2051,7 +2363,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             // Optional EmissiveColor (Color or Vector4)
             float cr = 1f, cg = 1f, cb = 1f;
-            if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var colMat) == true &&
+            if (TryGetRawMaterial(name, out var colMat) &&
                 colMat?.Values?.TryGetValue("EmissiveColor", out var colObj) == true)
             {
                 if (colObj is Vector4 evCol)
@@ -2077,7 +2389,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 var emissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
 
                 bool scaleBlack = false;
-                if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var scaleMat) == true &&
+                if (TryGetRawMaterial(name, out var scaleMat) &&
                     scaleMat?.Values?.TryGetValue("BaseColorScale", out var scObj) == true &&
                     scObj is Vector4 sc && sc.X < 0.05f && sc.Y < 0.05f && sc.Z < 0.05f)
                     scaleBlack = true;
@@ -2116,15 +2428,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 material.AlbedoMap = GetOrCreateTexture(filename_bd);
                 material.RenderAlbedoMap = true;
 
-                // Apply BaseColorScale if present (e.g. nails use scale=0 for black)
+                // BaseColorScale: when the albedo was baked from a BaseColor texture, the
+                // scale is already multiplied into the PNG (see the BaseColor bake), so do not
+                // apply it a second time here. Otherwise use it as the tint.
                 var albedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
-                if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var matScale) == true &&
-                    matScale?.Values?.TryGetValue("BaseColorScale", out var scaleObj) == true)
+                if (TryGetRawMaterial(name, out var matScale) &&
+                    matScale?.Values?.TryGetValue("BaseColorScale", out var scaleObj) == true &&
+                    scaleObj is Vector4 v4)
                 {
-                    if (scaleObj is Vector4 v4)
-                    {
-                        albedoColor = new SharpDX.Color4(v4.X, v4.Y, v4.Z, v4.W);
-                    }
+                    var scaleBakedIn = matScale.Values.TryGetValue("BaseColor", out var bcObj) &&
+                                       bcObj is CResourceReference<ITexture>;
+                    albedoColor = scaleBakedIn
+                        ? new SharpDX.Color4(1f, 1f, 1f, v4.W)
+                        : new SharpDX.Color4(v4.X, v4.Y, v4.Z, v4.W);
                 }
                 material.AlbedoColor = albedoColor;
             }
@@ -2220,7 +2536,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         catch
         {
-            try { File.Delete(tmp); } catch { /* ignore */ }
+            try
+            { File.Delete(tmp); }
+            catch { /* ignore */ }
             throw;
         }
     }
@@ -2285,8 +2603,80 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+    // BGRA byte offsets
+    private const int ChannelR = 2;
+    private const int ChannelA = 3;
+
+    /// <summary>
+    /// Picks the channel that actually carries coverage in a mask / alpha texture.
+    /// Templates expect a fixed channel (decal mask = R, glass mask = A, …), but modded
+    /// or unusual textures may store it elsewhere:
+    ///  - the preferred channel varies → use it (normal case, matches the Blender addon);
+    ///  - preferred A is flat (no alpha, e.g. BC1/BC4) but the image is grayscale and R
+    ///    varies → the mask is single-channel, use R;
+    ///  - preferred R is flat but A varies → the mask is in alpha, use A;
+    ///  - nothing varies → keep the preferred channel (flat coverage).
+    /// A colour texture without alpha is never read as R: colour is not coverage.
+    /// </summary>
+    private static int PickCoverageChannel(Bitmap bmp, int preferred)
+    {
+        var w = bmp.Width;
+        var h = bmp.Height;
+        if (w < 1 || h < 1)
+            return preferred;
+
+        var data = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly,
+            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        int minA = 255, maxA = 0, minR = 255, maxR = 0;
+        var grayscale = true;
+        try
+        {
+            unsafe
+            {
+                byte* ptr = (byte*)data.Scan0;
+                var stride = data.Stride;
+                var stepX = Math.Max(1, w / 64);
+                var stepY = Math.Max(1, h / 64);
+                for (int y = 0; y < h; y += stepY)
+                {
+                    for (int x = 0; x < w; x += stepX)
+                    {
+                        byte* p = ptr + y * stride + x * 4;
+                        int b = p[0], g = p[1], r = p[2], a = p[3];
+                        if (a < minA)
+                            minA = a;
+                        if (a > maxA)
+                            maxA = a;
+                        if (r < minR)
+                            minR = r;
+                        if (r > maxR)
+                            maxR = r;
+                        if (Math.Abs(r - g) > 8 || Math.Abs(r - b) > 8)
+                            grayscale = false;
+                    }
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+
+        const int minRange = 16;
+        var aVaries = maxA - minA > minRange;
+        var rVaries = maxR - minR > minRange;
+
+        if (preferred == ChannelA)
+            return aVaries ? ChannelA : (rVaries && grayscale ? ChannelR : ChannelA);
+
+        return rVaries ? ChannelR : (aVaries ? ChannelA : ChannelR);
+    }
+
     private static void MultiplyAlphaByMaskRed(Bitmap dest, Bitmap mask)
     {
+        // Template convention is MaskTexture.r; fall back to A for masks stored in alpha.
+        var maskChannel = PickCoverageChannel(mask, ChannelR);
+
         var destRect = new Rectangle(0, 0, dest.Width, dest.Height);
         var maskRect = new Rectangle(0, 0, mask.Width, mask.Height);
         var destData = dest.LockBits(destRect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -2312,7 +2702,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         int maskOff = maskY * maskStride + maskX * 4;
 
                         // BGRA: red channel is at +2
-                        float coverage = maskPtr[maskOff + 2] / 255f;
+                        float coverage = maskPtr[maskOff + maskChannel] / 255f;
                         destPtr[destOff + 3] = (byte)(destPtr[destOff + 3] * coverage);
                     }
                 }
@@ -2358,7 +2748,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         // Key includes write time so a rebaked PNG is not served stale.
         long ticks = 0;
-        try { ticks = File.GetLastWriteTimeUtc(path).Ticks; } catch { /* missing */ }
+        try
+        { ticks = File.GetLastWriteTimeUtc(path).Ticks; }
+        catch { /* missing */ }
         var key = path + "|" + ticks;
         return _textureCache.GetOrAdd(key, _ => TextureModel.Create(path));
     }
@@ -2366,6 +2758,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private void ClearFileCache()
     {
         _fileCache.Clear();
+        _templateCache.Clear();
         _textureCache.Clear();
     }
 
@@ -2664,17 +3057,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
-    public List<Material> GetMaterialsForAppearance(CMesh mesh, CName appearance)
+    public List<Material> GetMaterialsForAppearance(CMesh mesh, CName appearance, string? meshPath = null)
     {
-        var materials = GetMaterialsFromMesh(mesh);
+        var materials = GetMaterialsFromMesh(mesh, meshPath);
 
         var appMaterials = new List<Material>();
 
-        var amaterials = mesh.Appearances.FirstOrDefault(x => x is not null && x.Chunk.NotNull().Name == appearance, mesh.Appearances[0].NotNull()).NotNull().Chunk.NotNull().ChunkMaterials;
-        foreach (var materialName in amaterials)
+        // Mesh without appearances: nothing to map (previously threw on Appearances[0]).
+        var meshApp = mesh.Appearances
+                          .Select(x => x?.Chunk)
+                          .FirstOrDefault(x => x is not null && x.Name == appearance)
+                      ?? mesh.Appearances.Select(x => x?.Chunk).FirstOrDefault(x => x is not null);
+        if (meshApp == null)
         {
-            var name = GetUniqueMaterialName(materialName.ToString().NotNull(), mesh);
-            appMaterials.Add(materials.ContainsKey(name) ? materials[name] : new Material(name));
+            return materials.Values.ToList();
+        }
+
+        foreach (var materialName in meshApp.ChunkMaterials)
+        {
+            var name = GetUniqueMaterialName(materialName.ToString().NotNull(), mesh, meshPath);
+            appMaterials.Add(materials.TryGetValue(name, out var m) ? m : new Material(name));
         }
 
         return appMaterials;
@@ -2683,6 +3085,48 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
     private const float GlassDefaultOpacity = 1f;
 
+    // Haircard albedo multiplier in the preview, tuned by eye against the game.
+    private const float HairPreviewAlbedo = 0.4f;
+
+    // Eye parts (preview roughness)
+    private const float EyeLashRoughness = 0.8f;
+    private const float EyeballRoughness = 0.08f;
+    private const float EyeWetRoughness = 0.05f;
+
+    private enum EyePart { None, Eyeball, Shadow, Wet, Lashes }
+
+    /// <summary>
+    /// Which part of the eye a material is. Template / base path first (names are unreliable:
+    /// eyeballs named "lashes" exist), the name only when the path says nothing.
+    /// </summary>
+    private EyePart GetEyePart(Material? material, string? name)
+    {
+        var path = GetClassificationPath(material) ?? string.Empty;
+        var n = (name ?? string.Empty).ToLowerInvariant();
+
+        if (path.Contains("eyelash") || path.Contains("\\eyes\\eyelashes") ||
+            path.Contains("hair.mt") || path.Contains("hair_blendable"))
+            return EyePart.Lashes;
+        if (path.Contains("eye_wet"))
+            return EyePart.Wet;
+        if (path.Contains("eye_shadow") || path.Contains("eyeshadow"))
+            return EyePart.Shadow;
+        if (path.Contains("eye_gradient") || path.Contains("eye_base") || path.Contains("eyeball") ||
+            path.Contains("eye.mt") || path.Contains("eye_blendable"))
+            return EyePart.Eyeball;
+
+        if (n.Contains("wetness") || n.Contains("eye_wet"))
+            return EyePart.Wet;
+        if (n.Contains("eyeshadow") || n.Contains("eye_shadow"))
+            return EyePart.Shadow;
+        if (n.Contains("eyeball") || n.Contains("eye_mat") || n.Contains("eyemat"))
+            return EyePart.Eyeball;
+        if (n.Contains("lash"))
+            return EyePart.Lashes;
+
+        return EyePart.None;
+    }
+
     private static string SanitizeFileName(string name) =>
         string.Concat(name.Select(c => InvalidFileNameChars.Contains(c) ? '_' : c));
 
@@ -2690,9 +3134,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         _ = mesh;
 
+        // Use the depot-relative path for the open document too, so a mesh opened on its
+        // own gets the same cache names as when it is a component of an entity / sector
+        // (those pass the component's depot path), and reuses those bakes.
         var identity = !string.IsNullOrEmpty(meshPathOverride)
             ? meshPathOverride
-            : Parent?.FilePath ?? Parent?.ContentId ?? string.Empty;
+            : GetDocumentDepotPath();
 
         var meshFile = Path.GetFileNameWithoutExtension(identity);
         if (string.IsNullOrEmpty(meshFile) ||
@@ -2701,12 +3148,65 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return SanitizeFileName(name);
         }
 
-        var norm = identity.Replace('/', '\\').ToLowerInvariant();
-        var hash = BitConverter.ToUInt32(
-            System.Security.Cryptography.SHA256.HashData(
-                System.Text.Encoding.UTF8.GetBytes(norm)), 0);
+        var prefix = s_meshNamePrefixCache.GetOrAdd(identity, id =>
+        {
+            var norm = id.Replace('/', '\\').ToLowerInvariant();
+            var hash = BitConverter.ToUInt32(
+                System.Security.Cryptography.SHA256.HashData(
+                    System.Text.Encoding.UTF8.GetBytes(norm)), 0);
+            return $"{Path.GetFileNameWithoutExtension(id)}_{hash:X8}__";
+        });
 
-        return $"{meshFile}_{hash:X8}__{SanitizeFileName(name)}";
+        return prefix + SanitizeFileName(name);
+    }
+
+    // identity (mesh path) -> "meshFile_HASH__" ; hashing per call adds up in large sectors
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, string> s_meshNamePrefixCache =
+        new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Local material instance for a material entry. Prefers localMaterialBuffer.materials,
+    /// which is what the editor shows and edits, so unsaved edits in the open mesh reach
+    /// the preview; then the raw buffer and the preload list (older files).
+    /// </summary>
+    private static CMaterialInstance? GetLocalMaterialInstance(CMesh mesh, int index)
+    {
+        if (index < 0)
+            return null;
+
+        if (mesh.LocalMaterialBuffer?.Materials is { } edited && index < edited.Count &&
+            edited[index] is CMaterialInstance fromEditor)
+            return fromEditor;
+
+        if (mesh.LocalMaterialBuffer?.RawData?.Buffer.Data is CR2WList raw && index < raw.Files.Count &&
+            raw.Files[index].RootChunk is CMaterialInstance fromRaw)
+            return fromRaw;
+
+        if (index < mesh.PreloadLocalMaterialInstances.Count)
+            return mesh.PreloadLocalMaterialInstances[index]?.GetValue() as CMaterialInstance;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Depot-relative path of the open document (e.g. base\...\x.mesh): project files are
+    /// made relative to the project's archive folder, archive files already are.
+    /// Falls back to the absolute path if that is not available.
+    /// </summary>
+    private string GetDocumentDepotPath()
+    {
+        try
+        {
+            var relative = Parent?.RelativePath;
+            if (!string.IsNullOrEmpty(relative))
+                return relative;
+        }
+        catch
+        {
+            // RelativePath needs an active project for files on disk
+        }
+
+        return Parent?.FilePath ?? Parent?.ContentId ?? string.Empty;
     }
 
     private void FillFromExternal(Material material, CMesh mesh, CMeshMaterialEntry me)
@@ -2750,16 +3250,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             $"External material '{material.Name}' index {me.Index} not found");
     }
 
-    private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
+    private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh, string? meshPath = null)
     {
         var materials = new Dictionary<string, Material>();
 
-        var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
 
 
         foreach (var me in mesh.MaterialEntries)
         {
-            var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
+            var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh, meshPath);
             if (!me.IsLocalInstance)
             {
                 if (!materials.ContainsKey(name))
@@ -2771,11 +3270,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 continue;
             }
 
-            var inst = localList != null && localList.Files.Count > me.Index
-                ? localList.Files[me.Index].RootChunk as CMaterialInstance
-                : mesh.PreloadLocalMaterialInstances.Count > me.Index
-                    ? mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance
-                    : null;
+            var inst = GetLocalMaterialInstance(mesh, me.Index);
 
             if (inst == null)
             {
@@ -2786,7 +3281,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             var material = new Material(name)
             {
-                Name = name
+                Name = name,
+                // Keep the instance so the bake can resolve its base material chain.
+                Instance = inst
             };
 
             foreach (var pair in inst.Values)
@@ -2835,7 +3332,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var name = Path.GetFileName(file);
             if (!suffixes.Any(s => name.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                 continue;
-            try { File.Delete(file); }
+            try
+            { File.Delete(file); }
             catch { /* skip locked files */ }
         }
     }
@@ -2935,7 +3433,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         foreach (var (mesh, meshPath) in sources)
         {
-            var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList;
 
             foreach (var me in mesh.MaterialEntries)
             {
@@ -2945,11 +3442,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                 if (me.IsLocalInstance)
                 {
-                    CMaterialInstance? inst = null;
-                    if (localList != null && localList.Files.Count > me.Index)
-                        inst = localList.Files[me.Index].RootChunk as CMaterialInstance;
-                    else if (mesh.PreloadLocalMaterialInstances.Count > me.Index)
-                        inst = mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance;
+                    var inst = GetLocalMaterialInstance(mesh, me.Index);
 
                     if (inst == null)
                         continue;
@@ -3122,7 +3615,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Something changed (or no cache yet): drop old outputs so every branch bakes again.
             foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng })
             {
-                try { if (File.Exists(f)) File.Delete(f); }
+                try
+                { if (File.Exists(f)) File.Delete(f); }
                 catch { /* ignore */ }
             }
 
@@ -3298,13 +3792,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     a = (((p00[3] * (1f - fu)) + (p10[3] * fu)) * (1f - fv) + ((p01[3] * (1f - fu)) + (p11[3] * fu)) * fv) * inv;
                 }
 
-                // MB mask source (ints — static locals cannot capture consts):
-                //   0 Alpha  — pattern lives in A
-                //   1 Luma   — A flat, print is in RGB brightness (zebra01)
-                //   2 One    — default 64x64 #7F7FFF, no pattern
-                //   3 Slope  — A+luma flat, but RG deviate from 0.5
-                //              (pattern_militarism_01: chroma/normal pattern, luma ≈ const)
-                const int MbMaskOne = 2;
+                // Microblend mask source: the texture's alpha, as in the Blender addon
+                // (mask_mixer uses Sample.Alpha). Source 2 below is only the "no texture" case.
 
                 static unsafe float SampleMicroblendWeight(
                     byte* ptr, int stride, int tw, int th, float uu, float vv, int source)
@@ -3363,92 +3852,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                          + ((c01 * (1f - fu)) + (c11 * fu)) * fv;
                 }
 
-                static unsafe int DetectMicroblendMaskSource(byte* ptr, int stride, int tw, int th)
-                {
-                    if (ptr == null || tw < 1 || th < 1)
-                    {
-                        return 2;
-                    }
-
-                    var stepX = Math.Max(1, tw / 16);
-                    var stepY = Math.Max(1, th / 16);
-                    var minA = 255;
-                    var maxA = 0;
-                    var minL = 255 * 3;
-                    var maxL = 0;
-                    var minR = 255;
-                    var maxR = 0;
-                    var minG = 255;
-                    var maxG = 0;
-                    for (var y = 0; y < th; y += stepY)
-                    {
-                        var row = ptr + (y * stride);
-                        for (var x = 0; x < tw; x += stepX)
-                        {
-                            var p = row + (x * 4);
-                            var a = p[3];
-                            if (a < minA)
-                            {
-                                minA = a;
-                            }
-
-                            if (a > maxA)
-                            {
-                                maxA = a;
-                            }
-
-                            var r = p[2];
-                            var g = p[1];
-                            if (r < minR)
-                            {
-                                minR = r;
-                            }
-
-                            if (r > maxR)
-                            {
-                                maxR = r;
-                            }
-
-                            if (g < minG)
-                            {
-                                minG = g;
-                            }
-
-                            if (g > maxG)
-                            {
-                                maxG = g;
-                            }
-
-                            var l = p[0] + r + g;
-                            if (l < minL)
-                            {
-                                minL = l;
-                            }
-
-                            if (l > maxL)
-                            {
-                                maxL = l;
-                            }
-                        }
-                    }
-
-                    if ((maxA - minA) >= 16)
-                    {
-                        return 0;
-                    }
-
-                    if ((maxL - minL) >= 48)
-                    {
-                        return 1;
-                    }
-
-                    if ((maxR - minR) >= 16 || (maxG - minG) >= 16)
-                    {
-                        return 3;
-                    }
-
-                    return 2;
-                }
 
                 // Two regimes, same contrast:
                 //   mid/low mask (Layer 003 grey + zebra01, c=0.1):
@@ -3469,20 +3872,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     return x <= 0.04045f
                         ? x / 12.92f
                         : MathF.Pow((x + 0.055f) / 1.055f, 2.4f);
-                }
-
-                static unsafe void SampleBgraNearest(
-                    byte* ptr, int stride, int tw, int th, float uu, float vv,
-                    out float r, out float g, out float b, out float a)
-                {
-                    const float inv = 1f / 255f;
-                    var x = WrapIndex((int)(uu * tw), tw);
-                    var y = WrapIndex((int)(vv * th), th);
-                    var px = ptr + (y * stride) + (x * 4);
-                    b = px[0] * inv;
-                    g = px[1] * inv;
-                    r = px[2] * inv;
-                    a = px[3] * inv;
                 }
 
                 static void FractOffsetTile(float u, float v, float tile, float offU, float offV, bool flipV,
@@ -3534,7 +3923,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 const int PxPerTile = 32;
                 const int SoftMin = 256;
                 var hardMax = Math.Clamp(bakeMax, 256, 4096);
-                var useNearestMaps = hardMax >= 4096;
 
                 var maxMatTile = 1f;
                 var maxMbTile = 1f;
@@ -3652,9 +4040,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     g.FillRectangle(brush, 0, 0, maxWidth, maxHeight);
                 }
 
+                // Float accumulators, as in the addon's node graph:
+                //  - roughness / metalness are mixed between layers unclamped (Blender Mix
+                //    nodes don't clamp the result), clamped once when written;
+                //  - normal XY = template normal + microblend, both mixed by the layer mask
+                //    (the addon mixes them separately then adds; both use the same factor,
+                //    so mixing the sum is identical). Z is rebuilt at the end.
+                var pixelCount = maxWidth * maxHeight;
+                var accRough = new float[pixelCount];
+                var accMetal = new float[pixelCount];
+                var accNormalX = new float[pixelCount];
+                var accNormalY = new float[pixelCount];
+                Array.Fill(accRough, 0.5f);
+
                 var texCache = new Dictionary<string, Bitmap>(StringComparer.OrdinalIgnoreCase);
 
-                async Task<Bitmap?> GetTex(ResourcePath path, bool flipY = false)
+                // tile: how many times the texture repeats across the bake.
+                // One repeat covers only maxWidth / tile bake pixels; a texture larger than that,
+                // sampled once per bake pixel, skips texels with a different phase in every
+                // repeat → each tile looks different and the surface turns into a patchwork
+                // of blocks. Like GPU mipmaps, the texture is box-halved until one repeat
+                // matches the footprint, so every bake pixel sees the average of its texels.
+                async Task<Bitmap?> GetTex(ResourcePath path, bool flipY = false, float tile = 1f)
                 {
                     if (path == ResourcePath.Empty)
                         return null;
@@ -3667,13 +4074,92 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             return null;
                         if (flipY)
                         {
-                            try { bmp.RotateFlip(RotateFlipType.RotateNoneFlipY); }
+                            try
+                            { bmp.RotateFlip(RotateFlipType.RotateNoneFlipY); }
                             catch { bmp.Dispose(); throw; }
                         }
                         texCache[key] = hit = bmp;
                     }
 
+                    var footprint = Math.Max(maxWidth, maxHeight) / Math.Max(tile, 0.0001f);
+                    var levels = 0;
+                    for (var size = Math.Max(hit.Width, hit.Height); size / 2 >= footprint && size / 2 >= 1; size /= 2)
+                    {
+                        levels++;
+                    }
+
+                    if (levels > 0)
+                    {
+                        var mipKey = key + "|mip" + levels;
+                        if (!texCache.TryGetValue(mipKey, out var mip))
+                        {
+                            mip = hit;
+                            for (var i = 0; i < levels; i++)
+                            {
+                                var next = HalveBox(mip);
+                                if (!ReferenceEquals(mip, hit))
+                                {
+                                    mip.Dispose();
+                                }
+
+                                mip = next;
+                            }
+
+                            texCache[mipKey] = mip;
+                        }
+
+                        hit = mip;
+                    }
+
                     return (Bitmap)hit.Clone();
+                }
+
+                // One mip step: 2×2 box average (odd edges clamp). Works for colour,
+                // packed roughness/metalness, normals (RG average) and the microblend alpha.
+                static unsafe Bitmap HalveBox(Bitmap src)
+                {
+                    var sw = src.Width;
+                    var sh = src.Height;
+                    var dw = Math.Max(1, sw / 2);
+                    var dh = Math.Max(1, sh / 2);
+                    var dst = new Bitmap(dw, dh, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    var sd = src.LockBits(new Rectangle(0, 0, sw, sh), ImageLockMode.ReadOnly,
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    var dd = dst.LockBits(new Rectangle(0, 0, dw, dh), ImageLockMode.WriteOnly,
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    try
+                    {
+                        byte* sp = (byte*)sd.Scan0;
+                        byte* dp = (byte*)dd.Scan0;
+                        var ss = sd.Stride;
+                        var ds = dd.Stride;
+                        Parallel.For(0, dh, y =>
+                        {
+                            var y0 = Math.Min(y * 2, sh - 1);
+                            var y1 = Math.Min(y0 + 1, sh - 1);
+                            for (var x = 0; x < dw; x++)
+                            {
+                                var x0 = Math.Min(x * 2, sw - 1);
+                                var x1 = Math.Min(x0 + 1, sw - 1);
+                                byte* a = sp + (y0 * ss) + (x0 * 4);
+                                byte* b = sp + (y0 * ss) + (x1 * 4);
+                                byte* c = sp + (y1 * ss) + (x0 * 4);
+                                byte* d = sp + (y1 * ss) + (x1 * 4);
+                                byte* o = dp + (y * ds) + (x * 4);
+                                for (var ch = 0; ch < 4; ch++)
+                                {
+                                    o[ch] = (byte)((a[ch] + b[ch] + c[ch] + d[ch] + 2) >> 2);
+                                }
+                            }
+                        });
+                    }
+                    finally
+                    {
+                        src.UnlockBits(sd);
+                        dst.UnlockBits(dd);
+                    }
+
+                    return dst;
                 }
 
                 var layerIndex = 0;
@@ -3753,14 +4239,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         var useMbNormal = Math.Abs(mbNormalStr) > 0.001f;
                         if (useMbMask)
                         {
-                            microblendBmp = await GetTex(layer.Microblend.DepotPath, flipY: true);
+                            microblendBmp = await GetTex(layer.Microblend.DepotPath, flipY: true, tile: mbTile);
                         }
 
                         Bitmap? colorTexBmp = null;
                         var useColorTexture = mllt.ColorTexture.DepotPath != ResourcePath.Empty && opacity > 0;
                         if (useColorTexture)
                         {
-                            colorTexBmp = await GetTex(mllt.ColorTexture.DepotPath, flipY: true);
+                            colorTexBmp = await GetTex(mllt.ColorTexture.DepotPath, flipY: true, tile: effectiveMatTile);
                             if (colorTexBmp == null)
                             {
                                 useColorTexture = false;
@@ -3768,7 +4254,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
 
                         float cr = 1f, cg = 1f, cb = 1f;
-                        var colorOv = FindOverride(mllt.Overrides.ColorScale, layer.ColorScale, x => x.N);
+                        var colorOv = FindOverride(mllt.Overrides.ColorScale, layer.ColorScale, mllt.DefaultOverrides?.ColorScale, x => x.N);
                         var colorVec = colorOv?.V;
                         if (colorVec != null && colorVec.Count >= 3)
                         {
@@ -3782,13 +4268,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                         || (!useColorTexture && colorVec == null);
 
                         // Levels from template/overrides (multiply-add, identity by default)
-                        TryGetLevels(mllt.Overrides.RoughLevelsIn, layer.RoughLevelsIn, x => x.N, x => x.V,
+                        TryGetLevels(mllt.Overrides.RoughLevelsIn, layer.RoughLevelsIn, mllt.DefaultOverrides?.RoughLevelsIn, x => x.N, x => x.V,
                                      out float roughInScale, out float roughInOffset);
-                        TryGetLevels(mllt.Overrides.RoughLevelsOut, layer.RoughLevelsOut, x => x.N, x => x.V,
+                        TryGetLevels(mllt.Overrides.RoughLevelsOut, layer.RoughLevelsOut, mllt.DefaultOverrides?.RoughLevelsOut, x => x.N, x => x.V,
                                      out float roughOutScale, out float roughOutOffset);
-                        TryGetLevels(mllt.Overrides.MetalLevelsIn, layer.MetalLevelsIn, x => x.N, x => x.V,
+                        TryGetLevels(mllt.Overrides.MetalLevelsIn, layer.MetalLevelsIn, mllt.DefaultOverrides?.MetalLevelsIn, x => x.N, x => x.V,
                                      out float metalInScale, out float metalInOffset);
-                        TryGetLevels(mllt.Overrides.MetalLevelsOut, layer.MetalLevelsOut, x => x.N, x => x.V,
+                        TryGetLevels(mllt.Overrides.MetalLevelsOut, layer.MetalLevelsOut, mllt.DefaultOverrides?.MetalLevelsOut, x => x.N, x => x.V,
                                      out float metalOutScale, out float metalOutOffset);
 
 #if DEBUG
@@ -3809,7 +4295,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                         if (mllt.RoughnessTexture.DepotPath != ResourcePath.Empty)
                         {
-                            roughTexBmp = await GetTex(mllt.RoughnessTexture.DepotPath, flipY: true);
+                            roughTexBmp = await GetTex(mllt.RoughnessTexture.DepotPath, flipY: true, tile: effectiveMatTile);
                             if (roughTexBmp == null)
                             {
 #if DEBUG
@@ -3820,7 +4306,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                         if (mllt.MetalnessTexture.DepotPath != ResourcePath.Empty)
                         {
-                            metalTexBmp = await GetTex(mllt.MetalnessTexture.DepotPath, flipY: true);
+                            metalTexBmp = await GetTex(mllt.MetalnessTexture.DepotPath, flipY: true, tile: effectiveMatTile);
                             if (metalTexBmp == null)
                             {
 #if DEBUG
@@ -3829,12 +4315,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             }
                         }
 
-                        var nsOv = FindOverride(mllt.Overrides.NormalStrength, layer.NormalStrength, x => x.N);
+                        var nsOv = FindOverride(mllt.Overrides.NormalStrength, layer.NormalStrength, mllt.DefaultOverrides?.NormalStrength, x => x.N);
                         var normalStrengthVal = nsOv != null ? (float)nsOv.V : 1f;
 
                         if (mllt.NormalTexture.DepotPath != ResourcePath.Empty)
                         {
-                            normalTexBmp = await GetTex(mllt.NormalTexture.DepotPath, flipY: true);
+                            normalTexBmp = await GetTex(mllt.NormalTexture.DepotPath, flipY: true, tile: effectiveMatTile);
                         }
 
                         var destRect = new Rectangle(0, 0, maxWidth, maxHeight);
@@ -3930,12 +4416,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 var ntexW = normalTexBmp?.Width ?? 1;
                                 var ntexH = normalTexBmp?.Height ?? 1;
 
-                                var mbMaskSource = mbPtr != null
-                                    ? DetectMicroblendMaskSource(mbPtr, mbStride, mbW, mbH)
-                                    : MbMaskOne;
+                                var mbMaskSource = 0; // alpha (Blender addon)
                                 var applyMbMask = mbPtr != null && useMbMask;
-                                var nearestMb = useNearestMaps || mbTile >= 8f;
-                                var nearestMat = useNearestMaps || effectiveMatTile >= 8f;
 
                                 // Hoist path comparison and flags outside the pixel loop (performance)
                                 bool sameRmPath = false;
@@ -3968,7 +4450,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                         // Mask: native resolution, bilinear. Opacity applied AFTER mb mix.
                                         var mu = u - MathF.Floor(u);
                                         var mv = v - MathF.Floor(v);
-                                        var mask = SampleChannelR(maskPtr, maskStride, smW, smH, mu, mv);
+                                        // Layer 0 has no mask in the addon (Mask = 1) and is never blended
+                                        // over anything: it always covers 100 %.
+                                        var mask = isBaseLayer ? 1f : SampleChannelR(maskPtr, maskStride, smW, smH, mu, mv);
 
                                         {
                                             // Blender Mapping: UV * Scale + Location.
@@ -3981,8 +4465,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             mask = ApplyMicroblendContrast(mask, mbA, mbContrast);
                                         }
 
-                                        // Clamp factor like Blender Mix node (Clamp Factor)
-                                        var maskVal = Math.Clamp(mask * opacity, 0f, 1f);
+                                        // mask is now the remapped value (Map Range, clamped 0..1).
+                                        // Layer factor = remap × opacity; the base layer always 1.
+                                        var remap = mask;
+                                        var maskVal = isBaseLayer ? 1f : Math.Clamp(remap * opacity, 0f, 1f);
                                         if (maskVal < 0.001f)
                                         {
                                             continue;
@@ -3999,16 +4485,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             float srcB;
                                             if (colPtr != null)
                                             {
-                                                if (nearestMat)
-                                                {
-                                                    SampleBgraNearest(colPtr, colStride, colW, colH, su, sv,
-                                                        out srcR, out srcG, out srcB, out _);
-                                                }
-                                                else
-                                                {
-                                                    SampleBgra(colPtr, colStride, colW, colH, su, sv,
-                                                        out srcR, out srcG, out srcB, out _);
-                                                }
+                                                // Bilinear on the mip matching the tile footprint (see GetTex).
+                                                SampleBgra(colPtr, colStride, colW, colH, su, sv,
+                                                    out srcR, out srcG, out srcB, out _);
+
+                                                // colorTexture is sRGB (Blender converts it to linear)
+                                                srcR = SrgbToLinear(srcR);
+                                                srcG = SrgbToLinear(srcG);
+                                                srcB = SrgbToLinear(srcB);
                                             }
                                             else
                                             {
@@ -4045,9 +4529,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                                 roughValue = SampleChannelG(roughPtr, roughStride, roughW, roughH, su, sv);
                                             }
 
-                                            // Sequential levels + clamp (matches Blender Multiply Add + Clamp Result)
+                                            // Levels In then Out (Multiply Add), unclamped like the addon
                                             var roughAfterIn = ApplyLevels(roughValue, roughInScale, roughInOffset);
-                                            var roughness = Math.Clamp(ApplyLevels(roughAfterIn, roughOutScale, roughOutOffset), 0f, 1f);
+                                            var roughness = ApplyLevels(roughAfterIn, roughOutScale, roughOutOffset);
 
                                             // Metalness
                                             // - same path as roughness (foil / packed _r.xbm) → share sample
@@ -4067,120 +4551,43 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                                             // Always apply levels (even for solid placeholders and missing textures)
                                             var metalAfterIn = ApplyLevels(metalValue, metalInScale, metalInOffset);
-                                            var metallic = Math.Clamp(ApplyLevels(metalAfterIn, metalOutScale, metalOutOffset), 0f, 1f);
+                                            var metallic = ApplyLevels(metalAfterIn, metalOutScale, metalOutOffset);
 
-                                            var rOff = (y * rmStride) + (x * 4);
-                                            var existingMetal = rmPtr[rOff + 0] * Inv255;
-                                            var existingRough = rmPtr[rOff + 1] * Inv255;
-
-                                            // Clamp Result like Blender Mix node
-                                            var finalRough = Math.Clamp((existingRough * (1f - maskVal)) + (roughness * maskVal), 0f, 1f);
-                                            var finalMetal = Math.Clamp((existingMetal * (1f - maskVal)) + (metallic * maskVal), 0f, 1f);
-
-                                            var metalB = (byte)Math.Clamp((int)(finalMetal * 255f), 0, 255);
-                                            var roughB = (byte)Math.Clamp((int)(finalRough * 255f), 0, 255);
-
-                                            rmPtr[rOff + 0] = metalB; // B metal
-                                            rmPtr[rOff + 1] = roughB; // G rough
-                                            rmPtr[rOff + 2] = 0;      // R
-                                            rmPtr[rOff + 3] = 255;
+                                            // Mix by layer factor, result unclamped (clamped once on write)
+                                            var pi = (y * maxWidth) + x;
+                                            accRough[pi] += (roughness - accRough[pi]) * maskVal;
+                                            accMetal[pi] += (metallic - accMetal[pi]) * maskVal;
                                         }
 
-                                        // ---- template normal ----
-                                        if (ntexPtr != null)
+                                        // ---- normal: template + microblend (addon: Layer Blend + Multilayer Surface) ----
                                         {
-                                            if (maskVal >= 0.001f && ntexPtr != null)
+                                            // Template normal: (xy * 2 - 1) * NormalStrength
+                                            float layerX = 0f, layerY = 0f;
+                                            if (ntexPtr != null)
                                             {
-                                                float nR, nG, nB;
-                                                // Always bilinear for normals to avoid visible square artifacts
                                                 SampleBgra(ntexPtr, ntexStride, ntexW, ntexH, su, sv,
-                                                    out nR, out nG, out nB, out _);
-
-                                                nR = 0.5f + ((nR - 0.5f) * normalStrengthVal);
-                                                nG = 0.5f + ((nG - 0.5f) * normalStrengthVal);
-
-                                                var nOff = (y * nrmStride) + (x * 4);
-                                                var ocB = nrmPtr[nOff + 0] * Inv255;
-                                                var ocG = nrmPtr[nOff + 1] * Inv255;
-                                                var ocR = nrmPtr[nOff + 2] * Inv255;
-
-                                                var r = ((ocR - 0.5f) * (1f - maskVal)) + ((nR - 0.5f) * maskVal) + 0.5f;
-                                                var gch = ((ocG - 0.5f) * (1f - maskVal)) + ((nG - 0.5f) * maskVal) + 0.5f;
-                                                var bch = ((ocB - 0.5f) * (1f - maskVal)) + ((nB - 0.5f) * maskVal) + 0.5f;
-
-                                                if (nB < 0.01f)
-                                                {
-                                                    var nx = (r * 2f) - 1f;
-                                                    var ny = (gch * 2f) - 1f;
-                                                    var nz = (float)Math.Sqrt(Math.Max(0f, 1f - (nx * nx) - (ny * ny)));
-                                                    bch = (nz * 0.5f) + 0.5f;
-                                                }
-
-                                                nrmPtr[nOff + 0] = (byte)Math.Clamp((int)(bch * 255f), 0, 255);
-                                                nrmPtr[nOff + 1] = (byte)Math.Clamp((int)(gch * 255f), 0, 255);
-                                                nrmPtr[nOff + 2] = (byte)Math.Clamp((int)(r * 255f), 0, 255);
-                                                nrmPtr[nOff + 3] = 255;
+                                                    out var nR, out var nG, out _, out _);
+                                                layerX = ((nR * 2f) - 1f) * normalStrengthVal;
+                                                layerY = ((nG * 2f) - 1f) * normalStrengthVal;
                                             }
-                                        }
 
-                                        // Microblend normal is sampled with mbTile (not matTile) when strength != 0.
-
-                                        var applyMbNormalHere = Math.Abs(mbNormalStr) > 0.001f && mask < 0.999f;
-
-                                        if (applyMbNormalHere && mbPtr != null)
-                                        {
-                                            // Blender Mapping: UV * Scale + Location.
-                                            // Image V is top-down; Blender UV V is bottom-up.
-                                            FractOffsetTile(u, v, mbTile, mbOffU, mbOffV,
-                                                flipV: true,
-                                                out var mbu, out var mbv);
-                                            float nR, nG, nB;
-                                            if (nearestMb)
+                                            // Microblend: (xy * 2 - 1) * MicroblendNormalStrength, only where the
+                                            // remapped mask is below 1 (addon: "Microblend Below Full Mask").
+                                            if (mbPtr != null && Math.Abs(mbNormalStr) > 1e-6f && remap < 1f)
                                             {
-                                                SampleBgraNearest(mbPtr, mbStride, mbW, mbH, mbu, mbv,
-                                                    out nR, out nG, out nB, out _);
-                                            }
-                                            else
-                                            {
+                                                FractOffsetTile(u, v, mbTile, mbOffU, mbOffV,
+                                                    flipV: true,
+                                                    out var mbu, out var mbv);
                                                 SampleBgra(mbPtr, mbStride, mbW, mbH, mbu, mbv,
-                                                    out nR, out nG, out nB, out _);
+                                                    out var mR, out var mG, out _, out _);
+
+                                                layerX += ((mR * 2f) - 1f) * mbNormalStr;
+                                                layerY += ((mG * 2f) - 1f) * mbNormalStr;
                                             }
 
-                                            if (mbNormalStr < 0f)
-                                            {
-                                                // Negative strength inverts the microblend normal (matches Blender)
-                                                nR = 1f - nR;
-                                                nG = 1f - nG;
-                                            }
-
-                                            // Factor = mask * strength, clamped like Blender Mix (Clamp Factor)
-                                            // Removed the arbitrary *0.5 so strength matches Blender more closely
-                                            var alpha = Math.Clamp(maskVal * Math.Abs(mbNormalStr), 0f, 1f);
-                                            if (alpha >= 0.001f)
-                                            {
-                                                var nOff = (y * nrmStride) + (x * 4);
-                                                var ocB = nrmPtr[nOff + 0] * Inv255;
-                                                var ocG = nrmPtr[nOff + 1] * Inv255;
-                                                var ocR = nrmPtr[nOff + 2] * Inv255;
-
-                                                // Mix (lerp) in tangent space, then re-normalize Z
-                                                var r = ((ocR - 0.5f) * (1f - alpha)) + ((nR - 0.5f) * alpha) + 0.5f;
-                                                var gch = ((ocG - 0.5f) * (1f - alpha)) + ((nG - 0.5f) * alpha) + 0.5f;
-                                                var bch = ((ocB - 0.5f) * (1f - alpha)) + ((nB - 0.5f) * alpha) + 0.5f;
-
-                                                if (nB < 0.01f)
-                                                {
-                                                    var nx = (r * 2f) - 1f;
-                                                    var ny = (gch * 2f) - 1f;
-                                                    var nz = (float)Math.Sqrt(Math.Max(0f, 1f - (nx * nx) - (ny * ny)));
-                                                    bch = (nz * 0.5f) + 0.5f;
-                                                }
-
-                                                nrmPtr[nOff + 0] = (byte)Math.Clamp((int)(bch * 255f), 0, 255);
-                                                nrmPtr[nOff + 1] = (byte)Math.Clamp((int)(gch * 255f), 0, 255);
-                                                nrmPtr[nOff + 2] = (byte)Math.Clamp((int)(r * 255f), 0, 255);
-                                                nrmPtr[nOff + 3] = 255;
-                                            }
+                                            var pn = (y * maxWidth) + x;
+                                            accNormalX[pn] += (layerX - accNormalX[pn]) * maskVal;
+                                            accNormalY[pn] += (layerY - accNormalY[pn]) * maskVal;
                                         }
                                     }
                                 });
@@ -4247,7 +4654,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
 
-                // GlobalNormal
+                // GlobalNormal, as in the addon ("CP77 Multilayer Global Normal Decode"):
+                //   UV' = UV * GlobalNormalUVScale + GlobalNormalUVBias (Blender UV, V up), repeat;
+                //   x, y = rg * 2 - 1, z = sqrt(max(0, 1 - x² - y²));
+                //   n = normalize(x * I, y * I, (z - 1) * I + 1), I = GlobalNormalIntensity;
+                //   n.xy is added to the layer normal before Z is rebuilt.
                 if (dictionary.TryGetValue("GlobalNormal", out var gNormObj) &&
                     gNormObj is CResourceReference<ITexture> gNormRef &&
                     gNormRef.DepotPath != ResourcePath.Empty)
@@ -4255,75 +4666,97 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     Bitmap? gBmp = null;
                     try
                     {
-                        var loaded = await LoadTextureAsBitmap(gNormRef.DepotPath);
-                        if (loaded != null)
-                        {
-                            gBmp = (Bitmap)loaded.Clone();
-                            loaded.Dispose();
-                        }
-
+                        gBmp = await LoadTextureAsBitmap(gNormRef.DepotPath);
                         if (gBmp != null)
                         {
-                            var nRect = new Rectangle(0, 0, normalBitmap.Width, normalBitmap.Height);
                             var gRect = new Rectangle(0, 0, gBmp.Width, gBmp.Height);
-                            var nData = normalBitmap.LockBits(nRect, ImageLockMode.ReadWrite,
-                                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             var gData = gBmp.LockBits(gRect, ImageLockMode.ReadOnly,
                                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
                             try
                             {
                                 unsafe
                                 {
-                                    byte* nPtr = (byte*)nData.Scan0;
                                     byte* gPtr = (byte*)gData.Scan0;
-                                    var nStride = nData.Stride;
                                     var gStride = gData.Stride;
                                     var gw = gBmp.Width;
                                     var gh = gBmp.Height;
-                                    var nw = normalBitmap.Width;
-                                    var nh = normalBitmap.Height;
-                                    const float inv = 1f / 255f;
-                                    const float strength = 1f;
 
-                                    for (var y = 0; y < nh; y++)
+                                    var gIntensity = 1f;
+                                    if (dictionary.TryGetValue("GlobalNormalIntensity", out var gInt) && gInt != null)
                                     {
-                                        var v = (y + 0.5f) / nh;
-                                        var gy = (int)MathF.Floor(v * gh);
-                                        if (gy < 0)
-                                            gy = 0;
-                                        else if (gy >= gh)
-                                            gy = gh - 1;
-
-                                        for (var x = 0; x < nw; x++)
-                                        {
-                                            var u = (x + 0.5f) / nw;
-                                            var gx = (int)MathF.Floor(u * gw);
-                                            if (gx < 0)
-                                                gx = 0;
-                                            else if (gx >= gw)
-                                                gx = gw - 1;
-
-                                            var go = (gy * gStride) + (gx * 4);
-                                            var no = (y * nStride) + (x * 4);
-
-                                            var nr = nPtr[no + 2] * inv;
-                                            var ng = nPtr[no + 1] * inv;
-                                            var gr = gPtr[go + 2] * inv;
-                                            var gg = gPtr[go + 1] * inv;
-
-                                            var or = Math.Clamp(nr + ((gr - 0.5f) * strength), 0f, 1f);
-                                            var og = Math.Clamp(ng + ((gg - 0.5f) * strength), 0f, 1f);
-
-                                            nPtr[no + 2] = (byte)(or * 255f);
-                                            nPtr[no + 1] = (byte)(og * 255f);
-                                        }
+                                        gIntensity = ReadFloat(gInt);
                                     }
+
+                                    float gScaleU = 1f, gScaleV = 1f, gBiasU = 0f, gBiasV = 0f;
+                                    if (dictionary.TryGetValue("GlobalNormalUVScale", out var gSc) && gSc is Vector4 gScV)
+                                    {
+                                        gScaleU = (float)gScV.X;
+                                        gScaleV = (float)gScV.Y;
+                                    }
+
+                                    if (dictionary.TryGetValue("GlobalNormalUVBias", out var gBi) && gBi is Vector4 gBiV)
+                                    {
+                                        gBiasU = (float)gBiV.X;
+                                        gBiasV = (float)gBiV.Y;
+                                    }
+
+                                    // Bilinear with repeat (Blender Image Texture default).
+                                    // Nearest sampling made every texel of a lower-res GlobalNormal
+                                    // a visible square in the bake.
+                                    Parallel.For(0, maxHeight, y =>
+                                    {
+                                        // Image rows go down, Blender V goes up: transform in Blender space.
+                                        var vBl = 1f - ((y + 0.5f) / maxHeight);
+                                        var vImg = 1f - ((vBl * gScaleV) + gBiasV);
+                                        vImg -= MathF.Floor(vImg);
+                                        var py = (vImg * gh) - 0.5f;
+                                        var fy = MathF.Floor(py);
+                                        var ty = py - fy;
+                                        var y0 = WrapIndex((int)fy, gh);
+                                        var y1 = WrapIndex(y0 + 1, gh);
+                                        byte* row0 = gPtr + (y0 * gStride);
+                                        byte* row1 = gPtr + (y1 * gStride);
+
+                                        for (var x = 0; x < maxWidth; x++)
+                                        {
+                                            var uImg = (((x + 0.5f) / maxWidth) * gScaleU) + gBiasU;
+                                            uImg -= MathF.Floor(uImg);
+                                            var px = (uImg * gw) - 0.5f;
+                                            var fx = MathF.Floor(px);
+                                            var tx = px - fx;
+                                            var x0i = WrapIndex((int)fx, gw);
+                                            var x0 = x0i * 4;
+                                            var x1 = WrapIndex(x0i + 1, gw) * 4;
+
+                                            var r = ((row0[x0 + 2] * (1f - tx)) + (row0[x1 + 2] * tx)) * (1f - ty)
+                                                  + ((row1[x0 + 2] * (1f - tx)) + (row1[x1 + 2] * tx)) * ty;
+                                            var g = ((row0[x0 + 1] * (1f - tx)) + (row0[x1 + 1] * tx)) * (1f - ty)
+                                                  + ((row1[x0 + 1] * (1f - tx)) + (row1[x1 + 1] * tx)) * ty;
+
+                                            var gx = (r * Inv255 * 2f) - 1f;
+                                            var gy = (g * Inv255 * 2f) - 1f;
+                                            var gz = MathF.Sqrt(MathF.Max(0f, 1f - (gx * gx) - (gy * gy)));
+
+                                            // Intensity: scale XY, lerp Z towards flat, renormalize.
+                                            var nx = gx * gIntensity;
+                                            var ny = gy * gIntensity;
+                                            var nz = ((gz - 1f) * gIntensity) + 1f;
+                                            var len = MathF.Sqrt((nx * nx) + (ny * ny) + (nz * nz));
+                                            if (len > 1e-6f)
+                                            {
+                                                nx /= len;
+                                                ny /= len;
+                                            }
+
+                                            var pi = (y * maxWidth) + x;
+                                            accNormalX[pi] += nx;
+                                            accNormalY[pi] += ny;
+                                        }
+                                    });
                                 }
                             }
                             finally
                             {
-                                normalBitmap.UnlockBits(nData);
                                 gBmp.UnlockBits(gData);
                             }
                         }
@@ -4335,6 +4768,54 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     finally
                     {
                         gBmp?.Dispose();
+                    }
+                }
+
+                // Write roughness/metalness and normal from the accumulators.
+                {
+                    var accWriteRect = new Rectangle(0, 0, maxWidth, maxHeight);
+                    var rmOut = rmBitmap.LockBits(accWriteRect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    var nOut = normalBitmap.LockBits(accWriteRect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    try
+                    {
+                        unsafe
+                        {
+                            byte* rmP = (byte*)rmOut.Scan0;
+                            byte* nP = (byte*)nOut.Scan0;
+                            var rmS = rmOut.Stride;
+                            var nS = nOut.Stride;
+                            for (var y = 0; y < maxHeight; y++)
+                            {
+                                for (var x = 0; x < maxWidth; x++)
+                                {
+                                    var pi = (y * maxWidth) + x;
+
+                                    var ro = (y * rmS) + (x * 4);
+                                    rmP[ro + 0] = (byte)Math.Clamp((int)MathF.Round(Math.Clamp(accMetal[pi], 0f, 1f) * 255f), 0, 255); // B metal
+                                    rmP[ro + 1] = (byte)Math.Clamp((int)MathF.Round(Math.Clamp(accRough[pi], 0f, 1f) * 255f), 0, 255); // G rough
+                                    rmP[ro + 2] = 0;
+                                    rmP[ro + 3] = 255;
+
+                                    // Calculate Vectorized Normal Z: z = sqrt(max(0, 1 - x² - y²)),
+                                    // Y flipped (DirectX → Blender/OpenGL), like the other bakes here.
+                                    var nx = accNormalX[pi];
+                                    var ny = accNormalY[pi];
+                                    var nz = MathF.Sqrt(MathF.Max(0f, 1f - (nx * nx) - (ny * ny)));
+                                    ny = -ny;
+
+                                    var no = (y * nS) + (x * 4);
+                                    nP[no + 2] = (byte)Math.Clamp((int)MathF.Round(((nx * 0.5f) + 0.5f) * 255f), 0, 255);
+                                    nP[no + 1] = (byte)Math.Clamp((int)MathF.Round(((ny * 0.5f) + 0.5f) * 255f), 0, 255);
+                                    nP[no + 0] = (byte)Math.Clamp((int)MathF.Round(((nz * 0.5f) + 0.5f) * 255f), 0, 255);
+                                    nP[no + 3] = 255;
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        rmBitmap.UnlockBits(rmOut);
+                        normalBitmap.UnlockBits(nOut);
                     }
                 }
 
@@ -4391,13 +4872,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             #region Skin Shader / Hair / Makeup
 
-            string? basePathForClass = null;
-            if (material?.Instance is CMaterialInstance classInst &&
-                classInst.BaseMaterial.DepotPath != ResourcePath.Empty)
-            {
-                basePathForClass = classInst.BaseMaterial.DepotPath.GetResolvedText();
-            }
-            var kind = ClassifyMaterial(material?.Name, basePathForClass);
+            var kind = ClassifyMaterialFor(material?.Name, material);
 
             // === SKIN SHADER ===
             bool isSkin = Has(kind, MaterialKind.Skin);
@@ -4995,18 +5470,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     }
                 }
 
-                var basePath = ((material.Instance as CMaterialInstance)?.BaseMaterial.DepotPath.GetResolvedText() ?? "").ToLowerInvariant();
-                var name = material.Name.ToLowerInvariant();
+                var eyePart = GetEyePart(material, material.Name);
 
                 // Path takes priority over name (pasted_eyeMat2 can be lashes).
-                bool isRealLashes = basePath.Contains("eyelash") || basePath.Contains("\\eyes\\eyelashes");
-                bool isEyeShadow = !isRealLashes && (basePath.Contains("eyeshadow") || basePath.Contains("eye_wet") ||
-                                                     name.Contains("wetness"));
-                bool isEyeball = !isRealLashes && !isEyeShadow &&
-                                 (basePath.Contains("eye_gradient") || basePath.Contains("eye_base") ||
-                                  basePath.Contains("eyeball") || basePath.Contains("eye.mt") ||
-                                  name.Contains("eyeball") || name.Contains("eye_mat") ||
-                                  name.Contains("eyemat"));
+                bool isRealLashes = eyePart == EyePart.Lashes;
+                bool isEyeShadow = eyePart is EyePart.Shadow or EyePart.Wet;
+                bool isEyeball = eyePart == EyePart.Eyeball;
 
                 if (isRealLashes || isEyeShadow || isEyeball)
                 {
@@ -5308,25 +5777,37 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         {
                             if (tcObj is CColor cc)
                             {
-                                tr = cc.Red / 255f; tg = cc.Green / 255f; tb = cc.Blue / 255f;
+                                tr = cc.Red / 255f;
+                                tg = cc.Green / 255f;
+                                tb = cc.Blue / 255f;
                             }
                             else if (tcObj is Vector4 tv)
                             {
-                                tr = tv.X; tg = tv.Y; tb = tv.Z;
+                                tr = tv.X;
+                                tg = tv.Y;
+                                tb = tv.Z;
                             }
                             else if (tcObj is System.Numerics.Vector4 ntv)
                             {
-                                tr = ntv.X; tg = ntv.Y; tb = ntv.Z;
+                                tr = ntv.X;
+                                tg = ntv.Y;
+                                tb = ntv.Z;
                             }
                         }
 
                         float uvTX = 1f, uvTY = 1f, uvOX = 0f, uvOY = 0f;
-                        if (dictionary.TryGetValue("UvTilingX", out var uvtx)) uvTX = ReadFloat(uvtx);
-                        if (dictionary.TryGetValue("UvTilingY", out var uvty)) uvTY = ReadFloat(uvty);
-                        if (dictionary.TryGetValue("UvOffsetX", out var uvox)) uvOX = ReadFloat(uvox);
-                        if (dictionary.TryGetValue("UvOffsetY", out var uvoy)) uvOY = ReadFloat(uvoy);
-                        if (uvTX == 0) uvTX = 1f;
-                        if (uvTY == 0) uvTY = 1f;
+                        if (dictionary.TryGetValue("UvTilingX", out var uvtx))
+                            uvTX = ReadFloat(uvtx);
+                        if (dictionary.TryGetValue("UvTilingY", out var uvty))
+                            uvTY = ReadFloat(uvty);
+                        if (dictionary.TryGetValue("UvOffsetX", out var uvox))
+                            uvOX = ReadFloat(uvox);
+                        if (dictionary.TryGetValue("UvOffsetY", out var uvoy))
+                            uvOY = ReadFloat(uvoy);
+                        if (uvTX == 0)
+                            uvTX = 1f;
+                        if (uvTY == 0)
+                            uvTY = 1f;
 
                         if (dictionary.TryGetValue("GlassTint", out var gtObj) &&
                             gtObj is CResourceReference<ITexture> gtRef &&
@@ -5364,6 +5845,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 maskBmp = maskTiled;
                             }
                         }
+
+                        // Template convention is MaskTexture.a; single-channel masks carry it in R.
+                        var glassMaskChannel = maskBmp != null ? PickCoverageChannel(maskBmp, ChannelA) : ChannelA;
 
                         int w = maskBmp?.Width ?? tintBmp?.Width ?? 1024;
                         int h = maskBmp?.Height ?? tintBmp?.Height ?? 1024;
@@ -5414,7 +5898,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             int mx = x * mw / w;
                                             int my = y * mh / h;
                                             byte* mpx = mp + my * mStride + mx * 4;
-                                            float f = (mpx[3] / 255f) * maskOp;
+                                            float f = (mpx[glassMaskChannel] / 255f) * maskOp;
                                             gb = (byte)(gb * (1f - f) + mpx[0] * f);
                                             gg = (byte)(gg * (1f - f) + mpx[1] * f);
                                             gr = (byte)(gr * (1f - f) + mpx[2] * f);
@@ -5431,9 +5915,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                         finally
                         {
-                            if (dst != null) colorBmp.UnlockBits(dst);
-                            if (td != null && tintBmp != null) tintBmp.UnlockBits(td);
-                            if (md != null && maskBmp != null) maskBmp.UnlockBits(md);
+                            if (dst != null)
+                                colorBmp.UnlockBits(dst);
+                            if (td != null && tintBmp != null)
+                                tintBmp.UnlockBits(td);
+                            if (md != null && maskBmp != null)
+                                maskBmp.UnlockBits(md);
                         }
 
                         SavePngAtomic(colorBmp, gBd);
@@ -5796,17 +6283,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         Parent?.GetLoggerService()?.Debug($"[Hair] Cap material '{material?.Name}' has no MaskTexture / Strand_Alpha");
                     }
 
-                    // === Apply gradients (not for cap) ===
-                    // Matches hair.py: R-channel factor → Color Ramp, then Overlay = Multiply×2 / invert path
-                    if (!isCapMat)
-                    {
-                        if (idBmp != null && idEntries.Count > 0)
-                            ApplyColorRamp(idBmp, idEntries, gamma: 1f);
-                        if (gradBmp != null && rootToTipEntries.Count > 0)
-                            ApplyColorRamp(gradBmp, rootToTipEntries, gamma: 1f);
-                    }
-
-                    // === Create colorBmp ===
+                    // === Haircard colour (not for cap) ===
+                    // hair.py: Strand_ID.r → profile ID ramp, Strand_Gradient.r → Root-to-Tip ramp,
+                    // Overlay (Multiply×2 / inverted path chosen by Root-to-Tip luminance),
+                    // then Hair Global Albedo ×0.6. Blender does all of this in linear colour
+                    // (ramp colours are converted from sRGB), so the bake does too and encodes
+                    // to sRGB once at the end. Doing it on sRGB bytes flattened the contrast.
                     Bitmap? colorBmp = null;
                     if (idBmp != null && gradBmp != null && !isCapMat)
                     {
@@ -5818,39 +6300,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             gradBmp.Dispose();
                             gradBmp = resized;
                         }
-                        // Overlay (matches Blender hair.py: Multiply then ×2, not Mix Overlay mode)
-                        OverlayBitmaps(idBmp, gradBmp);
+
+                        BakeHairCardColor(idBmp, gradBmp, idEntries, rootToTipEntries);
                         colorBmp = idBmp;
                         gradBmp.Dispose();
-
-                        // Bake Hair Global Albedo ×0.6 into the texture (addon multiplies in the graph).
-                        // Doing it here so brightness does not depend on whether AlbedoColor multiplies the map.
-                        {
-                            var albedoRect = new Rectangle(0, 0, colorBmp.Width, colorBmp.Height);
-                            var albedoData = colorBmp.LockBits(albedoRect, ImageLockMode.ReadWrite,
-                                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                            try
-                            {
-                                unsafe
-                                {
-                                    byte* p = (byte*)albedoData.Scan0;
-                                    int st = albedoData.Stride;
-                                    const float k = 0.6f;
-                                    for (int yy = 0; yy < colorBmp.Height; yy++)
-                                        for (int xx = 0; xx < colorBmp.Width; xx++)
-                                        {
-                                            int o = yy * st + xx * 4;
-                                            p[o + 0] = (byte)(p[o + 0] * k);
-                                            p[o + 1] = (byte)(p[o + 1] * k);
-                                            p[o + 2] = (byte)(p[o + 2] * k);
-                                        }
-                                }
-                            }
-                            finally { colorBmp.UnlockBits(albedoData); }
-                        }
                     }
                     else
                     {
+                        if (!isCapMat)
+                        {
+                            if (idBmp != null && idEntries.Count > 0)
+                                ApplyColorRamp(idBmp, idEntries);
+                            if (gradBmp != null && rootToTipEntries.Count > 0)
+                                ApplyColorRamp(gradBmp, rootToTipEntries);
+                        }
                         colorBmp = idBmp ?? gradBmp;
                     }
 
@@ -5945,6 +6408,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                         var rect = new Rectangle(0, 0, colorBmp.Width, colorBmp.Height);
                         var data = colorBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        // Cap: MaskTexture.r by convention. Cards: Strand_Alpha may be single-channel
+                        // (BC4, value in R) or a real alpha channel. Decided once per texture: the
+                        // old per-pixel check switched to R inside fully opaque (A=255) areas.
+                        var hairAlphaChannel = alphaBmp == null
+                            ? ChannelA
+                            : PickCoverageChannel(alphaBmp, isCapMat ? ChannelR : ChannelA);
                         BitmapData? alphaData = alphaBmp?.LockBits(rect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         try
                         {
@@ -5969,20 +6438,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                         byte a;
                                         if (aPtr != null)
                                         {
-                                            if (isCapMat)
-                                            {
-                                                // Hair caps: MaskTexture.r is the coverage (matches Blender addon)
-                                                a = aPtr[off + 2]; // R channel (BGRA)
-                                            }
-                                            else
-                                            {
-                                                // Haircards: Strand_Alpha.r (matches addon). Fall back to A or average if needed.
-                                                byte alphaCh = aPtr[off + 3];
-                                                if (alphaCh > 0 && alphaCh < 255)
-                                                    a = alphaCh;
-                                                else
-                                                    a = aPtr[off + 2]; // R channel
-                                            }
+                                            a = aPtr[off + hairAlphaChannel];
                                         }
                                         else
                                         {
@@ -6347,6 +6803,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             // Mesh decals (stitches, zipper, etc.): coverage is often in MaskTexture.r.
                             // Multiply it into PNG alpha so IsTransparent doesn't punch holes.
                             await ApplyMaskCoverageToAlpha(bmp, dictionary);
+                            DilateColorIntoTransparent(bmp);
 
                             SavePngAtomic(bmp, filename_bd);
                             bmp.Dispose();
@@ -6464,6 +6921,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 }
                             }
                             finally { bmp.UnlockBits(data); }
+
+                            // Give the cut-away pixels the colour of the nearest visible ones,
+                            // so texture filtering at the edge does not pull in a dark/light fringe.
+                            DilateColorIntoTransparent(bmp);
                         }
 
                         SavePngAtomic(bmp, filename_bd);
@@ -6517,14 +6978,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             // Extract normals for decals and metal_base; multilayer bake handles the rest
-            string? basePathNorm = null;
-            if (material?.Instance is CMaterialInstance normInst &&
-                normInst.BaseMaterial.DepotPath != ResourcePath.Empty)
-            {
-                basePathNorm = normInst.BaseMaterial.DepotPath.GetResolvedText();
-            }
-            var matKind = ClassifyMaterial(material?.Name, basePathNorm);
-            bool isMetalBaseMat = material?.Name?.Contains("chain", StringComparison.OrdinalIgnoreCase) == true ||
+            var matKind = ClassifyMaterialFor(material?.Name, material);
+            bool isMetalBaseMat = GetTemplateFileName(material).StartsWith("metal_base", StringComparison.Ordinal) ||
+                                  material?.Name?.Contains("chain", StringComparison.OrdinalIgnoreCase) == true ||
                                   material?.Name?.Contains("metal_base", StringComparison.OrdinalIgnoreCase) == true;
             if (!Has(matKind, MaterialKind.Decal) && !isMetalBaseMat)
             {
@@ -6868,10 +7324,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         return Math.Clamp(mixed / safeC, 0f, 1f);
     }
 
-    static bool IsNullOverrideKey(CName n) =>
-    n == CName.Empty || n == "null" || n == "None" || n == "null_null";
-
-    static T? FindOverride<T>(IList<T>? list, CName key, Func<T, CName> nameOf) where T : class
+    /// <summary>
+    /// Override entry for a layer: the entry named by the layer; if the template has no
+    /// entry of that name, the entry named by the template's defaultOverrides (the variant
+    /// the template itself uses by default); otherwise none (caller uses white / 1 / identity).
+    /// Names are matched exactly ("null", "None" and "null_null" are different names).
+    /// The Blender addon stops at the first step; the defaultOverrides step follows the
+    /// template's own default selection.
+    /// </summary>
+    static T? FindOverride<T>(IList<T>? list, CName key, CName? defaultKey, Func<T, CName> nameOf) where T : class
     {
         if (list == null)
         {
@@ -6886,16 +7347,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
         }
 
-        if (!IsNullOverrideKey(key))
+        if (defaultKey is { } fallback && fallback != CName.Empty && fallback != key)
         {
-            return null;
-        }
-
-        foreach (var item in list)
-        {
-            if (item != null && IsNullOverrideKey(nameOf(item)))
+            foreach (var item in list)
             {
-                return item;
+                if (item != null && nameOf(item) == fallback)
+                {
+                    return item;
+                }
             }
         }
 
@@ -6908,19 +7367,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// Returns identity (1, 0) when nothing is found.
     /// Works with CArrayFixedSize<CFloat> (or any type with Count + indexer castable to float).
     /// </summary>
-    static void TryGetLevels<T>(IList<T>? list, CName key, Func<T, CName> nameOf, Func<T, object?> getVec,
+    static void TryGetLevels<T>(IList<T>? list, CName key, CName? defaultKey, Func<T, CName> nameOf, Func<T, object?> getVec,
                                  out float scale, out float offset) where T : class
     {
         scale = 1f;
         offset = 0f;
 
-        var ov = FindOverride(list, key, nameOf);
-        if (ov == null && list != null && list.Count > 0)
-        {
-            // Fallback to first null-like entry or first entry
-            ov = list.FirstOrDefault(x => x != null && IsNullOverrideKey(nameOf(x))) ?? list[0];
-        }
-
+        // Layer's entry, then the template's default entry, otherwise identity (1, 0).
+        var ov = FindOverride(list, key, defaultKey, nameOf);
         if (ov == null)
             return;
 
@@ -7062,6 +7516,97 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     /// <summary>
+    /// Edge padding: fills the RGB of fully transparent pixels with the average colour of
+    /// their visible neighbours, growing outward a few pixels per pass. Alpha is untouched.
+    /// Bilinear filtering and mipmaps then blend the edge with the object's own colour
+    /// instead of whatever the transparent area held (usually black), which showed as a
+    /// fringe or "trail" around cut-out shapes.
+    /// </summary>
+    private static void DilateColorIntoTransparent(Bitmap bmp, int passes = 8)
+    {
+        int w = bmp.Width, h = bmp.Height;
+        if (w < 2 || h < 2)
+            return;
+
+        var rect = new Rectangle(0, 0, w, h);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            var stride = data.Stride;
+            var pixels = new byte[stride * h];
+            Marshal.Copy(data.Scan0, pixels, 0, pixels.Length);
+
+            // filled[i]: pixel has a usable colour (visible, or filled in an earlier pass)
+            var filled = new bool[w * h];
+            var any = false;
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                {
+                    var visible = pixels[y * stride + x * 4 + 3] > 0;
+                    filled[y * w + x] = visible;
+                    any |= !visible;
+                }
+
+            if (!any)
+                return;
+
+            var next = new List<(int Index, byte B, byte G, byte R)>();
+            for (var pass = 0; pass < passes; pass++)
+            {
+                next.Clear();
+                for (int y = 0; y < h; y++)
+                {
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (filled[y * w + x])
+                            continue;
+
+                        int sb = 0, sg = 0, sr = 0, n = 0;
+                        for (int dy = -1; dy <= 1; dy++)
+                        {
+                            var ny = y + dy;
+                            if (ny < 0 || ny >= h)
+                                continue;
+                            for (int dx = -1; dx <= 1; dx++)
+                            {
+                                var nx = x + dx;
+                                if (nx < 0 || nx >= w || !filled[ny * w + nx])
+                                    continue;
+                                var o = ny * stride + nx * 4;
+                                sb += pixels[o];
+                                sg += pixels[o + 1];
+                                sr += pixels[o + 2];
+                                n++;
+                            }
+                        }
+
+                        if (n > 0)
+                            next.Add((y * w + x, (byte)(sb / n), (byte)(sg / n), (byte)(sr / n)));
+                    }
+                }
+
+                if (next.Count == 0)
+                    break;
+
+                foreach (var (index, b, g, r) in next)
+                {
+                    var o = (index / w) * stride + (index % w) * 4;
+                    pixels[o] = b;
+                    pixels[o + 1] = g;
+                    pixels[o + 2] = r;
+                    filled[index] = true;
+                }
+            }
+
+            Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+    }
+
+    /// <summary>
     /// Bake Blender Mapping (Point): out = uv * scale + location, with wrap.
     /// Used by glass UvTiling/UvOffset and *TileAndOffset vectors.
     /// </summary>
@@ -7094,7 +7639,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     float tvb = vb * tileY + offY;
                     tvb -= MathF.Floor(tvb);
                     int sy = (int)((1f - tvb) * h) % h;
-                    if (sy < 0) sy += h;
+                    if (sy < 0)
+                        sy += h;
                     byte* drow = dp + y * dStride;
                     byte* srow = sp + sy * sStride;
                     for (int x = 0; x < w; x++)
@@ -7103,7 +7649,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         float tu = u * tileX + offX;
                         tu -= MathF.Floor(tu);
                         int sx = (int)(tu * w) % w;
-                        if (sx < 0) sx += w;
+                        if (sx < 0)
+                            sx += w;
                         int so = sx * 4;
                         int dof = x * 4;
                         drow[dof + 0] = srow[so + 0];
@@ -7226,12 +7773,225 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+    // Built once per mesh path, then shared by every node / instance that uses the mesh.
+    // Clones share Geometry and Material; only the scene-graph node is per instance.
+    private readonly Dictionary<string, List<SubmeshComponent>> _sectorMeshTemplates = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, List<Material>> _sectorMaterialCache = new(StringComparer.OrdinalIgnoreCase);
+
+    private List<Material> GetSectorMaterials(CMesh mesh, CName appearance, string meshPath)
+    {
+        var key = meshPath + "|" + appearance;
+        if (!_sectorMaterialCache.TryGetValue(key, out var list))
+        {
+            list = GetMaterialsForAppearance(mesh, appearance, meshPath);
+            _sectorMaterialCache[key] = list;
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// MakeMesh with reuse: the geometry for a given mesh / chunk mask / appearance is
+    /// built once, then every placement gets its own scene node sharing Geometry and Material.
+    /// Used for sector nodes, their instances, and entity components (sectors place the
+    /// same .ent and .mesh many times).
+    /// </summary>
+    private List<SubmeshComponent> MakeMeshShared(CMesh mesh, ulong chunkMask, int appearanceIndex, string meshPath)
+    {
+        if (string.IsNullOrEmpty(meshPath))
+        {
+            // No stable key: build without sharing.
+            return MakeMesh(mesh, chunkMask, appearanceIndex, meshPath);
+        }
+
+        var key = $"{meshPath}|{chunkMask}|{appearanceIndex}";
+        if (!_sectorMeshTemplates.TryGetValue(key, out var template))
+        {
+            template = MakeMesh(mesh, chunkMask, appearanceIndex, meshPath);
+            _sectorMeshTemplates[key] = template;
+        }
+
+        var result = new List<SubmeshComponent>(template.Count);
+        foreach (var t in template)
+        {
+            result.Add(new SubmeshComponent()
+            {
+                Name = t.Name,
+                Text = t.Text,
+                LOD = t.LOD,
+                IsRendering = t.IsRendering,
+                EnabledWithMask = t.EnabledWithMask,
+                Geometry = t.Geometry,
+                Material = t.Material,
+                MaterialName = t.MaterialName,
+                DepthBias = t.DepthBias,
+                IsTransparent = t.IsTransparent,
+                CullMode = t.CullMode,
+                FrontCounterClockwise = t.FrontCounterClockwise,
+            });
+        }
+
+        return result;
+    }
+
+    #region sector prefetch
+
+    /// <summary>
+    /// Walks the sector's references in waves (meshes and entities, then their materials,
+    /// appearances and component meshes, then parts) and loads each wave in parallel
+    /// into _fileCache. The render pass then finds everything already loaded.
+    /// Only used when an archive manager is available (its reads are independent);
+    /// a file that fails here is simply loaded again by the normal sequential path.
+    /// </summary>
+    private void PrefetchSectorFiles(worldStreamingSector data)
+    {
+        var am = ResolveArchiveManager();
+        if (am == null)
+            return;
+
+        var wave = new HashSet<ResourcePath>();
+        foreach (var handle in data.Nodes)
+        {
+            switch (handle?.Chunk)
+            {
+                case IRedMeshNode irmn:
+                    wave.Add(irmn.Mesh.DepotPath);
+                    break;
+                case worldEntityNode wen:
+                    wave.Add(wen.EntityTemplate.DepotPath);
+                    break;
+            }
+        }
+
+        var wantedApps = new Dictionary<ResourcePath, HashSet<string>>();
+        for (var depth = 0; depth < 6 && wave.Count > 0; depth++)
+        {
+            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
+            PrefetchFiles(am, wave);
+
+            var next = new HashSet<ResourcePath>();
+            foreach (var path in wave)
+            {
+                if (_fileCache.TryGetValue(path, out var file) && file?.RootChunk is { } root)
+                    CollectPrefetchRefs(root, path, next, wantedApps);
+            }
+
+            next.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
+            wave = next;
+        }
+    }
+
+    private void PrefetchFiles(IArchiveManager am, ICollection<ResourcePath> paths)
+    {
+        if (paths.Count == 0)
+            return;
+
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount - 1) };
+        Parallel.ForEach(paths, options, path =>
+        {
+            try
+            {
+                var file = am.GetCR2WFile(path, includeMods: true, includeProject: true);
+                if (file != null)
+                    _fileCache.TryAdd(path, file);
+            }
+            catch
+            {
+                // left out of the cache: the sequential path loads it (and reports errors)
+            }
+        });
+    }
+
+    private static void CollectPrefetchRefs(RedBaseClass root, ResourcePath self,
+        HashSet<ResourcePath> next, Dictionary<ResourcePath, HashSet<string>> wantedApps)
+    {
+        switch (root)
+        {
+            case CMesh mesh:
+                foreach (var r in mesh.ExternalMaterials)
+                    next.Add(r.DepotPath);
+                if (mesh.PreloadExternalMaterials != null)
+                {
+                    foreach (var r in mesh.PreloadExternalMaterials)
+                        next.Add(r.DepotPath);
+                }
+                break;
+
+            case entEntityTemplate ent:
+                // Sectors render the default appearance only (see RenderEntity).
+                foreach (var a in ent.Appearances)
+                {
+                    if (a is null || a.Name != ent.DefaultAppearance)
+                        continue;
+
+                    var appPath = a.AppearanceResource.DepotPath;
+                    next.Add(appPath);
+                    if (!wantedApps.TryGetValue(appPath, out var names))
+                    {
+                        names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        wantedApps[appPath] = names;
+                    }
+                    var appName = StringHelper.StringifyOrNull(a.AppearanceName)
+                                  ?? StringHelper.StringifyOrNull(a.Name)
+                                  ?? string.Empty;
+                    names.Add(appName.Split('&')[0]);
+                }
+                if (ent.CompiledData.Data is RedPackage pkg)
+                    AddComponentRefs(pkg.Chunks, next);
+                break;
+
+            case appearanceAppearanceResource aar:
+                wantedApps.TryGetValue(self, out var wanted);
+                foreach (var h in aar.Appearances)
+                {
+                    if (h.GetValue() is not appearanceAppearanceDefinition def)
+                        continue;
+                    var defName = (StringHelper.StringifyOrNull(def.Name) ?? string.Empty).Split('&')[0];
+                    if (wanted != null && !wanted.Contains(defName))
+                        continue;
+                    if (def.CompiledData?.Data is RedPackage apkg)
+                        AddComponentRefs(apkg.Chunks, next);
+                    foreach (var pv in def.PartsValues)
+                    {
+                        if (pv is appearanceAppearancePart part)
+                            next.Add(part.Resource.DepotPath);
+                    }
+                }
+                break;
+        }
+    }
+
+    private static void AddComponentRefs(IEnumerable<RedBaseClass> chunks, HashSet<ResourcePath> next)
+    {
+        foreach (var c in chunks)
+        {
+            switch (c)
+            {
+                case entSkinnedClothComponent cloth:
+                    next.Add(cloth.GraphicsMesh.DepotPath);
+                    break;
+                case IRedMeshComponent mc:
+                    next.Add(mc.Mesh.DepotPath);
+                    break;
+                case entAnimatedComponent anim:
+                    next.Add(anim.Rig.DepotPath);
+                    break;
+            }
+        }
+    }
+
+    #endregion
+
     public SectorGroup RenderSector(worldStreamingSector data, Appearance app)
     {
         if (data.NodeData.Data is not worldNodeDataBuffer buffer)
         {
             throw new ArgumentNullException();
         }
+
+        // Read every file the sector will need up front, in parallel.
+        // Sequential archive reads were most of the sector load time.
+        PrefetchSectorFiles(data);
 
         var ssTransforms = buffer.Lookup;
 
@@ -7254,7 +8014,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     continue;
                 }
 
-                var appMaterials = GetMaterialsForAppearance(mesh, irmn.MeshAppearance);
+                var meshPath = irmn.Mesh.DepotPath.GetResolvedText() ?? string.Empty;
+                var appMaterials = GetSectorMaterials(mesh, irmn.MeshAppearance, meshPath);
 
                 var group = new MeshComponent()
                 {
@@ -7295,7 +8056,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                     for (var i = 0; i < wtb.Transforms.Count; i++)
                     {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -7343,7 +8104,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         //for (int j = 0; j < transforms.Count; j++)
                         //{
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -7386,7 +8147,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     var i = 0;
                     foreach (var transform in transforms)
                     {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -7857,6 +8618,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     public static SharpDX.Vector3 ToVector3(Vector3 v) => new(v.X, v.Y, v.Z);
 
+    /// <summary>
+    /// Tree → viewport: selecting a row in the tree highlights the matching object.
+    /// A submesh row highlights its owning component (the instance it belongs to).
+    /// Sector / block previews only: other previews have no selection highlight.
+    /// </summary>
+    partial void OnSelectedItemChanged(object? value)
+    {
+        if (Header != MeshViewHeaders.SectorPreview && Header != MeshViewHeaders.AllSectorPreview)
+            return;
+
+        DependencyObject? current = value as DependencyObject;
+        while (current != null && current is not MeshComponent)
+            current = LogicalTreeHelper.GetParent(current);
+
+        if (current is MeshComponent mesh && !ReferenceEquals(mesh, CurrentSelection.SelectedMesh))
+            UpdateSelection(mesh);
+    }
+
     public void UpdateSelection(MeshComponent mesh)
     {
         RetoreSelectedMeshMaterial();
@@ -7918,6 +8697,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
             {
                 UpdateSelection(mesh);
+                // Also select it in the tree; the view expands the branch and scrolls to it.
+                SelectedItem = mesh;
             }
         }
     }
@@ -8475,13 +9256,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                     foreach (var material in model.Materials)
                     {
+                        _buildingAppearance = a;
                         a.RawMaterials[material.Name] = material;
                     }
 
                     if (model.MeshFile?.RootChunk is CMesh mesh)
                     {
                         var meshPath = model.DepotPath.GetResolvedText() ?? string.Empty;
-                        model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
+                        model.Meshes = MakeMeshShared(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
                     }
 
                     foreach (var m in model.Meshes)
@@ -8537,13 +9319,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             foreach (var material in model.Materials)
             {
+                _buildingAppearance = meshApp;
                 meshApp.RawMaterials[material.Name] = material;
             }
 
             if (model.MeshFile?.RootChunk is CMesh mesh)
             {
                 var meshPath = model.DepotPath.GetResolvedText() ?? string.Empty;
-                model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
+                model.Meshes = MakeMeshShared(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
             }
 
             foreach (var m in model.Meshes)
@@ -8598,12 +9381,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 foreach (var model in variantModels)
                 {
                     foreach (var material in model.Materials)
+                    {
+                        _buildingAppearance = variant;
                         variant.RawMaterials[material.Name] = material;
+                    }
 
                     if (model.MeshFile?.RootChunk is CMesh modelMesh)
                     {
                         var meshPath = model.DepotPath.GetResolvedText() ?? string.Empty;
-                        model.Meshes = MakeMesh(modelMesh, model.ChunkMask, model.AppearanceIndex, meshPath);
+                        model.Meshes = MakeMeshShared(modelMesh, model.ChunkMask, model.AppearanceIndex, meshPath);
                     }
 
                     foreach (var submesh in model.Meshes)
@@ -8713,10 +9499,88 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     // Hair Gradient
     private record GradientEntry(float Value, byte R, byte G, byte B);
 
+    private static float SrgbToLinear01(float x)
+    {
+        x = Math.Clamp(x, 0f, 1f);
+        return x <= 0.04045f ? x / 12.92f : MathF.Pow((x + 0.055f) / 1.055f, 2.4f);
+    }
+
+    private static float LinearToSrgb01(float x)
+    {
+        x = Math.Clamp(x, 0f, 1f);
+        return x <= 0.0031308f ? 12.92f * x : (1.055f * MathF.Pow(x, 1f / 2.4f)) - 0.055f;
+    }
+
+    private static byte LinearToSrgbByte(float x) => (byte)Math.Clamp((int)MathF.Round(LinearToSrgb01(x) * 255f), 0, 255);
+
+    /// <summary>
+    /// Blender ColorRamp (linear interpolation, constant past the ends) sampled at the 256
+    /// possible factor values. Stop colours are sRGB bytes in the profile and are converted
+    /// to linear first, like populate_color_ramp in the addon. Result: linear RGB triplets.
+    /// No entries → grey ramp (factor used as the value).
+    /// </summary>
+    private static float[] BuildLinearRampLut(List<GradientEntry> entries)
+    {
+        var lut = new float[256 * 3];
+        if (entries.Count == 0)
+        {
+            for (var i = 0; i < 256; i++)
+            {
+                lut[i * 3] = lut[i * 3 + 1] = lut[i * 3 + 2] = i / 255f;
+            }
+            return lut;
+        }
+
+        var stops = entries
+            .OrderBy(e => e.Value)
+            .Select(e => (e.Value, R: SrgbToLinear01(e.R / 255f), G: SrgbToLinear01(e.G / 255f), B: SrgbToLinear01(e.B / 255f)))
+            .ToList();
+
+        for (var i = 0; i < 256; i++)
+        {
+            var t = i / 255f;
+            float r, g, b;
+            if (t <= stops[0].Value)
+            {
+                (r, g, b) = (stops[0].R, stops[0].G, stops[0].B);
+            }
+            else if (t >= stops[^1].Value)
+            {
+                (r, g, b) = (stops[^1].R, stops[^1].G, stops[^1].B);
+            }
+            else
+            {
+                var k = 0;
+                while (k < stops.Count - 2 && t > stops[k + 1].Value)
+                    k++;
+                var a = stops[k];
+                var c = stops[k + 1];
+                var range = c.Value - a.Value;
+                var f = range > 0 ? (t - a.Value) / range : 0f;
+                r = a.R + (c.R - a.R) * f;
+                g = a.G + (c.G - a.G) * f;
+                b = a.B + (c.B - a.B) * f;
+            }
+
+            lut[i * 3] = r;
+            lut[i * 3 + 1] = g;
+            lut[i * 3 + 2] = b;
+        }
+
+        return lut;
+    }
+
+    /// <summary>
+    /// Single ramp (only one of Strand_ID / Strand_Gradient present): R as factor,
+    /// linear interpolation, written back as sRGB.
+    /// </summary>
     private void ApplyColorRamp(Bitmap bmp, List<GradientEntry> entries, float gamma = 1f)
     {
+        _ = gamma;
         if (entries.Count == 0)
             return;
+
+        var lut = BuildLinearRampLut(entries);
         var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
         var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
         try
@@ -8729,18 +9593,88 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     for (int x = 0; x < bmp.Width; x++)
                     {
                         int off = y * stride + x * 4;
-                        // Use R channel as factor (matches Blender addon Strand ID R / Root To Tip R)
-                        float t = ptr[off + 2] / 255f;
-                        if (gamma != 1f)
-                            t = MathF.Pow(t, 1f / gamma);
-                        var (c1, c2, blend) = InterpolateGradient(entries, t);
-                        ptr[off + 0] = (byte)(c1.B * (1 - blend) + c2.B * blend);
-                        ptr[off + 1] = (byte)(c1.G * (1 - blend) + c2.G * blend);
-                        ptr[off + 2] = (byte)(c1.R * (1 - blend) + c2.R * blend);
+                        int i = ptr[off + 2] * 3;
+                        ptr[off + 0] = LinearToSrgbByte(lut[i + 2]);
+                        ptr[off + 1] = LinearToSrgbByte(lut[i + 1]);
+                        ptr[off + 2] = LinearToSrgbByte(lut[i]);
                     }
             }
         }
         finally { bmp.UnlockBits(data); }
+    }
+
+    /// <summary>
+    /// Haircard albedo exactly as hair.py builds it, in linear colour:
+    ///   base  = ID ramp(Strand_ID.r),  blend = RootToTip ramp(Strand_Gradient.r)
+    ///   low   = base * blend * 2
+    ///   high  = 1 - (1 - base) * (1 - blend) * 2
+    ///   color = clamp(lum(blend) > 0.5 ? high : low)        (lum weights 0.3/0.59/0.11)
+    ///   color = clamp(color * 0.6)                          (Hair Global Albedo)
+    /// Written to <paramref name="idBmp"/> RGB as sRGB; alpha is left for the alpha pass.
+    /// Not included: the vertex-colour hair shadow (ShadowStrength), which is per vertex.
+    /// </summary>
+    private static void BakeHairCardColor(Bitmap idBmp, Bitmap gradBmp,
+        List<GradientEntry> idEntries, List<GradientEntry> rootToTipEntries)
+    {
+        var idLut = BuildLinearRampLut(idEntries);
+        var rtLut = BuildLinearRampLut(rootToTipEntries);
+
+        var rect = new Rectangle(0, 0, idBmp.Width, idBmp.Height);
+        var idData = idBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        var gData = gradBmp.LockBits(rect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            unsafe
+            {
+                byte* ip = (byte*)idData.Scan0;
+                byte* gp = (byte*)gData.Scan0;
+                int iStride = idData.Stride;
+                int gStride = gData.Stride;
+                const float globalAlbedo = 0.6f;
+
+                for (int y = 0; y < idBmp.Height; y++)
+                {
+                    for (int x = 0; x < idBmp.Width; x++)
+                    {
+                        int io = y * iStride + x * 4;
+                        int go = y * gStride + x * 4;
+                        int bi = ip[io + 2] * 3;   // Strand_ID.r
+                        int si = gp[go + 2] * 3;   // Strand_Gradient.r
+
+                        float br = idLut[bi], bg = idLut[bi + 1], bb = idLut[bi + 2];
+                        float sr = rtLut[si], sg = rtLut[si + 1], sb = rtLut[si + 2];
+
+                        float lum = sr * 0.3f + sg * 0.59f + sb * 0.11f;
+                        float r, g, b;
+                        if (lum > 0.499999f)
+                        {
+                            r = 1f - (1f - br) * (1f - sr) * 2f;
+                            g = 1f - (1f - bg) * (1f - sg) * 2f;
+                            b = 1f - (1f - bb) * (1f - sb) * 2f;
+                        }
+                        else
+                        {
+                            r = br * sr * 2f;
+                            g = bg * sg * 2f;
+                            b = bb * sb * 2f;
+                        }
+
+                        r = Math.Clamp(r, 0f, 1f) * globalAlbedo;
+                        g = Math.Clamp(g, 0f, 1f) * globalAlbedo;
+                        b = Math.Clamp(b, 0f, 1f) * globalAlbedo;
+
+                        ip[io + 0] = LinearToSrgbByte(b);
+                        ip[io + 1] = LinearToSrgbByte(g);
+                        ip[io + 2] = LinearToSrgbByte(r);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            idBmp.UnlockBits(idData);
+            gradBmp.UnlockBits(gData);
+        }
     }
 
     private (GradientEntry, GradientEntry, float) InterpolateGradient(List<GradientEntry> entries, float t)
@@ -8943,7 +9877,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         float rough = 0.8f, metal = 0f;
 
         Material? mat = null;
-        if (SelectedAppearance?.RawMaterials.TryGetValue(name, out var m) == true)
+        if (TryGetRawMaterial(name, out var m))
             mat = m;
 
         if (mat?.Values == null)
@@ -9008,6 +9942,156 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         finally { bmp.UnlockBits(data); }
     }
+
+    // direct base path (lowercase) -> root template path (lowercase), or "" when unresolved
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, string> _templateCache =
+        new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Follows BaseMaterial from the instance through any chain of .mi files to the root
+    /// template (.mt / .remt). That template is what actually defines the shader, so it is
+    /// a far better signal than the material name or the folder of the direct base .mi.
+    /// </summary>
+    private string? ResolveTemplatePath(CMaterialInstance? instance)
+    {
+        if (instance == null || instance.BaseMaterial.DepotPath == ResourcePath.Empty)
+            return null;
+
+        var directBase = instance.BaseMaterial.DepotPath.GetResolvedText() ?? string.Empty;
+        if (directBase.Length == 0)
+            return null;
+
+        var cached = _templateCache.GetOrAdd(directBase, _ =>
+        {
+            var visited = new HashSet<ResourcePath>();
+            CMaterialInstance? current = instance;
+            while (current != null && current.BaseMaterial.DepotPath != ResourcePath.Empty &&
+                   visited.Add(current.BaseMaterial.DepotPath))
+            {
+                var path = current.BaseMaterial.DepotPath;
+                var text = (path.GetResolvedText() ?? string.Empty).Replace('/', '\\').ToLowerInvariant();
+                if (text.EndsWith(".mt", StringComparison.Ordinal) || text.EndsWith(".remt", StringComparison.Ordinal))
+                    return text;
+
+                CR2WFile? file;
+                try
+                {
+                    file = GetProjectOrDepotFile(path);
+                }
+                catch
+                {
+                    return string.Empty;
+                }
+
+                switch (file?.RootChunk)
+                {
+                    case CMaterialTemplate:
+                        return text;
+                    case CMaterialInstance next:
+                        current = next;
+                        break;
+                    default:
+                        return string.Empty;
+                }
+            }
+
+            return string.Empty;
+        });
+
+        return cached.Length == 0 ? null : cached;
+    }
+
+    private string GetTemplateFileName(Material? material) =>
+        Path.GetFileNameWithoutExtension(ResolveTemplatePath(material?.Instance as CMaterialInstance) ?? string.Empty);
+
+    /// <summary>"template|direct base", lowercase, for the substring checks (emissive, wet decal, eye subtypes).</summary>
+    private string? GetClassificationPath(Material? material)
+    {
+        if (material?.Instance is not CMaterialInstance inst)
+            return null;
+
+        var template = ResolveTemplatePath(inst) ?? string.Empty;
+        var direct = (inst.BaseMaterial.DepotPath.GetResolvedText() ?? string.Empty).Replace('/', '\\').ToLowerInvariant();
+        return template + "|" + direct;
+    }
+
+    /// <summary>
+    /// Material kind, decided by the root template first. Name keywords are only used to
+    /// split a template family the template cannot tell apart (hair cap vs other recolor
+    /// decal, makeup / brows vs clothing decal, nails on metal_base), or as the old
+    /// fallback when the template is unknown (e.g. a custom template from a mod).
+    /// </summary>
+    private MaterialKind ClassifyMaterialFor(string? name, Material? material = null)
+    {
+        if (material == null && !string.IsNullOrEmpty(name))
+            TryGetRawMaterial(name, out material);
+
+        var instance = material?.Instance as CMaterialInstance;
+        var template = ResolveTemplatePath(instance);
+        if (template != null && ClassifyByTemplate(template, name) is { } byTemplate)
+            return byTemplate;
+
+        var directBase = instance?.BaseMaterial.DepotPath.GetResolvedText();
+        return ClassifyMaterial(name, directBase);
+    }
+
+    private static MaterialKind? ClassifyByTemplate(string templatePath, string? name)
+    {
+        var file = Path.GetFileNameWithoutExtension(templatePath);
+        name ??= string.Empty;
+
+        // Game templates: engine\materials\, base\materials\, base\fx\.
+        // Anything else (custom/mod templates) falls back to the old heuristics.
+        var isGameTemplate = templatePath.StartsWith("engine\\", StringComparison.Ordinal) ||
+                             templatePath.StartsWith("base\\materials\\", StringComparison.Ordinal) ||
+                             templatePath.StartsWith("base\\fx\\", StringComparison.Ordinal);
+
+        if (file.Contains("skin", StringComparison.Ordinal))
+            return MaterialKind.Skin;
+
+        if (file is "hair" or "hair_blendable" or "blackwall_blendable_hair")
+        {
+            // Eyelashes are hair-shaded strands but get their own (dark, Strand_Alpha) bake.
+            return name.Contains("lash", StringComparison.OrdinalIgnoreCase) ? MaterialKind.Eye : MaterialKind.Hair;
+        }
+
+        // eye, eye_blendable, eye_gradient*, eye_shadow*, blackwall_blendable_eye*
+        if (file.StartsWith("eye", StringComparison.Ordinal) ||
+            file.StartsWith("blackwall_blendable_eye", StringComparison.Ordinal))
+            return MaterialKind.Eye;
+
+        if (file.Contains("glass", StringComparison.Ordinal))
+            return MaterialKind.Glass;
+
+        if (file.Contains("decal", StringComparison.Ordinal))
+        {
+            // Hair caps / beards use mesh_decal_gradientmap_recolor (MaskTexture + GradientMap)
+            if (file.Contains("gradientmap_recolor", StringComparison.Ordinal) && IsHairLikeName(name))
+                return MaterialKind.Hair;
+            // Face overlays are plain mesh_decal: only the name separates them from clothing decals.
+            if (ContainsAny(name, "heb_", "hb_", "brow"))
+                return MaterialKind.Eyebrow;
+            if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips", "tattoo"))
+                return MaterialKind.Makeup;
+            return MaterialKind.Decal;
+        }
+
+        if (file.StartsWith("metal_base", StringComparison.Ordinal))
+        {
+            if (name.Contains("nail", StringComparison.OrdinalIgnoreCase))
+                return MaterialKind.Nail;
+            // Stitches / zippers on metal_base still need decal handling (normals + alpha).
+            if (ContainsAny(name, "stitch", "zipper", "sticker"))
+                return MaterialKind.Decal;
+            return MaterialKind.None;
+        }
+
+        return isGameTemplate ? MaterialKind.None : null;
+    }
+
+    private static bool IsHairLikeName(string? name) =>
+        !string.IsNullOrEmpty(name) &&
+        (ContainsAny(name, "hh_", "hair", "dread", "beard", "mustache", "soul_patch", "_cards", "_cap", "strand"));
 
     private static MaterialKind ClassifyMaterial(string? name, string? basePath = null)
     {
