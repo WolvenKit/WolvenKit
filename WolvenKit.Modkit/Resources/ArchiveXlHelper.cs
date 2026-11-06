@@ -171,7 +171,7 @@ public partial class ArchiveXlHelper
     [GeneratedRegex(@"(?<=&)\w+=\w+")]
     private static partial Regex s_ConditionRegex();
 
-    public static bool HasInvalidCondition(string s) => s_ConditionRegex().IsMatch(s);
+    public static bool HasInvalidCondition(string s) => s.Contains('&') && !s_ConditionRegex().IsMatch(s);
 
     public static string? GetValuesForInvalidConditions(string? s)
     {
