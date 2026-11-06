@@ -50,14 +50,14 @@ public partial class RDTMeshViewModel
                 return;
             }
 
+            var wasSingleLayerMode = IsSingleLayerDebugMode(MultilayerShader.DebugMode);
             MultilayerShader.DebugMode = value;
             OnPropertyChanged();
 
-            // Layer mask / Layer tiling show one layer: with "All layers" picked, jump to the first
-            // masked layer (the base layer is always fully covered).
-            if (value is 6 or 7 && SelectedMultilayerDebugLayer is not { Index: >= 0 } && MultilayerDebugLayers.Count > 1)
+            // Layer mask / Layer tiling show one layer, so their list has no "All layers".
+            if (wasSingleLayerMode != IsSingleLayerDebugMode(value))
             {
-                SelectedMultilayerDebugLayer = MultilayerDebugLayers[Math.Min(2, MultilayerDebugLayers.Count - 1)];
+                RebuildMultilayerDebugLayers();
             }
 
             ApplyMultilayerDebugView();
@@ -88,18 +88,49 @@ public partial class RDTMeshViewModel
                 return;
             }
 
-            MultilayerDebugLayers.Clear();
-            MultilayerDebugLayers.Add(new MultilayerDebugChoice(value?.Key ?? "", -1, "All layers"));
-            if (value != null && _multilayerGpuData.TryGetValue(value.Key, out var data))
-            {
-                for (var i = 0; i < data.LayerLabels.Count; i++)
-                {
-                    MultilayerDebugLayers.Add(new MultilayerDebugChoice(value.Key, i, data.LayerLabels[i]));
-                }
-            }
-
-            SelectedMultilayerDebugLayer = MultilayerDebugLayers[0];
+            _selectedMultilayerDebugLayer = null;
+            RebuildMultilayerDebugLayers();
         }
+    }
+
+    /// <summary>Layer mask (6) and Layer tiling (7) show a single layer.</summary>
+    private static bool IsSingleLayerDebugMode(int mode) => mode is 6 or 7;
+
+    /// <summary>
+    /// Fills the layer picker for the selected material: "All layers" (no solo) and its layers,
+    /// without "All layers" in the single-layer modes. Keeps the picked layer when it is still
+    /// listed; otherwise picks "All layers", or in the single-layer modes the first masked
+    /// layer (layer 0 is the base and always fully covered).
+    /// </summary>
+    private void RebuildMultilayerDebugLayers()
+    {
+        var material = SelectedMultilayerDebugMaterial;
+        var previous = SelectedMultilayerDebugLayer;
+        var singleLayer = IsSingleLayerDebugMode(MultilayerDebugMode);
+
+        MultilayerDebugLayers.Clear();
+        if (!singleLayer)
+        {
+            MultilayerDebugLayers.Add(new MultilayerDebugChoice(material?.Key ?? "", -1, "All layers"));
+        }
+
+        if (material != null && _multilayerGpuData.TryGetValue(material.Key, out var data))
+        {
+            for (var i = 0; i < data.LayerLabels.Count; i++)
+            {
+                MultilayerDebugLayers.Add(new MultilayerDebugChoice(material.Key, i, data.LayerLabels[i]));
+            }
+        }
+
+        if (MultilayerDebugLayers.Count == 0)
+        {
+            SelectedMultilayerDebugLayer = null;
+            return;
+        }
+
+        SelectedMultilayerDebugLayer =
+            (previous != null ? MultilayerDebugLayers.FirstOrDefault(l => l == previous) : null)
+            ?? (singleLayer ? MultilayerDebugLayers[Math.Min(1, MultilayerDebugLayers.Count - 1)] : MultilayerDebugLayers[0]);
     }
 
     private MultilayerDebugChoice? _selectedMultilayerDebugLayer;
