@@ -916,7 +916,7 @@
                 ColumnSizer="AutoFillColumn"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
-                AutoExpandMode="AllNodesExpanded"
+                AutoExpandMode="RootNodesExpanded"
                 AutoGenerateColumns="False"
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"

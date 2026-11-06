@@ -8416,12 +8416,225 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+    // Built once per mesh path, then shared by every node / instance that uses the mesh.
+    // Clones share Geometry and Material; only the scene-graph node is per instance.
+    private readonly Dictionary<string, List<SubmeshComponent>> _sectorMeshTemplates = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, List<Material>> _sectorMaterialCache = new(StringComparer.OrdinalIgnoreCase);
+
+    private List<Material> GetSectorMaterials(CMesh mesh, CName appearance, string meshPath)
+    {
+        var key = meshPath + "|" + appearance;
+        if (!_sectorMaterialCache.TryGetValue(key, out var list))
+        {
+            list = GetMaterialsForAppearance(mesh, appearance, meshPath);
+            _sectorMaterialCache[key] = list;
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// MakeMesh with reuse: the geometry for a given mesh / chunk mask / appearance is
+    /// built once, then every placement gets its own scene node sharing Geometry and Material.
+    /// Used for sector nodes, their instances, and entity components (sectors place the
+    /// same .ent and .mesh many times).
+    /// </summary>
+    private List<SubmeshComponent> MakeMeshShared(CMesh mesh, ulong chunkMask, int appearanceIndex, string meshPath)
+    {
+        if (string.IsNullOrEmpty(meshPath))
+        {
+            // No stable key: build without sharing.
+            return MakeMesh(mesh, chunkMask, appearanceIndex, meshPath);
+        }
+
+        var key = $"{meshPath}|{chunkMask}|{appearanceIndex}";
+        if (!_sectorMeshTemplates.TryGetValue(key, out var template))
+        {
+            template = MakeMesh(mesh, chunkMask, appearanceIndex, meshPath);
+            _sectorMeshTemplates[key] = template;
+        }
+
+        var result = new List<SubmeshComponent>(template.Count);
+        foreach (var t in template)
+        {
+            result.Add(new SubmeshComponent()
+            {
+                Name = t.Name,
+                Text = t.Text,
+                LOD = t.LOD,
+                IsRendering = t.IsRendering,
+                EnabledWithMask = t.EnabledWithMask,
+                Geometry = t.Geometry,
+                Material = t.Material,
+                MaterialName = t.MaterialName,
+                DepthBias = t.DepthBias,
+                IsTransparent = t.IsTransparent,
+                CullMode = t.CullMode,
+                FrontCounterClockwise = t.FrontCounterClockwise,
+            });
+        }
+
+        return result;
+    }
+
+    #region sector prefetch
+
+    /// <summary>
+    /// Walks the sector's references in waves (meshes and entities, then their materials,
+    /// appearances and component meshes, then parts) and loads each wave in parallel
+    /// into _fileCache. The render pass then finds everything already loaded.
+    /// Only used when an archive manager is available (its reads are independent);
+    /// a file that fails here is simply loaded again by the normal sequential path.
+    /// </summary>
+    private void PrefetchSectorFiles(worldStreamingSector data)
+    {
+        var am = ResolveArchiveManager();
+        if (am == null)
+            return;
+
+        var wave = new HashSet<ResourcePath>();
+        foreach (var handle in data.Nodes)
+        {
+            switch (handle?.Chunk)
+            {
+                case IRedMeshNode irmn:
+                    wave.Add(irmn.Mesh.DepotPath);
+                    break;
+                case worldEntityNode wen:
+                    wave.Add(wen.EntityTemplate.DepotPath);
+                    break;
+            }
+        }
+
+        var wantedApps = new Dictionary<ResourcePath, HashSet<string>>();
+        for (var depth = 0; depth < 6 && wave.Count > 0; depth++)
+        {
+            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
+            PrefetchFiles(am, wave);
+
+            var next = new HashSet<ResourcePath>();
+            foreach (var path in wave)
+            {
+                if (_fileCache.TryGetValue(path, out var file) && file?.RootChunk is { } root)
+                    CollectPrefetchRefs(root, path, next, wantedApps);
+            }
+
+            next.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
+            wave = next;
+        }
+    }
+
+    private void PrefetchFiles(IArchiveManager am, ICollection<ResourcePath> paths)
+    {
+        if (paths.Count == 0)
+            return;
+
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount - 1) };
+        Parallel.ForEach(paths, options, path =>
+        {
+            try
+            {
+                var file = am.GetCR2WFile(path, includeMods: true, includeProject: true);
+                if (file != null)
+                    _fileCache.TryAdd(path, file);
+            }
+            catch
+            {
+                // left out of the cache: the sequential path loads it (and reports errors)
+            }
+        });
+    }
+
+    private static void CollectPrefetchRefs(RedBaseClass root, ResourcePath self,
+        HashSet<ResourcePath> next, Dictionary<ResourcePath, HashSet<string>> wantedApps)
+    {
+        switch (root)
+        {
+            case CMesh mesh:
+                foreach (var r in mesh.ExternalMaterials)
+                    next.Add(r.DepotPath);
+                if (mesh.PreloadExternalMaterials != null)
+                {
+                    foreach (var r in mesh.PreloadExternalMaterials)
+                        next.Add(r.DepotPath);
+                }
+                break;
+
+            case entEntityTemplate ent:
+                // Sectors render the default appearance only (see RenderEntity).
+                foreach (var a in ent.Appearances)
+                {
+                    if (a is null || a.Name != ent.DefaultAppearance)
+                        continue;
+
+                    var appPath = a.AppearanceResource.DepotPath;
+                    next.Add(appPath);
+                    if (!wantedApps.TryGetValue(appPath, out var names))
+                    {
+                        names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        wantedApps[appPath] = names;
+                    }
+                    var appName = StringHelper.StringifyOrNull(a.AppearanceName)
+                                  ?? StringHelper.StringifyOrNull(a.Name)
+                                  ?? string.Empty;
+                    names.Add(appName.Split('&')[0]);
+                }
+                if (ent.CompiledData.Data is RedPackage pkg)
+                    AddComponentRefs(pkg.Chunks, next);
+                break;
+
+            case appearanceAppearanceResource aar:
+                wantedApps.TryGetValue(self, out var wanted);
+                foreach (var h in aar.Appearances)
+                {
+                    if (h.GetValue() is not appearanceAppearanceDefinition def)
+                        continue;
+                    var defName = (StringHelper.StringifyOrNull(def.Name) ?? string.Empty).Split('&')[0];
+                    if (wanted != null && !wanted.Contains(defName))
+                        continue;
+                    if (def.CompiledData?.Data is RedPackage apkg)
+                        AddComponentRefs(apkg.Chunks, next);
+                    foreach (var pv in def.PartsValues)
+                    {
+                        if (pv is appearanceAppearancePart part)
+                            next.Add(part.Resource.DepotPath);
+                    }
+                }
+                break;
+        }
+    }
+
+    private static void AddComponentRefs(IEnumerable<RedBaseClass> chunks, HashSet<ResourcePath> next)
+    {
+        foreach (var c in chunks)
+        {
+            switch (c)
+            {
+                case entSkinnedClothComponent cloth:
+                    next.Add(cloth.GraphicsMesh.DepotPath);
+                    break;
+                case IRedMeshComponent mc:
+                    next.Add(mc.Mesh.DepotPath);
+                    break;
+                case entAnimatedComponent anim:
+                    next.Add(anim.Rig.DepotPath);
+                    break;
+            }
+        }
+    }
+
+    #endregion
+
     public SectorGroup RenderSector(worldStreamingSector data, Appearance app)
     {
         if (data.NodeData.Data is not worldNodeDataBuffer buffer)
         {
             throw new ArgumentNullException();
         }
+
+        // Read every file the sector will need up front, in parallel.
+        // Sequential archive reads were most of the sector load time.
+        PrefetchSectorFiles(data);
 
         var ssTransforms = buffer.Lookup;
 
@@ -8445,7 +8658,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
                 var meshPath = irmn.Mesh.DepotPath.GetResolvedText() ?? string.Empty;
-                var appMaterials = GetMaterialsForAppearance(mesh, irmn.MeshAppearance, meshPath);
+                var appMaterials = GetSectorMaterials(mesh, irmn.MeshAppearance, meshPath);
 
                 var group = new MeshComponent()
                 {
@@ -8486,7 +8699,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                     for (var i = 0; i < wtb.Transforms.Count; i++)
                     {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0, meshPath);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -8534,7 +8747,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         //for (int j = 0; j < transforms.Count; j++)
                         //{
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0, meshPath);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -8577,7 +8790,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     var i = 0;
                     foreach (var transform in transforms)
                     {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0, meshPath);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -9048,8 +9261,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     public static SharpDX.Vector3 ToVector3(Vector3 v) => new(v.X, v.Y, v.Z);
 
-    /// <summary>Selecting a row in the tree picks its material in the multilayer debug view.</summary>
-    partial void OnSelectedItemChanged(object? value) => SyncMultilayerDebugMaterial(value);
+    /// <summary>
+    /// Tree → viewport: selecting a row in the tree highlights the matching object.
+    /// A submesh row highlights its owning component (the instance it belongs to).
+    /// Sector / block previews only: other previews have no selection highlight.
+    /// </summary>
+    partial void OnSelectedItemChanged(object? value)
+    {
+        SyncMultilayerDebugMaterial(value);
+
+        if (Header != MeshViewHeaders.SectorPreview && Header != MeshViewHeaders.AllSectorPreview)
+            return;
+
+        DependencyObject? current = value as DependencyObject;
+        while (current != null && current is not MeshComponent)
+            current = LogicalTreeHelper.GetParent(current);
+
+        if (current is MeshComponent mesh && !ReferenceEquals(mesh, CurrentSelection.SelectedMesh))
+            UpdateSelection(mesh);
+    }
 
     public void UpdateSelection(MeshComponent mesh)
     {
@@ -9112,6 +9342,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
             {
                 UpdateSelection(mesh);
+                // Also select it in the tree; the view expands the branch and scrolls to it.
+                SelectedItem = mesh;
             }
         }
     }
@@ -9676,7 +9908,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     if (model.MeshFile?.RootChunk is CMesh mesh)
                     {
                         var meshPath = model.DepotPath.GetResolvedText() ?? string.Empty;
-                        model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
+                        model.Meshes = MakeMeshShared(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
                     }
 
                     foreach (var m in model.Meshes)
@@ -9739,7 +9971,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (model.MeshFile?.RootChunk is CMesh mesh)
             {
                 var meshPath = model.DepotPath.GetResolvedText() ?? string.Empty;
-                model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
+                model.Meshes = MakeMeshShared(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
             }
 
             foreach (var m in model.Meshes)
@@ -9802,7 +10034,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     if (model.MeshFile?.RootChunk is CMesh modelMesh)
                     {
                         var meshPath = model.DepotPath.GetResolvedText() ?? string.Empty;
-                        model.Meshes = MakeMesh(modelMesh, model.ChunkMask, model.AppearanceIndex, meshPath);
+                        model.Meshes = MakeMeshShared(modelMesh, model.ChunkMask, model.AppearanceIndex, meshPath);
                     }
 
                     foreach (var submesh in model.Meshes)
