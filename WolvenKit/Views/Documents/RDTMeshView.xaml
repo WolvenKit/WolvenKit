@@ -96,9 +96,15 @@
             EnableRenderOrder="True"
             FXAALevel="High"
             ShowCoordinateSystem="True"
+            ViewCubeTexture="{Binding ViewCubeTexture}"
             UseDefaultGestures="False"
             Loaded="Viewport3DX_Loaded"
-            ZoomExtentsWhenLoaded="True">
+            CameraChanged="HxViewport_OnCameraChanged"
+            ZoomExtentsWhenLoaded="True"
+            
+            OITRenderMode="DepthPeeling"
+            OITDepthPeelingIteration="8">
+
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding
                     Command="hx:ViewportCommands.Rotate"
@@ -112,23 +118,44 @@
             </hx:Viewport3DX.InputBindings>
 
             <hx:DirectionalLight3D
+                IsRendering="{Binding UseWorkLighting}"
                 Direction="0, -1, 0"
                 Color="White" />
             <hx:DirectionalLight3D
+                IsRendering="{Binding UseWorkLighting}"
                 Direction="0, 0, 1"
                 Color="White" />
             <hx:DirectionalLight3D
+                IsRendering="{Binding UseWorkLighting}"
                 Direction="0, 0, -1"
                 Color="White" />
             <hx:DirectionalLight3D
+                IsRendering="{Binding UseWorkLighting}"
                 Direction="1, 0, 0"
                 Color="White" />
             <hx:DirectionalLight3D
+                IsRendering="{Binding UseWorkLighting}"
                 Direction="-1, 0, 0"
                 Color="White" />
 
+            <!-- Lighting presets (Camera section). Icon (soft): soft key from the viewer's upper left when looking at the
+                 front (-Z), weaker fill from the right, rim from behind, a little from above and ambient -->
+            <hx:AmbientLight3D IsRendering="{Binding UseIconLighting}" Color="#383838" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="-0.5, -0.6, 1" Color="#E0E0E0" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="1, -0.2, 0.6" Color="#6A6A6A" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="0, -0.5, -1" Color="#8A8A8A" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="0, -1, 0" Color="#505050" />
+            <!-- Icon (follow camera): same set, directions set from the camera in code-behind -->
+            <hx:AmbientLight3D IsRendering="{Binding UseFollowLighting}" Color="#383838" />
+            <hx:DirectionalLight3D Tag="FollowKey" IsRendering="{Binding UseFollowLighting}" Direction="-0.5, -0.6, 1" Color="#E0E0E0" />
+            <hx:DirectionalLight3D Tag="FollowFill" IsRendering="{Binding UseFollowLighting}" Direction="1, -0.2, 0.6" Color="#6A6A6A" />
+            <hx:DirectionalLight3D Tag="FollowRim" IsRendering="{Binding UseFollowLighting}" Direction="0, -0.5, -1" Color="#8A8A8A" />
+            <hx:DirectionalLight3D Tag="FollowTop" IsRendering="{Binding UseFollowLighting}" Direction="0, -1, 0" Color="#505050" />
+            <!-- Flat: ambient only -->
+            <hx:AmbientLight3D IsRendering="{Binding UseFlatLighting}" Color="#707070" />
+
             <!-- hx:ShadowMap3D / -->
-            <hx:DynamicReflectionMap3D IsDynamicScene="True">
+            <hx:DynamicReflectionMap3D x:Name="hxReflection" IsDynamicScene="True">
                 <!-- hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" / -->
                 <hx:ItemsModel3D x:Name="hxContentVisual" />
             </hx:DynamicReflectionMap3D>
@@ -149,6 +176,41 @@
                 </ContextMenu>
             </hx:Viewport3DX.ContextMenu>
         </hx:Viewport3DX>
+
+        <!-- Cover while saving images: hides the resizing and appearance switching; the capture
+             reads the render buffer, so the cover is not in the images -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Background="#121212"
+            Visibility="{Binding IsSavingImage, Converter={StaticResource VisibilityConverter}}">
+            <StackPanel
+                MinWidth="260"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <TextBlock
+                    Margin="0,0,0,8"
+                    HorizontalAlignment="Center"
+                    Foreground="White"
+                    FontSize="14"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap"
+                    Text="{Binding SavingImageStatus}" />
+                <ProgressBar
+                    Height="6"
+                    Minimum="0"
+                    Maximum="{Binding SavingImageTotal}"
+                    Value="{Binding SavingImageDone}" />
+                <Button
+                    Margin="0,10,0,0"
+                    Padding="12,2"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding IsSavingImageBatch, Converter={StaticResource VisibilityConverter}}"
+                    Click="CancelSavingImages_OnClick"
+                    Content="Cancel" />
+            </StackPanel>
+        </Border>
 
         <others:LoadingTextControl
             Grid.Row="0"
@@ -338,8 +400,8 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Search Coordinate -->
-                <StackPanel Orientation="Vertical">
+                <!-- Search Coordinate (sector / block previews only) -->
+                <StackPanel Orientation="Vertical" Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}">
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginTiny}"
                         VerticalAlignment="Center"
@@ -436,72 +498,331 @@
                     </Grid>
                 </StackPanel>
 
-                <!-- Load/Generate Materials -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                <!-- Sections; their expanded state is kept for the session (see RDTMeshViewModel.PreviewImage.cs) -->
+                <Expander
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Header="Materials"
+                    IsExpanded="{Binding IsMaterialsSectionExpanded}">
+                    <StackPanel Orientation="Vertical">
+                        <!-- Load/Generate Materials -->
+                        <Grid>
+                            <!--
+                                Generate Materials: click = generate, Ctrl + click = clear cache and regenerate
+                                (the label says so while Ctrl is held). The arrow opens the same choices as a
+                                menu: click it, or press and drag onto an entry and release.
+                            -->
+                            <Grid Grid.Row="0" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
+                                <Button
+                                    Grid.Column="0"
+                                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                                    Padding="{DynamicResource WolvenKitMarginTiny}"
+                                    Foreground="{StaticResource WolvenKitYellow}"
+                                    IsEnabled="{Binding IsLoadingMaterials,
+                                                        Converter={StaticResource InvertBooleanConverter}}"
+                                    Command="{Binding LoadMaterialsCommand}"
+                                    ToolTip="Generate the material previews. Hold Ctrl to clear the cache and regenerate everything (or use the arrow menu).">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+                                            <Setter Property="Content" Value="Generate Materials" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
+                                                    <Setter Property="Content" Value="Clear Cache and Regenerate" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+
+                                <Button
+                                    x:Name="GenerateMaterialsMenuButton"
+                                    Grid.Column="1"
+                                    Margin="0,4,4,4"
+                                    Padding="6,0"
+                                    Foreground="{StaticResource WolvenKitYellow}"
+                                    IsEnabled="{Binding IsLoadingMaterials,
+                                                        Converter={StaticResource InvertBooleanConverter}}"
+                                    Content="&#x25BE;"
+                                    ToolTip="More options"
+                                    PreviewMouseLeftButtonDown="GenerateMaterialsMenuButton_OnPreviewMouseLeftButtonDown">
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Generate Materials" Command="{Binding LoadMaterialsCommand}" />
+                                            <MenuItem Header="Clear Cache and Regenerate" Command="{Binding RegenerateMaterialsCommand}" />
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                </Button>
+                            </Grid>
+                        </Grid>
+
+                        <!-- Export Materials: bake every material to PNG; multilayer at the chosen size -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ComboBox
+                                Grid.Column="0"
+                                MinWidth="80"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                ItemsSource="{Binding MultilayerExportResolutions}"
+                                SelectedItem="{Binding MultilayerExportResolution}"
+                                ToolTip="Size of the exported multilayer maps (px); other materials keep the size of their textures" />
+                            <Button
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
+                                Command="{Binding ExportMaterialsCommand}"
+                                ToolTip="Bake all materials of this appearance to _d (sRGB), _n (OpenGL, Non-Color), _rm (G roughness, B metalness, Non-Color) and _emissive PNGs in a folder you choose. Multilayer maps use the size on the left."
+                                Content="Bake / Export Materials..." />
+                        </Grid>
+
+                        <Border Background="{StaticResource WolvenKitRed}"
+                                CornerRadius="{DynamicResource WolvenKitTinyRadius}"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                HorizontalAlignment="Stretch">
+                            <TextBlock Text="The material preview is experimental and may be incorrect in some cases."
+                                       Foreground="White"
+                                       FontWeight="Regular"
+                                       HorizontalAlignment="Stretch"
+                                       FontSize="{DynamicResource WolvenKitFontBody}"/>
+                        </Border>
+                    </StackPanel>
+                </Expander>
+
+                <!-- Export (entities): appearance with rig -->
+                <Expander
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Header="Export"
+                    Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}"
+                    IsExpanded="{Binding IsExportSectionExpanded}">
                     <Button
-                        Grid.Row="0"
-                        Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTiny}"
                         Padding="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch"
                         Foreground="{StaticResource WolvenKitYellow}"
-                        IsEnabled="{Binding IsLoadingMaterials,
-                                            Converter={StaticResource InvertBooleanConverter}}"
-                        Command="{Binding LoadMaterialsCommand}"
-                        ToolTip="This feature is experimental, watch log for completion (hold CTRL to clear cache)"
-                        Content="Generate Materials">
-                        <!--
-                        TODO: fix/clean CTRL feature to show it in UI.
-                        <Button.Style>
-                            <Style
-                                BasedOn="{StaticResource WPFButtonStyle}"
-                                TargetType="{x:Type Button}">
-                                <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding IsCtrlKeyPressed}"
-                                        Value="True">
-                                        <Setter Property="Content" Value="Clear Cache and Regenerate" />
-                                    </DataTrigger>
-
-                                    <DataTrigger
-                                        Binding="{Binding IsCtrlKeyPressed}"
-                                        Value="False">
-                                        <Setter Property="Content" Value="Generate Materials" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        -->
-                    </Button>
-
-                    <Button
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="{DynamicResource WolvenKitMarginTiny}"
-                        Padding="{DynamicResource WolvenKitMarginTiny}"
-                        Foreground="{StaticResource WolvenKitYellow}"
-                        Visibility="{Binding PanelVisibility.ShowExportEntity,
-                                             Converter={StaticResource VisibilityConverter}}"
                         Command="{Binding ExportEntityCommand}"
                         ToolTip="This feature is experimental"
                         Content="Export Appearance with Rig" />
-                </Grid>
+                </Expander>
 
-                <Border Background="{StaticResource WolvenKitRed}"
-                        CornerRadius="{DynamicResource WolvenKitTinyRadius}"
-                        Margin="{DynamicResource WolvenKitMarginTiny}"
-                        Padding="{DynamicResource WolvenKitMarginTiny}"
-                        HorizontalAlignment="Stretch">
-                    <TextBlock Text="The material preview is experimental and may be incorrect in some cases."
-                               Foreground="White"
-                               FontWeight="Regular"
-                               HorizontalAlignment="Stretch"
-                               FontSize="{DynamicResource WolvenKitFontBody}"/>
-                </Border>
+                <Expander
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Header="Image &amp; Icons"
+                    IsExpanded="{Binding IsImageSectionExpanded}">
+                    <StackPanel Orientation="Vertical">
+                        <!-- Save Preview Image: the current view as a PNG with a transparent background (icons) -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ComboBox
+                                Grid.Column="0"
+                                MinWidth="80"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                ItemsSource="{Binding PreviewImageFormats}"
+                                SelectedItem="{Binding PreviewImageFormat}"
+                                DisplayMemberPath="Label"
+                                ToolTip="Size of the saved image (px). Icon sizes follow the modding wiki: clothing up to 160 × 160, guns 320 × 80–160, melee 320 × 60–145. Custom... sets any size. The object keeps its proportions." />
+                            <Button
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
+                                Click="SavePreviewImage_OnClick"
+                                ToolTip="Save the current view as a PNG with a transparent background, e.g. for an inventory icon. The object is cropped and centered; zoom in or enlarge the preview for a sharper result."
+                                Content="Save Preview Image..." />
+                        </Grid>
+
+                        <!-- Custom size (when "Custom..." is selected) -->
+                        <Grid Visibility="{Binding IsCustomImageSize, Converter={StaticResource VisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Width" />
+                            <TextBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}" Text="{Binding CustomImageWidth, UpdateSourceTrigger=LostFocus}" ToolTip="Image width in pixels (16 to 8192)" />
+                            <TextBlock Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Height" />
+                            <TextBox Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}" Text="{Binding CustomImageHeight, UpdateSourceTrigger=LostFocus}" ToolTip="Image height in pixels (16 to 8192)" />
+                        </Grid>
+
+                        <!-- Layout and quality of the saved image -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Margin %" />
+                            <ComboBox Grid.Row="0" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewImageMargins}" SelectedItem="{Binding PreviewImageMargin}"
+                                      ToolTip="Empty space around the item, in percent of the shorter side" />
+                            <TextBlock Grid.Row="0" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Align" />
+                            <ComboBox Grid.Row="0" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewImageAlignments}" SelectedItem="{Binding PreviewImageAlignment}"
+                                      ToolTip="Center the item, or stand it on the bottom margin (shoes, props)" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Background" />
+                            <ComboBox Grid.Row="1" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewBackgrounds}" SelectedItem="{Binding PreviewBackground}"
+                                      DisplayMemberPath="Label"
+                                      ToolTip="Transparent, or a solid colour (e.g. white to mask the icon in an image editor)" />
+                            <TextBlock Grid.Row="1" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Quality ×" />
+                            <ComboBox Grid.Row="1" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewSupersampleFactors}" SelectedItem="{Binding PreviewSupersample}"
+                                      ToolTip="Supersampling: render the preview this many times larger for the capture, then scale down. Cleaner edges, and large images no longer depend on the window size. The preview flickers briefly while capturing." />
+                        </Grid>
+
+                        <!-- Icons: one batch for every appearance, camera projection and standard angles -->
+                        <Button
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
+                            Click="SaveIconsForAllAppearances_OnClick"
+                            ToolTip="For every appearance: generate its materials, frame it and save &lt;file&gt;_&lt;appearance&gt;.png into a folder, with the size, camera and angle chosen here"
+                            Content="Save Icons for All Appearances..." />
+                    </StackPanel>
+                </Expander>
+
+                <Expander
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Header="Camera"
+                    IsExpanded="{Binding IsCameraSectionExpanded}">
+                    <StackPanel Orientation="Vertical">
+                        <ComboBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            ItemsSource="{Binding PreviewCameraOptions}"
+                            SelectedItem="{Binding PreviewCamera}"
+                            DisplayMemberPath="Label"
+                            SelectionChanged="PreviewCamera_OnSelectionChanged"
+                            ToolTip="Camera projection. A narrow field of view or orthographic removes perspective distortion, so icons of different items line up." />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Lighting" />
+                            <ComboBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewLightingPresets}" SelectedItem="{Binding PreviewLighting}"
+                                      SelectionChanged="Lighting_OnSelectionChanged"
+                                      ToolTip="Default: the usual work lights. Icon (soft): soft key light from the front upper left, fill and rim light. Icon (follow camera): the same, turning with the camera. Flat: ambient only, no highlights. Applies to the preview and to saved images." />
+                        </Grid>
+                        <WrapPanel Margin="{DynamicResource WolvenKitMarginTiny}" Orientation="Horizontal">
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Tag="Front"
+                                Click="StandardView_OnClick"
+                                ToolTip="Look at the front and frame the object"
+                                Content="Front" />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Tag="Back"
+                                Click="StandardView_OnClick"
+                                ToolTip="Look at the back and frame the object"
+                                Content="Back" />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Tag="Left"
+                                Click="StandardView_OnClick"
+                                ToolTip="Look from the left and frame the object"
+                                Content="Left" />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Tag="Right"
+                                Click="StandardView_OnClick"
+                                ToolTip="Look from the right and frame the object"
+                                Content="Right" />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Tag="Top"
+                                Click="StandardView_OnClick"
+                                ToolTip="Look from above and frame the object"
+                                Content="Top" />
+                            <Button
+                                x:Name="ThreeQuarterButton"
+                                MinWidth="52"
+                                Margin="1"
+                                Padding="4,2"
+                                Tag="ThreeQuarter"
+                                Click="StandardView_OnClick"
+                                ToolTip="Three-quarter view, slightly from above. Click again to go around: front-right (FR), front-left (FL), back-left (BL), back-right (BR)"
+                                Content="3/4" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Expander>
+
+                <Expander
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Header="Shader Debug"
+                    IsExpanded="{Binding IsDebugSectionExpanded}">
+                    <StackPanel Orientation="Vertical">
+                        <!-- Multilayer shader debug view (temporary, for comparing with the bake / Blender) -->
+                        <Grid Visibility="{Binding UseMultilayerShader, Converter={StaticResource VisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ComboBox
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                SelectedIndex="{Binding MultilayerDebugMode}"
+                                ToolTip="View of the selected multilayer material: shaded, single channels, which layer covers where (Layer coverage), a layer's mask with microblend (Layer mask) or how often its textures repeat (Layer tiling)">
+                                <ComboBoxItem Content="Shaded" />
+                                <ComboBoxItem Content="Albedo (unlit)" />
+                                <ComboBoxItem Content="Roughness" />
+                                <ComboBoxItem Content="Metalness" />
+                                <ComboBoxItem Content="Normal (tangent)" />
+                                <ComboBoxItem Content="Layer coverage" />
+                                <ComboBoxItem Content="Layer mask" />
+                                <ComboBoxItem Content="Layer tiling" />
+                            </ComboBox>
+                            <!-- Solo: pick a multilayer material (also follows the tree selection) and one of its layers -->
+                            <ComboBox
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                ItemsSource="{Binding MultilayerDebugMaterials}"
+                                SelectedItem="{Binding SelectedMultilayerDebugMaterial}"
+                                DisplayMemberPath="Label"
+                                ToolTip="Multilayer material for the solo views (selecting a submesh in the tree picks its material)" />
+                            <ComboBox
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                ItemsSource="{Binding MultilayerDebugLayers}"
+                                SelectedItem="{Binding SelectedMultilayerDebugLayer}"
+                                DisplayMemberPath="Label"
+                                ToolTip="Show one layer of the selected material (mlsetup layer number and template); other materials show all layers" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
 
                 <!-- Collisions/Sectors -->
                 <Grid>
@@ -769,7 +1090,7 @@
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="Auto"
                         HeaderText="Material"
-                        MappingName="MaterialName"
+                        MappingName="MaterialDisplayName"
                         MinimumWidth="80" />
 
                     <syncfusion:TreeGridTextColumn
