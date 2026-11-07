@@ -666,6 +666,7 @@
                 <Expander
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Header="Image &amp; Icons"
+                    Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsImageSectionExpanded}">
                     <StackPanel Orientation="Vertical">
                         <!-- Save Preview Image: the current view as a PNG with a transparent background (icons) -->
@@ -827,6 +828,7 @@
                 <Expander
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Header="Shader Debug"
+                    Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsDebugSectionExpanded}">
                     <StackPanel Orientation="Vertical">
                         <!-- Multilayer shader debug view (temporary, for comparing with the bake / Blender) -->
