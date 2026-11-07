@@ -563,6 +563,10 @@ public partial class ChunkViewModel
 
                 IsValueExtrapolated = true;
                 return;
+            case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
+                Value = $"{StringHelper.Stringify(aiSpot.Resource.DepotPath)}";
+                IsValueExtrapolated = true;
+                break;
             case worldNode worldNode:
                 Value = StringHelper.Stringify(worldNode, true);
                 IsValueExtrapolated = Value != string.Empty;
