@@ -102,7 +102,7 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(CUInt64)) && Data is CUInt64 uInt64)
         {
-            Value = StringHelper.StringifyHash(uInt64);
+            Value = StringHelper.StringifyNodeRefHash(uInt64);
         }
         else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
         {
@@ -1299,11 +1299,11 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 return;
             case worldGlobalNodeID worldGlobalNodeID:
-                Value = $"{StringHelper.StringifyHash(worldGlobalNodeID.Hash)}";
+                Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
             case worldCompiledNodeInstanceSetupInfo { GlobalNodeId: { } worldGlobalNodeID }:
-                Value = $"{StringHelper.StringifyHash(worldGlobalNodeID.Hash)}";
+                Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
             case rendRenderTextureBlobMemoryLayout rendTexBlobLayout:

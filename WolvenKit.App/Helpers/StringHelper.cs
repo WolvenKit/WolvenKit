@@ -546,5 +546,5 @@ public abstract partial class StringHelper
 
     public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 
-    public static string? StringifyHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : hash.ToString();
+    public static string? StringifyNodeRefHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : hash.ToString();
 }
