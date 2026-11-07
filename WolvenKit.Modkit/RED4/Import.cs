@@ -54,7 +54,7 @@ namespace WolvenKit.Modkit.RED4
 
             // check if the file can be directly imported
             // if not, rebuild buffers
-            if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
+            if (!RawFileFormatParser.TryParse(rawRelative.Extension, out var extAsEnum))
             {
                 return RebuildBuffer(rawRelative, outDir);
             }
@@ -97,7 +97,7 @@ namespace WolvenKit.Modkit.RED4
         private Task<bool> ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, ReImportArgs importArgs)
         {
             var ext = rawRelative.Extension;
-            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            if (RawFileFormatParser.TryParse(ext, out var extAsEnum))
             {
                 var redModPath = importArgs.RedMod;
                 if (File.Exists(redModPath))
@@ -123,7 +123,7 @@ namespace WolvenKit.Modkit.RED4
         {
             // community_system2.csv.csv
             var ext = rawRelative.Extension;
-            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            if (RawFileFormatParser.TryParse(ext, out var extAsEnum))
             {
 
                 // create redfile
@@ -168,7 +168,7 @@ namespace WolvenKit.Modkit.RED4
         {
             var mlmask = new MLMASK(new MlMaskContainer(), _loggerService);
             var ext = rawRelative.Extension;
-            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            if (RawFileFormatParser.TryParse(ext, out var extAsEnum))
             {
                 if (extAsEnum != ERawFileFormat.masklist)
                 {
@@ -283,14 +283,14 @@ namespace WolvenKit.Modkit.RED4
             // process all other raw files
             var allFiles = inDir.GetFiles("*", SearchOption.AllDirectories).ToList();
             var rawFilesList = allFiles
-                .Where(_ => Enum.GetNames<ERawFileFormat>().Contains(_.TrimmedExtension().ToLower()))
+                .Where(file => RawFileFormatParser.TryParse(file.TrimmedExtension(), out _))
                 .ToList();
             var failsCount = 0;
 
             foreach (var fi in rawFilesList)
             {
                 var ext = fi.TrimmedExtension();
-                if (!Enum.TryParse(ext, true, out ERawFileFormat _))
+                if (!RawFileFormatParser.TryParse(ext, out _))
                 {
                     failsCount++;
                     continue;
@@ -555,7 +555,7 @@ namespace WolvenKit.Modkit.RED4
         private static string FindRedFile(RedRelativePath rawRelPath, DirectoryInfo outDir, string? overrideExt = null)
         {
             var ext = rawRelPath.Extension;
-            if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            if (!RawFileFormatParser.TryParse(ext, out var extAsEnum))
             {
                 return "";
             }
