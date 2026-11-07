@@ -704,6 +704,7 @@
                             HorizontalAlignment="Stretch"
                             IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
                             Click="SaveAppearanceIcons_OnClick"
+                            Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                             ToolTip="Pick appearances, then save one icon per appearance into a folder as &lt;file&gt;_&lt;appearance&gt;.png: materials are generated and the item is framed for each, with the size, camera, angle and lighting chosen here"
                             Content="Save Appearance Icons..." />
                     </StackPanel>
@@ -712,6 +713,7 @@
                 <Expander
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Header="Camera"
+                    Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsCameraSectionExpanded}">
                     <StackPanel Orientation="Vertical">
                         <ComboBox

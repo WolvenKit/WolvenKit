@@ -162,10 +162,19 @@ public partial class RDTMeshViewModel
         }
     }
 
-    public bool UseWorkLighting => PreviewLighting == "Default";
-    public bool UseIconLighting => PreviewLighting == "Icon (soft)";
-    public bool UseFollowLighting => PreviewLighting == "Icon (follow camera)";
-    public bool UseFlatLighting => PreviewLighting == "Flat";
+    // Sector / block previews have no Camera section: they keep the default lights even when
+    // another preview tab picked a preset (the preset is shared by all tabs).
+    public bool UseWorkLighting => !IsObjectPreview || PreviewLighting == "Default";
+    public bool UseIconLighting => IsObjectPreview && PreviewLighting == "Icon (soft)";
+    public bool UseFollowLighting => IsObjectPreview && PreviewLighting == "Icon (follow camera)";
+    public bool UseFlatLighting => IsObjectPreview && PreviewLighting == "Flat";
+
+    /// <summary>
+    /// Mesh and entity previews. The Camera section (projection, lighting, standard views) and
+    /// the per-appearance icons are made for single items; sector and block previews show
+    /// only Save Preview Image.
+    /// </summary>
+    public bool IsObjectPreview => Header != WolvenKit.App.Models.MeshViewHeaders.SectorPreview && Header != WolvenKit.App.Models.MeshViewHeaders.AllSectorPreview;
 
     private static string? s_previewImageFolder;
 
