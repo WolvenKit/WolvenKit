@@ -25,6 +25,7 @@ using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents.Multilayer;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.PhysX;
@@ -273,6 +274,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         _modifierSvc.ModifierStateChanged -= ModifierStateChanged;
         RollbackGeneratedData();
         _textureCache.Clear();
+        ClearMultilayerShaderCache();
         _fileCache.Clear();
 
         var em = EffectsManager;
@@ -284,10 +286,34 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private CHandle<CMaterialInstance>? _generatedInstanceHandle;
     private CHandle<meshMeshAppearance>? _generatedAppearance;
 
+    private static bool s_multilayerDiagnosticsLogged;
+
     public void EnsureEffectsManager()
     {
         if (EffectsManager is null || EffectsManager.IsDisposed)
-            EffectsManager = new DefaultEffectsManager();
+        {
+            // Default Helix effects + the multilayer pass. The shader is compiled once per
+            // process; if that fails the pass is missing and multilayer materials are baked.
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            EffectsManager = new MultilayerEffectsManager();
+            if (!MultilayerShader.IsAvailable)
+            {
+                _loggerService.Warning($"[ML shader] not available, multilayer materials will be baked: {MultilayerShader.LastError}");
+            }
+            else if (sw.ElapsedMilliseconds > 200)
+            {
+                _loggerService.Debug($"[ML shader] effects ready in {sw.ElapsedMilliseconds} ms");
+            }
+
+            // The full report (vertex output / pixel input layouts, constant buffer check) only
+            // when something is off, once per session.
+            if (MultilayerShader.HasWarnings && !string.IsNullOrEmpty(MultilayerShader.Diagnostics) &&
+                !s_multilayerDiagnosticsLogged)
+            {
+                s_multilayerDiagnosticsLogged = true;
+                _loggerService.Warning("[ML shader] " + MultilayerShader.Diagnostics.TrimEnd());
+            }
+        }
     }
 
     private void RollbackGeneratedData()
@@ -396,9 +422,56 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             ApplyAppearancePreviewMaterials(SelectedAppearance);
+
+            // Once materials were generated in this tab, other appearances get theirs on
+            // selection: no grey models until Generate is pressed again.
+            if (_materialsGenerated)
+            {
+                _ = AutoGenerateMaterialsAsync();
+            }
         }
 
         base.OnPropertyChanged(e);
+    }
+
+    private bool _materialsGenerated;
+    private bool _autoGenerating;
+
+    /// <summary>
+    /// Generates the materials of the selected appearance after a switch (cached materials are
+    /// reused, so this is quick). If the selection changes again meanwhile, the newest one
+    /// is generated next.
+    /// </summary>
+    private async Task AutoGenerateMaterialsAsync()
+    {
+        if (_autoGenerating)
+        {
+            return;
+        }
+
+        _autoGenerating = true;
+        try
+        {
+            while (IsLoadingMaterials)
+            {
+                await Task.Delay(50);
+            }
+
+            Appearance? done = null;
+            while (SelectedAppearance is { } current && !ReferenceEquals(done, current))
+            {
+                done = current;
+                await GenerateMaterials(clearCache: false);
+            }
+        }
+        catch (Exception ex)
+        {
+            Parent?.GetLoggerService()?.Warning($"[Preview] materials for the selected appearance: {ex.Message}");
+        }
+        finally
+        {
+            _autoGenerating = false;
+        }
     }
 
     private void ApplyAppearancePreviewMaterials(Appearance app)
@@ -437,6 +510,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 ApplyRenderFlags(sm);
             }
         }
+
+        RefreshMultilayerDebugMaterials();
     }
 
     #endregion
@@ -1470,18 +1545,33 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
             }
 
-            Vector3Collection tangents;
-            if (mesh.tangents.Length > 0)
+            // Smooth per-vertex tangent frame from the preview UVs (see ComputeSmoothTangentFrame).
+            // The shaders use it instead of the per-triangle screen-space frame, which showed
+            // the triangles of smooth normal-mapped surfaces.
+            // xyz only: ToVector3() divides by w, which is the handedness sign here (±1).
+            List<SharpDX.Vector3>? sourceTangents = null;
+            if (mesh.tangents.Length == positions.Count)
             {
-                tangents = new Vector3Collection(mesh.tangents.Length);
-                for (var i = 0; i < mesh.tangents.Length; i++)
+                sourceTangents = new List<SharpDX.Vector3>(mesh.tangents.Length);
+                foreach (var mt in mesh.tangents)
                 {
-                    tangents.Add(mesh.tangents[i].ToVector3());
+                    sourceTangents.Add(new SharpDX.Vector3(mt.X, mt.Y, mt.Z));
                 }
             }
-            else
+
+            Vector3Collection tangents;
+            Vector3Collection? bitangents;
+            try
             {
-                MeshBuilder.ComputeTangents(positions, normals, textureCoordinates, indices, out tangents, out var bitangents);
+                ComputeSmoothTangentFrame(positions, normals, textureCoordinates, indices, out tangents, out var smoothB, sourceTangents);
+                bitangents = smoothB;
+            }
+            catch (Exception ex)
+            {
+                // Never let the tangent frame stop the preview: fall back to Helix's own.
+                _loggerService.Warning($"[Tangents] submesh {index}: {ex.Message}");
+                MeshBuilder.ComputeTangents(positions, normals, textureCoordinates, indices, out tangents, out var helixB);
+                bitangents = helixB;
             }
 
             var sm = new SubmeshComponent()
@@ -1498,7 +1588,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     Indices = indices,
                     Normals = normals,
                     TextureCoordinates = textureCoordinates,
-                    Tangents = tangents
+                    Tangents = tangents,
+                    BiTangents = bitangents
                 },
                 // No per-submesh bias: a body submesh with a high index used to be pulled
                 // in front of the clothes over it. Only coplanar overlay layers get a bias below.
@@ -1552,6 +1643,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         sm.IsTransparent = false;
         sm.DepthBias = 0;
+
+        // Multilayer in the shader is always opaque (the shader has no alpha). Transparent
+        // draws go through Helix's OIT passes, which would show it without its layers.
+        if (_multilayerGpuData.ContainsKey(sm.MaterialName))
+        {
+            return;
+        }
 
         var kind = ClassifyMaterialFor(sm.MaterialName);
 
@@ -1855,6 +1953,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             outIndices.Add(tris[t * 3 + 1] + n);
         }
 
+        Vector3Collection? outBiTangents = null;
+        if (outUv != null)
+        {
+            // Frame of the doubled geometry (mirrored normals), with matching bitangents.
+            try
+            {
+                ComputeSmoothTangentFrame(outPositions, outNormals, outUv, outIndices, out var frameT, out var frameB);
+                outTangents = frameT;
+                outBiTangents = frameB;
+            }
+            catch
+            {
+                // keep the copied tangents; Helix falls back without bitangents
+            }
+        }
+
         var doubled = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
         {
             Positions = outPositions,
@@ -1862,6 +1976,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             Normals = outNormals,
             TextureCoordinates = outUv,
             Tangents = outTangents,
+            BiTangents = outBiTangents,
         };
 
         // Copy 1 triangles agree with the side direction (right-hand rule): counter-clockwise
@@ -2017,10 +2132,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return Materials[name];
         }
 
+        if (UseMultilayerShader && _multilayerGpuData.TryGetValue(name, out var multilayerData))
+        {
+            return SetupMultilayerShaderMaterial(name, multilayerData);
+        }
+
         PBRMaterial material;
-        if (Materials.TryGetValue(name, out var cachedMaterial))
+        if (Materials.TryGetValue(name, out var cachedMaterial) && cachedMaterial is MultilayerPBRMaterial shaderMaterial)
         {
             material = cachedMaterial;
+            // Was shown by the multilayer shader before: back to plain PBR maps.
+            shaderMaterial.MultilayerData = null;
             // Force-refresh: drop maps loaded before the bake finished
             if (force)
             {
@@ -2036,9 +2158,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         else
         {
-            material = new PBRMaterial
+            // MultilayerPBRMaterial also for plain maps: it renders them with the smooth
+            // tangent frame (Helix's own PBR shows the triangles of normal-mapped surfaces).
+            material = new MultilayerPBRMaterial
             {
-                EnableAutoTangent = true,
+                // Vertex tangent frame (smooth); geometry always carries tangents + bitangents.
+                EnableAutoTangent = false,
                 RenderShadowMap = true,
                 RenderEnvironmentMap = true
             };
@@ -2046,6 +2171,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
+        material.EnableAutoTangent = false; // vertex tangent frame, see ComputeSmoothTangentFrame
 
         var (filename_bd, filename_bn, filename_rm) = GetMaterialFilePathsFromCache(name);
 
@@ -2715,8 +2841,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
-    private static bool _logged4k;
-
     /// <summary>
     /// Resolve a depot path via IArchiveManager.GetCR2WFile, which prefers the
     /// open project over mods and the base archive (includeProject = true).
@@ -2729,8 +2853,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (_fileCache.TryGetValue(depotPath, out var cached))
             return cached;
 
-        var am = ResolveArchiveManager();
         CR2WFile? result = null;
+
+        // Files embedded in the open document come first, as in the game: they override
+        // the project, mods and the archive for the same path.
+        if (FindEmbeddedContent(depotPath) is { } embedded)
+        {
+            result = new CR2WFile { RootChunk = embedded };
+            _fileCache[depotPath] = result;
+            return result;
+        }
+
+        var am = ResolveArchiveManager();
 
         if (am != null)
         {
@@ -2839,6 +2973,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// </summary>
     private string DepStamp(string relPath)
     {
+        // Embedded in the open document: no file to stamp; the content object identifies the
+        // version (replacing the embedded file gives a new one).
+        if (FindEmbeddedContent(relPath) is { } embedded)
+        {
+            return $"E|{relPath}|{System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(embedded)}";
+        }
+
         try
         {
             var modDir = Parent?.GetActiveProject()?.ModDirectory;
@@ -3246,15 +3387,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
         }
 
-        Parent?.GetLoggerService()?.Warning(
-            $"External material '{material.Name}' index {me.Index} not found");
+        var label = SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name;
+        var extPath = me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count
+            ? mesh.ExternalMaterials[me.Index].DepotPath
+            : mesh.PreloadExternalMaterials != null && me.Index >= 0 && me.Index < mesh.PreloadExternalMaterials.Count
+                ? mesh.PreloadExternalMaterials[me.Index].DepotPath
+                : ResourcePath.Empty;
+        if (extPath != ResourcePath.Empty)
+        {
+            WarnMissingFile("material", extPath, label);
+        }
+        else
+        {
+            Parent?.GetLoggerService()?.Warning(
+                $"[Preview] {label}: external material index {me.Index} is outside externalMaterials ({mesh.ExternalMaterials.Count}) and preloadExternalMaterials ({mesh.PreloadExternalMaterials?.Count ?? 0})");
+        }
     }
 
     private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh, string? meshPath = null)
     {
         var materials = new Dictionary<string, Material>();
 
-
+        WarnMixedMaterialLists(mesh, meshPath);
 
         foreach (var me in mesh.MaterialEntries)
         {
@@ -3275,7 +3429,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (inst == null)
             {
 
-                Parent?.GetLoggerService().Warning($"Couldn't find material instance for index {me.Index}");
+                Parent?.GetLoggerService().Warning(
+                    $"[Preview] {me.Name}: local material index {me.Index} not found in localMaterialBuffer or preloadLocalMaterialInstances");
                 continue;
             }
 
@@ -3338,8 +3493,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+    /// <summary>Generate Materials button: Ctrl held = clear the cache first.</summary>
     [RelayCommand]
-    public async Task LoadMaterials()
+    public Task LoadMaterials() =>
+        GenerateMaterials(CtrlKeyPressed || IsCtrlKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
+
+    /// <summary>Menu entry "Clear Cache and Regenerate" (same as Ctrl + Generate Materials).</summary>
+    [RelayCommand]
+    private Task RegenerateMaterials() => GenerateMaterials(clearCache: true);
+
+    private async Task GenerateMaterials(bool clearCache)
     {
         if (IsLoadingMaterials || SelectedAppearance == null)
         {
@@ -3349,21 +3512,27 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         IsLoadingMaterials = true;
+        lock (_missingFilesWarned)
+        {
+            _missingFilesWarned.Clear(); // report missing files once per Generate
+        }
+
         try
         {
             RefreshMaterialsFromDisk();
 
-            var shift = ShiftKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
-            var ctrl = CtrlKeyPressed || Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
-            var bakeMax = shift ? 4096 : 2048;
-            // Shift only picks the resolution; the .deps stamp records it, so switching
-            // 2K <-> 4K re-bakes multilayer materials and nothing else. Ctrl forces a full re-bake.
+            var ctrl = clearCache;
+            // Multilayer is shown by the shader; 2048 is only the fallback bake (shader not
+            // available / too many textures). Exports pick their size in Bake Multilayer.
+            // Ctrl forces a full re-bake.
+            const int bakeMax = 2048;
             var forceBake = ctrl;
 
             if (ctrl)
             {
                 DeleteMaterialCache();
                 _textureCache.Clear();
+                ClearMultilayerShaderCache();
                 Parent?.GetLoggerService()?.Info("Clearing material cache...");
 
                 foreach (var (_, material) in SelectedAppearance.RawMaterials)
@@ -3386,6 +3555,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             });
 
             Parent?.GetLoggerService()?.Info("All materials loaded!");
+            _materialsGenerated = true;
         }
         catch (Exception ex)
         {
@@ -3545,6 +3715,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                 if (baseMaterialFile == null)
                 {
+                    WarnMissingFile("base material", mat.BaseMaterial.DepotPath,
+                        SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name);
                     mat = null;
                     continue;
                 }
@@ -3604,13 +3776,42 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 ? Math.Clamp(bakeMax, 256, 4096)
                 : null;
 
+            if (_exportBake)
+            {
+                // Export Materials: every material is baked (or taken from the cache) and
+                // recorded for copying; multilayer is always re-baked at exactly the chosen size,
+                // the other kinds keep the size of their source textures.
+                lock (_exportBakedNames)
+                {
+                    _exportBakedNames.Add(material.Name);
+                }
+
+                if (dictionary.ContainsKey("MultilayerSetup"))
+                {
+                    forceBake = true;
+                }
+            }
+            else if (dictionary.ContainsKey("MultilayerSetup"))
+            {
+                // Multilayer in the shader: textures and parameters go to the GPU, nothing is baked.
+                // Falls through to the bake when the shader is off or cannot show this material.
+                if (await TryBuildMultilayerGpuData(material, dictionary))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                _multilayerGpuData.TryRemove(material.Name, out _);
+            }
+
             if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution))
             {
                 Parent?.GetLoggerService()?.Debug($"[Cache] '{material.Name}' up to date");
                 return;
             }
 
-            Parent?.GetLoggerService().Info($"Baking material: {material.Name}");
+            Parent?.GetLoggerService()?.Debug($"Baking material: {material.Name}");
 
             // Something changed (or no cache yet): drop old outputs so every branch bakes again.
             foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng })
@@ -4011,15 +4212,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                 var target = Math.Max(SoftMin, Math.Max(fromMask, Math.Max(fromTile, fromMb)));
                 target = NextPow2Clamped(target, hardMax);
+                if (_exportBake)
+                {
+                    target = hardMax; // export: exactly the requested 1K/2K/4K
+                }
 
                 var maxWidth = target;
                 var maxHeight = target;
-
-                if (hardMax >= 4096 && !_logged4k)
-                {
-                    _logged4k = true;
-                    Parent?.GetLoggerService()?.Debug($"ML 4k material preview (Shift)");
-                }
 
 
                 // === 3. Working buffers ===
@@ -5443,7 +5642,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         if (meshData.LocalMaterialBuffer.Materials[matIndex] is CMaterialInstance localMi)
                         {
                             material.Instance = localMi;
-                            Parent?.GetLoggerService()?.Info($"[Eye] Found local at index {matIndex}");
                         }
                     }
                 }
@@ -7488,6 +7686,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var file = GetProjectOrDepotFile(depotPath);
             if (file?.RootChunk is not ITexture it)
             {
+                WarnMissingFile("texture", depotPath);
                 return null;
             }
 
@@ -8625,6 +8824,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// </summary>
     partial void OnSelectedItemChanged(object? value)
     {
+        SyncMultilayerDebugMaterial(value);
+
         if (Header != MeshViewHeaders.SectorPreview && Header != MeshViewHeaders.AllSectorPreview)
             return;
 
