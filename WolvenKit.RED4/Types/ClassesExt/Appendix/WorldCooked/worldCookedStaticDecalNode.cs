@@ -28,8 +28,8 @@ public partial class worldCookedStaticDecalNode
             var entry = new worldCookedStaticDecalInnerNode();
 
             entry.Material = new CResourceAsyncReference<IMaterial>(br.BaseReader.ReadUInt64());
-            entry.ForcedAutoHideDistance = br.ReadCFloat();
             entry.AutoHideDistance = br.ReadCFloat();
+            entry.ForcedAutoHideDistance = br.ReadCFloat();
             entry.Alpha = br.ReadCFloat();
             entry.NormalThreshold = br.ReadCFloat();
             entry.RoughnessScale = br.ReadCFloat();
@@ -73,8 +73,8 @@ public partial class worldCookedStaticDecalNode
         foreach (var entry in data.InnerNodes)
         {
             bw.BaseWriter.Write((ulong)entry.Material.DepotPath);
-            bw.Write(entry.ForcedAutoHideDistance);
             bw.Write(entry.AutoHideDistance);
+            bw.Write(entry.ForcedAutoHideDistance);
             bw.Write(entry.Alpha);
             bw.Write(entry.NormalThreshold);
             bw.Write(entry.RoughnessScale);
@@ -120,17 +120,17 @@ public class worldCookedStaticDecalInnerNode : RedBaseClass
         set => SetPropertyValue<CResourceAsyncReference<IMaterial>>(value);
     }
 
-    [RED("forcedAutoHideDistance")]
+    [RED("autoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat ForcedAutoHideDistance
+    public CFloat AutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
     }
 
-    [RED("autoHideDistance")]
+    [RED("forcedAutoHideDistance")]
     [REDProperty(IsIgnored = true)]
-    public CFloat AutoHideDistance
+    public CFloat ForcedAutoHideDistance
     {
         get => GetPropertyValue<CFloat>();
         set => SetPropertyValue<CFloat>(value);
