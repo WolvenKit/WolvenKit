@@ -9,6 +9,6 @@ Template changelog entry:
 changes:
     - type: "fixed"
       packages: ["App", "CLI", "Nuget Packages"]
-      pr-number: 0
+      pr-number: 3242
       author: "spuddeh"
       description: "worldCookedStaticDecalNode reads and writes autoHideDistance and forcedAutoHideDistance in the right order"
