@@ -231,6 +231,13 @@ public partial class RDTMeshViewModel
     private static bool s_cameraSectionExpanded = true;
     private static bool s_debugSectionExpanded;
     private static bool s_exportSectionExpanded = true;
+    private static bool s_sectorSectionExpanded = true;
+
+    public bool IsSectorSectionExpanded
+    {
+        get => s_sectorSectionExpanded;
+        set => SetProperty(ref s_sectorSectionExpanded, value);
+    }
 
     public bool IsExportSectionExpanded
     {
