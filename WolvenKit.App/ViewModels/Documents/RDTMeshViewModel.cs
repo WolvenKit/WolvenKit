@@ -492,26 +492,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         foreach (var name in names)
         {
+            // Multilayer materials are shown by the shader and have no baked PNG.
             var (albedoPng, _, _) = GetMaterialFilePathsFromCache(name);
-            if (File.Exists(albedoPng))
+            if (_multilayerGpuData.ContainsKey(name) || File.Exists(albedoPng))
             {
                 SetupPBRMaterial(name, force: true);
             }
         }
 
-        foreach (var model in app.Models)
+        // Sector / block previews keep their submeshes in the LOD table, not in Models.
+        var submeshes = app.Models.Count > 0
+            ? app.Models.SelectMany(m => m.Meshes)
+            : app.LODLUT.Values.SelectMany(x => x);
+        foreach (var sm in submeshes)
         {
-            foreach (var sm in model.Meshes)
+            if (string.IsNullOrEmpty(sm.MaterialName))
             {
-                if (string.IsNullOrEmpty(sm.MaterialName))
-                {
-                    continue;
-                }
-
-                sm.Material = SetupPBRMaterial(sm.MaterialName, force: true);
-                // The albedo PNG may only exist now: re-decide transparency for it.
-                ApplyRenderFlags(sm);
+                continue;
             }
+
+            sm.Material = SetupPBRMaterial(sm.MaterialName, force: true);
+            // The albedo PNG may only exist now: re-decide transparency for it.
+            ApplyRenderFlags(sm);
         }
 
         ApplySkinNormalsUnderMakeup(app);
@@ -8421,6 +8423,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private readonly Dictionary<string, List<SubmeshComponent>> _sectorMeshTemplates = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, List<Material>> _sectorMaterialCache = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>Index of the mesh appearance with this name; 0 (the first) if there is none.</summary>
+    private static int GetMeshAppearanceIndex(CMesh mesh, CName appearance)
+    {
+        for (var i = 0; i < mesh.Appearances.Count; i++)
+        {
+            if (mesh.Appearances[i]?.Chunk is { } meshApp && meshApp.Name == appearance)
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
     private List<Material> GetSectorMaterials(CMesh mesh, CName appearance, string meshPath)
     {
         var key = meshPath + "|" + appearance;
@@ -8659,6 +8675,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                 var meshPath = irmn.Mesh.DepotPath.GetResolvedText() ?? string.Empty;
                 var appMaterials = GetSectorMaterials(mesh, irmn.MeshAppearance, meshPath);
+                // The node's appearance picks the chunk materials; index 0 named the submeshes
+                // after the first appearance while the materials came from the node's one.
+                var appearanceIndex = GetMeshAppearanceIndex(mesh, irmn.MeshAppearance);
 
                 var group = new MeshComponent()
                 {
@@ -8699,7 +8718,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                     for (var i = 0; i < wtb.Transforms.Count; i++)
                     {
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -8747,7 +8766,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         //for (int j = 0; j < transforms.Count; j++)
                         //{
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
@@ -8790,7 +8809,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     var i = 0;
                     foreach (var transform in transforms)
                     {
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, 0, meshPath);
+                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
 
                         var subgroup = new MeshComponent()
                         {
