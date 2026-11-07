@@ -166,7 +166,9 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
-            var isTarget = target == null || name == target;
+            // Sector / block previews have no Shader Debug section: always shaded there, even when
+            // another tab set a debug mode (the mode is shared).
+            var isTarget = IsObjectPreview && (target == null || name == target);
             var mode = isTarget ? MultilayerShader.DebugMode : 0;
             var solo = isTarget && layer != null && layer.Key == name ? layer.Index : -1;
 

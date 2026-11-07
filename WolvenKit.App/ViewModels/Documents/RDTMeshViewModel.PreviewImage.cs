@@ -170,9 +170,8 @@ public partial class RDTMeshViewModel
     public bool UseFlatLighting => IsObjectPreview && PreviewLighting == "Flat";
 
     /// <summary>
-    /// Mesh and entity previews. The Camera section (projection, lighting, standard views) and
-    /// the per-appearance icons are made for single items; sector and block previews show
-    /// only Save Preview Image.
+    /// Mesh and entity previews. The Camera, Image &amp; Icons and Shader Debug sections are made
+    /// for single items; sector and block previews hide them.
     /// </summary>
     public bool IsObjectPreview => Header != WolvenKit.App.Models.MeshViewHeaders.SectorPreview && Header != WolvenKit.App.Models.MeshViewHeaders.AllSectorPreview;
 
