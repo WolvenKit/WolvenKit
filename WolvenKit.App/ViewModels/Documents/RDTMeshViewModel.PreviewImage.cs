@@ -448,7 +448,7 @@ public partial class RDTMeshViewModel
         if (existing > 0 &&
             System.Windows.MessageBox.Show(
                 $"{existing} of the {appearanceNames.Count} icon files already exist in\n{folder}\n\nOverwrite them?",
-                "Save Icons for All Appearances",
+                "Save Appearance Icons",
                 System.Windows.MessageBoxButton.YesNo,
                 System.Windows.MessageBoxImage.Question) != System.Windows.MessageBoxResult.Yes)
         {

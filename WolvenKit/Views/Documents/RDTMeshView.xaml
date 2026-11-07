@@ -688,15 +688,15 @@
                                       ToolTip="Supersampling: render the preview this many times larger for the capture, then scale down. Cleaner edges, and large images no longer depend on the window size. The preview flickers briefly while capturing." />
                         </Grid>
 
-                        <!-- Icons: one batch for every appearance, camera projection and standard angles -->
+                        <!-- Appearance icons: one icon per picked appearance -->
                         <Button
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Padding="{DynamicResource WolvenKitMarginTiny}"
                             HorizontalAlignment="Stretch"
                             IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
-                            Click="SaveIconsForAllAppearances_OnClick"
-                            ToolTip="For every appearance: generate its materials, frame it and save &lt;file&gt;_&lt;appearance&gt;.png into a folder, with the size, camera and angle chosen here"
-                            Content="Save Icons for All Appearances..." />
+                            Click="SaveAppearanceIcons_OnClick"
+                            ToolTip="Pick appearances, then save one icon per appearance into a folder as &lt;file&gt;_&lt;appearance&gt;.png: materials are generated and the item is framed for each, with the size, camera, angle and lighting chosen here"
+                            Content="Save Appearance Icons..." />
                     </StackPanel>
                 </Expander>
 

@@ -182,11 +182,11 @@ namespace WolvenKit.Views.Documents
         private bool _savingIcons;
 
         /// <summary>
-        /// Save Icons for All Appearances: for each appearance, select it, generate its materials
+        /// Save Appearance Icons: for each picked appearance, select it, generate its materials
         /// (cached ones are reused), frame it and save &lt;file&gt;_&lt;appearance&gt;.png with the
         /// current size, camera angle and projection. The selected appearance is restored after.
         /// </summary>
-        private async void SaveIconsForAllAppearances_OnClick(object sender, RoutedEventArgs e)
+        private async void SaveAppearanceIcons_OnClick(object sender, RoutedEventArgs e)
         {
             if (_savingIcons || ViewModel is not { } vm || vm.IsLoadingMaterials)
             {
@@ -307,7 +307,7 @@ namespace WolvenKit.Views.Documents
 
             var window = new System.Windows.Window
             {
-                Title = "Save Icons for All Appearances",
+                Title = "Save Appearance Icons",
                 Width = 380,
                 Height = Math.Min(560, 150 + 26 * names.Count),
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
