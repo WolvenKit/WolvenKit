@@ -111,6 +111,8 @@ public sealed partial class ThemeService : IThemeService
 
     public event EventHandler? ThemesChanged;
 
+    public event EventHandler? CurrentThemeChanging;
+
     public event EventHandler? CurrentThemeChanged;
 
     #region lifecycle
@@ -327,8 +329,34 @@ public sealed partial class ThemeService : IThemeService
         }
 
         _currentName = name;
-        ApplyResources(Current);
-        CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
+        ApplyCurrentDeferred();
+    }
+
+    /// <summary>
+    /// Announces the change, then applies the current theme at background priority, so that a notification
+    /// raised in <see cref="CurrentThemeChanging"/> is rendered before the UI thread is busy.
+    /// Without a running application (tests) everything happens right away.
+    /// </summary>
+    private void ApplyCurrentDeferred()
+    {
+        CurrentThemeChanging?.Invoke(this, EventArgs.Empty);
+
+        void Apply()
+        {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            ApplyResources(Current);
+            _loggerService.Debug($"Themes: resources of \"{Current.Name}\" written in {watch.ElapsedMilliseconds} ms.");
+            CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        if (Application.Current?.Dispatcher is { } dispatcher)
+        {
+            dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (Action)Apply);
+        }
+        else
+        {
+            Apply();
+        }
     }
 
     #endregion
@@ -600,8 +628,7 @@ public sealed partial class ThemeService : IThemeService
         if (_isInitialized && isCurrent)
         {
             _currentName = Current.Name;
-            ApplyResources(Current);
-            CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
+            ApplyCurrentDeferred();
         }
 
         return saved;

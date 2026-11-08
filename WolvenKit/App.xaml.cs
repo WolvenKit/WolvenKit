@@ -25,6 +25,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
@@ -128,6 +129,7 @@ namespace WolvenKit
                 .Skip(1)
                 .Subscribe(_ => OnUiScaleChanged());
 
+            _themeService.CurrentThemeChanging += (_, _) => OnThemeChanging();
             _themeService.CurrentThemeChanged += (_, _) => OnThemeChanged();
 
             // SfSkinManager may merge its own brush dictionaries when the main window gets its theme;
@@ -310,13 +312,25 @@ namespace WolvenKit
             });
         }
 
-        private void OnThemeChanged() => DispatcherHelper.RunOnMainThread(() =>
+        /// <summary>Switching takes a few seconds (Syncfusion rebuilds its styles): tell the user before the UI freezes.</summary>
+        private void OnThemeChanging()
         {
+            Locator.Current.GetService<INotificationService>()?.Info($"Applying theme \"{_themeService.Current.Name}\"…");
+            if (Locator.Current.GetService<IProgressService<double>>() is { } progress)
+            {
+                progress.IsIndeterminate = true;
+                progress.Status = EStatus.Running;
+            }
+        }
+
+        private void OnThemeChanged()
+        {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             try
             {
                 // node brushes are cached per resource key
                 WolvenKit.App.ViewModels.GraphEditor.Nodes.GraphNodeStyling.ClearBrushCache();
-                ApplyThemeLive(_settingsManager, _themeService);
+                ApplyThemeLive(_settingsManager, _themeService, _loggerService);
             }
             catch (Exception ex)
             {
@@ -327,7 +341,16 @@ namespace WolvenKit
                     "Theme",
                     WMessageBoxButtons.Ok);
             }
-        });
+            finally
+            {
+                if (Locator.Current.GetService<IProgressService<double>>() is { } progress)
+                {
+                    progress.IsIndeterminate = false;
+                    progress.Status = EStatus.Ready;
+                }
+                _loggerService.Info($"Theme \"{_themeService.Current.Name}\" applied in {watch.ElapsedMilliseconds} ms.");
+            }
+        }
 
         /// <summary>
         /// Applies the current theme without restart. The theme service has already written the colors into the
@@ -335,26 +358,24 @@ namespace WolvenKit
         /// their brushes with StaticResource, so the SfSkinManager theme is re-applied to rebuild them; this also
         /// registers the new accent. Same sequence as <see cref="UpdateTheme"/>, which is known to work.
         /// </summary>
-        public static void ApplyThemeLive(ISettingsManager settingsManager, IThemeService themeService)
+        public static void ApplyThemeLive(ISettingsManager settingsManager, IThemeService themeService, ILoggerService logger = null)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             var window = Current.MainWindow;
             if (window is null)
             {
                 return;
             }
 
-            try
+            // RegisterThemeSettings writes into Syncfusion dictionaries it sealed earlier (Common.xaml, Brushes.xaml)
+            using (themeService.BeginSkinUpdate())
             {
                 Reapply();
             }
-            catch (InvalidOperationException)
-            {
-                // fallback: Syncfusion tried to write into a dictionary it sealed earlier
-                using var skinUpdate = themeService.BeginSkinUpdate();
-                Reapply();
-            }
+            var skinMs = watch.ElapsedMilliseconds;
 
             themeService.Refresh();
+            logger?.Debug($"Themes: Syncfusion skin re-applied in {skinMs} ms, new dictionaries patched in {watch.ElapsedMilliseconds - skinMs} ms.");
 
             // Hiding and showing the window makes it rebuild its visuals with the new styles (as in UpdateTheme).
             window.InvalidateVisual();

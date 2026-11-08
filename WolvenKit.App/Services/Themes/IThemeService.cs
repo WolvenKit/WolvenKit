@@ -41,6 +41,12 @@ public interface IThemeService
     /// <summary>Raised when themes are added, saved, renamed or deleted.</summary>
     event EventHandler? ThemesChanged;
 
+    /// <summary>
+    /// Raised when <see cref="Current"/> changed, before the (UI-blocking) work of applying it starts.
+    /// The work runs at background dispatcher priority, so a notification shown here gets rendered first.
+    /// </summary>
+    event EventHandler? CurrentThemeChanging;
+
     /// <summary>Raised after <see cref="Current"/> changed and its resources were applied.</summary>
     event EventHandler? CurrentThemeChanged;
 
