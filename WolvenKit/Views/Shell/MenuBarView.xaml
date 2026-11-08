@@ -747,6 +747,24 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
+
+                <Separator />
+
+                <!-- Items are filled in MenuBarView.xaml.cs when the submenu opens -->
+                <MenuItem
+                    x:Name="MenuItemTheme"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Theme"
+                    SubmenuOpened="MenuItemTheme_OnSubmenuOpened">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Material"
+                            Kind="Palette"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </MenuItem.Icon>
+                    <!-- placeholder so that WPF shows the submenu arrow -->
+                    <MenuItem Header="…" />
+                </MenuItem>
             </MenuItem>
 
             <!-- Tools -->
@@ -851,22 +869,6 @@
                 </MenuItem>
 
                 <Separator />
-
-                <!-- Items are filled in MenuBarView.xaml.cs when the submenu opens -->
-                <MenuItem
-                    x:Name="MenuItemTheme"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Theme"
-                    SubmenuOpened="MenuItemTheme_OnSubmenuOpened">
-                    <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Material"
-                            Kind="Palette"
-                            Size="{DynamicResource WolvenKitIconTiny}" />
-                    </MenuItem.Icon>
-                    <!-- placeholder so that WPF shows the submenu arrow -->
-                    <MenuItem Header="…" />
-                </MenuItem>
 
                 <MenuItem
                     x:Name="ToolbarSettingsButton"
