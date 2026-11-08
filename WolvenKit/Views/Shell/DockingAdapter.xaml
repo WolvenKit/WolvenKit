@@ -488,10 +488,11 @@
                         <DockPanel
                             x:Name="RegularHeader"
                             Visibility="Collapsed">
+                            <!--  tool panels shown as tabs (Asset Browser, Import/Export Tool): same as above  -->
                             <TextBlock
                                 Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
                                 VerticalAlignment="Center"
-                                Foreground="{DynamicResource ContentForeground}"
+                                Style="{x:Null}"
                                 Text="{Binding}" />
                         </DockPanel>
                     </Grid>
