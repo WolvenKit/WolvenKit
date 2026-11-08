@@ -85,7 +85,6 @@
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsSelected" Value="True">
                         <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
-                        <Setter Property="FontWeight" Value="Bold" />
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
@@ -114,7 +113,6 @@
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsSelected" Value="True">
                         <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectResources}" />
-                        <Setter Property="FontWeight" Value="Bold" />
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
