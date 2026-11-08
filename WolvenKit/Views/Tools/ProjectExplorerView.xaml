@@ -868,23 +868,19 @@
 
             <Style
                 x:Key="WolvenKitPESourceTabs"
-                BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                 TargetType="{x:Type syncfusion:TabItemExt}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
-                <Setter Property="BorderThickness" Value="0,0,0,2" />
+                <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 <Setter Property="Foreground" Value="White" />
+                <!--
+                    Not based on the Syncfusion tab style: its triggers swap in its own template (accent background,
+                    different padding) depending on the state, so the tabs changed color and width on hover/selection.
+                -->
                 <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
-                <!--  the base Syncfusion style swaps the template of a selected or hovered tab; keep ours  -->
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
-                    </Trigger>
-                </Style.Triggers>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
             </Style>
         </ResourceDictionary>
 
@@ -916,22 +912,13 @@
             <syncfusion:TabItemExt Header="SOURCE">
                 <syncfusion:TabItemExt.Style>
                     <Style
-                        BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                         TargetType="{x:Type syncfusion:TabItemExt}">
                         <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
                         <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
-                        <!--  the base Syncfusion style swaps the template of a selected or hovered tab; keep ours  -->
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
-                            </Trigger>
-                        </Style.Triggers>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
@@ -947,21 +934,13 @@
             <syncfusion:TabItemExt Header="RESOURCES">
                 <syncfusion:TabItemExt.Style>
                     <Style
-                        BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                         TargetType="{x:Type syncfusion:TabItemExt}">
                         <Setter Property="Background" Value="{DynamicResource WolvenKitProjectResourcesShadow}" />
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
-                        <!--  the base Syncfusion style swaps the template of a selected or hovered tab; keep ours  -->
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
-                            </Trigger>
-                        </Style.Triggers>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
