@@ -20,6 +20,7 @@ using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
@@ -37,6 +38,7 @@ namespace WolvenKit
 
         private ISettingsManager _settingsManager;
         private ILoggerService _loggerService;
+        private IThemeService _themeService;
 
         // Constructor #1
         static AppImpl()
@@ -70,11 +72,23 @@ namespace WolvenKit
             _loggerService.Info("Starting application");
             _loggerService.Info($"Version: {_settingsManager.GetVersionNumber()}");
 
+            // Apply the WolvenKit color theme before any window is created:
+            // views resolve StaticResource colors when they are loaded.
+            _themeService = Locator.Current.GetService<IThemeService>();
+            try
+            {
+                _themeService.Initialize();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Exception while loading color themes: {ex.Message}");
+            }
+
             // Register themes before loading any UI to avoid exceptions.
             try
             {
                 _loggerService.Info("Registering themes...");
-                var themeSettings = BuildTheme(_settingsManager);
+                var themeSettings = BuildTheme(_settingsManager, _themeService);
                 SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
                 SfSkinManager.ApplyStylesOnApplication = true;
                 _loggerService.Info("Themes registered successfully.");
@@ -113,6 +127,12 @@ namespace WolvenKit
                 .WhenPropertyChanged(settings => settings.UiScale)
                 .Skip(1)
                 .Subscribe(_ => OnUiScaleChanged());
+
+            _themeService.CurrentThemeChanged += (_, _) => OnThemeChanged();
+
+            // SfSkinManager may merge its own brush dictionaries when the main window gets its theme;
+            // keep the WolvenKit theme overrides on top of them.
+            Activated += OnFirstActivated;
 
             StartDeferredServiceLoad();
 
@@ -214,11 +234,20 @@ namespace WolvenKit
             }
         }
 
-        private static IThemeSetting BuildTheme(ISettingsManager settingsManager)
+        private void OnFirstActivated(object sender, EventArgs e)
         {
-            return new MaterialDarkThemeSettings
+            Activated -= OnFirstActivated;
+            _themeService.EnsureResourcesOnTop();
+        }
+
+        private static IThemeSetting BuildTheme(ISettingsManager settingsManager, IThemeService themeService)
+        {
+            var theme = themeService.Current;
+            var accentForeground = themeService.ResolveAccentForeground(theme);
+
+            var settings = new MaterialDarkThemeSettings
             {
-                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
+                PrimaryBackground = new SolidColorBrush(themeService.ResolveAccent(theme)),
                 BodyFontSize = 11 * settingsManager.UiScalePercentage,
                 HeaderFontSize = 14 * settingsManager.UiScalePercentage,
                 SubHeaderFontSize = 13 * settingsManager.UiScalePercentage,
@@ -227,21 +256,29 @@ namespace WolvenKit
                 BodyAltFontSize = 11 * settingsManager.UiScalePercentage,
                 FontFamily = new FontFamily("Segoe UI")
             };
+
+            if (accentForeground is { } foreground)
+            {
+                settings.PrimaryForeground = new SolidColorBrush(foreground);
+            }
+
+            return settings;
         }
 
         // NOTE: used for debug environment
-        public static void UpdateTheme(ISettingsManager settingsManager)
+        public static void UpdateTheme(ISettingsManager settingsManager, IThemeService themeService)
         {
             var window = Application.Current.MainWindow;
             // NOTE: trick SfSkinManager to unregister current ThemeSettings.
             var theme = SfSkinManager.GetTheme(window);
 
             theme.ThemeName = "";
-            var themeSettings = BuildTheme(settingsManager);
+            var themeSettings = BuildTheme(settingsManager, themeService);
 
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
             SfSkinManager.ApplyStylesOnApplication = true;
             SfSkinManager.SetTheme(window, new Theme("MaterialDark"));
+            themeService.EnsureResourcesOnTop();
             window.InvalidateVisual();
             window.UpdateLayout();
             window.Visibility = Visibility.Collapsed;
@@ -264,13 +301,138 @@ namespace WolvenKit
 #if DEBUG
                 // NOTE: Allow dynamic scaling to speed-up workflow when working on UI.
                 //       You might need to restart manually in some cases.
-                UpdateTheme(_settingsManager);
+                UpdateTheme(_settingsManager, _themeService);
                 await Task.CompletedTask;
 #else
                 await Interactions.ShowMessageBoxAsync("WolvenKit will restart to apply UI changes.", "Restart to scale UI", WMessageBoxButtons.Ok);
                 ProcessHelper.Restart(Current);
 #endif
             });
+        }
+
+        private void OnThemeChanged() => DispatcherHelper.RunOnMainThread(() =>
+        {
+            try
+            {
+                // node brushes are cached per resource key
+                WolvenKit.App.ViewModels.GraphEditor.Nodes.GraphNodeStyling.ClearBrushCache();
+                ApplyThemeLive(_settingsManager, _themeService);
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Could not apply the theme without restart: {ex.Message}");
+                _loggerService.Debug(ex.ToString());
+                _ = Interactions.ShowMessageBoxAsync(
+                    "The theme could not be applied completely. Restart WolvenKit to see it everywhere.",
+                    "Theme",
+                    WMessageBoxButtons.Ok);
+            }
+        });
+
+        /// <summary>
+        /// Applies the current theme without restart. The theme service has already written the colors into the
+        /// resource dictionaries (WolvenKit's XAML follows via DynamicResource). Syncfusion control styles resolve
+        /// their brushes with StaticResource, so the SfSkinManager theme is re-applied to rebuild them; this also
+        /// registers the new accent. Same sequence as <see cref="UpdateTheme"/>, which is known to work.
+        /// </summary>
+        public static void ApplyThemeLive(ISettingsManager settingsManager, IThemeService themeService)
+        {
+            var window = Current.MainWindow;
+            if (window is null)
+            {
+                return;
+            }
+
+            try
+            {
+                Reapply();
+            }
+            catch (InvalidOperationException)
+            {
+                // fallback: Syncfusion tried to write into a dictionary it sealed earlier
+                using var skinUpdate = themeService.BeginSkinUpdate();
+                Reapply();
+            }
+
+            themeService.Refresh();
+
+            // Hiding and showing the window makes it rebuild its visuals with the new styles (as in UpdateTheme).
+            window.InvalidateVisual();
+            window.UpdateLayout();
+            window.Visibility = Visibility.Collapsed;
+
+            Task.Delay(500).ContinueWith(_ =>
+            {
+                Current.Dispatcher.Invoke(() =>
+                {
+                    // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
+                    themeService.Refresh();
+                    window.InvalidateVisual();
+                    window.UpdateLayout();
+                    window.Visibility = Visibility.Visible;
+                });
+            });
+
+            void Reapply()
+            {
+                // other windows themed by SfSkinManager (floating panels, open tool windows, dialogs)
+                var others = Current.Windows.OfType<Window>()
+                    .Where(w => !ReferenceEquals(w, window) && SfSkinManager.GetTheme(w) is not null)
+                    .ToList();
+
+                // NOTE: trick SfSkinManager to unregister current ThemeSettings (must happen before registering).
+                foreach (var w in others.Prepend(window))
+                {
+                    if (SfSkinManager.GetTheme(w) is { } theme)
+                    {
+                        theme.ThemeName = "";
+                    }
+                }
+                SfSkinManager.RegisterThemeSettings("MaterialDark", BuildTheme(settingsManager, themeService));
+                SfSkinManager.ApplyStylesOnApplication = true;
+                SfSkinManager.SetTheme(window, new Theme("MaterialDark"));
+                foreach (var other in others)
+                {
+                    SfSkinManager.SetTheme(other, new Theme("MaterialDark"));
+                    other.InvalidateVisual();
+                }
+
+                // Popups have their own visual tree outside of any Window (auto-hidden docking panels sliding in,
+                // context menus, dropdowns). Re-skin the ones that contain Syncfusion controls.
+                foreach (var source in PresentationSource.CurrentSources.OfType<PresentationSource>().ToList())
+                {
+                    if (source.RootVisual is FrameworkElement root and not Window && ContainsSyncfusion(root, 6))
+                    {
+                        if (SfSkinManager.GetTheme(root) is { } popupTheme)
+                        {
+                            popupTheme.ThemeName = "";
+                        }
+                        SfSkinManager.SetTheme(root, new Theme("MaterialDark"));
+                        root.InvalidateVisual();
+                    }
+                }
+            }
+
+            static bool ContainsSyncfusion(DependencyObject element, int depth)
+            {
+                if (element.GetType().Namespace?.StartsWith("Syncfusion", StringComparison.Ordinal) == true)
+                {
+                    return true;
+                }
+                if (depth == 0)
+                {
+                    return false;
+                }
+                var count = VisualTreeHelper.GetChildrenCount(element);
+                for (var i = 0; i < count; i++)
+                {
+                    if (ContainsSyncfusion(VisualTreeHelper.GetChild(element, i), depth - 1))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         //https://stackoverflow.com/a/46804709/16407587

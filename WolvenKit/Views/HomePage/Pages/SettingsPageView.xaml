@@ -36,7 +36,7 @@
                 <Style
                     BasedOn="{StaticResource ButtonDefault}"
                     TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginHorizontal}" />
                 </Style>
@@ -67,7 +67,7 @@
                         Kind="Sync"
                         Width="{DynamicResource WolvenKitIcon}"
                         Height="{DynamicResource WolvenKitIcon}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
 
                     <TextBlock
                         Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
@@ -87,7 +87,7 @@
                         Height="{DynamicResource WolvenKitIcon}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WolvenKitCyan}" />
+                        Foreground="{DynamicResource WolvenKitCyan}" />
 
                     <TextBlock
                         Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
@@ -115,7 +115,7 @@
             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
             UpdateSourceMode="ReturnOrLostFocus"
             ButtonPanelVisibility="Collapsed"
-            CategoryForeground="{StaticResource WolvenKitRed}"
+            CategoryForeground="{DynamicResource WolvenKitRed}"
             EnableGrouping="True"
             PropertyNameColumnDefinition="{DynamicResource WolvenKitSettingsGridLabelWidth}"
             SearchBoxVisibility="Collapsed">

@@ -1,5 +1,6 @@
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
@@ -7,6 +8,7 @@ using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Shell;
 
@@ -313,4 +315,58 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
     }
 
 
+
+    /// <summary>
+    /// Rebuilds the theme list every time, so new / renamed / deleted themes show up without extra plumbing.
+    /// </summary>
+    private void MenuItemTheme_OnSubmenuOpened(object sender, RoutedEventArgs e)
+    {
+        if (!ReferenceEquals(e.OriginalSource, MenuItemTheme))
+        {
+            return; // bubbled up from a nested submenu
+        }
+
+        var themeService = ThemeUiHelper.ThemeService;
+        var current = themeService.Current;
+        var owner = Window.GetWindow(this);
+
+        MenuItemTheme.Items.Clear();
+
+        var hadBuiltIn = false;
+        var separatorAdded = false;
+        foreach (var theme in themeService.Themes)
+        {
+            if (hadBuiltIn && !theme.IsBuiltIn && !separatorAdded)
+            {
+                MenuItemTheme.Items.Add(new Separator());
+                separatorAdded = true;
+            }
+            hadBuiltIn |= theme.IsBuiltIn;
+
+            var item = new MenuItem
+            {
+                Header = theme.DisplayName,
+                IsCheckable = true,
+                IsChecked = ReferenceEquals(theme, current),
+                ToolTip = string.IsNullOrEmpty(theme.Description) ? null : theme.Description
+            };
+            var name = theme.Name;
+            item.Click += (_, _) => themeService.SetActive(name);
+            MenuItemTheme.Items.Add(item);
+        }
+
+        MenuItemTheme.Items.Add(new Separator());
+
+        var edit = new MenuItem { Header = current.IsBuiltIn ? "Customize current theme…" : "Edit current theme…" };
+        edit.Click += (_, _) => ThemeUiHelper.OpenEditor(themeService.Current, owner);
+        MenuItemTheme.Items.Add(edit);
+
+        var import = new MenuItem { Header = "Import theme…" };
+        import.Click += (_, _) => ThemeUiHelper.Import(owner);
+        MenuItemTheme.Items.Add(import);
+
+        var folder = new MenuItem { Header = "Open themes folder" };
+        folder.Click += (_, _) => ThemeUiHelper.OpenThemesFolder();
+        MenuItemTheme.Items.Add(folder);
+    }
 }

@@ -57,7 +57,7 @@
                             IconPack="Codicons"
                             Kind="NewFile"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -82,7 +82,7 @@
                                 IconPack="Codicons"
                                 Kind="NewFile"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -97,7 +97,7 @@
                                 IconPack="Codicons"
                                 Kind="TerminalTmux"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -115,7 +115,7 @@
                                 IconPack="Codicons"
                                 Kind="SymbolEvent"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -130,7 +130,7 @@
                                 IconPack="Material"
                                 Kind="Radio"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -147,7 +147,7 @@
                                 IconPack="Material"
                                 Kind="ToyBrickPlus"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -162,7 +162,7 @@
                                 IconPack="Codicons"
                                 Kind="Globe"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -179,7 +179,7 @@
                                 IconPack="Material"
                                 Kind="TshirtCrew"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -196,7 +196,7 @@
                                 IconPack="Material"
                                 Kind="Head"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -222,7 +222,7 @@
                                 IconPack="Material"
                                 Kind="ArchivePlusOutline"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitTan}" />
+                                Foreground="{DynamicResource WolvenKitTan}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -235,7 +235,7 @@
                                 IconPack="Material"
                                 Kind="TextBoxPlusOutline"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitCyan}" />
+                                Foreground="{DynamicResource WolvenKitCyan}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -250,7 +250,7 @@
                             IconPack="Codicons"
                             Kind="Save"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -264,7 +264,7 @@
                             IconPack="Codicons"
                             Kind="SaveAs"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -278,7 +278,7 @@
                             IconPack="Codicons"
                             Kind="SaveAll"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -300,7 +300,7 @@
                             IconPack="Codicons"
                             Kind="NewFolder"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -314,7 +314,7 @@
                             IconPack="Codicons"
                             Kind="FolderOpened"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -368,7 +368,7 @@
                                 IconPack="Material"
                                 Kind="FolderRemove"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitRed}" />
+                                Foreground="{DynamicResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -381,7 +381,7 @@
                                 IconPack="Material"
                                 Kind="DeleteForever"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitRed}" />
+                                Foreground="{DynamicResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -483,7 +483,7 @@
                             IconPack="Material"
                             Kind="ArchiveCheckOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -500,7 +500,7 @@
                             IconPack="Material"
                             Kind="ArchiveCheckOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -517,7 +517,7 @@
                             IconPack="Material"
                             Kind="ArchiveSyncOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -534,7 +534,7 @@
                             IconPack="Material"
                             Kind="ArchiveSyncOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -550,7 +550,7 @@
                             IconPack="Codicons"
                             Kind="RunAll"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -566,7 +566,7 @@
                             IconPack="Codicons"
                             Kind="RunAll"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -583,7 +583,7 @@
                             IconPack="Material"
                             Kind="DeleteOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -764,7 +764,7 @@
                             IconPack="ForkAwesome"
                             Kind="List"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -777,7 +777,7 @@
                             IconPack="ForkAwesome"
                             Kind="VolumeUp"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -790,7 +790,7 @@
                             IconPack="Unicons"
                             Kind="JavaScriptLine"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -803,7 +803,7 @@
                             IconPack="Unicons"
                             Kind="CopyAltLine"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -818,7 +818,7 @@
                             IconPack="Unicons"
                             Kind="ImportLine"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -831,7 +831,7 @@
                             IconPack="Unicons"
                             Kind="ExportLine"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -846,11 +846,27 @@
                             IconPack="Material"
                             Kind="Pound"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
+
+                <!-- Items are filled in MenuBarView.xaml.cs when the submenu opens -->
+                <MenuItem
+                    x:Name="MenuItemTheme"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Theme"
+                    SubmenuOpened="MenuItemTheme_OnSubmenuOpened">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Material"
+                            Kind="Palette"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </MenuItem.Icon>
+                    <!-- placeholder so that WPF shows the submenu arrow -->
+                    <MenuItem Header="…" />
+                </MenuItem>
 
                 <MenuItem
                     x:Name="ToolbarSettingsButton"
@@ -880,7 +896,7 @@
                             IconPack="Codicons"
                             Kind="Play"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -907,7 +923,7 @@
                             IconPack="Codicons"
                             Kind="FolderOpened"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -926,7 +942,7 @@
                             IconPack="Codicons"
                             Kind="Extensions"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -939,7 +955,7 @@
                             IconPack="Codicons"
                             Kind="Package"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1182,7 +1198,7 @@
                             IconPack="Codicons"
                             Kind="FolderOpened"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
