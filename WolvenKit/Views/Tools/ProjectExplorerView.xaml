@@ -34,7 +34,7 @@
                     x:Name="border"
                     MinWidth="{DynamicResource WolvenKitDragDropTooltipWidth}"
                     Padding="{DynamicResource WolvenKitMarginSmall}"
-                    Background="{StaticResource ContentBackgroundAlt}"
+                    Background="{DynamicResource ContentBackgroundAlt}"
                     BorderBrush="{StaticResource Border}"
                     BorderThickness="1">
                     <!-- this should update based on the context -->
@@ -313,7 +313,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -457,7 +457,7 @@
                             Kind="ArrowCircleRight"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -512,7 +512,7 @@
                             Kind="FolderPlus"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -526,7 +526,7 @@
                             Kind="FolderOpen"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>
@@ -645,18 +645,18 @@
                     <!-- Copy relative path - Open in Windows Explorer - Open file - Delete -->
                     <StackPanel
                         Grid.Column="2"
-                        Background="{StaticResource ContentBackground}"
+                        Background="{DynamicResource ContentBackground}"
                         Orientation="Horizontal">
 
                         <!-- Copy relative path -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitOrange}"
+                            BorderBrush="{DynamicResource WolvenKitOrange}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             Command="{Binding ViewModel.CopyRelPathCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
-                            HoverBackground="{StaticResource WolvenKitOrangeShadow}"
+                            HoverBackground="{DynamicResource WolvenKitOrangeShadow}"
                             ToolTip="Copy relative path to game file">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -670,13 +670,13 @@
 
                         <!-- Open in Explorer -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitYellow}"
+                            BorderBrush="{DynamicResource WolvenKitYellow}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             Command="{Binding ViewModel.OpenInFileExplorerCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
-                            HoverBackground="{StaticResource WolvenKitYellowShadow}"
+                            HoverBackground="{DynamicResource WolvenKitYellowShadow}"
                             ToolTip="Open in Windows Explorer">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -690,13 +690,13 @@
 
                         <!-- Open File -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitCyan}"
+                            BorderBrush="{DynamicResource WolvenKitCyan}"
                             Style="{StaticResource WolvenKitTreeGridButton}"
                             Command="{Binding ViewModel.OpenFileCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
-                            HoverBackground="{StaticResource WolvenKitCyanShadow}"
+                            HoverBackground="{DynamicResource WolvenKitCyanShadow}"
                             ToolTip="Open this file">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -710,13 +710,13 @@
 
                         <!-- Delete -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitRed}"
+                            BorderBrush="{DynamicResource WolvenKitRed}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             syncfusion:FocusManagerHelper.FocusedElement="True"
                             Command="{Binding ViewModel.DeleteFileCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
-                            HoverBackground="{StaticResource WolvenKitRedShadow}"
+                            HoverBackground="{DynamicResource WolvenKitRedShadow}"
                             ToolTip="Delete this file/folder">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -776,7 +776,7 @@
                 BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                 TargetType="{x:Type syncfusion:TabItemExt}">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
                 <Setter Property="BorderThickness" Value="0,0,0,2" />
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 <Setter Property="Foreground" Value="White" />
@@ -800,8 +800,8 @@
                                     <Setter Property="Foreground" Value="White" />
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                    <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSource}" />
                                     <Setter Property="Foreground" Value="White" />
                                 </Trigger>
                                 <MultiTrigger>
@@ -848,7 +848,7 @@
                     <Style
                         BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                         TargetType="{x:Type syncfusion:TabItemExt}">
-                        <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow}" />
+                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
@@ -868,7 +868,7 @@
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                            <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
                                             <Setter Property="FontWeight" Value="Bold" />
                                         </Trigger>
                                         <MultiTrigger>
@@ -899,7 +899,7 @@
                     <Style
                         BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                         TargetType="{x:Type syncfusion:TabItemExt}">
-                        <Setter Property="Background" Value="{StaticResource WolvenKitCyanShadow}" />
+                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectResourcesShadow}" />
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Template">
@@ -918,7 +918,7 @@
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
+                                            <Setter Property="Background" Value="{DynamicResource WolvenKitProjectResources}" />
                                             <Setter Property="FontWeight" Value="Bold" />
                                         </Trigger>
                                         <MultiTrigger>
@@ -940,7 +940,7 @@
         <Border
             Grid.Row="1"
             Height="Auto"
-            BorderBrush="{StaticResource BorderBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.RowDefinitions>
@@ -966,9 +966,9 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Margin="{DynamicResource WolvenKitMarginTiny}"
-                    Background="Transparent"
-                    BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
-                    BorderThickness="0"
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
                     Style="{StaticResource SearchBarExtendBaseStyle}"
                     hc:InfoElement.Necessary="True"
                     hc:InfoElement.Placeholder="Search"
@@ -1044,7 +1044,7 @@
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
-                        hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"
+                        hc:VisualElement.HighlightBackground="{DynamicResource WolvenKitAccent}"
                         IsChecked="{Binding IsFlatModeEnabled}"
                         ToolTip="Toggle Flat File List">
                         <ToggleButton.Style>
@@ -1053,7 +1053,7 @@
                                 TargetType="ToggleButton">
                                 <Style.Triggers>
                                     <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="Background" Value="{DynamicResource WolvenKitAccent}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -1084,7 +1084,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Refresh"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </Button>
 
                     <Button
@@ -1096,7 +1096,7 @@
                         <templates:IconBox
                             IconPack="Codicons"
                             Kind="RootFolderOpened"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -1213,8 +1213,8 @@
                 </Style>
 
                 <Style TargetType="syncfusion:GridHeaderCellControl">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Setter Property="Foreground" Value="#CCCCCC" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
+                    <Setter Property="Foreground" Value="{DynamicResource WolvenKitGrayCC}" />
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                     <Setter Property="FontWeight" Value="SemiBold" />
                     <Setter Property="BorderBrush" Value="Transparent" />

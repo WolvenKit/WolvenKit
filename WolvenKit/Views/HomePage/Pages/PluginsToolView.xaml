@@ -36,7 +36,7 @@
                 <Style
                     BasedOn="{StaticResource ButtonDefault}"
                     TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginHorizontal}" />
                 </Style>
@@ -65,7 +65,7 @@
                         Kind="Sync"
                         Width="{DynamicResource WolvenKitIcon}"
                         Height="{DynamicResource WolvenKitIcon}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
 
                     <TextBlock
                         Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
@@ -136,7 +136,7 @@
                                     Kind="Download"
                                     Width="{DynamicResource WolvenKitIconHuge}"
                                     Height="{DynamicResource WolvenKitIconHuge}"
-                                    Foreground="{StaticResource WolvenKitCyan}" />
+                                    Foreground="{DynamicResource WolvenKitCyan}" />
                             </Button>
 
                             <Button
@@ -153,7 +153,7 @@
                                     Kind="Check"
                                     Width="{DynamicResource WolvenKitIconHuge}"
                                     Height="{DynamicResource WolvenKitIconHuge}"
-                                    Foreground="{StaticResource WolvenKitPurple}" />
+                                    Foreground="{DynamicResource WolvenKitPurple}" />
                             </Button>
 
                             <StackPanel

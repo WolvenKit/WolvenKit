@@ -93,7 +93,7 @@
                                    Mode=TwoWay,
                                    UpdateSourceTrigger=PropertyChanged}"
             ShowTabItemContextMenu="False"
-            TabPanelBackground="#313131"
+            TabPanelBackground="{DynamicResource WolvenKitGray31}"
             Tag="{Binding}">
             <syncfusion:TabControlExt.NewTabButtonTemplate>
                 <DataTemplate>
@@ -175,7 +175,7 @@
                                         <templates:IconBox
                                             IconPack="Codicons"
                                             Kind="Save"
-                                            Foreground="{StaticResource WolvenKitCyan}" />
+                                            Foreground="{DynamicResource WolvenKitCyan}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
 
@@ -190,7 +190,7 @@
                                         <templates:IconBox
                                             IconPack="Material"
                                             Kind="Delete"
-                                            Foreground="{StaticResource WolvenKitRed}" />
+                                            Foreground="{DynamicResource WolvenKitRed}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>

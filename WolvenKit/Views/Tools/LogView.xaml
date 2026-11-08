@@ -86,7 +86,7 @@
                         Kind="AlphaEBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </Button>
 
                 <Button
@@ -100,7 +100,7 @@
                         Kind="AlphaWBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
 
                 <Button
@@ -114,7 +114,7 @@
                         Kind="AlphaSBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </Button>
 
                 <Button
@@ -141,7 +141,7 @@
                         Kind="AlphaDBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
                 </Button>
             </StackPanel>
 
@@ -170,7 +170,7 @@
                         IconPack="Material"
                         Kind="Refresh"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
                 </Button>
 
                 <ComboBox
@@ -240,7 +240,7 @@
                         IconPack="Material"
                         Kind="Play"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </Button>
 
                 <Button
@@ -257,7 +257,7 @@
                         IconPack="Material"
                         Kind="Stop"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </Button>
             </Grid>
         </Grid>
@@ -347,7 +347,7 @@
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer
-                        Background="#131313"
+                        Background="{DynamicResource WolvenKitPanelLogBackground}"
                         Loaded="ScrollViewer_Loaded"
                         PreviewKeyDown="ScrollViewer_OnKeyDown">
                         <ItemsPresenter />
@@ -413,7 +413,7 @@
                     IconPack="Codicons"
                     Kind="FolderOpened"
                     Size="{DynamicResource WolvenKitIconSmall}"
-                    Foreground="{StaticResource WolvenKitYellow}" />
+                    Foreground="{DynamicResource WolvenKitYellow}" />
             </Button>
 
             <Button

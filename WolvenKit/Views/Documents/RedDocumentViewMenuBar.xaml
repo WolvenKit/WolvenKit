@@ -31,11 +31,11 @@
             <converters:EditorLevelToColorConverter x:Key="EditorLevelToColorConverter" />
 
             <Style TargetType="{x:Type Menu}">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Frame_Background}" />
             </Style>
 
             <Style TargetType="{x:Type hc:SearchBar}">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Frame_Background}" />
             </Style>
 
             <Style
@@ -66,8 +66,8 @@
                         Binding="{Binding Path=IsEnabled,
                                           RelativeSource={RelativeSource Self}}"
                         Value="False">
-                        <Setter Property="Background" Value="#121212" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+                        <Setter Property="Background" Value="{DynamicResource WolvenKitGray12}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Inactive}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -96,7 +96,7 @@
                                 <templates:IconBox
                                     IconPack="Material"
                                     Kind="Palette"
-                                    Foreground="{StaticResource WolvenKitYellow}" />
+                                    Foreground="{DynamicResource WolvenKitYellow}" />
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
@@ -148,7 +148,7 @@
                                 <templates:IconBox
                                     IconPack="Material"
                                     Kind="SizeXl"
-                                    Foreground="{StaticResource ForegroundColor}" />
+                                    Foreground="{DynamicResource ForegroundColor}" />
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
@@ -329,7 +329,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="StarThreePoints"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -340,7 +340,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="StarFourPoints"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -351,7 +351,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Star"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <!-- Editor Mode end -->
@@ -558,7 +558,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="Alert"
-                                Foreground="{StaticResource WolvenKitYellow}" />
+                                Foreground="{DynamicResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -577,7 +577,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Recycle"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </MenuItem.Icon>
 
                 <MenuItem
@@ -632,7 +632,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ImageMinus"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -661,7 +661,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Delete"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -697,7 +697,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Graph"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -715,7 +715,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FilterVariantRemove"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -732,7 +732,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="MinusCircleMultiple"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -793,7 +793,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Graph"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -936,7 +936,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="ContentCopy"
-                                Foreground="{StaticResource WolvenKitGraphLabel}" />
+                                Foreground="{DynamicResource WolvenKitGraphLabel}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -964,7 +964,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="DeleteSweep"
-                                Foreground="{StaticResource WolvenKitRed}" />
+                                Foreground="{DynamicResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -977,7 +977,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="PlaylistRemove"
-                                Foreground="{StaticResource WolvenKitRed}" />
+                                Foreground="{DynamicResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -990,7 +990,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="PlaylistRemove"
-                                Foreground="{StaticResource WolvenKitRed}" />
+                                Foreground="{DynamicResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -1097,7 +1097,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Play"
-                            Foreground="{StaticResource WolvenKitGreen}" />
+                            Foreground="{DynamicResource WolvenKitGreen}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1123,8 +1123,8 @@
             Width="{DynamicResource WolvenKitRedDocumentSearchBarWidth}"
             Margin="0,0,0,2"
             HorizontalAlignment="Right"
-            Background="{StaticResource BackgroundColor_Frame_Background}"
-            BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
+            Background="{DynamicResource BackgroundColor_Frame_Background}"
+            BorderBrush="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}"
             BorderThickness="1"
             Style="{StaticResource SearchBarStyle}"
             hc:BorderElement.CornerRadius="0"

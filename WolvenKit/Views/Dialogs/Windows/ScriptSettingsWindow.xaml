@@ -32,7 +32,7 @@
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
                 HorizontalAlignment="Right"
-                Background="{StaticResource WolvenKitRed}"
+                Background="{DynamicResource WolvenKitRed}"
                 Click="OkButton_OnClick"
                 Content="Save" />
 

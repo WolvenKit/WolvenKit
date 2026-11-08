@@ -65,7 +65,7 @@
                         Kind="FolderOpened"
                         Margin="0"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitTan}" />
+                        Foreground="{DynamicResource WolvenKitTan}" />
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -95,7 +95,7 @@
                             Kind="FolderImage"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -147,7 +147,7 @@
                             Kind="ArchiveArrowUp"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -177,7 +177,7 @@
                         Kind="Check"
                         Margin="0"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallLeft}"
