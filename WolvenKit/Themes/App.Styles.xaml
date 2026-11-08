@@ -924,6 +924,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <ControlTemplate.Resources>
+                        <!--
+                            Text created for string content (Content="OK") is inside the template, where only
+                            template and application resources apply: reset the app-wide TextBlock style here too.
+                        -->
+                        <Style TargetType="{x:Type TextBlock}" />
+                    </ControlTemplate.Resources>
                     <Border
                         x:Name="ButtonBorder"
                         Padding="{TemplateBinding Padding}"
