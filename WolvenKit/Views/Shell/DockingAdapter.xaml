@@ -182,7 +182,7 @@
                     <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderThickness" Value="1,1,1,0" />
-                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                     <Setter Property="Height" Value="{DynamicResource WolvenKitFontHuge}" />
                     <Setter Property="HoverBackground" Value="{DynamicResource ContentBackgroundAlt4}" />
                     <Setter Property="Margin" Value="0" />
@@ -467,9 +467,9 @@
                                 Margin="{DynamicResource WolvenKitMarginSmallRight}"
                                 Icon="{Binding Extension}" />
 
+                            <!--  no Foreground: inherit it from the tab, so the active (accent) tab uses the accent foreground  -->
                             <TextBlock
                                 Margin="0,0,0,1"
-                                Foreground="{DynamicResource ContentForeground}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Text="{Binding Path=Header}" />
 
