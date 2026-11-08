@@ -124,7 +124,7 @@
                     <Setter Property="HeaderBorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="HeaderBorderThickness" Value="0" />
                     <Setter Property="HeaderForeground" Value="White" />
-                    <Setter Property="HeaderForegroundSelected" Value="White" />
+                    <Setter Property="HeaderForegroundSelected" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
                     <Setter Property="HeaderMouseOverBackground" Value="{DynamicResource WolvenKitPanelHeaderSelected}" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="MaximizeButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />

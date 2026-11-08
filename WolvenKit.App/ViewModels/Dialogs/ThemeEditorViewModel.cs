@@ -244,6 +244,8 @@ public partial class ThemeEditorViewModel : ObservableObject
         ("text on background", "ContentForeground", "ContentBackground", 4.5),
         ("text on panels", "ForegroundColor", "ContentBackgroundAlt2", 4.5),
         ("text on controls", "ForegroundColor", "BackgroundColor_Control", 4.5),
+        ("text on hovered tabs", "WolvenKitAccentShadowForeground", "WolvenKitAccentShadow", 4.5),
+        ("active panel title", "WolvenKitPanelHeaderSelectedForeground", "WolvenKitPanelHeaderSelected", 4.5),
     ];
 
     private void UpdateContrastWarning()
