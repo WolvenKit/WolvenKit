@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3248
+      author: "Ametis81"
+      description: "Document tabs use the colors of the new theme right after switching themes (the selected tab of an inactive document kept the old colors)."
