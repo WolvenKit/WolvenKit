@@ -467,9 +467,13 @@
                                 Margin="{DynamicResource WolvenKitMarginSmallRight}"
                                 Icon="{Binding Extension}" />
 
-                            <!--  no Foreground: inherit it from the tab, so the active (accent) tab uses the accent foreground  -->
+                            <!--
+                                Style x:Null: skip the app-wide TextBlock style, so the text inherits the tab's
+                                foreground (the accent foreground on the active, accent-colored tab)
+                            -->
                             <TextBlock
                                 Margin="0,0,0,1"
+                                Style="{x:Null}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Text="{Binding Path=Header}" />
 
