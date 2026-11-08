@@ -55,13 +55,13 @@ public sealed partial class ThemeService
 
     private int _unpatchable;
 
-    private ThemeDefinition? _patchedTheme;
+    private ThemeDto? _patchedTheme;
     private DispatcherTimer? _rescanTimer;
     private bool _summaryLogged;
 
     private void InitializeLivePatching()
     {
-        foreach (var entry in Schema.Entries)
+        foreach (var entry in Catalog.Entries)
         {
             _patchKeys.Add(entry.Key);
             foreach (var derived in entry.DerivedBrushes ?? [])
@@ -151,13 +151,13 @@ public sealed partial class ThemeService
     private void LogPatchSummary()
     {
         var dictionaries = _sources.Values.SelectMany(l => l).Count();
-        var syncfusionKeys = Schema.Entries.Count(e => e.Group == SyncfusionGroup);
+        var syncfusionKeys = Catalog.Entries.Count(e => e.Group == SyncfusionGroup);
         _loggerService.Debug($"Themes: {_sources.Count} keys found in {dictionaries} dictionary entries ({syncfusionKeys} Syncfusion surface keys). Current theme: \"{Current.Name}\".");
 
-        var missing = Schema.Entries.Where(e => !_sources.ContainsKey(e.Key)).Select(e => e.Key).OrderBy(k => k).ToList();
+        var missing = Catalog.Entries.Where(e => !_sources.ContainsKey(e.Key)).Select(e => e.Key).OrderBy(k => k).ToList();
         if (missing.Count > 0)
         {
-            _loggerService.Debug($"Themes: {missing.Count} schema keys not found in any dictionary: {string.Join(", ", missing.Take(30))}{(missing.Count > 30 ? ", …" : "")}");
+            _loggerService.Debug($"Themes: {missing.Count} catalog keys not found in any dictionary: {string.Join(", ", missing.Take(30))}{(missing.Count > 30 ? ", …" : "")}");
         }
     }
 
@@ -231,7 +231,7 @@ public sealed partial class ThemeService
 
     /// <summary>
     /// Syncfusion's ResourceDictionaryProvider (DictionaryName "Brushes" holds the theme brushes).
-    /// Its keys are not known at compile time, so they are added to the schema (group "Surfaces") when found.
+    /// Its keys are not known at compile time, so they are added to the catalog (group "Surfaces") when found.
     /// </summary>
     private static bool IsSyncfusionProvider(ResourceDictionary dictionary, out string? dictionaryName)
     {
@@ -266,14 +266,13 @@ public sealed partial class ThemeService
             }
 
             _patchKeys.Add(key);
-            _defaults.TryAdd(key, brush.Color);
-            _isBrush.TryAdd(key, true);
-            Schema.AddEntry(new ThemeSchemaEntry
+            _defaults.TryAdd(key, new DefaultResource(brush.Color, ThemeKeyKind.Brush));
+            Catalog.AddEntry(new ThemeKeyEntry
             {
                 Key = key,
                 Group = SyncfusionGroup,
                 DisplayName = Humanize(key),
-                Kind = "Brush"
+                Kind = ThemeKeyKind.Brush
             });
         }
     }
@@ -304,14 +303,14 @@ public sealed partial class ThemeService
     }
 
     /// <summary>Resource key → target color for a theme (derived brushes follow their color key).</summary>
-    internal Dictionary<string, Color> BuildColorMap(ThemeDefinition theme)
+    internal Dictionary<string, Color> BuildColorMap(ThemeDto theme)
     {
         var overrides = ResolveOverrides(theme);
         var map = new Dictionary<string, Color>(overrides, StringComparer.Ordinal);
 
         foreach (var (key, color) in overrides)
         {
-            foreach (var derived in Schema.Find(key)?.DerivedBrushes ?? [])
+            foreach (var derived in Catalog.Find(key)?.DerivedBrushes ?? [])
             {
                 map.TryAdd(derived, color);
             }
@@ -364,7 +363,7 @@ public sealed partial class ThemeService
     /// two anchors around its brightness, so popups, separators, hover states etc. get the same tint.
     /// Colored values (accent, errors, …) are left alone. Returns null if the theme has fewer than two anchors.
     /// </summary>
-    internal Func<Color, Color>? BuildNeutralMapper(ThemeDefinition theme)
+    internal Func<Color, Color>? BuildNeutralMapper(ThemeDto theme)
     {
         if (GetChain(theme).Any(t => t.DeriveNeutralColors == false))
         {
@@ -374,7 +373,12 @@ public sealed partial class ThemeService
         var anchors = new SortedList<double, (Color From, Color To)>();
         foreach (var (key, to) in ResolveOverrides(theme))
         {
-            if (!_defaults.TryGetValue(key, out var from) || from.A != 0xFF || to.A != 0xFF || !IsNeutral(from))
+            if (!_defaults.TryGetValue(key, out var resource))
+            {
+                continue;
+            }
+            var from = resource.Color;
+            if (from.A != 0xFF || to.A != 0xFF || !IsNeutral(from))
             {
                 continue;
             }
@@ -468,7 +472,7 @@ public sealed partial class ThemeService
     /// Writes the theme color (or the original value) into every dictionary that defines a key.
     /// Read-only dictionaries get a writable shadow dictionary merged right after them.
     /// </summary>
-    private void PatchSources(ThemeDefinition theme)
+    private void PatchSources(ThemeDto theme)
     {
         _patchedTheme = theme;
         var map = BuildColorMap(theme);
@@ -820,9 +824,9 @@ public sealed partial class ThemeService
         var byDefault = new Dictionary<Color, Color>();
         foreach (var (key, color) in map)
         {
-            if (_defaults.TryGetValue(key, out var defaultColor))
+            if (_defaults.TryGetValue(key, out var defaultResource))
             {
-                byDefault.TryAdd(defaultColor, color);
+                byDefault.TryAdd(defaultResource.Color, color);
             }
         }
 

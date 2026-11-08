@@ -12,9 +12,9 @@ import json, re, sys, pathlib, collections
 root = pathlib.Path(sys.argv[1])
 dry = len(sys.argv) > 2 and sys.argv[2] == '--dry'
 
-schema = json.load(open(root / 'WolvenKit.App/Resources/Themes/theme-schema.json'))['entries']
-keys = {e['key'] for e in schema}
-for e in schema:
+entries = json.load(open(root / 'WolvenKit.App/Resources/Themes/theme-keys.json'))['entries']
+keys = {e['key'] for e in entries}
+for e in entries:
     keys.update(e.get('derivedBrushes') or [])
 PREFIXES = ('ContentBackground', 'ContentForeground', 'BorderAlt', 'Popup', 'IconColor', 'MahApps.Brushes.',
             'PrimaryBackground', 'PrimaryForeground', 'HoveredBackground', 'SelectedBackground', 'PressedBackground')

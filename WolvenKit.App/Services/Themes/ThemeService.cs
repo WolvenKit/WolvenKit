@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
 using WolvenKit.Core.Interfaces;
@@ -13,7 +10,6 @@ namespace WolvenKit.App.Services.Themes;
 /// <inheritdoc />
 public sealed partial class ThemeService : IThemeService
 {
-    private const string BuiltInResourcePrefix = "WolvenKit.App.Resources.Themes.Builtin.";
     private const string MigratedThemeName = "Custom (migrated accent)";
 
     /// <summary>MahApps accent keys and the alpha used for each of them.</summary>
@@ -31,43 +27,37 @@ public sealed partial class ThemeService : IThemeService
         ("MahApps.Brushes.Highlight", 0xFF),
     ];
 
-    private static readonly JsonSerializerOptions s_options = new()
-    {
-        WriteIndented = true,
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-    };
-
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
+    private readonly IThemeRepository _repository;
 
-    private readonly List<ThemeDefinition> _builtInThemes = [];
-    private readonly List<ThemeDefinition> _userThemes = [];
+    private readonly List<ThemeDto> _builtInThemes = [];
+    private readonly List<ThemeDto> _userThemes = [];
+
+    /// <summary>Default (pre-theme) value of a resource and whether it is a Color or a Brush.</summary>
+    private readonly record struct DefaultResource(Color Color, ThemeKeyKind Kind);
 
     /// <summary>Default value of every known key, captured before the first theme is applied.</summary>
-    private readonly Dictionary<string, Color> _defaults = new(StringComparer.Ordinal);
-
-    /// <summary>true if the default resource is a Brush, false if it is a Color.</summary>
-    private readonly Dictionary<string, bool> _isBrush = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, DefaultResource> _defaults = new(StringComparer.Ordinal);
 
     private ResourceDictionary? _appliedDictionary;
     private bool _isInitialized;
     private string? _currentName;
 
-    public ThemeService(ISettingsManager settingsManager, ILoggerService loggerService)
+    public ThemeService(ISettingsManager settingsManager, ILoggerService loggerService, IThemeRepository repository)
     {
         _settingsManager = settingsManager;
         _loggerService = loggerService;
+        _repository = repository;
         try
         {
-            Schema = ThemeSchema.LoadEmbedded();
+            Catalog = ThemeKeyCatalog.LoadEmbedded();
         }
         catch (Exception ex)
         {
-            // without a schema themes only change the accent; WolvenKit must still start
-            _loggerService.Error($"Could not load the theme schema: {ex.Message}");
-            Schema = new ThemeSchema();
+            // without the key catalog themes only change the accent; WolvenKit must still start
+            _loggerService.Error($"Could not load the theme key catalog: {ex.Message}");
+            Catalog = new ThemeKeyCatalog();
         }
 
         _settingsManager.PropertyChanged += (_, e) =>
@@ -79,41 +69,62 @@ public sealed partial class ThemeService : IThemeService
         };
     }
 
-    public ThemeSchema Schema { get; }
-
-    private string? _userThemesDirectory;
-
-    /// <summary>Folder with the user's theme files. Settable for tests.</summary>
-    public string UserThemesDirectory
-    {
-        get => _userThemesDirectory ??= IThemeService.GetUserThemesDir();
-        set => _userThemesDirectory = value;
-    }
+    public ThemeKeyCatalog Catalog { get; }
 
     /// <summary>Sets the default (pre-theme) color of a key. Normally captured from the WPF resources; used by tests.</summary>
-    internal void SetDefaultColor(string key, Color color, bool isBrush = true)
-    {
-        _defaults[key] = color;
-        _isBrush[key] = isBrush;
-    }
+    internal void SetDefaultColor(string key, Color color, ThemeKeyKind kind = ThemeKeyKind.Brush) =>
+        _defaults[key] = new DefaultResource(color, kind);
 
-    public IReadOnlyList<ThemeDefinition> Themes =>
+    public IReadOnlyList<ThemeDto> Themes =>
         _builtInThemes.OrderByDescending(t => t.IsDefault)
             .ThenBy(t => t.Name, StringComparer.OrdinalIgnoreCase)
             .Concat(_userThemes.OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase))
             .ToList();
 
-    public ThemeDefinition Current =>
+    public ThemeDto Current =>
         Find(_currentName) ?? Find(IThemeService.DefaultThemeName) ?? s_fallbackTheme;
 
     /// <summary>Used if even the built-in themes could not be loaded: no overrides = stock WolvenKit look.</summary>
-    private static readonly ThemeDefinition s_fallbackTheme = new() { Name = IThemeService.DefaultThemeName, IsBuiltIn = true };
+    private static readonly ThemeDto s_fallbackTheme = new() { Name = IThemeService.DefaultThemeName, IsBuiltIn = true };
 
     public event EventHandler? ThemesChanged;
 
     public event EventHandler? CurrentThemeChanging;
 
     public event EventHandler? CurrentThemeChanged;
+
+    private readonly List<WeakReference<IThemeAware>> _listeners = [];
+
+    public void Register(IThemeAware listener)
+    {
+        lock (_listeners)
+        {
+            _listeners.RemoveAll(r => !r.TryGetTarget(out _));
+            _listeners.Add(new WeakReference<IThemeAware>(listener));
+        }
+    }
+
+    private void NotifyListeners()
+    {
+        IThemeAware[] alive;
+        lock (_listeners)
+        {
+            _listeners.RemoveAll(r => !r.TryGetTarget(out _));
+            alive = [.. _listeners.Select(r => r.TryGetTarget(out var l) ? l : null).OfType<IThemeAware>()];
+        }
+
+        foreach (var listener in alive)
+        {
+            try
+            {
+                listener.OnThemeChanged();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Themes: {listener.GetType().Name} failed to update: {ex.Message}");
+            }
+        }
+    }
 
     #region lifecycle
 
@@ -167,6 +178,8 @@ public sealed partial class ThemeService : IThemeService
 
     private static bool IsShiftHeld()
     {
+        // No WPF app (unit tests): skip, so the result does not depend on the real keyboard
+        // and no InputManager is created on a test thread.
         if (Application.Current is null)
         {
             return false;
@@ -189,8 +202,8 @@ public sealed partial class ThemeService : IThemeService
             return;
         }
 
-        var keys = Schema.Entries.Select(e => e.Key)
-            .Concat(Schema.Entries.SelectMany(e => e.DerivedBrushes ?? []))
+        var keys = Catalog.Entries.Select(e => e.Key)
+            .Concat(Catalog.Entries.SelectMany(e => e.DerivedBrushes ?? []))
             .Concat(s_mahAppsAccentKeys.Select(k => k.Key));
 
         foreach (var key in keys)
@@ -210,12 +223,10 @@ public sealed partial class ThemeService : IThemeService
             switch (resource)
             {
                 case Color color:
-                    _defaults[key] = color;
-                    _isBrush[key] = false;
+                    _defaults[key] = new DefaultResource(color, ThemeKeyKind.Color);
                     break;
                 case SolidColorBrush brush:
-                    _defaults[key] = brush.Color;
-                    _isBrush[key] = true;
+                    _defaults[key] = new DefaultResource(brush.Color, ThemeKeyKind.Brush);
                     break;
                 default:
                     // Missing, or not a solid color (gradient etc.) — such keys are not themeable.
@@ -223,66 +234,34 @@ public sealed partial class ThemeService : IThemeService
             }
         }
 
-        var missing = Schema.Entries.Count(e => !_defaults.ContainsKey(e.Key));
+        var missing = Catalog.Entries.Count(e => !_defaults.ContainsKey(e.Key));
         if (missing > 0)
         {
-            _loggerService.Debug($"Themes: {missing} schema keys have no solid color resource and will be ignored.");
+            _loggerService.Debug($"Themes: {missing} catalog keys have no solid color resource and will be ignored.");
         }
     }
 
     private void LoadBuiltInThemes()
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        foreach (var resourceName in assembly.GetManifestResourceNames().Where(n => n.StartsWith(BuiltInResourcePrefix, StringComparison.Ordinal)))
-        {
-            try
-            {
-                using var stream = assembly.GetManifestResourceStream(resourceName);
-                if (stream is null)
-                {
-                    continue;
-                }
-                var theme = JsonSerializer.Deserialize<ThemeDefinition>(stream, s_options);
-                if (theme is null || string.IsNullOrWhiteSpace(theme.Name))
-                {
-                    continue;
-                }
-                theme.IsBuiltIn = true;
-                theme.FilePath = null;
-                _builtInThemes.Add(theme);
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error($"Could not load built-in theme {resourceName}: {ex.Message}");
-            }
-        }
+        _builtInThemes.AddRange(_repository.LoadBuiltIn());
 
         if (_builtInThemes.All(t => t.Name != IThemeService.DefaultThemeName))
         {
-            _builtInThemes.Add(new ThemeDefinition { Name = IThemeService.DefaultThemeName, IsBuiltIn = true });
+            _builtInThemes.Add(new ThemeDto { Name = IThemeService.DefaultThemeName, IsBuiltIn = true });
         }
     }
 
     private void LoadUserThemes()
     {
         _userThemes.Clear();
-        foreach (var file in Directory.EnumerateFiles(UserThemesDirectory, "*.json"))
+        foreach (var theme in _repository.LoadUserThemes())
         {
-            try
+            if (Find(theme.Name) is not null)
             {
-                var theme = ReadThemeFile(file);
-                if (Find(theme.Name) is not null)
-                {
-                    _loggerService.Warning($"Theme \"{theme.Name}\" from {file} is ignored: a theme with this name already exists.");
-                    continue;
-                }
-                theme.FilePath = file;
-                _userThemes.Add(theme);
+                _loggerService.Warning($"Theme \"{theme.Name}\" from {theme.FilePath} is ignored: a theme with this name already exists.");
+                continue;
             }
-            catch (Exception ex)
-            {
-                _loggerService.Error($"Could not load theme {file}: {ex.Message}");
-            }
+            _userThemes.Add(theme);
         }
     }
 
@@ -303,7 +282,7 @@ public sealed partial class ThemeService : IThemeService
             return;
         }
 
-        var theme = Find(MigratedThemeName) ?? Save(new ThemeDefinition
+        var theme = Find(MigratedThemeName) ?? Save(new ThemeDto
         {
             Name = MigratedThemeName,
             BasedOn = IThemeService.DefaultThemeName,
@@ -350,6 +329,7 @@ public sealed partial class ThemeService : IThemeService
             ApplyResources(Current);
             _loggerService.Debug($"Themes: resources of \"{Current.Name}\" written in {watch.ElapsedMilliseconds} ms.");
             CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
+            NotifyListeners(); // already on the UI thread here
         }
 
         if (Application.Current?.Dispatcher is { } dispatcher)
@@ -376,18 +356,18 @@ public sealed partial class ThemeService : IThemeService
 
     #region query
 
-    public ThemeDefinition? Find(string? name) =>
+    public ThemeDto? Find(string? name) =>
         string.IsNullOrEmpty(name)
             ? null
             : _builtInThemes.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase))
               ?? _userThemes.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
 
-    public Color? GetDefaultColor(string key) => _defaults.TryGetValue(key, out var color) ? color : null;
+    public Color? GetDefaultColor(string key) => _defaults.TryGetValue(key, out var resource) ? resource.Color : null;
 
     /// <summary>Root-first list: [base of base, base, theme]. Guards against cycles.</summary>
-    private List<ThemeDefinition> GetChain(ThemeDefinition theme)
+    private List<ThemeDto> GetChain(ThemeDto theme)
     {
-        var chain = new List<ThemeDefinition>();
+        var chain = new List<ThemeDto>();
         var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         for (var t = theme; t is not null && visited.Add(t.Name); t = Find(t.BasedOn))
@@ -397,7 +377,7 @@ public sealed partial class ThemeService : IThemeService
         return chain;
     }
 
-    public IReadOnlyDictionary<string, Color> ResolveOverrides(ThemeDefinition theme)
+    public IReadOnlyDictionary<string, Color> ResolveOverrides(ThemeDto theme)
     {
         var result = new Dictionary<string, Color>(StringComparer.Ordinal);
         foreach (var t in GetChain(theme))
@@ -417,30 +397,30 @@ public sealed partial class ThemeService : IThemeService
         return result;
     }
 
-    public Color? ResolveColor(ThemeDefinition theme, string key) =>
+    public Color? ResolveColor(ThemeDto theme, string key) =>
         ResolveOverrides(theme).TryGetValue(key, out var color) ? color : GetDefaultColor(key);
 
-    public Color ResolveAccent(ThemeDefinition theme) =>
+    public Color ResolveAccent(ThemeDto theme) =>
         GetChain(theme).Select(t => TryParseColor(t.Accent)).LastOrDefault(c => c is not null)
         ?? IThemeService.DefaultAccent;
 
-    public Color? ResolveAccentForeground(ThemeDefinition theme) =>
+    public Color? ResolveAccentForeground(ThemeDto theme) =>
         GetChain(theme).Select(t => TryParseColor(t.AccentForeground)).LastOrDefault(c => c is not null);
 
     #endregion
 
     #region resources
 
-    public ResourceDictionary CreateResourceDictionary(ThemeDefinition theme, bool complete = false)
+    public ResourceDictionary CreateResourceDictionary(ThemeDto theme, bool complete = false)
     {
         var dictionary = new ResourceDictionary();
 
         // includes derived, linked (HandyControl) and accent-derived keys
         var overrides = BuildColorMap(theme);
         IEnumerable<KeyValuePair<string, Color>> palette = complete
-            ? Schema.Entries
+            ? Catalog.Entries
                 .Where(e => _defaults.ContainsKey(e.Key))
-                .Select(e => new KeyValuePair<string, Color>(e.Key, overrides.TryGetValue(e.Key, out var c) ? c : _defaults[e.Key]))
+                .Select(e => new KeyValuePair<string, Color>(e.Key, overrides.TryGetValue(e.Key, out var c) ? c : _defaults[e.Key].Color))
             : overrides;
 
         foreach (var (key, color) in palette)
@@ -450,7 +430,7 @@ public sealed partial class ThemeService : IThemeService
             {
                 AddResource(dictionary, key, color);
             }
-            foreach (var derived in Schema.Find(key)?.DerivedBrushes ?? [])
+            foreach (var derived in Catalog.Find(key)?.DerivedBrushes ?? [])
             {
                 if (complete || !IsPatchedAtSource(derived))
                 {
@@ -476,13 +456,13 @@ public sealed partial class ThemeService : IThemeService
 
     private void AddResource(ResourceDictionary dictionary, string key, Color color)
     {
-        if (!_isBrush.TryGetValue(key, out var isBrush))
+        if (!_defaults.TryGetValue(key, out var resource))
         {
             // unknown key: there is nothing to override
             return;
         }
 
-        if (isBrush)
+        if (resource.Kind == ThemeKeyKind.Brush)
         {
             var brush = new SolidColorBrush(color);
             brush.Freeze();
@@ -494,7 +474,7 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public void ApplyResources(ThemeDefinition theme)
+    public void ApplyResources(ThemeDto theme)
     {
         var app = Application.Current;
         if (app is null)
@@ -569,7 +549,7 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public ThemeDefinition Duplicate(ThemeDefinition source, string newName)
+    public ThemeDto Duplicate(ThemeDto source, string newName)
     {
         var copy = source.Clone();
         copy.Name = GetUniqueName(newName);
@@ -588,7 +568,7 @@ public sealed partial class ThemeService : IThemeService
         return Save(copy);
     }
 
-    public ThemeDefinition Save(ThemeDefinition theme, string? previousName = null)
+    public ThemeDto Save(ThemeDto theme, string? previousName = null)
     {
         if (theme.IsBuiltIn)
         {
@@ -613,18 +593,15 @@ public sealed partial class ThemeService : IThemeService
             theme.BasedOn = null;
         }
 
-        var path = Path.Combine(UserThemesDirectory, ToFileName(theme.Name));
-        theme.FormatVersion = ThemeDefinition.CurrentFormatVersion;
-        File.WriteAllText(path, JsonSerializer.Serialize(theme, s_options));
+        var path = _repository.Save(theme);
 
         if (previous is not null)
         {
             _userThemes.Remove(previous);
             if (previous.FilePath is not null
-                && !string.Equals(previous.FilePath, path, StringComparison.OrdinalIgnoreCase)
-                && File.Exists(previous.FilePath))
+                && !string.Equals(previous.FilePath, path, StringComparison.OrdinalIgnoreCase))
             {
-                File.Delete(previous.FilePath);
+                _repository.Delete(previous.FilePath);
             }
             RenameReferences(previous.Name, theme.Name);
         }
@@ -666,12 +643,12 @@ public sealed partial class ThemeService : IThemeService
             child.BasedOn = newName;
             if (child.FilePath is not null)
             {
-                File.WriteAllText(child.FilePath, JsonSerializer.Serialize(child, s_options));
+                _repository.Write(child, child.FilePath);
             }
         }
     }
 
-    public void Delete(ThemeDefinition theme)
+    public void Delete(ThemeDto theme)
     {
         if (theme.IsBuiltIn)
         {
@@ -694,14 +671,14 @@ public sealed partial class ThemeService : IThemeService
             child.AccentForeground = flattened.AccentForeground;
             if (child.FilePath is not null)
             {
-                File.WriteAllText(child.FilePath, JsonSerializer.Serialize(child, s_options));
+                _repository.Write(child, child.FilePath);
             }
         }
 
         _userThemes.Remove(stored);
-        if (stored.FilePath is not null && File.Exists(stored.FilePath))
+        if (stored.FilePath is not null)
         {
-            File.Delete(stored.FilePath);
+            _repository.Delete(stored.FilePath);
         }
 
         ThemesChanged?.Invoke(this, EventArgs.Empty);
@@ -714,9 +691,9 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public ThemeDefinition Import(string path)
+    public ThemeDto Import(string path)
     {
-        var theme = ReadThemeFile(path);
+        var theme = _repository.Read(path);
         theme.Name = GetUniqueName(theme.Name);
         theme.IsBuiltIn = false;
         theme.FilePath = null;
@@ -728,14 +705,13 @@ public sealed partial class ThemeService : IThemeService
         return Save(theme);
     }
 
-    public void Export(ThemeDefinition theme, string path, bool flatten)
+    public void Export(ThemeDto theme, string path, bool flatten)
     {
-        var data = flatten ? Flatten(theme) : theme.Clone();
-        File.WriteAllText(path, JsonSerializer.Serialize(data, s_options));
+        _repository.Write(flatten ? Flatten(theme) : theme.Clone(), path);
     }
 
     /// <summary>A copy that contains all inherited overrides and no BasedOn.</summary>
-    private ThemeDefinition Flatten(ThemeDefinition theme)
+    private ThemeDto Flatten(ThemeDto theme)
     {
         var flat = theme.Clone();
         flat.BasedOn = null;
@@ -747,35 +723,9 @@ public sealed partial class ThemeService : IThemeService
         return flat;
     }
 
-    private static ThemeDefinition ReadThemeFile(string path)
-    {
-        var theme = JsonSerializer.Deserialize<ThemeDefinition>(File.ReadAllText(path), s_options)
-                    ?? throw new InvalidDataException("Empty theme file.");
-        if (theme.FormatVersion > ThemeDefinition.CurrentFormatVersion)
-        {
-            throw new InvalidDataException($"Theme format {theme.FormatVersion} is newer than supported ({ThemeDefinition.CurrentFormatVersion}).");
-        }
-        if (string.IsNullOrWhiteSpace(theme.Name))
-        {
-            theme.Name = Path.GetFileNameWithoutExtension(path);
-        }
-        // "colors": null in a hand-written file
-        theme.Colors = theme.Colors is null
-            ? new Dictionary<string, string>(StringComparer.Ordinal)
-            : new Dictionary<string, string>(theme.Colors, StringComparer.Ordinal);
-        return theme;
-    }
-
     #endregion
 
     #region helpers
-
-    private static string ToFileName(string name)
-    {
-        var invalid = Path.GetInvalidFileNameChars();
-        var safe = new string(name.Select(c => invalid.Contains(c) ? '_' : c).ToArray());
-        return safe + ".json";
-    }
 
     public static string ToHex(Color color) =>
         color.A == 0xFF

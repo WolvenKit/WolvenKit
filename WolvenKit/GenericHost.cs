@@ -69,6 +69,7 @@ namespace WolvenKit
                     services.AddSingleton<CRUIDService>(x => new CRUIDService(false));    // can this be transient?
                     services.AddSingleton<MySink>();                                                            // can this be transient?
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                                    // can this be transient?
+                    services.AddSingleton<IThemeRepository, ThemeRepository>();
                     services.AddSingleton<IThemeService, ThemeService>();
                     services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IUpdateService, UpdateService>();

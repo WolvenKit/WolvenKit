@@ -12,7 +12,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
-public partial class StatusBarViewModel : ObservableObject
+public partial class StatusBarViewModel : ObservableObject, IThemeAware
 {
     private const string s_noProjectLoaded =
         "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
@@ -49,8 +49,10 @@ public partial class StatusBarViewModel : ObservableObject
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
 
         // the bar color is a theme color: re-read it when the theme changes
-        themeService.CurrentThemeChanged += (_, _) => DispatcherHelper.RunOnMainThread(UpdateBarColor);
+        themeService.Register(this);
     }
+
+    void IThemeAware.OnThemeChanged() => UpdateBarColor();
 
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {

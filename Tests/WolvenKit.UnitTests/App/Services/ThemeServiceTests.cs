@@ -44,7 +44,8 @@ public class ThemeServiceTests
             });
             Settings.SetupProperty(s => s.ThemeAccentString, legacyAccent);
 
-            Service = new ThemeService(Settings.Object, new Mock<ILoggerService>().Object) { UserThemesDirectory = Directory };
+            var logger = new Mock<ILoggerService>().Object;
+            Service = new ThemeService(Settings.Object, logger, new ThemeRepository(logger, Directory));
             Service.Initialize();
         }
 
@@ -56,10 +57,10 @@ public class ThemeServiceTests
 
         public string? ActiveTheme => _activeTheme;
 
-        public ThemeDefinition Get(string name) => Service.Find(name) ?? throw new InvalidOperationException($"theme {name} not found");
+        public ThemeDto Get(string name) => Service.Find(name) ?? throw new InvalidOperationException($"theme {name} not found");
 
-        public ThemeDefinition SaveNew(string name, string? basedOn, params (string Key, string Hex)[] colors) =>
-            Service.Save(new ThemeDefinition
+        public ThemeDto SaveNew(string name, string? basedOn, params (string Key, string Hex)[] colors) =>
+            Service.Save(new ThemeDto
             {
                 Name = name,
                 BasedOn = basedOn,
@@ -101,7 +102,7 @@ public class ThemeServiceTests
     }
 
     [Fact]
-    public void BuiltInThemes_UseOnlySchemaKeys_AndValidColors()
+    public void BuiltInThemes_UseOnlyKnownKeys_AndValidColors()
     {
         using var f = new Fixture();
 
@@ -109,12 +110,21 @@ public class ThemeServiceTests
         {
             foreach (var (key, value) in theme.Colors)
             {
-                Assert.True(f.Service.Schema.Find(key) is not null, $"{theme.Name}: unknown key {key}");
+                Assert.True(f.Service.Catalog.Find(key) is not null, $"{theme.Name}: unknown key {key}");
                 Assert.True(ThemeService.TryParseColor(value) is not null, $"{theme.Name}: invalid color {value} for {key}");
             }
             Assert.True(theme.Accent is null || ThemeService.TryParseColor(theme.Accent) is not null, $"{theme.Name}: invalid accent");
             Assert.True(theme.BasedOn is null || f.Service.Find(theme.BasedOn) is not null, $"{theme.Name}: unknown base {theme.BasedOn}");
         }
+    }
+
+    [Fact]
+    public void KeyCatalog_ParsesKindAsEnum()
+    {
+        var catalog = ThemeKeyCatalog.LoadEmbedded();
+
+        Assert.Equal(ThemeKeyKind.Brush, catalog.Find("WolvenKitAccent")?.Kind);
+        Assert.Contains(catalog.Entries, e => e.Kind == ThemeKeyKind.Color);
     }
 
     [Fact]
@@ -139,6 +149,70 @@ public class ThemeServiceTests
         Assert.Empty(copy.Colors);
         Assert.True(File.Exists(copy.FilePath));
         Assert.Equal(f.Service.ResolveOverrides(f.Get(NightCity)), f.Service.ResolveOverrides(copy));
+    }
+
+    #endregion
+
+    #region listeners
+
+    private sealed class Listener(Action? onChanged = null) : IThemeAware
+    {
+        public int Calls { get; private set; }
+
+        public void OnThemeChanged()
+        {
+            Calls++;
+            onChanged?.Invoke();
+        }
+    }
+
+    [Fact]
+    public void RegisteredListeners_AreNotified_EvenIfOneThrows()
+    {
+        using var f = new Fixture();
+        var failing = new Listener(() => throw new InvalidOperationException("boom"));
+        var listener = new Listener();
+        f.Service.Register(failing);
+        f.Service.Register(listener);
+
+        f.Service.SetActive(NightCity);
+
+        Assert.Equal(1, failing.Calls);
+        Assert.Equal(1, listener.Calls);
+    }
+
+    #endregion
+
+    #region repository
+
+    [Fact]
+    public void Repository_SaveThenRead_RoundTrips_AndSanitizesFileName()
+    {
+        using var f = new Fixture();
+        var repository = new ThemeRepository(new Mock<ILoggerService>().Object, f.Directory);
+        var theme = new ThemeDto { Name = "a/b", BasedOn = NightCity, Accent = "#112233" };
+        theme.Colors["ContentBackground"] = "#101010";
+
+        var path = repository.Save(theme);
+        var read = repository.Read(path);
+
+        Assert.Equal("a_b.json", Path.GetFileName(path));
+        Assert.Equal("a/b", read.Name);
+        Assert.Equal(NightCity, read.BasedOn);
+        Assert.Equal("#112233", read.Accent);
+        Assert.Equal("#101010", read.Colors["ContentBackground"]);
+        Assert.Single(repository.LoadUserThemes(), t => t.FilePath == path);
+    }
+
+    [Fact]
+    public void Repository_Read_RejectsNewerFormat()
+    {
+        using var f = new Fixture();
+        var repository = new ThemeRepository(new Mock<ILoggerService>().Object, f.Directory);
+        WriteTheme(f.Directory, "future.json", $$"""{ "formatVersion": {{ThemeDto.CurrentFormatVersion + 1}}, "name": "Future" }""");
+
+        Assert.Throws<InvalidDataException>(() => repository.Read(Path.Combine(f.Directory, "future.json")));
+        Assert.Empty(repository.LoadUserThemes());
     }
 
     #endregion
@@ -342,7 +416,7 @@ public class ThemeServiceTests
         using var f = new Fixture();
         f.Service.SetDefaultColor("ContentBackground", Hex("#202020"));
         f.Service.SetDefaultColor("ContentForeground", Hex("#E0E0E0"));
-        var theme = new ThemeDefinition
+        var theme = new ThemeDto
         {
             Name = "Blue",
             Colors = { ["ContentBackground"] = "#102030", ["ContentForeground"] = "#D0E0F0" }
@@ -369,8 +443,8 @@ public class ThemeServiceTests
         f.Service.SetDefaultColor("ContentBackground", Hex("#202020"));
         f.Service.SetDefaultColor("ContentForeground", Hex("#E0E0E0"));
 
-        var oneAnchor = new ThemeDefinition { Name = "One", Colors = { ["ContentBackground"] = "#102030" } };
-        var disabled = new ThemeDefinition
+        var oneAnchor = new ThemeDto { Name = "One", Colors = { ["ContentBackground"] = "#102030" } };
+        var disabled = new ThemeDto
         {
             Name = "Off",
             DeriveNeutralColors = false,

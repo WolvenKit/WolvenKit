@@ -22,7 +22,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private bool _appPreviewActive;
 
-        public ThemeEditorWindow(IThemeService themeService, ThemeDefinition theme)
+        public ThemeEditorWindow(IThemeService themeService, ThemeDto theme)
         {
             _themeService = themeService;
             _viewModel = new ThemeEditorViewModel(themeService, theme);
@@ -49,7 +49,7 @@ namespace WolvenKit.Views.Dialogs.Windows
         }
 
         /// <summary>The theme saved by "Save and use", or the last saved theme.</summary>
-        public ThemeDefinition SavedTheme { get; private set; }
+        public ThemeDto SavedTheme { get; private set; }
 
         private void ViewModel_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

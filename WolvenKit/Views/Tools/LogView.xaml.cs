@@ -31,7 +31,7 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView : ReactiveUserControl<LogViewModel>
+    public partial class LogView : ReactiveUserControl<LogViewModel>, IThemeAware
     {
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
@@ -47,10 +47,7 @@ namespace WolvenKit.Views.Tools
             DataContext = ViewModel;
 
             // entries keep the brush they were created with; recolor them for a new theme
-            if (Locator.Current.GetService<IThemeService>() is { } themeService)
-            {
-                themeService.CurrentThemeChanged += (_, _) => Dispatcher.BeginInvoke(RecolorEntries);
-            }
+            Locator.Current.GetService<IThemeService>()?.Register(this);
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -97,6 +94,8 @@ namespace WolvenKit.Views.Tools
             FilteredLogEntries.Clear();
             FilteredLogEntries.AddRange(LogEntries.Where(PassesFilter));
         }
+
+        void IThemeAware.OnThemeChanged() => RecolorEntries();
 
         private void RecolorEntries()
         {
