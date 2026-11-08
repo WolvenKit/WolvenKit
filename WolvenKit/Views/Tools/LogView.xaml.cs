@@ -18,6 +18,7 @@ using Serilog.Events;
 using Splat;
 using WolvenKit.App;
 using WolvenKit.App.Services;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Core.Exceptions;
@@ -30,7 +31,7 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView : ReactiveUserControl<LogViewModel>
+    public partial class LogView : ReactiveUserControl<LogViewModel>, IThemeAware
     {
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
@@ -44,6 +45,9 @@ namespace WolvenKit.Views.Tools
 
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
+
+            // entries keep the brush they were created with; recolor them for a new theme
+            Locator.Current.GetService<IThemeService>()?.Register(this);
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -89,6 +93,22 @@ namespace WolvenKit.Views.Tools
         {
             FilteredLogEntries.Clear();
             FilteredLogEntries.AddRange(LogEntries.Where(PassesFilter));
+        }
+
+        void IThemeAware.OnThemeChanged() => RecolorEntries();
+
+        private void RecolorEntries()
+        {
+            for (var i = 0; i < LogEntries.Count; i++)
+            {
+                var entry = LogEntries[i];
+                var brush = GetBrushForLevel(entry.Level);
+                if (!ReferenceEquals(brush, entry.TextColor))
+                {
+                    LogEntries[i] = entry with { TextColor = brush };
+                }
+            }
+            RebuildFilteredEntries();
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;

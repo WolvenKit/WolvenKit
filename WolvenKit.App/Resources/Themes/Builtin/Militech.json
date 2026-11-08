@@ -1,0 +1,28 @@
+{
+  "formatVersion": 1,
+  "name": "Militech",
+  "author": "WolvenKit",
+  "description": "Militech signal yellow on black, army green details.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#F2E500",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#0E0F0B",
+    "ContentBackgroundAlt": "#13140F",
+    "ContentBackgroundAlt2": "#181A13",
+    "ContentBackgroundAlt3": "#1F2118",
+    "ContentBackgroundAlt4": "#272A1E",
+    "ContentBackgroundAlt5": "#313426",
+    "BorderAlt": "#3A3E25",
+    "ContentForeground": "#ECEBD6",
+    "ForegroundColor": "#ECEBD6",
+    "BackgroundColor_Control": "#181A13",
+    "BackgroundColor_Frame_Active": "#1F2118",
+    "BackgroundColor_Frame_Background": "#13140F",
+    "WolvenKitProjectSource": "#8DB33A",
+    "WolvenKitProjectSourceShadow": "#4F6621",
+    "WolvenKitProjectResources": "#F2E500",
+    "WolvenKitProjectResourcesShadow": "#7D7600",
+    "WolvenKitYellowColor": "#F2E500"
+  }
+}

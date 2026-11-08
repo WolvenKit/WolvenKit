@@ -161,7 +161,7 @@
 
             <!-- Default texts -->
             <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             </Style>
 
             <!-- Don't override TextBlock of ToolTip -->

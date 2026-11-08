@@ -13,7 +13,7 @@
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
     Padding="{DynamicResource WolvenKitMargin}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <UserControl.Resources>
         <Style
             x:Key="ActionButtonStyle"
@@ -60,7 +60,7 @@
             x:Key="PrimaryActionButtonStyle"
             BasedOn="{StaticResource ActionButtonStyle}"
             TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+            <Setter Property="Background" Value="{DynamicResource WolvenKitRed}" />
             <Setter Property="BorderBrush" Value="{x:Null}" />
         </Style>
     </UserControl.Resources>

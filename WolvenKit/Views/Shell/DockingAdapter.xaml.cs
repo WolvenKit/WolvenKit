@@ -42,6 +42,7 @@ namespace WolvenKit.Views.Shell
         private AppViewModel _viewModel;
         private Window _mainWindow;
         private bool _stateChanged;
+        private bool _isLayoutLoaded;
 
         private readonly bool _debuggingLayouts = false;
 
@@ -292,6 +293,36 @@ namespace WolvenKit.Views.Shell
             return false;
         }
 
+        /// <summary>The current dock state as XML, e.g. to keep the layout while the color theme is re-applied.</summary>
+        public string CaptureDockState()
+        {
+            using var stringWriter = new StringWriter();
+            using (var writer = XmlWriter.Create(stringWriter))
+            {
+                PART_DockingManager.SaveDockState(writer);
+            }
+            return stringWriter.ToString();
+        }
+
+        /// <summary>Restores a state from <see cref="CaptureDockState"/>. The same panels must still be open.</summary>
+        public void RestoreDockState(string dockState)
+        {
+            try
+            {
+                PART_DockingManager.BeginInit();
+                using var reader = XmlReader.Create(new StringReader(dockState));
+                PART_DockingManager.LoadDockState(reader);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Could not restore the layout: {e.Message}");
+            }
+            finally
+            {
+                PART_DockingManager.EndInit();
+            }
+        }
+
         public DataTemplate FindDataTemplate(Type type, FrameworkElement element)
         {
             if (element.TryFindResource(type) is DataTemplate dataTemplate)
@@ -403,7 +434,13 @@ namespace WolvenKit.Views.Shell
         {
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
 
-            LoadDefaultLayout();
+            // Loaded is raised again when the color theme is re-applied. The layout is already in place then,
+            // and loading the default one would replace the project layout.
+            if (!_isLayoutLoaded)
+            {
+                LoadDefaultLayout();
+                _isLayoutLoaded = true;
+            }
 
             if (_debuggingLayouts)
             {

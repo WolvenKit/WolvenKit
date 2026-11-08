@@ -41,7 +41,7 @@
 
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt5}" />
+                        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt5}" />
                     </Trigger>
 
                     <Trigger Property="IsEnabled" Value="False">
@@ -54,7 +54,7 @@
                             <Condition Property="IsPressed" Value="True" />
                         </MultiTrigger.Conditions>
 
-                        <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
+                        <Setter Property="Border.Background" Value="{DynamicResource ContentBackgroundAlt}" />
                     </MultiTrigger>
                 </Style.Triggers>
             </Style>
@@ -83,7 +83,7 @@
                             IconPack="Codicons"
                             Kind="Play"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                            Foreground="{StaticResource WolvenKitGreen}" />
+                            Foreground="{DynamicResource WolvenKitGreen}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
@@ -105,7 +105,7 @@
                             IconPack="Codicons"
                             Kind="RunAll"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                            Foreground="{StaticResource WolvenKitGreen}" />
+                            Foreground="{DynamicResource WolvenKitGreen}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
@@ -126,7 +126,7 @@
                             IconPack="Material"
                             Kind="Refresh"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
@@ -199,7 +199,7 @@
                 Grid.Column="0"
                 Width="Auto"
                 Height="Auto"
-                BorderBrush="{StaticResource BorderAlt}"
+                BorderBrush="{DynamicResource BorderAlt}"
                 BorderThickness="0,1,0,0"
                 Visibility="{Binding Path=HasItems,
                                      Converter={StaticResource InvertBooleanVisibilityConverter}}">

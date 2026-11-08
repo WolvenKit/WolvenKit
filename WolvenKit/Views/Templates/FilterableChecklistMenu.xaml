@@ -21,7 +21,7 @@
                     BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
                     TargetType="{x:Type Label}" />
                 <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                    <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
                 </Style>
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
 
@@ -44,7 +44,7 @@
             Grid.Column="0"
             Width="{StaticResource WolvenKitLabelWidthMedium}"
             HorizontalAlignment="Left"
-            Background="#252525"
+            Background="{DynamicResource WolvenKitGray25}"
             BorderThickness="0"
             Content="{Binding Label}" />
 

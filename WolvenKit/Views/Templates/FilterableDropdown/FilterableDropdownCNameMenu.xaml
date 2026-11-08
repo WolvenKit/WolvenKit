@@ -53,13 +53,13 @@
         <Border
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1" />
 
         <Border
             Grid.Row="0"
             Grid.Column="0"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,1,0" />
 
         <!-- ====================================== -->
@@ -83,7 +83,7 @@
         <Border
             Grid.Row="0"
             Grid.Column="1"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,1,0" />
 
         <!-- ====================================== -->
@@ -108,7 +108,7 @@
         <Border
             Grid.Row="0"
             Grid.Column="2"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1" />
 
         <!-- ====================================== -->
@@ -128,7 +128,7 @@
                     Kind="Cached"
                     Margin="{DynamicResource WolvenKitMarginMicro}"
                     Size="{DynamicResource WolvenKitIconSmall}"
-                    Foreground="{StaticResource WolvenKitCyan}" />
+                    Foreground="{DynamicResource WolvenKitCyan}" />
             </StackPanel>
         </Button>
 

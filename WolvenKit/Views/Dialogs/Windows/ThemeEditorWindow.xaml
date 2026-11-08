@@ -1,0 +1,412 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.ThemeEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:vm="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    Title="{Binding Title}"
+    Width="1100"
+    Height="760"
+    MinWidth="820"
+    MinHeight="520"
+    d:DataContext="{d:DesignInstance Type=vm:ThemeEditorViewModel}"
+    Background="{DynamicResource ContentBackground}"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+        <!-- Source is set in code-behind -->
+        <CollectionViewSource x:Key="EntriesView">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
+        </Style>
+
+        <Style x:Key="OverriddenDot" TargetType="Ellipse">
+            <Setter Property="Width" Value="6" />
+            <Setter Property="Height" Value="6" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Fill" Value="{DynamicResource WolvenKitYellow}" />
+            <Setter Property="ToolTip" Value="Changed in this theme" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Theme metadata -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Style="{StaticResource LabelText}" Text="Name" />
+            <TextBox
+                Grid.Column="1"
+                Margin="0,2,16,2"
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock
+                Grid.Column="2"
+                Style="{StaticResource LabelText}"
+                Text="Based on" />
+            <ComboBox
+                Grid.Column="3"
+                Margin="0,2"
+                ItemsSource="{Binding BaseThemeNames}"
+                SelectedItem="{Binding BasedOn}" />
+
+            <TextBlock
+                Grid.Row="1"
+                Style="{StaticResource LabelText}"
+                Text="Author" />
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,2,16,2"
+                Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="2"
+                Style="{StaticResource LabelText}"
+                Text="Description" />
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="3"
+                Margin="0,2"
+                Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+
+            <!-- Accent -->
+            <StackPanel
+                Grid.Row="2"
+                Grid.ColumnSpan="4"
+                Margin="0,8,0,0"
+                Orientation="Horizontal">
+                <TextBlock Style="{StaticResource LabelText}" Text="Accent" />
+                <Ellipse Style="{StaticResource OverriddenDot}" Visibility="{Binding IsAccentOverridden, Converter={StaticResource BoolToVisibility}}" />
+                <syncfusion:ColorPickerPalette
+                    Width="56"
+                    Height="24"
+                    Color="{Binding Accent, Mode=TwoWay}" />
+                <Button
+                    Margin="4,0,24,0"
+                    Padding="6,0"
+                    Command="{Binding ResetAccentCommand}"
+                    Content="Reset"
+                    ToolTip="Use the value of the base theme" />
+
+                <TextBlock Style="{StaticResource LabelText}" Text="Text on accent" />
+                <Ellipse Style="{StaticResource OverriddenDot}" Visibility="{Binding IsAccentForegroundOverridden, Converter={StaticResource BoolToVisibility}}" />
+                <syncfusion:ColorPickerPalette
+                    Width="56"
+                    Height="24"
+                    Color="{Binding AccentForeground, Mode=TwoWay}" />
+                <Button
+                    Margin="4,0,24,0"
+                    Padding="6,0"
+                    Command="{Binding ResetAccentForegroundCommand}"
+                    Content="Reset"
+                    ToolTip="Use the value of the base theme" />
+
+                <CheckBox
+                    VerticalAlignment="Center"
+                    Content="Preview in the whole app"
+                    IsChecked="{Binding PreviewInApp}"
+                    ToolTip="Recolors what can be recolored without a restart. Closing without saving restores the current theme." />
+            </StackPanel>
+        </Grid>
+
+        <!-- Info about built-in themes / restart -->
+        <Border
+            Grid.Row="1"
+            Margin="0,10,0,6"
+            Padding="8,6"
+            Background="{DynamicResource BackgroundColor_Frame_Active}"
+            BorderBrush="{DynamicResource BorderAlt}"
+            BorderThickness="1">
+            <StackPanel>
+            <TextBlock TextWrapping="Wrap">
+                <Run Text="Unchanged colors follow the base theme. &quot;Preview in the whole app&quot; recolors the running app while you edit; Syncfusion controls (docking, grids, menus) update when you save." />
+                <Run Text=" " />
+                <Run Foreground="{DynamicResource WolvenKitYellow}" Text="{Binding OverriddenCount, Mode=OneWay, StringFormat='{}{0} color(s) changed.'}" />
+            </TextBlock>
+            <!-- shown only when some text/background pair is hard to read -->
+            <TextBlock
+                Margin="0,4,0,0"
+                Foreground="{DynamicResource WolvenKitOrange}"
+                Text="{Binding ContrastWarning}"
+                TextWrapping="Wrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ContrastWarning}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" MinWidth="420" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="2*" MinWidth="300" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Color list -->
+            <DockPanel>
+                <DockPanel Margin="0,0,0,6" DockPanel.Dock="Top">
+                    <CheckBox
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="Only changed"
+                        DockPanel.Dock="Right"
+                        IsChecked="{Binding ShowOnlyOverridden}" />
+                    <CheckBox
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="All colors (advanced)"
+                        DockPanel.Dock="Right"
+                        IsChecked="{Binding ShowAdvanced}"
+                        ToolTip="Show every themeable color (Syncfusion surfaces, HandyControl, graphs, nodes, …). Searching always looks through all of them." />
+                    <Button
+                        Margin="8,0,0,0"
+                        Padding="8,0"
+                        Command="{Binding ResetAllCommand}"
+                        Content="Reset all"
+                        DockPanel.Dock="Right" />
+                    <TextBox
+                        x:Name="FilterBox"
+                        Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                        ToolTip="Filter by name, resource key, group or hex value" />
+                </DockPanel>
+
+                <ListBox
+                    x:Name="EntriesList"
+                    HorizontalContentAlignment="Stretch"
+                    BorderBrush="{DynamicResource BorderAlt}"
+                    ItemsSource="{Binding Source={StaticResource EntriesView}}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    VirtualizingPanel.IsVirtualizing="True"
+                    VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                    VirtualizingPanel.ScrollUnit="Pixel"
+                    VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Margin="4,10,0,4"
+                                        FontWeight="SemiBold"
+                                        Foreground="{DynamicResource WolvenKitCyan}"
+                                        Text="{Binding Name}" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:ThemeColorEntryViewModel}">
+                            <Grid Margin="0,1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="12" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Style="{StaticResource OverriddenDot}" Visibility="{Binding IsOverridden, Converter={StaticResource BoolToVisibility}}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding DisplayName}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTip="{Binding Key}" />
+                                <syncfusion:ColorPickerPalette
+                                    Grid.Column="2"
+                                    Width="48"
+                                    Height="22"
+                                    Margin="6,0"
+                                    Color="{Binding Color, Mode=TwoWay}" />
+                                <TextBox
+                                    Grid.Column="3"
+                                    VerticalContentAlignment="Center"
+                                    FontFamily="Consolas"
+                                    Text="{Binding Hex, UpdateSourceTrigger=LostFocus}" />
+                                <Button
+                                    Grid.Column="4"
+                                    Margin="4,0,0,0"
+                                    Padding="6,0"
+                                    Command="{Binding ResetCommand}"
+                                    Content="↺"
+                                    IsEnabled="{Binding IsOverridden}"
+                                    ToolTip="Reset to the base theme" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+
+            <!-- Live preview. Everything inside uses DynamicResource, so it follows PreviewHost.Resources. -->
+            <Border
+                x:Name="PreviewHost"
+                Grid.Column="2"
+                BorderBrush="{DynamicResource BorderAlt}"
+                BorderThickness="1">
+                <DockPanel Background="{DynamicResource ContentBackground}">
+                    <Border
+                        Padding="10,6"
+                        Background="{DynamicResource ContentBackgroundAlt2}"
+                        BorderBrush="{DynamicResource BorderAlt}"
+                        BorderThickness="0,0,0,1"
+                        DockPanel.Dock="Top">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource ForegroundColor}"
+                            Text="Preview" />
+                    </Border>
+
+                    <StackPanel Margin="10">
+                        <!-- Property rows -->
+                        <Border
+                            Padding="8"
+                            Background="{DynamicResource ContentBackgroundAlt}"
+                            BorderBrush="{DynamicResource BorderAlt}"
+                            BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Foreground="{DynamicResource ForegroundColor}" Text="appearanceName" />
+                                <TextBlock Foreground="{DynamicResource ForegroundColor_Grey_Light}" Text="  CName · default" />
+                                <TextBlock Foreground="{DynamicResource ForegroundColor_Grey_Dark}" Text="  ResourcePath · base\characters\..." />
+                                <TextBlock Foreground="{DynamicResource ForegroundColor_Grey_Inactive}" Text="  (inactive)" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Palette chips -->
+                        <WrapPanel Margin="0,10,0,0">
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitRed}" ToolTip="Red" />
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitCyan}" ToolTip="Cyan" />
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitYellow}" ToolTip="Yellow" />
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitGreen}" ToolTip="Green" />
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitOrange}" ToolTip="Orange" />
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitPurple}" ToolTip="Purple" />
+                            <Border Width="36" Height="20" Margin="0,0,4,4" Background="{DynamicResource WolvenKitTan}" ToolTip="Tan" />
+                        </WrapPanel>
+
+                        <!-- Status texts -->
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource ForegroundColor_Cyan}" Text="Info: archive loaded" />
+                        <TextBlock Foreground="{DynamicResource ForegroundColor_Yellow}" Text="Warning: missing material" />
+                        <TextBlock Foreground="{DynamicResource ForegroundColor_Red}" Text="Error: file not found" />
+
+                        <!-- Buttons -->
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Border Padding="12,4" CornerRadius="2">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{Binding Accent}" />
+                                </Border.Background>
+                                <TextBlock Text="Accent button">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding AccentForeground}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </Border>
+                            <Border
+                                Margin="8,0,0,0"
+                                Padding="12,4"
+                                Background="{DynamicResource BackgroundColor_Control}"
+                                BorderBrush="{DynamicResource BorderAlt}"
+                                BorderThickness="1">
+                                <TextBlock Foreground="{DynamicResource ForegroundColor}" Text="Button" />
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Graph nodes -->
+                        <Grid Margin="0,12,0,0" Background="{DynamicResource ContentBackgroundAlt3}">
+                            <StackPanel Margin="8" Orientation="Horizontal">
+                                <Border Width="110" BorderBrush="{DynamicResource BorderAlt}" BorderThickness="1">
+                                    <StackPanel>
+                                        <Border Padding="6,3" Background="{DynamicResource QuestStartNodeHeader}">
+                                            <TextBlock Foreground="{DynamicResource ForegroundColor}" Text="Start" />
+                                        </Border>
+                                        <Border Height="34" Background="{DynamicResource QuestStartNodeContent}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Width="110" Margin="10,0,0,0" BorderBrush="{DynamicResource BorderAlt}" BorderThickness="1">
+                                    <StackPanel>
+                                        <Border Padding="6,3" Background="{DynamicResource QuestEndNodeHeader}">
+                                            <TextBlock Foreground="{DynamicResource ForegroundColor}" Text="End" />
+                                        </Border>
+                                        <Border Height="34" Background="{DynamicResource QuestEndNodeContent}" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- Footer -->
+        <DockPanel Grid.Row="3" Margin="0,10,0,0">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <Button
+                    x:Name="ExportButton"
+                    Padding="10,4"
+                    Click="ExportButton_OnClick"
+                    Content="Export…" />
+            </StackPanel>
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <TextBlock
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource ForegroundColor_Red}"
+                    Text="{Binding ValidationError}" />
+                <Button
+                    x:Name="SaveButton"
+                    Padding="12,4"
+                    Click="SaveButton_OnClick"
+                    Content="Save" />
+                <Button
+                    x:Name="SaveApplyButton"
+                    Margin="8,0,0,0"
+                    Padding="12,4"
+                    Click="SaveApplyButton_OnClick"
+                    Content="Save and use" />
+                <Button
+                    Margin="8,0,0,0"
+                    Padding="12,4"
+                    Click="CloseButton_OnClick"
+                    Content="Close"
+                    IsCancel="True" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

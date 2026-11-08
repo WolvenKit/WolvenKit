@@ -75,7 +75,7 @@
                                 Kind="Recycle"
                                 Margin="0"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitPurple}" />
+                                Foreground="{DynamicResource WolvenKitPurple}" />
 
                             <TextBlock
                                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -235,7 +235,7 @@
                             x:Name="CanvasLinearCurve"
                             Visibility="Collapsed">
                             <Path
-                                Stroke="{StaticResource WolvenKitGraphCurve}"
+                                Stroke="{DynamicResource WolvenKitGraphCurve}"
                                 StrokeThickness="2">
                                 <Path.Data>
                                     <GeometryGroup>
@@ -262,7 +262,7 @@
                             x:Name="CanvasQuadraticCurve"
                             Visibility="Collapsed">
                             <Path
-                                Stroke="{StaticResource WolvenKitGraphCurve}"
+                                Stroke="{DynamicResource WolvenKitGraphCurve}"
                                 StrokeThickness="2">
                                 <Path.Data>
                                     <GeometryGroup>
@@ -289,7 +289,7 @@
                             x:Name="CanvasCubicCurve"
                             Visibility="Collapsed">
                             <Path
-                                Stroke="{StaticResource WolvenKitGraphCurve}"
+                                Stroke="{DynamicResource WolvenKitGraphCurve}"
                                 StrokeThickness="2">
                                 <Path.Data>
                                     <GeometryGroup>

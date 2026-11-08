@@ -19,7 +19,7 @@
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     MaxHeight="{DynamicResource WolvenKitDialogHeightLarge}"
     Padding="{DynamicResource WolvenKitMargin}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
  <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -42,7 +42,7 @@
             Padding="0"
             Source="{Binding Markdown}"
             FontSize="{DynamicResource WolvenKitFontBody}"
-            Background="{StaticResource ContentBackgroundAlt3}">
+            Background="{DynamicResource ContentBackgroundAlt3}">
         </markdown:SfMarkdownViewer>
 
         <!-- Actions -->
