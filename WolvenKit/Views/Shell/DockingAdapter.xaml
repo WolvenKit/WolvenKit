@@ -168,7 +168,8 @@
 
                     <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitGray31}" />
                     <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource BorderAlt}" />
-                    <Setter Property="TabItemSelectedForeground" Value="White" />
+                    <!--  the active document tab is drawn in the accent color  -->
+                    <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />
                     <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackground}" />
                     <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                 </Style>
