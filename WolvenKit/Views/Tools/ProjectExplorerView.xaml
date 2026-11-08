@@ -29,6 +29,9 @@
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
 
+            <!--  tab text color follows the (theme-colored) tab background  -->
+            <converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter" />
+
             <DataTemplate x:Key="DragDropTemplate">
                 <Border
                     x:Name="border"
@@ -783,7 +786,12 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
+                            <!--
+                                The selected look is set on the named Border: the TabControl sets the tab's own
+                                Background to its selected (accent) color, which would hide WolvenKitProjectSource.
+                            -->
                             <Border
+                                x:Name="TabBorder"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
@@ -791,18 +799,17 @@
                                     Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Foreground="{TemplateBinding Foreground}"
+                                    Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
                                     Text="{TemplateBinding Header}" />
                             </Border>
 
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="False">
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter TargetName="TabBorder" Property="Background" Value="Transparent" />
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
-                                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSource}" />
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
+                                    <Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSource}" />
                                 </Trigger>
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
@@ -855,12 +862,14 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
-                                    <Border Background="{TemplateBinding Background}">
+                                    <Border
+                                        x:Name="TabBorder"
+                                        Background="{DynamicResource WolvenKitProjectSourceShadow}">
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Foreground="White"
+                                            Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
                                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                             FontWeight="Normal"
                                             Text="SOURCE" />
@@ -868,7 +877,7 @@
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
+                                            <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
                                             <Setter Property="FontWeight" Value="Bold" />
                                         </Trigger>
                                         <MultiTrigger>
@@ -905,12 +914,14 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
-                                    <Border Background="{TemplateBinding Background}">
+                                    <Border
+                                        x:Name="TabBorder"
+                                        Background="{DynamicResource WolvenKitProjectResourcesShadow}">
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Foreground="Black"
+                                            Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
                                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                             FontWeight="Normal"
                                             Text="RESOURCES" />
@@ -918,7 +929,7 @@
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{DynamicResource WolvenKitProjectResources}" />
+                                            <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectResources}" />
                                             <Setter Property="FontWeight" Value="Bold" />
                                         </Trigger>
                                         <MultiTrigger>
