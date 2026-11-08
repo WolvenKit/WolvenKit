@@ -44,7 +44,8 @@ public class ThemeServiceTests
             });
             Settings.SetupProperty(s => s.ThemeAccentString, legacyAccent);
 
-            Service = new ThemeService(Settings.Object, new Mock<ILoggerService>().Object) { UserThemesDirectory = Directory };
+            var logger = new Mock<ILoggerService>().Object;
+            Service = new ThemeService(Settings.Object, logger, new ThemeRepository(logger, Directory));
             Service.Initialize();
         }
 
@@ -178,6 +179,40 @@ public class ThemeServiceTests
 
         Assert.Equal(1, failing.Calls);
         Assert.Equal(1, listener.Calls);
+    }
+
+    #endregion
+
+    #region repository
+
+    [Fact]
+    public void Repository_SaveThenRead_RoundTrips_AndSanitizesFileName()
+    {
+        using var f = new Fixture();
+        var repository = new ThemeRepository(new Mock<ILoggerService>().Object, f.Directory);
+        var theme = new ThemeDto { Name = "a/b", BasedOn = NightCity, Accent = "#112233" };
+        theme.Colors["ContentBackground"] = "#101010";
+
+        var path = repository.Save(theme);
+        var read = repository.Read(path);
+
+        Assert.Equal("a_b.json", Path.GetFileName(path));
+        Assert.Equal("a/b", read.Name);
+        Assert.Equal(NightCity, read.BasedOn);
+        Assert.Equal("#112233", read.Accent);
+        Assert.Equal("#101010", read.Colors["ContentBackground"]);
+        Assert.Single(repository.LoadUserThemes(), t => t.FilePath == path);
+    }
+
+    [Fact]
+    public void Repository_Read_RejectsNewerFormat()
+    {
+        using var f = new Fixture();
+        var repository = new ThemeRepository(new Mock<ILoggerService>().Object, f.Directory);
+        WriteTheme(f.Directory, "future.json", $$"""{ "formatVersion": {{ThemeDto.CurrentFormatVersion + 1}}, "name": "Future" }""");
+
+        Assert.Throws<InvalidDataException>(() => repository.Read(Path.Combine(f.Directory, "future.json")));
+        Assert.Empty(repository.LoadUserThemes());
     }
 
     #endregion
