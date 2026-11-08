@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -29,7 +30,8 @@ public partial class StatusBarViewModel : ObservableObject
         ISettingsManager settingsManager,
         IProjectManager projectManager,
         ILoggerService loggerService,
-        IProgressService<double> progressService
+        IProgressService<double> progressService,
+        IThemeService themeService
         )
     {
         _settingsManager = settingsManager;
@@ -45,6 +47,9 @@ public partial class StatusBarViewModel : ObservableObject
 
         _progressService.ProgressChanged += ProgressService_ProgressChanged;
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
+
+        // the bar color is a theme color: re-read it when the theme changes
+        themeService.CurrentThemeChanged += (_, _) => DispatcherHelper.RunOnMainThread(UpdateBarColor);
     }
 
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -69,22 +74,27 @@ public partial class StatusBarViewModel : ObservableObject
             DispatcherHelper.RunOnMainThread(() =>
             {
                 Status = _progressService.Status.ToString();
-                switch (_progressService.Status)
-                {
-                    case EStatus.Running:
-                        BarColor = Brushes.DarkOrange;
-                        break;
-                    case EStatus.Ready:
-                        if (new BrushConverter().ConvertFromString("#951C2D") is SolidColorBrush brush)
-                        {
-                            BarColor = brush;
-                        }
-
-                        break;
-                    default:
-                        break;
-                }
+                UpdateBarColor();
             });
+        }
+    }
+
+    /// <summary>Bar color for the current status, from the theme resources (see App.Styles.xaml).</summary>
+    private void UpdateBarColor()
+    {
+        switch (_progressService.Status)
+        {
+            case EStatus.Running:
+                BarColor = FindBrush("WolvenKitStatusBarBusy") ?? Brushes.DarkOrange;
+                break;
+            case EStatus.Ready:
+                if ((FindBrush("WolvenKitStatusBarReady") ?? new BrushConverter().ConvertFromString("#951C2D")) is Brush brush)
+                {
+                    BarColor = brush;
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -118,6 +128,8 @@ public partial class StatusBarViewModel : ObservableObject
 
 
     [ObservableProperty] private Brush _barColor = Brushes.Black;
+
+    private static Brush? FindBrush(string key) => System.Windows.Application.Current?.TryFindResource(key) as Brush;
 
     #endregion Properties
 
