@@ -167,6 +167,8 @@ public sealed partial class ThemeService : IThemeService
 
     private static bool IsShiftHeld()
     {
+        // No WPF app (unit tests): skip, so the result does not depend on the real keyboard
+        // and no InputManager is created on a test thread.
         if (Application.Current is null)
         {
             return false;
