@@ -35,7 +35,7 @@ namespace WolvenKit.Views.Shell
     /// <summary>
     /// Interaction logic for DockingAdapter.xaml
     /// </summary>
-    public partial class DockingAdapter : UserControl
+    public partial class DockingAdapter : UserControl, WolvenKit.App.Services.Themes.IThemeAware
     {
         private readonly ILoggerService _logger;
 
@@ -58,6 +58,130 @@ namespace WolvenKit.Views.Shell
             if (_viewModel is not null)
             {
                 _viewModel.OnAppLoaded += (_, _) => LoadLayoutFromProject();
+            }
+
+            if (Locator.Current.GetService<WolvenKit.App.Services.Themes.IThemeService>() is { } themeService)
+            {
+                themeService.Register(this);
+            }
+        }
+
+        /// <summary>
+        /// The document tab styles are based on Syncfusion styles that were resolved when this view was loaded.
+        /// Their templates hold the colors of that time (StaticResource), e.g. the background of a selected tab
+        /// whose document is not active. After a theme switch, rebase ours on freshly loaded Syncfusion styles.
+        /// </summary>
+        void WolvenKit.App.Services.Themes.IThemeAware.OnThemeChanged()
+        {
+            var fresh = LoadFreshDockingStyles();
+            PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabItemStyleProperty,
+                Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabItemStyleProperty), fresh, "SyncfusionDocumentTabItemExtStyle"));
+            PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabControlStyleProperty,
+                Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabControlStyleProperty), fresh, "SyncfusionDocumentTabControlExtStyle"));
+        }
+
+        private const string SyncfusionDockingStylesUri =
+            "pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml";
+
+        /// <summary>
+        /// A new instance of Syncfusion's DockingManager styles. Its styles are created on first access, so after
+        /// its Brushes.xaml is swapped for the application's (recolored) one they pick up the current theme colors.
+        /// The styles already in the application resources keep the colors from when they were first used.
+        /// </summary>
+        private ResourceDictionary LoadFreshDockingStyles()
+        {
+            try
+            {
+                if (FindSyncfusionBrushes(Application.Current.Resources) is not { } brushes)
+                {
+                    _logger.Debug("Themes: Syncfusion Brushes.xaml not found in the application resources.");
+                    return null;
+                }
+
+                var fresh = new ResourceDictionary { Source = new Uri(SyncfusionDockingStylesUri, UriKind.Absolute) };
+                ReplaceSyncfusionBrushes(fresh, brushes);
+                return fresh;
+            }
+            catch (Exception e)
+            {
+                _logger.Warning($"Themes: could not load the Syncfusion docking styles: {e.Message}");
+                return null;
+            }
+        }
+
+        private static bool IsSyncfusionBrushes(ResourceDictionary dictionary) =>
+            dictionary.Source?.OriginalString.EndsWith("/Common/Brushes.xaml", StringComparison.OrdinalIgnoreCase) == true;
+
+        private static ResourceDictionary FindSyncfusionBrushes(ResourceDictionary dictionary)
+        {
+            foreach (var merged in dictionary.MergedDictionaries)
+            {
+                if (IsSyncfusionBrushes(merged))
+                {
+                    return merged;
+                }
+                if (FindSyncfusionBrushes(merged) is { } found)
+                {
+                    return found;
+                }
+            }
+            return null;
+        }
+
+        private static void ReplaceSyncfusionBrushes(ResourceDictionary dictionary, ResourceDictionary brushes)
+        {
+            for (var i = 0; i < dictionary.MergedDictionaries.Count; i++)
+            {
+                var merged = dictionary.MergedDictionaries[i];
+                if (IsSyncfusionBrushes(merged))
+                {
+                    dictionary.MergedDictionaries[i] = brushes;
+                }
+                else
+                {
+                    ReplaceSyncfusionBrushes(merged, brushes);
+                }
+            }
+        }
+
+        /// <summary>A copy of <paramref name="style"/> based on <paramref name="baseKey"/> from <paramref name="fresh"/>.</summary>
+        private Style Rebase(Style style, ResourceDictionary fresh, string baseKey)
+        {
+            if (style is null || fresh?[baseKey] is not Style basedOn)
+            {
+                _logger.Debug($"Themes: {baseKey} not available, document tab style not rebased.");
+                return style;
+            }
+
+            try
+            {
+                var copy = new Style(style.TargetType, basedOn);
+                foreach (var setterBase in style.Setters)
+                {
+                    if (setterBase is Setter setter)
+                    {
+                        copy.Setters.Add(new Setter(setter.Property, CopyValue(setter.Value), setter.TargetName));
+                    }
+                }
+                _logger.Debug($"Themes: {style.TargetType.Name} style rebased on {baseKey} (new base: {!ReferenceEquals(basedOn, style.BasedOn)}).");
+                return copy;
+            }
+            catch (Exception e)
+            {
+                _logger.Warning($"Themes: could not rebase the {style.TargetType.Name} style: {e.Message}");
+                return style;
+            }
+
+            // {DynamicResource} setter values: keep them dynamic in the copy
+            static object CopyValue(object value)
+            {
+                if (value is null || value is DynamicResourceExtension)
+                {
+                    return value;
+                }
+                var keyField = value.GetType().GetField("_resourceKey",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                return keyField?.GetValue(value) is { } key ? new DynamicResourceExtension(key) : value;
             }
         }
 
