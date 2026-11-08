@@ -56,10 +56,10 @@ public class ThemeServiceTests
 
         public string? ActiveTheme => _activeTheme;
 
-        public ThemeDefinition Get(string name) => Service.Find(name) ?? throw new InvalidOperationException($"theme {name} not found");
+        public ThemeDto Get(string name) => Service.Find(name) ?? throw new InvalidOperationException($"theme {name} not found");
 
-        public ThemeDefinition SaveNew(string name, string? basedOn, params (string Key, string Hex)[] colors) =>
-            Service.Save(new ThemeDefinition
+        public ThemeDto SaveNew(string name, string? basedOn, params (string Key, string Hex)[] colors) =>
+            Service.Save(new ThemeDto
             {
                 Name = name,
                 BasedOn = basedOn,
@@ -342,7 +342,7 @@ public class ThemeServiceTests
         using var f = new Fixture();
         f.Service.SetDefaultColor("ContentBackground", Hex("#202020"));
         f.Service.SetDefaultColor("ContentForeground", Hex("#E0E0E0"));
-        var theme = new ThemeDefinition
+        var theme = new ThemeDto
         {
             Name = "Blue",
             Colors = { ["ContentBackground"] = "#102030", ["ContentForeground"] = "#D0E0F0" }
@@ -369,8 +369,8 @@ public class ThemeServiceTests
         f.Service.SetDefaultColor("ContentBackground", Hex("#202020"));
         f.Service.SetDefaultColor("ContentForeground", Hex("#E0E0E0"));
 
-        var oneAnchor = new ThemeDefinition { Name = "One", Colors = { ["ContentBackground"] = "#102030" } };
-        var disabled = new ThemeDefinition
+        var oneAnchor = new ThemeDto { Name = "One", Colors = { ["ContentBackground"] = "#102030" } };
+        var disabled = new ThemeDto
         {
             Name = "Off",
             DeriveNeutralColors = false,

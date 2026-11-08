@@ -42,8 +42,8 @@ public sealed partial class ThemeService : IThemeService
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
 
-    private readonly List<ThemeDefinition> _builtInThemes = [];
-    private readonly List<ThemeDefinition> _userThemes = [];
+    private readonly List<ThemeDto> _builtInThemes = [];
+    private readonly List<ThemeDto> _userThemes = [];
 
     /// <summary>Default value of every known key, captured before the first theme is applied.</summary>
     private readonly Dictionary<string, Color> _defaults = new(StringComparer.Ordinal);
@@ -97,17 +97,17 @@ public sealed partial class ThemeService : IThemeService
         _isBrush[key] = isBrush;
     }
 
-    public IReadOnlyList<ThemeDefinition> Themes =>
+    public IReadOnlyList<ThemeDto> Themes =>
         _builtInThemes.OrderByDescending(t => t.IsDefault)
             .ThenBy(t => t.Name, StringComparer.OrdinalIgnoreCase)
             .Concat(_userThemes.OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase))
             .ToList();
 
-    public ThemeDefinition Current =>
+    public ThemeDto Current =>
         Find(_currentName) ?? Find(IThemeService.DefaultThemeName) ?? s_fallbackTheme;
 
     /// <summary>Used if even the built-in themes could not be loaded: no overrides = stock WolvenKit look.</summary>
-    private static readonly ThemeDefinition s_fallbackTheme = new() { Name = IThemeService.DefaultThemeName, IsBuiltIn = true };
+    private static readonly ThemeDto s_fallbackTheme = new() { Name = IThemeService.DefaultThemeName, IsBuiltIn = true };
 
     public event EventHandler? ThemesChanged;
 
@@ -242,7 +242,7 @@ public sealed partial class ThemeService : IThemeService
                 {
                     continue;
                 }
-                var theme = JsonSerializer.Deserialize<ThemeDefinition>(stream, s_options);
+                var theme = JsonSerializer.Deserialize<ThemeDto>(stream, s_options);
                 if (theme is null || string.IsNullOrWhiteSpace(theme.Name))
                 {
                     continue;
@@ -259,7 +259,7 @@ public sealed partial class ThemeService : IThemeService
 
         if (_builtInThemes.All(t => t.Name != IThemeService.DefaultThemeName))
         {
-            _builtInThemes.Add(new ThemeDefinition { Name = IThemeService.DefaultThemeName, IsBuiltIn = true });
+            _builtInThemes.Add(new ThemeDto { Name = IThemeService.DefaultThemeName, IsBuiltIn = true });
         }
     }
 
@@ -303,7 +303,7 @@ public sealed partial class ThemeService : IThemeService
             return;
         }
 
-        var theme = Find(MigratedThemeName) ?? Save(new ThemeDefinition
+        var theme = Find(MigratedThemeName) ?? Save(new ThemeDto
         {
             Name = MigratedThemeName,
             BasedOn = IThemeService.DefaultThemeName,
@@ -363,7 +363,7 @@ public sealed partial class ThemeService : IThemeService
 
     #region query
 
-    public ThemeDefinition? Find(string? name) =>
+    public ThemeDto? Find(string? name) =>
         string.IsNullOrEmpty(name)
             ? null
             : _builtInThemes.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase))
@@ -372,9 +372,9 @@ public sealed partial class ThemeService : IThemeService
     public Color? GetDefaultColor(string key) => _defaults.TryGetValue(key, out var color) ? color : null;
 
     /// <summary>Root-first list: [base of base, base, theme]. Guards against cycles.</summary>
-    private List<ThemeDefinition> GetChain(ThemeDefinition theme)
+    private List<ThemeDto> GetChain(ThemeDto theme)
     {
-        var chain = new List<ThemeDefinition>();
+        var chain = new List<ThemeDto>();
         var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         for (var t = theme; t is not null && visited.Add(t.Name); t = Find(t.BasedOn))
@@ -384,7 +384,7 @@ public sealed partial class ThemeService : IThemeService
         return chain;
     }
 
-    public IReadOnlyDictionary<string, Color> ResolveOverrides(ThemeDefinition theme)
+    public IReadOnlyDictionary<string, Color> ResolveOverrides(ThemeDto theme)
     {
         var result = new Dictionary<string, Color>(StringComparer.Ordinal);
         foreach (var t in GetChain(theme))
@@ -404,21 +404,21 @@ public sealed partial class ThemeService : IThemeService
         return result;
     }
 
-    public Color? ResolveColor(ThemeDefinition theme, string key) =>
+    public Color? ResolveColor(ThemeDto theme, string key) =>
         ResolveOverrides(theme).TryGetValue(key, out var color) ? color : GetDefaultColor(key);
 
-    public Color ResolveAccent(ThemeDefinition theme) =>
+    public Color ResolveAccent(ThemeDto theme) =>
         GetChain(theme).Select(t => TryParseColor(t.Accent)).LastOrDefault(c => c is not null)
         ?? IThemeService.DefaultAccent;
 
-    public Color? ResolveAccentForeground(ThemeDefinition theme) =>
+    public Color? ResolveAccentForeground(ThemeDto theme) =>
         GetChain(theme).Select(t => TryParseColor(t.AccentForeground)).LastOrDefault(c => c is not null);
 
     #endregion
 
     #region resources
 
-    public ResourceDictionary CreateResourceDictionary(ThemeDefinition theme, bool complete = false)
+    public ResourceDictionary CreateResourceDictionary(ThemeDto theme, bool complete = false)
     {
         var dictionary = new ResourceDictionary();
 
@@ -481,7 +481,7 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public void ApplyResources(ThemeDefinition theme)
+    public void ApplyResources(ThemeDto theme)
     {
         var app = Application.Current;
         if (app is null)
@@ -556,7 +556,7 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public ThemeDefinition Duplicate(ThemeDefinition source, string newName)
+    public ThemeDto Duplicate(ThemeDto source, string newName)
     {
         var copy = source.Clone();
         copy.Name = GetUniqueName(newName);
@@ -575,7 +575,7 @@ public sealed partial class ThemeService : IThemeService
         return Save(copy);
     }
 
-    public ThemeDefinition Save(ThemeDefinition theme, string? previousName = null)
+    public ThemeDto Save(ThemeDto theme, string? previousName = null)
     {
         if (theme.IsBuiltIn)
         {
@@ -601,7 +601,7 @@ public sealed partial class ThemeService : IThemeService
         }
 
         var path = Path.Combine(UserThemesDirectory, ToFileName(theme.Name));
-        theme.FormatVersion = ThemeDefinition.CurrentFormatVersion;
+        theme.FormatVersion = ThemeDto.CurrentFormatVersion;
         File.WriteAllText(path, JsonSerializer.Serialize(theme, s_options));
 
         if (previous is not null)
@@ -658,7 +658,7 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public void Delete(ThemeDefinition theme)
+    public void Delete(ThemeDto theme)
     {
         if (theme.IsBuiltIn)
         {
@@ -701,7 +701,7 @@ public sealed partial class ThemeService : IThemeService
         }
     }
 
-    public ThemeDefinition Import(string path)
+    public ThemeDto Import(string path)
     {
         var theme = ReadThemeFile(path);
         theme.Name = GetUniqueName(theme.Name);
@@ -715,14 +715,14 @@ public sealed partial class ThemeService : IThemeService
         return Save(theme);
     }
 
-    public void Export(ThemeDefinition theme, string path, bool flatten)
+    public void Export(ThemeDto theme, string path, bool flatten)
     {
         var data = flatten ? Flatten(theme) : theme.Clone();
         File.WriteAllText(path, JsonSerializer.Serialize(data, s_options));
     }
 
     /// <summary>A copy that contains all inherited overrides and no BasedOn.</summary>
-    private ThemeDefinition Flatten(ThemeDefinition theme)
+    private ThemeDto Flatten(ThemeDto theme)
     {
         var flat = theme.Clone();
         flat.BasedOn = null;
@@ -734,13 +734,13 @@ public sealed partial class ThemeService : IThemeService
         return flat;
     }
 
-    private static ThemeDefinition ReadThemeFile(string path)
+    private static ThemeDto ReadThemeFile(string path)
     {
-        var theme = JsonSerializer.Deserialize<ThemeDefinition>(File.ReadAllText(path), s_options)
+        var theme = JsonSerializer.Deserialize<ThemeDto>(File.ReadAllText(path), s_options)
                     ?? throw new InvalidDataException("Empty theme file.");
-        if (theme.FormatVersion > ThemeDefinition.CurrentFormatVersion)
+        if (theme.FormatVersion > ThemeDto.CurrentFormatVersion)
         {
-            throw new InvalidDataException($"Theme format {theme.FormatVersion} is newer than supported ({ThemeDefinition.CurrentFormatVersion}).");
+            throw new InvalidDataException($"Theme format {theme.FormatVersion} is newer than supported ({ThemeDto.CurrentFormatVersion}).");
         }
         if (string.IsNullOrWhiteSpace(theme.Name))
         {

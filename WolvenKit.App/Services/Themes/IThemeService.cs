@@ -33,10 +33,10 @@ public interface IThemeService
     ThemeSchema Schema { get; }
 
     /// <summary>The default theme, then the other built-in themes, then user themes, sorted by name.</summary>
-    IReadOnlyList<ThemeDefinition> Themes { get; }
+    IReadOnlyList<ThemeDto> Themes { get; }
 
     /// <summary>The theme selected in the settings (falls back to the default theme).</summary>
-    ThemeDefinition Current { get; }
+    ThemeDto Current { get; }
 
     /// <summary>Raised when themes are added, saved, renamed or deleted.</summary>
     event EventHandler? ThemesChanged;
@@ -56,7 +56,7 @@ public interface IThemeService
     /// </summary>
     void Initialize();
 
-    ThemeDefinition? Find(string? name);
+    ThemeDto? Find(string? name);
 
     /// <summary>Makes <paramref name="name"/> the active theme (persisted in the settings).</summary>
     void SetActive(string name);
@@ -65,7 +65,7 @@ public interface IThemeService
     /// Puts the palette of <paramref name="theme"/> into the application resources without
     /// changing <see cref="Current"/>. Used for live preview; call with <see cref="Current"/> to revert.
     /// </summary>
-    void ApplyResources(ThemeDefinition theme);
+    void ApplyResources(ThemeDto theme);
 
     /// <summary>
     /// Scans for resource dictionaries loaded since the last scan (e.g. after Syncfusion re-applied its theme)
@@ -87,40 +87,40 @@ public interface IThemeService
     /// included (defaults for keys the theme does not override) — used by the editor preview, so that it
     /// does not fall back to the colors of the currently applied theme.
     /// </summary>
-    ResourceDictionary CreateResourceDictionary(ThemeDefinition theme, bool complete = false);
+    ResourceDictionary CreateResourceDictionary(ThemeDto theme, bool complete = false);
 
     /// <summary>Factory color of a key, before any theme was applied.</summary>
     Color? GetDefaultColor(string key);
 
     /// <summary>Overrides of the theme merged with all themes it is based on.</summary>
-    IReadOnlyDictionary<string, Color> ResolveOverrides(ThemeDefinition theme);
+    IReadOnlyDictionary<string, Color> ResolveOverrides(ThemeDto theme);
 
     /// <summary>Effective color of a key: overrides of the theme chain, else the default.</summary>
-    Color? ResolveColor(ThemeDefinition theme, string key);
+    Color? ResolveColor(ThemeDto theme, string key);
 
-    Color ResolveAccent(ThemeDefinition theme);
+    Color ResolveAccent(ThemeDto theme);
 
-    Color? ResolveAccentForeground(ThemeDefinition theme);
+    Color? ResolveAccentForeground(ThemeDto theme);
 
     string GetUniqueName(string baseName);
 
     /// <summary>Creates and saves a user copy of <paramref name="source"/>.</summary>
-    ThemeDefinition Duplicate(ThemeDefinition source, string newName);
+    ThemeDto Duplicate(ThemeDto source, string newName);
 
     /// <summary>
     /// Saves a user theme. <paramref name="previousName"/> is the name it had before editing
     /// (for renames); the active-theme setting follows the rename.
     /// </summary>
-    ThemeDefinition Save(ThemeDefinition theme, string? previousName = null);
+    ThemeDto Save(ThemeDto theme, string? previousName = null);
 
-    void Delete(ThemeDefinition theme);
+    void Delete(ThemeDto theme);
 
     /// <summary>Imports a theme JSON file as a user theme (renamed if the name is taken).</summary>
-    ThemeDefinition Import(string path);
+    ThemeDto Import(string path);
 
     /// <summary>
     /// Exports a theme. With <paramref name="flatten"/> the inherited overrides are included
-    /// and <see cref="ThemeDefinition.BasedOn"/> is dropped, so the file works on its own.
+    /// and <see cref="ThemeDto.BasedOn"/> is dropped, so the file works on its own.
     /// </summary>
-    void Export(ThemeDefinition theme, string path, bool flatten);
+    void Export(ThemeDto theme, string path, bool flatten);
 }

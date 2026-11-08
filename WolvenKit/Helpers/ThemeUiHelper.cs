@@ -21,14 +21,14 @@ namespace WolvenKit.Helpers
         /// <summary>
         /// Opens the theme editor. For a built-in theme the editor creates a new theme based on it.
         /// </summary>
-        public static void OpenEditor(ThemeDefinition theme, Window owner = null)
+        public static void OpenEditor(ThemeDto theme, Window owner = null)
         {
             theme ??= ThemeService.Current;
             var window = new ThemeEditorWindow(ThemeService, theme) { Owner = owner ?? DefaultOwner };
             window.ShowDialog();
         }
 
-        public static void Duplicate(ThemeDefinition theme, Window owner = null)
+        public static void Duplicate(ThemeDto theme, Window owner = null)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace WolvenKit.Helpers
             }
         }
 
-        public static void Delete(ThemeDefinition theme)
+        public static void Delete(ThemeDto theme)
         {
             if (theme is null || theme.IsBuiltIn)
             {
@@ -81,7 +81,7 @@ namespace WolvenKit.Helpers
                 return;
             }
 
-            ThemeDefinition imported;
+            ThemeDto imported;
             try
             {
                 imported = ThemeService.Import(dialog.FileName);

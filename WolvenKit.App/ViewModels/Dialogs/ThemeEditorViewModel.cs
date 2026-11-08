@@ -115,7 +115,7 @@ public partial class ThemeEditorViewModel : ObservableObject
     private readonly bool? _deriveNeutralColors;
     private Color _inheritedAccentForeground;
 
-    public ThemeEditorViewModel(IThemeService themeService, ThemeDefinition source)
+    public ThemeEditorViewModel(IThemeService themeService, ThemeDto source)
     {
         _themeService = themeService;
         _isInitializing = true;
@@ -326,7 +326,7 @@ public partial class ThemeEditorViewModel : ObservableObject
     }
 
     /// <summary>The edited theme as it would be saved: only values that differ from the base theme.</summary>
-    public ThemeDefinition BuildDefinition() => new()
+    public ThemeDto BuildDefinition() => new()
     {
         Name = Name.Trim(),
         Author = string.IsNullOrWhiteSpace(Author) ? null : Author.Trim(),
@@ -340,7 +340,7 @@ public partial class ThemeEditorViewModel : ObservableObject
     };
 
     /// <summary>Saves the theme and returns the stored definition.</summary>
-    public ThemeDefinition Save()
+    public ThemeDto Save()
     {
         if (ValidationError is { } error)
         {
@@ -453,10 +453,10 @@ public partial class ThemeEditorViewModel : ObservableObject
         PaletteChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private ThemeDefinition? GetBaseTheme() => _themeService.Find(BasedOn);
+    private ThemeDto? GetBaseTheme() => _themeService.Find(BasedOn);
 
     /// <summary>A theme can't be based on itself or on a theme that inherits from it.</summary>
-    private bool IsSelfOrDescendant(ThemeDefinition theme)
+    private bool IsSelfOrDescendant(ThemeDto theme)
     {
         if (_storedName is null)
         {

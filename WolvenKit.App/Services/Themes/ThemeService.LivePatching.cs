@@ -55,7 +55,7 @@ public sealed partial class ThemeService
 
     private int _unpatchable;
 
-    private ThemeDefinition? _patchedTheme;
+    private ThemeDto? _patchedTheme;
     private DispatcherTimer? _rescanTimer;
     private bool _summaryLogged;
 
@@ -304,7 +304,7 @@ public sealed partial class ThemeService
     }
 
     /// <summary>Resource key → target color for a theme (derived brushes follow their color key).</summary>
-    internal Dictionary<string, Color> BuildColorMap(ThemeDefinition theme)
+    internal Dictionary<string, Color> BuildColorMap(ThemeDto theme)
     {
         var overrides = ResolveOverrides(theme);
         var map = new Dictionary<string, Color>(overrides, StringComparer.Ordinal);
@@ -364,7 +364,7 @@ public sealed partial class ThemeService
     /// two anchors around its brightness, so popups, separators, hover states etc. get the same tint.
     /// Colored values (accent, errors, …) are left alone. Returns null if the theme has fewer than two anchors.
     /// </summary>
-    internal Func<Color, Color>? BuildNeutralMapper(ThemeDefinition theme)
+    internal Func<Color, Color>? BuildNeutralMapper(ThemeDto theme)
     {
         if (GetChain(theme).Any(t => t.DeriveNeutralColors == false))
         {
@@ -468,7 +468,7 @@ public sealed partial class ThemeService
     /// Writes the theme color (or the original value) into every dictionary that defines a key.
     /// Read-only dictionaries get a writable shadow dictionary merged right after them.
     /// </summary>
-    private void PatchSources(ThemeDefinition theme)
+    private void PatchSources(ThemeDto theme)
     {
         _patchedTheme = theme;
         var map = BuildColorMap(theme);

@@ -8,7 +8,7 @@ namespace WolvenKit.App.Services.Themes;
 /// A WolvenKit theme: a named set of color overrides, stored as JSON.
 /// Only the keys that differ from <see cref="BasedOn"/> (or from the built-in defaults) are stored.
 /// </summary>
-public sealed class ThemeDefinition
+public sealed class ThemeDto
 {
     public const int CurrentFormatVersion = 1;
 
@@ -63,7 +63,7 @@ public sealed class ThemeDefinition
     [JsonIgnore]
     public string? FilePath { get; internal set; }
 
-    public ThemeDefinition Clone() => new()
+    public ThemeDto Clone() => new()
     {
         FormatVersion = FormatVersion,
         Name = Name,

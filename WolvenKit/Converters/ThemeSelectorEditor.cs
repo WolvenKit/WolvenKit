@@ -84,7 +84,7 @@ namespace WolvenKit.Converters
 
         public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
 
-        private ThemeDefinition SelectedTheme =>
+        private ThemeDto SelectedTheme =>
             _themeService.Find(_comboBox.SelectedValue as string) ?? _themeService.Current;
 
         private void OnThemesChanged(object sender, EventArgs e)
