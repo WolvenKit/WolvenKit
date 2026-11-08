@@ -77,7 +77,7 @@
                         Padding="{DynamicResource WolvenKitMarginTiny}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Bottom"
-                        Background="{StaticResource BackgroundColor_Button_Active}"
+                        Background="{DynamicResource BackgroundColor_Button_Active}"
                         Foreground="White"
                         Style="{DynamicResource ModernButtonStyle}"
                         Content="From ArchiveXL patch mesh"

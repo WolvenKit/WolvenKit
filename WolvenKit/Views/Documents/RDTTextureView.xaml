@@ -11,12 +11,12 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTTextureViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    BorderBrush="{StaticResource BorderAlt}"
+    BorderBrush="{DynamicResource BorderAlt}"
     BorderThickness="1">
     <StackPanel
         Height="Auto"
         VerticalAlignment="Stretch"
-        Background="{StaticResource ContentBackground}"
+        Background="{DynamicResource ContentBackground}"
         Orientation="Vertical">
         <Border
             Padding="0"
@@ -43,7 +43,7 @@
                             <templates:IconBox
                                 IconPack="Codicons"
                                 Kind="Save"
-                                Foreground="{StaticResource WolvenKitCyan}" />
+                                Foreground="{DynamicResource WolvenKitCyan}" />
                         </MenuItem.Icon>
                     </MenuItem>
 

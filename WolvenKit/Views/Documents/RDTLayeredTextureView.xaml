@@ -11,7 +11,7 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTLayeredPreviewViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    BorderBrush="{StaticResource BorderAlt}"
+    BorderBrush="{DynamicResource BorderAlt}"
     BorderThickness="1"
     Grid.IsSharedSizeScope="True">
     <Grid>
@@ -23,7 +23,7 @@
         <Border
             Grid.Column="0"
             Padding="0"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             BorderThickness="1"
             ClipToBounds="True">
             <Border.ContextMenu>

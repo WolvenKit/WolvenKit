@@ -14,7 +14,7 @@
         <syncfusion:ComboBoxAdv
             Name="comboboxadv"
             Padding="{DynamicResource WolvenKitMarginTiny}"
-            Background="#252525"
+            Background="{DynamicResource WolvenKitGray25}"
             BorderThickness="0"
             AllowMultiSelect="True"
             DataContext="{Binding Mode=OneWay,

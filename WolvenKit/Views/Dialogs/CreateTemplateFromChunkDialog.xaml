@@ -16,7 +16,7 @@
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
     Padding="{DynamicResource WolvenKitMargin}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

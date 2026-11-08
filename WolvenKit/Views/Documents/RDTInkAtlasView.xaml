@@ -12,7 +12,7 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTInkTextureAtlasViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    BorderBrush="{StaticResource BorderAlt}"
+    BorderBrush="{DynamicResource BorderAlt}"
     BorderThickness="1">
     <Grid Background="Transparent">
         <Grid.ColumnDefinitions>
@@ -24,7 +24,7 @@
         <Border
             Grid.Column="0"
             Padding="0"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             BorderThickness="0"
             IsEnabled="{Binding IsLoaded}"
             ClipToBounds="True">
@@ -92,13 +92,13 @@
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         Background="Transparent"
-                                        BorderBrush="{StaticResource WolvenKitCyan50}"
+                                        BorderBrush="{DynamicResource WolvenKitCyan50}"
                                         BorderThickness="1">
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Bottom"
-                                            Foreground="{StaticResource WolvenKitCyan50}"
+                                            Foreground="{DynamicResource WolvenKitCyan50}"
                                             FontSize="{DynamicResource WolvenKitFontAltTitle}"
                                             Text="{Binding Name}"
                                             TextTrimming="None" />
@@ -129,7 +129,7 @@
 
         <StackPanel
             Grid.Column="2"
-            Background="{StaticResource ContentBackgroundAlt}">
+            Background="{DynamicResource ContentBackgroundAlt}">
             <syncfusion:PropertyGrid
                 Margin="0,-1,0,0"
                 BorderThickness="0"
@@ -201,7 +201,7 @@
                                     <templates:IconBox
                                         IconPack="Codicons"
                                         Kind="Save"
-                                        Foreground="{StaticResource WolvenKitCyan}" />
+                                        Foreground="{DynamicResource WolvenKitCyan}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </ContextMenu>

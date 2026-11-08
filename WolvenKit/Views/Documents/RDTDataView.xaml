@@ -20,7 +20,7 @@
     d:DesignWidth="800"
     d:DesignHeight="450"
     Margin="0"
-    BorderBrush="{StaticResource BorderAlt}"
+    BorderBrush="{DynamicResource BorderAlt}"
     BorderThickness="1">
     <Grid>
         <Grid.Resources>
@@ -113,7 +113,7 @@
             Grid.ColumnSpan="3"
             Height="5"
             HorizontalAlignment="Stretch"
-            Background="{StaticResource BorderAlt}"
+            Background="{DynamicResource BorderAlt}"
             Visibility="{Binding ShowReferenceGraph,
                                  Converter={StaticResource BooleanToVisibilityConverter}}" />
         <!--
@@ -135,7 +135,7 @@
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             Visibility="{Binding ShowReferenceGraph,
                                  Converter={StaticResource BooleanToVisibilityConverter}}"
             Connections="{Binding References}"
@@ -202,7 +202,7 @@
                     BasedOn="{StaticResource {x:Type nodify:NodeInput}}"
                     TargetType="{x:Type nodify:NodeInput}">
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitCyan}" />
                     <Setter Property="Header" Value="" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
                     <Setter Property="Margin" Value="0" />
@@ -212,7 +212,7 @@
                     BasedOn="{StaticResource {x:Type nodify:NodeOutput}}"
                     TargetType="{x:Type nodify:NodeOutput}">
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitCyan}" />
                     <Setter Property="Header" Value="{Binding Property}" />
                     <Setter Property="HorizontalAlignment" Value="Right" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
@@ -234,7 +234,7 @@
                                         Orientation="Horizontal">
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                            Foreground="#999999"
+                                            Foreground="{DynamicResource WolvenKitGray99}"
                                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                             Text="{Binding Name}"
                                             TextTrimming="CharacterEllipsis"
@@ -294,7 +294,7 @@
                                                 IconPack="Material"
                                                 Kind="TabPlus"
                                                 Margin="0"
-                                                Foreground="{StaticResource WolvenKitCyan}" />
+                                                Foreground="{DynamicResource WolvenKitCyan}" />
                                         </StackPanel>
                                     </Button>
 
@@ -303,7 +303,7 @@
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
                                         Margin="{DynamicResource WolvenKitMarginSmallTop}"
-                                        Foreground="{StaticResource WolvenKitTan}"
+                                        Foreground="{DynamicResource WolvenKitTan}"
                                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                         Text="{Binding Type}" />
                                 </Grid>
@@ -358,7 +358,7 @@
                                                 IconPack="Material"
                                                 Kind="TabPlus"
                                                 Margin="0"
-                                                Foreground="{StaticResource WolvenKitCyan}" />
+                                                Foreground="{DynamicResource WolvenKitCyan}" />
                                         </StackPanel>
                                     </Button>
 
@@ -375,14 +375,14 @@
                                             <TextBlock
                                                 Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                                 VerticalAlignment="Center"
-                                                Foreground="{StaticResource WolvenKitYellow}"
+                                                Foreground="{DynamicResource WolvenKitYellow}"
                                                 Text="Load References" />
 
                                             <templates:IconBox
                                                 IconPack="Material"
                                                 Kind="FolderOpen"
                                                 Margin="0"
-                                                Foreground="{StaticResource WolvenKitYellow}" />
+                                                Foreground="{DynamicResource WolvenKitYellow}" />
                                         </StackPanel>
                                     </Button>
                                 </Grid>
@@ -411,7 +411,7 @@
 
                     <Setter Property="Location" Value="{Binding Location}" />
                     <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTiny}" />
-                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="SelectedBrush" Value="{DynamicResource WolvenKitCyan}" />
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
         </editors:AutomaticNodifyEditor>

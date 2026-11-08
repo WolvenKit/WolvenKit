@@ -16,7 +16,7 @@
     d:DesignWidth="800"
     d:DesignHeight="450">
     <Grid
-        Background="{StaticResource ContentBackground}"
+        Background="{DynamicResource ContentBackground}"
         IsSharedSizeScope="True"
         KeyboardNavigation.TabNavigation="Contained">
         <Grid.Resources>
@@ -61,7 +61,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -84,7 +84,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -107,7 +107,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -130,7 +130,7 @@
                         Kind="CursorDefault"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitCyan}" />
+                        Foreground="{DynamicResource WolvenKitCyan}" />
                 </Button>
             </DataTemplate>
 
@@ -151,7 +151,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -180,7 +180,7 @@
                                                 Kind="Delete"
                                                 Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                                 Size="{DynamicResource WolvenKitIconMilli}"
-                                                Foreground="{StaticResource WolvenKitRed}" />
+                                                Foreground="{DynamicResource WolvenKitRed}" />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -239,7 +239,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </DataTemplate>
@@ -270,7 +270,7 @@
                                                 Kind="Delete"
                                                 Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                                 Size="{DynamicResource WolvenKitIconMilli}"
-                                                Foreground="{StaticResource WolvenKitRed}" />
+                                                Foreground="{DynamicResource WolvenKitRed}" />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -329,7 +329,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </DataTemplate>
@@ -352,7 +352,7 @@
                         Binding="{Binding IsDefault}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="Foreground" Value="{DynamicResource BorderAlt2}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -726,7 +726,7 @@
                                 <TextBlock
                                     Name="PropertyType"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource WolvenKitTan}"
+                                    Foreground="{DynamicResource WolvenKitTan}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Type,
                                                    Mode=OneTime}" />
@@ -758,7 +758,7 @@
                                     <TextBlock
                                         Margin="0"
                                         VerticalAlignment="Center"
-                                        Foreground="{StaticResource WolvenKitTan}"
+                                        Foreground="{DynamicResource WolvenKitTan}"
                                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                         Text="{Binding ResolvedType,
                                                        Mode=OneWay,
@@ -814,7 +814,7 @@
                 <Border
                     x:Name="TopLine"
                     MinHeight="{DynamicResource WolvenKitRedTreeRowMinHeight}"
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,0,0,1"
                     Visibility="{Binding IsHiddenByEditorDifficultyLevel,
                                          Converter={StaticResource InvertBooleanConverter}}">
@@ -849,7 +849,7 @@
                         <GridSplitter
                             Grid.Column="2"
                             HorizontalAlignment="Stretch"
-                            Background="{StaticResource BorderAlt}" />
+                            Background="{DynamicResource BorderAlt}" />
 
                         <ContentControl
                             Grid.Column="3"
@@ -926,7 +926,7 @@
             <Style
                 BasedOn="{StaticResource WPFComboBoxStyle}"
                 TargetType="ComboBox">
-                <Setter Property="Background" Value="#252525" />
+                <Setter Property="Background" Value="{DynamicResource WolvenKitGray25}" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -935,7 +935,7 @@
             <Style
                 BasedOn="{StaticResource CheckBoxBaseStyle}"
                 TargetType="CheckBox">
-                <Setter Property="Background" Value="#252525" />
+                <Setter Property="Background" Value="{DynamicResource WolvenKitGray25}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
@@ -961,7 +961,7 @@
         <Border
             Grid.Row="0"
             HorizontalAlignment="Stretch"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,2">
             <Border.Style>
                 <Style TargetType="Border">
@@ -1021,7 +1021,7 @@
                         Name="PropertyType"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WolvenKitTan}"
+                        Foreground="{DynamicResource WolvenKitTan}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Type,
                                        Mode=OneTime}" />
@@ -1050,7 +1050,7 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitTan}"
+                            Foreground="{DynamicResource WolvenKitTan}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Text="{Binding ResolvedType,
                                            Mode=OneWay,
@@ -1120,7 +1120,7 @@
             Grid.Row="1"
             Margin="0"
             Padding="0"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             BorderThickness="0"
             AlternationCount="{Binding RelativeSource={RelativeSource Self},
                                        Path=Items.Count}"

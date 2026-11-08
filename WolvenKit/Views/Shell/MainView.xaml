@@ -262,7 +262,7 @@
                             Grid.ColumnSpan="5"
                             Visibility="{Binding IsDialogShown,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Fill="{StaticResource ContentBackground}"
+                            Fill="{DynamicResource ContentBackground}"
                             MouseLeftButtonDown="Overlay_MouseLeftButtonDown"
                             Opacity="0.8" />
 
@@ -388,7 +388,7 @@
                                 BorderThickness="1"
                                 CornerRadius="8" />
                             <Border
-                                Background="{StaticResource ContentBackgroundAlt2}"
+                                Background="{DynamicResource ContentBackgroundAlt2}"
                                 CornerRadius="8" />
                             <TextBlock
                                 Margin="20,10"
@@ -396,7 +396,7 @@
                                 Text="Loading..." />
                             <ContentControl Content="{Binding ActiveDialog}" />
                             <Border
-                                BorderBrush="{StaticResource BorderAlt}"
+                                BorderBrush="{DynamicResource BorderAlt}"
                                 BorderThickness="1"
                                 CornerRadius="8" />
                         </Grid>
@@ -412,7 +412,7 @@
                 x:Name="dockingAdapter"
                 Grid.Row="1"
                 Margin="5,2,5,0"
-                Background="{StaticResource ContentBackground}" />
+                Background="{DynamicResource ContentBackground}" />
 
             <shell:StatusBarView
                 Grid.Row="2"

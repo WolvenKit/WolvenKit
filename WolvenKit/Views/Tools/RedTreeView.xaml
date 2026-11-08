@@ -52,7 +52,7 @@
                                           Mode=OneWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="null">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsDefault,
@@ -60,32 +60,32 @@
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding DisplayAsArrayItem,
                                           Mode=OneWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding ShouldMuteDescriptor,
                                           Mode=OneWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsReadOnly}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan50}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsDisplayAsReadOnly}"
                         Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -100,7 +100,7 @@
                                           Mode=OneWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="null">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsDefault,
@@ -108,24 +108,24 @@
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsReadOnly}"
                         Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan50}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsDisplayAsReadOnly}"
                         Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding IsValueExtrapolated,
                                           Mode=OneWay,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -153,15 +153,15 @@
                                                       UpdateSourceTrigger=PropertyChanged}"
                                     Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsReadOnly}"
                                     Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan50}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsDisplayAsReadOnly}">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -183,7 +183,7 @@
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyRight}"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource ForegroundColor_Grey1}"
+                        Foreground="{DynamicResource ForegroundColor_Grey1}"
                         Style="{StaticResource ExpanderHider}"
                         Text="{Binding Type,
                                        StringFormat=' {0}'}" />
@@ -216,7 +216,7 @@
                                                       UpdateSourceTrigger=PropertyChanged}"
                                     Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsReadOnly,
@@ -230,7 +230,7 @@
                                                       Mode=OneWay,
                                                       UpdateSourceTrigger=PropertyChanged}"
                                     Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsReadOnly,
@@ -244,7 +244,7 @@
                                                       Mode=OneWay,
                                                       UpdateSourceTrigger=PropertyChanged}"
                                     Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -256,7 +256,7 @@
                                                       Mode=OneWay,
                                                       UpdateSourceTrigger=PropertyChanged}"
                                     Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsReadOnly,
@@ -270,7 +270,7 @@
                                                       Mode=OneWay,
                                                       UpdateSourceTrigger=PropertyChanged}"
                                     Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -297,7 +297,7 @@
                         Orientation="Horizontal">
                         <TextBlock
                             Name="PropertyType"
-                            Foreground="{StaticResource WolvenKitTan}"
+                            Foreground="{DynamicResource WolvenKitTan}"
                             Text="{Binding Type}" />
                         <!-- icon -->
                         <StackPanel Orientation="Horizontal">
@@ -322,7 +322,7 @@
                                 VerticalAlignment="Center" />
 
                             <TextBlock
-                                Foreground="{StaticResource WolvenKitTan}"
+                                Foreground="{DynamicResource WolvenKitTan}"
                                 Text="{Binding ResolvedType,
                                                Mode=OneWay,
                                                UpdateSourceTrigger=PropertyChanged}" />
@@ -557,7 +557,7 @@
                             Kind="Save"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -595,7 +595,7 @@
                             Kind="TabPlus"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
+                            Foreground="{DynamicResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1494,7 +1494,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1537,7 +1537,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1572,7 +1572,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1607,7 +1607,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1651,7 +1651,7 @@
                             Kind="DeleteSweep"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1668,7 +1668,7 @@
                             Kind="RestoreAlert"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1762,7 +1762,7 @@
                             Kind="ArrowCircleLeft"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1780,7 +1780,7 @@
                             Kind="CopyAltLine"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>
@@ -1949,7 +1949,7 @@
                                     Width="{DynamicResource WolvenKitIconMilli}"
                                     Height="{DynamicResource WolvenKitIconMilli}"
                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                    Foreground="{StaticResource WolvenKitCyan}" />
+                                    Foreground="{DynamicResource WolvenKitCyan}" />
                             </Button>
 
                             <Button
@@ -1963,7 +1963,7 @@
                                     Kind="ArrowCircleLeft"
                                     Width="{DynamicResource WolvenKitIconMilli}"
                                     Height="{DynamicResource WolvenKitIconMilli}"
-                                    Foreground="{StaticResource WolvenKitYellow}" />
+                                    Foreground="{DynamicResource WolvenKitYellow}" />
                             </Button>
                         </Grid>
                     </DataTemplate>
@@ -2010,7 +2010,7 @@
     <syncfusion:SfTreeView
         x:Name="TreeView"
         Margin="-1"
-        Background="{StaticResource ContentBackground}"
+        Background="{DynamicResource ContentBackground}"
         BorderThickness="0"
         Visibility="Visible"
         AllowDragging="True"
@@ -2032,9 +2032,9 @@
                                 Path=SelectedItems,
                                 Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"
-        SelectionBackgroundColor="{StaticResource BackgroundColor_Control}"
+        SelectionBackgroundColor="{DynamicResource BackgroundColor_Control}"
         SelectionForegroundColor="White"
-        FocusBorderColor="{StaticResource WolvenKitRedShadow}"
+        FocusBorderColor="{DynamicResource WolvenKitRedShadow}"
         FocusBorderThickness="1"
         MouseDoubleClick="OnDoubleClick"
         MouseRightButtonDown="OnMouseRightButtonDown"
@@ -2052,9 +2052,9 @@
         <syncfusion:SfTreeView.DragPreviewTemplate>
             <DataTemplate DataType="{x:Type syncfusion:TreeViewDragInfo}">
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="1">
-                    <Grid Background="{StaticResource ContentBackgroundAlt2}">
+                    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
@@ -2082,7 +2082,7 @@
                             <TextBlock
                                 Margin="{DynamicResource WolvenKitMarginTiny}"
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource WolvenKitTan}"
+                                Foreground="{DynamicResource WolvenKitTan}"
                                 Text="{Binding Data[0].Content.Type}" />
 
                             <TextBlock

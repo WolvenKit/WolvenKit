@@ -344,10 +344,10 @@
                     Height="Auto">
                     <Border
                         Name="ViewportBorder"
-                        Background="{StaticResource ContentBackground}">
+                        Background="{DynamicResource ContentBackground}">
                         <hx:Viewport3DX
                             Name="hxViewport"
-                            BackgroundColor="#121212"
+                            BackgroundColor="{DynamicResource WolvenKitGray12Color}"
                             Camera="{Binding Camera}"
                             CoordinateSystemLabelForeground="White"
                             EffectsManager="{Binding EffectsManager}"

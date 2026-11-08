@@ -73,7 +73,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Border Background="{StaticResource ContentBackgroundAlt2}" />
+                <Border Background="{DynamicResource ContentBackgroundAlt2}" />
 
                 <!-- Asset Browser Search -->
                 <Grid
@@ -407,7 +407,7 @@
                                                 Kind="ArrowCircleLeft"
                                                 Margin="{DynamicResource WolvenKitMarginTiny}"
                                                 Size="{DynamicResource WolvenKitIconMilli}"
-                                                Foreground="{StaticResource WolvenKitYellow}" />
+                                                Foreground="{DynamicResource WolvenKitYellow}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
 
@@ -448,7 +448,7 @@
                                                 Kind="TabPlus"
                                                 Margin="{DynamicResource WolvenKitMarginTiny}"
                                                 Size="{DynamicResource WolvenKitIconMilli}"
-                                                Foreground="{StaticResource WolvenKitCyan}" />
+                                                Foreground="{DynamicResource WolvenKitCyan}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
 
@@ -649,7 +649,7 @@
         <Border
             x:Name="LoadingBorder"
             Grid.RowSpan="3"
-            Background="{StaticResource ContentBackgroundAlt3}"
+            Background="{DynamicResource ContentBackgroundAlt3}"
             BorderBrush="Black"
             BorderThickness="0"
             Visibility="{Binding Path=LoadVisibility,
@@ -672,7 +672,7 @@
         <Border
             x:Name="NoProjectBorder"
             Grid.RowSpan="3"
-            Background="{StaticResource ContentBackgroundAlt2}"
+            Background="{DynamicResource ContentBackgroundAlt2}"
             Visibility="{Binding Path=ShouldShowLoadButton,
                                  Mode=OneWay,
                                  Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -703,7 +703,7 @@
         <Border
             x:Name="NoExecutableBorder"
             Grid.RowSpan="3"
-            Background="{StaticResource ContentBackgroundAlt2}"
+            Background="{DynamicResource ContentBackgroundAlt2}"
             Visibility="{Binding Path=ShouldShowExecutablePathWarning,
                                  Mode=OneWay,
                                  Converter={StaticResource BooleanToVisibilityConverter}}">

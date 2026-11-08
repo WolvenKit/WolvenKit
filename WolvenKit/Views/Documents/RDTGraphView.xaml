@@ -16,7 +16,7 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTGraphViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450">
-    <Grid Background="#1E1E1E">
+    <Grid Background="{DynamicResource WolvenKitGray1E}">
         <Grid.Resources>
             <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         </Grid.Resources>
@@ -26,7 +26,7 @@
         <editors:AutomaticNodifyEditor
             x:Name="Editor"
             Grid.Column="0"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             IsEnabled="{Binding IsLoaded}"
             Connections="{Binding Connections}"
             DisplayConnectionsOnTop="True"
@@ -100,7 +100,7 @@
 
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                        <Setter Property="Stroke" Value="{DynamicResource WolvenKitYellow}" />
                                     </Trigger>
 
                                     <DataTrigger
@@ -229,7 +229,7 @@
                                         Orientation="Horizontal">
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                            Foreground="#999999"
+                                            Foreground="{DynamicResource WolvenKitGray99}"
                                             Text="{Binding Key}"
                                             TextTrimming="CharacterEllipsis"
                                             ToolTip="{Binding Key}" />
@@ -250,7 +250,7 @@
                 <DataTemplate x:Key="FooterTemplate">
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginTiny}"
-                        Foreground="{StaticResource WolvenKitTan}"
+                        Foreground="{DynamicResource WolvenKitTan}"
                         Text="{Binding}" />
                 </DataTemplate>
 
@@ -404,7 +404,7 @@
 
                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                     <Setter Property="Location" Value="{Binding Location}" />
-                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitYellow}" />
+                    <Setter Property="SelectedBrush" Value="{DynamicResource WolvenKitYellow}" />
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
         </editors:AutomaticNodifyEditor>
