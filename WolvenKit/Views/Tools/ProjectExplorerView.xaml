@@ -878,9 +878,12 @@
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
-                <!--  the base Syncfusion style swaps the template of a selected tab; keep ours  -->
+                <!--  the base Syncfusion style swaps the template of a selected or hovered tab; keep ours  -->
                 <Style.Triggers>
                     <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
                     </Trigger>
                 </Style.Triggers>
@@ -922,9 +925,12 @@
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
                         <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
-                        <!--  the base Syncfusion style swaps the template of a selected tab; keep ours  -->
+                        <!--  the base Syncfusion style swaps the template of a selected or hovered tab; keep ours  -->
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
                             </Trigger>
                         </Style.Triggers>
@@ -949,9 +955,12 @@
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
-                        <!--  the base Syncfusion style swaps the template of a selected tab; keep ours  -->
+                        <!--  the base Syncfusion style swaps the template of a selected or hovered tab; keep ours  -->
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
                             </Trigger>
                         </Style.Triggers>
