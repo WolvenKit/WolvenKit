@@ -354,6 +354,11 @@ public sealed partial class ThemeService
             map.TryAdd("DarkPrimaryBrush", shadow);
         }
 
+        if (ResolveAccentForeground(theme) is { } accentForeground)
+        {
+            map.TryAdd("WolvenKitAccentForeground", accentForeground);
+        }
+
         return map;
     }
 

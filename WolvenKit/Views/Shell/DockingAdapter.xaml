@@ -168,7 +168,8 @@
 
                     <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitGray31}" />
                     <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource BorderAlt}" />
-                    <Setter Property="TabItemSelectedForeground" Value="White" />
+                    <!--  the active document tab is drawn in the accent color  -->
+                    <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />
                     <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackground}" />
                     <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                 </Style>
@@ -181,7 +182,7 @@
                     <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderThickness" Value="1,1,1,0" />
-                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                     <Setter Property="Height" Value="{DynamicResource WolvenKitFontHuge}" />
                     <Setter Property="HoverBackground" Value="{DynamicResource ContentBackgroundAlt4}" />
                     <Setter Property="Margin" Value="0" />
@@ -466,9 +467,13 @@
                                 Margin="{DynamicResource WolvenKitMarginSmallRight}"
                                 Icon="{Binding Extension}" />
 
+                            <!--
+                                Style x:Null: skip the app-wide TextBlock style, so the text inherits the tab's
+                                foreground (the accent foreground on the active, accent-colored tab)
+                            -->
                             <TextBlock
                                 Margin="0,0,0,1"
-                                Foreground="{DynamicResource ContentForeground}"
+                                Style="{x:Null}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Text="{Binding Path=Header}" />
 
@@ -483,10 +488,11 @@
                         <DockPanel
                             x:Name="RegularHeader"
                             Visibility="Collapsed">
+                            <!--  tool panels shown as tabs (Asset Browser, Import/Export Tool): same as above  -->
                             <TextBlock
                                 Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
                                 VerticalAlignment="Center"
-                                Foreground="{DynamicResource ContentForeground}"
+                                Style="{x:Null}"
                                 Text="{Binding}" />
                         </DockPanel>
                     </Grid>

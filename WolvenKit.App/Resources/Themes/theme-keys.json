@@ -13,6 +13,12 @@
       "kind": "Brush"
     },
     {
+      "key": "WolvenKitAccentForeground",
+      "group": "Accent",
+      "displayName": "Accent Foreground",
+      "kind": "Brush"
+    },
+    {
       "key": "WolvenKitStatusBarReady",
       "group": "Accent",
       "displayName": "Status Bar Ready",

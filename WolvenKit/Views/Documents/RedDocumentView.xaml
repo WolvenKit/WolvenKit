@@ -196,8 +196,10 @@
                             </ContextMenu>
                         </Grid.ContextMenu>
 
+                        <!--  Style x:Null: inherit the tab's foreground (readable on the accent-colored selected tab)  -->
                         <TextBlock
                             Padding="{DynamicResource WolvenKitMarginTiny}"
+                            Style="{x:Null}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Mouse.MouseDown="OnToggleNoobFilter"
                             Text="{Binding Header}"
