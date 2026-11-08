@@ -7,6 +7,7 @@
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
@@ -924,13 +925,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
-                    <ControlTemplate.Resources>
-                        <!--
-                            Text created for string content (Content="OK") is inside the template, where only
-                            template and application resources apply: reset the app-wide TextBlock style here too.
-                        -->
-                        <Style TargetType="{x:Type TextBlock}" />
-                    </ControlTemplate.Resources>
                     <Border
                         x:Name="ButtonBorder"
                         Padding="{TemplateBinding Padding}"
@@ -940,8 +934,19 @@
                         CornerRadius="3">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            RecognizesAccessKey="True" />
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <ContentPresenter.Resources>
+                                <!--
+                                    String content (Content="OK"): the default text template gets the app-wide
+                                    TextBlock style. Use a plain TextBlock that inherits the button foreground.
+                                -->
+                                <DataTemplate DataType="{x:Type system:String}">
+                                    <TextBlock
+                                        Style="{x:Null}"
+                                        Text="{Binding}" />
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
