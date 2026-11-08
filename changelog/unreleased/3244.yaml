@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3244
+      author: "Ametis81"
+      description: "Sector and block previews: show generated materials, coordinate search and collision buttons in a Sector section, hide preview sections that do not apply."
