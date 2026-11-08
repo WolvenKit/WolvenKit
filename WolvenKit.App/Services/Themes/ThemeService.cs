@@ -34,11 +34,11 @@ public sealed partial class ThemeService : IThemeService
     private readonly List<ThemeDto> _builtInThemes = [];
     private readonly List<ThemeDto> _userThemes = [];
 
-    /// <summary>Default value of every known key, captured before the first theme is applied.</summary>
-    private readonly Dictionary<string, Color> _defaults = new(StringComparer.Ordinal);
+    /// <summary>Default (pre-theme) value of a resource and whether it is a Color or a Brush.</summary>
+    private readonly record struct DefaultResource(Color Color, ThemeKeyKind Kind);
 
-    /// <summary>true if the default resource is a Brush, false if it is a Color.</summary>
-    private readonly Dictionary<string, bool> _isBrush = new(StringComparer.Ordinal);
+    /// <summary>Default value of every known key, captured before the first theme is applied.</summary>
+    private readonly Dictionary<string, DefaultResource> _defaults = new(StringComparer.Ordinal);
 
     private ResourceDictionary? _appliedDictionary;
     private bool _isInitialized;
@@ -72,11 +72,8 @@ public sealed partial class ThemeService : IThemeService
     public ThemeKeyCatalog Catalog { get; }
 
     /// <summary>Sets the default (pre-theme) color of a key. Normally captured from the WPF resources; used by tests.</summary>
-    internal void SetDefaultColor(string key, Color color, bool isBrush = true)
-    {
-        _defaults[key] = color;
-        _isBrush[key] = isBrush;
-    }
+    internal void SetDefaultColor(string key, Color color, ThemeKeyKind kind = ThemeKeyKind.Brush) =>
+        _defaults[key] = new DefaultResource(color, kind);
 
     public IReadOnlyList<ThemeDto> Themes =>
         _builtInThemes.OrderByDescending(t => t.IsDefault)
@@ -226,12 +223,10 @@ public sealed partial class ThemeService : IThemeService
             switch (resource)
             {
                 case Color color:
-                    _defaults[key] = color;
-                    _isBrush[key] = false;
+                    _defaults[key] = new DefaultResource(color, ThemeKeyKind.Color);
                     break;
                 case SolidColorBrush brush:
-                    _defaults[key] = brush.Color;
-                    _isBrush[key] = true;
+                    _defaults[key] = new DefaultResource(brush.Color, ThemeKeyKind.Brush);
                     break;
                 default:
                     // Missing, or not a solid color (gradient etc.) — such keys are not themeable.
@@ -354,7 +349,7 @@ public sealed partial class ThemeService : IThemeService
             : _builtInThemes.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase))
               ?? _userThemes.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
 
-    public Color? GetDefaultColor(string key) => _defaults.TryGetValue(key, out var color) ? color : null;
+    public Color? GetDefaultColor(string key) => _defaults.TryGetValue(key, out var resource) ? resource.Color : null;
 
     /// <summary>Root-first list: [base of base, base, theme]. Guards against cycles.</summary>
     private List<ThemeDto> GetChain(ThemeDto theme)
@@ -412,7 +407,7 @@ public sealed partial class ThemeService : IThemeService
         IEnumerable<KeyValuePair<string, Color>> palette = complete
             ? Catalog.Entries
                 .Where(e => _defaults.ContainsKey(e.Key))
-                .Select(e => new KeyValuePair<string, Color>(e.Key, overrides.TryGetValue(e.Key, out var c) ? c : _defaults[e.Key]))
+                .Select(e => new KeyValuePair<string, Color>(e.Key, overrides.TryGetValue(e.Key, out var c) ? c : _defaults[e.Key].Color))
             : overrides;
 
         foreach (var (key, color) in palette)
@@ -448,13 +443,13 @@ public sealed partial class ThemeService : IThemeService
 
     private void AddResource(ResourceDictionary dictionary, string key, Color color)
     {
-        if (!_isBrush.TryGetValue(key, out var isBrush))
+        if (!_defaults.TryGetValue(key, out var resource))
         {
             // unknown key: there is nothing to override
             return;
         }
 
-        if (isBrush)
+        if (resource.Kind == ThemeKeyKind.Brush)
         {
             var brush = new SolidColorBrush(color);
             brush.Freeze();

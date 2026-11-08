@@ -266,8 +266,7 @@ public sealed partial class ThemeService
             }
 
             _patchKeys.Add(key);
-            _defaults.TryAdd(key, brush.Color);
-            _isBrush.TryAdd(key, true);
+            _defaults.TryAdd(key, new DefaultResource(brush.Color, ThemeKeyKind.Brush));
             Catalog.AddEntry(new ThemeKeyEntry
             {
                 Key = key,
@@ -374,7 +373,12 @@ public sealed partial class ThemeService
         var anchors = new SortedList<double, (Color From, Color To)>();
         foreach (var (key, to) in ResolveOverrides(theme))
         {
-            if (!_defaults.TryGetValue(key, out var from) || from.A != 0xFF || to.A != 0xFF || !IsNeutral(from))
+            if (!_defaults.TryGetValue(key, out var resource))
+            {
+                continue;
+            }
+            var from = resource.Color;
+            if (from.A != 0xFF || to.A != 0xFF || !IsNeutral(from))
             {
                 continue;
             }
@@ -820,9 +824,9 @@ public sealed partial class ThemeService
         var byDefault = new Dictionary<Color, Color>();
         foreach (var (key, color) in map)
         {
-            if (_defaults.TryGetValue(key, out var defaultColor))
+            if (_defaults.TryGetValue(key, out var defaultResource))
             {
-                byDefault.TryAdd(defaultColor, color);
+                byDefault.TryAdd(defaultResource.Color, color);
             }
         }
 
