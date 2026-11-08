@@ -1,5 +1,3 @@
 [b]9.1.1 — 2026-11-08[/b]
 
-[b]App[/b]
-
-[*] [i]Fixed[/i]: Add game version compatibility check with popup to ensure WKit >= 10.x with 2.5 by @manavortex
+The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/9.1.1]GitHub releases page[/url]
