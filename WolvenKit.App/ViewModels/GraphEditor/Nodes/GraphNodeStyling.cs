@@ -15,7 +15,7 @@ public static class GraphNodeStyling
 {
     private static ConcurrentDictionary<string, Brush> BrushCache = [];
 
-    /// <summary>Forget cached node brushes, e.g. after the color theme changed.</summary>
+    /// <summary>Example of usage: after color theme changed.</summary>
     public static void ClearBrushCache() => BrushCache.Clear();
     private static ConcurrentDictionary<string, string> TitleCache = [];
 
