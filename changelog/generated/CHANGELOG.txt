@@ -1,3 +1,5 @@
-[b]9.1.0 — 2026-10-10[/b]
+[b]9.1.1 — 2026-11-08[/b]
 
-The changelog can be found on our [url=https://github.com/WolvenKit/WolvenKit/releases/tag/9.1.0]GitHub releases page[/url]
+[b]App[/b]
+
+[*] [i]Fixed[/i]: Add game version compatibility check with popup to ensure WKit >= 10.x with 2.5 by @manavortex
