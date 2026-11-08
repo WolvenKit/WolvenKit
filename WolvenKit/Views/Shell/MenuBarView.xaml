@@ -690,7 +690,8 @@
 
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Empty"
+                            IconPack="Material"
+                            Kind="ViewDashboard"
                             Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
 
