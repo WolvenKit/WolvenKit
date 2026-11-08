@@ -58,12 +58,13 @@
                         <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
                         <Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSource}" />
                     </Trigger>
+                    <!--  hover: the darker source color, like the unselected SOURCE tab  -->
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
                             <Condition Property="IsSelected" Value="False" />
                             <Condition Property="IsMouseOver" Value="True" />
                         </MultiTrigger.Conditions>
-                        <Setter Property="Opacity" Value="0.8" />
+                        <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
                     </MultiTrigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
