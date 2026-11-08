@@ -1,0 +1,6 @@
+changes:
+    - type: "removed"
+      packages: ["App"]
+      pr-number: 3247
+      author: "Ametis81"
+      description: "Removed accidentally committed Python bytecode files (tools/themes) and ignored __pycache__."
