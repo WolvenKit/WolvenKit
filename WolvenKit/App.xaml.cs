@@ -367,6 +367,17 @@ namespace WolvenKit
                 return;
             }
 
+            // Re-skinning the DockingManager puts the panels back where the XAML defines them; keep the user's layout.
+            string dockState = null;
+            try
+            {
+                dockState = Views.Shell.DockingAdapter.G_Dock?.CaptureDockState();
+            }
+            catch (Exception ex)
+            {
+                logger?.Warning($"Themes: could not save the layout before re-applying the skin: {ex.Message}");
+            }
+
             // RegisterThemeSettings writes into Syncfusion dictionaries it sealed earlier (Common.xaml, Brushes.xaml)
             using (themeService.BeginSkinUpdate())
             {
@@ -391,6 +402,13 @@ namespace WolvenKit
                     window.InvalidateVisual();
                     window.UpdateLayout();
                     window.Visibility = Visibility.Visible;
+
+                    if (dockState is not null)
+                    {
+                        window.Dispatcher.BeginInvoke(
+                            () => Views.Shell.DockingAdapter.G_Dock?.RestoreDockState(dockState),
+                            System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                    }
                 });
             });
 
