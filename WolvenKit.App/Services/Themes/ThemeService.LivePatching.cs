@@ -273,7 +273,7 @@ public sealed partial class ThemeService
                 Key = key,
                 Group = SyncfusionGroup,
                 DisplayName = Humanize(key),
-                Kind = "Brush"
+                Kind = ThemeKeyKind.Brush
             });
         }
     }

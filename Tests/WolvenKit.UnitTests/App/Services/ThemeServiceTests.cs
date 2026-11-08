@@ -118,6 +118,15 @@ public class ThemeServiceTests
     }
 
     [Fact]
+    public void KeyCatalog_ParsesKindAsEnum()
+    {
+        var catalog = ThemeKeyCatalog.LoadEmbedded();
+
+        Assert.Equal(ThemeKeyKind.Brush, catalog.Find("WolvenKitAccent")?.Kind);
+        Assert.Contains(catalog.Entries, e => e.Kind == ThemeKeyKind.Color);
+    }
+
+    [Fact]
     public void BuiltInThemes_CannotBeSavedOrDeleted()
     {
         using var f = new Fixture();
