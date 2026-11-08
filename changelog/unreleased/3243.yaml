@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3243
+      author: "Ametis81"
+      description: "Color themes: 12 built-in themes (Tools > Theme or Settings), a theme editor to customize them or create your own, import/export as JSON. Themes switch without restarting; hold Shift while starting WolvenKit to use the default theme."
