@@ -896,54 +896,113 @@
         <Setter Property="Width" Value="45" />
     </Style>
 
+    <!--
+        Button styles. Use these instead of local button styles:
+        - WKButtonStyle: regular button
+        - WKButtonPrimaryStyle: the main action of a dialog or view (accent color)
+        - WKToggleButtonStyle: on/off buttons (accent color while checked)
+        All colors are theme resources, so the buttons follow the color theme.
+    -->
     <Style
-        x:Key="DialogButtonStyle"
-        TargetType="Button">
-        <Setter Property="Background" Value="{x:Null}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
-        <Setter Property="MinWidth" Value="60" />
-        <Setter Property="Padding" Value="12,10" />
+        x:Key="WKButtonBaseStyle"
+        TargetType="{x:Type ButtonBase}">
+        <Style.Resources>
+            <!--  text in the button inherits the button's Foreground instead of the app-wide TextBlock color  -->
+            <Style TargetType="{x:Type TextBlock}" />
+        </Style.Resources>
 
+        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,4" />
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="Button">
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
                     <Border
-                        x:Name="border"
-                        Padding="5,3"
+                        x:Name="ButtonBorder"
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="4">
+                        CornerRadius="3">
                         <ContentPresenter
-                            Margin="5"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True" />
                     </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Opacity" Value="0.95" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Opacity" Value="0.9" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Opacity" Value="0.6" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt4}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt5}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccent}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style
-        x:Key="DialogPrimaryButtonStyle"
-        BasedOn="{StaticResource DialogButtonStyle}"
-        TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource WolvenKitRed}" />
-        <Setter Property="BorderBrush" Value="{x:Null}" />
+        x:Key="WKButtonStyle"
+        BasedOn="{StaticResource WKButtonBaseStyle}"
+        TargetType="{x:Type Button}" />
+
+    <!--  on/off buttons: accent color while checked  -->
+    <Style
+        x:Key="WKToggleButtonStyle"
+        BasedOn="{StaticResource WKButtonBaseStyle}"
+        TargetType="{x:Type ToggleButton}">
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccent}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccent}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitAccentForeground}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="WKButtonPrimaryStyle"
+        BasedOn="{StaticResource WKButtonStyle}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource WolvenKitAccent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccent}" />
+        <Setter Property="Foreground" Value="{DynamicResource WolvenKitAccentForeground}" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccentForeground}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 

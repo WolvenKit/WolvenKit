@@ -102,7 +102,7 @@
                         Grid.Column="0"
                         Height="Auto"
                         VerticalAlignment="Center"
-                        Style="{StaticResource ButtonDefault}"
+                        Style="{StaticResource WKButtonStyle}"
                         Visibility="Visible"
                         Click="LeftNavigationHomeButton_OnClick"
                         ToolTip="Back to top level">
@@ -161,7 +161,7 @@
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
-                        Style="{StaticResource ButtonDefault}"
+                        Style="{StaticResource WKButtonStyle}"
                         Visibility="{Binding IsModBrowserEnabled,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Click="ReloadModBrowserButton_OnClick"
@@ -179,7 +179,7 @@
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
-                        Style="{StaticResource ButtonDefault}"
+                        Style="{StaticResource WKButtonStyle}"
                         Visibility="{Binding IsModBrowserEnabled,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Click="ScanModArchivesButton_OnClick"
@@ -689,6 +689,7 @@
                         TextWrapping="Wrap" />
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         HorizontalAlignment="Center"
                         Command="{Binding LoadAssetBrowserCommand}">
                         <TextBlock
@@ -721,6 +722,7 @@
                         TextWrapping="Wrap" />
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         HorizontalAlignment="Center"
                         Command="{Binding OpenWolvenKitSettingsCommand}">
                         <TextBlock
