@@ -311,9 +311,12 @@ public sealed partial class ThemeService : IThemeService
         ApplyCurrentDeferred();
     }
 
+    /// <summary>Time for the "applying theme" notification to appear before the UI thread gets busy.</summary>
+    private static readonly TimeSpan s_notificationDelay = TimeSpan.FromMilliseconds(400);
+
     /// <summary>
-    /// Announces the change, then applies the current theme at background priority, so that a notification
-    /// raised in <see cref="CurrentThemeChanging"/> is rendered before the UI thread is busy.
+    /// Announces the change, then applies the current theme after a short delay, so that a notification
+    /// raised in <see cref="CurrentThemeChanging"/> is visible before the UI thread is busy.
     /// Without a running application (tests) everything happens right away.
     /// </summary>
     private void ApplyCurrentDeferred()
@@ -331,7 +334,17 @@ public sealed partial class ThemeService : IThemeService
 
         if (Application.Current?.Dispatcher is { } dispatcher)
         {
-            dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (Action)Apply);
+            // The notification slides in with an animation; give it time to show before the UI thread is busy.
+            var timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Background, dispatcher)
+            {
+                Interval = s_notificationDelay
+            };
+            timer.Tick += (_, _) =>
+            {
+                timer.Stop();
+                Apply();
+            };
+            timer.Start();
         }
         else
         {
