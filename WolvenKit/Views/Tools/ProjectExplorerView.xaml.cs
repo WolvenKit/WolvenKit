@@ -782,8 +782,11 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var model = ViewModel.SelectedItem;
-            var node = TreeGrid.View.Nodes.GetNode(model);
+            if (GetSelectedTreeNode() is not { } node)
+            {
+                return;
+            }
+
             ExpandAllNodes(node);
         }
 
@@ -794,11 +797,30 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var model = ViewModel.SelectedItem;
-            var node = TreeGrid.View.Nodes.GetNode(model);
+            if (GetSelectedTreeNode() is not { } node)
+            {
+                return;
+            }
+
             CollapseAllNodes(node);
+
+            // The selected folder itself stays open, only everything below it is collapsed.
             TreeGrid.ExpandNode(node);
+            if (node.Item is FileSystemModel { IsDirectory: true } model && string.IsNullOrEmpty(_currentFolderQuery))
+            {
+                ViewModel.SaveNodeExpansionState(model.RawRelativePath, true);
+            }
         }
+
+        /// <summary>
+        /// Tree node of the selected item, found by walking down its parent chain from the root,
+        /// the same way search and reveal do. Null if nothing is selected or the node isn't found,
+        /// instead of passing null on to ExpandAllNodes / CollapseAllNodes.
+        /// </summary>
+        private TreeNode GetSelectedTreeNode() =>
+            ViewModel?.SelectedItem is { } model && TreeGrid?.View is not null
+                ? FindNodeIgnoringFilter(model)
+                : null;
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e)
         {
