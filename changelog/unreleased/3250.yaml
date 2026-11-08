@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3250
+      author: "Ametis81"
+      description: "Unified button styles: dialogs, Import/Export tools, Asset Browser, Project Explorer toolbar and other views use the same buttons, which follow the color theme (main actions in the accent color)."
