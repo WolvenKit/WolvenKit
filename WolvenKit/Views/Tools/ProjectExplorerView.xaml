@@ -43,7 +43,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}">
                     <TextBlock
-                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
