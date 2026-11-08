@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3220
+      author: "manavortex"
+      description: "Add game version compatibility check with popup to ensure WKit >= 10.x with 2.5"
