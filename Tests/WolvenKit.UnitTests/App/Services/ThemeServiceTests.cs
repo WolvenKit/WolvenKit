@@ -101,7 +101,7 @@ public class ThemeServiceTests
     }
 
     [Fact]
-    public void BuiltInThemes_UseOnlySchemaKeys_AndValidColors()
+    public void BuiltInThemes_UseOnlyKnownKeys_AndValidColors()
     {
         using var f = new Fixture();
 
@@ -109,7 +109,7 @@ public class ThemeServiceTests
         {
             foreach (var (key, value) in theme.Colors)
             {
-                Assert.True(f.Service.Schema.Find(key) is not null, $"{theme.Name}: unknown key {key}");
+                Assert.True(f.Service.Catalog.Find(key) is not null, $"{theme.Name}: unknown key {key}");
                 Assert.True(ThemeService.TryParseColor(value) is not null, $"{theme.Name}: invalid color {value} for {key}");
             }
             Assert.True(theme.Accent is null || ThemeService.TryParseColor(theme.Accent) is not null, $"{theme.Name}: invalid accent");

@@ -30,7 +30,7 @@ public interface IThemeService
         return dir;
     }
 
-    ThemeSchema Schema { get; }
+    ThemeKeyCatalog Catalog { get; }
 
     /// <summary>The default theme, then the other built-in themes, then user themes, sorted by name.</summary>
     IReadOnlyList<ThemeDto> Themes { get; }

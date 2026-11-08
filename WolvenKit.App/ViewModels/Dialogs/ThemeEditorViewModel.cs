@@ -15,7 +15,7 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class ThemeColorEntryViewModel : ObservableObject
 {
-    public ThemeColorEntryViewModel(ThemeSchemaEntry entry, Color inherited, Color current, string? basicName = null)
+    public ThemeColorEntryViewModel(ThemeKeyEntry entry, Color inherited, Color current, string? basicName = null)
     {
         Key = entry.Key;
         IsBasic = basicName is not null;
@@ -150,7 +150,7 @@ public partial class ThemeEditorViewModel : ObservableObject
         var basicOrder = s_basicColors.Select((b, i) => (b.Key, b.Name, i)).ToDictionary(b => b.Key, b => (b.Name, Index: b.i), StringComparer.Ordinal);
 
         // main colors first, so their group is shown on top
-        foreach (var entry in themeService.Schema.Entries
+        foreach (var entry in themeService.Catalog.Entries
                      .OrderBy(e => basicOrder.TryGetValue(e.Key, out var b) ? b.Index : int.MaxValue))
         {
             if (themeService.GetDefaultColor(entry.Key) is not { } defaultColor)

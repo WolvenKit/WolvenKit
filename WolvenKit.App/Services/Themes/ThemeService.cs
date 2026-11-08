@@ -61,13 +61,13 @@ public sealed partial class ThemeService : IThemeService
         _loggerService = loggerService;
         try
         {
-            Schema = ThemeSchema.LoadEmbedded();
+            Catalog = ThemeKeyCatalog.LoadEmbedded();
         }
         catch (Exception ex)
         {
-            // without a schema themes only change the accent; WolvenKit must still start
-            _loggerService.Error($"Could not load the theme schema: {ex.Message}");
-            Schema = new ThemeSchema();
+            // without the key catalog themes only change the accent; WolvenKit must still start
+            _loggerService.Error($"Could not load the theme key catalog: {ex.Message}");
+            Catalog = new ThemeKeyCatalog();
         }
 
         _settingsManager.PropertyChanged += (_, e) =>
@@ -79,7 +79,7 @@ public sealed partial class ThemeService : IThemeService
         };
     }
 
-    public ThemeSchema Schema { get; }
+    public ThemeKeyCatalog Catalog { get; }
 
     private string? _userThemesDirectory;
 
@@ -189,8 +189,8 @@ public sealed partial class ThemeService : IThemeService
             return;
         }
 
-        var keys = Schema.Entries.Select(e => e.Key)
-            .Concat(Schema.Entries.SelectMany(e => e.DerivedBrushes ?? []))
+        var keys = Catalog.Entries.Select(e => e.Key)
+            .Concat(Catalog.Entries.SelectMany(e => e.DerivedBrushes ?? []))
             .Concat(s_mahAppsAccentKeys.Select(k => k.Key));
 
         foreach (var key in keys)
@@ -223,10 +223,10 @@ public sealed partial class ThemeService : IThemeService
             }
         }
 
-        var missing = Schema.Entries.Count(e => !_defaults.ContainsKey(e.Key));
+        var missing = Catalog.Entries.Count(e => !_defaults.ContainsKey(e.Key));
         if (missing > 0)
         {
-            _loggerService.Debug($"Themes: {missing} schema keys have no solid color resource and will be ignored.");
+            _loggerService.Debug($"Themes: {missing} catalog keys have no solid color resource and will be ignored.");
         }
     }
 
@@ -425,7 +425,7 @@ public sealed partial class ThemeService : IThemeService
         // includes derived, linked (HandyControl) and accent-derived keys
         var overrides = BuildColorMap(theme);
         IEnumerable<KeyValuePair<string, Color>> palette = complete
-            ? Schema.Entries
+            ? Catalog.Entries
                 .Where(e => _defaults.ContainsKey(e.Key))
                 .Select(e => new KeyValuePair<string, Color>(e.Key, overrides.TryGetValue(e.Key, out var c) ? c : _defaults[e.Key]))
             : overrides;
@@ -437,7 +437,7 @@ public sealed partial class ThemeService : IThemeService
             {
                 AddResource(dictionary, key, color);
             }
-            foreach (var derived in Schema.Find(key)?.DerivedBrushes ?? [])
+            foreach (var derived in Catalog.Find(key)?.DerivedBrushes ?? [])
             {
                 if (complete || !IsPatchedAtSource(derived))
                 {

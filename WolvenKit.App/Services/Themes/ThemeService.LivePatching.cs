@@ -61,7 +61,7 @@ public sealed partial class ThemeService
 
     private void InitializeLivePatching()
     {
-        foreach (var entry in Schema.Entries)
+        foreach (var entry in Catalog.Entries)
         {
             _patchKeys.Add(entry.Key);
             foreach (var derived in entry.DerivedBrushes ?? [])
@@ -151,13 +151,13 @@ public sealed partial class ThemeService
     private void LogPatchSummary()
     {
         var dictionaries = _sources.Values.SelectMany(l => l).Count();
-        var syncfusionKeys = Schema.Entries.Count(e => e.Group == SyncfusionGroup);
+        var syncfusionKeys = Catalog.Entries.Count(e => e.Group == SyncfusionGroup);
         _loggerService.Debug($"Themes: {_sources.Count} keys found in {dictionaries} dictionary entries ({syncfusionKeys} Syncfusion surface keys). Current theme: \"{Current.Name}\".");
 
-        var missing = Schema.Entries.Where(e => !_sources.ContainsKey(e.Key)).Select(e => e.Key).OrderBy(k => k).ToList();
+        var missing = Catalog.Entries.Where(e => !_sources.ContainsKey(e.Key)).Select(e => e.Key).OrderBy(k => k).ToList();
         if (missing.Count > 0)
         {
-            _loggerService.Debug($"Themes: {missing.Count} schema keys not found in any dictionary: {string.Join(", ", missing.Take(30))}{(missing.Count > 30 ? ", …" : "")}");
+            _loggerService.Debug($"Themes: {missing.Count} catalog keys not found in any dictionary: {string.Join(", ", missing.Take(30))}{(missing.Count > 30 ? ", …" : "")}");
         }
     }
 
@@ -231,7 +231,7 @@ public sealed partial class ThemeService
 
     /// <summary>
     /// Syncfusion's ResourceDictionaryProvider (DictionaryName "Brushes" holds the theme brushes).
-    /// Its keys are not known at compile time, so they are added to the schema (group "Surfaces") when found.
+    /// Its keys are not known at compile time, so they are added to the catalog (group "Surfaces") when found.
     /// </summary>
     private static bool IsSyncfusionProvider(ResourceDictionary dictionary, out string? dictionaryName)
     {
@@ -268,7 +268,7 @@ public sealed partial class ThemeService
             _patchKeys.Add(key);
             _defaults.TryAdd(key, brush.Color);
             _isBrush.TryAdd(key, true);
-            Schema.AddEntry(new ThemeSchemaEntry
+            Catalog.AddEntry(new ThemeKeyEntry
             {
                 Key = key,
                 Group = SyncfusionGroup,
@@ -311,7 +311,7 @@ public sealed partial class ThemeService
 
         foreach (var (key, color) in overrides)
         {
-            foreach (var derived in Schema.Find(key)?.DerivedBrushes ?? [])
+            foreach (var derived in Catalog.Find(key)?.DerivedBrushes ?? [])
             {
                 map.TryAdd(derived, color);
             }

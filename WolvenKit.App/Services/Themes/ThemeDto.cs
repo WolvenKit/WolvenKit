@@ -42,7 +42,7 @@ public sealed class ThemeDto
     public bool? DeriveNeutralColors { get; set; }
 
     /// <summary>
-    /// Resource key → hex color. Keys are listed in theme-schema.json.
+    /// Resource key → hex color. Keys are listed in theme-keys.json.
     /// </summary>
     public Dictionary<string, string> Colors { get; set; } = new(StringComparer.Ordinal);
 
