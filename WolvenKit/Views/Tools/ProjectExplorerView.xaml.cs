@@ -649,44 +649,47 @@ namespace WolvenKit.Views.Tools
         private void ExpandAllNodes(TreeNode node)
         {
             TreeGrid.ExpandAllNodes(node);
-            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
-            {
-                RecursiveStateSave(node.ChildNodes);
-            }
 
-            return;
-
-            void RecursiveStateSave(TreeNodes childNodes)
-            {
-                foreach (var childNode in childNodes)
-                {
-                    if (childNode.Item is FileSystemModel fileSystemModel)
-                    {
-                        ViewModel!.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = true;
-                    }
-                    RecursiveStateSave(childNode.ChildNodes);
-                }
-            }
+            // Child nodes only exist once expanded, so record the state after expanding.
+            SaveSubtreeExpansionState(node, true);
         }
 
         private void CollapseAllNodes(TreeNode node)
         {
-            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
-            {
-                RecursiveStateSave(node.ChildNodes);
-            }
-            TreeGrid.CollapseAllNodes(node);
+            // Record before collapsing, while the child nodes are still populated.
+            SaveSubtreeExpansionState(node, false);
 
-            return;
-            void RecursiveStateSave(TreeNodes childNodes)
+            TreeGrid.CollapseAllNodes(node);
+        }
+
+        /// <summary>
+        /// Persists the expansion state of <paramref name="node"/> itself and every folder below it.
+        /// The node itself matters: restore stops at the first collapsed folder, so if e.g. "archive"
+        /// isn't recorded as expanded, nothing below it gets reopened.
+        /// Goes through SaveNodeExpansionState so the state is marked dirty and actually written to disk.
+        /// </summary>
+        private void SaveSubtreeExpansionState(TreeNode node, bool isExpanded)
+        {
+            // While searching, expansion is temporary and gets reverted when the search is cleared.
+            if (ViewModel is not { } vm || !string.IsNullOrEmpty(_currentFolderQuery))
             {
-                foreach (var childNode in childNodes)
+                return;
+            }
+
+            Save(node);
+
+            void Save(TreeNode current)
+            {
+                if (current.Item is not FileSystemModel { IsDirectory: true } model)
                 {
-                    if (childNode.Item is FileSystemModel fileSystemModel)
-                    {
-                        ViewModel!.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = false;
-                    }
-                    RecursiveStateSave(childNode.ChildNodes);
+                    return;
+                }
+
+                vm.SaveNodeExpansionState(model.RawRelativePath, isExpanded);
+
+                foreach (var child in current.ChildNodes)
+                {
+                    Save(child);
                 }
             }
         }
