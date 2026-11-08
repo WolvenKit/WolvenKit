@@ -315,7 +315,7 @@ namespace WolvenKit
         /// <summary>Switching takes a few seconds (Syncfusion rebuilds its styles): tell the user before the UI freezes.</summary>
         private void OnThemeChanging()
         {
-            Locator.Current.GetService<INotificationService>()?.Info($"Applying theme \"{_themeService.Current.Name}\"…");
+            Locator.Current.GetService<INotificationService>()?.Info($"Applying theme \"{_themeService.Current.Name}\"… WolvenKit may freeze for a few seconds.");
             if (Locator.Current.GetService<IProgressService<double>>() is { } progress)
             {
                 progress.IsIndeterminate = true;
