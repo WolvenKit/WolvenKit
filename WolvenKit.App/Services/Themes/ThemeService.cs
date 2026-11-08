@@ -115,6 +115,39 @@ public sealed partial class ThemeService : IThemeService
 
     public event EventHandler? CurrentThemeChanged;
 
+    private readonly List<WeakReference<IThemeAware>> _listeners = [];
+
+    public void Register(IThemeAware listener)
+    {
+        lock (_listeners)
+        {
+            _listeners.RemoveAll(r => !r.TryGetTarget(out _));
+            _listeners.Add(new WeakReference<IThemeAware>(listener));
+        }
+    }
+
+    private void NotifyListeners()
+    {
+        IThemeAware[] alive;
+        lock (_listeners)
+        {
+            _listeners.RemoveAll(r => !r.TryGetTarget(out _));
+            alive = [.. _listeners.Select(r => r.TryGetTarget(out var l) ? l : null).OfType<IThemeAware>()];
+        }
+
+        foreach (var listener in alive)
+        {
+            try
+            {
+                listener.OnThemeChanged();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Themes: {listener.GetType().Name} failed to update: {ex.Message}");
+            }
+        }
+    }
+
     #region lifecycle
 
     public void Initialize()
@@ -349,6 +382,7 @@ public sealed partial class ThemeService : IThemeService
             ApplyResources(Current);
             _loggerService.Debug($"Themes: resources of \"{Current.Name}\" written in {watch.ElapsedMilliseconds} ms.");
             CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
+            NotifyListeners(); // already on the UI thread here
         }
 
         if (Application.Current?.Dispatcher is { } dispatcher)

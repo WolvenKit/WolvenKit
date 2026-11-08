@@ -152,6 +152,36 @@ public class ThemeServiceTests
 
     #endregion
 
+    #region listeners
+
+    private sealed class Listener(Action? onChanged = null) : IThemeAware
+    {
+        public int Calls { get; private set; }
+
+        public void OnThemeChanged()
+        {
+            Calls++;
+            onChanged?.Invoke();
+        }
+    }
+
+    [Fact]
+    public void RegisteredListeners_AreNotified_EvenIfOneThrows()
+    {
+        using var f = new Fixture();
+        var failing = new Listener(() => throw new InvalidOperationException("boom"));
+        var listener = new Listener();
+        f.Service.Register(failing);
+        f.Service.Register(listener);
+
+        f.Service.SetActive(NightCity);
+
+        Assert.Equal(1, failing.Calls);
+        Assert.Equal(1, listener.Calls);
+    }
+
+    #endregion
+
     #region fallbacks
 
     [Fact]

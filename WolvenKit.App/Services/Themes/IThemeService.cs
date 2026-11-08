@@ -51,6 +51,12 @@ public interface IThemeService
     event EventHandler? CurrentThemeChanged;
 
     /// <summary>
+    /// Calls <see cref="IThemeAware.OnThemeChanged"/> on <paramref name="listener"/> after every theme change.
+    /// Only a weak reference is kept, so registering does not keep the listener alive.
+    /// </summary>
+    void Register(IThemeAware listener);
+
+    /// <summary>
     /// Captures the default colors, loads themes, migrates the old accent setting
     /// and applies the active theme. Call on the UI thread before any window is created.
     /// </summary>
