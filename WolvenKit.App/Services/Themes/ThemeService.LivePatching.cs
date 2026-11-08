@@ -473,6 +473,8 @@ public sealed partial class ThemeService
     private static Color Darken(Color color, double factor) =>
         Color.FromArgb(color.A, (byte)(color.R * factor), (byte)(color.G * factor), (byte)(color.B * factor));
 
+    private const int MinOperationsToDetach = 8;
+
     /// <summary>
     /// Writes the theme color (or the original value) into every dictionary that defines a key.
     /// Read-only dictionaries get a writable shadow dictionary merged right after them.
@@ -589,7 +591,16 @@ public sealed partial class ThemeService
         }
         foreach (var (root, operations) in batches)
         {
-            RunDetached(root, operations);
+            // Detaching and re-attaching a dictionary of the application resources makes WPF re-evaluate every
+            // resource reference once (~0.3 s). That pays off for many writes, not for a few.
+            if (operations.Count < MinOperationsToDetach)
+            {
+                RunAll(operations);
+            }
+            else
+            {
+                RunDetached(root, operations);
+            }
         }
         RunAll(direct);
         RunAll(afterReattach);

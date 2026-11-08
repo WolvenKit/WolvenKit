@@ -312,7 +312,7 @@ public sealed partial class ThemeService : IThemeService
     }
 
     /// <summary>Time for the "applying theme" notification to appear before the UI thread gets busy.</summary>
-    private static readonly TimeSpan s_notificationDelay = TimeSpan.FromMilliseconds(400);
+    private static readonly TimeSpan s_notificationDelay = TimeSpan.FromMilliseconds(250);
 
     /// <summary>
     /// Announces the change, then applies the current theme after a short delay, so that a notification

@@ -313,8 +313,15 @@ namespace WolvenKit
         }
 
         /// <summary>Switching takes a few seconds (Syncfusion rebuilds its styles): tell the user before the UI freezes.</summary>
+        /// <summary>From the theme change request until the UI is idle again with the new theme.</summary>
+        private static readonly System.Diagnostics.Stopwatch s_themeSwitchWatch = new();
+
+        /// <summary>How long the main window stays hidden while it rebuilds its visuals.</summary>
+        private static readonly TimeSpan s_showAfterHideDelay = TimeSpan.FromMilliseconds(200);
+
         private void OnThemeChanging()
         {
+            s_themeSwitchWatch.Restart();
             Locator.Current.GetService<INotificationService>()?.Info($"Applying theme \"{_themeService.Current.Name}\"… WolvenKit may freeze for a few seconds.");
             if (Locator.Current.GetService<IProgressService<double>>() is { } progress)
             {
@@ -389,28 +396,35 @@ namespace WolvenKit
             logger?.Debug($"Themes: Syncfusion skin re-applied in {skinMs} ms, new dictionaries patched in {watch.ElapsedMilliseconds - skinMs} ms.");
 
             // Hiding and showing the window makes it rebuild its visuals with the new styles (as in UpdateTheme).
+            // Both the layout pass before hiding and a short delay are needed: without them the window shows a
+            // solid color instead of its content.
             window.InvalidateVisual();
             window.UpdateLayout();
             window.Visibility = Visibility.Collapsed;
 
-            Task.Delay(500).ContinueWith(_ =>
+            var showTimer = new System.Windows.Threading.DispatcherTimer { Interval = s_showAfterHideDelay };
+            showTimer.Tick += (_, _) =>
             {
-                Current.Dispatcher.Invoke(() =>
-                {
-                    // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
-                    themeService.Refresh();
-                    window.InvalidateVisual();
-                    window.UpdateLayout();
-                    window.Visibility = Visibility.Visible;
+                showTimer.Stop();
 
-                    if (dockState is not null)
-                    {
-                        window.Dispatcher.BeginInvoke(
-                            () => Views.Shell.DockingAdapter.G_Dock?.RestoreDockState(dockState),
-                            System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-                    }
-                });
-            });
+                // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
+                themeService.Refresh();
+                window.InvalidateVisual();
+                window.UpdateLayout();
+                window.Visibility = Visibility.Visible;
+
+                if (dockState is not null)
+                {
+                    window.Dispatcher.BeginInvoke(
+                        () => Views.Shell.DockingAdapter.G_Dock?.RestoreDockState(dockState),
+                        System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }
+
+                window.Dispatcher.BeginInvoke(
+                    () => logger?.Debug($"Themes: switch done in {s_themeSwitchWatch.ElapsedMilliseconds} ms (until the UI is idle)."),
+                    System.Windows.Threading.DispatcherPriority.ContextIdle);
+            };
+            showTimer.Start();
 
             void Reapply()
             {

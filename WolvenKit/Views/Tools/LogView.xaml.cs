@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Navigation;
 using DynamicData;
 using HandyControl.Tools.Extension;
@@ -18,7 +17,6 @@ using Serilog.Events;
 using Splat;
 using WolvenKit.App;
 using WolvenKit.App.Services;
-using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Core.Exceptions;
@@ -26,12 +24,12 @@ using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
 {
-    public record LogEntry(Logtype Level, string Message, Uri Uri, Brush TextColor);
+    public record LogEntry(Logtype Level, string Message, Uri Uri);
 
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView : ReactiveUserControl<LogViewModel>, IThemeAware
+    public partial class LogView : ReactiveUserControl<LogViewModel>
     {
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
@@ -46,8 +44,6 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
-            // entries keep the brush they were created with; recolor them for a new theme
-            Locator.Current.GetService<IThemeService>()?.Register(this);
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -93,22 +89,6 @@ namespace WolvenKit.Views.Tools
         {
             FilteredLogEntries.Clear();
             FilteredLogEntries.AddRange(LogEntries.Where(PassesFilter));
-        }
-
-        void IThemeAware.OnThemeChanged() => RecolorEntries();
-
-        private void RecolorEntries()
-        {
-            for (var i = 0; i < LogEntries.Count; i++)
-            {
-                var entry = LogEntries[i];
-                var brush = GetBrushForLevel(entry.Level);
-                if (!ReferenceEquals(brush, entry.TextColor))
-                {
-                    LogEntries[i] = entry with { TextColor = brush };
-                }
-            }
-            RebuildFilteredEntries();
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
@@ -157,15 +137,13 @@ namespace WolvenKit.Views.Tools
                 level = Logtype.Success;
             }
 
-            var brush = GetBrushForLevel(level);
-
             var message = item.RenderMessage();
             var uri = item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj)
                       && infoCodeObj is ScalarValue { Value: int infoCode }
                 ? LogCodeHelper.GetUrl(infoCode)
                 : null;
 
-            var entry = new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", uri, brush);
+            var entry = new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", uri);
             LogEntries.Add(entry);
 
             if (PassesFilter(entry))
@@ -185,17 +163,6 @@ namespace WolvenKit.Views.Tools
                 LogEventLevel.Fatal => Logtype.Error,
                 _ => Logtype.Normal,
             };
-
-        private static Brush GetBrushForLevel(Logtype level) => level switch
-        {
-            Logtype.Normal or Logtype.Important => Brushes.LightGray,
-            Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-            Logtype.Debug => (Brush)Application.Current.FindResource("WolvenKitPurple"),
-            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitGreen"),
-
-            _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
-        };
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
         {

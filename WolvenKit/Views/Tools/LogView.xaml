@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:core="clr-namespace:WolvenKit.Common;assembly=WolvenKit.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -306,12 +307,34 @@
                             VerticalAlignment="Center"
                             Background="Transparent"
                             BorderThickness="0"
-                            Foreground="{Binding TextColor}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             FontFamily="Consolas"
                             IsReadOnly="True"
                             Text="{Binding Path=Message}"
-                            TextWrapping="Wrap" />
+                            TextWrapping="Wrap">
+                            <!--  color by level from theme resources: follows a theme switch without touching the entries  -->
+                            <TextBox.Style>
+                                <Style
+                                    BasedOn="{StaticResource {x:Type TextBox}}"
+                                    TargetType="{x:Type TextBox}">
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Error}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Warning}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitYellow}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Debug}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitPurple}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Success}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitGreen}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
 
                         <TextBlock
                             Grid.Column="1"
