@@ -42,6 +42,7 @@ namespace WolvenKit.Views.Shell
         private AppViewModel _viewModel;
         private Window _mainWindow;
         private bool _stateChanged;
+        private bool _isLayoutLoaded;
 
         private readonly bool _debuggingLayouts = false;
 
@@ -403,7 +404,13 @@ namespace WolvenKit.Views.Shell
         {
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
 
-            LoadDefaultLayout();
+            // Loaded is raised again when the color theme is re-applied. The layout is already in place then,
+            // and loading the default one would replace the project layout.
+            if (!_isLayoutLoaded)
+            {
+                LoadDefaultLayout();
+                _isLayoutLoaded = true;
+            }
 
             if (_debuggingLayouts)
             {
