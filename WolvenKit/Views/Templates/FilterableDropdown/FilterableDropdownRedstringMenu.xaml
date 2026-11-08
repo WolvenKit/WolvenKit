@@ -38,7 +38,7 @@
         <!-- ====================================== -->
         <syncfusion:SfTextBoxExt
             x:Name="FilterTextBox"
-            Background="{DynamicResource ContentBackgroundAlt2}"
+            Background="{DynamicResource BackgroundColor_Control}"
             Grid.Row="0"
             Grid.Column="0"
             Margin="0,0,1,1"
