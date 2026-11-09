@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -44,6 +45,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly ICvmTools _cvmTools;
     private readonly INotificationService _notificationService;
     private readonly IAppArchiveManager _archiveManager;
+    private readonly SceneLipsyncTools _sceneLipsyncTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -54,7 +56,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         ICvmTools cvmTools,
         ILoggerService loggerService,
         INotificationService notificationService,
-        IAppArchiveManager archiveManager
+        IAppArchiveManager archiveManager,
+        SceneLipsyncTools sceneLipsyncTools
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -66,6 +69,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _loggerService = loggerService;
         _notificationService = notificationService;
         _archiveManager = archiveManager;
+        _sceneLipsyncTools = sceneLipsyncTools;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -203,6 +207,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateLipsyncAnimSetsCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -908,6 +913,72 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         _cvmTools.DeleteUnusedMaterials(RootChunk);
+    }
+
+    #endregion
+
+    #region sceneFile
+
+    private bool CanGenerateLipsyncAnimSets() => ContentType is RedDocumentItemType.Scene;
+
+    /// <summary>
+    /// Generates lipsync assets for the open scene and updates its references.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanGenerateLipsyncAnimSets))]
+    private async Task GenerateLipsyncAnimSetsAsync()
+    {
+        if (CurrentTab?.Parent is not { Cr2wFile.RootChunk: scnSceneResource scene } document)
+        {
+            return;
+        }
+
+        // Name animations before generation and track the document change.
+        var namedLines = SceneEditingHelper.FillMissingLipsyncAnimationNames(scene);
+
+        if (namedLines > 0)
+        {
+            MarkDocumentChanged(document);
+            _loggerService.Info(
+                $"Lipsync: named the lipsync animations of {namedLines} dialogue line(s). Save the scene to keep them.");
+        }
+
+        _notificationService.Info("Generating lipsync anim sets. This can take a moment.");
+
+        try
+        {
+            var result = await _sceneLipsyncTools.GenerateLipsyncAnimSetsAsync(scene, document.RelativePath);
+
+            // Update the document even when generation removed an empty lipmap entry.
+            if (SceneEditingHelper.AssignLipsyncAnimSets(scene, result.SceneAnimSetsByVoicetag))
+            {
+                MarkDocumentChanged(document);
+                _loggerService.Info(
+                    $"Lipsync: the scene now references {scene.ResouresReferences.LipsyncAnimSets.Count} lipsync anim set(s). " +
+                    "Save the scene to keep them.");
+            }
+
+            if (result.WrittenAnimSetCount == 0)
+            {
+                _notificationService.Warning("No lipsync anim set was generated. The log says why.");
+                return;
+            }
+
+            _notificationService.Success(
+                $"Generated {result.WrittenAnimSetCount} lipsync anim set(s). The log has the details.");
+        }
+        catch (Exception ex)
+        {
+            _notificationService.Error("Failed to generate lipsync anim sets. The log has the details.");
+            _loggerService.Error("Failed to generate lipsync anim sets:");
+            _loggerService.Error(ex);
+        }
+    }
+
+    /// <summary>Marks a document as changed and refreshes its tree.</summary>
+    private static void MarkDocumentChanged(RedDocumentViewModel document)
+    {
+        document.SetIsDirty(true);
+        (document.GetMainFile() as RDTDataViewModel)?.GetRootChunk()?.RecalculateProperties();
     }
 
     #endregion

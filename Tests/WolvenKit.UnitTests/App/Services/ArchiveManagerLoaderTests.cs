@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Moq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using Wolvenkit.Test.App.Helpers;
 using Xunit;
@@ -87,6 +91,29 @@ public class ArchiveManagerLoaderTests
 
         Assert.False(DispatcherHelper.IsRepeatingActionRunning(Purpose));
         Assert.Equal(0, DispatcherHelper.GetRepeatingActionRefCount(Purpose));
+    }
+
+    [Fact]
+    public async Task LoadArchiveManagerAsync_WhileAnotherLoadIsRunning_SkipsTheSecondLoad()
+    {
+        var archiveManager = new Mock<IArchiveManager>();
+        archiveManager.SetupGet(manager => manager.IsManagerLoading).Returns(true);
+
+        // Ensure only the active load prevents another.
+        var settingsManager = new Mock<ISettingsManager>();
+        settingsManager.SetupGet(settings => settings.CP77ExecutablePath).Returns(@"C:\Cyberpunk 2077\bin\x64\Cyberpunk2077.exe");
+
+        var loader = new ArchiveManagerLoader(
+            archiveManager.Object,
+            settingsManager.Object,
+            Mock.Of<IProgressService<double>>(),
+            null!,
+            Mock.Of<ILoggerService>());
+
+        await loader.LoadArchiveManagerAsync();
+
+        archiveManager.Verify(manager => manager.LoadGameArchives(It.IsAny<FileInfo>()), Times.Never);
+        Assert.False(DispatcherHelper.IsRepeatingActionRunning(Purpose));
     }
 
     private static IDisposable BeginLoadingIndicator(ArchiveManagerLoader loader)
