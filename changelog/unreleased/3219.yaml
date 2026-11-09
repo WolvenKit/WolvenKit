@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3219
+      author: "MORTEM3845"
+      description: "Add Jump to array index to array context menus."
