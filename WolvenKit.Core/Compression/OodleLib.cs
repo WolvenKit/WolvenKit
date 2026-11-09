@@ -16,6 +16,7 @@ namespace WolvenKit.Core.Compression
         private static DecompressDelegateUnsafe? s_decompressUnsafe;
         private static GetCompressedBufferSizeNeededDelegate? s_getCompressedBufferSizeNeeded;
         private static CompressDelegate? s_compress;
+        private static CompressDelegateUnsafe? s_compressUnsafe;
 
         public static bool Load(string oodlepath)
         {
@@ -44,7 +45,7 @@ namespace WolvenKit.Core.Compression
                 s_pOodleLzDecompress,
                 typeof(DecompressDelegate)
             );
-            
+
             var decompressPtrUnsafe = Marshal.GetDelegateForFunctionPointer(
                 s_pOodleLzDecompress,
                 typeof(DecompressDelegateUnsafe)
@@ -52,7 +53,7 @@ namespace WolvenKit.Core.Compression
 
             s_decompress = (DecompressDelegate)decompressPtr;
             s_decompressUnsafe = (DecompressDelegateUnsafe)decompressPtrUnsafe;
-            
+
             s_getCompressedBufferSizeNeeded = (GetCompressedBufferSizeNeededDelegate)Marshal.GetDelegateForFunctionPointer(
                 s_pOodleLzGetCompressedBufferSizeNeeded,
                 typeof(GetCompressedBufferSizeNeededDelegate)
@@ -61,6 +62,10 @@ namespace WolvenKit.Core.Compression
                 s_pOodleLzCompress,
                 typeof(CompressDelegate)
             );
+
+            s_compressUnsafe = (CompressDelegateUnsafe)Marshal.GetDelegateForFunctionPointer(
+                s_pOodleLzCompress,
+                typeof(CompressDelegateUnsafe));
 
             return true;
         }
@@ -83,7 +88,7 @@ namespace WolvenKit.Core.Compression
             IntPtr decoderMemory = new(),
             long decoderMemorySize = 0,
             Oodle.ThreadPhase threadModule = Oodle.ThreadPhase.Unthreaded);
-        
+
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private unsafe delegate int DecompressDelegateUnsafe(
             byte* compBuf,
@@ -117,6 +122,19 @@ namespace WolvenKit.Core.Compression
             IntPtr scratchMem = new(),
             long scratchSize = 0);
 
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private unsafe delegate int CompressDelegateUnsafe(
+            Oodle.Compressor compressor,
+            byte* rawBuf,
+            long rawLen,
+            byte* compBuf,
+            CompressionLevel level,
+            IntPtr pOptions = new(),
+            IntPtr dictionaryBase = new(),
+            IntPtr lrm = new(),
+            IntPtr scratchMem = new(),
+            long scratchSize = 0);
+
         public static int OodleLZ_Decompress(
             byte[] inputBuffer,
             byte[] outputBuffer)
@@ -128,7 +146,7 @@ namespace WolvenKit.Core.Compression
                 outputBuffer,
                 outputBuffer.Length);
         }
-        
+
         public static unsafe int OodleLZ_Decompress(
             byte* inputBuffer,
             long inputLength,
@@ -136,7 +154,7 @@ namespace WolvenKit.Core.Compression
             long outputLength)
         {
             ArgumentNullException.ThrowIfNull(s_decompress);
-            
+
             return s_decompressUnsafe!(
                 inputBuffer,
                 inputLength,
@@ -157,6 +175,28 @@ namespace WolvenKit.Core.Compression
                 inputBuffer.Length,
                 outputBuffer,
                 level);
+        }
+
+        public static unsafe int OodleLZ_Compress(
+            byte* inputBuffer,
+            long inputLength,
+            byte* outputBuffer,
+            Compressor compressor = Compressor.Kraken,
+            CompressionLevel level = CompressionLevel.Normal)
+        {
+            ArgumentNullException.ThrowIfNull(s_compressUnsafe);
+            return s_compressUnsafe(
+                compressor,
+                inputBuffer,
+                inputLength,
+                outputBuffer,
+                level);
+        }
+
+        public static long OodleLZ_GetCompressedBufferSizeNeeded(long size)
+        {
+            ArgumentNullException.ThrowIfNull(s_getCompressedBufferSizeNeeded);
+            return s_getCompressedBufferSizeNeeded(size);
         }
     }
 }
