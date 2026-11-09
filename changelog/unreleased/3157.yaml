@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3157
+      author: "notaspirit"
+      description: "Debug logs are now hidden in the UI by default"

@@ -18,15 +18,15 @@ namespace WolvenKit.CLI.Services
         public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
 
-        public void Debug(string msg) => LogString(msg, Logtype.Debug);
+        public void Debug(string msg) => LogString(msg, LogType.Debug);
 
-        public void Success(string msg) => LogString(msg, Logtype.Success);
+        public void Success(string msg) => LogString(msg, LogType.Success);
 
-        public void Info(string msg) => LogString(msg, Logtype.Important);
+        public void Info(string msg) => LogString(msg, LogType.Important);
 
-        public void Warning(string msg) => LogString(msg, Logtype.Warning);
+        public void Warning(string msg) => LogString(msg, LogType.Warning);
 
-        public void Error(string msg) => LogString(msg, Logtype.Error);
+        public void Error(string msg) => LogString(msg, LogType.Error);
 
         public void Error(Exception exception)
         {
@@ -52,7 +52,7 @@ namespace WolvenKit.CLI.Services
         }
 
 
-        private void LogString(string message, Logtype type)
+        private void LogString(string message, LogType type)
         {
             if (LoggerVerbosity == LoggerVerbosity.Quiet)
             {
@@ -61,22 +61,22 @@ namespace WolvenKit.CLI.Services
 
             switch (type)
             {
-                case Logtype.Debug:
+                case LogType.Debug:
                     _logger.LogDebug(message);
                     break;
-                case Logtype.Normal:
+                case LogType.Normal:
                     _logger.LogDebug(message);
                     break;
-                case Logtype.Success:
+                case LogType.Success:
                     _logger.LogInformation(message);
                     break;
-                case Logtype.Important:
+                case LogType.Important:
                     _logger.LogWarning(message);
                     break;
-                case Logtype.Warning:
+                case LogType.Warning:
                     _logger.LogError(message);
                     break;
-                case Logtype.Error:
+                case LogType.Error:
                     _logger.LogCritical(message);
                     break;
                 default:
