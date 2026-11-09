@@ -29,6 +29,9 @@ public sealed class ThemeKeyEntry
 
     public string DisplayName { get; set; } = "";
 
+    /// <summary>Where the color is used, shown in the theme editor. Optional.</summary>
+    public string? Description { get; set; }
+
     /// <summary>
     /// The type of the resource in App.Styles.xaml. The actual type is re-checked at runtime.
     /// </summary>

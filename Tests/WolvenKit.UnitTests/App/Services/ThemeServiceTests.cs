@@ -128,6 +128,16 @@ public class ThemeServiceTests
     }
 
     [Fact]
+    public void KeyCatalog_EveryKeyHasADescription()
+    {
+        var catalog = ThemeKeyCatalog.LoadEmbedded();
+
+        var missing = catalog.Entries.Where(e => string.IsNullOrWhiteSpace(e.Description)).Select(e => e.Key).ToList();
+
+        Assert.True(missing.Count == 0, "Add descriptions in tools/themes/theme-key-descriptions.json for: " + string.Join(", ", missing));
+    }
+
+    [Fact]
     public void BuiltInThemes_CannotBeSavedOrDeleted()
     {
         using var f = new Fixture();

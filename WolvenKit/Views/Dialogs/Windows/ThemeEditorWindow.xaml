@@ -243,12 +243,19 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Ellipse Style="{StaticResource OverriddenDot}" Visibility="{Binding IsOverridden, Converter={StaticResource BoolToVisibility}}" />
-                                <TextBlock
+                                <StackPanel
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
-                                    Text="{Binding DisplayName}"
-                                    TextTrimming="CharacterEllipsis"
-                                    ToolTip="{Binding Key}" />
+                                    ToolTip="{Binding ToolTip}">
+                                    <TextBlock Text="{Binding DisplayName}" TextTrimming="CharacterEllipsis" />
+                                    <!--  Where the color is used  -->
+                                    <TextBlock
+                                        FontSize="11"
+                                        Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
+                                        Text="{Binding Description}"
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{Binding HasDescription, Converter={StaticResource BoolToVisibility}}" />
+                                </StackPanel>
                                 <syncfusion:ColorPickerPalette
                                     Grid.Column="2"
                                     Width="48"
