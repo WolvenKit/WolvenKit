@@ -189,7 +189,7 @@
     -->
     <SolidColorBrush x:Key="WolvenKitAccent" Color="#DF2935" />
     <SolidColorBrush x:Key="WolvenKitAccentShadow" Color="#951C2D" />
-    <!--  text on WolvenKitAccent (selected tabs); themes set it with "accentForeground"  -->
+    <!-- text on WolvenKitAccent (selected tabs); themes set it with "accentForeground" -->
     <SolidColorBrush x:Key="WolvenKitAccentForeground" Color="White" />
     <SolidColorBrush x:Key="WolvenKitStatusBarReady" Color="#951C2D" />
     <SolidColorBrush x:Key="WolvenKitStatusBarBusy" Color="#FF8C00" />
@@ -390,6 +390,15 @@
         <!-- Setter Property="TabPanelBackground" Value="#313131" / -->
     </Style>
 
+    <!-- Global: unselected Syncfusion tabs follow the theme surface -->
+    <Style
+        BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
+        TargetType="{x:Type syncfusion:TabItemExt}">
+        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+    </Style>
+
     <!--
         Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
         Doesn't work for base dropdown background yet
@@ -425,9 +434,11 @@
     -->
     <Style TargetType="{x:Type others:InspectableTreeGrid}">
         <Setter Property="Background" Value="{DynamicResource ContentBackground}" />
-        <!-- BorderThickness="0" etc. are usually set per-usage or via the
-             local .Resources styles for cells; add more Setters here if other
-             visual regressions appear on the subclass. -->
+        <!--
+            BorderThickness="0" etc. are usually set per-usage or via the
+            local .Resources styles for cells; add more Setters here if other
+            visual regressions appear on the subclass.
+        -->
     </Style>
 
     <Style TargetType="{x:Type others:InspectableDataGrid}">
