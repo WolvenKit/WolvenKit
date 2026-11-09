@@ -22,8 +22,8 @@ public partial class ThemeColorEntryViewModel : ObservableObject
         DisplayName = basicName ?? entry.DisplayName;
         Group = IsBasic ? ThemeEditorViewModel.BasicGroup : entry.Group;
         Description = entry.Description ?? "";
-        InheritedColor = inherited;
-        Color = current;
+        InheritedColor = ThemeEditorViewModel.NormalizeBackgroundColor(Key, inherited);
+        Color = ThemeEditorViewModel.NormalizeBackgroundColor(Key, current);
     }
 
     public string Key { get; }
@@ -61,7 +61,7 @@ public partial class ThemeColorEntryViewModel : ObservableObject
         {
             if (ThemeService.TryParseColor(value) is { } color)
             {
-                Color = color;
+                Color = ThemeEditorViewModel.NormalizeBackgroundColor(Key, color);
             }
             else
             {
@@ -72,6 +72,15 @@ public partial class ThemeColorEntryViewModel : ObservableObject
 
     [RelayCommand]
     private void Reset() => Color = InheritedColor;
+
+    partial void OnColorChanged(Color value)
+    {
+        var normalized = ThemeEditorViewModel.NormalizeBackgroundColor(Key, value);
+        if (normalized != value)
+        {
+            Color = normalized;
+        }
+    }
 }
 
 /// <summary>
@@ -109,6 +118,34 @@ public partial class ThemeEditorViewModel : ObservableObject
         ("WolvenKitCyanColor", "Cyan"),
         ("WolvenKitOrangeColor", "Orange"),
     ];
+
+    /// <summary>
+    /// Background / surface keys that must stay fully opaque.
+    /// Low alpha on these is dropped by the resource system and produces solid bright fills in preview.
+    /// </summary>
+    private static readonly HashSet<string> s_opaqueBackgroundKeys = new(StringComparer.Ordinal)
+    {
+        "ContentBackground",
+        "ContentBackgroundAlt",
+        "ContentBackgroundAlt2",
+        "ContentBackgroundAlt3",
+        "ContentBackgroundAlt4",
+        "ContentBackgroundAlt5",
+        "BackgroundColor_Control",
+        "BackgroundColor_Frame_Background",
+        "BackgroundColor_Frame_Active",
+        "BorderAlt",
+    };
+
+    /// <summary>Force alpha = 255 for background/surface keys so preview does not paint solid bright colors.</summary>
+    public static Color NormalizeBackgroundColor(string key, Color color)
+    {
+        if (color.A == 0xFF || !s_opaqueBackgroundKeys.Contains(key))
+        {
+            return color;
+        }
+        return Color.FromArgb(0xFF, color.R, color.G, color.B);
+    }
 
     private readonly IThemeService _themeService;
 
@@ -413,10 +450,10 @@ public partial class ThemeEditorViewModel : ObservableObject
             var inherited = (baseTheme is null ? null : _themeService.ResolveColor(baseTheme, entry.Key))
                             ?? _themeService.GetDefaultColor(entry.Key)
                             ?? entry.InheritedColor;
-            entry.InheritedColor = inherited;
+            entry.InheritedColor = NormalizeBackgroundColor(entry.Key, inherited);
             if (!wasOverridden)
             {
-                entry.Color = inherited;
+                entry.Color = entry.InheritedColor;
             }
         }
 
