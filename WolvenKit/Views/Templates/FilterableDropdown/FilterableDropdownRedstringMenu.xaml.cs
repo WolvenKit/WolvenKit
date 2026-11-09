@@ -43,10 +43,12 @@ namespace WolvenKit.Views.Editors
                     ColumnRefreshButton.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
                 }
 
-                if (IsJournalEntryField(vm) && string.IsNullOrEmpty(FilterText) &&
-                    !string.IsNullOrEmpty(s_LastSearchTerm))
+                if (IsJournalEntryField(vm))
                 {
-                    SetCurrentValue(FilterTextProperty, s_LastSearchTerm);
+                    if (string.IsNullOrEmpty(FilterText) && !string.IsNullOrEmpty(s_LastSearchTerm))
+                    {
+                        SetCurrentValue(FilterTextProperty, s_LastSearchTerm);
+                    }
 
                     SetCurrentValue(OptionsProperty,
                         CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true, FilterText));
