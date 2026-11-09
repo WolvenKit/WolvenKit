@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 using Moq;
 using WolvenKit.App.Services;
@@ -135,6 +136,45 @@ public class ThemeServiceTests
         var missing = catalog.Entries.Where(e => string.IsNullOrWhiteSpace(e.Description)).Select(e => e.Key).ToList();
 
         Assert.True(missing.Count == 0, "Add descriptions in tools/themes/theme-key-descriptions.json for: " + string.Join(", ", missing));
+    }
+
+    [Fact]
+    public void KeyCatalog_ContainsEveryColorOfAppStyles()
+    {
+        // Same rules as tools/themes/generate_theme_keys.py: Color resources and SolidColorBrush resources with
+        // a literal color (brushes derived via StaticResource/DynamicResource are not keys of their own).
+        var stylesPath = FindRepositoryFile(Path.Combine("WolvenKit", "Themes", "App.Styles.xaml"));
+        if (stylesPath is null)
+        {
+            return; // not running from a source checkout
+        }
+
+        var text = File.ReadAllText(stylesPath);
+        var keys = Regex.Matches(text, @"<Color\s+x:Key=""([^""]+)""\s*>[^<]+</Color>")
+            .Select(m => m.Groups[1].Value)
+            .Concat(Regex.Matches(text, @"<SolidColorBrush\s+x:Key=""([^""]+)""\s+Color=""([^""]+)""\s*/>")
+                .Where(m => !m.Groups[2].Value.TrimStart().StartsWith('{')
+                            && !m.Groups[2].Value.Trim().Equals("Transparent", StringComparison.OrdinalIgnoreCase))
+                .Select(m => m.Groups[1].Value));
+
+        var catalog = ThemeKeyCatalog.LoadEmbedded();
+        var missing = keys.Where(k => catalog.Find(k) is null).Distinct().ToList();
+
+        Assert.True(missing.Count == 0,
+            "theme-keys.json is out of date, run `python tools/themes/generate_theme_keys.py`. Missing: " + string.Join(", ", missing));
+    }
+
+    private static string? FindRepositoryFile(string relativePath)
+    {
+        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+        {
+            var candidate = Path.Combine(dir.FullName, relativePath);
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     [Fact]
