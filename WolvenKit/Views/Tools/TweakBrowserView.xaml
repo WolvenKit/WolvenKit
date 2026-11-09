@@ -115,7 +115,7 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="#7EFFFFFF"
+                    Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                     FontSize="{DynamicResource WolvenKitFontHuge}"
                     FontWeight="Bold"
                     Text="Loading TweakDB Browser..."
