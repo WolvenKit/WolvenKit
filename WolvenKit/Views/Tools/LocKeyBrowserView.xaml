@@ -128,7 +128,7 @@
                             IconPack="Material"
                             Kind="ContentCopy"
                             Size="{DynamicResource WolvenKitTinyIconSize}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </Button>
                 </Grid>
 
@@ -168,7 +168,7 @@
                             IconPack="Material"
                             Kind="ContentCopy"
                             Size="{DynamicResource WolvenKitTinyIconSize}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </Button>
                 </Grid>
             </Grid>
@@ -207,7 +207,7 @@
                         IconPack="Material"
                         Kind="ContentCopy"
                         Size="{DynamicResource WolvenKitTinyIconSize}"
-                        Foreground="White" />
+                        Foreground="{DynamicResource ContentForeground}" />
                 </Button>
             </Grid>
         </Grid>

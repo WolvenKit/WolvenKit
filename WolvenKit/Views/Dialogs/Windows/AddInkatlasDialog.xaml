@@ -188,7 +188,7 @@
                         Width="15"
                         Margin="{DynamicResource WolvenKitMarginTinyTop}"
                         HorizontalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         Content="x" />
 
                     <TextBox

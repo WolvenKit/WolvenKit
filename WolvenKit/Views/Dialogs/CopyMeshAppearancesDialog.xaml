@@ -78,7 +78,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Bottom"
                         Background="{DynamicResource BackgroundColor_Button_Active}"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         Style="{DynamicResource ModernButtonStyle}"
                         Content="From ArchiveXL patch mesh"
                         Click="OnButtonClick" />

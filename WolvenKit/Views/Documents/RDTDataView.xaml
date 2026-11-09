@@ -152,7 +152,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="ViewDashboard"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

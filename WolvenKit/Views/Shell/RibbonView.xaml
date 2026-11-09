@@ -422,7 +422,7 @@
                                 <templates:IconBox
                                     IconPack="Codicons"
                                     Kind="SettingsGear"
-                                    Foreground="White" />
+                                    Foreground="{DynamicResource ContentForeground}" />
                             </MenuItem.Icon>
                         </MenuItem>
 

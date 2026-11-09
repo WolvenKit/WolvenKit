@@ -37,7 +37,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="Magnify"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

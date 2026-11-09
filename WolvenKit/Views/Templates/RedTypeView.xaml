@@ -653,7 +653,7 @@
                                 <TextBlock
                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                     VerticalAlignment="Center"
-                                    Foreground="White"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Descriptor}">
                                     <TextBlock.Style>

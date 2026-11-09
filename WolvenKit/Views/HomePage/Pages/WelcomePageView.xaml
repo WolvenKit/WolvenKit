@@ -168,7 +168,7 @@
                                                             Margin="10,5,0,8"
                                                             VerticalAlignment="Center">
                                                             <TextBlock
-                                                                Foreground="White"
+                                                                Foreground="{DynamicResource ContentForeground}"
                                                                 FontSize="{DynamicResource WolvenKitFontMedium}"
                                                                 FontWeight="Bold"
                                                                 Text="{Binding Path=SafeName}"
@@ -229,7 +229,7 @@
                                                 ToolTip="Find in Explorer">
                                                 <Button.Resources>
                                                     <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
-                                                        <Setter Property="Foreground" Value="White" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
 
                                                         <Style.Triggers>
                                                             <DataTrigger
