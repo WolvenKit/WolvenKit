@@ -21,6 +21,7 @@ public partial class ThemeColorEntryViewModel : ObservableObject
         IsBasic = basicName is not null;
         DisplayName = basicName ?? entry.DisplayName;
         Group = IsBasic ? ThemeEditorViewModel.BasicGroup : entry.Group;
+        Description = entry.Description ?? "";
         InheritedColor = inherited;
         Color = current;
     }
@@ -30,6 +31,13 @@ public partial class ThemeColorEntryViewModel : ObservableObject
     public string DisplayName { get; }
 
     public string Group { get; }
+
+    /// <summary>Where the color is used (from theme-keys.json); empty if unknown.</summary>
+    public string Description { get; }
+
+    public bool HasDescription => Description.Length > 0;
+
+    public string ToolTip => HasDescription ? $"{Key}\n{Description}" : Key;
 
     /// <summary>One of the main colors shown in the simple view of the editor.</summary>
     public bool IsBasic { get; }
@@ -324,6 +332,7 @@ public partial class ThemeEditorViewModel : ObservableObject
         return entry.DisplayName.Contains(filter, StringComparison.OrdinalIgnoreCase)
                || entry.Key.Contains(filter, StringComparison.OrdinalIgnoreCase)
                || entry.Group.Contains(filter, StringComparison.OrdinalIgnoreCase)
+               || entry.Description.Contains(filter, StringComparison.OrdinalIgnoreCase)
                || entry.Hex.Contains(filter, StringComparison.OrdinalIgnoreCase);
     }
 
