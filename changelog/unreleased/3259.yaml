@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3259
+      author: "Ametis81"
+      description: "Theme editor shows where each color is used (under the name and in the tooltip), and the filter searches these descriptions"
