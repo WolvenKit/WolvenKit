@@ -191,8 +191,7 @@ public partial class ChunkViewModel
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
-            case worldCompiledNodeInstanceSetupInfo:
-            case V2310.worldCompiledNodeInstanceSetupInfo:
+            case worldCompiledNodeInstanceSetupInfo or V2310.worldCompiledNodeInstanceSetupInfo:
                 var referencedNodeIndex = Data switch
                 {
                     worldCompiledNodeInstanceSetupInfo sst => (int)(ulong)sst.NodeIdx,
