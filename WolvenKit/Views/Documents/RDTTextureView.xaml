@@ -32,7 +32,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="Magnify"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -54,7 +54,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="FileReplaceOutline"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
 

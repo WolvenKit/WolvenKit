@@ -45,7 +45,7 @@
             TargetType="TextBlock">
             <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
             <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -83,7 +83,7 @@
                         Foreground="{DynamicResource WolvenKitYellow}" />
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         FontWeight="Bold"
                         Text="Section Timeline" />
@@ -116,7 +116,7 @@
                         Text="Duration:" />
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:N0}ms ({1:N2}s)">
@@ -291,7 +291,7 @@
                     <CheckBox
                         Margin="{DynamicResource WolvenKitMarginSmallRight}"
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         Content="Snap"
                         IsChecked="{Binding IsSnapEnabled}" />
                     <TextBox

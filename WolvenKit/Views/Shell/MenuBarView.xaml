@@ -329,7 +329,7 @@
                             IconPack="Codicons"
                             Kind="SettingsGear"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -353,7 +353,7 @@
                                 IconPack="Material"
                                 Kind="TextSearchVariant"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -434,7 +434,7 @@
                             IconPack="Material"
                             Kind="FileSearchOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -448,7 +448,7 @@
                             IconPack="Material"
                             Kind="FileSearchOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -462,7 +462,7 @@
                             IconPack="Codicons"
                             Kind="PlayCircle"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -617,7 +617,7 @@
                             IconPack="Codicons"
                             Kind="SettingsGear"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

@@ -58,7 +58,7 @@
 
                     <ComboBox
                         Width="200"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         ItemsSource="{Binding Path=InterpolationTypes}"
                         SelectedItem="{Binding Path=InterpolationType}"

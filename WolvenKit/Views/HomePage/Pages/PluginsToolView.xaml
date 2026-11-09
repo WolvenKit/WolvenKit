@@ -105,7 +105,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center">
                                 <TextBlock
-                                    Foreground="White"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     FontSize="{DynamicResource WolvenKitFontMedium}"
                                     FontWeight="Bold"
                                     Text="{Binding Name}" />
@@ -116,7 +116,7 @@
                                     Text="{Binding Description}" />
 
                                 <TextBlock
-                                    Foreground="White"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Version}" />
                             </StackPanel>

@@ -135,7 +135,7 @@
                     BorderThickness="1">
                     <!-- this should update based on the context -->
                     <TextBlock
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="Move file(s) here - hold control to copy" />
                 </Border>
@@ -875,7 +875,7 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
