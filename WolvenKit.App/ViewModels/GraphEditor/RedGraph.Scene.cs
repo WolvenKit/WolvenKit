@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,6 +85,75 @@ public partial class RedGraph
         DocumentViewModel?.SetIsDirty(true);
 
         return instance.NodeId.Id;
+    }
+
+    /// <summary>
+    /// Puts a node somebody else built into the graph: gives it an id, names it in the scene's
+    /// notable points, and wraps it for the canvas.
+    /// </summary>
+    /// <param name="node">The node, filled in but for its id, which is overwritten here.</param>
+    /// <param name="notablePointName">
+    /// A name to list the node under in the scene's notable points, which the canvas shows on the
+    /// node's marker bar. Null for a node not worth marking.
+    /// </param>
+    /// <returns>The node's wrapper, already on the canvas.</returns>
+    public BaseSceneViewModel AddSceneNode(scnSceneGraphNode node, System.Windows.Point point, string? notablePointName = null)
+    {
+        var sceneResource = (scnSceneResource)_data;
+
+        var nodeId = GetNextAvailableSceneNodeId();
+        node.NodeId = new scnNodeId { Id = nodeId };
+        _currentSceneNodeId = Math.Max(_currentSceneNodeId, nodeId);
+
+        // Before the wrapper: a wrapper reads its notable point once, when it is built.
+        if (!string.IsNullOrWhiteSpace(notablePointName))
+        {
+            sceneResource.NotablePoints.Add(new scnNotablePoint
+            {
+                Name = notablePointName,
+                NodeId = new scnNodeId { Id = nodeId }
+            });
+
+            RefreshSpecificProperties("notablePoints");
+        }
+
+        var wrappedInstance = WrapSceneNode(node);
+        wrappedInstance.Location = point;
+
+        sceneResource.SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(node));
+
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedInstance);
+
+        DocumentViewModel?.SetIsDirty(true);
+
+        return wrappedInstance;
+    }
+
+    /// <summary>
+    /// Somewhere to put a new node without landing on an existing one: off the right edge of
+    /// everything already on the canvas.
+    /// </summary>
+    public System.Windows.Point GetFreeCanvasPoint()
+    {
+        const double spacing = 200;
+
+        // A node the canvas has not laid out yet measures 0 wide, so assume a plausible width -
+        // the same floor the comment boxes use.
+        const double assumedNodeWidth = 260;
+
+        if (Nodes.Count == 0)
+        {
+            return new System.Windows.Point();
+        }
+
+        return new System.Windows.Point(
+            Nodes.Max(node => node.Location.X + Math.Max(node.Size.Width, assumedNodeWidth)) + spacing,
+            Nodes.Min(node => node.Location.Y));
     }
 
     private scnSceneGraphNode InternalCreateSceneNode(Type type, RedTypeTemplateSelectionOption? templateDesc = null)
