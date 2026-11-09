@@ -497,6 +497,18 @@
 
                 <Separator />
 
+                <!-- Context menu: Create new file -->
+                <MenuItem Command="{Binding NewFileCommand}" Header="New File...">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="NewFile"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitYellow}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- Context menu: Create new folder -->
                 <MenuItem
                     Visibility="{Binding Path=IsEnabled,
