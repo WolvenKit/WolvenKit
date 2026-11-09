@@ -34,7 +34,7 @@
             Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style
-                    BasedOn="{StaticResource ButtonDefault}"
+                    BasedOn="{StaticResource WKButtonStyle}"
                     TargetType="{x:Type Button}">
                     <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
                     <Setter Property="BorderThickness" Value="0" />

@@ -1045,6 +1045,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Padding="0"
                         AutomationProperties.AutomationId="ExpandAllButton"
@@ -1056,6 +1057,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1067,6 +1069,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1079,6 +1082,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1091,6 +1095,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1107,20 +1112,9 @@
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
-                        hc:VisualElement.HighlightBackground="{DynamicResource WolvenKitAccent}"
+                        Style="{StaticResource WKToggleButtonStyle}"
                         IsChecked="{Binding IsFlatModeEnabled}"
                         ToolTip="Toggle Flat File List">
-                        <ToggleButton.Style>
-                            <Style
-                                BasedOn="{StaticResource {x:Type ToggleButton}}"
-                                TargetType="ToggleButton">
-                                <Style.Triggers>
-                                    <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource WolvenKitAccent}" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ToggleButton.Style>
 
                         <ToggleButton.Resources>
                             <converters:TreeFlatIconConverter x:Key="TreeFlatIconConverter" />
@@ -1140,6 +1134,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="RefreshButton"
                         Height="Auto"
                         Padding="0"
@@ -1151,6 +1146,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="OpenFolderButton"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"

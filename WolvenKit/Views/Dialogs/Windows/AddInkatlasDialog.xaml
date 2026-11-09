@@ -107,6 +107,7 @@
                         IsReadOnly="True" />
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="ClearExistingFileButton"
                         Grid.Row="4"
                         Grid.Column="5"
@@ -241,6 +242,7 @@
                     </TextBox>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Grid.Row="14"
                         Grid.Column="5"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
