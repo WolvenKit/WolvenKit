@@ -167,7 +167,7 @@ public sealed partial class ThemeService : IThemeService
         catch (Exception ex)
         {
             // a theme that breaks while being applied: fall back to the stock look (restores patched values)
-            _loggerService.Error($"Theme \"{Current.Name}\" could not be applied, using \"{IThemeService.DefaultThemeName}\", {ex.Message}");
+            _loggerService.Error($"Theme \"{Current.Name}\" could not be applied, using \"{IThemeService.DefaultThemeName}\": {ex.Message}");
             _currentName = IThemeService.DefaultThemeName;
             ApplyResources(Current);
         }
@@ -390,7 +390,7 @@ public sealed partial class ThemeService : IThemeService
                 }
                 else
                 {
-                    _loggerService.Warning($"Theme \"{t.Name}\", invalid color \"{value}\" for {key}.");
+                    _loggerService.Warning($"Theme \"{t.Name}\": invalid color \"{value}\" for {key}.");
                 }
             }
         }
@@ -454,28 +454,8 @@ public sealed partial class ThemeService : IThemeService
         return dictionary;
     }
 
-
-    /// <summary>
-    /// Background / surface keys must stay fully opaque.
-    /// Low alpha is dropped by some resource paths and produces solid bright fills.
-    /// </summary>
-    private static Color EnsureOpaqueForBackground(string key, Color color)
-    {
-        if (color.A == 0xFF)
-            return color;
-
-        if (key.StartsWith("ContentBackground", StringComparison.Ordinal)
-            || key.StartsWith("BackgroundColor_", StringComparison.Ordinal)
-            || key == "BorderAlt")
-        {
-            return Color.FromArgb(0xFF, color.R, color.G, color.B);
-        }
-        return color;
-    }
-
     private void AddResource(ResourceDictionary dictionary, string key, Color color)
     {
-        color = EnsureOpaqueForBackground(key, color);
         if (!_defaults.TryGetValue(key, out var resource))
         {
             // unknown key: there is nothing to override
@@ -576,14 +556,13 @@ public sealed partial class ThemeService : IThemeService
         copy.IsBuiltIn = false;
         copy.FilePath = null;
 
-        // A copy of a built-in theme becomes a child of it instead of a full copy,
-        // so later changes to the built-in theme still flow through.
+        // A copy of a built-in theme inherits from it, so later fixes of the built-in theme are picked up.
         if (source.IsBuiltIn)
         {
             copy.BasedOn = source.Name;
+            copy.Colors.Clear();
             copy.Accent = null;
             copy.AccentForeground = null;
-            copy.Colors.Clear();
         }
 
         return Save(copy);
@@ -591,115 +570,167 @@ public sealed partial class ThemeService : IThemeService
 
     public ThemeDto Save(ThemeDto theme, string? previousName = null)
     {
+        if (theme.IsBuiltIn)
+        {
+            throw new InvalidOperationException("Built-in themes can't be modified. Duplicate the theme first.");
+        }
         if (string.IsNullOrWhiteSpace(theme.Name))
         {
-            throw new ArgumentException("Theme name is required.", nameof(theme));
+            throw new ArgumentException("Theme name is empty.", nameof(theme));
         }
 
-        theme = theme.Clone();
         theme.Name = theme.Name.Trim();
+        previousName ??= theme.Name;
 
         var existing = Find(theme.Name);
-        if (existing is { IsBuiltIn: true })
-        {
-            throw new InvalidOperationException($"\"{theme.Name}\" is a built-in theme and can't be modified.");
-        }
-        if (existing is not null && !string.Equals(existing.Name, previousName, StringComparison.OrdinalIgnoreCase))
+        var previous = _userThemes.FirstOrDefault(t => string.Equals(t.Name, previousName, StringComparison.OrdinalIgnoreCase));
+        if (existing is not null && existing != previous)
         {
             throw new InvalidOperationException($"A theme named \"{theme.Name}\" already exists.");
         }
-
-        var previous = previousName is null ? null : Find(previousName);
-        if (previous is { IsBuiltIn: true })
+        if (string.Equals(theme.BasedOn, theme.Name, StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException($"\"{previousName}\" is a built-in theme and can't be modified.");
+            theme.BasedOn = null;
         }
 
-        // keep children pointing at the renamed theme
-        if (previous is not null && !string.Equals(previous.Name, theme.Name, StringComparison.Ordinal))
+        var path = _repository.Save(theme);
+
+        if (previous is not null)
         {
-            foreach (var child in _userThemes.Where(t => string.Equals(t.BasedOn, previous.Name, StringComparison.OrdinalIgnoreCase)))
+            _userThemes.Remove(previous);
+            if (previous.FilePath is not null
+                && !string.Equals(previous.FilePath, path, StringComparison.OrdinalIgnoreCase))
             {
-                child.BasedOn = theme.Name;
-                _repository.Save(child);
+                _repository.Delete(previous.FilePath);
             }
-
-            if (string.Equals(_settingsManager.ActiveTheme, previous.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                _settingsManager.ActiveTheme = theme.Name;
-            }
+            RenameReferences(previous.Name, theme.Name);
         }
 
-        theme.FilePath = _repository.Save(theme);
-
-        if (previous is not null && previous.FilePath is not null && previous.FilePath != theme.FilePath)
-        {
-            _repository.Delete(previous.FilePath);
-        }
-
-        _userThemes.RemoveAll(t => string.Equals(t.Name, previousName ?? theme.Name, StringComparison.OrdinalIgnoreCase));
-        _userThemes.Add(theme);
+        var saved = theme.Clone();
+        saved.FilePath = path;
+        saved.IsBuiltIn = false;
+        _userThemes.Add(saved);
 
         ThemesChanged?.Invoke(this, EventArgs.Empty);
-        return theme;
+
+        var isCurrent = string.Equals(_currentName, saved.Name, StringComparison.OrdinalIgnoreCase)
+                        || GetChain(Current).Any(t => string.Equals(t.Name, saved.Name, StringComparison.OrdinalIgnoreCase));
+        if (_isInitialized && isCurrent)
+        {
+            _currentName = Current.Name;
+            ApplyCurrentDeferred();
+        }
+
+        return saved;
+    }
+
+    /// <summary>Keeps the active theme and BasedOn links pointing at a renamed theme.</summary>
+    private void RenameReferences(string oldName, string newName)
+    {
+        if (string.Equals(oldName, newName, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        if (string.Equals(_currentName, oldName, StringComparison.OrdinalIgnoreCase))
+        {
+            _currentName = newName;
+            _settingsManager.ActiveTheme = newName;
+        }
+
+        foreach (var child in _userThemes.Where(t => string.Equals(t.BasedOn, oldName, StringComparison.OrdinalIgnoreCase)).ToList())
+        {
+            child.BasedOn = newName;
+            if (child.FilePath is not null)
+            {
+                _repository.Write(child, child.FilePath);
+            }
+        }
     }
 
     public void Delete(ThemeDto theme)
     {
         if (theme.IsBuiltIn)
         {
-            throw new InvalidOperationException($"\"{theme.Name}\" is a built-in theme and can't be deleted.");
+            throw new InvalidOperationException("Built-in themes can't be deleted.");
         }
 
-        // children keep the colors they inherited: flatten the deleted theme into them
-        foreach (var child in _userThemes.Where(t => string.Equals(t.BasedOn, theme.Name, StringComparison.OrdinalIgnoreCase)).ToList())
+        var stored = _userThemes.FirstOrDefault(t => string.Equals(t.Name, theme.Name, StringComparison.OrdinalIgnoreCase));
+        if (stored is null)
         {
-            foreach (var (key, value) in theme.Colors)
+            return;
+        }
+
+        // Children keep working: they inherit what the deleted theme inherited.
+        foreach (var child in _userThemes.Where(t => string.Equals(t.BasedOn, stored.Name, StringComparison.OrdinalIgnoreCase)).ToList())
+        {
+            var flattened = Flatten(child);
+            child.BasedOn = stored.BasedOn;
+            child.Colors = flattened.Colors;
+            child.Accent = flattened.Accent;
+            child.AccentForeground = flattened.AccentForeground;
+            if (child.FilePath is not null)
             {
-                child.Colors.TryAdd(key, value);
+                _repository.Write(child, child.FilePath);
             }
-            child.BasedOn = theme.BasedOn;
-            _repository.Save(child);
         }
 
-        if (theme.FilePath is not null)
+        _userThemes.Remove(stored);
+        if (stored.FilePath is not null)
         {
-            _repository.Delete(theme.FilePath);
-        }
-        _userThemes.RemoveAll(t => string.Equals(t.Name, theme.Name, StringComparison.OrdinalIgnoreCase));
-
-        if (string.Equals(_settingsManager.ActiveTheme, theme.Name, StringComparison.OrdinalIgnoreCase))
-        {
-            _settingsManager.ActiveTheme = Find(theme.BasedOn)?.Name ?? IThemeService.DefaultThemeName;
+            _repository.Delete(stored.FilePath);
         }
 
         ThemesChanged?.Invoke(this, EventArgs.Empty);
+
+        if (string.Equals(_currentName, stored.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            _settingsManager.ActiveTheme = stored.BasedOn is not null && Find(stored.BasedOn) is not null
+                ? stored.BasedOn
+                : IThemeService.DefaultThemeName;
+        }
     }
 
     public ThemeDto Import(string path)
     {
         var theme = _repository.Read(path);
         theme.Name = GetUniqueName(theme.Name);
+        theme.IsBuiltIn = false;
         theme.FilePath = null;
+        if (theme.BasedOn is not null && Find(theme.BasedOn) is null)
+        {
+            _loggerService.Warning($"Imported theme \"{theme.Name}\" is based on unknown theme \"{theme.BasedOn}\"; using the defaults instead.");
+            theme.BasedOn = null;
+        }
         return Save(theme);
     }
 
     public void Export(ThemeDto theme, string path, bool flatten)
     {
-        var exported = theme.Clone();
-        if (flatten)
-        {
-            exported.BasedOn = null;
-            exported.Accent = ToHex(ResolveAccent(theme));
-            exported.AccentForeground = ResolveAccentForeground(theme) is { } fg ? ToHex(fg) : null;
-            exported.Colors = ResolveOverrides(theme).ToDictionary(kv => kv.Key, kv => ToHex(kv.Value), StringComparer.Ordinal);
-        }
-        _repository.Write(exported, path);
+        _repository.Write(flatten ? Flatten(theme) : theme.Clone(), path);
+    }
+
+    /// <summary>A copy that contains all inherited overrides and no BasedOn.</summary>
+    private ThemeDto Flatten(ThemeDto theme)
+    {
+        var flat = theme.Clone();
+        flat.BasedOn = null;
+        flat.Colors = ResolveOverrides(theme).ToDictionary(kv => kv.Key, kv => ToHex(kv.Value), StringComparer.Ordinal);
+
+        var accent = ResolveAccent(theme);
+        flat.Accent = accent == IThemeService.DefaultAccent ? null : ToHex(accent);
+        flat.AccentForeground = ResolveAccentForeground(theme) is { } fg ? ToHex(fg) : null;
+        return flat;
     }
 
     #endregion
 
-    #region color helpers
+    #region helpers
+
+    public static string ToHex(Color color) =>
+        color.A == 0xFF
+            ? $"#{color.R:X2}{color.G:X2}{color.B:X2}"
+            : $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
 
     public static Color? TryParseColor(string? value)
     {
@@ -716,11 +747,6 @@ public sealed partial class ThemeService : IThemeService
             return null;
         }
     }
-
-    public static string ToHex(Color color) =>
-        color.A == 0xFF
-            ? $"#{color.R:X2}{color.G:X2}{color.B:X2}"
-            : $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
 
     #endregion
 }
