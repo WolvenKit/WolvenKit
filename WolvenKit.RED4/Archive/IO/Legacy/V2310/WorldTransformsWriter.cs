@@ -1,6 +1,7 @@
 using WolvenKit.RED4.IO;
+using WolvenKit.RED4.Types.Legacy.V2310;
 
-namespace WolvenKit.RED4.Types.Legacy.V2310;
+namespace WolvenKit.RED4.Archive.IO.Legacy.V2310;
 
 public class WorldTransformsWriter : Red4Writer
 {

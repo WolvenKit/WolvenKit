@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Archive.IO.Legacy.V2310;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Legacy.V2310;
 
@@ -30,7 +31,7 @@ public static class BufferHelper
         //s_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
         s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         s_bufferReaders.Add("worldFoliageCompiledResource.dataBuffer", typeof(FoliageReader));
-        
+
         s_bufferReaders.Add("animFacialSetup.bakedData", typeof(AnimFacialSetupBakedDataReader));
         s_bufferReaders.Add("animFacialSetup.mainPosesData", typeof(AnimFacialSetupMainPosesDataReader));
         s_bufferReaders.Add("animFacialSetup.correctivePosesData", typeof(AnimFacialSetupCorrectivePosesDataReader));

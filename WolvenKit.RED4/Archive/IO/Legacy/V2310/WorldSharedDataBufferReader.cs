@@ -1,7 +1,10 @@
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.IO;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Legacy.V2310;
+using worldInstancedMeshNode = WolvenKit.RED4.Types.Legacy.V2310.worldInstancedMeshNode;
 
-namespace WolvenKit.RED4.Types.Legacy.V2310;
+namespace WolvenKit.RED4.Archive.IO.Legacy.V2310;
 
 public class WorldSharedDataBufferReader : Red4Reader, IBufferReader
 {

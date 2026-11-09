@@ -317,8 +317,8 @@ public partial class CR2WWriter
                 if (_file!.RootChunk.GetType() == typeof(appearanceAppearanceResource) && buffer.Parent is entEntityTemplate)
                 {
                     packageWriter.Settings.ImportsAsHash = true;
-                } 
-                    
+                }
+
                 if (_file!.RootChunk.GetType() == typeof(gamePersistentStateDataResource))
                 {
                     packageWriter.Settings.RedPackageType = RedPackageType.SaveResource;
@@ -386,7 +386,7 @@ public partial class CR2WWriter
         if (buffer.Data is Types.Legacy.V2310.WorldTransformsBuffer legacyWtb)
         {
             using var ms = new MemoryStream();
-            using var transformWriter = new Types.Legacy.V2310.WorldTransformsWriter(ms);
+            using var transformWriter = new IO.Legacy.V2310.WorldTransformsWriter(ms);
 
             transformWriter.WriteBuffer(legacyWtb);
 
