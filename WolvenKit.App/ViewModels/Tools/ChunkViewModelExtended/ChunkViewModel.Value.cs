@@ -574,8 +574,19 @@ public partial class ChunkViewModel
                     Value = $"{Value} => {nodeName}";
                 }
 
+                var globalNodeId = Data switch
+                {
+                    worldCompiledNodeInstanceSetupInfo sst => sst.GlobalNodeId,
+                    V2310.worldCompiledNodeInstanceSetupInfo lsst => lsst.GlobalNodeId,
+                    _ => null
+                };
+
+                if (globalNodeId is not null && globalNodeId.Hash != 0)
+                {
+                    Value = $"{Value} ({StringHelper.StringifyNodeRefHash(globalNodeId.Hash)})";
+                }
                 IsValueExtrapolated = true;
-                return;
+                break;
             case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
                 Value = $"{StringHelper.Stringify(aiSpot.Resource.DepotPath)}";
                 IsValueExtrapolated = true;
@@ -1312,10 +1323,6 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 return;
             case worldGlobalNodeID worldGlobalNodeID:
-                Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
-                IsValueExtrapolated = true;
-                return;
-            case worldCompiledNodeInstanceSetupInfo { GlobalNodeId: { } worldGlobalNodeID }:
                 Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
