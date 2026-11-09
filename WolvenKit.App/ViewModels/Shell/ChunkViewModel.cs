@@ -55,6 +55,7 @@ using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+using V2310 =  WolvenKit.RED4.Types.Legacy.V2310;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -607,7 +608,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     [ObservableProperty] private System.Windows.Point _location;
 
-    public bool ShouldShowWorldNodeDataImport => Data is worldCompiledNodeInstanceSetupInfo;
+    public bool ShouldShowWorldNodeDataImport => Data is worldCompiledNodeInstanceSetupInfo or V2310.worldCompiledNodeInstanceSetupInfo;
 
     public bool ShouldShowExportNodeData =>
         Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
@@ -2863,14 +2864,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                 }
 
-                if (Data is worldCompiledNodeInstanceSetupInfo sst && Tab is { } dvm &&
+                var referencedNodeIndex = Data switch
+                {
+                    worldCompiledNodeInstanceSetupInfo sst => (int)(ulong)sst.NodeIdx,
+                    V2310.worldCompiledNodeInstanceSetupInfo lsst => (int)(ulong)lsst.NodeIdx,
+                    _ => -1
+                };
+
+                if (referencedNodeIndex >= 0 && Tab is { } dvm &&
                     dvm.Chunks[0].Data is worldStreamingSector wss &&
-                    (int)(ulong)sst.NodeIdx < wss.Nodes.Count)
+                    referencedNodeIndex < wss.Nodes.Count)
                 {
                     try
                     {
                         var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(
-                            wss.Nodes[(int)(ulong)sst.NodeIdx].NotNull(), "Node",
+                            wss.Nodes[referencedNodeIndex].NotNull(), "Node",
                             _appViewModel,
                             this, isreadonly);
                         nodeChunk.CalculateProperties();
@@ -2878,6 +2886,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                     catch (Exception ex) { _loggerService?.Error(ex); }
                 }
+
 
                 break;
             }

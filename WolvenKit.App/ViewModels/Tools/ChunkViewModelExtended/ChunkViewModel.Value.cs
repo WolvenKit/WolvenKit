@@ -12,6 +12,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 using static WolvenKit.RED4.Types.Enums;
+using V2310 =  WolvenKit.RED4.Types.Legacy.V2310;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
@@ -552,10 +553,22 @@ public partial class ChunkViewModel
 
             #endregion
 
-            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
-                                                             (int)(ulong)sst.NodeIdx < wss.Nodes.Count:
-                var node = wss.Nodes[(int)(ulong)sst.NodeIdx].Chunk;
-                Value = $"#{(int)(ulong)sst.NodeIdx}";
+            case worldCompiledNodeInstanceSetupInfo or V2310.worldCompiledNodeInstanceSetupInfo:
+                var referencedNodeIndex = Data switch
+                {
+                    worldCompiledNodeInstanceSetupInfo sst => (int)(ulong)sst.NodeIdx,
+                    V2310.worldCompiledNodeInstanceSetupInfo lsst => (int)(ulong)lsst.NodeIdx,
+                    _ => -1
+                };
+
+                if (Parent?.Parent?.ResolvedData is not worldStreamingSector wss ||
+                    referencedNodeIndex > wss.Nodes.Count || referencedNodeIndex < 0)
+                {
+                    break;
+                }
+
+                var node = wss.Nodes[referencedNodeIndex].Chunk;
+                Value = $"#{referencedNodeIndex}";
                 if (node?.GetType().Name is string nodeName && !string.IsNullOrEmpty(nodeName))
                 {
                     Value = $"{Value} => {nodeName}";

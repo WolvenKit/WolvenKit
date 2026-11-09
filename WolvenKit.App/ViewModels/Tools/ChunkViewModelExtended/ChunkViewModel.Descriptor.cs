@@ -9,6 +9,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 using static WolvenKit.RED4.Types.RedReflection;
+using V2310 =  WolvenKit.RED4.Types.Legacy.V2310;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
@@ -190,8 +191,21 @@ public partial class ChunkViewModel
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
-            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && (int)(ulong)sst.NodeIdx < wss.Nodes.Count:
-                Descriptor = $"[{(int)(ulong)sst.NodeIdx}] {StringHelper.Stringify(wss.Nodes[(int)(ulong)sst.NodeIdx].Chunk)}";
+            case worldCompiledNodeInstanceSetupInfo or V2310.worldCompiledNodeInstanceSetupInfo:
+                var referencedNodeIndex = Data switch
+                {
+                    worldCompiledNodeInstanceSetupInfo sst => (int)(ulong)sst.NodeIdx,
+                    V2310.worldCompiledNodeInstanceSetupInfo lsst => (int)(ulong)lsst.NodeIdx,
+                    _ => -1
+                };
+
+                if (Parent?.Parent?.ResolvedData is not worldStreamingSector wss ||
+                    referencedNodeIndex > wss.Nodes.Count || referencedNodeIndex < 0)
+                {
+                    break;
+                }
+
+                Descriptor = $"[{referencedNodeIndex}] {StringHelper.Stringify(wss.Nodes[referencedNodeIndex].Chunk)}";
                 return;
             case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != string.Empty:
                 Descriptor = s;
