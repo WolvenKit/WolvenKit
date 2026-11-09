@@ -437,11 +437,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             throw new WolvenKitException(0x4002, "Your Cyberpunk game executable isn't set");
         }
 
-        var fi = new FileInfo(CP77ExecutablePath);
-
-        return fi.Directory is { Parent.Parent: { } }
-            ? Path.Combine(fi.Directory.Parent.Parent.FullName)
-            : throw new DirectoryNotFoundException();
+        var rootDir = Red4PathHelper.ResolveGameRootDir(CP77ExecutablePath);
+        return !string.IsNullOrEmpty(rootDir)
+            ? rootDir
+            : throw new DirectoryNotFoundException("Could not resolve Cyberpunk 2077 game root directory.");
     }
 
     public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
@@ -474,9 +473,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         return dir;
     }
 
-    public string? GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
-            ? null
-            : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
+    public string? GetRED4OodleDll()
+    {
+        var rootDir = GetRED4GameRootDir();
+        return Red4PathHelper.ResolveOodleDll(rootDir, CP77ExecutablePath);
+    }
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
 

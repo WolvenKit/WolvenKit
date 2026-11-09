@@ -31,6 +31,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                     v => v.cp77ExeButton).DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
+                    vm => vm.OpenCP77GameFolderCommand,
+                    v => v.cp77FolderButton).DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
                     vm => vm.OpenDepotPathCommand,
                     v => v.matdepotButton).DisposeWith(disposables);
 

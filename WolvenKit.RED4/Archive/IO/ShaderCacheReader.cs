@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using WolvenKit.Core;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Shaders;
 
@@ -10,12 +11,8 @@ public class ShaderCacheReader
 
     public static void ExtractShaders(FileInfo executable, string exportPath)
     {
-        var di = executable.Directory;
-        if (di?.Parent?.Parent is null)
-        {
-            return;
-        }
-        if (!di.Exists)
+        var rootDir = Red4PathHelper.ResolveGameRootDir(executable);
+        if (string.IsNullOrEmpty(rootDir) || !Directory.Exists(rootDir))
         {
             return;
         }
@@ -32,7 +29,11 @@ public class ShaderCacheReader
             Directory.CreateDirectory(shaderDirectory);
         }
 
-        var shaderCache = Path.Combine(di.Parent.Parent.FullName, "engine", "shader_final.cache");
+        var shaderCache = Path.Combine(rootDir, "engine", "shader_final.cache");
+        if (!File.Exists(shaderCache))
+        {
+            return;
+        }
 
         var fh = File.OpenRead(shaderCache);
         var br = new BinaryReader(fh);

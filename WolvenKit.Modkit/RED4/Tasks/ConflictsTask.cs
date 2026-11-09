@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Tasks;
@@ -38,19 +39,15 @@ public partial class ConsoleFunctions
         }
 
         // check if game dir
-        if (!path.Name.Equals("Cyberpunk 2077"))
-        {
-            _loggerService.Error("Incorrect input path: Not game folder");
-            return ERROR_BAD_ARGUMENTS;
-        }
-        var gameExe = new FileInfo(Path.Combine(path.FullName, "bin", "x64", "Cyberpunk2077.exe"));
-        if (!gameExe.Exists)
+        var rootDir = Red4PathHelper.ResolveGameRootDir(path.FullName) ?? path.FullName;
+        var gameExe = Red4PathHelper.ResolveExecutable(rootDir);
+        if (gameExe is null)
         {
             _loggerService.Error("Incorrect input path: Not game folder");
             return ERROR_BAD_ARGUMENTS;
         }
 
-        var legacyModsDir = new DirectoryInfo(Path.Combine(path.FullName, "archive", "pc", "mod"));
+        var legacyModsDir = new DirectoryInfo(Path.Combine(rootDir, "archive", "pc", "mod"));
         if (!legacyModsDir.Exists)
         {
             _loggerService.Info("No legacy mods loaded");
