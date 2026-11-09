@@ -15,10 +15,14 @@ namespace WolvenKit.App.Services
     public class NodePropertiesSelectionService : INotifyPropertyChanged
     {
         private static NodePropertiesSelectionService? _instance;
+        private static readonly ConditionalWeakTable<RedBaseClass, NodePropertiesSelectionService> InstancesByData = new();
         private ChunkViewModel? _selectedProperty;
         private ObservableCollection<ChunkViewModel> _selectedProperties = new();
 
         public static NodePropertiesSelectionService Instance => _instance ??= new NodePropertiesSelectionService();
+
+        public static NodePropertiesSelectionService ForData(RedBaseClass data) =>
+            InstancesByData.GetValue(data, _ => new NodePropertiesSelectionService());
 
         public ChunkViewModel? SelectedProperty
         {

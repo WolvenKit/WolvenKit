@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.Timeline;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.RED4.Types;
 
@@ -16,13 +17,25 @@ public partial class TimelineService : ObservableObject, IDisposable
     private scnSectionNodeWrapper? _nodeWrapper;
     private bool _isUpdating;
     private int _lastKnownEventCount;
+    private readonly RedDocumentViewModel? _document;
 
-    public TimelineService()
+    public TimelineService(RedDocumentViewModel? document = null)
     {
+        _document = document;
         Tracks = new ObservableCollection<TimelineTrack>();
-        NodeSelectionService.Instance.PropertyChanged += OnNodeSelectionChanged;
+        if (document is null)
+        {
+            NodeSelectionService.Instance.PropertyChanged += OnNodeSelectionChanged;
+        }
+        else
+        {
+            NodeSelectionService.Instance.SelectionChanged += OnDocumentSelectionChanged;
+        }
+
         NodePropertyUpdateService.NodePropertyUpdated += OnNodePropertyUpdated;
-        UpdateSelectedNode(NodeSelectionService.Instance.SelectedNode);
+        UpdateSelectedNode(document is null
+            ? NodeSelectionService.Instance.SelectedNode
+            : NodeSelectionService.Instance.GetSelectedNode(document));
     }
 
     public ObservableCollection<TimelineTrack> Tracks { get; }
@@ -70,8 +83,21 @@ public partial class TimelineService : ObservableObject, IDisposable
         UpdateSelectedNode(NodeSelectionService.Instance.SelectedNode);
     }
 
+    private void OnDocumentSelectionChanged(object? sender, EventArgs e)
+    {
+        if (_document is not null)
+        {
+            UpdateSelectedNode(NodeSelectionService.Instance.GetSelectedNode(_document));
+        }
+    }
+
     private void UpdateSelectedNode(object? selectedNode)
     {
+        if (ReferenceEquals(selectedNode, _nodeWrapper))
+        {
+            return;
+        }
+
         if (selectedNode is scnSectionNodeWrapper sectionWrapper)
         {
             LoadSectionNode(sectionWrapper);
@@ -420,6 +446,7 @@ public partial class TimelineService : ObservableObject, IDisposable
     public void Dispose()
     {
         NodeSelectionService.Instance.PropertyChanged -= OnNodeSelectionChanged;
+        NodeSelectionService.Instance.SelectionChanged -= OnDocumentSelectionChanged;
         NodePropertyUpdateService.NodePropertyUpdated -= OnNodePropertyUpdated;
     }
 }
