@@ -622,6 +622,7 @@ public partial class ArchiveXlItemService
             Path.GetFileName(clothingItemData.InkatlasPath),
             160,
             160,
+            false,
             _cr2WTools,
             activeProject
         );

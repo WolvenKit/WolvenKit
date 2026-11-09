@@ -15,7 +15,39 @@ namespace WolvenKit.App.Helpers;
 public static class InkatlasImageGenerator
 {
     /// <summary>
-    /// Generates an inkatlas from input parameters.
+    /// Checks if the target folder exists and contains png files, throws exception if not.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// If the folder doesn't contain png files and no placeholders are set
+    /// </exception>
+    ///
+    /// <returns>Path to folder with .png files for inkatlas generation</returns>
+    public static string VerifyFolderAndGeneratePlaceholders(string pngFolder, List<string> variants,
+        string atlasFileName)
+    {
+        if (string.IsNullOrEmpty(pngFolder))
+        {
+            pngFolder = Path.Combine(Path.GetTempPath(), $"{atlasFileName}_icons");
+        }
+
+        Directory.CreateDirectory(pngFolder);
+        if (variants.Count == 0 && Directory.GetFiles(pngFolder, "*.png").Length == 0)
+        {
+            throw new InvalidOperationException("No variants provided and no png files found in the target folder.");
+        }
+
+        GenerateDummyIcons(pngFolder, "", variants.ToArray());
+
+        if (Directory.GetFiles(pngFolder, "*.png").Length == 0)
+        {
+            throw new InvalidOperationException("Failed to generate placeholder png files for the provided variants.");
+        }
+
+        return pngFolder;
+    }
+
+    /// <summary>
+    /// Generates an inkatlas from input parameters. Does not generate placeholders, this has to be done in <see cref="VerifyFolderAndGeneratePlaceholders"./>
     /// </summary>
     ///
     /// <returns>A boolean if the write operation to the original path was successful</returns>
@@ -25,11 +57,17 @@ public static class InkatlasImageGenerator
         string atlasFileName,
         int tileWidth,
         int tileHeight,
+        bool cropIcons,
         Cr2WTools cr2WTools,
         Cp77Project activeProject)
     {
+        if (!Directory.Exists(pngFolder)) // shouldn't happen anymore at this point, but better safe than sorry
+        {
+            return false;
+        }
+
         var parts = CreateAtlasImages(pngFolder, relativeSourcePath, atlasFileName, activeProject, tileWidth,
-            tileHeight);
+            tileHeight, cropIcons);
 
         var inkatlas = CreateInkatlas(relativeSourcePath, atlasFileName, parts);
 
@@ -60,53 +98,88 @@ public static class InkatlasImageGenerator
 
     public static void GenerateDummyIcons(string folderPath, string prefix, string[] variants)
     {
+        // nothing to do
+        if (variants.Length == 0)
+        {
+            return;
+        }
+
         Directory.CreateDirectory(folderPath);
-        try
+
+        foreach (var (variant, idx) in variants.Select((v, i) => (v, i)))
         {
-            foreach (var file in Directory.GetFiles(folderPath))
+            var safeVariant = variant.ToArchiveFileName();
+
+            if (string.IsNullOrWhiteSpace(safeVariant))
             {
-                File.Delete(file);
+                safeVariant = $"icon_{idx}";
             }
-        }
-        catch
-        {
-            // don't delete, we'll have extra items
-        }
 
-        foreach (var variant in variants)
-        {
-            var fileName = Path.Combine(folderPath, $"{prefix}{variant}.png");
+            var fileName = Path.Combine(folderPath, $"{prefix}{safeVariant}.png");
 
+            if (File.Exists(fileName))
+            {
+                continue;
+            }
 
             using var bmp = new Bitmap(160, 160);
             using var g = Graphics.FromImage(bmp);
-
-            // Use a simpler font constructor and ensure high quality rendering
-            using var font = new Font("Arial", 14, FontStyle.Bold); // Simplified font creation
-            using var brush = new SolidBrush(Color.Black); // Use SolidBrush instead of Brushes.Black
-            using var stringFormat = new StringFormat()
+            using var font = new Font("Arial", 14, FontStyle.Bold);
+            using var brush = new SolidBrush(Color.Black);
+            using var stringFormat = new StringFormat
             {
                 Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center
             };
 
-            // Clear background white
             g.Clear(Color.White);
-
-
-            // Set high quality rendering
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-
-            // Draw the text centered using StringFormat
             g.DrawString(variant, font, brush, new RectangleF(0, 0, bmp.Width, bmp.Height), stringFormat);
 
-            // Save as PNG
-            bmp.Save(fileName, ImageFormat.Png);
+            // write to temp file first to avoid A generic error occurred in GDI+
+            var tmp = fileName + ".tmp";
+            bmp.Save(tmp, ImageFormat.Png);
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            File.Move(tmp, fileName);
+            // bmp.Save(fileName, ImageFormat.Png);
         }
     }
 
+    private static Bitmap RenderToTile(Image source, int tileWidth, int tileHeight, bool cropIcons)
+    {
+        var srcW = source.Width;
+        var srcH = source.Height;
+
+        var scaleX = (double)tileWidth / srcW;
+        var scaleY = (double)tileHeight / srcH;
+
+        // contain (no crop) vs cover (crop)
+        var scale = cropIcons ? Math.Max(scaleX, scaleY) : Math.Min(scaleX, scaleY);
+
+        var drawW = (int)Math.Round(srcW * scale);
+        var drawH = (int)Math.Round(srcH * scale);
+
+        var offsetX = (tileWidth - drawW) / 2;
+        var offsetY = (tileHeight - drawH) / 2;
+
+        var tile = new Bitmap(tileWidth, tileHeight);
+        using var g = Graphics.FromImage(tile);
+        g.Clear(Color.Transparent);
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+        g.DrawImage(source, new Rectangle(offsetX, offsetY, drawW, drawH));
+        return tile;
+    }
+
     private static List<AtlasPart> CreateAtlasImages(string pngFolder, string relativeSourcePath, string atlasFileName,
-        Cp77Project activeProject, int tileWidth, int tileHeight)
+        Cp77Project activeProject, int tileWidth, int tileHeight, bool cropIcons)
     {
         // Get all PNG files from source folder
         var pngFiles = Directory.GetFiles(pngFolder, "*.png");
@@ -122,45 +195,38 @@ public static class InkatlasImageGenerator
             try
             {
                 using var originalImage = Image.FromFile(file);
-                var originalWidth = originalImage.Width;
-                var originalHeight = originalImage.Height;
+                var sourceWidth = originalImage.Width;
+                var sourceHeight = originalImage.Height;
 
-                // Apply scaling if tile dimensions are specified
-                if (tileWidth > 0 || tileHeight > 0)
+                Bitmap preparedImage;
+                int originalWidth;
+                int originalHeight;
+
+// If tile size is explicitly provided, generate a fixed-size tile bitmap.
+                if (tileWidth > 0 && tileHeight > 0)
                 {
-                    var (scaledWidth, scaledHeight) = CalculateScaledDimensions(
-                        originalWidth,
-                        originalHeight,
-                        tileWidth,
-                        tileHeight
-                    );
-
-                    using var scaledImage = new Bitmap(scaledWidth, scaledHeight);
-                    using (var g = Graphics.FromImage(scaledImage))
-                    {
-                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                        g.DrawImage(originalImage, 0, 0, scaledWidth, scaledHeight);
-                    }
-
-                    originalWidth = scaledWidth;
-                    originalHeight = scaledHeight;
+                    preparedImage = RenderToTile(originalImage, tileWidth, tileHeight, cropIcons);
+                    originalWidth = tileWidth;
+                    originalHeight = tileHeight;
                 }
-
-                // Ensure image dimensions are divisible by 2
-                var paddedWidth = originalWidth + (originalWidth % 2);
-                var paddedHeight = originalHeight + (originalHeight % 2);
-
-                var paddedImage = new Bitmap(paddedWidth, paddedHeight);
-                using (var g = Graphics.FromImage(paddedImage))
+                else
                 {
+                    // Fallback: keep source dimensions, ensure divisible by 2 like before.
+                    originalWidth = sourceWidth;
+                    originalHeight = sourceHeight;
+
+                    var paddedWidth = originalWidth + (originalWidth % 2);
+                    var paddedHeight = originalHeight + (originalHeight % 2);
+
+                    preparedImage = new Bitmap(paddedWidth, paddedHeight);
+                    using var g = Graphics.FromImage(preparedImage);
                     g.Clear(Color.Transparent);
                     g.DrawImage(originalImage, 0, 0, originalWidth, originalHeight);
                 }
 
-                images.Add(new ImageData
-                (
+                images.Add(new ImageData(
                     file,
-                    paddedImage,
+                    preparedImage,
                     Path.GetFileNameWithoutExtension(file).ToArchiveFileName(),
                     originalWidth,
                     originalHeight
@@ -420,4 +486,5 @@ public static class InkatlasImageGenerator
         public Rectangle PixelRect { get; init; }
         public RectangleF UvRect { get; init; }
     }
+
 }
