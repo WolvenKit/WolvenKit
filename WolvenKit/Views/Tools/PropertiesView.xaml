@@ -28,10 +28,6 @@
                     TargetType="{x:Type syncfusion:TabItemExt}">
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                     <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
-                    <!-- unselected tabs follow the theme surface -->
-                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
-                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
                     <!--  Style x:Null: the title inherits the tab foreground (readable on the accent-colored selected tab)  -->
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
@@ -381,6 +377,7 @@
                                     Command="hx:ViewportCommands.Rotate"
                                     Gesture="Shift+MiddleClick" />
                             </hx:Viewport3DX.InputBindings>
+
                             <hx:DirectionalLight3D
                                 Direction="0, -1, 0"
                                 Color="White" />
@@ -396,11 +393,13 @@
                             <hx:DirectionalLight3D
                                 Direction="-1, 0, 0"
                                 Color="White" />
+
                             <hx:DynamicReflectionMap3D>
                                 <hx:ItemsModel3D
                                     x:Name="hxContentVisual"
                                     ItemsSource="{Binding ModelGroup}" />
                             </hx:DynamicReflectionMap3D>
+
                             <hx:Viewport3DX.ContextMenu>
                                 <ContextMenu Style="{StaticResource WPFContextMenuStyle}">
                                     <MenuItem
@@ -417,6 +416,7 @@
                             </hx:Viewport3DX.ContextMenu>
                         </hx:Viewport3DX>
                     </Border>
+
                     <StackPanel
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
@@ -433,6 +433,7 @@
                                 TextWrapping="Wrap" />
                         </Expander>
                     </StackPanel>
+
                     <syncfusion:DropDownButtonAdv
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
@@ -447,6 +448,7 @@
                                 <Setter Property="Background" Value="Transparent" />
                             </Style>
                         </syncfusion:DropDownButtonAdv.Style>
+
                         <syncfusion:DropDownButtonAdv.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconMaterial
@@ -457,6 +459,7 @@
                                     VerticalAlignment="Center" />
                             </DataTemplate>
                         </syncfusion:DropDownButtonAdv.IconTemplate>
+
                         <Border
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             HorizontalAlignment="Right"
@@ -470,6 +473,27 @@
                                     HorizontalAlignment="Left"
                                     Content="Show wireframe"
                                     IsChecked="{Binding ShowWireFrame}" />
+                                <!--
+                                    CheckBox
+                                    Name="ReadPolygonIndicesCheckBox"
+                                    Margin="0,4,0,0"
+                                    HorizontalAlignment="Left"
+                                    Checked="OnReadPolygonIndicesCheckBoxCheckedChanged"
+                                    Content="Read PolygonIndices"
+                                    IsChecked="True"
+                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
+                                    ToolTip="When checked ReaderObj will read PolygonIndices collection that can be used to show polygons instead of triangles. Object need to be shown with wireframe to see the difference."
+                                    Unchecked="OnReadPolygonIndicesCheckBoxCheckedChanged" /
+                                -->
+
+                                <!--
+                                    Button
+                                    Name="ShowInfoButton"
+                                    Margin="0,20,0,0"
+                                    Click="ShowInfoButton_OnClick"
+                                    Content="Show objects info"
+                                    IsEnabled="False" /
+                                -->
                             </StackPanel>
                         </Border>
                     </syncfusion:DropDownButtonAdv>
