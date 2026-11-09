@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3075
+      author: "gistya"
+      description: "Added 'lazy loading' with accurate progress indicator for quest/scene/behavior graphs. This also fixes the loading animation for graphs that was already in the app but previously did not play correctly."
