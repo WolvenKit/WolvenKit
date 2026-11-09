@@ -1414,6 +1414,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 case ERawFileFormat.tga:
                 case ERawFileFormat.bmp:
                 case ERawFileFormat.jpg:
+                case ERawFileFormat.jpeg:
                 case ERawFileFormat.png:
                 case ERawFileFormat.tiff:
                 case ERawFileFormat.dds:

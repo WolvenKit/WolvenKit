@@ -1,0 +1,38 @@
+Local diagnostics (private development branch)
+
+Build the desktop executable with:
+dotnet publish WolvenKit/WolvenKit.csproj -c Release -p:Platform=x64 -p:LocalDiagnostics=true -o <publish-directory>
+
+Run synchronously from PowerShell:
+$process = Start-Process <publish-directory>/WolvenKit.exe -ArgumentList '--local-diagnostics "<raw-directory>" "<empty-output-directory>" "<report.json>"' -Wait -PassThru
+$process.ExitCode
+
+Use absolute paths. The input directory must exist. Output must be a separate,
+empty directory; choose a new output directory for each run. Reports overwrite
+the explicitly supplied report file. The normal game executable/Oodle setting
+must point to your legitimate local installation.
+
+The executable initializes its real dependency container and Oodle, then runs
+without opening the shell. It enumerates input files through the exact predicate
+used by Import Tool, constructs the real ImportableItemViewModel, and imports
+textures through ImportExportHelper. Other file types are reported but are not
+imported. Each source gets an independent destination to avoid same-stem files
+overwriting each other. Generated XBM files are reopened with Red4ParserService.
+
+Report fields: source SHA256, Import Tool visibility, option type, import result,
+output path, parse result/root type and full errors. Exit 0 means the probe ran
+without exceptions; inspect each result to determine feature support. Exit 1
+means a captured error; exit 2 means invalid command syntax.
+
+This is an executable integration probe, not a screenshot or proof that UI
+navigation works. It intentionally does not create/load a project or scan game
+archives: texture settings use the same default fallback as an unmatched texture
+in a project. It cannot verify loading texture settings from a vanilla archive.
+There is no HTTP listener or arbitrary command execution. Without the build
+property, the diagnostic class and startup entry point are excluded entirely.
+
+Issue 2805 regression scenario:
+Copy one valid JPEG to texture_d.jpg and texture_d.jpeg in the input directory.
+Their SHA256 must match. Before the fix, only .jpg is visible and importable.
+After the fix, both should use XbmImportArgs, import successfully, and parse as
+CBitmapTexture. Keep before and after reports and published directories separate.
