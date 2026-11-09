@@ -13,11 +13,15 @@ namespace WolvenKit.Helpers
     /// surfaces that the MaterialDark theme does not recolor, so the theme text color becomes unreadable on them.
     /// When such a window or editor is shown, its large neutral (gray) surfaces are replaced with theme backgrounds:
     /// light ones with ContentBackground, and, in the window itself, dark ones with ContentBackgroundAlt2.
+    /// The channel labels (H, S, V, A / R, G, B) are dimmed by the base style; they use the theme text color.
     /// </summary>
     public static class ColorDialogThemeFix
     {
         private const string s_lightSurfaceKey = "ContentBackground";
         private const string s_darkSurfaceKey = "ContentBackgroundAlt2";
+        private const string s_labelForegroundKey = "ContentForeground";
+
+        private static readonly string[] s_channelLabels = { "H", "S", "V", "A", "R", "G", "B" };
 
         // Only large containers are recolored, so color swatches (including white/gray ones) stay untouched.
         private const double s_minWidth = 80;
@@ -52,6 +56,9 @@ namespace WolvenKit.Helpers
             else
             {
                 RecolorDeferred(edit, false);
+
+                // Switching between HSV and RGB rebuilds the channel labels.
+                edit.AddHandler(Selector.SelectionChangedEvent, new SelectionChangedEventHandler((_, _) => RecolorDeferred(edit, false)));
             }
         }
 
@@ -80,6 +87,9 @@ namespace WolvenKit.Helpers
             {
                 switch (element)
                 {
+                    case TextBlock textBlock:
+                        FixChannelLabel(textBlock);
+                        break;
                     case Panel:
                         Fix(element, Panel.BackgroundProperty, includeDark);
                         break;
@@ -97,6 +107,17 @@ namespace WolvenKit.Helpers
             {
                 Recolor(VisualTreeHelper.GetChild(node, i), includeDark);
             }
+        }
+
+        private static void FixChannelLabel(TextBlock textBlock)
+        {
+            if (Array.IndexOf(s_channelLabels, textBlock.Text) < 0)
+            {
+                return;
+            }
+
+            textBlock.SetResourceReference(TextBlock.ForegroundProperty, s_labelForegroundKey);
+            textBlock.SetCurrentValue(UIElement.OpacityProperty, 1.0);
         }
 
         private static void Fix(FrameworkElement element, DependencyProperty property, bool includeDark)
