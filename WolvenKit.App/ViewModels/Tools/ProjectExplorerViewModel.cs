@@ -1404,7 +1404,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         void SetImportArgs(ImportArgsWrapper displayArgs, GlobalImportArgs args, string filePath)
         {
             var extension = Path.GetExtension(filePath).TrimStart('.');
-            if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
+            if (!RawFileFormatParser.TryParse(extension, out var rawFileFormat))
             {
                 return;
             }

@@ -203,19 +203,19 @@ public partial class ImportExportHelper
     public static bool CanImportFilepath(string filePath)
     {
         var fileExtension = Path.GetExtension(filePath).TrimStart('.');
-        if (!Enum.TryParse<ERawFileFormat>(fileExtension.ToLower(), out var _))
+        if (!RawFileFormatParser.TryParse(fileExtension, out var format))
         {
             return false;
         }
 
-        switch (fileExtension)
+        switch (format)
         {
             // masklist items
-            case "png":
+            case ERawFileFormat.png:
                 var masklistPath  = (Path.GetDirectoryName(filePath)?? "").Replace("_layers", ".masklist");
                 return !File.Exists(masklistPath) && !filePath.Contains($".inkatlas{Path.DirectorySeparatorChar}");
             // morphtarget texturesF
-            case "dds":
+            case ERawFileFormat.dds:
                 var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
                 var morphtargetFolderName = NumberedDdsFileRegex().Replace(Path.GetFileName(filePath), "textures");
                 return parentDirName != morphtargetFolderName;

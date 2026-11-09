@@ -1028,6 +1028,12 @@ public partial class ProjectResourceTools
                     case IRedHandle handle when handle.GetValue() is CMaterialInstance mInstance:
                         mInstance.BaseMaterial = new CResourceReference<IMaterial>(newValue.DepotPath);
                         break;
+                    case IRedHandle handle when handle.GetValue() is entEffectDesc entEffect:
+                        entEffect.Effect = new CResourceAsyncReference<worldEffect>(newValue.DepotPath);
+                        break;
+                    case IRedHandle handle when handle.GetValue() is effectTrackItemParticles effectTrack:
+                        effectTrack.ParticleSystem = new CResourceReference<CParticleSystem>(newValue.DepotPath);
+                        break;
                     case IRedHandle ira:
                         throw new WolvenKitException(-1,
                             $"Can't replace in IRedHandle property type {ira.RedType}");

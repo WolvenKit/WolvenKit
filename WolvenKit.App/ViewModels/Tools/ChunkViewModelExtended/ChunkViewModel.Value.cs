@@ -103,7 +103,7 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(CUInt64)) && Data is CUInt64 uInt64)
         {
-            Value = uInt64 != 0 ? ((NodeRef)(ulong)uInt64).ToString() : ((ulong)uInt64).ToString();
+            Value = StringHelper.StringifyNodeRefHash(uInt64);
         }
         else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
         {
@@ -577,6 +577,10 @@ public partial class ChunkViewModel
 
                 IsValueExtrapolated = true;
                 return;
+            case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
+                Value = $"{StringHelper.Stringify(aiSpot.Resource.DepotPath)}";
+                IsValueExtrapolated = true;
+                break;
             case worldNode worldNode:
                 Value = StringHelper.Stringify(worldNode, true);
                 IsValueExtrapolated = Value != string.Empty;
@@ -1306,6 +1310,14 @@ public partial class ChunkViewModel
                 return;
             case scnAnimSetAnimNames animNames when animNames.AnimationNames.Count > 0:
                 Value = $"{StringHelper.Stringify(animNames.AnimationNames)}";
+                IsValueExtrapolated = true;
+                return;
+            case worldGlobalNodeID worldGlobalNodeID:
+                Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
+                IsValueExtrapolated = true;
+                return;
+            case worldCompiledNodeInstanceSetupInfo { GlobalNodeId: { } worldGlobalNodeID }:
+                Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
             case rendRenderTextureBlobMemoryLayout rendTexBlobLayout:
