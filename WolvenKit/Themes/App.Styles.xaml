@@ -390,15 +390,6 @@
         <!-- Setter Property="TabPanelBackground" Value="#313131" / -->
     </Style>
 
-    <!-- Global: unselected Syncfusion tabs follow the theme surface -->
-    <Style
-        BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
-        TargetType="{x:Type syncfusion:TabItemExt}">
-        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
-        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
-    </Style>
-
     <!--
         Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
         Doesn't work for base dropdown background yet
