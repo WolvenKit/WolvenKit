@@ -383,6 +383,18 @@ public partial class CR2WWriter
             buffer.SetBytes(newData);
         }
 
+        if (buffer.Data is Types.Legacy.V2310.WorldTransformsBuffer legacyWtb)
+        {
+            using var ms = new MemoryStream();
+            using var transformWriter = new Types.Legacy.V2310.WorldTransformsWriter(ms);
+
+            transformWriter.WriteBuffer(legacyWtb);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
+
         if (buffer.Data is CR2WWrapper wrapper)
         {
             using var ms = new MemoryStream();
