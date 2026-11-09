@@ -11,11 +11,13 @@ namespace WolvenKit.Helpers
     /// <summary>
     /// The "More colors" window of Syncfusion's ColorPickerPalette (and its ColorEdit) keeps light, hardcoded
     /// surfaces that the MaterialDark theme does not recolor, so the theme text color becomes unreadable on them.
-    /// When such a window or editor is shown, large light-gray surfaces are replaced with the theme background.
+    /// When such a window or editor is shown, its large neutral (gray) surfaces are replaced with theme backgrounds:
+    /// light ones with ContentBackground, and, in the window itself, dark ones with ContentBackgroundAlt2.
     /// </summary>
     public static class ColorDialogThemeFix
     {
-        private const string s_backgroundKey = "ContentBackground";
+        private const string s_lightSurfaceKey = "ContentBackground";
+        private const string s_darkSurfaceKey = "ContentBackgroundAlt2";
 
         // Only large containers are recolored, so color swatches (including white/gray ones) stay untouched.
         private const double s_minWidth = 80;
@@ -43,7 +45,14 @@ namespace WolvenKit.Helpers
             }
 
             var window = Window.GetWindow(edit);
-            RecolorDeferred(IsSyncfusionWindow(window) ? window : edit);
+            if (IsSyncfusionWindow(window))
+            {
+                RecolorDeferred(window, true);
+            }
+            else
+            {
+                RecolorDeferred(edit, false);
+            }
         }
 
         private static void OnWindowLoaded(object sender, RoutedEventArgs e)
@@ -53,32 +62,32 @@ namespace WolvenKit.Helpers
                 return;
             }
 
-            RecolorDeferred(window);
+            RecolorDeferred(window, true);
 
             // Tab content (Standard / Custom) is rebuilt when switching tabs.
-            window.AddHandler(Selector.SelectionChangedEvent, new SelectionChangedEventHandler((_, _) => RecolorDeferred(window)));
+            window.AddHandler(Selector.SelectionChangedEvent, new SelectionChangedEventHandler((_, _) => RecolorDeferred(window, true)));
         }
 
         private static bool IsSyncfusionWindow(Window window) =>
             window?.GetType().Namespace?.StartsWith("Syncfusion", StringComparison.Ordinal) == true;
 
-        private static void RecolorDeferred(DependencyObject root) =>
-            root.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => Recolor(root)));
+        private static void RecolorDeferred(DependencyObject root, bool includeDark) =>
+            root.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => Recolor(root, includeDark)));
 
-        private static void Recolor(DependencyObject node)
+        private static void Recolor(DependencyObject node, bool includeDark)
         {
             if (node is FrameworkElement element)
             {
                 switch (element)
                 {
                     case Panel:
-                        Fix(element, Panel.BackgroundProperty);
+                        Fix(element, Panel.BackgroundProperty, includeDark);
                         break;
                     case Border:
-                        Fix(element, Border.BackgroundProperty);
+                        Fix(element, Border.BackgroundProperty, includeDark);
                         break;
                     case Control:
-                        Fix(element, Control.BackgroundProperty);
+                        Fix(element, Control.BackgroundProperty, includeDark);
                         break;
                 }
             }
@@ -86,33 +95,39 @@ namespace WolvenKit.Helpers
             var count = VisualTreeHelper.GetChildrenCount(node);
             for (var i = 0; i < count; i++)
             {
-                Recolor(VisualTreeHelper.GetChild(node, i));
+                Recolor(VisualTreeHelper.GetChild(node, i), includeDark);
             }
         }
 
-        private static void Fix(FrameworkElement element, DependencyProperty property)
+        private static void Fix(FrameworkElement element, DependencyProperty property, bool includeDark)
         {
             if (element.ActualWidth < s_minWidth || element.ActualHeight < s_minHeight)
             {
                 return;
             }
 
-            if (element.GetValue(property) is not SolidColorBrush brush || !IsLightNeutral(brush.Color))
+            if (element.GetValue(property) is not SolidColorBrush brush || !IsOpaqueNeutral(brush.Color, out var isLight))
             {
                 return;
             }
 
-            // Bound backgrounds show the picked color; leave them alone.
+            if (!isLight && !includeDark)
+            {
+                return;
+            }
+
+            // Bound or resource-referenced backgrounds (the picked color, already themed brushes); leave them alone.
             if (DependencyPropertyHelper.GetValueSource(element, property).IsExpression)
             {
                 return;
             }
 
-            element.SetResourceReference(property, s_backgroundKey);
+            element.SetResourceReference(property, isLight ? s_lightSurfaceKey : s_darkSurfaceKey);
         }
 
-        private static bool IsLightNeutral(Color color)
+        private static bool IsOpaqueNeutral(Color color, out bool isLight)
         {
+            isLight = false;
             if (color.A < 200)
             {
                 return false;
@@ -120,7 +135,13 @@ namespace WolvenKit.Helpers
 
             var max = Math.Max(color.R, Math.Max(color.G, color.B));
             var min = Math.Min(color.R, Math.Min(color.G, color.B));
-            return min >= 0xC0 && max - min <= 24;
+            if (max - min > 24)
+            {
+                return false;
+            }
+
+            isLight = min >= 0xC0;
+            return true;
         }
     }
 }
