@@ -192,6 +192,8 @@
     <SolidColorBrush x:Key="WolvenKitAccentShadow" Color="#951C2D" />
     <!--  text on WolvenKitAccent (selected tabs); themes set it with "accentForeground"  -->
     <SolidColorBrush x:Key="WolvenKitAccentForeground" Color="White" />
+    <!--  text on WolvenKitAccentShadow (hovered tabs); for themes whose accent shadow is light  -->
+    <SolidColorBrush x:Key="WolvenKitAccentShadowForeground" Color="White" />
     <SolidColorBrush x:Key="WolvenKitStatusBarReady" Color="#951C2D" />
     <SolidColorBrush x:Key="WolvenKitStatusBarBusy" Color="#FF8C00" />
 
@@ -200,6 +202,8 @@
         move these along (see s_surfaceLinks in ThemeService).
     -->
     <SolidColorBrush x:Key="WolvenKitPanelHeaderSelected" Color="#1F1F1F" />
+    <!--  title of the active panel (on WolvenKitPanelHeaderSelected)  -->
+    <SolidColorBrush x:Key="WolvenKitPanelHeaderSelectedForeground" Color="White" />
     <SolidColorBrush x:Key="WolvenKitPanelTabSelected" Color="#373737" />
     <SolidColorBrush x:Key="WolvenKitPanelLogBackground" Color="#131313" />
     <SolidColorBrush x:Key="WolvenKitPanelCardHover" Color="#2D2D30" />
@@ -383,6 +387,7 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="TabItemHoverBackground" Value="{DynamicResource WolvenKitAccentShadow}" />
         <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+        <Setter Property="TabItemHoverForeground" Value="{DynamicResource WolvenKitAccentShadowForeground}" />
         <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitAccent}" />
         <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
         <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />

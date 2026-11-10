@@ -19,6 +19,12 @@
       "kind": "Brush"
     },
     {
+      "key": "WolvenKitAccentShadowForeground",
+      "group": "Accent",
+      "displayName": "Accent Shadow Foreground",
+      "kind": "Brush"
+    },
+    {
       "key": "WolvenKitStatusBarReady",
       "group": "Accent",
       "displayName": "Status Bar Ready",
@@ -88,6 +94,12 @@
       "key": "WolvenKitPanelHeaderSelected",
       "group": "Panels",
       "displayName": "Panel Header Selected",
+      "kind": "Brush"
+    },
+    {
+      "key": "WolvenKitPanelHeaderSelectedForeground",
+      "group": "Panels",
+      "displayName": "Panel Header Selected Foreground",
       "kind": "Brush"
     },
     {

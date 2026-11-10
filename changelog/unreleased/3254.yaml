@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3254
+      author: "Ametis81"
+      description: "Themes can set the text color of hovered tabs and of the active panel title (for themes with a light accent shadow or panel header)."
