@@ -553,39 +553,25 @@ public partial class ChunkViewModel
 
             #endregion
 
-            case worldCompiledNodeInstanceSetupInfo or V2310.worldCompiledNodeInstanceSetupInfo:
-                var referencedNodeIndex = Data switch
+            case ICompiledNodeInstanceSetupInfo cnisi:
+                var referencedNodeIndex = (int)(ulong)cnisi.NodeIdx;
+                if (Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
+                    referencedNodeIndex < wss.Nodes.Count)
                 {
-                    worldCompiledNodeInstanceSetupInfo sst => (int)(ulong)sst.NodeIdx,
-                    V2310.worldCompiledNodeInstanceSetupInfo lsst => (int)(ulong)lsst.NodeIdx,
-                    _ => -1
-                };
-
-                if (Parent?.Parent?.ResolvedData is not worldStreamingSector wss ||
-                    referencedNodeIndex > wss.Nodes.Count || referencedNodeIndex < 0)
-                {
-                    break;
+                    var node = wss.Nodes[referencedNodeIndex].Chunk;
+                    Value = $"#{referencedNodeIndex}";
+                    if (node?.GetType().Name is {  } nodeName && !string.IsNullOrEmpty(node?.GetType().Name))
+                    {
+                        Value = $"{Value} => {nodeName}";
+                    }
+                    IsValueExtrapolated = true;
                 }
 
-                var node = wss.Nodes[referencedNodeIndex].Chunk;
-                Value = $"#{referencedNodeIndex}";
-                if (node?.GetType().Name is string nodeName && !string.IsNullOrEmpty(nodeName))
+                if (cnisi.GlobalNodeId.Hash != 0)
                 {
-                    Value = $"{Value} => {nodeName}";
+                    Value = $"{Value} ({StringHelper.StringifyNodeRefHash(cnisi.GlobalNodeId.Hash)})";
+                    IsValueExtrapolated = true;
                 }
-
-                var globalNodeId = Data switch
-                {
-                    worldCompiledNodeInstanceSetupInfo sst => sst.GlobalNodeId,
-                    V2310.worldCompiledNodeInstanceSetupInfo lsst => lsst.GlobalNodeId,
-                    _ => null
-                };
-
-                if (globalNodeId is not null && globalNodeId.Hash != 0)
-                {
-                    Value = $"{Value} ({StringHelper.StringifyNodeRefHash(globalNodeId.Hash)})";
-                }
-                IsValueExtrapolated = true;
                 break;
             case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
                 Value = $"{StringHelper.Stringify(aiSpot.Resource.DepotPath)}";

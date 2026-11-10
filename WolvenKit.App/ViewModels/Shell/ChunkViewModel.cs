@@ -608,7 +608,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     [ObservableProperty] private System.Windows.Point _location;
 
-    public bool ShouldShowWorldNodeDataImport => Data is worldCompiledNodeInstanceSetupInfo or V2310.worldCompiledNodeInstanceSetupInfo;
+    public bool ShouldShowWorldNodeDataImport => Data is ICompiledNodeInstanceSetupInfo;
 
     public bool ShouldShowExportNodeData =>
         Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
@@ -2864,21 +2864,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                 }
 
-                var referencedNodeIndex = Data switch
-                {
-                    worldCompiledNodeInstanceSetupInfo sst => (int)(ulong)sst.NodeIdx,
-                    V2310.worldCompiledNodeInstanceSetupInfo lsst => (int)(ulong)lsst.NodeIdx,
-                    _ => -1
-                };
-
-                if (referencedNodeIndex >= 0 && Tab is { } dvm &&
-                    dvm.Chunks[0].Data is worldStreamingSector wss &&
-                    referencedNodeIndex < wss.Nodes.Count)
+                if (Data is ICompiledNodeInstanceSetupInfo cnisi && Tab is { } dvm &&
+                     dvm.Chunks[0].Data is worldStreamingSector wss &&
+                     (int)(ulong)cnisi.NodeIdx < wss.Nodes.Count)
                 {
                     try
                     {
                         var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(
-                            wss.Nodes[referencedNodeIndex].NotNull(), "Node",
+                            wss.Nodes[(int)(ulong)cnisi.NodeIdx].NotNull(), "Node",
                             _appViewModel,
                             this, isreadonly);
                         nodeChunk.CalculateProperties();
