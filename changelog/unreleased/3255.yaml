@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3255
+      author: "Ametis81"
+      description: "Themes: dropdowns, filter boxes and empty CName fields in the property editor follow the color theme instead of staying gray."

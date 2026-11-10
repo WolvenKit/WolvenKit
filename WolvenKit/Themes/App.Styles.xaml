@@ -403,7 +403,7 @@
     <Style
         BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}"
         TargetType="{x:Type syncfusion:ComboBoxAdv}">
-        <Setter Property="Background" Value="#252525" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
     </Style>
 
     <!-- Give all textboxes the same background -->
