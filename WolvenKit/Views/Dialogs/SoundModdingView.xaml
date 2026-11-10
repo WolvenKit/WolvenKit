@@ -105,6 +105,7 @@
                                             Text="{Binding Name}" />
 
                                         <Button
+                                            Style="{StaticResource WKButtonStyle}"
                                             Grid.Column="1"
                                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                             Padding="{DynamicResource WolvenKitMarginTiny}"
@@ -128,6 +129,7 @@
                 <!-- Footer -->
                 <StackPanel Grid.Row="2">
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                         Click="ButtonAddAll_Click">
                         <StackPanel Orientation="Horizontal">
@@ -184,6 +186,7 @@
                                             Text="{Binding Name}" />
 
                                         <Button
+                                            Style="{StaticResource WKButtonStyle}"
                                             Grid.Column="1"
                                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                             Padding="{DynamicResource WolvenKitMarginTiny}"
@@ -292,6 +295,7 @@
             </Grid.ColumnDefinitions>
 
             <Button
+                Style="{StaticResource WKButtonPrimaryStyle}"
                 x:Name="OkButton"
                 Grid.Column="1"
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -301,6 +305,7 @@
                 Content="Save" />
 
             <Button
+                Style="{StaticResource WKButtonStyle}"
                 x:Name="CancelButton"
                 Grid.Column="2"
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"

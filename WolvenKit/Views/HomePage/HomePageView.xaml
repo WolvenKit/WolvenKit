@@ -50,6 +50,7 @@
 
             <!-- Continue to Editor Button -->
             <Button
+                Style="{StaticResource WKButtonStyle}"
                 x:Name="ToEditorButton"
                 Grid.Row="0"
                 Margin="4,4,4,30"
@@ -137,6 +138,7 @@
                         Foreground="{DynamicResource WolvenKitRed}" />
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="CheckForUpdateButton"
                         Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                         Padding="0"

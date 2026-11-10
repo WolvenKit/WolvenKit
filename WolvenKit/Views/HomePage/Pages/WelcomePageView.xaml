@@ -46,7 +46,7 @@
                 <ResourceDictionary>
                     <Style
                         x:Key="WelcomeButton"
-                        BasedOn="{StaticResource ButtonDefault}"
+                        BasedOn="{StaticResource WKButtonStyle}"
                         TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
 
