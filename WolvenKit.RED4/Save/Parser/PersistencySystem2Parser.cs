@@ -47,7 +47,7 @@ public class PersistencySystem2Reader : Red4Reader
 
     public long Remaining => BaseStream.Length - BaseStream.Position;
 
-    public override void ReadClass(RedBaseClass instance, uint size)
+    public override void ReadClass(ref RedBaseClass instance, uint size)
     {
         while (Remaining != 0)
         {
@@ -79,7 +79,7 @@ public class PersistencySystem2Reader : Red4Reader
     {
         var instance = RedTypeManager.Create(type);
 
-        ReadClass(instance, size);
+        ReadClass(ref instance, size);
 
         return instance;
     }
@@ -264,7 +264,7 @@ public class PersistencySystem2Parser : INodeParser
                             using var subMemory = new MemoryStream(reader.ReadBytes((int)size));
                             using var subReader = new PersistencySystem2Reader(subMemory);
 
-                            subReader.ReadClass(instance1, size);
+                            subReader.ReadClass(ref instance1, size);
                         }
                         entry.Data = instance1;
 

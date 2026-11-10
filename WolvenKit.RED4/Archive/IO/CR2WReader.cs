@@ -27,7 +27,7 @@ public partial class CR2WReader : Red4Reader
     {
     }
 
-    public override void ReadClass(RedBaseClass cls, uint size)
+    public override void ReadClass(ref RedBaseClass cls, uint size)
     {
         if (cls is IRedCustomData customCls)
         {
@@ -168,7 +168,7 @@ public partial class CR2WReader : Red4Reader
             return true;
         }
 
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!, GameVersion);
         
         cls.AddDynamicProperty(varName, type);
         value = Read(redTypeInfos, size);

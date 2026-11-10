@@ -25,7 +25,7 @@ public partial class RedPackageReader : Red4Reader
     {
     }
 
-    public override void ReadClass(RedBaseClass cls, uint size)
+    public override void ReadClass(ref RedBaseClass cls, uint size)
     {
         var typeInfo = RedReflection.GetTypeInfo(cls);
 
@@ -97,7 +97,7 @@ public partial class RedPackageReader : Red4Reader
                 continue;
             }
 
-            var (fieldType, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
+            var (fieldType, _) = RedReflection.GetCSTypeFromRedType(redTypeName!, GameVersion);
             cls.AddDynamicProperty(varName, fieldType);
 
             if (compiledPropertyData != null && compiledPropertyData.IsCustomReadNeeded(header))
@@ -314,34 +314,16 @@ public partial class RedPackageReader : Red4Reader
 
         var type = RedReflection.GetFullType(redTypeInfos);
 
-        RedBaseClass? instance = null;
-        if (pointer >= 0)
-        {
-            instance = _chunks[pointer].Instance;
-            _chunks[pointer].IsUsed = true;
-        }
-
-        if (instance is DynamicBaseClass dbc)
-        {
-            var innerType = type.GetGenericArguments()[0];
-            if (innerType == typeof(inkIWidgetController))
-            {
-                instance = dbc.ToDynamicWidgetController();
-                _chunks[pointer] = new ChunkInfo(instance);
-                _chunks[pointer].IsUsed = true;
-            }
-            else if (innerType == typeof(inkWidgetLogicController))
-            {
-                instance = dbc.ToDynamicWidgetLogicController();
-                _chunks[pointer] = new ChunkInfo(instance);
-                _chunks[pointer].IsUsed = true;
-            }
-        }
-
-        if (Activator.CreateInstance(type, instance) is not IRedHandle result)
+        if (Activator.CreateInstance(type) is not IRedHandle result)
         {
             throw new Exception();
         }
+
+        if (!_handles.ContainsKey(pointer))
+        {
+            _handles.Add(pointer, []);
+        }
+        _handles[pointer].Add(result);
 
         return result;
 
@@ -352,17 +334,16 @@ public partial class RedPackageReader : Red4Reader
         var pointer = _reader.ReadInt32();
         var type = RedReflection.GetFullType(redTypeInfos);
 
-        RedBaseClass? instance = null;
-        if (pointer >= 0)
-        {
-            instance = _chunks[pointer].Instance;
-            _chunks[pointer].IsUsed = true;
-        }
-
-        if (Activator.CreateInstance(type, instance) is not IRedWeakHandle result)
+        if (Activator.CreateInstance(type) is not IRedWeakHandle result)
         {
             throw new Exception();
         }
+
+        if (!_handles.ContainsKey(pointer))
+        {
+            _handles.Add(pointer, []);
+        }
+        _handles[pointer].Add(result);
 
         return result;
     }

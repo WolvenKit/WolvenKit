@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types;
 
-public partial class worldCompiledNodeInstanceSetupInfo
+public partial class worldCompiledNodeInstanceSetupInfo : ICompiledNodeInstanceSetupInfo
 {
     [RED("transform")]
     [REDProperty(IsIgnored = true)]

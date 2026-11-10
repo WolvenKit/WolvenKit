@@ -14,9 +14,11 @@ public class RedTypeManager
         return result;
     }
 
-    public static RedBaseClass Create(string redTypeName)
+    public static RedBaseClass Create(string redTypeName, Enums.gameGameVersion gameVersion = Enums.gameGameVersion.Current) => Create(redTypeName, (int)gameVersion);
+
+    public static RedBaseClass Create(string redTypeName, int gameVersion)
     {
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName, gameVersion);
         if (type == null)
         {
             throw new TypeNotFoundException(redTypeName);
@@ -35,9 +37,13 @@ public class RedTypeManager
         return result;
     }
 
-    public static IRedType CreateRedType(string redTypeName, params object[] args)
+    public static IRedType CreateRedType(string redTypeName, params object[] args) => CreateRedType(redTypeName, (int)Enums.gameGameVersion.Current, args);
+
+    public static IRedType CreateRedType(string redTypeName, Enums.gameGameVersion gameVersion, params object[] args) => CreateRedType(redTypeName, (int)gameVersion, args);
+
+    public static IRedType CreateRedType(string redTypeName, int gameVersion, params object[] args)
     {
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName, gameVersion);
         if (type == null)
         {
             throw new TypeNotFoundException(redTypeName);

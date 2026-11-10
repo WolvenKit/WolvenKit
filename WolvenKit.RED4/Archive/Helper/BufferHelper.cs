@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Archive.IO.Legacy.V2310;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Legacy.V2310;
 
 namespace WolvenKit.RED4.Archive;
 
@@ -21,7 +23,7 @@ public static class BufferHelper
         s_bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
         s_bufferReaders.Add("worldInstancedMeshNode.cookedWorldTransformsBuffer", typeof(WorldTransformsReader));
         s_bufferReaders.Add("worldNavigationTileResource.tileBuffers", typeof(TilesReader));
-        //s_bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
+        s_bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
         s_bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
         s_bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
         s_bufferReaders.Add("worldFoliageDestructionNode.compiledData", typeof(CollisionReader));
@@ -29,7 +31,7 @@ public static class BufferHelper
         //s_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
         s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         s_bufferReaders.Add("worldFoliageCompiledResource.dataBuffer", typeof(FoliageReader));
-        
+
         s_bufferReaders.Add("animFacialSetup.bakedData", typeof(AnimFacialSetupBakedDataReader));
         s_bufferReaders.Add("animFacialSetup.mainPosesData", typeof(AnimFacialSetupMainPosesDataReader));
         s_bufferReaders.Add("animFacialSetup.correctivePosesData", typeof(AnimFacialSetupCorrectivePosesDataReader));
