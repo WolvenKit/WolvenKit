@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3245
+      author: "Ametis81"
+      description: "Project Explorer: file watcher handles renames correctly, folder expansion state is kept (also after Expand/Collapse All), faster search filtering."
