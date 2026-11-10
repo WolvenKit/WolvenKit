@@ -46,7 +46,7 @@
                 MinWidth="{DynamicResource WolvenKitHomeSharedHeaderWidth}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource ContentForeground}"
                 FontSize="{DynamicResource WolvenKitFontHeader}"
                 Text="Settings" />
 

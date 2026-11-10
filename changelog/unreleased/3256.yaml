@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3256
+      author: "Ametis81"
+      description: "Text and monochrome icons in menus, dialogs, home pages and tool panels now use the theme text color instead of hardcoded white"

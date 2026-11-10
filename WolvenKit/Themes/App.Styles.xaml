@@ -413,7 +413,7 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt3}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
     </Style>
 
     <!-- Also counts for syncfusion:SfTextBoxExt -->
@@ -422,7 +422,7 @@
         TargetType="{x:Type syncfusion:SfTextBoxExt}">
         <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
     </Style>
 
     <!--

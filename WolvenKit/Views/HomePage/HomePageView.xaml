@@ -69,7 +69,7 @@
                         Padding="{DynamicResource WolvenKitMarginLeft}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="Continue to editor" />
 
@@ -312,7 +312,7 @@
                             Kind="Home"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -335,7 +335,7 @@
                             Kind="Extensions"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -358,7 +358,7 @@
                             Kind="Tune"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"

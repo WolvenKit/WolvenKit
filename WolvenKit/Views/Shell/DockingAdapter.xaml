@@ -24,7 +24,7 @@
                         <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
                     </Trigger>
                     <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
                         <Setter Property="Foreground" Value="{DynamicResource WolvenKitRedShadow}" />
@@ -135,11 +135,11 @@
                     <Setter Property="SplitterBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemBackgroundSelected" Value="{DynamicResource WolvenKitPanelTabSelected}" />
                     <Setter Property="TabItemBorderThickness" Value="0" />
-                    <Setter Property="TabItemForegroundSelected" Value="White" />
+                    <Setter Property="TabItemForegroundSelected" Value="{DynamicResource ContentForeground}" />
                     <Setter Property="TabItemsBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBorderThicknessSelected" Value="0" />
-                    <Setter Property="TabItemsForeground" Value="White" />
+                    <Setter Property="TabItemsForeground" Value="{DynamicResource ContentForeground}" />
                     <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackground}" />
                     <Setter Property="TabPanelBorderBrush" Value="{DynamicResource ContentBackground}" />
                     <Setter Property="TabPanelBorderThickness" Value="0" />
@@ -162,7 +162,7 @@
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="TabItemHoverBackground" Value="{DynamicResource ContentBackgroundAlt3}" />
                     <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource ContentBackgroundAlt3}" />
-                    <Setter Property="TabItemHoverForeground" Value="White" />
+                    <Setter Property="TabItemHoverForeground" Value="{DynamicResource ContentForeground}" />
                     <Setter Property="TabItemSelectedBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <!-- Setter Property="Margin" Value="-1" / -->
 
@@ -197,7 +197,7 @@
                     <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
 
                     <Setter Property="Background" Value="{DynamicResource WolvenKitGray31}" />
-                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 </Style>
             </syncfusion:DockingManager.TabItemStyle>
 

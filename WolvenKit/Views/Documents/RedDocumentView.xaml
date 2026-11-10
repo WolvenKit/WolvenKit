@@ -110,7 +110,7 @@
                                 Kind="Add"
                                 Margin="0"
                                 Size="{DynamicResource WolvenKitIconMicro}"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </Button.Content>
                     </Button>
                 </DataTemplate>
@@ -160,7 +160,7 @@
                                         <templates:IconBox
                                             IconPack="Material"
                                             Kind="Pencil"
-                                            Foreground="White" />
+                                            Foreground="{DynamicResource ContentForeground}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
 

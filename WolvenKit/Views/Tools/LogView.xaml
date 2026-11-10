@@ -341,7 +341,7 @@
                                 Kind="ClipboardArrowRightOutline"
                                 Margin="{DynamicResource WolvenKitMarginMicroVertical}"
                                 Size="{DynamicResource WolvenKitIconMicro}"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </Button>
                     </Grid>
                 </DataTemplate>

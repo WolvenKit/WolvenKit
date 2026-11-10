@@ -57,7 +57,7 @@
                         Padding="{DynamicResource WolvenKitMarginTiny}"
                         HorizontalAlignment="Stretch"
                         Background="{DynamicResource BackgroundColor_Button_Active}"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         Style="{DynamicResource ModernButtonStyle}"
                         Visibility="{Binding ShowButton,
                                              Converter={StaticResource StringToVisibilityConverter}}"

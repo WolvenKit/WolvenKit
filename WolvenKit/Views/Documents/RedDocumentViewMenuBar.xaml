@@ -394,7 +394,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FileArrowLeftRight"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -412,7 +412,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FileArrowLeftRight"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -429,7 +429,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FileEye"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -446,7 +446,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ToggleSwitchOutline"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -463,7 +463,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ToggleSwitchOutline"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -481,7 +481,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="PackageVariantClosedPlus"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -499,7 +499,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="GraphOutline"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -517,7 +517,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Autorenew"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -620,7 +620,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FolderSearchOutline"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -693,7 +693,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="LayersTriple"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -773,7 +773,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ArrowUpBox"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -789,7 +789,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ArrowUpBox"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -826,7 +826,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="TagPlus"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -847,7 +847,7 @@
                         <templates:IconBox
                             IconPack="MaterialDesign"
                             Kind="SwitchAccessShortcut"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -860,7 +860,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="PaletteSwatch"
-                        Foreground="White" />
+                        Foreground="{DynamicResource ContentForeground}" />
                 </MenuItem.Icon>
 
                 <!-- .ent/.app: generate CRUIDs (for selected components) -->
@@ -877,7 +877,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Dice3"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -901,7 +901,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="CogRefresh"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -914,7 +914,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="DatabaseRefreshOutline"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -939,7 +939,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="OctagramEditOutline"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -1020,7 +1020,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Connection"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1038,7 +1038,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Hail"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1056,7 +1056,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="EmoticonHappy"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -1071,7 +1071,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="MovieOpen"
-                        Foreground="White" />
+                        Foreground="{DynamicResource ContentForeground}" />
                 </MenuItem.Icon>
 
                 <!-- Generate lipsync anim sets -->
@@ -1084,7 +1084,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="AccountVoice"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -1102,7 +1102,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Dice3"
-                        Foreground="White" />
+                        Foreground="{DynamicResource ContentForeground}" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -1115,7 +1115,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="CogRefresh"
-                        Foreground="White" />
+                        Foreground="{DynamicResource ContentForeground}" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -1129,7 +1129,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="TextSearch"
-                        Foreground="White" />
+                        Foreground="{DynamicResource ContentForeground}" />
                 </MenuItem.Icon>
 
                 <!-- Run WScript -->
@@ -1154,7 +1154,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="BookSearch"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
