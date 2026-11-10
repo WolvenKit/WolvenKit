@@ -1332,7 +1332,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Background="Transparent"
-            Foreground="Gray"
+            Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
             FontSize="{DynamicResource WolvenKitFontHuge}"
             Opacity="0.8"
             Text="Loading..." />

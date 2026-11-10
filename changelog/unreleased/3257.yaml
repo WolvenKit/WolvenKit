@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3257
+      author: "Ametis81"
+      description: "Loading texts and the trimmed-path fade in reference editors now follow the theme colors"
