@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3258
+      author: "Ametis81"
+      description: "The color picker's More colors window now follows the theme: dark panels and readable channel labels instead of light gray surfaces"
