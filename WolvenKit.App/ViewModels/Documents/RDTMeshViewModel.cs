@@ -10317,10 +10317,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         var instance = material?.Instance as CMaterialInstance;
         var template = ResolveTemplatePath(instance);
-        if (template != null && ClassifyByTemplate(template, name) is { } byTemplate)
+        var directBase = instance?.BaseMaterial.DepotPath.GetResolvedText();
+        if (template != null && ClassifyByTemplate(template, name, directBase) is { } byTemplate)
             return byTemplate;
 
-        var directBase = instance?.BaseMaterial.DepotPath.GetResolvedText();
         var kind = ClassifyMaterial(name, directBase);
 
         // The template could not be resolved (e.g. a mod .mi whose chain is incomplete):
@@ -10371,7 +10371,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         path.Contains("character_mat_instance", StringComparison.Ordinal) ||
         path.Contains("\\common\\skin\\", StringComparison.Ordinal);
 
-    private static MaterialKind? ClassifyByTemplate(string templatePath, string? name)
+    private static MaterialKind? ClassifyByTemplate(string templatePath, string? name, string? directBase = null)
     {
         var file = Path.GetFileNameWithoutExtension(templatePath);
         name ??= string.Empty;
@@ -10410,6 +10410,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Tattoo decals stay plain decals: the makeup overlay bake (DiffuseTexture tint) made
             // them, and the skin under them, look washed out.
             if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips"))
+                return MaterialKind.Makeup;
+            // Character creator makeup (lips, eyes, cheeks) often has a plain name such as
+            // "gold_05_03": its .mi lives under character_customisation_items\makeup\.
+            if (directBase != null &&
+                directBase.Replace('/', '\\').Contains("character_customisation_items\\makeup\\", StringComparison.OrdinalIgnoreCase))
                 return MaterialKind.Makeup;
             return MaterialKind.Decal;
         }
