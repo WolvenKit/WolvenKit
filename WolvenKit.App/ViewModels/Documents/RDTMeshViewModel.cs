@@ -2383,7 +2383,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 material.MetallicFactor = ovMetal * rma;
                 material.RenderEnvironmentMap = material.MetallicFactor > 0.05f || material.RoughnessFactor < 0.4f;
                 // Metals get their colour from the albedo: don't darken it as much.
-                var shade = 0.55f + 0.45f * material.MetallicFactor;
+                var shade = (float)(0.55 + 0.45 * material.MetallicFactor);
                 material.AlbedoColor = new SharpDX.Color4(shade, shade, shade, 1f);
             }
 
