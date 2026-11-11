@@ -229,11 +229,11 @@
                     <MenuItem
                         x:Name="ToolbarImportEntitySpawnerButton"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Import object spawner .json">
+                        Header="Import WorldBuilder .json">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
-                                Kind="TextBoxPlusOutline"
+                                Kind="EarthPlus"
                                 Size="{DynamicResource WolvenKitIconTiny}"
                                 Foreground="{StaticResource WolvenKitCyan}" />
                         </MenuItem.Icon>
