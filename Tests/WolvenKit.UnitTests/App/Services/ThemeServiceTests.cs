@@ -129,6 +129,56 @@ public class ThemeServiceTests
     }
 
     [Fact]
+    public void EffectiveColors_DeriveVariantsOfMainColors()
+    {
+        using var f = new Fixture();
+        var theme = new ThemeDto
+        {
+            Name = "Derived",
+            Colors =
+            {
+                ["WolvenKitRedColor"] = "#C80000",
+                ["WolvenKitCyanColor"] = "#00A0C0",
+                ["WolvenKitCyanShadowColor"] = "#123456",
+                ["ContentForeground"] = "#202020",
+                ["WolvenKitPanelHeaderSelected"] = "#F0E0E0"
+            }
+        };
+
+        var colors = f.Service.ResolveEffectiveColors(theme);
+
+        // dark and translucent variants follow the main color
+        Assert.Equal(Hex("#860000"), colors["WolvenKitRedShadowColor"]);
+        Assert.Equal(Color.FromArgb(0x7F, 0x86, 0x00, 0x00), colors["WolvenKitRedShadow50Color"]);
+        // an explicit variant wins, and its own variants follow it
+        Assert.Equal(Hex("#123456"), colors["WolvenKitCyanShadowColor"]);
+        Assert.Equal(Color.FromArgb(0x7F, 0x12, 0x34, 0x56), colors["WolvenKitCyanShadow50Color"]);
+        // duplicates follow
+        Assert.Equal(Hex("#202020"), colors["ForegroundColor"]);
+        // text on a light colored surface uses the (dark) theme text, not white
+        Assert.Equal(Hex("#202020"), colors["WolvenKitPanelHeaderSelectedForeground"]);
+        Assert.Equal("WolvenKitRedColor", ThemeService.GetLinkedSource("WolvenKitRedShadowColor"));
+    }
+
+    [Fact]
+    public void Overrides_FlattenTranslucentSurfaces()
+    {
+        using var f = new Fixture();
+        var theme = new ThemeDto
+        {
+            Name = "Translucent",
+            Colors = { ["ContentBackground"] = "#801F497D", ["WolvenKitCyan50"] = "#7F52F1FF" }
+        };
+
+        var overrides = f.Service.ResolveOverrides(theme);
+
+        // surfaces: blended over black and opaque, so they look the same everywhere
+        Assert.Equal(Hex("#10253F"), overrides["ContentBackground"]);
+        // intentionally translucent keys keep their alpha
+        Assert.Equal(0x7F, overrides["WolvenKitCyan50"].A);
+    }
+
+    [Fact]
     public void KeyCatalog_EveryKeyHasADescription()
     {
         var catalog = ThemeKeyCatalog.LoadEmbedded();

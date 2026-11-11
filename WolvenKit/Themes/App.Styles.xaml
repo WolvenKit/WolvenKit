@@ -34,7 +34,6 @@
     <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
     <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
     <Color x:Key="WolvenKitPurpleColor">CornflowerBlue</Color>
-    <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
     <Color x:Key="WolvenKitOrangeColor">#FFA359</Color>
     <Color x:Key="WolvenKitOrangeShadowColor">#8C5A31</Color>
@@ -176,9 +175,6 @@
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
 
-    <SolidColorBrush x:Key="WolvenKitSammyRed" Color="#DF2935" />
-    <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
-    <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
     <SolidColorBrush x:Key="WolvenKitRedPale" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
@@ -222,7 +218,6 @@
     <SolidColorBrush x:Key="WolvenKitGray7F" Color="#7F7F7F" />
     <SolidColorBrush x:Key="WolvenKitGray99" Color="#999999" />
     <SolidColorBrush x:Key="WolvenKitGray66" Color="#666666" />
-    <SolidColorBrush x:Key="WolvenKitGrayDD" Color="#DDDDDD" />
     <SolidColorBrush x:Key="WolvenKitGray33" Color="#333333" />
     <SolidColorBrush x:Key="WolvenKitGrayCC" Color="#CCCCCC" />
     <SolidColorBrush x:Key="WolvenKitGray2D" Color="#2D2D30" />
@@ -275,7 +270,6 @@
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow" Color="{StaticResource WolvenKitYellowShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
-    <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
     <SolidColorBrush x:Key="WolvenKitOrange" Color="{StaticResource WolvenKitOrangeColor}" />
     <SolidColorBrush x:Key="WolvenKitOrangeShadow" Color="{StaticResource WolvenKitOrangeShadowColor}" />
@@ -285,10 +279,7 @@
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
-    <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="{StaticResource WolvenKitYellowShadow50Color}" />
-    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F6495ED" />
-    <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
 
     <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />

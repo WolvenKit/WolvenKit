@@ -10,6 +10,19 @@ using WolvenKit.App.Services.Themes;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
+/// <summary>How many colors the theme editor lists.</summary>
+public enum ThemeEditorLevel
+{
+    /// <summary>The main colors; everything else follows them.</summary>
+    Simple,
+
+    /// <summary>All WolvenKit colors, grouped by area.</summary>
+    Advanced,
+
+    /// <summary>Also graph node colors, gray shades and library (Syncfusion, HandyControl) keys.</summary>
+    All
+}
+
 /// <summary>
 /// One color row in the theme editor.
 /// </summary>
@@ -21,7 +34,9 @@ public partial class ThemeColorEntryViewModel : ObservableObject
         IsBasic = basicName is not null;
         DisplayName = basicName ?? entry.DisplayName;
         Group = IsBasic ? ThemeEditorViewModel.BasicGroup : entry.Group;
-        Description = entry.Description ?? "";
+        IsExpert = !IsBasic && ThemeEditorViewModel.IsExpertGroup(entry.Group);
+        var linked = ThemeService.GetLinkedSource(entry.Key);
+        Description = (entry.Description ?? "") + (linked is null ? "" : $"{(entry.Description is null ? "" : " · ")}follows {linked} unless set");
         InheritedColor = inherited;
         Color = current;
     }
@@ -41,6 +56,9 @@ public partial class ThemeColorEntryViewModel : ObservableObject
 
     /// <summary>One of the main colors shown in the simple view of the editor.</summary>
     public bool IsBasic { get; }
+
+    /// <summary>Only listed with <see cref="ThemeEditorLevel.All"/> (node colors, gray shades, library keys).</summary>
+    public bool IsExpert { get; }
 
     /// <summary>Value coming from the base theme (or the WolvenKit defaults).</summary>
     [ObservableProperty]
@@ -83,32 +101,37 @@ public partial class ThemeEditorViewModel : ObservableObject
 
     public const string BasicGroup = "Main colors";
 
-    /// <summary>Colors of the simple view, in display order, with names a theme author understands.</summary>
+    /// <summary>
+    /// Colors of the simple view, in display order, with names a theme author understands.
+    /// Dark / translucent variants, duplicates and text on colored surfaces follow these (see ThemeService).
+    /// </summary>
     private static readonly (string Key, string Name)[] s_basicColors =
     [
         ("ContentBackground", "Background"),
-        ("ContentBackgroundAlt", "Background 2"),
         ("ContentBackgroundAlt2", "Panels"),
-        ("ContentBackgroundAlt3", "Panels, raised"),
+        ("ContentBackgroundAlt3", "Raised surfaces"),
         ("ContentBackgroundAlt4", "Hover / selection"),
-        ("ContentBackgroundAlt5", "Highlight"),
         ("BorderAlt", "Borders"),
         ("ContentForeground", "Text"),
-        ("ForegroundColor", "Text in WolvenKit views"),
+        ("ForegroundColor_Grey1", "Secondary text"),
         ("BackgroundColor_Control", "Input fields"),
-        ("BackgroundColor_Frame_Background", "Frames"),
-        ("BackgroundColor_Frame_Active", "Frames, active"),
+        ("WolvenKitStatusBarReady", "Status bar"),
         ("WolvenKitProjectSource", "Project Explorer: SOURCE"),
-        ("WolvenKitProjectSourceShadow", "Project Explorer: SOURCE, dark"),
         ("WolvenKitProjectResources", "Project Explorer: RESOURCES"),
-        ("WolvenKitProjectResourcesShadow", "Project Explorer: RESOURCES, dark"),
-        ("WolvenKitRedColor", "Red (errors)"),
-        ("WolvenKitYellowColor", "Yellow (warnings)"),
-        ("WolvenKitGreenColor", "Green (success)"),
-        ("WolvenKitPurpleColor", "Purple (debug)"),
-        ("WolvenKitCyanColor", "Cyan"),
-        ("WolvenKitOrangeColor", "Orange"),
+        ("WolvenKitRedColor", "Errors (red)"),
+        ("WolvenKitYellowColor", "Warnings (yellow)"),
+        ("WolvenKitGreenColor", "Success (green)"),
     ];
+
+    /// <summary>Groups only listed with <see cref="ThemeEditorLevel.All"/>.</summary>
+    private static readonly HashSet<string> s_expertGroups = new(StringComparer.Ordinal)
+    {
+        "Quest nodes", "Scene nodes", "Grays", "HandyControl", "Surfaces"
+    };
+
+    public static bool IsExpertGroup(string group) => s_expertGroups.Contains(group);
+
+    public IReadOnlyList<ThemeEditorLevel> Levels { get; } = Enum.GetValues<ThemeEditorLevel>();
 
     private readonly IThemeService _themeService;
 
@@ -181,6 +204,8 @@ public partial class ThemeEditorViewModel : ObservableObject
             .Select(t => t.Name)
             .ToList();
 
+        RefreshInheritedColors();
+
         _isInitializing = false;
         UpdateContrastWarning();
     }
@@ -229,9 +254,9 @@ public partial class ThemeEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _showOnlyOverridden;
 
-    /// <summary>Show all colors, not only the main ones.</summary>
+    /// <summary>How many colors are listed (searching always looks through all of them).</summary>
     [ObservableProperty]
-    private bool _showAdvanced;
+    private ThemeEditorLevel _level;
 
     [ObservableProperty]
     private bool _isDirty;
@@ -325,8 +350,14 @@ public partial class ThemeEditorViewModel : ObservableObject
         }
         if (string.IsNullOrWhiteSpace(FilterText))
         {
-            // simple view: main colors, plus anything this theme already changes
-            return ShowAdvanced || entry.IsBasic || entry.IsOverridden;
+            // anything this theme already changes is always listed
+            return entry.IsOverridden || Level switch
+            {
+                ThemeEditorLevel.Simple => entry.IsBasic,
+                ThemeEditorLevel.Advanced => !entry.IsExpert,
+                ThemeEditorLevel.All => true,
+                _ => true
+            };
         }
         var filter = FilterText.Trim();
         return entry.DisplayName.Contains(filter, StringComparison.OrdinalIgnoreCase)
@@ -409,23 +440,54 @@ public partial class ThemeEditorViewModel : ObservableObject
         OnPropertyChanged(nameof(IsAccentOverridden));
         OnPropertyChanged(nameof(IsAccentForegroundOverridden));
 
-        foreach (var entry in Entries)
-        {
-            var wasOverridden = entry.IsOverridden;
-            var inherited = (baseTheme is null ? null : _themeService.ResolveColor(baseTheme, entry.Key))
-                            ?? _themeService.GetDefaultColor(entry.Key)
-                            ?? entry.InheritedColor;
-            entry.InheritedColor = inherited;
-            if (!wasOverridden)
-            {
-                entry.Color = inherited;
-            }
-        }
-
+        RefreshInheritedColors();
         RaisePaletteChanged();
     }
 
-    partial void OnAccentChanged(Color value) => RaisePaletteChanged();
+    private bool _isRefreshing;
+
+    /// <summary>
+    /// Updates what each color gets when this theme does not set it: the base theme's value, or the value derived
+    /// from another color of this theme (e.g. a dark variant follows its main color). Colors the theme sets stay.
+    /// </summary>
+    private void RefreshInheritedColors()
+    {
+        var baseTheme = GetBaseTheme();
+        var baseColors = baseTheme is null ? null : _themeService.ResolveEffectiveColors(baseTheme);
+        var currentColors = _themeService.ResolveEffectiveColors(BuildDefinition());
+
+        _isRefreshing = true;
+        try
+        {
+            foreach (var entry in Entries)
+            {
+                var fallback = _themeService.GetDefaultColor(entry.Key) ?? entry.InheritedColor;
+                if (entry.IsOverridden)
+                {
+                    entry.InheritedColor = baseColors is not null && baseColors.TryGetValue(entry.Key, out var b) ? b : fallback;
+                }
+                else
+                {
+                    var effective = currentColors.TryGetValue(entry.Key, out var c) ? c : fallback;
+                    entry.InheritedColor = effective;
+                    entry.Color = effective;
+                }
+            }
+        }
+        finally
+        {
+            _isRefreshing = false;
+        }
+    }
+
+    partial void OnAccentChanged(Color value)
+    {
+        if (!_isInitializing)
+        {
+            RefreshInheritedColors();
+        }
+        RaisePaletteChanged();
+    }
 
     partial void OnAccentForegroundChanged(Color value) => RaisePaletteChanged();
 
@@ -445,8 +507,12 @@ public partial class ThemeEditorViewModel : ObservableObject
 
     private void OnEntryChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ThemeColorEntryViewModel.Color))
+        if (e.PropertyName == nameof(ThemeColorEntryViewModel.Color) && !_isRefreshing)
         {
+            if (!_isInitializing)
+            {
+                RefreshInheritedColors();
+            }
             RaisePaletteChanged();
         }
     }

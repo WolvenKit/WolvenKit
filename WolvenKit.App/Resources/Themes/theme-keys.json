@@ -25,7 +25,8 @@
       "key": "WolvenKitAccentShadowForeground",
       "group": "Accent",
       "displayName": "Accent Shadow Foreground",
-      "kind": "Brush"
+      "kind": "Brush",
+      "description": "Text on hovered tabs (on the accent shadow color)"
     },
     {
       "key": "WolvenKitStatusBarReady",
@@ -115,7 +116,8 @@
       "key": "WolvenKitPanelHeaderSelectedForeground",
       "group": "Panels",
       "displayName": "Panel Header Selected Foreground",
-      "kind": "Brush"
+      "kind": "Brush",
+      "description": "Text on the active panel header"
     },
     {
       "key": "WolvenKitPanelTabSelected",
@@ -214,13 +216,6 @@
       "displayName": "Gray66",
       "kind": "Brush",
       "description": "Placeholder / empty-value text in reference, CName, tweak and path fields"
-    },
-    {
-      "key": "WolvenKitGrayDD",
-      "group": "Grays",
-      "displayName": "Gray DD",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
     },
     {
       "key": "WolvenKitGray33",
@@ -611,16 +606,6 @@
       ]
     },
     {
-      "key": "WolvenKitDarkPinkColor",
-      "group": "Palette",
-      "displayName": "Dark Pink",
-      "kind": "Color",
-      "description": "Not used by WolvenKit views at the moment",
-      "derivedBrushes": [
-        "WolvenKitDarkPink"
-      ]
-    },
-    {
       "key": "WolvenKitTanColor",
       "group": "Palette",
       "displayName": "Tan",
@@ -755,53 +740,11 @@
       ]
     },
     {
-      "key": "WolvenKitSammyRed",
-      "group": "Palette",
-      "displayName": "Sammy Red",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
-    },
-    {
-      "key": "WolvenKitSammyRedShaded",
-      "group": "Palette",
-      "displayName": "Sammy Red Shaded",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
-    },
-    {
-      "key": "WolvenKitSammyBlack",
-      "group": "Palette",
-      "displayName": "Sammy Black",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
-    },
-    {
       "key": "WolvenKitCyan50",
       "group": "Palette",
       "displayName": "Cyan50",
       "kind": "Brush",
       "description": "Translucent cyan: ink atlas part outlines and labels"
-    },
-    {
-      "key": "WolvenKitYellow50",
-      "group": "Palette",
-      "displayName": "Yellow50",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
-    },
-    {
-      "key": "WolvenKitPurple50",
-      "group": "Palette",
-      "displayName": "Purple50",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
-    },
-    {
-      "key": "WolvenKitTan25",
-      "group": "Palette",
-      "displayName": "Tan25",
-      "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
     },
     {
       "key": "WolvenKitTan50",

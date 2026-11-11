@@ -386,7 +386,7 @@ public sealed partial class ThemeService : IThemeService
             {
                 if (TryParseColor(value) is { } color)
                 {
-                    result[key] = color;
+                    result[key] = IsOpaqueSurface(key) ? FlattenOnBlack(color) : color;
                 }
                 else
                 {
@@ -397,8 +397,30 @@ public sealed partial class ThemeService : IThemeService
         return result;
     }
 
+    /// <summary>
+    /// Surfaces the window and panels are painted with. WPF draws the window background opaque (it ignores alpha),
+    /// while the same color with alpha on a nested panel blends with the dark layer below, so a translucent surface
+    /// color would look different from place to place. They get the blended, opaque color everywhere instead.
+    /// </summary>
+    internal static bool IsOpaqueSurface(string key) =>
+        key.StartsWith("ContentBackground", StringComparison.Ordinal)
+        || key.StartsWith("BackgroundColor_", StringComparison.Ordinal)
+        || key is "WolvenKitPanelHeaderSelected" or "WolvenKitPanelTabSelected" or "WolvenKitPanelLogBackground"
+            or "WolvenKitPanelCardHover" or "WolvenKitPanelProgressTrack" or "WolvenKitStatusBarReady" or "WolvenKitStatusBarBusy";
+
+    /// <summary>The color as it looks drawn with its alpha over black, made opaque.</summary>
+    internal static Color FlattenOnBlack(Color color) =>
+        color.A == 0xFF
+            ? color
+            : Color.FromRgb(
+                (byte)Math.Round(color.R * color.A / 255.0),
+                (byte)Math.Round(color.G * color.A / 255.0),
+                (byte)Math.Round(color.B * color.A / 255.0));
+
     public Color? ResolveColor(ThemeDto theme, string key) =>
         ResolveOverrides(theme).TryGetValue(key, out var color) ? color : GetDefaultColor(key);
+
+    public IReadOnlyDictionary<string, Color> ResolveEffectiveColors(ThemeDto theme) => BuildColorMap(theme);
 
     public Color ResolveAccent(ThemeDto theme) =>
         GetChain(theme).Select(t => TryParseColor(t.Accent)).LastOrDefault(c => c is not null)

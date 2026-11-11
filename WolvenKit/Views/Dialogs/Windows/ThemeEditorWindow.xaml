@@ -191,13 +191,14 @@
                         Content="Only changed"
                         DockPanel.Dock="Right"
                         IsChecked="{Binding ShowOnlyOverridden}" />
-                    <CheckBox
+                    <ComboBox
+                        Width="100"
                         Margin="8,0,0,0"
                         VerticalAlignment="Center"
-                        Content="All colors (advanced)"
                         DockPanel.Dock="Right"
-                        IsChecked="{Binding ShowAdvanced}"
-                        ToolTip="Show every themeable color (Syncfusion surfaces, HandyControl, graphs, nodes, …). Searching always looks through all of them." />
+                        ItemsSource="{Binding Levels}"
+                        SelectedItem="{Binding Level}"
+                        ToolTip="Simple: the main colors, everything else follows them. Advanced: all WolvenKit colors. All: also graph node colors, gray shades and Syncfusion / HandyControl keys. Searching always looks through all colors." />
                     <Button
                         Margin="8,0,0,0"
                         Padding="8,0"

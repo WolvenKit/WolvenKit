@@ -308,7 +308,10 @@ public sealed partial class ThemeService
         var overrides = ResolveOverrides(theme);
         var map = new Dictionary<string, Color>(overrides, StringComparer.Ordinal);
 
-        foreach (var (key, color) in overrides)
+        // variants (dark / translucent / duplicate keys) follow their main color unless the theme sets them
+        AddDerivedColors(map);
+
+        foreach (var (key, color) in map.ToList())
         {
             foreach (var derived in Catalog.Find(key)?.DerivedBrushes ?? [])
             {
@@ -359,7 +362,94 @@ public sealed partial class ThemeService
             map.TryAdd("WolvenKitAccentForeground", accentForeground);
         }
 
+        // text on colored surfaces stays readable when the theme changes the surface but not the text
+        foreach (var (target, surface) in s_readableTextLinks)
+        {
+            if (!map.ContainsKey(target) && map.TryGetValue(surface, out var background))
+            {
+                var text = map.TryGetValue("ContentForeground", out var fg) ? fg : GetDefaultColor("ContentForeground") ?? Colors.White;
+                var readable = ContrastRatio(Colors.White, background) >= ContrastRatio(text, background) ? Colors.White : text;
+                map[target] = readable;
+                foreach (var derived in Catalog.Find(target)?.DerivedBrushes ?? [])
+                {
+                    map.TryAdd(derived, readable);
+                }
+            }
+        }
+
         return map;
+    }
+
+    /// <summary>Main color key → keys derived from it (dark, translucent and duplicate variants).</summary>
+    private static readonly (string Target, string Source, Func<Color, Color> Derive)[] s_derivedColors =
+    [
+        // duplicates
+        ("ForegroundColor", "ContentForeground", c => c),
+        ("BackgroundColor_Frame_Background", "ContentBackgroundAlt", c => c),
+        ("BackgroundColor_Frame_Active", "ContentBackgroundAlt2", c => c),
+
+        // dark variants
+        ("WolvenKitRedShadowColor", "WolvenKitRedColor", c => Darken(c, 0.67)),
+        ("WolvenKitGreenShadowColor", "WolvenKitGreenColor", c => Darken(c, 0.67)),
+        ("WolvenKitCyanShadowColor", "WolvenKitCyanColor", c => Darken(c, 0.6)),
+        ("WolvenKitYellowShadowColor", "WolvenKitYellowColor", c => Darken(c, 0.67)),
+        ("WolvenKitOrangeShadowColor", "WolvenKitOrangeColor", c => Darken(c, 0.55)),
+        ("WolvenKitProjectSourceShadow", "WolvenKitProjectSource", c => Darken(c, 0.67)),
+        ("WolvenKitProjectResourcesShadow", "WolvenKitProjectResources", c => Darken(c, 0.67)),
+
+        // translucent variants (after the dark variants they are based on)
+        ("WolvenKitRedShadow50Color", "WolvenKitRedShadowColor", c => WithAlpha(c, 0x7F)),
+        ("WolvenKitRedShadow25Color", "WolvenKitRedShadowColor", c => WithAlpha(Darken(c, 0.55), 0x7F)),
+        ("WolvenKitCyanShadow50Color", "WolvenKitCyanShadowColor", c => WithAlpha(c, 0x7F)),
+        ("WolvenKitCyanShadow25Color", "WolvenKitCyanShadowColor", c => WithAlpha(Darken(c, 0.55), 0x7F)),
+        ("WolvenKitYellowShadow50Color", "WolvenKitYellowShadowColor", c => WithAlpha(c, 0x7F)),
+        ("WolvenKitYellowShadow25Color", "WolvenKitYellowShadowColor", c => WithAlpha(Darken(c, 0.55), 0x7F)),
+        ("WolvenKitCyan50", "WolvenKitCyanColor", c => WithAlpha(c, 0x7F)),
+        ("WolvenKitTan50", "WolvenKitTanColor", c => WithAlpha(c, 0x7F)),
+    ];
+
+    /// <summary>Text key → the colored surface it is drawn on.</summary>
+    private static readonly (string Target, string Surface)[] s_readableTextLinks =
+    [
+        ("WolvenKitAccentShadowForeground", "WolvenKitAccentShadow"),
+        ("WolvenKitPanelHeaderSelectedForeground", "WolvenKitPanelHeaderSelected"),
+    ];
+
+    /// <summary>The key another key follows when a theme does not set it (shown in the theme editor), or null.</summary>
+    public static string? GetLinkedSource(string key) =>
+        s_derivedColors.FirstOrDefault(d => d.Target == key).Source
+        ?? s_readableTextLinks.FirstOrDefault(d => d.Target == key).Surface
+        ?? s_surfaceLinks.FirstOrDefault(d => d.Target == key).Source;
+
+    /// <summary>Adds the derived variants of every main color the map contains (explicit values win).</summary>
+    private static void AddDerivedColors(Dictionary<string, Color> map)
+    {
+        foreach (var (target, source, derive) in s_derivedColors)
+        {
+            if (map.TryGetValue(source, out var color))
+            {
+                map.TryAdd(target, derive(color));
+            }
+        }
+    }
+
+    private static Color WithAlpha(Color color, byte alpha) => Color.FromArgb(alpha, color.R, color.G, color.B);
+
+    /// <summary>WCAG 2 contrast ratio of two colors (1 … 21), alpha ignored.</summary>
+    internal static double ContrastRatio(Color a, Color b)
+    {
+        var la = RelativeLuminance(a);
+        var lb = RelativeLuminance(b);
+        return (Math.Max(la, lb) + 0.05) / (Math.Min(la, lb) + 0.05);
+
+        static double RelativeLuminance(Color c) =>
+            (0.2126 * Channel(c.R)) + (0.7152 * Channel(c.G)) + (0.0722 * Channel(c.B));
+
+        static double Channel(byte value)
+        {
+            var v = value / 255.0;
+            return v <= 0.03928 ? v / 12.92 : Math.Pow((v + 0.055) / 1.055, 2.4);
+        }
     }
 
     /// <summary>
