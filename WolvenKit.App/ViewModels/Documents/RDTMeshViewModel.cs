@@ -1684,8 +1684,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         else if (Has(kind, MaterialKind.Glass))
         {
-            sm.IsTransparent = true;
-            sm.DepthBias = -1;
+            // glass_deferred is drawn opaque in the game (glass-like metal, no transmission).
+            if (!IsDeferredGlass(sm.MaterialName))
+            {
+                sm.IsTransparent = true;
+                sm.DepthBias = -1;
+            }
         }
         else if (Has(kind, MaterialKind.Decal))
         {
@@ -2378,6 +2382,37 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         // glass (base\materials\glass.mt)
         // Baked PNG already mixes TintColor glass with MaskTexture label.
+        if (Has(kind, MaterialKind.Glass) && IsDeferredGlass(name))
+        {
+            // glass_deferred: opaque; colour, roughness and metalness come from the bake
+            // (glass lobe and MaskTexture surface lobe mixed per pixel).
+            material.RenderEnvironmentMap = true;
+            material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 1f);
+            if (File.Exists(filename_bd))
+            {
+                material.AlbedoMap = GetOrCreateTexture(filename_bd);
+                material.RenderAlbedoMap = true;
+            }
+            if (File.Exists(filename_rm))
+            {
+                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
+                material.RenderRoughnessMetallicMap = true;
+                material.RoughnessFactor = 1f;
+                material.MetallicFactor = 1f;
+            }
+            else
+            {
+                material.RoughnessFactor = DeferredGlassRoughness;
+                material.MetallicFactor = DeferredGlassMetalness;
+            }
+            if (File.Exists(filename_bn))
+            {
+                material.NormalMap = GetOrCreateTexture(filename_bn);
+                material.RenderNormalMap = true;
+            }
+            return material;
+        }
+
         if (Has(kind, MaterialKind.Glass))
         {
             material.RenderEnvironmentMap = true;
@@ -3244,6 +3279,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
     private const float GlassDefaultOpacity = 1f;
 
+    // glass_deferred.mt (Blender add-on glassdeferred.py): the glass lobe has a fixed
+    // roughness; GlassMetalness defaults to 0.8 in the template.
+    private const float DeferredGlassRoughness = 0.1f;
+    private const float DeferredGlassMetalness = 0.8f;
+
     // Haircard albedo multiplier in the preview, tuned by eye against the game.
     private const float HairPreviewAlbedo = 0.4f;
 
@@ -3847,7 +3887,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 _multilayerGpuData.TryRemove(material.Name, out _);
             }
 
-            if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution))
+            // Deferred glass bakes an RM map too; older bakes of it (as transparent glass) have none.
+            if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution) &&
+                (File.Exists(filename_rm) || !IsDeferredGlass(material.Name, material)))
             {
                 Parent?.GetLoggerService()?.Debug($"[Cache] '{material.Name}' up to date");
                 return;
@@ -5990,8 +6032,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 Bitmap? maskBmp = null;
                 try
                 {
-                    var (gBd, gBn, _) = GetMaterialFilePathsFromCache(material?.Name ?? "glass");
-                    if (forceBake || !File.Exists(gBd))
+                    var (gBd, gBn, gRm) = GetMaterialFilePathsFromCache(material?.Name ?? "glass");
+                    var deferredGlass = IsDeferredGlass(material?.Name, material);
+                    if (forceBake || !File.Exists(gBd) || (deferredGlass && !File.Exists(gRm)))
                     {
                         static bool IsPlaceholderTex(string path)
                         {
@@ -6011,6 +6054,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         float maskOp = 0f;
                         if (dictionary.TryGetValue("MaskOpacity", out var moObj))
                             maskOp = Math.Clamp(ReadFloat(moObj), 0f, 1f);
+
+                        // glass_deferred lobes (opaque): glass = tint, GlassMetalness, roughness 0.1;
+                        // surface = MaskTexture (attenuated by the tint), SurfaceMetalness,
+                        // Roughness.r + MaskRoughnessBias. Mixed by Mask.a * MaskOpacity.
+                        float glassMetal = DeferredGlassMetalness, surfaceMetal = 0f, maskRoughBias = 0f, tintAtten = 0f;
+                        if (deferredGlass)
+                        {
+                            if (dictionary.TryGetValue("GlassMetalness", out var gmObj))
+                                glassMetal = Math.Clamp(ReadFloat(gmObj), 0f, 1f);
+                            if (dictionary.TryGetValue("SurfaceMetalness", out var smObj))
+                                surfaceMetal = Math.Clamp(ReadFloat(smObj), 0f, 1f);
+                            if (dictionary.TryGetValue("MaskRoughnessBias", out var mrbObj))
+                                maskRoughBias = Math.Clamp(ReadFloat(mrbObj), -1f, 1f);
+                            if (dictionary.TryGetValue("TintColorAttenuation", out var taObj))
+                                tintAtten = Math.Clamp(ReadFloat(taObj), 0f, 1f);
+                        }
 
                         float tr = 1f, tg = 1f, tb = 1f;
                         if (dictionary.TryGetValue("TintColor", out var tcObj))
@@ -6066,6 +6125,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 maskBmp = await LoadTextureAsBitmap(mRef.DepotPath);
                         }
 
+                        Bitmap? roughBmp = null;
+                        if (deferredGlass &&
+                            dictionary.TryGetValue("Roughness", out var rgObj) &&
+                            rgObj is CResourceReference<ITexture> rgRef &&
+                            rgRef.DepotPath != ResourcePath.Empty)
+                        {
+                            roughBmp = await LoadTextureAsBitmap(rgRef.DepotPath);
+                            if (roughBmp != null)
+                            {
+                                var roughTiled = ApplyUvTileOffset(roughBmp, uvTX, uvTY, uvOX, uvOY);
+                                if (!ReferenceEquals(roughTiled, roughBmp))
+                                {
+                                    roughBmp.Dispose();
+                                    roughBmp = roughTiled;
+                                }
+                            }
+                        }
+
                         var (gtTX, gtTY, gtOX, gtOY) = ReadTileOffset(dictionary, "GlassTintTileAndOffset");
                         if (tintBmp != null)
                         {
@@ -6092,9 +6169,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         int w = maskBmp?.Width ?? tintBmp?.Width ?? 1024;
                         int h = maskBmp?.Height ?? tintBmp?.Height ?? 1024;
                         colorBmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        using var rmBmp = deferredGlass ? new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb) : null;
 
                         var rect = new Rectangle(0, 0, w, h);
-                        System.Drawing.Imaging.BitmapData? dst = null, td = null, md = null;
+                        System.Drawing.Imaging.BitmapData? dst = null, td = null, md = null, rmd = null, rgd = null;
                         try
                         {
                             dst = colorBmp.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -6102,8 +6180,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 td = tintBmp.LockBits(new Rectangle(0, 0, tintBmp.Width, tintBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             if (maskBmp != null)
                                 md = maskBmp.LockBits(new Rectangle(0, 0, maskBmp.Width, maskBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            if (rmBmp != null)
+                                rmd = rmBmp.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            if (roughBmp != null)
+                                rgd = roughBmp.LockBits(new Rectangle(0, 0, roughBmp.Width, roughBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             unsafe
                             {
+                                byte* rmp = rmd == null ? null : (byte*)rmd.Scan0;
+                                byte* rgp = rgd == null ? null : (byte*)rgd.Scan0;
+                                int rmStride = rmd?.Stride ?? 0;
+                                int rgStride = rgd?.Stride ?? 0;
+                                int rgw = roughBmp?.Width ?? 1, rgh = roughBmp?.Height ?? 1;
                                 byte* dp = (byte*)dst!.Scan0;
                                 byte* tp = td == null ? null : (byte*)td.Scan0;
                                 byte* mp = md == null ? null : (byte*)md.Scan0;
@@ -6132,6 +6219,47 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             gg = (byte)(tpx[1] * tg);
                                             gr = (byte)(tpx[2] * tr);
                                         }
+                                        if (rmp != null)
+                                        {
+                                            // glass_deferred: opaque lobe mix, colour + roughness/metalness
+                                            float f = 0f;
+                                            byte sr = gr, sg = gg, sb = gb;
+                                            if (mp != null && maskOp > 0.001f)
+                                            {
+                                                int mx = x * mw / w;
+                                                int my = y * mh / h;
+                                                byte* mpx = mp + my * mStride + mx * 4;
+                                                f = (mpx[glassMaskChannel] / 255f) * maskOp;
+                                                // Surface colour: mask * lerp(1, tint, TintColorAttenuation)
+                                                sb = (byte)(mpx[0] * (1f - tintAtten + tintAtten * gb / 255f));
+                                                sg = (byte)(mpx[1] * (1f - tintAtten + tintAtten * gg / 255f));
+                                                sr = (byte)(mpx[2] * (1f - tintAtten + tintAtten * gr / 255f));
+                                            }
+                                            float surfRough = 0.5f;
+                                            if (rgp != null)
+                                            {
+                                                int rx = x * rgw / w;
+                                                int ry = y * rgh / h;
+                                                surfRough = rgp[ry * rgStride + rx * 4 + 2] / 255f;
+                                            }
+                                            surfRough = Math.Clamp(surfRough + maskRoughBias, 0f, 1f);
+                                            float rough = DeferredGlassRoughness + (surfRough - DeferredGlassRoughness) * f;
+                                            float metal = glassMetal + (surfaceMetal - glassMetal) * f;
+                                            int ro = x * 4;
+                                            byte* rmrow = rmp + y * rmStride;
+                                            rmrow[ro + 0] = (byte)(Math.Clamp(metal, 0f, 1f) * 255f);   // B metalness
+                                            rmrow[ro + 1] = (byte)(Math.Clamp(rough, 0f, 1f) * 255f);   // G roughness
+                                            rmrow[ro + 2] = 255;
+                                            rmrow[ro + 3] = 255;
+
+                                            int o2 = x * 4;
+                                            drow[o2 + 0] = (byte)(gb + (sb - gb) * f);
+                                            drow[o2 + 1] = (byte)(gg + (sg - gg) * f);
+                                            drow[o2 + 2] = (byte)(gr + (sr - gr) * f);
+                                            drow[o2 + 3] = 255;
+                                            continue;
+                                        }
+
                                         // Label over glass by Mask.A * MaskOpacity (addon MixShader factor)
                                         if (mp != null && maskOp > 0.001f)
                                         {
@@ -6161,8 +6289,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 tintBmp.UnlockBits(td);
                             if (md != null && maskBmp != null)
                                 maskBmp.UnlockBits(md);
+                            if (rmd != null && rmBmp != null)
+                                rmBmp.UnlockBits(rmd);
+                            if (rgd != null && roughBmp != null)
+                                roughBmp.UnlockBits(rgd);
                         }
 
+                        roughBmp?.Dispose();
+                        if (rmBmp != null)
+                            SavePngAtomic(rmBmp, gRm);
                         SavePngAtomic(colorBmp, gBd);
                         colorBmp.Dispose();
                         colorBmp = null;
@@ -6186,6 +6321,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                     {
                                         var (nTX, nTY, nOX, nOY) = ReadTileOffset(dictionary, "NormalTileAndOffset");
                                         nTiled = ApplyUvTileOffset(nBmp, uvTX * nTX, uvTY * nTY, uvOX * nTX + nOX, uvOY * nTY + nOY);
+                                        if (dictionary.TryGetValue("NormalStrength", out var nsObj))
+                                        {
+                                            var strength = ReadFloat(nsObj);
+                                            if (Math.Abs(strength - 1f) > 0.001f)
+                                            {
+                                                if (ReferenceEquals(nTiled, nBmp))
+                                                    nTiled = new Bitmap(nBmp);
+                                                ScaleNormalStrength(nTiled, Math.Max(0f, strength));
+                                            }
+                                        }
                                         SavePngAtomic(nTiled, gBn);
                                     }
                                     finally
@@ -10010,6 +10155,46 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         });
 
         return cached.Length == 0 ? null : cached;
+    }
+
+    /// <summary>Tangent normal map: XY scaled by the strength, Z rebuilt (glass NormalStrength).</summary>
+    private static void ScaleNormalStrength(Bitmap bmp, float strength)
+    {
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            unsafe
+            {
+                for (var y = 0; y < bmp.Height; y++)
+                {
+                    var row = (byte*)data.Scan0 + y * data.Stride;
+                    for (var x = 0; x < bmp.Width; x++)
+                    {
+                        var px = row + x * 4;
+                        var nx = Math.Clamp((px[2] / 255f * 2f - 1f) * strength, -1f, 1f);
+                        var ny = Math.Clamp((px[1] / 255f * 2f - 1f) * strength, -1f, 1f);
+                        var nz = MathF.Sqrt(Math.Max(0f, 1f - nx * nx - ny * ny));
+                        px[2] = (byte)((nx * 0.5f + 0.5f) * 255f);
+                        px[1] = (byte)((ny * 0.5f + 0.5f) * 255f);
+                        px[0] = (byte)((nz * 0.5f + 0.5f) * 255f);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+    }
+
+    /// <summary>glass_deferred.mt: glass look, but opaque (no transmission).</summary>
+    private bool IsDeferredGlass(string? name, Material? material = null)
+    {
+        if (material == null && (string.IsNullOrEmpty(name) || !TryGetRawMaterial(name, out material)))
+            return false;
+
+        return GetTemplateFileName(material).Equals("glass_deferred", StringComparison.OrdinalIgnoreCase);
     }
 
     private string GetTemplateFileName(Material? material) =>
