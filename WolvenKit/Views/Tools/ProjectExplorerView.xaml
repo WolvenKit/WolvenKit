@@ -43,6 +43,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}">
                     <TextBlock
+                        x:Name="TabText"
                         Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -51,8 +52,10 @@
                 </Border>
 
                 <ControlTemplate.Triggers>
+                    <!--  unselected: transparent tab, so the text follows the theme instead of the (empty) background  -->
                     <Trigger Property="IsSelected" Value="False">
                         <Setter TargetName="TabBorder" Property="Background" Value="Transparent" />
+                        <Setter TargetName="TabText" Property="Foreground" Value="{DynamicResource ContentForeground}" />
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
                         <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
@@ -65,6 +68,7 @@
                             <Condition Property="IsMouseOver" Value="True" />
                         </MultiTrigger.Conditions>
                         <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
+                        <Setter TargetName="TabText" Property="Foreground" Value="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}" />
                     </MultiTrigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
