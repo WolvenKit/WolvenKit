@@ -514,6 +514,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
         }
 
+        ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
     }
 
@@ -5814,6 +5815,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             }
                         }
 
+                        // AlphaMaskContrast (-1..1): alpha' = (alpha - 0.5) * tan((c + 1) * pi/4) + 0.5,
+                        // on both masks (Blender add-on); 0 leaves the alpha as it is.
+                        var alphaContrast = dictionary.TryGetValue("AlphaMaskContrast", out var amcObj)
+                            ? Math.Clamp(ReadFloat(amcObj), -1f, 0.99f)
+                            : 0f;
+                        var contrastSlope = MathF.Tan((alphaContrast + 1f) * MathF.PI / 4f);
+                        float Contrast(float a) =>
+                            alphaContrast == 0f ? a : Math.Clamp((a - 0.5f) * contrastSlope + 0.5f, 0f, 1f);
+
                         var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
                         var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         System.Drawing.Imaging.BitmapData? secData = null;
@@ -5833,14 +5843,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                     for (int x = 0; x < albedoBmp.Width; x++)
                                     {
                                         int off = y * stride + x * 4;
-                                        float primA = ptr[off + 3] / 255f;
+                                        float primA = Contrast(ptr[off + 3] / 255f);
                                         float cb = Math.Min(1f, ptr[off + 0] / 255f * tintB);
                                         float cg = Math.Min(1f, ptr[off + 1] / 255f * tintG);
                                         float cr = Math.Min(1f, ptr[off + 2] / 255f * tintR);
 
                                         if (sp != null)
                                         {
-                                            float sCov = Math.Clamp(sp[(y * sh / ah) * secData!.Stride + (x * sw / aw) * 4 + secChannel] / 255f * secIntensity, 0f, 1f);
+                                            float sCov = Math.Clamp(Contrast(sp[(y * sh / ah) * secData!.Stride + (x * sw / aw) * 4 + secChannel] / 255f) * secIntensity, 0f, 1f);
                                             float under = sCov * (1f - primA);
                                             float mergedA = primA + under;
                                             if (mergedA > 0.0001f)
