@@ -2498,7 +2498,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 "parallaxscreen", "simple_emissive") ||
             ContainsAny(name,
                 "billboard", "neon", "television", "emissive");
-        if (!isEmissive && TryGetRawMaterial(name, out var emMat) &&
+        // Skin with EmissiveEV (glowing tattoos: EmissiveMask) stays skin: the emissive path
+        // below made the whole body glossy (roughness 0.2) and glowing, i.e. pale.
+        if (!isEmissive && !isSkin && TryGetRawMaterial(name, out var emMat) &&
             emMat?.Values != null)
         {
             if (emMat.Values.TryGetValue("EmissiveEV", out var evCheck) && ReadFloat(evCheck) > 0.01f)
