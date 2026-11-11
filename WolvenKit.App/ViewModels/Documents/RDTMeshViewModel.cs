@@ -2982,7 +2982,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   O|<file>                 output that existed after the bake (must still exist)
     //   D|P|<path>|<len>|<ticks> dependency found in the project (size + write time)
     //   D|A|<path>               dependency from the game archive / mods (never changes)
-    private const string DepsFormat = "v2";
+    // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred).
+    private const string DepsFormat = "v3";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
@@ -5276,110 +5277,125 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             return;
                         }
 
-                        // TintColor
-                        if (dictionary.TryGetValue("TintColor", out var tintObj) && tintObj is CColor tintCol)
+                        // Tint and SecondaryAlbedo (tattoos), as skin.mt / the Blender add-on:
+                        //   tf      = |TintScale| * TintColorMask.r
+                        //   tinted  = lerp(albedo, albedo * TintColor, tf)
+                        //   second  = lerp(Secondary, Secondary * tinted, tf * SecondaryAlbedoTintColorInfluence)
+                        //   result  = lerp(tinted, second, Secondary.a * SecondaryAlbedoInfluence)
+                        // so ink takes the skin tone under it instead of being laid over it.
                         {
-                            float tintScale = 0.3f;
-                            if (dictionary.TryGetValue("TintScale", out var scaleObj))
+                            float tr = 1f, tg = 1f, tb = 1f, tintScale = 0f;
+                            if (dictionary.TryGetValue("TintColor", out var tintObj) && tintObj is CColor tintCol)
                             {
-                                if (scaleObj is CFloat cf)
-                                    tintScale = Math.Clamp((float)cf, 0f, 1f);
-                                else if (scaleObj is float f)
-                                    tintScale = Math.Clamp(f, 0f, 1f);
+                                tr = tintCol.Red / 255f;
+                                tg = tintCol.Green / 255f;
+                                tb = tintCol.Blue / 255f;
+                                tintScale = 0.3f;
+                                if (dictionary.TryGetValue("TintScale", out var scaleObj))
+                                    tintScale = Math.Clamp(Math.Abs(ReadFloat(scaleObj)), 0f, 1f);
                             }
 
-                            float tr = tintCol.Red / 255f;
-                            float tg = tintCol.Green / 255f;
-                            float tb = tintCol.Blue / 255f;
+                            float secInfluence = 0.4f, secTintInfluence = 0f;
+                            if (dictionary.TryGetValue("SecondaryAlbedoInfluence", out var infObj))
+                                secInfluence = Math.Clamp(ReadFloat(infObj), 0f, 1f);
+                            if (dictionary.TryGetValue("SecondaryAlbedoTintColorInfluence", out var stiObj))
+                                secTintInfluence = Math.Clamp(ReadFloat(stiObj), 0f, 1f);
 
-                            var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
-                            var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            Bitmap? tintMaskBmp = null;
+                            Bitmap? secBmp = null;
                             try
                             {
-                                unsafe
+                                if (tintScale > 0f &&
+                                    dictionary.TryGetValue("TintColorMask", out var tmObj) &&
+                                    tmObj is CResourceReference<ITexture> tmRef &&
+                                    tmRef.DepotPath != ResourcePath.Empty)
                                 {
-                                    byte* ptr = (byte*)data.Scan0;
-                                    int stride = data.Stride;
-                                    for (int y = 0; y < albedoBmp.Height; y++)
-                                    {
-                                        for (int x = 0; x < albedoBmp.Width; x++)
-                                        {
-                                            int off = y * stride + x * 4;
-                                            ptr[off + 0] = (byte)(ptr[off + 0] * (1f - tintScale) + ptr[off + 0] * tb * tintScale);
-                                            ptr[off + 1] = (byte)(ptr[off + 1] * (1f - tintScale) + ptr[off + 1] * tg * tintScale);
-                                            ptr[off + 2] = (byte)(ptr[off + 2] * (1f - tintScale) + ptr[off + 2] * tr * tintScale);
-                                        }
-                                    }
+                                    tintMaskBmp = await LoadTextureAsBitmap(tmRef.DepotPath);
                                 }
-                            }
-                            finally { albedoBmp.UnlockBits(data); }
-                        }
 
-                        // SecondaryAlbedo
-                        if (dictionary.TryGetValue("SecondaryAlbedo", out var secObj) &&
-                            secObj is CResourceReference<ITexture> secRef &&
-                            secRef.DepotPath != ResourcePath.Empty)
-                        {
-                            try
-                            {
-                                var xbm = GetProjectOrDepotFile(secRef.DepotPath);
-                                if (xbm?.RootChunk is ITexture it)
+                                if (secInfluence > 0f &&
+                                    dictionary.TryGetValue("SecondaryAlbedo", out var secObj) &&
+                                    secObj is CResourceReference<ITexture> secRef &&
+                                    secRef.DepotPath != ResourcePath.Empty)
                                 {
-                                    using var stream = new MemoryStream();
-                                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var format, true);
-                                    stream.Position = 0;
-                                    var bmpSource = await ImageDecoder.RenderToBitmapImageDds(stream, format);
-                                    if (bmpSource != null)
-                                    {
-                                        if (bmpSource.CanFreeze && !bmpSource.IsFrozen)
-                                            bmpSource.Freeze();
-                                        using var secBmp = BitmapSourceToBitmap(bmpSource);
-                                        if (secBmp.Width == albedoBmp.Width && secBmp.Height == albedoBmp.Height)
-                                        {
-                                            float influence = 0.4f;
-                                            if (dictionary.TryGetValue("SecondaryAlbedoInfluence", out var infObj))
-                                            {
-                                                if (infObj is CFloat cf)
-                                                    influence = Math.Clamp((float)cf, 0f, 0.5f);
-                                                else if (infObj is float f)
-                                                    influence = Math.Clamp(f, 0f, 0.5f);
-                                            }
+                                    secBmp = await LoadTextureAsBitmap(secRef.DepotPath);
+                                }
 
-                                            var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
-                                            var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                            var secData = secBmp.LockBits(rect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                            try
+                                if (tintScale > 0f || secBmp != null)
+                                {
+                                    int aw = albedoBmp.Width, ah = albedoBmp.Height;
+                                    var data = albedoBmp.LockBits(new Rectangle(0, 0, aw, ah), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    System.Drawing.Imaging.BitmapData? tmData = null, secData = null;
+                                    try
+                                    {
+                                        if (tintMaskBmp != null)
+                                            tmData = tintMaskBmp.LockBits(new Rectangle(0, 0, tintMaskBmp.Width, tintMaskBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                        if (secBmp != null)
+                                            secData = secBmp.LockBits(new Rectangle(0, 0, secBmp.Width, secBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                        unsafe
+                                        {
+                                            byte* dst = (byte*)data.Scan0;
+                                            byte* tm = tmData == null ? null : (byte*)tmData.Scan0;
+                                            byte* sec = secData == null ? null : (byte*)secData.Scan0;
+                                            int tmw = tintMaskBmp?.Width ?? 1, tmh = tintMaskBmp?.Height ?? 1;
+                                            int sw = secBmp?.Width ?? 1, sh = secBmp?.Height ?? 1;
+                                            for (int y = 0; y < ah; y++)
                                             {
-                                                unsafe
+                                                byte* drow = dst + y * data.Stride;
+                                                for (int x = 0; x < aw; x++)
                                                 {
-                                                    byte* dst = (byte*)data.Scan0;
-                                                    byte* src = (byte*)secData.Scan0;
-                                                    int stride = data.Stride;
-                                                    for (int y = 0; y < albedoBmp.Height; y++)
+                                                    byte* px = drow + x * 4;
+                                                    float tf = tintScale;
+                                                    if (tm != null)
+                                                        tf *= tm[(y * tmh / ah) * tmData!.Stride + (x * tmw / aw) * 4 + 2] / 255f;
+
+                                                    float b = px[0] / 255f, g = px[1] / 255f, r = px[2] / 255f;
+                                                    b *= 1f - tf + tf * tb;
+                                                    g *= 1f - tf + tf * tg;
+                                                    r *= 1f - tf + tf * tr;
+
+                                                    if (sec != null)
                                                     {
-                                                        for (int x = 0; x < albedoBmp.Width; x++)
+                                                        byte* spx = sec + (y * sh / ah) * secData!.Stride + (x * sw / aw) * 4;
+                                                        float a = spx[3] / 255f * secInfluence;
+                                                        if (a > 0f)
                                                         {
-                                                            int off = y * stride + x * 4;
-                                                            float a = (src[off + 3] / 255f) * influence;
-                                                            dst[off + 0] = (byte)(dst[off + 0] * (1 - a) + src[off + 0] * a);
-                                                            dst[off + 1] = (byte)(dst[off + 1] * (1 - a) + src[off + 1] * a);
-                                                            dst[off + 2] = (byte)(dst[off + 2] * (1 - a) + src[off + 2] * a);
+                                                            float st = tf * secTintInfluence;
+                                                            float sb = spx[0] / 255f, sg = spx[1] / 255f, sr = spx[2] / 255f;
+                                                            sb *= 1f - st + st * b;
+                                                            sg *= 1f - st + st * g;
+                                                            sr *= 1f - st + st * r;
+                                                            b += (sb - b) * a;
+                                                            g += (sg - g) * a;
+                                                            r += (sr - r) * a;
                                                         }
                                                     }
+
+                                                    px[0] = (byte)(Math.Clamp(b, 0f, 1f) * 255f);
+                                                    px[1] = (byte)(Math.Clamp(g, 0f, 1f) * 255f);
+                                                    px[2] = (byte)(Math.Clamp(r, 0f, 1f) * 255f);
                                                 }
                                             }
-                                            finally
-                                            {
-                                                albedoBmp.UnlockBits(data);
-                                                secBmp.UnlockBits(secData);
-                                            }
                                         }
+                                    }
+                                    finally
+                                    {
+                                        albedoBmp.UnlockBits(data);
+                                        if (tmData != null)
+                                            tintMaskBmp!.UnlockBits(tmData);
+                                        if (secData != null)
+                                            secBmp!.UnlockBits(secData);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                Parent?.GetLoggerService()?.Warning($"[Skin] SecondaryAlbedo load warning: {ex.Message}");
+                                Parent?.GetLoggerService()?.Warning($"[Skin] tint / SecondaryAlbedo warning: {ex.Message}");
+                            }
+                            finally
+                            {
+                                tintMaskBmp?.Dispose();
+                                secBmp?.Dispose();
                             }
                         }
 
