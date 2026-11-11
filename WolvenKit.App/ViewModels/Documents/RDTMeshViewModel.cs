@@ -2495,7 +2495,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else
             {
-                material.AlbedoColor = new SharpDX.Color4(tr, tg, tb, opacity);
+                material.AlbedoColor = new SharpDX.Color4(tr, tg, tb, opacity * GlassPreviewAlpha);
             }
             if (File.Exists(filename_bn))
             {
@@ -3027,8 +3027,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   O|<file>                 output that existed after the bake (must still exist)
     //   D|P|<path>|<len>|<ticks> dependency found in the project (size + write time)
     //   D|A|<path>               dependency from the game archive / mods (never changes)
-    // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred).
-    private const string DepsFormat = "v3";
+    // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
+    // v4: see-through glass, makeup roughness / metalness, glowing tattoos).
+    private const string DepsFormat = "v4";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
@@ -3324,6 +3325,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     private static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
     private const float GlassDefaultOpacity = 1f;
+
+    // Transparent glass (glass.mt, glass_onesided.mt …): Opacity 1 (the default) means "full
+    // glass", which is still see-through in the game. Until glass gets its own pass
+    // (transmission + reflections), the preview draws it at this alpha.
+    private const float GlassPreviewAlpha = 0.25f;
 
     // glass_deferred.mt (Blender add-on glassdeferred.py): the glass lobe has a fixed
     // roughness; GlassMetalness defaults to 0.8 in the template.
@@ -6384,7 +6390,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 int mStride = md?.Stride ?? 0;
                                 int tw = tintBmp?.Width ?? 1, th = tintBmp?.Height ?? 1;
                                 int mw = maskBmp?.Width ?? 1, mh = maskBmp?.Height ?? 1;
-                                byte glassA = (byte)(Math.Clamp(op, 0f, 1f) * 255f);
+                                // Opacity = how much glass there is, not coverage: the glass itself
+                                // stays see-through (GlassPreviewAlpha); a label (MaskTexture) is opaque.
+                                byte glassA = (byte)(Math.Clamp(op, 0f, 1f) * (deferredGlass ? 1f : GlassPreviewAlpha) * 255f);
                                 byte br = (byte)(Math.Clamp(tr, 0f, 1f) * 255f);
                                 byte bg = (byte)(Math.Clamp(tg, 0f, 1f) * 255f);
                                 byte bb = (byte)(Math.Clamp(tb, 0f, 1f) * 255f);
