@@ -2271,6 +2271,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.RenderEnvironmentMap = false;
             material.RoughnessFactor = 0.8f;
 
+            // Glowing tattoos: masked skin colour baked to _emissive.png, strength 2^EV - 1.
+            var skinEmissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
+            var skinEv = 0f;
+            if (TryGetRawMaterial(name, out var skinEm) && skinEm?.Values != null &&
+                skinEm.Values.TryGetValue("EmissiveEV", out var skinEvObj))
+            {
+                skinEv = ReadFloat(skinEvObj);
+            }
+            if (File.Exists(skinEmissivePng) && skinEv > 0.01f)
+            {
+                var strength = Math.Clamp(MathF.Pow(2f, skinEv) - 1f, 0f, 4f);
+                material.EmissiveMap = GetOrCreateTexture(skinEmissivePng);
+                material.RenderEmissiveMap = true;
+                material.EmissiveColor = new SharpDX.Color4(strength, strength, strength, 1f);
+            }
+
             if (File.Exists(filename_bd))
             {
                 material.AlbedoMap = GetOrCreateTexture(filename_bd);
@@ -5430,6 +5446,63 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                         // Save albedo
                         SavePngAtomic(albedoBmp, filename_bd);
+
+                        // Glowing tattoos: the final skin colour (tattoo included) glows where
+                        // EmissiveMask.r is set, with strength 2^EmissiveEV - 1 (Blender add-on).
+                        if (dictionary.TryGetValue("EmissiveEV", out var skinEvObj) && ReadFloat(skinEvObj) > 0.01f &&
+                            dictionary.TryGetValue("EmissiveMask", out var emMaskObj) &&
+                            emMaskObj is CResourceReference<ITexture> emMaskRef &&
+                            emMaskRef.DepotPath != ResourcePath.Empty)
+                        {
+                            try
+                            {
+                                using var emMask = await LoadTextureAsBitmap(emMaskRef.DepotPath);
+                                if (emMask != null)
+                                {
+                                    int ew = albedoBmp.Width, eh = albedoBmp.Height;
+                                    using var emBmp = new Bitmap(ew, eh, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    var eRect = new Rectangle(0, 0, ew, eh);
+                                    var aData = albedoBmp.LockBits(eRect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    var eData = emBmp.LockBits(eRect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    var mData = emMask.LockBits(new Rectangle(0, 0, emMask.Width, emMask.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    try
+                                    {
+                                        unsafe
+                                        {
+                                            byte* ap = (byte*)aData.Scan0;
+                                            byte* ep = (byte*)eData.Scan0;
+                                            byte* mp = (byte*)mData.Scan0;
+                                            int mw = emMask.Width, mh = emMask.Height;
+                                            for (int y = 0; y < eh; y++)
+                                            {
+                                                byte* arow = ap + y * aData.Stride;
+                                                byte* erow = ep + y * eData.Stride;
+                                                byte* mrow = mp + (y * mh / eh) * mData.Stride;
+                                                for (int x = 0; x < ew; x++)
+                                                {
+                                                    float m = mrow[(x * mw / ew) * 4 + 2] / 255f;
+                                                    erow[x * 4 + 0] = (byte)(arow[x * 4 + 0] * m);
+                                                    erow[x * 4 + 1] = (byte)(arow[x * 4 + 1] * m);
+                                                    erow[x * 4 + 2] = (byte)(arow[x * 4 + 2] * m);
+                                                    erow[x * 4 + 3] = 255;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        albedoBmp.UnlockBits(aData);
+                                        emBmp.UnlockBits(eData);
+                                        emMask.UnlockBits(mData);
+                                    }
+                                    SavePngAtomic(emBmp, emissivePng);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Parent?.GetLoggerService()?.Warning($"[Skin] EmissiveMask warning: {ex.Message}");
+                            }
+                        }
 
 
                         // No Roughness
