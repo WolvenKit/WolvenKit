@@ -2371,6 +2371,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.AlbedoColor = new SharpDX.Color4(0.55f, 0.55f, 0.55f, 1f);
             material.RenderAlbedoMap = true;
 
+            // Makeup with its own roughness / metalness (RoughnessMetalnessAlpha > 0): glossy or
+            // metallic lipstick, eyeshadow with glitter. Placeholders give the values (white = 1).
+            if (TryGetRawMaterial(name, out var ovMat) && ovMat?.Values != null &&
+                ovMat.Values.TryGetValue("RoughnessMetalnessAlpha", out var rmaObj) &&
+                ReadFloat(rmaObj) is var rma && rma > 0.001f)
+            {
+                rma = Math.Clamp(rma, 0f, 1f);
+                var (ovRough, ovMetal) = GetDecalRoughMetal(name, makeupKeys: true);
+                material.RoughnessFactor = 0.6f + (ovRough - 0.6f) * rma;
+                material.MetallicFactor = ovMetal * rma;
+                material.RenderEnvironmentMap = material.MetallicFactor > 0.05f || material.RoughnessFactor < 0.4f;
+                // Metals get their colour from the albedo: don't darken it as much.
+                var shade = 0.55f + 0.45f * material.MetallicFactor;
+                material.AlbedoColor = new SharpDX.Color4(shade, shade, shade, 1f);
+            }
+
             if (File.Exists(filename_bn))
             {
                 material.NormalMap = GetOrCreateTexture(filename_bn);
@@ -5674,25 +5690,81 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                         diffuseAlpha = Math.Clamp(diffuseAlpha, 0f, 1f);
 
+                        // mesh_decal_double_diffuse / _morph: a second colour (SecondaryDiffuseColor)
+                        // under the first, where SecondaryDiffuseAlpha * SecondaryDiffuseAlphaIntensity
+                        // covers it (lip stripes and the like). As in the Blender add-on:
+                        //   colour = base*a + SecondaryColor * s * (1 - a),  alpha = a + (1 - a) * s
+                        Bitmap? secAlphaBmp = null;
+                        float secR = 0f, secG = 0f, secB = 0f, secIntensity = 0f;
+                        int secChannel = ChannelA;
+                        if (dictionary.TryGetValue("SecondaryDiffuseAlpha", out var sdaObj) &&
+                            sdaObj is CResourceReference<ITexture> sdaRef &&
+                            sdaRef.DepotPath != ResourcePath.Empty)
+                        {
+                            var sdaPath = sdaRef.DepotPath.GetResolvedText() ?? "";
+                            secIntensity = 1f;
+                            if (dictionary.TryGetValue("SecondaryDiffuseAlphaIntensity", out var sdiObj))
+                                secIntensity = Math.Max(0f, ReadFloat(sdiObj));
+                            if (dictionary.TryGetValue("SecondaryDiffuseColor", out var sdcObj) && sdcObj is CColor sdc)
+                            {
+                                secR = sdc.Red / 255f;
+                                secG = sdc.Green / 255f;
+                                secB = sdc.Blue / 255f;
+                            }
+
+                            // The template default (editor grey) means "no secondary colour".
+                            var isDefault = sdaPath.EndsWith("editor\\grey.xbm", StringComparison.OrdinalIgnoreCase);
+                            if (!isDefault && secIntensity > 0f)
+                            {
+                                secAlphaBmp = await LoadTextureAsBitmap(sdaRef.DepotPath);
+                                if (secAlphaBmp != null)
+                                    secChannel = PickCoverageChannel(secAlphaBmp, ChannelA);
+                            }
+                        }
+
                         var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
                         var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        System.Drawing.Imaging.BitmapData? secData = null;
                         try
                         {
+                            if (secAlphaBmp != null)
+                                secData = secAlphaBmp.LockBits(new Rectangle(0, 0, secAlphaBmp.Width, secAlphaBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             unsafe
                             {
                                 byte* ptr = (byte*)data.Scan0;
                                 int stride = data.Stride;
+                                byte* sp = secData == null ? null : (byte*)secData.Scan0;
+                                int sw = secAlphaBmp?.Width ?? 1, sh = secAlphaBmp?.Height ?? 1;
+                                int aw = albedoBmp.Width, ah = albedoBmp.Height;
                                 for (int y = 0; y < albedoBmp.Height; y++)
                                 {
                                     for (int x = 0; x < albedoBmp.Width; x++)
                                     {
                                         int off = y * stride + x * 4;
-                                        float srcA = (ptr[off + 3] / 255f) * diffuseAlpha;
+                                        float primA = ptr[off + 3] / 255f;
+                                        float cb = Math.Min(1f, ptr[off + 0] / 255f * tintB);
+                                        float cg = Math.Min(1f, ptr[off + 1] / 255f * tintG);
+                                        float cr = Math.Min(1f, ptr[off + 2] / 255f * tintR);
 
-                                        ptr[off + 0] = (byte)Math.Min(255, ptr[off + 0] * tintB);
-                                        ptr[off + 1] = (byte)Math.Min(255, ptr[off + 1] * tintG);
-                                        ptr[off + 2] = (byte)Math.Min(255, ptr[off + 2] * tintR);
-                                        ptr[off + 3] = (byte)(srcA * 255f);
+                                        if (sp != null)
+                                        {
+                                            float sCov = Math.Clamp(sp[(y * sh / ah) * secData!.Stride + (x * sw / aw) * 4 + secChannel] / 255f * secIntensity, 0f, 1f);
+                                            float under = sCov * (1f - primA);
+                                            float mergedA = primA + under;
+                                            if (mergedA > 0.0001f)
+                                            {
+                                                // Straight (non-premultiplied) colour of the merged layers.
+                                                cb = (cb * primA + secB * under) / mergedA;
+                                                cg = (cg * primA + secG * under) / mergedA;
+                                                cr = (cr * primA + secR * under) / mergedA;
+                                            }
+                                            primA = mergedA;
+                                        }
+
+                                        ptr[off + 0] = (byte)(cb * 255f);
+                                        ptr[off + 1] = (byte)(cg * 255f);
+                                        ptr[off + 2] = (byte)(cr * 255f);
+                                        ptr[off + 3] = (byte)(Math.Clamp(primA * diffuseAlpha, 0f, 1f) * 255f);
                                     }
                                 }
                             }
@@ -5700,6 +5772,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         finally
                         {
                             albedoBmp.UnlockBits(data);
+                            if (secData != null)
+                                secAlphaBmp!.UnlockBits(secData);
+                            secAlphaBmp?.Dispose();
                         }
 
                         SavePngAtomic(albedoBmp, filename_bd);
@@ -10044,7 +10119,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// <summary>
     /// Decal roughness/metalness: placeholder (black=0, white=1) * scale + bias.
     /// </summary>
-    private (float roughness, float metalness) GetDecalRoughMetal(string name)
+    private (float roughness, float metalness) GetDecalRoughMetal(string name, bool makeupKeys = false)
     {
         float rough = 0.8f, metal = 0f;
 
@@ -10058,7 +10133,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         float ReadScaleBias(string texKey, string scaleKey, string biasKey, float fallback)
         {
             float baseVal = fallback;
-            if (mat.Values.TryGetValue(texKey, out var texObj) && texObj is CResourceReference<ITexture> texRef)
+            // Makeup decals name the maps RoughnessTexture / MetalnessTexture.
+            if (mat.Values.TryGetValue(makeupKeys ? texKey + "Texture" : texKey, out var texObj) &&
+                texObj is CResourceReference<ITexture> texRef)
             {
                 var path = texRef.DepotPath.GetResolvedText() ?? "";
                 if (path.Contains("black", StringComparison.OrdinalIgnoreCase))
