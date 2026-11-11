@@ -336,6 +336,15 @@
     <SolidColorBrush x:Key="WolvenKitProjectIconTan" Color="#D0A467" />
     <!--  log lines without a level color (info, important)  -->
     <SolidColorBrush x:Key="WolvenKitLogText" Color="#D3D3D3" />
+    <!--  node graph editors (quest, scene, behavior, data graphs); neutral, so light themes derive them  -->
+    <SolidColorBrush x:Key="WolvenKitGraphEditorGridMinor" Color="#1C1C1C" />
+    <SolidColorBrush x:Key="WolvenKitGraphEditorGridMajor" Color="#222222" />
+    <SolidColorBrush x:Key="WolvenKitGraphConnection" Color="#33FFFFFF" />
+    <SolidColorBrush x:Key="WolvenKitGraphGroupBackground" Color="#33282828" />
+    <SolidColorBrush x:Key="WolvenKitGraphOverlayBackground" Color="#DD2A2A2A" />
+    <!--  section timeline  -->
+    <SolidColorBrush x:Key="WolvenKitTimelineTrack" Color="#14FFFFFF" />
+    <SolidColorBrush x:Key="WolvenKitTimelineGridLine" Color="#1EFFFFFF" />
 
     <!-- Generic label style - foreground, border thickness, alignment -->
     <Style

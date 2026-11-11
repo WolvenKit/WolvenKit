@@ -208,21 +208,21 @@
       "group": "Grays",
       "displayName": "Gray99",
       "kind": "Brush",
-      "description": "Secondary text in graph views and on the welcome page"
+      "description": "Secondary text in graph views and on the welcome page; timeline ruler labels"
     },
     {
       "key": "WolvenKitGray66",
       "group": "Grays",
       "displayName": "Gray66",
       "kind": "Brush",
-      "description": "Placeholder / empty-value text in reference, CName, tweak and path fields"
+      "description": "Placeholder / empty-value text in reference, CName, tweak and path fields; timeline ruler ticks"
     },
     {
       "key": "WolvenKitGray33",
       "group": "Grays",
       "displayName": "Gray33",
       "kind": "Brush",
-      "description": "Not used by WolvenKit views at the moment"
+      "description": "Section timeline: track borders"
     },
     {
       "key": "WolvenKitGrayCC",
@@ -250,7 +250,7 @@
       "group": "Grays",
       "displayName": "Gray77",
       "kind": "Brush",
-      "description": "Dimmed node text in the graph editor"
+      "description": "Dimmed node text in the graph editor; section end marker in the timeline"
     },
     {
       "key": "WolvenKitProjectSource",
@@ -830,6 +830,20 @@
       "description": "Log panel: info / important lines (errors, warnings, debug and success use the palette colors)"
     },
     {
+      "key": "WolvenKitTimelineTrack",
+      "group": "Palette",
+      "displayName": "Timeline Track",
+      "kind": "Brush",
+      "description": "Section timeline: track background"
+    },
+    {
+      "key": "WolvenKitTimelineGridLine",
+      "group": "Palette",
+      "displayName": "Timeline Grid Line",
+      "kind": "Brush",
+      "description": "Section timeline: vertical grid lines"
+    },
+    {
       "key": "WolvenKitGraphGridColor",
       "group": "Graph",
       "displayName": "Graph Grid",
@@ -868,6 +882,41 @@
       "derivedBrushes": [
         "WolvenKitGraphCurve"
       ]
+    },
+    {
+      "key": "WolvenKitGraphEditorGridMinor",
+      "group": "Graph",
+      "displayName": "Graph Editor Grid Minor",
+      "kind": "Brush",
+      "description": "Node graph editors: fine background grid lines"
+    },
+    {
+      "key": "WolvenKitGraphEditorGridMajor",
+      "group": "Graph",
+      "displayName": "Graph Editor Grid Major",
+      "kind": "Brush",
+      "description": "Node graph editors: major background grid lines (every 5 cells)"
+    },
+    {
+      "key": "WolvenKitGraphConnection",
+      "group": "Graph",
+      "displayName": "Graph Connection",
+      "kind": "Brush",
+      "description": "Data graphs (RDT graph / data views): connection lines"
+    },
+    {
+      "key": "WolvenKitGraphGroupBackground",
+      "group": "Graph",
+      "displayName": "Graph Group Background",
+      "kind": "Brush",
+      "description": "Data graphs: background and header of phase/group nodes"
+    },
+    {
+      "key": "WolvenKitGraphOverlayBackground",
+      "group": "Graph",
+      "displayName": "Graph Overlay Background",
+      "kind": "Brush",
+      "description": "Quest phase graph: breadcrumb bar over the graph"
     },
     {
       "key": "QuestStartNodeHeaderColor",
