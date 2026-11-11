@@ -10001,8 +10001,55 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return byTemplate;
 
         var directBase = instance?.BaseMaterial.DepotPath.GetResolvedText();
-        return ClassifyMaterial(name, directBase);
+        var kind = ClassifyMaterial(name, directBase);
+
+        // The template could not be resolved (e.g. a mod .mi whose chain is incomplete):
+        // a skin is still a skin when its base chain goes through the character skin
+        // instances, whatever its name says ("..._tattoo" skins are not overlays).
+        if (!Has(kind, MaterialKind.Skin) && instance != null && IsSkinByBaseChain(instance))
+            return MaterialKind.Skin;
+
+        return kind;
     }
+
+    /// <summary>
+    /// Walks the .mi chain (a few levels) looking for the character skin template or the
+    /// character skin instances (base\characters\common\skin\…, character_mat_instance).
+    /// </summary>
+    private bool IsSkinByBaseChain(CMaterialInstance instance)
+    {
+        CMaterialInstance? current = instance;
+        for (var depth = 0; depth < 6 && current != null; depth++)
+        {
+            if (current.BaseMaterial.DepotPath == ResourcePath.Empty)
+                return false;
+
+            var path = (current.BaseMaterial.DepotPath.GetResolvedText() ?? string.Empty).Replace('/', '\\').ToLowerInvariant();
+            if (IsSkinPath(path))
+                return true;
+            if (path.EndsWith(".mt", StringComparison.Ordinal) || path.EndsWith(".remt", StringComparison.Ordinal))
+                return false;
+
+            try
+            {
+                current = GetProjectOrDepotFile(current.BaseMaterial.DepotPath)?.RootChunk as CMaterialInstance;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsSkinPath(string path) =>
+        path.EndsWith("skin.mt", StringComparison.Ordinal) ||
+        path.EndsWith("skin_blendable.mt", StringComparison.Ordinal) ||
+        path.EndsWith("skin_morph.mt", StringComparison.Ordinal) ||
+        path.Contains("blackwall_blendable_skin", StringComparison.Ordinal) ||
+        path.Contains("character_mat_instance", StringComparison.Ordinal) ||
+        path.Contains("\\common\\skin\\", StringComparison.Ordinal);
 
     private static MaterialKind? ClassifyByTemplate(string templatePath, string? name)
     {
@@ -10040,7 +10087,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Face overlays are plain mesh_decal: only the name separates them from clothing decals.
             if (ContainsAny(name, "heb_", "hb_", "brow"))
                 return MaterialKind.Eyebrow;
-            if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips", "tattoo"))
+            // Tattoo decals stay plain decals: the makeup overlay bake (DiffuseTexture tint) made
+            // them, and the skin under them, look washed out.
+            if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips"))
                 return MaterialKind.Makeup;
             return MaterialKind.Decal;
         }
@@ -10082,8 +10131,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // 1. Base material path (primary, like Blender addon registry)
         if (!string.IsNullOrEmpty(path))
         {
-            if (path.EndsWith("skin.mt") || path.EndsWith("skin_blendable.mt") || path.EndsWith("skin_morph.mt") ||
-                path.Contains("blackwall_blendable_skin"))
+            if (IsSkinPath(path))
                 kind |= MaterialKind.Skin;
 
             if (path.EndsWith("hair.mt") || path.EndsWith("hair_blendable.mt") ||
@@ -10144,8 +10192,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 "eye_wet", "wetness", "splineModeling", "eye_shadow", "eyemat", "_eye"))
                     kind |= MaterialKind.Eye;
 
-                if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lip", "tattoo"))
+                // A tattoo by name is a decal, unless the name already says skin ("..._skin_tattoo").
+                if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lip"))
                     kind |= MaterialKind.Makeup;
+                else if (name.Contains("tattoo", StringComparison.OrdinalIgnoreCase) && !Has(kind, MaterialKind.Skin))
+                    kind |= MaterialKind.Decal;
 
                 if (name.Contains("nail") || name.StartsWith("an0_") || name.StartsWith("an_"))
                     return MaterialKind.Nail;
