@@ -240,6 +240,7 @@ namespace WolvenKit
         {
             Activated -= OnFirstActivated;
             _themeService.EnsureResourcesOnTop();
+            WolvenKit.Helpers.AdonisThemeBridge.Apply();
         }
 
         private static IThemeSetting BuildTheme(ISettingsManager settingsManager, IThemeService themeService)
@@ -338,6 +339,7 @@ namespace WolvenKit
                 // node brushes are cached per resource key
                 WolvenKit.App.ViewModels.GraphEditor.Nodes.GraphNodeStyling.ClearBrushCache();
                 ApplyThemeLive(_settingsManager, _themeService, _loggerService);
+                WolvenKit.Helpers.AdonisThemeBridge.Apply();
             }
             catch (Exception ex)
             {

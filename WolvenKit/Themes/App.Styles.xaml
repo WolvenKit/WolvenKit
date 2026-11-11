@@ -46,6 +46,13 @@
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
     <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
 
+    <!--  3D preview (File Information → Mesh); light themes keep it dark  -->
+    <Color x:Key="WolvenKitViewportBackgroundColor">#121212</Color>
+    <!--  folder icons (Project Explorer, Asset Browser); follow WolvenKitTanColor unless a theme sets them  -->
+    <Color x:Key="WolvenKitFolderColor">#D0A467</Color>
+    <!--  off state of toggle switches (e.g. Mod Browser): knob and outline  -->
+    <Color x:Key="WolvenKitToggleOffColor">#CCCCCC</Color>
+
     <Color x:Key="WolvenKitGraphGridColor">#0DFFFFFF</Color>
     <Color x:Key="WolvenKitGraphAxisColor">Black</Color>
     <Color x:Key="WolvenKitGraphLabelColor">White</Color>
@@ -317,6 +324,18 @@
     <SolidColorBrush x:Key="WolvenKitGraphAxis" Color="{StaticResource WolvenKitGraphAxisColor}" />
     <SolidColorBrush x:Key="WolvenKitGraphLabel" Color="{StaticResource WolvenKitGraphLabelColor}" />
     <SolidColorBrush x:Key="WolvenKitGraphCurve" Color="{StaticResource WolvenKitGraphCurveColor}" />
+    <SolidColorBrush x:Key="WolvenKitFolder" Color="{StaticResource WolvenKitFolderColor}" />
+    <SolidColorBrush x:Key="WolvenKitToggleOff" Color="{StaticResource WolvenKitToggleOffColor}" />
+    <!--  menu / list separators; follow BorderAlt unless a theme sets them  -->
+    <SolidColorBrush x:Key="WolvenKitSeparator" Color="#424242" />
+    <!--  project icons on the welcome page (by project color); follow the palette colors unless a theme sets them  -->
+    <SolidColorBrush x:Key="WolvenKitProjectIconYellow" Color="#FFEA0A" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconCyan" Color="#52F1FF" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconRed" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconPurple" Color="#6495ED" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconTan" Color="#D0A467" />
+    <!--  log lines without a level color (info, important)  -->
+    <SolidColorBrush x:Key="WolvenKitLogText" Color="#D3D3D3" />
 
     <!-- Generic label style - foreground, border thickness, alignment -->
     <Style
@@ -376,6 +395,8 @@
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
         TargetType="{x:Type syncfusion:TabControlExt}">
         <Setter Property="BorderThickness" Value="0" />
+        <!--  the base template captures its border color on load; keep it on the current theme  -->
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
         <Setter Property="TabItemHoverBackground" Value="{DynamicResource WolvenKitAccentShadow}" />
         <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
         <Setter Property="TabItemHoverForeground" Value="{DynamicResource WolvenKitAccentShadowForeground}" />
@@ -2531,14 +2552,14 @@
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="RawDirectoryTop">
-                <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="RawDirectoryTopOpen">
-                <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
 
@@ -2561,21 +2582,21 @@
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="ClosedDirImageKey">
-                <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="OpenDirImageKey">
-                <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="OpenDirImageKeyOpen">
-                <Setter Property="Foreground" Value="{DynamicResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
             <Trigger Property="Kind" Value="{x:Null}">

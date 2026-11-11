@@ -94,7 +94,8 @@
         <syncfusion:SfGridSplitter
             Grid.Row="0"
             Grid.Column="1"
-            HorizontalAlignment="Stretch" />
+            HorizontalAlignment="Stretch"
+            Background="{DynamicResource BorderAlt}" />
 
         <editors:RedTypeView
             x:Name="CustomPG"

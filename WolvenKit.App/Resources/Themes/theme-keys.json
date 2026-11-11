@@ -281,6 +281,41 @@
       "description": "Project Explorer: hovered / dimmed \"resources\" highlight"
     },
     {
+      "key": "WolvenKitProjectIconYellow",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Yellow",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the yellow project color"
+    },
+    {
+      "key": "WolvenKitProjectIconCyan",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Cyan",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the cyan project color"
+    },
+    {
+      "key": "WolvenKitProjectIconRed",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Red",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the red project color"
+    },
+    {
+      "key": "WolvenKitProjectIconPurple",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Purple",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the purple project color"
+    },
+    {
+      "key": "WolvenKitProjectIconTan",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Tan",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the tan project color"
+    },
+    {
       "key": "PrimaryColor",
       "group": "HandyControl",
       "displayName": "Primary",
@@ -710,6 +745,33 @@
       ]
     },
     {
+      "key": "WolvenKitViewportBackgroundColor",
+      "group": "Palette",
+      "displayName": "Viewport Background",
+      "kind": "Color",
+      "description": "3D mesh preview background (File Information \u2192 Mesh)"
+    },
+    {
+      "key": "WolvenKitFolderColor",
+      "group": "Palette",
+      "displayName": "Folder",
+      "kind": "Color",
+      "description": "Folder icons in the Project Explorer (raw) and the Asset Browser",
+      "derivedBrushes": [
+        "WolvenKitFolder"
+      ]
+    },
+    {
+      "key": "WolvenKitToggleOffColor",
+      "group": "Palette",
+      "displayName": "Toggle Off",
+      "kind": "Color",
+      "description": "Toggle switches when off (e.g. Mod Browser in the Asset Browser): knob and outline",
+      "derivedBrushes": [
+        "WolvenKitToggleOff"
+      ]
+    },
+    {
       "key": "WolvenKitLabelColor",
       "group": "Palette",
       "displayName": "Label",
@@ -752,6 +814,20 @@
       "displayName": "Tan50",
       "kind": "Brush",
       "description": "Dimmed resource paths in the property tree"
+    },
+    {
+      "key": "WolvenKitSeparator",
+      "group": "Palette",
+      "displayName": "Separator",
+      "kind": "Brush",
+      "description": "Separator lines in menus and lists"
+    },
+    {
+      "key": "WolvenKitLogText",
+      "group": "Palette",
+      "displayName": "Log Text",
+      "kind": "Brush",
+      "description": "Log panel: info / important lines (errors, warnings, debug and success use the palette colors)"
     },
     {
       "key": "WolvenKitGraphGridColor",

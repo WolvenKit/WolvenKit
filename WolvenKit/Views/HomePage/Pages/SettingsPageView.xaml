@@ -20,7 +20,6 @@
                 <system:Boolean x:Key="FalseValue">False</system:Boolean>
 
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>

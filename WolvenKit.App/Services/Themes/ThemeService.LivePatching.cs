@@ -387,6 +387,13 @@ public sealed partial class ThemeService
         ("ForegroundColor", "ContentForeground", c => c),
         ("BackgroundColor_Frame_Background", "ContentBackgroundAlt", c => c),
         ("BackgroundColor_Frame_Active", "ContentBackgroundAlt2", c => c),
+        ("WolvenKitSeparator", "BorderAlt", c => c),
+        ("WolvenKitFolderColor", "WolvenKitTanColor", c => c),
+        ("WolvenKitProjectIconYellow", "WolvenKitYellowColor", c => c),
+        ("WolvenKitProjectIconCyan", "WolvenKitCyanColor", c => c),
+        ("WolvenKitProjectIconRed", "WolvenKitRedColor", c => c),
+        ("WolvenKitProjectIconPurple", "WolvenKitPurpleColor", c => c),
+        ("WolvenKitProjectIconTan", "WolvenKitTanColor", c => c),
 
         // dark variants
         ("WolvenKitRedShadowColor", "WolvenKitRedColor", c => Darken(c, 0.67)),

@@ -820,6 +820,8 @@ namespace WolvenKit.Views.Shell
                 // add control
                 var control = new ContentControl() { Content = item };
                 DockingManager.SetHeader(control, dockElement.Header);
+                // auto-hidden (side) tab text: theme color, so it follows a theme switch
+                control.SetResourceReference(DockingManager.SideTabItemForegroundProperty, "ContentForeground");
                 DockingManager.SetSideInDockedMode(control,
                     (Syncfusion.Windows.Tools.Controls.DockSide)(int)dockElement.SideInDockedMode);
                 DockingManager.SetState(control, dockElement.State.ToSfDockState());
@@ -906,6 +908,8 @@ namespace WolvenKit.Views.Shell
                 }
 
                 DockingManager.SetHeader(control, element.Header);
+                // auto-hidden (side) tab text: theme color, so it follows a theme switch
+                control.SetResourceReference(DockingManager.SideTabItemForegroundProperty, "ContentForeground");
                 DockingManager.SetState(control, element.State.ToSfDockState());
                 if (element.State != DockState.Document)
                 {

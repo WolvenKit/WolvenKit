@@ -96,5 +96,15 @@
   "WolvenKitGraphCurveColor": "Curve editor: the curve",
   "CustomSliderForegroundBrush": "Sliders: filled part / thumb",
   "CustomSliderBackgroundBrush": "Sliders: track",
-  "CustomSliderHighlightBrush": "Sliders: hovered thumb"
+  "CustomSliderHighlightBrush": "Sliders: hovered thumb",
+  "WolvenKitViewportBackgroundColor": "3D mesh preview background (File Information → Mesh)",
+  "WolvenKitFolderColor": "Folder icons in the Project Explorer (raw) and the Asset Browser",
+  "WolvenKitToggleOffColor": "Toggle switches when off (e.g. Mod Browser in the Asset Browser): knob and outline",
+  "WolvenKitSeparator": "Separator lines in menus and lists",
+  "WolvenKitLogText": "Log panel: info / important lines (errors, warnings, debug and success use the palette colors)",
+  "WolvenKitProjectIconYellow": "Welcome page: icon background of projects with the yellow project color",
+  "WolvenKitProjectIconCyan": "Welcome page: icon background of projects with the cyan project color",
+  "WolvenKitProjectIconRed": "Welcome page: icon background of projects with the red project color",
+  "WolvenKitProjectIconPurple": "Welcome page: icon background of projects with the purple project color",
+  "WolvenKitProjectIconTan": "Welcome page: icon background of projects with the tan project color"
 }

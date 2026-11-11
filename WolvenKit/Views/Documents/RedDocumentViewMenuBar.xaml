@@ -1124,7 +1124,7 @@
             Margin="0,0,0,2"
             HorizontalAlignment="Right"
             Background="{DynamicResource BackgroundColor_Frame_Background}"
-            BorderBrush="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}"
+            BorderBrush="{DynamicResource ForegroundColor_Grey_Dark}"
             BorderThickness="1"
             Style="{StaticResource SearchBarStyle}"
             hc:BorderElement.CornerRadius="0"

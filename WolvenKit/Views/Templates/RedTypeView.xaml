@@ -20,7 +20,6 @@
         IsSharedSizeScope="True"
         KeyboardNavigation.TabNavigation="Contained">
         <Grid.Resources>
-            <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
 
             <!-- Do not hide anything by style if it's hidden by search - we'll be filtering the item collection -->
             <Style
@@ -347,12 +346,14 @@
             <Style
                 x:Key="PGNameStyle"
                 TargetType="TextBlock">
+                <!--  a keyed style skips the app-wide TextBlock style, so set the theme text color here  -->
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding IsDefault}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{DynamicResource BorderAlt2}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -640,12 +641,13 @@
                                 <templates:IconBox
                                     IconPack="Empty"
                                     Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     Size="{DynamicResource WolvenKitIconMicro}" />
 
                                 <TextBlock
                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource RedTypeColor}"
+                                    Foreground="{DynamicResource WolvenKitTan}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Type,
                                                    Mode=OneTime}" />
@@ -721,6 +723,7 @@
                                     IconPack="Codicons"
                                     Kind="SymbolClass"
                                     Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     Size="{DynamicResource WolvenKitIconMicro}" />
 
                                 <TextBlock
@@ -753,6 +756,7 @@
                                         IconPack="Codicons"
                                         Kind="ArrowRight"
                                         Margin="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                                        Foreground="{DynamicResource ContentForeground}"
                                         Size="{DynamicResource WolvenKitIconNano}" />
 
                                     <TextBlock
@@ -768,6 +772,7 @@
                                 <TextBlock
                                     Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                     VerticalAlignment="Center"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Descriptor}">
                                     <TextBlock.Style>
@@ -917,10 +922,14 @@
                 </HierarchicalDataTemplate.ItemTemplate-->
             </DataTemplate>
 
+            <!--  editor text boxes (float, string, …) without a style of their own: theme field colors  -->
             <Style TargetType="TextBox">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
             </Style>
 
             <Style
@@ -937,6 +946,9 @@
                 TargetType="CheckBox">
                 <Setter Property="Background" Value="{DynamicResource WolvenKitGray25}" />
                 <Setter Property="BorderThickness" Value="1" />
+                <!--  visible outline and check mark in every theme (the library colors are fixed for dark)  -->
+                <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor_Grey1}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -1046,6 +1058,7 @@
                         <templates:IconBox
                             IconPack="Codicons"
                             Kind="ArrowRight"
+                            Foreground="{DynamicResource ContentForeground}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
 
                         <TextBlock

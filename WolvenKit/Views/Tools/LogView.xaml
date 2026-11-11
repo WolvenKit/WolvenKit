@@ -317,7 +317,7 @@
                                 <Style
                                     BasedOn="{StaticResource {x:Type TextBox}}"
                                     TargetType="{x:Type TextBox}">
-                                    <Setter Property="Foreground" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="{DynamicResource WolvenKitLogText}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Error}">
                                             <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />

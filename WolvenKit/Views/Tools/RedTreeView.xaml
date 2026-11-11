@@ -19,6 +19,13 @@
     KeyUp="TreeView_OnKeyChanged">
     <UserControl.Resources>
         <ResourceDictionary>
+            <!--  editor text boxes (float, string, …) without a style of their own: theme field colors  -->
+            <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
+            </Style>
+
             <!-- StackPanel: empty value style -->
             <Style
                 x:Key="VisibleOnEmptyValueStyle"
@@ -250,6 +257,8 @@
                         </Style>
 
                         <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                            <!--  type icons next to the values: theme text color  -->
+                            <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                             <Style.Triggers>
                                 <DataTrigger
                                     Binding="{Binding IsDefault,
