@@ -2378,9 +2378,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 ReadFloat(rmaObj) is var rma && rma > 0.001f)
             {
                 rma = Math.Clamp(rma, 0f, 1f);
-                var (ovRough, ovMetal) = GetDecalRoughMetal(name, makeupKeys: true);
-                material.RoughnessFactor = 0.6f + (ovRough - 0.6f) * rma;
-                material.MetallicFactor = ovMetal * rma;
+                if (File.Exists(filename_rm))
+                {
+                    // Baked from RoughnessTexture / MetalnessTexture.
+                    material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
+                    material.RenderRoughnessMetallicMap = true;
+                    material.RoughnessFactor = 1f;
+                    material.MetallicFactor = rma;
+                }
+                else
+                {
+                    var (ovRough, ovMetal) = GetDecalRoughMetal(name, makeupKeys: true);
+                    material.RoughnessFactor = 0.6f + (ovRough - 0.6f) * rma;
+                    material.MetallicFactor = ovMetal * rma;
+                }
                 material.RenderEnvironmentMap = material.MetallicFactor > 0.05f || material.RoughnessFactor < 0.4f;
                 // Metals get their colour from the albedo: don't darken it as much.
                 var shade = (float)(0.55 + 0.45 * material.MetallicFactor);
@@ -5778,6 +5789,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
 
                         SavePngAtomic(albedoBmp, filename_bd);
+
+                        // Makeup with its own roughness / metalness (RoughnessMetalnessAlpha > 0):
+                        // bake RoughnessTexture.r / MetalnessTexture.r (x scale + bias) to _rm.
+                        if (dictionary.TryGetValue("RoughnessMetalnessAlpha", out var rmaObj) && ReadFloat(rmaObj) > 0.001f)
+                        {
+                            await BakeMakeupRoughMetal(dictionary, albedoBmp.Width, albedoBmp.Height, filename_rm);
+                        }
+
                         albedoBmp.Dispose();
                     }
                 }
@@ -10248,6 +10267,68 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         });
 
         return cached.Length == 0 ? null : cached;
+    }
+
+    /// <summary>
+    /// Makeup roughness / metalness map: G = RoughnessTexture.r * RoughnessScale + RoughnessBias,
+    /// B = MetalnessTexture.r * MetalnessScale + MetalnessBias, at the size of the diffuse.
+    /// </summary>
+    private async Task BakeMakeupRoughMetal(Dictionary<string, object> dictionary, int w, int h, string path)
+    {
+        float Param(string key, float fallback) =>
+            dictionary.TryGetValue(key, out var o) ? ReadFloat(o) : fallback;
+
+        async Task<Bitmap?> Tex(string key) =>
+            dictionary.TryGetValue(key, out var o) && o is CResourceReference<ITexture> r && r.DepotPath != ResourcePath.Empty
+                ? await LoadTextureAsBitmap(r.DepotPath)
+                : null;
+
+        using var rough = await Tex("RoughnessTexture");
+        using var metal = await Tex("MetalnessTexture");
+        float rScale = Param("RoughnessScale", 1f), rBias = Param("RoughnessBias", 0f);
+        float mScale = Param("MetalnessScale", 1f), mBias = Param("MetalnessBias", 0f);
+
+        using var rm = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        var rect = new Rectangle(0, 0, w, h);
+        var dst = rm.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        System.Drawing.Imaging.BitmapData? rd = null, md = null;
+        try
+        {
+            if (rough != null)
+                rd = rough.LockBits(new Rectangle(0, 0, rough.Width, rough.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            if (metal != null)
+                md = metal.LockBits(new Rectangle(0, 0, metal.Width, metal.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            unsafe
+            {
+                byte* dp = (byte*)dst.Scan0;
+                byte* rp = rd == null ? null : (byte*)rd.Scan0;
+                byte* mp = md == null ? null : (byte*)md.Scan0;
+                int rw = rough?.Width ?? 1, rh = rough?.Height ?? 1, mw = metal?.Width ?? 1, mh = metal?.Height ?? 1;
+                for (var y = 0; y < h; y++)
+                {
+                    var row = dp + y * dst.Stride;
+                    for (var x = 0; x < w; x++)
+                    {
+                        float r = rp != null ? rp[(y * rh / h) * rd!.Stride + (x * rw / w) * 4 + 2] / 255f : 0.5f;
+                        float m = mp != null ? mp[(y * mh / h) * md!.Stride + (x * mw / w) * 4 + 2] / 255f : 0f;
+                        row[x * 4 + 0] = (byte)(Math.Clamp(m * mScale + mBias, 0f, 1f) * 255f);
+                        row[x * 4 + 1] = (byte)(Math.Clamp(r * rScale + rBias, 0f, 1f) * 255f);
+                        row[x * 4 + 2] = 255;
+                        row[x * 4 + 3] = 255;
+                    }
+                }
+            }
+        }
+        finally
+        {
+            rm.UnlockBits(dst);
+            if (rd != null)
+                rough!.UnlockBits(rd);
+            if (md != null)
+                metal!.UnlockBits(md);
+        }
+
+        SavePngAtomic(rm, path);
     }
 
     /// <summary>Tangent normal map: XY scaled by the strength, Z rebuilt (glass NormalStrength).</summary>
