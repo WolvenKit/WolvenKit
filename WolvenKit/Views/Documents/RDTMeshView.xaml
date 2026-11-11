@@ -515,6 +515,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <Button
@@ -556,6 +557,14 @@
                                         </ContextMenu>
                                     </Button.ContextMenu>
                                 </Button>
+
+                                <CheckBox
+                                    Grid.Column="2"
+                                    Margin="2,4,6,4"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding LiveMaterialUpdate}"
+                                    ToolTip="Live update: after Generate Materials, follow edits. Changing the mesh's materials in this document, or saving its .mi / .mlsetup / .mlmask / .mltemplate / .xbm files in the project, updates the preview. Only the changed materials are rebuilt."
+                                    Content="Live" />
                             </Grid>
                         </Grid>
 
@@ -582,12 +591,6 @@
                                 ToolTip="Bake all materials of this appearance to _d (sRGB), _n (OpenGL, Non-Color), _rm (G roughness, B metalness, Non-Color) and _emissive PNGs in a folder you choose. Multilayer maps use the size on the left."
                                 Content="Bake / Export Materials..." />
                         </Grid>
-
-                        <CheckBox
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            IsChecked="{Binding LiveMaterialUpdate}"
-                            ToolTip="After Generate Materials, follow edits: changing the mesh's materials in this document, or saving its .mi / .mlsetup / .mlmask / .mltemplate / .xbm files in the project, updates the preview. Only the changed materials are rebuilt."
-                            Content="Live update" />
 
                         <Border Background="{StaticResource WolvenKitRed}"
                                 CornerRadius="{DynamicResource WolvenKitTinyRadius}"
