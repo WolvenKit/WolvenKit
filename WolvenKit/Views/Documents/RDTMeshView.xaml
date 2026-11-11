@@ -563,7 +563,7 @@
                                     Margin="2,4,6,4"
                                     VerticalAlignment="Center"
                                     IsChecked="{Binding LiveMaterialUpdate}"
-                                    ToolTip="Live update: after Generate Materials, follow edits. Changing the mesh's materials in this document, or saving its .mi / .mlsetup / .mlmask / .mltemplate / .xbm files in the project, updates the preview. Only the changed materials are rebuilt."
+                                    ToolTip="Live update: after Generate Materials, follow edits. Changing the mesh's materials in this document, or saving its .mi / .mlsetup / .mlmask / .mltemplate / .xbm / .hp files in the project, updates the preview. Only the changed materials are rebuilt."
                                     Content="Live" />
                             </Grid>
                         </Grid>

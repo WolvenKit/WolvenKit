@@ -13,7 +13,8 @@ namespace WolvenKit.App.ViewModels.Documents;
 /// - edits in the open document (mesh materials, embedded files): every change marks the
 ///   document dirty (DocumentViewModel.ContentModified), the materials are rebuilt from the
 ///   in-memory mesh;
-/// - saved project files (.mi, .mlsetup, .mlmask, .mltemplate, .xbm, .mesh, .mt): a file
+/// - saved project files (.mi, .mlsetup, .mlmask, .mltemplate, .xbm, .hp, .gradient, .mesh, .mt,
+///   or any other file the materials were read from): a file
 ///   watcher on the project's archive folder drops them from the file cache.
 /// Changes are collected for a moment (typing in a field changes the value on every key),
 /// then one generation runs; unchanged materials stay cached (bake stamps include values
@@ -25,7 +26,7 @@ public partial class RDTMeshViewModel
 
     private static readonly HashSet<string> s_liveExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
-        ".mi", ".mt", ".mlsetup", ".mlmask", ".mltemplate", ".xbm", ".mesh",
+        ".mi", ".mt", ".mlsetup", ".mlmask", ".mltemplate", ".xbm", ".mesh", ".hp", ".gradient",
     };
 
     private static bool s_liveMaterialUpdate = true;
@@ -113,13 +114,32 @@ public partial class RDTMeshViewModel
 
     private void OnLiveFileChanged(object sender, FileSystemEventArgs e)
     {
-        if (!s_liveExtensions.Contains(Path.GetExtension(e.FullPath)))
+        // Known material file types, or any file the materials were built from (it is in the
+        // file cache), so a type missing from the list (e.g. a new resource kind) still counts.
+        if (!s_liveExtensions.Contains(Path.GetExtension(e.FullPath)) && !IsLoadedProjectFile(e.FullPath))
         {
             return;
         }
 
         _liveChangedFiles.Enqueue(e.FullPath);
         ScheduleLiveUpdate();
+    }
+
+    private bool IsLoadedProjectFile(string fullPath)
+    {
+        try
+        {
+            if (_liveModDirectory == null || !fullPath.StartsWith(_liveModDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return _fileCache.ContainsKey((ResourcePath)Path.GetRelativePath(_liveModDirectory, fullPath));
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>(Re)starts the delay; the update runs on the UI thread when it expires.</summary>
