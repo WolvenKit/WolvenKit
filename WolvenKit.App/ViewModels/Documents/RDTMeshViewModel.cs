@@ -461,7 +461,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             while (SelectedAppearance is { } current && !ReferenceEquals(done, current))
             {
                 done = current;
-                await GenerateMaterials(clearCache: false);
+                // Files were read when Generate was pressed: no re-read from disk on every
+                // switch (that re-parsed all meshes and materials on the UI thread).
+                await GenerateMaterials(clearCache: false, refreshFromDisk: false);
             }
         }
         catch (Exception ex)
@@ -2886,6 +2888,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         { ticks = File.GetLastWriteTimeUtc(path).Ticks; }
         catch { /* missing */ }
         var key = path + "|" + ticks;
+        if (_textureCache.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
+
+        // A rebaked PNG: forget the entries of its older versions.
+        var prefix = path + "|";
+        foreach (var old in _textureCache.Keys)
+        {
+            if (old.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                _textureCache.TryRemove(old, out _);
+            }
+        }
+
         return _textureCache.GetOrAdd(key, _ => TextureModel.Create(path));
     }
 
@@ -3502,7 +3519,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     [RelayCommand]
     private Task RegenerateMaterials() => GenerateMaterials(clearCache: true);
 
-    private async Task GenerateMaterials(bool clearCache)
+    /// <param name="refreshFromDisk">
+    /// Re-read meshes and materials from the project / archive first (Generate button).
+    /// Off for the automatic generation on appearance switch and for icon batches: nothing
+    /// was edited in between, and the re-read is the slow part.
+    /// </param>
+    private async Task GenerateMaterials(bool clearCache, bool refreshFromDisk = true)
     {
         if (IsLoadingMaterials || SelectedAppearance == null)
         {
@@ -3519,7 +3541,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         try
         {
-            RefreshMaterialsFromDisk();
+            if (refreshFromDisk || clearCache)
+            {
+                RefreshMaterialsFromDisk();
+            }
 
             var ctrl = clearCache;
             // Multilayer is shown by the shader; 2048 is only the fallback bake (shader not
@@ -3566,8 +3591,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             IsLoadingMaterials = false;
         }
 
-        // Drop anything loaded mid-bake so Apply picks up the fresh PNGs.
-        _textureCache.Clear();
+        // No cache clear here: texture keys include the PNG write time, so a rebaked PNG gets
+        // a new entry and the unchanged ones are reused (clearing re-decoded and re-uploaded
+        // every texture of the appearance on each switch).
 
         if (SelectedAppearance != null)
             ApplyAppearancePreviewMaterials(SelectedAppearance);

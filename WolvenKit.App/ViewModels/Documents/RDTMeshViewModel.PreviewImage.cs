@@ -403,7 +403,7 @@ public partial class RDTMeshViewModel
             await Task.Delay(50);
         }
 
-        await GenerateMaterials(clearCache: false);
+        await GenerateMaterials(clearCache: false, refreshFromDisk: false);
     }
 
     /// <summary>Asks for the folder of the per-appearance icons; null if cancelled or not confirmed.</summary>
