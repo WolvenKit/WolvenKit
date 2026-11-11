@@ -583,6 +583,12 @@
                                 Content="Bake / Export Materials..." />
                         </Grid>
 
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding LiveMaterialUpdate}"
+                            ToolTip="After Generate Materials, follow edits: changing the mesh's materials in this document, or saving its .mi / .mlsetup / .mlmask / .mltemplate / .xbm files in the project, updates the preview. Only the changed materials are rebuilt."
+                            Content="Live update" />
+
                         <Border Background="{StaticResource WolvenKitRed}"
                                 CornerRadius="{DynamicResource WolvenKitTinyRadius}"
                                 Margin="{DynamicResource WolvenKitMarginTiny}"

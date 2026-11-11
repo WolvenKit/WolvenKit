@@ -44,10 +44,21 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
 
     public bool IsInitialized() => _isInitialized;
 
+    /// <summary>
+    /// Raised on every <see cref="SetIsDirty"/>(true), i.e. after each edit; <see cref="IsDirty"/>
+    /// itself only changes on the first one. Lets views of the document follow the edits
+    /// (the mesh preview updates its materials).
+    /// </summary>
+    public event EventHandler? ContentModified;
+
     public void SetIsDirty(bool b)
     {
         IsDirty = b;
         Header = GetHeader();
+        if (b)
+        {
+            ContentModified?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public DateTime LastWriteTime { get; protected set; } = DateTime.MaxValue;

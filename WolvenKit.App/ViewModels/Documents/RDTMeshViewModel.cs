@@ -272,6 +272,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         _disposed = true;
 
         _modifierSvc.ModifierStateChanged -= ModifierStateChanged;
+        StopLiveMaterialUpdate();
         RollbackGeneratedData();
         _textureCache.Clear();
         ClearMultilayerShaderCache();
@@ -3524,7 +3525,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// Off for the automatic generation on appearance switch and for icon batches: nothing
     /// was edited in between, and the re-read is the slow part.
     /// </param>
-    private async Task GenerateMaterials(bool clearCache, bool refreshFromDisk = true)
+    /// <param name="rebuildMaterials">
+    /// Without a refresh from disk: still rebuild the materials from the open (possibly unsaved)
+    /// mesh, keeping the file cache (live update after an edit).
+    /// </param>
+    private async Task GenerateMaterials(bool clearCache, bool refreshFromDisk = true, bool rebuildMaterials = false)
     {
         if (IsLoadingMaterials || SelectedAppearance == null)
         {
@@ -3544,6 +3549,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (refreshFromDisk || clearCache)
             {
                 RefreshMaterialsFromDisk();
+            }
+            else if (rebuildMaterials)
+            {
+                RefreshMaterialsFromDisk(clearFiles: false);
             }
 
             var ctrl = clearCache;
@@ -3579,8 +3588,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     await LoadMaterial(m, bakeMax, forceBake);
             });
 
-            Parent?.GetLoggerService()?.Info("All materials loaded!");
+            if (refreshFromDisk || clearCache)
+                Parent?.GetLoggerService()?.Info("All materials loaded!");
+            else
+                Parent?.GetLoggerService()?.Debug("Materials updated");
             _materialsGenerated = true;
+            EnsureLiveMaterialUpdate();
         }
         catch (Exception ex)
         {
@@ -3599,9 +3612,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyAppearancePreviewMaterials(SelectedAppearance);
     }
 
-    private void RefreshMaterialsFromDisk()
+    private void RefreshMaterialsFromDisk(bool clearFiles = true)
     {
-        ClearFileCache();
+        if (clearFiles)
+        {
+            ClearFileCache();
+        }
 
         if (SelectedAppearance?.RawMaterials == null)
             return;
