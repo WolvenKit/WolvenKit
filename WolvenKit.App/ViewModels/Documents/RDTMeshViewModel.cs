@@ -3010,6 +3010,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         TrackDependency(depotPath);
 
+        // Files embedded in the sector being drawn (foliage, meshes...) come first, as in the game.
+        // Not put in _fileCache: another sector may embed other content under the same path.
+        if (_sectorEmbeddedFiles != null && _sectorEmbeddedFiles.TryGetValue(depotPath, out var sectorEmbedded))
+            return sectorEmbedded;
+
         if (_fileCache.TryGetValue(depotPath, out var cached))
             return cached;
 
@@ -8595,7 +8600,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var wantedApps = new Dictionary<ResourcePath, HashSet<string>>();
         for (var depth = 0; depth < 6 && wave.Count > 0; depth++)
         {
-            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
+            // embedded files are not read from the archive: the archive copy would hide them
+            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p) || IsEmbeddedForSector(p));
             PrefetchFiles(am, wave);
 
             var next = new HashSet<ResourcePath>();
@@ -8736,7 +8742,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     #endregion
 
-    public SectorGroup RenderSector(worldStreamingSector data, Appearance app)
+    /// <param name="sectorFile">the sector's file when it is not the open document (block preview), for its embedded files</param>
+    public SectorGroup RenderSector(worldStreamingSector data, Appearance app, CR2WFile? sectorFile = null)
+    {
+        PrepareSectorEmbeddedFiles(data, sectorFile);
+        try
+        {
+            return RenderSectorContent(data, app);
+        }
+        finally
+        {
+            _sectorEmbeddedFiles = null;
+        }
+    }
+
+    private SectorGroup RenderSectorContent(worldStreamingSector data, Appearance app)
     {
         if (data.NodeData.Data is not worldNodeDataBuffer buffer)
         {
@@ -9400,7 +9420,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
         }
 
-        sector.Element = RenderSector(wss, Appearances[0]);
+        sector.Element = RenderSector(wss, Appearances[0], sectorFile);
 
         // the block names the sector's variants and says which the game loads by default
         foreach (var variant in sector.Variants)

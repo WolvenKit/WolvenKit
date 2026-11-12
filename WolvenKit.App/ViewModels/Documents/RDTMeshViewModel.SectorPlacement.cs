@@ -6,6 +6,7 @@ using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using WolvenKit.App.Models;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using MeshGeometry3D = HelixToolkit.SharpDX.Core.MeshGeometry3D;
 using NMatrix = System.Numerics.Matrix4x4;
@@ -507,6 +508,63 @@ public partial class RDTMeshViewModel
         (float)m.M21, (float)m.M22, (float)m.M23, (float)m.M24,
         (float)m.M31, (float)m.M32, (float)m.M33, (float)m.M34,
         (float)m.OffsetX, (float)m.OffsetY, (float)m.OffsetZ, (float)m.M44);
+
+    #region embedded files
+
+    // Files embedded in the sector being drawn and in its extern inplace resource, by path.
+    private Dictionary<ResourcePath, CR2WFile>? _sectorEmbeddedFiles;
+
+    /// <summary>
+    /// Sectors often keep their foliage (and other resources) embedded: in the sector file itself,
+    /// or in its extern inplace resource (.streamingsector_inplace). The open document's embedded files
+    /// were found already; a sector loaded in a block preview and the inplace resource were not.
+    /// </summary>
+    private void PrepareSectorEmbeddedFiles(worldStreamingSector data, CR2WFile? sectorFile)
+    {
+        _sectorEmbeddedFiles = null;
+        var found = new Dictionary<ResourcePath, CR2WFile>();
+
+        void Add(CR2WFile? file)
+        {
+            if (file == null)
+            {
+                return;
+            }
+
+            foreach (var embedded in file.EmbeddedFiles)
+            {
+                if (embedded?.Content != null && embedded.FileName != ResourcePath.Empty)
+                {
+                    found.TryAdd(embedded.FileName, new CR2WFile { RootChunk = embedded.Content });
+                }
+            }
+        }
+
+        // the sector's own embedded files win over the shared inplace resource
+        Add(sectorFile);
+
+        try
+        {
+            if (data.ExternInplaceResource.DepotPath != ResourcePath.Empty)
+            {
+                Add(GetProjectOrDepotFile(data.ExternInplaceResource.DepotPath));
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Warning($"[Sector] could not read the inplace resource {data.ExternInplaceResource.DepotPath}: {ex.Message}");
+        }
+
+        if (found.Count > 0)
+        {
+            _sectorEmbeddedFiles = found;
+        }
+    }
+
+    private bool IsEmbeddedForSector(ResourcePath path) =>
+        (_sectorEmbeddedFiles?.ContainsKey(path) ?? false) || FindEmbeddedContent(path) != null;
+
+    #endregion
 
     #region bended meshes
 
