@@ -37,6 +37,24 @@ public partial class RDTMeshViewModel
     private const double DecalDropShare = 0.01;            // stray triangles not drawn
 
     private readonly ConcurrentDictionary<string, byte> _decalBakesRunning = new();
+
+    private static bool s_blendDecals = true;
+
+    /// <summary>
+    /// Blend mesh decals into the surfaces under them (on), or draw them as their own meshes
+    /// (off). Shared by all preview tabs; switching re-applies the current appearance.
+    /// </summary>
+    public bool BlendDecalsIntoSurfaces
+    {
+        get => s_blendDecals;
+        set
+        {
+            if (SetProperty(ref s_blendDecals, value) && SelectedAppearance is { } app && !IsLoadingMaterials)
+            {
+                ApplyAppearancePreviewMaterials(app);
+            }
+        }
+    }
     private PBRMaterial? _hiddenDecalMaterial;
 
     // decal submesh -> (surface submesh -> its triangles on that surface): geometry only,
@@ -76,6 +94,11 @@ public partial class RDTMeshViewModel
         try
         {
             RestoreDecals(app);
+            if (!BlendDecalsIntoSurfaces)
+            {
+                return;
+            }
+
             var layers = FindDecalLayers(app);
             if (layers.Count == 0)
             {
@@ -126,7 +149,7 @@ public partial class RDTMeshViewModel
                     {
                         context.Post(_ =>
                         {
-                            if (!_disposed && SelectedAppearance == app && File.Exists(cd))
+                            if (!_disposed && BlendDecalsIntoSurfaces && SelectedAppearance == app && File.Exists(cd))
                             {
                                 UseDecalComposite(app, surfaceName, decals, cd, cn, crm);
                             }

@@ -516,6 +516,7 @@
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <Button
@@ -565,6 +566,14 @@
                                     IsChecked="{Binding LiveMaterialUpdate}"
                                     ToolTip="Live update: after Generate Materials, follow edits. Changing the mesh's materials in this document, or saving its .mi / .mlsetup / .mlmask / .mltemplate / .xbm / .hp files in the project, updates the preview. Only the changed materials are rebuilt."
                                     Content="Live" />
+
+                                <CheckBox
+                                    Grid.Column="3"
+                                    Margin="2,4,6,4"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding BlendDecalsIntoSurfaces}"
+                                    ToolTip="Blend decals into the surface under them, as the game does: colour, normal and roughness / metalness of mesh decals are baked into the skin or material they lie on, which is then lit as one surface. Off: decals are drawn as their own meshes (faster, but lit differently). Decals on multilayer materials are always drawn on their own for now."
+                                    Content="Blend decals" />
                             </Grid>
                         </Grid>
 
