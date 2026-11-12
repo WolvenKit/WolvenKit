@@ -19,12 +19,12 @@
                         <DataTrigger
                             Binding="{Binding HasError}"
                             Value="true">
-                            <Setter Property="Foreground" Value="{StaticResource WolvenKitRedPaleColor}" />
+                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitRedPaleColor}" />
                         </DataTrigger>
                         <DataTrigger
                             Binding="{Binding HasError}"
                             Value="false">
-                            <Setter Property="Foreground" Value="{StaticResource WolvenKitFrameColor}" />
+                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitFrameColor}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

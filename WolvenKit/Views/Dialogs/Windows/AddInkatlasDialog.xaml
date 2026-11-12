@@ -12,7 +12,7 @@
     MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
     MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
     Padding="{DynamicResource WolvenKitMarginTop}"
-    Background="{StaticResource BackgroundColor_Control}"
+    Background="{DynamicResource BackgroundColor_Control}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=FilterableDropdownMenu}"
     DataContext="{Binding RelativeSource={RelativeSource Self},
@@ -41,7 +41,7 @@
             <syncfusion:WizardPage
                 Height="Auto"
                 Margin="{DynamicResource WolvenKitMarginHorizontal}"
-                Background="{StaticResource BackgroundColor_Control}"
+                Background="{DynamicResource BackgroundColor_Control}"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
@@ -107,6 +107,7 @@
                         IsReadOnly="True" />
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="ClearExistingFileButton"
                         Grid.Row="4"
                         Grid.Column="5"
@@ -117,7 +118,7 @@
                             IconPack="Material"
                             Kind="Delete"
                             Size="{DynamicResource WolvenKitIconMicro}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </Button>
 
 
@@ -187,7 +188,7 @@
                         Width="15"
                         Margin="{DynamicResource WolvenKitMarginTinyTop}"
                         HorizontalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         Content="x" />
 
                     <TextBox
@@ -241,6 +242,7 @@
                     </TextBox>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Grid.Row="14"
                         Grid.Column="5"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
