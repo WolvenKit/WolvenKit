@@ -16,6 +16,7 @@ namespace WolvenKit.Views.HomePage.Pages
         private bool _isStackedLayout;
         private bool _layoutModeInitialized;
         private Window _hostWindow;
+        private bool _refreshWhenShown;
 
         public WelcomePageView()
         {
@@ -26,6 +27,7 @@ namespace WolvenKit.Views.HomePage.Pages
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            IsVisibleChanged += OnIsVisibleChanged;
 
             Locator.Current.GetService<IThemeService>()?.Register(this);
             SizeChanged += (_, _) => UpdateLayoutMode();
@@ -111,32 +113,41 @@ namespace WolvenKit.Views.HomePage.Pages
 
         /// <summary>
         /// Re-applying the skin re-templates the Syncfusion CardViews, which then show no cards although the
-        /// project lists are unchanged. Fill the lists again once the main window is shown with the new theme.
+        /// project lists are unchanged. Fill the lists again once this page is on screen with the new theme:
+        /// right away if it is shown, otherwise when it is shown again (e.g. the theme was switched with a
+        /// project open and the user goes back Home, or the main window is hidden while the skin is applied).
         /// </summary>
         void IThemeAware.OnThemeChanged()
         {
-            var window = Application.Current?.MainWindow;
-            if (window is null || ViewModel is null)
+            if (ViewModel is null)
             {
                 return;
             }
 
-            if (window.IsVisible)
+            _refreshWhenShown = true;
+            if (IsVisible)
             {
-                RefreshProjectListsWhenIdle();
+                RefreshIfPending();
+            }
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                RefreshIfPending();
+            }
+        }
+
+        private void RefreshIfPending()
+        {
+            if (!_refreshWhenShown)
+            {
                 return;
             }
 
-            void OnVisible(object sender, DependencyPropertyChangedEventArgs e)
-            {
-                if (!window.IsVisible)
-                {
-                    return;
-                }
-                window.IsVisibleChanged -= OnVisible;
-                RefreshProjectListsWhenIdle();
-            }
-            window.IsVisibleChanged += OnVisible;
+            _refreshWhenShown = false;
+            RefreshProjectListsWhenIdle();
         }
 
         private void RefreshProjectListsWhenIdle() =>
