@@ -163,11 +163,19 @@ public partial class RDTMeshViewModel
         }
     }
 
-    public bool UseWorkLighting => PreviewLighting == "Default";
-    public bool UseIconContrastLighting => PreviewLighting == "Icon";
-    public bool UseIconLighting => PreviewLighting == "Icon (soft)";
-    public bool UseFollowLighting => PreviewLighting == "Icon (follow camera)";
-    public bool UseFlatLighting => PreviewLighting == "Flat";
+    // Sector / block previews have no Camera section: they keep the default lights even when
+    // another preview tab picked a preset (the preset is shared by all tabs).
+    public bool UseWorkLighting => !IsObjectPreview || PreviewLighting == "Default";
+    public bool UseIconContrastLighting => IsObjectPreview && PreviewLighting == "Icon";
+    public bool UseIconLighting => IsObjectPreview && PreviewLighting == "Icon (soft)";
+    public bool UseFollowLighting => IsObjectPreview && PreviewLighting == "Icon (follow camera)";
+    public bool UseFlatLighting => IsObjectPreview && PreviewLighting == "Flat";
+
+    /// <summary>
+    /// Mesh and entity previews. The Camera, Image &amp; Icons and Shader Debug sections are made
+    /// for single items; sector and block previews hide them.
+    /// </summary>
+    public bool IsObjectPreview => Header != WolvenKit.App.Models.MeshViewHeaders.SectorPreview && Header != WolvenKit.App.Models.MeshViewHeaders.AllSectorPreview;
 
     private static string? s_previewImageFolder;
 
@@ -224,6 +232,13 @@ public partial class RDTMeshViewModel
     private static bool s_cameraSectionExpanded = true;
     private static bool s_debugSectionExpanded;
     private static bool s_exportSectionExpanded = true;
+    private static bool s_sectorSectionExpanded = true;
+
+    public bool IsSectorSectionExpanded
+    {
+        get => s_sectorSectionExpanded;
+        set => SetProperty(ref s_sectorSectionExpanded, value);
+    }
 
     public bool IsExportSectionExpanded
     {
