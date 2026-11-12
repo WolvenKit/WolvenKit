@@ -2,12 +2,14 @@ using System;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.HomePage.Pages;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -134,7 +136,41 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         private void RefreshProjectListsWhenIdle() =>
-            Dispatcher.BeginInvoke(() => ViewModel?.RefreshProjectLists(), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+            Dispatcher.BeginInvoke(RefreshProjectLists, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+
+        /// <summary>
+        /// Fills the project lists again and gives both CardViews their ItemsSource anew, so a CardView that was
+        /// re-templated by the skin builds its cards again instead of keeping an empty panel.
+        /// </summary>
+        private void RefreshProjectLists()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.RefreshProjectLists();
+
+            foreach (var cardView in new object[] { PinnedCardView, RecentCardView })
+            {
+                if (cardView is not ItemsControl itemsControl)
+                {
+                    continue;
+                }
+
+                var binding = BindingOperations.GetBindingBase(itemsControl, ItemsControl.ItemsSourceProperty);
+                if (binding is null)
+                {
+                    continue;
+                }
+
+                BindingOperations.ClearBinding(itemsControl, ItemsControl.ItemsSourceProperty);
+                BindingOperations.SetBinding(itemsControl, ItemsControl.ItemsSourceProperty, binding);
+            }
+
+            Locator.Current.GetService<ILoggerService>()?.Debug(
+                $"Welcome page: project lists refilled ({ViewModel.FancyPinnedProjects.Count} pinned, {ViewModel.FancyProjects.Count} recent)");
+        }
 
         /// <summary>
         /// Side-by-side: projects and actions each scroll in place.
