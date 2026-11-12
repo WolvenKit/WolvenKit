@@ -418,6 +418,188 @@ public partial class RDTMeshViewModel
         return result;
     }
 
+    // ---- mesh_decal parameters on the decal's own maps ------------------------------------------
+
+    /// <summary>Templates whose decal maps take UVOffset / UVScale / UVRotation, flipbook and coverage params.</summary>
+    private bool IsUvTransformedDecal(Material material)
+    {
+        var template = GetTemplateFileName(material);
+        return (template.Equals("mesh_decal", StringComparison.OrdinalIgnoreCase) ||
+                template.Equals("mesh_decal_emissive", StringComparison.OrdinalIgnoreCase)) &&
+               Has(ClassifyMaterialFor(material.Name, material), MaterialKind.Decal);
+    }
+
+    /// <summary>
+    /// The decal's baked maps as the game samples them (Blender add-on decal_nodes.py):
+    /// UV = frac(rotate((uv - 0.5) * UVScale, UVRotation * pi) + 0.5 + UVOffset) in mesh UV
+    /// (V up), divided by the flipbook grid (AnimationFramesWidth / Height: its first frame);
+    /// coverage = contrast(alpha, AlphaMaskContrast)^2 * (1 - SecondaryMask.r * SecondaryMaskInfluence).
+    /// The normal map's XY turn with the UV.
+    /// </summary>
+    private async Task PostProcessMeshDecalMaps(Dictionary<string, object> dictionary, string bd, string bn, string rm)
+    {
+        float P(string key, float fallback) => dictionary.TryGetValue(key, out var o) ? ReadFloat(o) : fallback;
+
+        double offX = P("UVOffsetX", 0), offY = P("UVOffsetY", 0);
+        double sX = P("UVScaleX", 1), sY = P("UVScaleY", 1);
+        if (Math.Abs(sX) < 1e-6)
+        {
+            sX = 1e-6;
+        }
+
+        if (Math.Abs(sY) < 1e-6)
+        {
+            sY = 1e-6;
+        }
+        double angle = P("UVRotation", 0) * Math.PI;
+        var cols = Math.Max(1, (int)P("AnimationFramesWidth", 1));
+        var rows = Math.Max(1, (int)P("AnimationFramesHeight", 1));
+        var contrast = Math.Clamp(P("AlphaMaskContrast", 0), -1f, 0.99f);
+        var secInfluence = P("SecondaryMaskInfluence", 0);
+        var secScale = P("SecondaryMaskUVScale", 1);
+
+        var identity = Math.Abs(offX) < 1e-6 && Math.Abs(offY) < 1e-6 && Math.Abs(sX - 1) < 1e-6 &&
+                       Math.Abs(sY - 1) < 1e-6 && Math.Abs(angle) < 1e-6 && cols == 1 && rows == 1;
+        double cos = Math.Cos(angle), sin = Math.Sin(angle);
+
+        // Mesh UV (V up) -> texture UV (V up), flipbook frame 0.
+        (double U, double V) Map(double u, double v)
+        {
+            double cu = (u - 0.5) * sX, cv = (v - 0.5) * sY;
+            double ru = cu * cos - cv * sin, rv = cu * sin + cv * cos;
+            double tu = ru + 0.5 + offX, tv = rv + 0.5 + offY;
+            tu -= Math.Floor(tu);
+            tv -= Math.Floor(tv);
+            return (tu / cols, tv / rows);
+        }
+
+        // Normal XY (PNG, Y up = V up): texture frame -> mesh frame, inverse of scale * rotation.
+        double n00 = cos / sX, n01 = sin / sX, n10 = -sin / sY, n11 = cos / sY;
+        var nScale = Math.Sqrt(Math.Abs(n00 * n11 - n01 * n10));
+        if (nScale > 1e-9)
+        {
+            n00 /= nScale;
+            n01 /= nScale;
+            n10 /= nScale;
+            n11 /= nScale;
+        }
+
+        Pixels? Remap(string path, bool isNormal)
+        {
+            using var src = LoadPng32(path);
+            var sp = Pixels.From(src);
+            if (sp == null || identity)
+            {
+                return sp;
+            }
+
+            var dst = new Pixels { W = sp.W, H = sp.H, Data = new byte[sp.Data.Length] };
+            Span<float> s4 = stackalloc float[4];
+            for (var y = 0; y < dst.H; y++)
+            {
+                var v = 1.0 - (y + 0.5) / dst.H;
+                for (var x = 0; x < dst.W; x++)
+                {
+                    var (tu, tv) = Map((x + 0.5) / dst.W, v);
+                    sp.Sample(tu, 1.0 - tv, s4);
+                    var o = (y * dst.W + x) * 4;
+                    if (isNormal)
+                    {
+                        double nx = s4[2] * 2 - 1, ny = s4[1] * 2 - 1;
+                        var rx = n00 * nx + n01 * ny;
+                        var ry = n10 * nx + n11 * ny;
+                        dst.Data[o + 2] = (byte)Math.Clamp((rx * 0.5 + 0.5) * 255, 0, 255);
+                        dst.Data[o + 1] = (byte)Math.Clamp((ry * 0.5 + 0.5) * 255, 0, 255);
+                        dst.Data[o] = (byte)Math.Clamp(s4[0] * 255, 0, 255);
+                    }
+                    else
+                    {
+                        dst.Data[o] = (byte)Math.Clamp(s4[0] * 255, 0, 255);
+                        dst.Data[o + 1] = (byte)Math.Clamp(s4[1] * 255, 0, 255);
+                        dst.Data[o + 2] = (byte)Math.Clamp(s4[2] * 255, 0, 255);
+                    }
+
+                    dst.Data[o + 3] = (byte)Math.Clamp(s4[3] * 255, 0, 255);
+                }
+            }
+
+            return dst;
+        }
+
+        void Save(Pixels p, string path)
+        {
+            using var bmp = p.ToBitmap();
+            SavePngAtomic(bmp, path);
+        }
+
+        try
+        {
+            if (!identity)
+            {
+                foreach (var (path, isNormal) in new[] { (bn, true), (rm, false) })
+                {
+                    if (File.Exists(path) && Remap(path, isNormal) is { } p)
+                    {
+                        Save(p, path);
+                    }
+                }
+            }
+
+            if (!File.Exists(bd) || Remap(bd, false) is not { } color)
+            {
+                return;
+            }
+
+            // Coverage: contrast, then squared and the secondary mask (mesh_decal).
+            Pixels? secondary = null;
+            if (Math.Abs(secInfluence) > 1e-8 &&
+                dictionary.TryGetValue("SecondaryMask", out var smObj) &&
+                smObj is WolvenKit.RED4.Types.CResourceReference<WolvenKit.RED4.Types.ITexture> smRef &&
+                smRef.DepotPath != WolvenKit.RED4.Types.ResourcePath.Empty)
+            {
+                using var sb = await LoadTextureAsBitmap(smRef.DepotPath);
+                secondary = Pixels.From(sb);
+            }
+
+            ApplyCoverage(color, secondary);
+            Save(color, bd);
+        }
+        catch (Exception ex)
+        {
+            Parent?.GetLoggerService()?.Warning($"[Decals] decal parameters: {ex.Message}");
+        }
+
+        void ApplyCoverage(Pixels target, Pixels? mask2)
+        {
+            var slope = MathF.Tan((contrast + 1f) * MathF.PI / 4f);
+            Span<float> m4 = stackalloc float[4];
+            for (var y = 0; y < target.H; y++)
+            {
+                var v = 1.0 - (y + 0.5) / target.H;
+                for (var x = 0; x < target.W; x++)
+                {
+                    var o = (y * target.W + x) * 4;
+                    var a = target.Data[o + 3] / 255f;
+                    if (contrast != 0f)
+                    {
+                        a = Math.Clamp((a - 0.5f) * slope + 0.5f, 0f, 1f);
+                    }
+
+                    var keep = a;
+                    if (mask2 != null)
+                    {
+                        // Secondary mask on the transformed UV (before the flipbook), scaled.
+                        var (tu, tv) = Map((x + 0.5) / target.W, v);
+                        mask2.Sample(tu * cols * secScale, 1.0 - tv * rows * secScale, m4);
+                        keep = a * (1f - m4[2] * secInfluence);
+                    }
+
+                    target.Data[o + 3] = (byte)Math.Clamp(a * keep * 255f, 0f, 255f);
+                }
+            }
+        }
+    }
+
     private const int UvGridCells = 512;          // per UV unit
     private const double SharedUvDistance = 0.02; // 2 cm apart on the mesh = another place
 
