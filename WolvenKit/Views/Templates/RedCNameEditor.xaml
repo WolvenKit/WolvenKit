@@ -16,6 +16,9 @@
                 TargetType="TextBox">
                 <!--  e.g. an empty CName (None): same color as other input controls, follows the theme  -->
                 <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <!--  keyed style: no app-wide TextBox colors, so set the theme text color here  -->
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding IsValid}"

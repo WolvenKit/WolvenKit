@@ -57,7 +57,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 case nameof(ThemeEditorViewModel.FilterText):
                 case nameof(ThemeEditorViewModel.ShowOnlyOverridden):
-                case nameof(ThemeEditorViewModel.ShowAdvanced):
+                case nameof(ThemeEditorViewModel.Level):
                     _entriesView.View?.Refresh();
                     break;
                 case nameof(ThemeEditorViewModel.PreviewInApp):

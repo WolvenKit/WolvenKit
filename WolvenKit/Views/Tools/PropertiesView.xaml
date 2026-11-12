@@ -22,22 +22,71 @@
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
+                <!--
+                    File Information tabs. Own template with theme resources: the Syncfusion tab template
+                    captures its colors when it is loaded, so it would keep the old theme after a switch.
+                -->
+                <ControlTemplate x:Key="WolvenKitInfoTabTemplate" TargetType="{x:Type syncfusion:TabItemExt}">
+                    <Border
+                        x:Name="TabBorder"
+                        Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        Background="{DynamicResource ContentBackgroundAlt2}"
+                        SnapsToDevicePixels="True">
+                        <TextBlock
+                            x:Name="TabText"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Style="{x:Null}"
+                            FontSize="{TemplateBinding FontSize}"
+                            Foreground="{DynamicResource ContentForeground}"
+                            Text="{TemplateBinding Header}" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+                            <Setter TargetName="TabText" Property="Foreground" Value="{DynamicResource WolvenKitAccentShadowForeground}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitAccent}" />
+                            <Setter TargetName="TabText" Property="Foreground" Value="{DynamicResource WolvenKitAccentForeground}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="TabText" Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
                 <Style
                     x:Key="WolvenKitTabItemStyle"
                     BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                     TargetType="{x:Type syncfusion:TabItemExt}">
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                     <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
-                    <!--  Style x:Null: the title inherits the tab foreground (readable on the accent-colored selected tab)  -->
-                    <Setter Property="HeaderTemplate">
-                        <Setter.Value>
-                            <DataTemplate>
-                                <TextBlock
-                                    Style="{x:Null}"
-                                    Text="{Binding}" />
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template" Value="{StaticResource WolvenKitInfoTabTemplate}" />
+                    <!--  the Syncfusion base style swaps in its own template per state; our triggers come after its triggers  -->
+                    <Style.Triggers>
+                        <Trigger Property="TabStripPlacement" Value="Top">
+                            <Setter Property="Template" Value="{StaticResource WolvenKitInfoTabTemplate}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Template" Value="{StaticResource WolvenKitInfoTabTemplate}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Template" Value="{StaticResource WolvenKitInfoTabTemplate}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Template" Value="{StaticResource WolvenKitInfoTabTemplate}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Template" Value="{StaticResource WolvenKitInfoTabTemplate}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
 
                 <!-- region PreviewSlider -->
@@ -247,11 +296,16 @@
 
                         <Style TargetType="TextBox">
                             <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyLeft}" />
+                            <!--  file information values: theme field colors  -->
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                            <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                            <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
                         </Style>
                     </Grid.Resources>
 
                     <syncfusion:PropertyGrid
                         x:Name="PEPropGrid"
+                        Background="{DynamicResource ContentBackground}"
                         BorderThickness="0"
                         Visibility="{Binding PE_FileInfoVisible,
                                              Converter={StaticResource ToggleVisibilityConverter}}"
@@ -357,7 +411,7 @@
                         Background="{DynamicResource ContentBackground}">
                         <hx:Viewport3DX
                             Name="hxViewport"
-                            BackgroundColor="{DynamicResource WolvenKitGray12Color}"
+                            BackgroundColor="{DynamicResource WolvenKitViewportBackgroundColor}"
                             Camera="{Binding Camera}"
                             CoordinateSystemLabelForeground="White"
                             EffectsManager="{Binding EffectsManager}"

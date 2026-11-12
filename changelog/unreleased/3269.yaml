@@ -1,0 +1,11 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3269
+      author: "Ametis81"
+      description: "Sector previews load faster; coordinate search and collision buttons are grouped in a Sector section."
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3269
+      author: "Ametis81"
+      description: "Generated materials are shown in sector previews."

@@ -164,6 +164,26 @@
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             </Style>
 
+            <!--
+                Separators (menus and elsewhere): a thin line in the theme border color.
+                The library styles draw a thick, fixed dark line that doesn't follow the theme.
+            -->
+            <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Separator}">
+                            <Border
+                                Height="1"
+                                Margin="0,3"
+                                Background="{DynamicResource WolvenKitSeparator}"
+                                SnapsToDevicePixels="True" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style BasedOn="{StaticResource {x:Static MenuItem.SeparatorStyleKey}}" TargetType="{x:Type Separator}" />
+
             <!-- Don't override TextBlock of ToolTip -->
             <Style
                 x:Key="{x:Type ToolTip}"
@@ -201,6 +221,10 @@
             <Style TargetType="{x:Type syncfusion:SfTextBoxExt}">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
+                <!--  theme field colors (fields that don't set their own, e.g. resource path filters)  -->
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
             </Style>
 
             <Style

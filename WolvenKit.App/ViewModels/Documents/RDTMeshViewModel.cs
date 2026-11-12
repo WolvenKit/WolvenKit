@@ -272,6 +272,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         _disposed = true;
 
         _modifierSvc.ModifierStateChanged -= ModifierStateChanged;
+        StopLiveMaterialUpdate();
         RollbackGeneratedData();
         _textureCache.Clear();
         ClearMultilayerShaderCache();
@@ -461,7 +462,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             while (SelectedAppearance is { } current && !ReferenceEquals(done, current))
             {
                 done = current;
-                await GenerateMaterials(clearCache: false);
+                // Files were read when Generate was pressed: no re-read from disk on every
+                // switch (that re-parsed all meshes and materials on the UI thread).
+                await GenerateMaterials(clearCache: false, refreshFromDisk: false);
             }
         }
         catch (Exception ex)
@@ -513,6 +516,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyRenderFlags(sm);
         }
 
+        ApplyDecalsToSurfaces(app);
+        ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
     }
 
@@ -842,11 +847,34 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (_slotSets.TryGetValue(model.BindName, out var slotBind))
             {
                 if (model.SlotName != null && slotBind.Slots.TryGetValue(model.SlotName, out var slot) &&
-                    groups.ContainsKey(slotBind.BindName + ":" + slot))
+                    groups.TryGetValue(slotBind.BindName + ":" + slot, out var boneGroup))
                 {
-                    groups[slotBind.BindName + ":" + slot].Children.Add(group);
+                    // the slot sits at an offset from its bone
+                    if (slotBind.SlotTransforms.TryGetValue(model.SlotName, out var slotMatrix))
+                    {
+                        AppendTransform(group, slotMatrix);
+                    }
 
+                    boneGroup.Children.Add(group);
                 }
+                else
+                {
+                    // The bone is not drawn (rig skipped or missing): place the component from the
+                    // rig's bind pose, or at the slot component. It used to be left out.
+                    AppendTransform(group, BindingMatrix(model.BindName, model.SlotName) ?? Matrix3D.Identity);
+                    modelGroups.Add(group);
+                }
+            }
+            else if (groups.TryGetValue(model.BindName + ":" + model.SlotName, out var rigBoneGroup))
+            {
+                // bound straight to a bone of a drawn rig
+                rigBoneGroup.Children.Add(group);
+            }
+            else if (BindingMatrix(model.BindName, model.SlotName) is { } boneMatrix)
+            {
+                // bound to a bone of a rig that is not drawn
+                AppendTransform(group, boneMatrix);
+                modelGroups.Add(group);
             }
             else if (groups.TryGetValue(model.BindName, out var modelBind))
             {
@@ -898,7 +926,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             foreach (var entityTemplateComponent in components)
             {
-                if (entityTemplateComponent is not IRedMeshComponent irm || irm.Name.GetResolvedText() is not string s || s == "")
+                if (entityTemplateComponent is not (IRedMeshComponent or entPhysicalDestructionComponent or entClothComponent) ||
+                    entityTemplateComponent is not entIComponent { Name: var componentCName } ||
+                    componentCName.GetResolvedText() is not string s || s == "")
                 {
                     continue;
                 }
@@ -1046,6 +1076,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             meshApp = mc.MeshAppearance;
             chunkMask = mc.ChunkMask;
             componentName = mc.Name;
+        }
+        // Destructible parts (fan blades, glass, signs...) and simulated cloth (flags, curtains)
+        // have a mesh too, but are not IRedMeshComponent: they were left out of entities.
+        else if (component is entPhysicalDestructionComponent destruction)
+        {
+            depotPath = destruction.Mesh.DepotPath;
+            meshApp = destruction.MeshAppearance;
+            componentName = destruction.Name;
+            enabled = destruction.IsEnabled;
+        }
+        else if (component is entClothComponent clothMesh)
+        {
+            depotPath = clothMesh.Mesh.DepotPath;
+            componentName = clothMesh.Name;
+            enabled = clothMesh.IsEnabled;
         }
 
         var enabledChunks = new ObservableCollection<int>();
@@ -1683,8 +1728,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         else if (Has(kind, MaterialKind.Glass))
         {
-            sm.IsTransparent = true;
-            sm.DepthBias = -1;
+            // glass_deferred is drawn opaque in the game (glass-like metal, no transmission).
+            if (!IsDeferredGlass(sm.MaterialName))
+            {
+                sm.IsTransparent = true;
+                sm.DepthBias = -1;
+            }
         }
         else if (Has(kind, MaterialKind.Decal))
         {
@@ -2266,6 +2315,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.RenderEnvironmentMap = false;
             material.RoughnessFactor = 0.8f;
 
+            // Glowing tattoos: masked skin colour baked to _emissive.png, strength 2^EV - 1.
+            var skinEmissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
+            var skinEv = 0f;
+            if (TryGetRawMaterial(name, out var skinEm) && skinEm?.Values != null &&
+                skinEm.Values.TryGetValue("EmissiveEV", out var skinEvObj))
+            {
+                skinEv = ReadFloat(skinEvObj);
+            }
+            if (File.Exists(skinEmissivePng) && skinEv > 0.01f)
+            {
+                var strength = Math.Clamp(MathF.Pow(2f, skinEv) - 1f, 0f, 4f);
+                material.EmissiveMap = GetOrCreateTexture(skinEmissivePng);
+                material.RenderEmissiveMap = true;
+                material.EmissiveColor = new SharpDX.Color4(strength, strength, strength, 1f);
+            }
+
             if (File.Exists(filename_bd))
             {
                 material.AlbedoMap = GetOrCreateTexture(filename_bd);
@@ -2366,6 +2431,33 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.AlbedoColor = new SharpDX.Color4(0.55f, 0.55f, 0.55f, 1f);
             material.RenderAlbedoMap = true;
 
+            // Makeup with its own roughness / metalness (RoughnessMetalnessAlpha > 0): glossy or
+            // metallic lipstick, eyeshadow with glitter. Placeholders give the values (white = 1).
+            if (TryGetRawMaterial(name, out var ovMat) && ovMat?.Values != null &&
+                ovMat.Values.TryGetValue("RoughnessMetalnessAlpha", out var rmaObj) &&
+                ReadFloat(rmaObj) is var rma && rma > 0.001f)
+            {
+                rma = Math.Clamp(rma, 0f, 1f);
+                if (File.Exists(filename_rm))
+                {
+                    // Baked from RoughnessTexture / MetalnessTexture.
+                    material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
+                    material.RenderRoughnessMetallicMap = true;
+                    material.RoughnessFactor = 1f;
+                    material.MetallicFactor = rma;
+                }
+                else
+                {
+                    var (ovRough, ovMetal) = GetDecalRoughMetal(name, makeupKeys: true);
+                    material.RoughnessFactor = 0.6f + (ovRough - 0.6f) * rma;
+                    material.MetallicFactor = ovMetal * rma;
+                }
+                material.RenderEnvironmentMap = material.MetallicFactor > 0.05f || material.RoughnessFactor < 0.4f;
+                // Metals get their colour from the albedo: don't darken it as much.
+                var shade = (float)(0.55 + 0.45 * material.MetallicFactor);
+                material.AlbedoColor = new SharpDX.Color4(shade, shade, shade, 1f);
+            }
+
             if (File.Exists(filename_bn))
             {
                 material.NormalMap = GetOrCreateTexture(filename_bn);
@@ -2377,6 +2469,37 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         // glass (base\materials\glass.mt)
         // Baked PNG already mixes TintColor glass with MaskTexture label.
+        if (Has(kind, MaterialKind.Glass) && IsDeferredGlass(name))
+        {
+            // glass_deferred: opaque; colour, roughness and metalness come from the bake
+            // (glass lobe and MaskTexture surface lobe mixed per pixel).
+            material.RenderEnvironmentMap = true;
+            material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 1f);
+            if (File.Exists(filename_bd))
+            {
+                material.AlbedoMap = GetOrCreateTexture(filename_bd);
+                material.RenderAlbedoMap = true;
+            }
+            if (File.Exists(filename_rm))
+            {
+                material.RoughnessMetallicMap = GetOrCreateTexture(filename_rm);
+                material.RenderRoughnessMetallicMap = true;
+                material.RoughnessFactor = 1f;
+                material.MetallicFactor = 1f;
+            }
+            else
+            {
+                material.RoughnessFactor = DeferredGlassRoughness;
+                material.MetallicFactor = DeferredGlassMetalness;
+            }
+            if (File.Exists(filename_bn))
+            {
+                material.NormalMap = GetOrCreateTexture(filename_bn);
+                material.RenderNormalMap = true;
+            }
+            return material;
+        }
+
         if (Has(kind, MaterialKind.Glass))
         {
             material.RenderEnvironmentMap = true;
@@ -2416,7 +2539,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else
             {
-                material.AlbedoColor = new SharpDX.Color4(tr, tg, tb, opacity);
+                material.AlbedoColor = new SharpDX.Color4(tr, tg, tb, opacity * GlassPreviewAlpha);
             }
             if (File.Exists(filename_bn))
             {
@@ -2435,7 +2558,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 "parallaxscreen", "simple_emissive") ||
             ContainsAny(name,
                 "billboard", "neon", "television", "emissive");
-        if (!isEmissive && TryGetRawMaterial(name, out var emMat) &&
+        // Skin with EmissiveEV (glowing tattoos: EmissiveMask) stays skin: the emissive path
+        // below made the whole body glossy (roughness 0.2) and glowing, i.e. pale.
+        if (!isEmissive && !isSkin && TryGetRawMaterial(name, out var emMat) &&
             emMat?.Values != null)
         {
             if (emMat.Values.TryGetValue("EmissiveEV", out var evCheck) && ReadFloat(evCheck) > 0.01f)
@@ -2511,10 +2636,23 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (ev > 0.01f)
             {
                 float intensity = Math.Clamp(MathF.Pow(2f, ev) * 0.04f, 0.2f, 4f);
-                material.EmissiveColor = new SharpDX.Color4(intensity * cr, intensity * cg, intensity * cb, 1f);
 
                 // Emissive map is baked in LoadMaterial; here we only consume it.
                 var emissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
+
+                // The glow follows the emissive map. While a material that has an emissive texture
+                // has no baked map yet, the colour alone lit the whole mesh (pale, shading washed
+                // out): no glow until the map is there. Without an emissive texture the colour is
+                // the glow itself (panels lit by EmissiveColor / EV only) and stays.
+                if (File.Exists(emissivePng) || !HasEmissiveTexture(name))
+                {
+                    material.EmissiveColor = new SharpDX.Color4(intensity * cr, intensity * cg, intensity * cb, 1f);
+                }
+                else
+                {
+                    material.EmissiveColor = new SharpDX.Color4(0f, 0f, 0f, 1f);
+                    material.RenderEmissiveMap = false;
+                }
 
                 bool scaleBlack = false;
                 if (TryGetRawMaterial(name, out var scaleMat) &&
@@ -2652,6 +2790,27 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             Parent?.GetLoggerService()?.Warning($"[Emissive] bake failed for {name}: {ex.Message}");
         }
+    }
+
+    /// <summary>The material has an emissive texture (Emissive, or AdTexture on screens / billboards).</summary>
+    private bool HasEmissiveTexture(string name)
+    {
+        if (!TryGetRawMaterial(name, out var raw) || raw?.Values == null)
+        {
+            return false;
+        }
+
+        foreach (var key in new[] { "Emissive", "AdTexture" })
+        {
+            if (raw.Values.TryGetValue(key, out var value) &&
+                value is CResourceReference<ITexture> texture &&
+                texture.DepotPath != ResourcePath.Empty)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static void SavePngAtomic(Bitmap bmp, string path)
@@ -2852,6 +3011,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         TrackDependency(depotPath);
 
+        // Files embedded in the sector being drawn (foliage, meshes...) come first, as in the game.
+        // Not put in _fileCache: another sector may embed other content under the same path.
+        if (_sectorEmbeddedFiles != null && _sectorEmbeddedFiles.TryGetValue(depotPath, out var sectorEmbedded))
+            return sectorEmbedded;
+
         if (_fileCache.TryGetValue(depotPath, out var cached))
             return cached;
 
@@ -2888,6 +3052,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         { ticks = File.GetLastWriteTimeUtc(path).Ticks; }
         catch { /* missing */ }
         var key = path + "|" + ticks;
+        if (_textureCache.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
+
+        // A rebaked PNG: forget the entries of its older versions.
+        var prefix = path + "|";
+        foreach (var old in _textureCache.Keys)
+        {
+            if (old.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                _textureCache.TryRemove(old, out _);
+            }
+        }
+
         return _textureCache.GetOrAdd(key, _ => TextureModel.Create(path));
     }
 
@@ -2931,7 +3110,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   O|<file>                 output that existed after the bake (must still exist)
     //   D|P|<path>|<len>|<ticks> dependency found in the project (size + write time)
     //   D|A|<path>               dependency from the game archive / mods (never changes)
-    private const string DepsFormat = "v2";
+    // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
+    // v4: see-through glass, makeup roughness / metalness, glowing tattoos).
+    private const string DepsFormat = "v4";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
@@ -3228,6 +3409,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
     private const float GlassDefaultOpacity = 1f;
 
+    // Transparent glass (glass.mt, glass_onesided.mt …): Opacity 1 (the default) means "full
+    // glass", which is still see-through in the game. Until glass gets its own pass
+    // (transmission + reflections), the preview draws it at this alpha.
+    private const float GlassPreviewAlpha = 0.25f;
+
+    // glass_deferred.mt (Blender add-on glassdeferred.py): the glass lobe has a fixed
+    // roughness; GlassMetalness defaults to 0.8 in the template.
+    private const float DeferredGlassRoughness = 0.1f;
+    private const float DeferredGlassMetalness = 0.8f;
+
     // Haircard albedo multiplier in the preview, tuned by eye against the game.
     private const float HairPreviewAlbedo = 0.4f;
 
@@ -3504,7 +3695,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     [RelayCommand]
     private Task RegenerateMaterials() => GenerateMaterials(clearCache: true);
 
-    private async Task GenerateMaterials(bool clearCache)
+    /// <param name="refreshFromDisk">
+    /// Re-read meshes and materials from the project / archive first (Generate button).
+    /// Off for the automatic generation on appearance switch and for icon batches: nothing
+    /// was edited in between, and the re-read is the slow part.
+    /// </param>
+    /// <param name="rebuildMaterials">
+    /// Without a refresh from disk: still rebuild the materials from the open (possibly unsaved)
+    /// mesh, keeping the file cache (live update after an edit).
+    /// </param>
+    private async Task GenerateMaterials(bool clearCache, bool refreshFromDisk = true, bool rebuildMaterials = false)
     {
         if (IsLoadingMaterials || SelectedAppearance == null)
         {
@@ -3521,7 +3721,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         try
         {
-            RefreshMaterialsFromDisk();
+            if (refreshFromDisk || clearCache)
+            {
+                RefreshMaterialsFromDisk();
+            }
+            else if (rebuildMaterials)
+            {
+                RefreshMaterialsFromDisk(clearFiles: false);
+            }
 
             var ctrl = clearCache;
             // Multilayer is shown by the shader; 2048 is only the fallback bake (shader not
@@ -3556,8 +3763,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     await LoadMaterial(m, bakeMax, forceBake);
             });
 
-            Parent?.GetLoggerService()?.Info("All materials loaded!");
+            if (refreshFromDisk || clearCache)
+                Parent?.GetLoggerService()?.Info("All materials loaded!");
+            else
+                Parent?.GetLoggerService()?.Debug("Materials updated");
             _materialsGenerated = true;
+            EnsureLiveMaterialUpdate();
         }
         catch (Exception ex)
         {
@@ -3568,16 +3779,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             IsLoadingMaterials = false;
         }
 
-        // Drop anything loaded mid-bake so Apply picks up the fresh PNGs.
-        _textureCache.Clear();
+        // No cache clear here: texture keys include the PNG write time, so a rebaked PNG gets
+        // a new entry and the unchanged ones are reused (clearing re-decoded and re-uploaded
+        // every texture of the appearance on each switch).
 
         if (SelectedAppearance != null)
             ApplyAppearancePreviewMaterials(SelectedAppearance);
     }
 
-    private void RefreshMaterialsFromDisk()
+    private void RefreshMaterialsFromDisk(bool clearFiles = true)
     {
-        ClearFileCache();
+        if (clearFiles)
+        {
+            ClearFileCache();
+        }
 
         if (SelectedAppearance?.RawMaterials == null)
             return;
@@ -3807,7 +4022,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 _multilayerGpuData.TryRemove(material.Name, out _);
             }
 
-            if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution))
+            // Deferred glass bakes an RM map too; older bakes of it (as transparent glass) have none.
+            if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution) &&
+                (File.Exists(filename_rm) || !IsDeferredGlass(material.Name, material)))
             {
                 Parent?.GetLoggerService()?.Debug($"[Cache] '{material.Name}' up to date");
                 return;
@@ -4436,11 +4653,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         var mbOffV = (float)layer.MicroblendOffsetV;
 
                         Bitmap? microblendBmp = null;
-                        var useMbMask = layer.Microblend.DepotPath != ResourcePath.Empty;
+                        var mbPath = MicroblendOrDefault(layer.Microblend.DepotPath, $"{SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name}, layer {mls.Layers.IndexOf(layer)}");
+                        var useMbMask = mbPath != ResourcePath.Empty;
                         var useMbNormal = Math.Abs(mbNormalStr) > 0.001f;
                         if (useMbMask)
                         {
-                            microblendBmp = await GetTex(layer.Microblend.DepotPath, flipY: true, tile: mbTile);
+                            microblendBmp = await GetTex(mbPath, flipY: true, tile: mbTile);
                         }
 
                         Bitmap? colorTexBmp = null;
@@ -5194,115 +5412,187 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             return;
                         }
 
-                        // TintColor
-                        if (dictionary.TryGetValue("TintColor", out var tintObj) && tintObj is CColor tintCol)
+                        // Tint and SecondaryAlbedo (tattoos), as skin.mt / the Blender add-on:
+                        //   tf      = |TintScale| * TintColorMask.r
+                        //   tinted  = lerp(albedo, albedo * TintColor, tf)
+                        //   second  = lerp(Secondary, Secondary * tinted, tf * SecondaryAlbedoTintColorInfluence)
+                        //   result  = lerp(tinted, second, Secondary.a * SecondaryAlbedoInfluence)
+                        // so ink takes the skin tone under it instead of being laid over it.
                         {
-                            float tintScale = 0.3f;
-                            if (dictionary.TryGetValue("TintScale", out var scaleObj))
+                            float tr = 1f, tg = 1f, tb = 1f, tintScale = 0f;
+                            if (dictionary.TryGetValue("TintColor", out var tintObj) && tintObj is CColor tintCol)
                             {
-                                if (scaleObj is CFloat cf)
-                                    tintScale = Math.Clamp((float)cf, 0f, 1f);
-                                else if (scaleObj is float f)
-                                    tintScale = Math.Clamp(f, 0f, 1f);
+                                tr = tintCol.Red / 255f;
+                                tg = tintCol.Green / 255f;
+                                tb = tintCol.Blue / 255f;
+                                tintScale = 0.3f;
+                                if (dictionary.TryGetValue("TintScale", out var scaleObj))
+                                    tintScale = Math.Clamp(Math.Abs(ReadFloat(scaleObj)), 0f, 1f);
                             }
 
-                            float tr = tintCol.Red / 255f;
-                            float tg = tintCol.Green / 255f;
-                            float tb = tintCol.Blue / 255f;
+                            float secInfluence = 0.4f, secTintInfluence = 0f;
+                            if (dictionary.TryGetValue("SecondaryAlbedoInfluence", out var infObj))
+                                secInfluence = Math.Clamp(ReadFloat(infObj), 0f, 1f);
+                            if (dictionary.TryGetValue("SecondaryAlbedoTintColorInfluence", out var stiObj))
+                                secTintInfluence = Math.Clamp(ReadFloat(stiObj), 0f, 1f);
 
-                            var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
-                            var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            Bitmap? tintMaskBmp = null;
+                            Bitmap? secBmp = null;
                             try
                             {
-                                unsafe
+                                if (tintScale > 0f &&
+                                    dictionary.TryGetValue("TintColorMask", out var tmObj) &&
+                                    tmObj is CResourceReference<ITexture> tmRef &&
+                                    tmRef.DepotPath != ResourcePath.Empty)
                                 {
-                                    byte* ptr = (byte*)data.Scan0;
-                                    int stride = data.Stride;
-                                    for (int y = 0; y < albedoBmp.Height; y++)
-                                    {
-                                        for (int x = 0; x < albedoBmp.Width; x++)
-                                        {
-                                            int off = y * stride + x * 4;
-                                            ptr[off + 0] = (byte)(ptr[off + 0] * (1f - tintScale) + ptr[off + 0] * tb * tintScale);
-                                            ptr[off + 1] = (byte)(ptr[off + 1] * (1f - tintScale) + ptr[off + 1] * tg * tintScale);
-                                            ptr[off + 2] = (byte)(ptr[off + 2] * (1f - tintScale) + ptr[off + 2] * tr * tintScale);
-                                        }
-                                    }
+                                    tintMaskBmp = await LoadTextureAsBitmap(tmRef.DepotPath);
                                 }
-                            }
-                            finally { albedoBmp.UnlockBits(data); }
-                        }
 
-                        // SecondaryAlbedo
-                        if (dictionary.TryGetValue("SecondaryAlbedo", out var secObj) &&
-                            secObj is CResourceReference<ITexture> secRef &&
-                            secRef.DepotPath != ResourcePath.Empty)
-                        {
-                            try
-                            {
-                                var xbm = GetProjectOrDepotFile(secRef.DepotPath);
-                                if (xbm?.RootChunk is ITexture it)
+                                if (secInfluence > 0f &&
+                                    dictionary.TryGetValue("SecondaryAlbedo", out var secObj) &&
+                                    secObj is CResourceReference<ITexture> secRef &&
+                                    secRef.DepotPath != ResourcePath.Empty)
                                 {
-                                    using var stream = new MemoryStream();
-                                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var format, true);
-                                    stream.Position = 0;
-                                    var bmpSource = await ImageDecoder.RenderToBitmapImageDds(stream, format);
-                                    if (bmpSource != null)
-                                    {
-                                        if (bmpSource.CanFreeze && !bmpSource.IsFrozen)
-                                            bmpSource.Freeze();
-                                        using var secBmp = BitmapSourceToBitmap(bmpSource);
-                                        if (secBmp.Width == albedoBmp.Width && secBmp.Height == albedoBmp.Height)
-                                        {
-                                            float influence = 0.4f;
-                                            if (dictionary.TryGetValue("SecondaryAlbedoInfluence", out var infObj))
-                                            {
-                                                if (infObj is CFloat cf)
-                                                    influence = Math.Clamp((float)cf, 0f, 0.5f);
-                                                else if (infObj is float f)
-                                                    influence = Math.Clamp(f, 0f, 0.5f);
-                                            }
+                                    secBmp = await LoadTextureAsBitmap(secRef.DepotPath);
+                                }
 
-                                            var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
-                                            var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                            var secData = secBmp.LockBits(rect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                            try
+                                if (tintScale > 0f || secBmp != null)
+                                {
+                                    int aw = albedoBmp.Width, ah = albedoBmp.Height;
+                                    var data = albedoBmp.LockBits(new Rectangle(0, 0, aw, ah), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    System.Drawing.Imaging.BitmapData? tmData = null, secData = null;
+                                    try
+                                    {
+                                        if (tintMaskBmp != null)
+                                            tmData = tintMaskBmp.LockBits(new Rectangle(0, 0, tintMaskBmp.Width, tintMaskBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                        if (secBmp != null)
+                                            secData = secBmp.LockBits(new Rectangle(0, 0, secBmp.Width, secBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                        unsafe
+                                        {
+                                            byte* dst = (byte*)data.Scan0;
+                                            byte* tm = tmData == null ? null : (byte*)tmData.Scan0;
+                                            byte* sec = secData == null ? null : (byte*)secData.Scan0;
+                                            int tmw = tintMaskBmp?.Width ?? 1, tmh = tintMaskBmp?.Height ?? 1;
+                                            int sw = secBmp?.Width ?? 1, sh = secBmp?.Height ?? 1;
+                                            for (int y = 0; y < ah; y++)
                                             {
-                                                unsafe
+                                                byte* drow = dst + y * data.Stride;
+                                                for (int x = 0; x < aw; x++)
                                                 {
-                                                    byte* dst = (byte*)data.Scan0;
-                                                    byte* src = (byte*)secData.Scan0;
-                                                    int stride = data.Stride;
-                                                    for (int y = 0; y < albedoBmp.Height; y++)
+                                                    byte* px = drow + x * 4;
+                                                    float tf = tintScale;
+                                                    if (tm != null)
+                                                        tf *= tm[(y * tmh / ah) * tmData!.Stride + (x * tmw / aw) * 4 + 2] / 255f;
+
+                                                    float b = px[0] / 255f, g = px[1] / 255f, r = px[2] / 255f;
+                                                    b *= 1f - tf + tf * tb;
+                                                    g *= 1f - tf + tf * tg;
+                                                    r *= 1f - tf + tf * tr;
+
+                                                    if (sec != null)
                                                     {
-                                                        for (int x = 0; x < albedoBmp.Width; x++)
+                                                        byte* spx = sec + (y * sh / ah) * secData!.Stride + (x * sw / aw) * 4;
+                                                        float a = spx[3] / 255f * secInfluence;
+                                                        if (a > 0f)
                                                         {
-                                                            int off = y * stride + x * 4;
-                                                            float a = (src[off + 3] / 255f) * influence;
-                                                            dst[off + 0] = (byte)(dst[off + 0] * (1 - a) + src[off + 0] * a);
-                                                            dst[off + 1] = (byte)(dst[off + 1] * (1 - a) + src[off + 1] * a);
-                                                            dst[off + 2] = (byte)(dst[off + 2] * (1 - a) + src[off + 2] * a);
+                                                            float st = tf * secTintInfluence;
+                                                            float sb = spx[0] / 255f, sg = spx[1] / 255f, sr = spx[2] / 255f;
+                                                            sb *= 1f - st + st * b;
+                                                            sg *= 1f - st + st * g;
+                                                            sr *= 1f - st + st * r;
+                                                            b += (sb - b) * a;
+                                                            g += (sg - g) * a;
+                                                            r += (sr - r) * a;
                                                         }
                                                     }
+
+                                                    px[0] = (byte)(Math.Clamp(b, 0f, 1f) * 255f);
+                                                    px[1] = (byte)(Math.Clamp(g, 0f, 1f) * 255f);
+                                                    px[2] = (byte)(Math.Clamp(r, 0f, 1f) * 255f);
                                                 }
                                             }
-                                            finally
-                                            {
-                                                albedoBmp.UnlockBits(data);
-                                                secBmp.UnlockBits(secData);
-                                            }
                                         }
+                                    }
+                                    finally
+                                    {
+                                        albedoBmp.UnlockBits(data);
+                                        if (tmData != null)
+                                            tintMaskBmp!.UnlockBits(tmData);
+                                        if (secData != null)
+                                            secBmp!.UnlockBits(secData);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                Parent?.GetLoggerService()?.Warning($"[Skin] SecondaryAlbedo load warning: {ex.Message}");
+                                Parent?.GetLoggerService()?.Warning($"[Skin] tint / SecondaryAlbedo warning: {ex.Message}");
+                            }
+                            finally
+                            {
+                                tintMaskBmp?.Dispose();
+                                secBmp?.Dispose();
                             }
                         }
 
                         // Save albedo
                         SavePngAtomic(albedoBmp, filename_bd);
+
+                        // Glowing tattoos: the final skin colour (tattoo included) glows where
+                        // EmissiveMask.r is set, with strength 2^EmissiveEV - 1 (Blender add-on).
+                        if (dictionary.TryGetValue("EmissiveEV", out var skinEvObj) && ReadFloat(skinEvObj) > 0.01f &&
+                            dictionary.TryGetValue("EmissiveMask", out var emMaskObj) &&
+                            emMaskObj is CResourceReference<ITexture> emMaskRef &&
+                            emMaskRef.DepotPath != ResourcePath.Empty)
+                        {
+                            try
+                            {
+                                using var emMask = await LoadTextureAsBitmap(emMaskRef.DepotPath);
+                                if (emMask != null)
+                                {
+                                    int ew = albedoBmp.Width, eh = albedoBmp.Height;
+                                    using var emBmp = new Bitmap(ew, eh, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    var eRect = new Rectangle(0, 0, ew, eh);
+                                    var aData = albedoBmp.LockBits(eRect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    var eData = emBmp.LockBits(eRect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    var mData = emMask.LockBits(new Rectangle(0, 0, emMask.Width, emMask.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                                    try
+                                    {
+                                        unsafe
+                                        {
+                                            byte* ap = (byte*)aData.Scan0;
+                                            byte* ep = (byte*)eData.Scan0;
+                                            byte* mp = (byte*)mData.Scan0;
+                                            int mw = emMask.Width, mh = emMask.Height;
+                                            for (int y = 0; y < eh; y++)
+                                            {
+                                                byte* arow = ap + y * aData.Stride;
+                                                byte* erow = ep + y * eData.Stride;
+                                                byte* mrow = mp + (y * mh / eh) * mData.Stride;
+                                                for (int x = 0; x < ew; x++)
+                                                {
+                                                    float m = mrow[(x * mw / ew) * 4 + 2] / 255f;
+                                                    erow[x * 4 + 0] = (byte)(arow[x * 4 + 0] * m);
+                                                    erow[x * 4 + 1] = (byte)(arow[x * 4 + 1] * m);
+                                                    erow[x * 4 + 2] = (byte)(arow[x * 4 + 2] * m);
+                                                    erow[x * 4 + 3] = 255;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        albedoBmp.UnlockBits(aData);
+                                        emBmp.UnlockBits(eData);
+                                        emMask.UnlockBits(mData);
+                                    }
+                                    SavePngAtomic(emBmp, emissivePng);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Parent?.GetLoggerService()?.Warning($"[Skin] EmissiveMask warning: {ex.Message}");
+                            }
+                        }
 
 
                         // No Roughness
@@ -5576,25 +5866,90 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                         diffuseAlpha = Math.Clamp(diffuseAlpha, 0f, 1f);
 
+                        // mesh_decal_double_diffuse / _morph: a second colour (SecondaryDiffuseColor)
+                        // under the first, where SecondaryDiffuseAlpha * SecondaryDiffuseAlphaIntensity
+                        // covers it (lip stripes and the like). As in the Blender add-on:
+                        //   colour = base*a + SecondaryColor * s * (1 - a),  alpha = a + (1 - a) * s
+                        Bitmap? secAlphaBmp = null;
+                        float secR = 0f, secG = 0f, secB = 0f, secIntensity = 0f;
+                        int secChannel = ChannelA;
+                        if (dictionary.TryGetValue("SecondaryDiffuseAlpha", out var sdaObj) &&
+                            sdaObj is CResourceReference<ITexture> sdaRef &&
+                            sdaRef.DepotPath != ResourcePath.Empty)
+                        {
+                            var sdaPath = sdaRef.DepotPath.GetResolvedText() ?? "";
+                            secIntensity = 1f;
+                            if (dictionary.TryGetValue("SecondaryDiffuseAlphaIntensity", out var sdiObj))
+                                secIntensity = Math.Max(0f, ReadFloat(sdiObj));
+                            if (dictionary.TryGetValue("SecondaryDiffuseColor", out var sdcObj) && sdcObj is CColor sdc)
+                            {
+                                secR = sdc.Red / 255f;
+                                secG = sdc.Green / 255f;
+                                secB = sdc.Blue / 255f;
+                            }
+
+                            // The template default (editor grey) means "no secondary colour".
+                            var isDefault = sdaPath.EndsWith("editor\\grey.xbm", StringComparison.OrdinalIgnoreCase);
+                            if (!isDefault && secIntensity > 0f)
+                            {
+                                secAlphaBmp = await LoadTextureAsBitmap(sdaRef.DepotPath);
+                                if (secAlphaBmp != null)
+                                    secChannel = PickCoverageChannel(secAlphaBmp, ChannelA);
+                            }
+                        }
+
+                        // AlphaMaskContrast (-1..1): alpha' = (alpha - 0.5) * tan((c + 1) * pi/4) + 0.5,
+                        // on both masks (Blender add-on); 0 leaves the alpha as it is.
+                        var alphaContrast = dictionary.TryGetValue("AlphaMaskContrast", out var amcObj)
+                            ? Math.Clamp(ReadFloat(amcObj), -1f, 0.99f)
+                            : 0f;
+                        var contrastSlope = MathF.Tan((alphaContrast + 1f) * MathF.PI / 4f);
+                        float Contrast(float a) =>
+                            alphaContrast == 0f ? a : Math.Clamp((a - 0.5f) * contrastSlope + 0.5f, 0f, 1f);
+
                         var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
                         var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        System.Drawing.Imaging.BitmapData? secData = null;
                         try
                         {
+                            if (secAlphaBmp != null)
+                                secData = secAlphaBmp.LockBits(new Rectangle(0, 0, secAlphaBmp.Width, secAlphaBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             unsafe
                             {
                                 byte* ptr = (byte*)data.Scan0;
                                 int stride = data.Stride;
+                                byte* sp = secData == null ? null : (byte*)secData.Scan0;
+                                int sw = secAlphaBmp?.Width ?? 1, sh = secAlphaBmp?.Height ?? 1;
+                                int aw = albedoBmp.Width, ah = albedoBmp.Height;
                                 for (int y = 0; y < albedoBmp.Height; y++)
                                 {
                                     for (int x = 0; x < albedoBmp.Width; x++)
                                     {
                                         int off = y * stride + x * 4;
-                                        float srcA = (ptr[off + 3] / 255f) * diffuseAlpha;
+                                        float primA = Contrast(ptr[off + 3] / 255f);
+                                        float cb = Math.Min(1f, ptr[off + 0] / 255f * tintB);
+                                        float cg = Math.Min(1f, ptr[off + 1] / 255f * tintG);
+                                        float cr = Math.Min(1f, ptr[off + 2] / 255f * tintR);
 
-                                        ptr[off + 0] = (byte)Math.Min(255, ptr[off + 0] * tintB);
-                                        ptr[off + 1] = (byte)Math.Min(255, ptr[off + 1] * tintG);
-                                        ptr[off + 2] = (byte)Math.Min(255, ptr[off + 2] * tintR);
-                                        ptr[off + 3] = (byte)(srcA * 255f);
+                                        if (sp != null)
+                                        {
+                                            float sCov = Math.Clamp(Contrast(sp[(y * sh / ah) * secData!.Stride + (x * sw / aw) * 4 + secChannel] / 255f) * secIntensity, 0f, 1f);
+                                            float under = sCov * (1f - primA);
+                                            float mergedA = primA + under;
+                                            if (mergedA > 0.0001f)
+                                            {
+                                                // Straight (non-premultiplied) colour of the merged layers.
+                                                cb = (cb * primA + secB * under) / mergedA;
+                                                cg = (cg * primA + secG * under) / mergedA;
+                                                cr = (cr * primA + secR * under) / mergedA;
+                                            }
+                                            primA = mergedA;
+                                        }
+
+                                        ptr[off + 0] = (byte)(cb * 255f);
+                                        ptr[off + 1] = (byte)(cg * 255f);
+                                        ptr[off + 2] = (byte)(cr * 255f);
+                                        ptr[off + 3] = (byte)(Math.Clamp(primA * diffuseAlpha, 0f, 1f) * 255f);
                                     }
                                 }
                             }
@@ -5602,9 +5957,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         finally
                         {
                             albedoBmp.UnlockBits(data);
+                            if (secData != null)
+                                secAlphaBmp!.UnlockBits(secData);
+                            secAlphaBmp?.Dispose();
                         }
 
                         SavePngAtomic(albedoBmp, filename_bd);
+
+                        // Makeup with its own roughness / metalness (RoughnessMetalnessAlpha > 0):
+                        // bake RoughnessTexture.r / MetalnessTexture.r (x scale + bias) to _rm.
+                        if (dictionary.TryGetValue("RoughnessMetalnessAlpha", out var rmaObj) && ReadFloat(rmaObj) > 0.001f)
+                        {
+                            await BakeMakeupRoughMetal(dictionary, albedoBmp.Width, albedoBmp.Height, filename_rm);
+                        }
+
                         albedoBmp.Dispose();
                     }
                 }
@@ -5950,8 +6316,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 Bitmap? maskBmp = null;
                 try
                 {
-                    var (gBd, gBn, _) = GetMaterialFilePathsFromCache(material?.Name ?? "glass");
-                    if (forceBake || !File.Exists(gBd))
+                    var (gBd, gBn, gRm) = GetMaterialFilePathsFromCache(material?.Name ?? "glass");
+                    var deferredGlass = IsDeferredGlass(material?.Name, material);
+                    if (forceBake || !File.Exists(gBd) || (deferredGlass && !File.Exists(gRm)))
                     {
                         static bool IsPlaceholderTex(string path)
                         {
@@ -5971,6 +6338,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         float maskOp = 0f;
                         if (dictionary.TryGetValue("MaskOpacity", out var moObj))
                             maskOp = Math.Clamp(ReadFloat(moObj), 0f, 1f);
+
+                        // glass_deferred lobes (opaque): glass = tint, GlassMetalness, roughness 0.1;
+                        // surface = MaskTexture (attenuated by the tint), SurfaceMetalness,
+                        // Roughness.r + MaskRoughnessBias. Mixed by Mask.a * MaskOpacity.
+                        float glassMetal = DeferredGlassMetalness, surfaceMetal = 0f, maskRoughBias = 0f, tintAtten = 0f;
+                        if (deferredGlass)
+                        {
+                            if (dictionary.TryGetValue("GlassMetalness", out var gmObj))
+                                glassMetal = Math.Clamp(ReadFloat(gmObj), 0f, 1f);
+                            if (dictionary.TryGetValue("SurfaceMetalness", out var smObj))
+                                surfaceMetal = Math.Clamp(ReadFloat(smObj), 0f, 1f);
+                            if (dictionary.TryGetValue("MaskRoughnessBias", out var mrbObj))
+                                maskRoughBias = Math.Clamp(ReadFloat(mrbObj), -1f, 1f);
+                            if (dictionary.TryGetValue("TintColorAttenuation", out var taObj))
+                                tintAtten = Math.Clamp(ReadFloat(taObj), 0f, 1f);
+                        }
 
                         float tr = 1f, tg = 1f, tb = 1f;
                         if (dictionary.TryGetValue("TintColor", out var tcObj))
@@ -6026,6 +6409,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 maskBmp = await LoadTextureAsBitmap(mRef.DepotPath);
                         }
 
+                        Bitmap? roughBmp = null;
+                        if (deferredGlass &&
+                            dictionary.TryGetValue("Roughness", out var rgObj) &&
+                            rgObj is CResourceReference<ITexture> rgRef &&
+                            rgRef.DepotPath != ResourcePath.Empty)
+                        {
+                            roughBmp = await LoadTextureAsBitmap(rgRef.DepotPath);
+                            if (roughBmp != null)
+                            {
+                                var roughTiled = ApplyUvTileOffset(roughBmp, uvTX, uvTY, uvOX, uvOY);
+                                if (!ReferenceEquals(roughTiled, roughBmp))
+                                {
+                                    roughBmp.Dispose();
+                                    roughBmp = roughTiled;
+                                }
+                            }
+                        }
+
                         var (gtTX, gtTY, gtOX, gtOY) = ReadTileOffset(dictionary, "GlassTintTileAndOffset");
                         if (tintBmp != null)
                         {
@@ -6052,9 +6453,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         int w = maskBmp?.Width ?? tintBmp?.Width ?? 1024;
                         int h = maskBmp?.Height ?? tintBmp?.Height ?? 1024;
                         colorBmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        using var rmBmp = deferredGlass ? new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb) : null;
 
                         var rect = new Rectangle(0, 0, w, h);
-                        System.Drawing.Imaging.BitmapData? dst = null, td = null, md = null;
+                        System.Drawing.Imaging.BitmapData? dst = null, td = null, md = null, rmd = null, rgd = null;
                         try
                         {
                             dst = colorBmp.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -6062,8 +6464,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 td = tintBmp.LockBits(new Rectangle(0, 0, tintBmp.Width, tintBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             if (maskBmp != null)
                                 md = maskBmp.LockBits(new Rectangle(0, 0, maskBmp.Width, maskBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            if (rmBmp != null)
+                                rmd = rmBmp.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            if (roughBmp != null)
+                                rgd = roughBmp.LockBits(new Rectangle(0, 0, roughBmp.Width, roughBmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                             unsafe
                             {
+                                byte* rmp = rmd == null ? null : (byte*)rmd.Scan0;
+                                byte* rgp = rgd == null ? null : (byte*)rgd.Scan0;
+                                int rmStride = rmd?.Stride ?? 0;
+                                int rgStride = rgd?.Stride ?? 0;
+                                int rgw = roughBmp?.Width ?? 1, rgh = roughBmp?.Height ?? 1;
                                 byte* dp = (byte*)dst!.Scan0;
                                 byte* tp = td == null ? null : (byte*)td.Scan0;
                                 byte* mp = md == null ? null : (byte*)md.Scan0;
@@ -6072,7 +6483,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 int mStride = md?.Stride ?? 0;
                                 int tw = tintBmp?.Width ?? 1, th = tintBmp?.Height ?? 1;
                                 int mw = maskBmp?.Width ?? 1, mh = maskBmp?.Height ?? 1;
-                                byte glassA = (byte)(Math.Clamp(op, 0f, 1f) * 255f);
+                                // Opacity = how much glass there is, not coverage: the glass itself
+                                // stays see-through (GlassPreviewAlpha); a label (MaskTexture) is opaque.
+                                byte glassA = (byte)(Math.Clamp(op, 0f, 1f) * (deferredGlass ? 1f : GlassPreviewAlpha) * 255f);
                                 byte br = (byte)(Math.Clamp(tr, 0f, 1f) * 255f);
                                 byte bg = (byte)(Math.Clamp(tg, 0f, 1f) * 255f);
                                 byte bb = (byte)(Math.Clamp(tb, 0f, 1f) * 255f);
@@ -6092,6 +6505,47 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             gg = (byte)(tpx[1] * tg);
                                             gr = (byte)(tpx[2] * tr);
                                         }
+                                        if (rmp != null)
+                                        {
+                                            // glass_deferred: opaque lobe mix, colour + roughness/metalness
+                                            float f = 0f;
+                                            byte sr = gr, sg = gg, sb = gb;
+                                            if (mp != null && maskOp > 0.001f)
+                                            {
+                                                int mx = x * mw / w;
+                                                int my = y * mh / h;
+                                                byte* mpx = mp + my * mStride + mx * 4;
+                                                f = (mpx[glassMaskChannel] / 255f) * maskOp;
+                                                // Surface colour: mask * lerp(1, tint, TintColorAttenuation)
+                                                sb = (byte)(mpx[0] * (1f - tintAtten + tintAtten * gb / 255f));
+                                                sg = (byte)(mpx[1] * (1f - tintAtten + tintAtten * gg / 255f));
+                                                sr = (byte)(mpx[2] * (1f - tintAtten + tintAtten * gr / 255f));
+                                            }
+                                            float surfRough = 0.5f;
+                                            if (rgp != null)
+                                            {
+                                                int rx = x * rgw / w;
+                                                int ry = y * rgh / h;
+                                                surfRough = rgp[ry * rgStride + rx * 4 + 2] / 255f;
+                                            }
+                                            surfRough = Math.Clamp(surfRough + maskRoughBias, 0f, 1f);
+                                            float rough = DeferredGlassRoughness + (surfRough - DeferredGlassRoughness) * f;
+                                            float metal = glassMetal + (surfaceMetal - glassMetal) * f;
+                                            int ro = x * 4;
+                                            byte* rmrow = rmp + y * rmStride;
+                                            rmrow[ro + 0] = (byte)(Math.Clamp(metal, 0f, 1f) * 255f);   // B metalness
+                                            rmrow[ro + 1] = (byte)(Math.Clamp(rough, 0f, 1f) * 255f);   // G roughness
+                                            rmrow[ro + 2] = 255;
+                                            rmrow[ro + 3] = 255;
+
+                                            int o2 = x * 4;
+                                            drow[o2 + 0] = (byte)(gb + (sb - gb) * f);
+                                            drow[o2 + 1] = (byte)(gg + (sg - gg) * f);
+                                            drow[o2 + 2] = (byte)(gr + (sr - gr) * f);
+                                            drow[o2 + 3] = 255;
+                                            continue;
+                                        }
+
                                         // Label over glass by Mask.A * MaskOpacity (addon MixShader factor)
                                         if (mp != null && maskOp > 0.001f)
                                         {
@@ -6121,8 +6575,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 tintBmp.UnlockBits(td);
                             if (md != null && maskBmp != null)
                                 maskBmp.UnlockBits(md);
+                            if (rmd != null && rmBmp != null)
+                                rmBmp.UnlockBits(rmd);
+                            if (rgd != null && roughBmp != null)
+                                roughBmp.UnlockBits(rgd);
                         }
 
+                        roughBmp?.Dispose();
+                        if (rmBmp != null)
+                            SavePngAtomic(rmBmp, gRm);
                         SavePngAtomic(colorBmp, gBd);
                         colorBmp.Dispose();
                         colorBmp = null;
@@ -6146,6 +6607,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                     {
                                         var (nTX, nTY, nOX, nOY) = ReadTileOffset(dictionary, "NormalTileAndOffset");
                                         nTiled = ApplyUvTileOffset(nBmp, uvTX * nTX, uvTY * nTY, uvOX * nTX + nOX, uvOY * nTY + nOY);
+                                        if (dictionary.TryGetValue("NormalStrength", out var nsObj))
+                                        {
+                                            var strength = ReadFloat(nsObj);
+                                            if (Math.Abs(strength - 1f) > 0.001f)
+                                            {
+                                                if (ReferenceEquals(nTiled, nBmp))
+                                                    nTiled = new Bitmap(nBmp);
+                                                ScaleNormalStrength(nTiled, Math.Max(0f, strength));
+                                            }
+                                        }
                                         SavePngAtomic(nTiled, gBn);
                                     }
                                     finally
@@ -7516,6 +7987,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// mixed = lerp(burn, mask, safeC), out = saturate(mixed / safeC).
     /// contrast=0 thresholds the microblend pattern.
     /// </summary>
+    /// <summary>The engine's default microblend (the placeholder default .mlsetup files use).</summary>
+    private static readonly ResourcePath s_defaultMicroblend = @"base\surfaces\microblends\default.xbm";
+
+    /// <summary>
+    /// A layer's microblend, or the default one when its path leads nowhere (missing file, not
+    /// a texture): without any the mask mixer divides the bare mask by the contrast and the
+    /// layer spreads with hard edges. An empty path stays empty.
+    /// </summary>
+    private ResourcePath MicroblendOrDefault(ResourcePath path, string? context = null)
+    {
+        if (path == ResourcePath.Empty || GetProjectOrDepotFile(path)?.RootChunk is ITexture)
+        {
+            return path;
+        }
+
+        WarnMissingFile("microblend", path, (context ?? "") + " - using the default microblend");
+        return GetProjectOrDepotFile(s_defaultMicroblend)?.RootChunk is ITexture ? s_defaultMicroblend : path;
+    }
+
     private static float ApplyMicroblendContrast(float mask, float mbAlpha, float contrast)
     {
         var safeC = Math.Max(contrast, 1e-5f);
@@ -7970,7 +8460,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         IsRendered = true;
         if (_data is worldStreamingSector wss)
         {
-            RenderSector(wss, Appearances[0]);
+            _soloSector = RenderSector(wss, Appearances[0]);
+            FillSoloSectorVariants(_soloSector);
         }
     }
 
@@ -8065,15 +8556,44 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
 
         var wave = new HashSet<ResourcePath>();
+        var wantedEntityApps = new Dictionary<ResourcePath, HashSet<string>>();
         foreach (var handle in data.Nodes)
         {
             switch (handle?.Chunk)
             {
                 case IRedMeshNode irmn:
                     wave.Add(irmn.Mesh.DepotPath);
+                    if (irmn is worldFoliageNode fn)
+                        wave.Add(fn.FoliageResource.DepotPath);
+                    else if (irmn is worldInstancedDestructibleMeshNode idmn)
+                        wave.Add(idmn.StaticMesh.DepotPath);
                     break;
                 case worldEntityNode wen:
                     wave.Add(wen.EntityTemplate.DepotPath);
+                    AddWantedEntityAppearance(wantedEntityApps, wen);
+                    break;
+                case worldTerrainMeshNode tmn:
+                    wave.Add(tmn.MeshRef.DepotPath);
+                    break;
+                case worldPhysicalDestructionNode pdn:
+                    wave.Add(pdn.Mesh.DepotPath);
+                    break;
+                // game 2.5 cooked nodes keep their meshes in inner nodes
+                case worldInstancedMeshNode { Buffer.Data: worldInstancedMeshNodeBuffer imnb }:
+                    foreach (var inner in imnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
+                    break;
+                case worldCookedBendedMeshNode { Buffer.Data: worldCookedBendedMeshNodeBuffer bmnb }:
+                    foreach (var inner in bmnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
+                    break;
+                case worldCookedStaticMeshNode { Buffer.Data: worldCookedStaticMeshNodeBuffer smnb }:
+                    foreach (var inner in smnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
+                    break;
+                case worldCookedGenericProxyMeshNode { Buffer.Data: worldCookedGenericProxyMeshNode_Buffer gpnb }:
+                    foreach (var inner in gpnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
                     break;
             }
         }
@@ -8081,14 +8601,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var wantedApps = new Dictionary<ResourcePath, HashSet<string>>();
         for (var depth = 0; depth < 6 && wave.Count > 0; depth++)
         {
-            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
+            // embedded files are not read from the archive: the archive copy would hide them
+            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p) || IsEmbeddedForSector(p));
             PrefetchFiles(am, wave);
 
             var next = new HashSet<ResourcePath>();
             foreach (var path in wave)
             {
                 if (_fileCache.TryGetValue(path, out var file) && file?.RootChunk is { } root)
-                    CollectPrefetchRefs(root, path, next, wantedApps);
+                    CollectPrefetchRefs(root, path, next, wantedApps, wantedEntityApps);
             }
 
             next.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
@@ -8117,8 +8638,23 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         });
     }
 
+    /// <summary>The ent appearance a sector entity node uses (see SectorEntityAppearances).</summary>
+    private static void AddWantedEntityAppearance(Dictionary<ResourcePath, HashSet<string>> wanted, worldEntityNode wen)
+    {
+        var path = wen.EntityTemplate.DepotPath;
+        if (!wanted.TryGetValue(path, out var names))
+        {
+            names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            wanted[path] = names;
+        }
+
+        if (StringHelper.StringifyOrNull(wen.AppearanceName) is { Length: > 0 } name)
+            names.Add(name);
+    }
+
     private static void CollectPrefetchRefs(RedBaseClass root, ResourcePath self,
-        HashSet<ResourcePath> next, Dictionary<ResourcePath, HashSet<string>> wantedApps)
+        HashSet<ResourcePath> next, Dictionary<ResourcePath, HashSet<string>> wantedApps,
+        Dictionary<ResourcePath, HashSet<string>> wantedEntityApps)
     {
         switch (root)
         {
@@ -8133,10 +8669,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 break;
 
             case entEntityTemplate ent:
-                // Sectors render the default appearance only (see RenderEntity).
+                // Sectors render the appearance their node names, else the default one (see SectorEntityAppearances).
+                wantedEntityApps.TryGetValue(self, out var nodeApps);
                 foreach (var a in ent.Appearances)
                 {
-                    if (a is null || a.Name != ent.DefaultAppearance)
+                    if (a is null)
+                        continue;
+                    var entAppName = StringHelper.StringifyOrNull(a.Name) ?? string.Empty;
+                    if (a.Name != ent.DefaultAppearance && (nodeApps == null || !nodeApps.Contains(entAppName)))
                         continue;
 
                     var appPath = a.AppearanceResource.DepotPath;
@@ -8188,6 +8728,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 case IRedMeshComponent mc:
                     next.Add(mc.Mesh.DepotPath);
                     break;
+                case entPhysicalDestructionComponent destruction:
+                    next.Add(destruction.Mesh.DepotPath);
+                    break;
+                case entClothComponent clothMesh:
+                    next.Add(clothMesh.Mesh.DepotPath);
+                    break;
                 case entAnimatedComponent anim:
                     next.Add(anim.Rig.DepotPath);
                     break;
@@ -8197,7 +8743,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     #endregion
 
-    public SectorGroup RenderSector(worldStreamingSector data, Appearance app)
+    /// <param name="sectorFile">the sector's file when it is not the open document (block preview), for its embedded files</param>
+    public SectorGroup RenderSector(worldStreamingSector data, Appearance app, CR2WFile? sectorFile = null)
+    {
+        PrepareSectorEmbeddedFiles(data, sectorFile);
+        try
+        {
+            return RenderSectorContent(data, app);
+        }
+        finally
+        {
+            _sectorEmbeddedFiles = null;
+        }
+    }
+
+    private SectorGroup RenderSectorContent(worldStreamingSector data, Appearance app)
     {
         if (data.NodeData.Data is not worldNodeDataBuffer buffer)
         {
@@ -8207,6 +8767,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // Read every file the sector will need up front, in parallel.
         // Sequential archive reads were most of the sector load time.
         PrefetchSectorFiles(data);
+
+        // what each nodeData entry placed, for the variant list and the proxy switch
+        BeginSectorRegistry();
 
         var ssTransforms = buffer.Lookup;
 
@@ -8220,234 +8783,80 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var indexStr = string.Join(", ", transforms.Select(x => buffer.IndexOf(x)));
             var typeStr = handle.Chunk.GetType().Name;
 
-            if (handle.Chunk is IRedMeshNode irmn)
+            if (handle.Chunk is worldFoliageNode foliageNode)
             {
-                var meshFile = GetProjectOrDepotFile(irmn.Mesh.DepotPath);
-
-                if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                {
-                    continue;
-                }
-
-                var meshPath = irmn.Mesh.DepotPath.GetResolvedText() ?? string.Empty;
-                var appMaterials = GetSectorMaterials(mesh, irmn.MeshAppearance, meshPath);
-                // The node's appearance picks the chunk materials; index 0 named the submeshes
-                // after the first appearance while the materials came from the node's one.
-                var appearanceIndex = GetMeshAppearanceIndex(mesh, irmn.MeshAppearance);
-
-                var group = new MeshComponent()
-                {
-                    Name = name,
-                    Text = name,
-                    WorldNodeIndex = $"{handleIndex}",
-                    WorldNodeType = typeStr,
-                    WorldNodeDataIndices = indexStr,
-                    AppearanceName = irmn.MeshAppearance,
-                    DepotPath = irmn.Mesh.DepotPath
-                };
-
-                if (group.WorldNodeIndex == SelectedNodeIndex)
-                {
-                    SelectedItem = group;
-                }
-
-                var model = new LoadableModel(name)
-                {
-                    MeshFile = Parent?.Cr2wFile,
-                    AppearanceIndex = 0,
-                    AppearanceName = irmn.MeshAppearance,
-                    Materials = appMaterials,
-                    IsEnabled = true,
-                };
-
-                foreach (var material in model.Materials)
-                {
-                    app.RawMaterials[material.Name] = material;
-                }
-
-                if (handle.Chunk is worldInstancedMeshNode wimn)
-                {
-                    if (wimn.CookedWorldTransformsBuffer.Buffer.Data is not WorldTransformsBuffer wtb)
-                    {
-                        continue;
-                    }
-
-                    for (var i = 0; i < wtb.Transforms.Count; i++)
-                    {
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{i:D2}",
-                            Text = name + $"_instance_{i:D2}",
-                            //AppearanceName = wimn.MeshAppearance,
-                            DepotPath = irmn.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                        var wtbMatrix = new Matrix3D();
-                        if (wtb.Transforms[i] is { } wte)
-                        {
-                            wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
-                        }
-
-                        var transform = wtb.Transforms[i].NotNull();
-                        wtbMatrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        wtbMatrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        wtbMatrix.Append(matrix);
-
-                        subgroup.Transform = new MatrixTransform3D(wtbMatrix);
-
-                        group.Children.Add(subgroup);
-                    }
-                }
-                else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
-                {
-                    for (var i = 0; i < widmn.InstanceTransforms.Count; i++)
-                    {
-                        //for (int j = 0; j < transforms.Count; j++)
-                        //{
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{i:D2}",
-                            Text = name + $"_instance_{i:D2}",
-                            AppearanceName = widmn.MeshAppearance,
-                            DepotPath = irmn.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                        var citbMatrix = new Matrix3D();
-                        var transform = widmn.InstanceTransforms[i].NotNull();
-                        citbMatrix.Rotate(ToQuaternion(transform.Orientation));
-                        citbMatrix.Translate(ToVector3D(transform.Position));
-
-                        citbMatrix.Append(matrix);
-
-                        subgroup.Transform = new MatrixTransform3D(citbMatrix);
-
-                        group.Children.Add(subgroup);
-                        //}
-                    }
-                }
-                else
-                {
-                    var i = 0;
-                    foreach (var transform in transforms)
-                    {
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{i:D2}",
-                            Text = name + $"_instance_{i:D2}",
-                            AppearanceName = irmn.MeshAppearance,
-                            DepotPath = irmn.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        if (irmn is worldBendedMeshNode wbmn)
-                        {
-                            //matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
-                        }
-
-                        subgroup.Transform = new MatrixTransform3D(matrix);
-
-                        group.Children.Add(subgroup);
-                        i++;
-                    }
-                }
-
-                groups.Add(group);
+                AddFoliageSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, foliageNode);
             }
-            else if (handle.Chunk is worldCollisionNode wcn)
+            else if (handle.Chunk is IRedMeshNode plainMeshNode and not worldInstancedDestructibleMeshNode)
             {
-                if (wcn.CompiledData.Data is not CollisionBuffer cb)
+                // worldBendedMeshNode (roads...) and worldCableMeshNode carry their deformation frames.
+                IReadOnlyList<CMatrix>? frames = plainMeshNode is worldBendedMeshNode { DeformationData.Count: >= 2 } wbmn
+                    ? wbmn.DeformationData.ToList()
+                    : null;
+                var placements = transforms
+                    .Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t), frames))
+                    .ToList();
+                AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, plainMeshNode.Mesh.DepotPath, plainMeshNode.MeshAppearance,
+                    placements, plainMeshNode is worldCableMeshNode ? SectorBendAxis.NegativeX : SectorBendAxis.PositiveY);
+            }
+            else if (handle.Chunk is worldInstancedDestructibleMeshNode destructibleNode)
+            {
+                AddDestructibleSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, destructibleNode);
+            }
+            else if (handle.Chunk is worldTerrainMeshNode terrainNode)
+            {
+                // terrain was not drawn; its mesh is a reference or kept in the node
+                var placements = transforms.Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t))).ToList();
+                AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, terrainNode.MeshRef.DepotPath, CName.Empty, placements,
+                    embeddedMesh: terrainNode.Mesh?.Chunk);
+            }
+            else if (handle.Chunk is worldPhysicalDestructionNode physicalNode)
+            {
+                // destructible props (not a worldMeshNode): were not drawn
+                var placements = transforms.Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t))).ToList();
+                AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, physicalNode.Mesh.DepotPath, physicalNode.MeshAppearance, placements);
+            }
+            else if (handle.Chunk is worldInstancedMeshNode imn)
+            {
+                if (imn.Buffer.Data is worldInstancedMeshNodeBuffer imnb && imn.CookedWorldTransformsBuffer.Data is WorldTransformsBuffer wtb)
+                {
+                    AddInstancedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, imnb, wtb);
+                }
+            }
+            else if (handle.Chunk is worldCookedAcousticSectorNode)
+            {
+
+            }
+            else if (handle.Chunk is worldCookedBendedMeshNode wcbmn)
+            {
+                // Cables are bended meshes too (worldCookedCableMeshNode derives from it), along -X.
+                if (wcbmn.Buffer.Data is worldCookedBendedMeshNodeBuffer wcbmnb)
+                {
+                    AddCookedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, wcbmnb.InnerNodes.Count,
+                        i => (wcbmnb.InnerNodes[i].Mesh.DepotPath, wcbmnb.InnerNodes[i].MeshAppearance),
+                        i => SliceFrames(wcbmnb.DeformationData, wcbmnb.InnerNodes[i].DeformationDataStartIndex, wcbmnb.InnerNodes[i].DeformationDataCount),
+                        handle.Chunk is worldCookedCableMeshNode ? SectorBendAxis.NegativeX : SectorBendAxis.PositiveY);
+                }
+            }
+            else if (handle.Chunk is worldCookedCollisionNode wcn)
+            {
+                if (wcn.Buffer.Data is not worldCookedCollisionInfoBuffer b || wcn.CompiledData.Data is not worldCookedCollisionNodeBuffer cb)
                 {
                     continue;
                 }
 
-                var mesh = new MeshComponent()
+                for (var m = 0; m < b.CollisionNodeInfos.Count; m++)
                 {
-                    WorldNodeIndex = $"{handleIndex}",
-                    WorldNodeType = typeStr,
-                    WorldNodeDataIndices = indexStr,
-                    Name = "collisionNode_" + wcn.SectorHash,
-                    Text = "collisionNode_" + wcn.SectorHash
-                };
+                    var nodeInfo = b.CollisionNodeInfos[m];
+                    var node = cb.CollisionNodes[m];
 
-                if (mesh.WorldNodeIndex == SelectedNodeIndex)
-                {
-                    SelectedItem = mesh;
-                }
-
-                var colliderMaterial = new PBRMaterial()
-                {
-                    EnableAutoTangent = true,
-                    RenderShadowMap = true,
-                    RenderEnvironmentMap = true,
-                    //AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f),
-                    AlbedoColor = new SharpDX.Color4(0.5f, 0f, 0.5f, 1f),
-                    RoughnessFactor = 0.5,
-                    MetallicFactor = 0
-                };
-
-                for (var k = 0; k < cb.Actors.Count; k++)
-                {
-                    var actor = cb.Actors[k];
-
-                    var actorGroup = new MeshComponent()
+                    var mesh = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
                         WorldNodeType = typeStr,
                         WorldNodeDataIndices = indexStr,
-                        Name = "actor_" + cb.Actors.IndexOf(actor),
-                        Text = "actor_" + cb.Actors.IndexOf(actor),
-                        CollisionActorId = $"{k}"
+                        Name = "collisionNode_" + nodeInfo.SectorHash,
+                        Text = "collisionNode_" + nodeInfo.SectorHash
                     };
 
                     if (mesh.WorldNodeIndex == SelectedNodeIndex)
@@ -8455,185 +8864,265 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         SelectedItem = mesh;
                     }
 
-                    foreach (var shape in actor.Shapes)
+                    var colliderMaterial = new PBRMaterial()
                     {
-                        HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
+                        EnableAutoTangent = true,
+                        RenderShadowMap = true,
+                        RenderEnvironmentMap = true,
+                        //AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f),
+                        AlbedoColor = new SharpDX.Color4(0.5f, 0f, 0.5f, 1f),
+                        RoughnessFactor = 0.5,
+                        MetallicFactor = 0
+                    };
 
-                        if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
+                    for (var k = 0; k < node.Actors.Count; k++)
+                    {
+                        var actor = node.Actors[k];
+
+                        var actorGroup = new MeshComponent()
                         {
-                            var mb = new MeshBuilder
-                            {
-                                CreateNormals = true
-                            };
-                            mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Y * 2, simpleShape.Size.Z * 2);
-
-                            mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
-
-                            geometry = mb.ToMeshGeometry3D();
-                        }
-                        else if (shape is CollisionShapeMesh meshShape)
-                        {
-                            var geo = _geometryCacheService.GetEntry(wcn.SectorHash, meshShape.Hash);
-
-                            if (geo == null)
-                            {
-                                //_loggerService.Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
-                                continue;
-                            }
-
-                            if (geo is ConvexMesh convexMesh)
-                            {
-                                var mb = new MeshBuilder
-                                {
-                                    CreateNormals = true
-                                };
-
-                                var positions = new Vector3Collection();
-                                for (var i = 0; i < convexMesh.HullData.HullVertices.Count; i++)
-                                {
-                                    positions.Add(convexMesh.HullData.HullVertices[i]);
-                                }
-
-                                var faceIndex = 0;
-                                for (var i = 0; i < convexMesh.HullData.Polygons.Count; i++)
-                                {
-                                    var count = mb.Positions.Count;
-                                    var faceData = convexMesh.HullData.Polygons[i];
-
-                                    switch (faceData.NbVerts)
-                                    {
-                                        case 3:
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.TriangleIndices.Add(count);
-                                            mb.TriangleIndices.Add(count + 1);
-                                            mb.TriangleIndices.Add(count + 2);
-                                            break;
-                                        case 4:
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
-                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 3]]);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.Normals.Add(faceData.Plane.N);
-                                            mb.TriangleIndices.Add(count);
-                                            mb.TriangleIndices.Add(count + 1);
-                                            mb.TriangleIndices.Add(count + 2);
-                                            mb.TriangleIndices.Add(count + 2);
-                                            mb.TriangleIndices.Add(count + 3);
-                                            mb.TriangleIndices.Add(count);
-                                            break;
-                                        default:
-                                            for (var j = 0; j < faceData.NbVerts; j++)
-                                            {
-                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[j]]);
-                                                mb.Normals.Add(faceData.Plane.N);
-                                            }
-                                            for (var j = 0; j + 2 < faceData.NbVerts; j++)
-                                            {
-                                                mb.TriangleIndices.Add(count);
-                                                mb.TriangleIndices.Add(count + j + 1);
-                                                mb.TriangleIndices.Add(count + j + 2);
-                                            }
-                                            break;
-                                    }
-
-                                    faceIndex += faceData.NbVerts;
-                                }
-
-                                geometry = mb.ToMeshGeometry3D();
-                            }
-
-                            if (geo is BV4TriangleMesh bv4TriangleMesh)
-                            {
-                                var mb = new MeshBuilder
-                                {
-                                    CreateNormals = true
-                                };
-
-                                var positions = new Vector3Collection();
-                                for (var i = 0; i < bv4TriangleMesh.Vertices.Count; i++)
-                                {
-                                    positions.Add(bv4TriangleMesh.Vertices[i]);
-                                }
-
-                                foreach (var face in bv4TriangleMesh.Triangles)
-                                {
-                                    var points = new List<SharpDX.Vector3>();
-                                    foreach (var point in face)
-                                    {
-                                        points.Add(positions[(int)point]);
-                                    }
-                                    mb.AddTriangle(points[0], points[1], points[2]);
-                                }
-
-                                //mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
-                                geometry = mb.ToMeshGeometry3D();
-                            }
-                        }
-
-                        if (geometry == null)
-                        {
-                            continue;
-                        }
-
-                        ulong hash = 0;
-                        if (shape is CollisionShapeMesh meshShape2)
-                        {
-                            hash = meshShape2.Hash;
-                        }
-
-                        var shapeGroup = new SubmeshComponent()
-                        {
-                            Name = "shape_" + hash,
-                            Text = "shape_" + hash,
-                            IsRendering = true,
-                            Geometry = geometry,
-                            Material = colliderMaterial,
-                            IsTransparent = true,
+                            WorldNodeIndex = $"{handleIndex}",
+                            WorldNodeType = typeStr,
+                            WorldNodeDataIndices = indexStr,
+                            Name = "actor_" + node.Actors.IndexOf(actor),
+                            Text = "actor_" + node.Actors.IndexOf(actor),
                             CollisionActorId = $"{k}"
                         };
 
-                        var shapeMatrix = new Matrix3D();
+                        if (mesh.WorldNodeIndex == SelectedNodeIndex)
+                        {
+                            SelectedItem = mesh;
+                        }
 
-                        var shapeQuat = new System.Numerics.Quaternion(shape.Rotation.I, shape.Rotation.J, shape.Rotation.K, shape.Rotation.R);
-                        var conversionQuat =
-                            System.Numerics.Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.UnitX, -MathF.PI / 2);
-                        var adjustedQuat = conversionQuat * shapeQuat;
+                        for (int j = actor.ShapeStartIndex; j < actor.ShapeStartIndex + actor.ShapeCount; j++)
+                        {
+                            var shape = node.Shapes[j];
 
-                        shapeMatrix.Rotate(new System.Windows.Media.Media3D.Quaternion(adjustedQuat.X, adjustedQuat.Y, adjustedQuat.Z, adjustedQuat.W));
-                        shapeMatrix.Translate(ToVector3D(shape.Position));
+                            HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
 
-                        shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
+                            ulong hash = 0;
 
-                        actorGroup.Children.Add(shapeGroup);
+                            if (shape.CollisionSourceKey is PhysicsGeometryBoxData boxData)
+                            {
+                                var mb = new MeshBuilder
+                                {
+                                    CreateNormals = true
+                                };
+                                mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), boxData.Size.X * 2, boxData.Size.Y * 2, boxData.Size.Z * 2);
+
+                                mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
+
+                                geometry = mb.ToMeshGeometry3D();
+                            }
+                            else if (shape.CollisionSourceKey is PhysicsGeometryConvexMeshData convexMesh2)
+                            {
+                                hash = convexMesh2.Hash;
+
+                                var geo = _geometryCacheService.GetEntry(nodeInfo.SectorHash, convexMesh2.Hash);
+
+                                if (geo == null)
+                                {
+                                    //_loggerService.Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
+                                    continue;
+                                }
+
+                                if (geo is ConvexMesh convexMesh)
+                                {
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
+
+                                    var positions = new Vector3Collection();
+                                    for (var l = 0; l < convexMesh.HullData.HullVertices.Count; l++)
+                                    {
+                                        positions.Add(convexMesh.HullData.HullVertices[l]);
+                                    }
+
+                                    var faceIndex = 0;
+                                    for (var l = 0; l < convexMesh.HullData.Polygons.Count; l++)
+                                    {
+                                        var count = mb.Positions.Count;
+                                        var faceData = convexMesh.HullData.Polygons[l];
+
+                                        switch (faceData.NbVerts)
+                                        {
+                                            case 3:
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.TriangleIndices.Add(count);
+                                                mb.TriangleIndices.Add(count + 1);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                break;
+                                            case 4:
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 3]]);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.Normals.Add(faceData.Plane.N);
+                                                mb.TriangleIndices.Add(count);
+                                                mb.TriangleIndices.Add(count + 1);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                mb.TriangleIndices.Add(count + 3);
+                                                mb.TriangleIndices.Add(count);
+                                                break;
+                                            default:
+                                                for (var n = 0; n < faceData.NbVerts; n++)
+                                                {
+                                                    mb.Positions.Add(positions[convexMesh.HullData.VertexData8[n]]);
+                                                    mb.Normals.Add(faceData.Plane.N);
+                                                }
+                                                for (var n = 0; n + 2 < faceData.NbVerts; n++)
+                                                {
+                                                    mb.TriangleIndices.Add(count);
+                                                    mb.TriangleIndices.Add(count + n + 1);
+                                                    mb.TriangleIndices.Add(count + n + 2);
+                                                }
+                                                break;
+                                        }
+
+                                        faceIndex += faceData.NbVerts;
+                                    }
+
+                                    geometry = mb.ToMeshGeometry3D();
+                                }
+                            }
+                            else if (shape.CollisionSourceKey is PhysicsGeometryTriangleMeshData triangleMesh)
+                            {
+                                hash = triangleMesh.Hash;
+
+                                var geo = _geometryCacheService.GetEntry(nodeInfo.SectorHash, triangleMesh.Hash);
+
+                                if (geo == null)
+                                {
+                                    //_loggerService.Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
+                                    continue;
+                                }
+
+                                if (geo is BV4TriangleMesh bv4TriangleMesh)
+                                {
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
+
+                                    var positions = new Vector3Collection();
+                                    for (var i = 0; i < bv4TriangleMesh.Vertices.Count; i++)
+                                    {
+                                        positions.Add(bv4TriangleMesh.Vertices[i]);
+                                    }
+
+                                    foreach (var face in bv4TriangleMesh.Triangles)
+                                    {
+                                        var points = new List<SharpDX.Vector3>();
+                                        foreach (var point in face)
+                                        {
+                                            points.Add(positions[(int)point]);
+                                        }
+                                        mb.AddTriangle(points[0], points[1], points[2]);
+                                    }
+
+                                    //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                                    geometry = mb.ToMeshGeometry3D();
+                                }
+                            }
+
+                            if (geometry == null)
+                            {
+                                continue;
+                            }
+
+                            var shapeGroup = new SubmeshComponent()
+                            {
+                                Name = "shape_" + hash,
+                                Text = "shape_" + hash,
+                                IsRendering = true,
+                                Geometry = geometry,
+                                Material = colliderMaterial,
+                                IsTransparent = true,
+                                CollisionActorId = $"{k}"
+                            };
+
+                            var shapeMatrix = new Matrix3D();
+
+                            var shapeQuat = new System.Numerics.Quaternion(0, 0, 0, 1); // check this
+                            if (shape.ShapeRotationIndex != -1)
+                            {
+                                var rotation = node.ShapeRotations[shape.ShapeRotationIndex];
+                                shapeQuat = new System.Numerics.Quaternion(rotation.I, rotation.J, rotation.K, rotation.R);
+                            }
+
+                            var conversionQuat = System.Numerics.Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.UnitX, -MathF.PI / 2);
+                            var adjustedQuat = conversionQuat * shapeQuat;
+
+                            shapeMatrix.Rotate(new System.Windows.Media.Media3D.Quaternion(adjustedQuat.X, adjustedQuat.Y, adjustedQuat.Z, adjustedQuat.W));
+
+                            var shapePos = new Vector3();
+                            if (shape.ShapePositionIndex != -1)
+                            {
+                                shapePos = node.ShapePositions[shape.ShapePositionIndex];
+                            }
+
+                            shapeMatrix.Translate(ToVector3D(shapePos));
+
+                            shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
+
+                            actorGroup.Children.Add(shapeGroup);
+                        }
+
+                        var matrix = new Matrix3D();
+
+                        if (actor.ScaleIndex != -1)
+                        {
+                            matrix.Scale(ToScaleVector3D(node.Scales[actor.ScaleIndex]));
+                        }
+                        matrix.Rotate(ToQuaternion(actor.Transform.Orientation));
+                        matrix.Translate(ToVector3D(actor.Transform.Position));
+
+                        actorGroup.Transform = new MatrixTransform3D(matrix);
+
+                        mesh.Children.Add(actorGroup);
                     }
 
-                    var matrix = new Matrix3D();
-                    matrix.Scale(ToScaleVector3D(actor.Scale));
-                    matrix.Rotate(ToQuaternion(actor.Orientation));
-                    matrix.Translate(ToVector3D(actor.Position));
-
-                    actorGroup.Transform = new MatrixTransform3D(matrix);
-
-                    mesh.Children.Add(actorGroup);
+                    groups.Add(mesh);
                 }
+            }
+            /*else if (handle.Chunk is worldCookedFoliageDestructionNode wcfdn)
+            {
+                // worldCookedCollisionNode
+            }*/
+            else if (handle.Chunk is worldCookedGenericProxyMeshNode wcgpmn)
+            {
+                if (wcgpmn.Buffer.Data is worldCookedGenericProxyMeshNode_Buffer wcgpmnb)
+                {
+                    AddCookedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, wcgpmnb.InnerNodes.Count,
+                        i => (wcgpmnb.InnerNodes[i].Mesh.DepotPath, wcgpmnb.InnerNodes[i].MeshAppearance));
+                }
+            }
+            else if (handle.Chunk is worldCookedStaticDecalNode wcsdn)
+            {
 
-                // not used?
-                //var meshMatrix = new Matrix3D();
-                //meshMatrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                //meshMatrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                //meshMatrix.Translate(ToVector3D(transforms[0].Position));
+            }
+            else if (handle.Chunk is worldCookedStaticMeshNode wcsmn)
+            {
+                if (wcsmn.Buffer.Data is worldCookedStaticMeshNodeBuffer wcsmnb)
+                {
+                    AddCookedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, wcsmnb.InnerNodes.Count,
+                        i => (wcsmnb.InnerNodes[i].Mesh.DepotPath, wcsmnb.InnerNodes[i].MeshAppearance));
+                }
+            }
+            else if (handle.Chunk is worldCookedMeshNode wcmn)
+            {
 
-                //mesh.Transform = new MatrixTransform3D(meshMatrix);
-                groups.Add(mesh);
             }
             else if (handle.Chunk is worldNavigationNode wnm)
             {
@@ -8705,42 +9194,49 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (handle.Chunk is worldEntityNode wen)
             {
-                //a little slow for what we want to do
-                // <3
-
                 try
                 {
-
                     var entFile = GetProjectOrDepotFile(wen.EntityTemplate.DepotPath);
 
                     if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
                     {
-                        var entity = RenderEntity(eet, app);
-                        if (entity != null)
+                        // One row for the node, like mesh nodes: a click on the entity in the
+                        // viewport selects it in the tree, selecting it highlights the entity.
+                        var row = new MeshComponent()
                         {
+                            Name = name,
+                            Text = name,
+                            WorldNodeIndex = $"{handleIndex}",
+                            WorldNodeType = typeStr,
+                            WorldNodeDataIndices = indexStr,
+                            DepotPath = wen.EntityTemplate.DepotPath
+                        };
+
+                        // every nodeData entry is one placement of the entity
+                        foreach (var transform in transforms)
+                        {
+                            var entity = RenderEntity(eet, app, sectorAppearance: StringHelper.StringifyOrNull(wen.AppearanceName));
+                            if (entity == null)
+                            {
+                                break;
+                            }
+
                             entity.Name = "Entity";
                             entity.Text = "Entity";
-                            //var f = Shell.ChunkViewModel.FixRotation;
+                            entity.Transform = new MatrixTransform3D(SectorNodeMatrix(transform));
+                            RegisterSectorPlacement(entity, buffer.IndexOf(transform));
 
-                            var q = new System.Numerics.Quaternion()
+                            row.Children.Add(entity);
+                        }
+
+                        if (row.Children.Count > 0)
+                        {
+                            if (row.WorldNodeIndex == SelectedNodeIndex)
                             {
-                                W = transforms[0].Transform.Orientation.R,
-                                X = transforms[0].Transform.Orientation.I,
-                                Y = transforms[0].Transform.Orientation.J,
-                                Z = transforms[0].Transform.Orientation.K
-                            };
+                                SelectedItem = row;
+                            }
 
-                            //q = Shell.ChunkViewModel.FixRotation(q);
-                            var qq = new System.Windows.Media.Media3D.Quaternion(q.X, q.Y, q.Z, q.W);
-
-                            var matrix = new Matrix3D();
-                            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                            matrix.Rotate(qq);
-                            matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                            entity.Transform = new MatrixTransform3D(matrix);
-
-                            groups.Add(entity);
+                            groups.Add(row);
                         }
                     }
                 }
@@ -8775,47 +9271,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (handle.Chunk is worldAreaShapeNode wasn)
             {
-                var shape = wasn.Outline.Chunk.NotNull();
-                var mb = new MeshBuilder();
-
-                var center = new SharpDX.Vector3();
-
-                foreach (var point in shape.Points)
-                {
-                    center.X += point.X / shape.Points.Count;
-                    center.Y += point.Z / shape.Points.Count;
-                    center.Z += -point.Y / shape.Points.Count;
-                }
-
-                mb.AddBox(center, Math.Abs(shape.Points[0].NotNull().X) * 2, shape.Height, Math.Abs(shape.Points[0].NotNull().Y) * 2);
-                mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
-                var material = SetupPBRMaterial("DefaultMaterial");
-                material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
-
-                var mesh = new MeshGeometryModel3D()
-                {
-                    Geometry = mb.ToMeshGeometry3D(),
-                    Material = material,
-                    IsTransparent = true
-                };
-
-                var matrix = new Matrix3D();
-                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                var group = new MeshComponent()
-                {
-                    Name = name,
-                    Text = name,
-                    Transform = new MatrixTransform3D(matrix)
-                };
-
-                group.Children.Add(mesh);
-
-                groups.Add(group);
-
+                AddAreaShape(groups, name, typeStr, handleIndex, indexStr, buffer, transforms, wasn);
             }
         }
 
@@ -8828,6 +9284,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             element.Children.Add(group);
         }
+
+        EndSectorRegistry(element, data, buffer.Count);
+        ApplySectorVisibility(element);
+
         app.ModelGroup.Add(element);
 
         SelectWorldNode();
@@ -8875,7 +9335,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         });
     }
 
-    private void UpdateChildrenSubmesh(MeshComponent? mesh, Action<SubmeshComponent>? submeshUpdater)
+    private void UpdateChildrenSubmesh(GroupModel3D? mesh, Action<SubmeshComponent>? submeshUpdater)
     {
         if (mesh == null)
         {
@@ -8886,20 +9346,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             switch (child)
             {
-                case MeshComponent childMesh:
-                    UpdateChildrenSubmesh(childMesh, submeshUpdater);
-                    break;
                 case SubmeshComponent childSubMesh:
-                {
-                    if (submeshUpdater != null)
-                    {
-                        submeshUpdater(childSubMesh);
-                    }
-
+                    submeshUpdater?.Invoke(childSubMesh);
                     break;
-                }
-                default:
-                    Parent?.GetLoggerService().Warning("Child is a " + child.GetType());
+                // node groups, placements, and the component / rig / bone groups of entities
+                case GroupModel3D childGroup:
+                    UpdateChildrenSubmesh(childGroup, submeshUpdater);
                     break;
             }
         }
@@ -8908,7 +9360,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
     {
 
-        if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+        if (Header == MeshViewHeaders.SectorPreview && SectorNodeRowOf(args.HitTestResult.ModelHit) is { } mesh)
         {
             if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
             {
@@ -8923,6 +9375,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+
+    /// <summary>
+    /// The node row (a direct child of the sector group) an object hit in the viewport belongs to:
+    /// meshes and their instances, entities (any depth of components, rigs and bones), area volumes.
+    /// </summary>
+    private static MeshComponent? SectorNodeRowOf(object? hit)
+    {
+        var current = hit as DependencyObject;
+        for (var depth = 0; current != null && depth < 64; depth++)
+        {
+            if (current is MeshComponent { WorldNodeIndex.Length: > 0 } row && row.Parent is SectorGroup)
+            {
+                return row;
+            }
+
+            current = (current as FrameworkContentElement)?.Parent ?? LogicalTreeHelper.GetParent(current);
+        }
+
+        return null;
+    }
 
     #endregion
 
@@ -8949,7 +9421,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
         }
 
-        sector.Element = RenderSector(wss, Appearances[0]);
+        sector.Element = RenderSector(wss, Appearances[0], sectorFile);
+
+        // the block names the sector's variants and says which the game loads by default
+        foreach (var variant in sector.Variants)
+        {
+            if (variant is not null)
+            {
+                sector.Element.Variants[(int)(uint)variant.RangeIndex] =
+                    (StringHelper.StringifyOrNull(variant.Name) ?? string.Empty, variant.EnabledByDefault);
+            }
+        }
+
+        ApplySectorVisibility(sector.Element);
         sector.Element.Name = sector.Name.Replace("-", "n");
         sector.Element.Text = sector.Name;
         sector.IsLoaded = true;
@@ -9095,6 +9579,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             Name = "Navigation",
             Text = "Navigation",
         };
+        var alwaysLoaded = new GroupModel3DExt()
+        {
+            Name = "AlwaysLoaded",
+            Text = "AlwaysLoaded",
+        };
         var other = new GroupModel3DExt()
         {
             Name = "Other",
@@ -9200,6 +9689,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 navigation.Children.Add(bbText);
             }
+            else if (desc.Category == Enums.worldStreamingSectorCategory.AlwaysLoaded)
+            {
+                alwaysLoaded.Children.Add(bbText);
+            }
             else
             {
                 other.Children.Add(bbText);
@@ -9208,7 +9701,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()), bbText)
             {
                 DepotPath = desc.Data.DepotPath,
-                NumberOfHandles = desc.NumNodeRanges
+                NumberOfHandles = desc.NumNodeRanges,
+                Variants = desc.Variants
             });
         }
         Sectors = new List<Sector>(sectors.OrderBy(x => x.Name).ToList());
@@ -9216,8 +9710,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         texts.Children.Add(interior);
         texts.Children.Add(quest);
         texts.Children.Add(navigation);
+        texts.Children.Add(alwaysLoaded);
         texts.Children.Add(other);
         app.ModelGroup.Add(texts);
+
+        FillBlockSectorVariants();
 
     }
 
@@ -9281,110 +9778,138 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
-    public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null)
+    /// <summary>
+    /// Rig (entAnimatedComponent) and slot (entSlotComponent) components: the bones and slots
+    /// other components are bound to. From the .ent and from the appearance's own components.
+    /// </summary>
+    private void CollectRigsAndSlots(IList<RedBaseClass> chunks)
+    {
+        foreach (var component in chunks)
+        {
+            switch (component)
+            {
+                case entSlotComponent slotset:
+                {
+                    var slots = new Dictionary<string, string>();
+                    var slotTransforms = new Dictionary<string, Matrix3D>();
+                    foreach (var slot in slotset.Slots)
+                    {
+                        var name = slot.SlotName.ToString().NotNull();
+
+                        if (!slots.ContainsKey(name))
+                        {
+                            slots.Add(name, slot.BoneName.ToString().NotNull());
+
+                            // the slot's offset from its bone
+                            var slotMatrix = new Matrix3D();
+                            slotMatrix.Rotate(ToQuaternion(slot.RelativeRotation));
+                            slotMatrix.Translate(ToVector3D(slot.RelativePosition));
+                            slotTransforms.Add(name, slotMatrix);
+                        }
+                    }
+
+                    string? bindName = null, slotName = null;
+                    if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
+                    {
+                        bindName = ehtb.BindName;
+                        slotName = ehtb.SlotName;
+                    }
+
+                    var slotSetName = slotset.Name.ToString().NotNull();
+                    if (!_slotSets.ContainsKey(slotSetName))
+                    {
+                        _slotSets.Add(slotSetName,
+                            new SlotSet(slotSetName, bindName)
+                            {
+                                Matrix = ToSeparateMatrix(slotset.LocalTransform),
+                                Slots = slots,
+                                SlotTransforms = slotTransforms,
+                                SlotName = slotName
+                            });
+                    }
+
+                    break;
+                }
+                case entAnimatedComponent enc:
+                {
+                    var rigFile = GetProjectOrDepotFile(enc.Rig.DepotPath);
+
+                    if (rigFile?.RootChunk is animRig rig)
+                    {
+                        var rigBones = new List<RigBone>();
+                        for (var i = 0; i < rig.BoneNames.Count; i++)
+                        {
+                            var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
+                            {
+                                Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
+                            };
+
+                            if (rig.BoneParentIndexes[i] != -1)
+                            {
+                                rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
+                            }
+
+                            rigBones.Add(rigBone);
+                        }
+
+                        string? bindName = null, slotName = null;
+                        if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                        {
+                            bindName = ehtb.BindName;
+                            slotName = ehtb.SlotName;
+                        }
+
+                        Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
+                        {
+                            Bones = rigBones,
+                            BindName = bindName,
+                            SlotName = slotName
+                        };
+                    }
+
+                    break;
+                }
+
+                default:
+                    break;
+            }
+        }
+
+        foreach (var rig in Rigs.Values)
+        {
+            if (rig.Parent is null && rig.BindName is not null && rig.BindName != rig.Name &&
+                Rigs.TryGetValue(rig.BindName, out var parentRig))
+            {
+                parentRig.AddChild(rig);
+            }
+        }
+    }
+
+    public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null,
+        string? sectorAppearance = null)
     {
         if (ent?.CompiledData.Data is not RedPackage pkg)
         {
             return null;
         }
 
+        if (appearance != null)
+        {
+            // Sector: one entity after another. Rigs and slots of the previous entity
+            // (same component names, other bones) must not place this one's components.
+            Rigs.Clear();
+            _slotSets.Clear();
+        }
+
         if (ent.Appearances.Count > 0)
         {
-            foreach (var component in pkg.Chunks)
-            {
-                switch (component)
-                {
-                    case entSlotComponent slotset:
-                    {
-                        var slots = new Dictionary<string, string>();
-                        foreach (var slot in slotset.Slots)
-                        {
-                            var name = slot.SlotName.ToString().NotNull();
-
-                            if (!slots.ContainsKey(name))
-                            {
-                                slots.Add(name, slot.BoneName.ToString().NotNull());
-                            }
-                        }
-
-                        string? bindName = null, slotName = null;
-                        if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
-                        {
-                            bindName = ehtb.BindName;
-                            slotName = ehtb.SlotName;
-                        }
-
-                        var slotSetName = slotset.Name.ToString().NotNull();
-                        if (!_slotSets.ContainsKey(slotSetName))
-                        {
-                            _slotSets.Add(slotSetName,
-                                new SlotSet(slotSetName, bindName)
-                                {
-                                    Matrix = ToSeparateMatrix(slotset.LocalTransform),
-                                    Slots = slots,
-                                    SlotName = slotName
-                                });
-                        }
-
-                        break;
-                    }
-                    case entAnimatedComponent enc:
-                    {
-                        var rigFile = GetProjectOrDepotFile(enc.Rig.DepotPath);
-
-                        if (rigFile?.RootChunk is animRig rig)
-                        {
-                            var rigBones = new List<RigBone>();
-                            for (var i = 0; i < rig.BoneNames.Count; i++)
-                            {
-                                var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
-                                {
-                                    Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
-                                };
-
-                                if (rig.BoneParentIndexes[i] != -1)
-                                {
-                                    rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
-                                }
-
-                                rigBones.Add(rigBone);
-                            }
-
-                            string? bindName = null, slotName = null;
-                            if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-                            {
-                                bindName = ehtb.BindName;
-                                slotName = ehtb.SlotName;
-                            }
-
-                            Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
-                            {
-                                Bones = rigBones,
-                                BindName = bindName,
-                                SlotName = slotName
-                            };
-                        }
-
-                        break;
-                    }
-
-                    default:
-                        break;
-                }
-            }
-
-            foreach (var rig in Rigs.Values)
-            {
-                if (rig.BindName is not null && Rigs.ContainsKey(rig.BindName))
-                {
-                    Rigs[rig.BindName].AddChild(rig);
-                }
-            }
+            CollectRigsAndSlots(pkg.Chunks);
+            var entPlaced = CollectPlacedComponents(pkg.Chunks);
 
             List<entTemplateAppearance> appearances;
             if (appearance != null)
             {
-                appearances = ent.Appearances.Where(x => x is not null && x.Name == ent.DefaultAppearance).ToList();
+                appearances = SectorEntityAppearances(ent, sectorAppearance);
             }
             else if (appearanceName == null)
             {
@@ -9439,8 +9964,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
                 List<LoadableModel> loadableModels = new();
+                var placed = new Dictionary<string, entIPlacedComponent>(entPlaced);
                 if (appDef.CompiledData?.Data is RedPackage appPkg)
                 {
+                    CollectRigsAndSlots(appPkg.Chunks);
+                    foreach (var (placedName, component) in CollectPlacedComponents(appPkg.Chunks))
+                    {
+                        placed[placedName] = component;
+                    }
+
                     loadableModels.AddRange(LoadMeshes(appPkg.Chunks));
                 }
 
@@ -9454,6 +9986,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
                 LoadPartsOverrides(appDef, loadableModels);
+                ResolvePlacedParents(loadableModels, placed);
 
                 var a = new Appearance(app.AppearanceName.ToString().NotNull())
                 {
@@ -9524,12 +10057,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         // ent.appearances.Count == null => it's not a root entity
+        CollectRigsAndSlots(pkg.Chunks);
+        var rootPlaced = CollectPlacedComponents(pkg.Chunks);
         var models = LoadMeshes(pkg.Chunks);
 
         if (models.Count == 0)
         {
             return null;
         }
+
+        ResolvePlacedParents(models, rootPlaced);
 
         var meshApp = appearance ?? new Appearance("Default") { Models = models };
 
@@ -9549,9 +10086,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 model.Meshes = MakeMeshShared(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
             }
 
+            // the component's place in the entity (its own transform, then what it is bound to)
+            var placedGroup = PlacedModelGroup(model, models);
+            cGroup.Children.Add(placedGroup);
+
             foreach (var m in model.Meshes)
             {
-                cGroup.Children.Add(m);
+                placedGroup.Children.Add(m);
                 if (!meshApp.LODLUT.ContainsKey(m.LOD))
                 {
                     meshApp.LODLUT[m.LOD] = new List<SubmeshComponent>();
@@ -9585,6 +10126,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 var variantModels = LoadMeshes(pkg.Chunks, variantName);
                 if (variantModels.Count == 0)
                     continue;
+                ResolvePlacedParents(variantModels, rootPlaced);
 
                 var variant = new Appearance(variantName)
                 {
@@ -9612,9 +10154,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         model.Meshes = MakeMeshShared(modelMesh, model.ChunkMask, model.AppearanceIndex, meshPath);
                     }
 
+                    var placedGroup = PlacedModelGroup(model, variantModels);
+                    variantGroup.Children.Add(placedGroup);
+
                     foreach (var submesh in model.Meshes)
                     {
-                        variantGroup.Children.Add(submesh);
+                        placedGroup.Children.Add(submesh);
                         if (!variant.LODLUT.TryGetValue(submesh.LOD, out var lodMeshes))
                         {
                             lodMeshes = [];
@@ -9632,6 +10177,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         var el = new GroupModel3DExt();
+        if (appearance != null)
+        {
+            // Sector: this entity's components. meshApp is the sector's appearance, whose
+            // ModelGroup holds no entity yet, so the entity used to come back empty.
+            el.Children.Add(cGroup);
+            return el;
+        }
+
         foreach (var model in meshApp.ModelGroup)
         {
             el.Children.Add(model);
@@ -10092,7 +10645,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// <summary>
     /// Decal roughness/metalness: placeholder (black=0, white=1) * scale + bias.
     /// </summary>
-    private (float roughness, float metalness) GetDecalRoughMetal(string name)
+    private (float roughness, float metalness) GetDecalRoughMetal(string name, bool makeupKeys = false)
     {
         float rough = 0.8f, metal = 0f;
 
@@ -10106,7 +10659,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         float ReadScaleBias(string texKey, string scaleKey, string biasKey, float fallback)
         {
             float baseVal = fallback;
-            if (mat.Values.TryGetValue(texKey, out var texObj) && texObj is CResourceReference<ITexture> texRef)
+            // Makeup decals name the maps RoughnessTexture / MetalnessTexture.
+            if (mat.Values.TryGetValue(makeupKeys ? texKey + "Texture" : texKey, out var texObj) &&
+                texObj is CResourceReference<ITexture> texRef)
             {
                 var path = texRef.DepotPath.GetResolvedText() ?? "";
                 if (path.Contains("black", StringComparison.OrdinalIgnoreCase))
@@ -10221,6 +10776,108 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         return cached.Length == 0 ? null : cached;
     }
 
+    /// <summary>
+    /// Makeup roughness / metalness map: G = RoughnessTexture.r * RoughnessScale + RoughnessBias,
+    /// B = MetalnessTexture.r * MetalnessScale + MetalnessBias, at the size of the diffuse.
+    /// </summary>
+    private async Task BakeMakeupRoughMetal(Dictionary<string, object> dictionary, int w, int h, string path)
+    {
+        float Param(string key, float fallback) =>
+            dictionary.TryGetValue(key, out var o) ? ReadFloat(o) : fallback;
+
+        async Task<Bitmap?> Tex(string key) =>
+            dictionary.TryGetValue(key, out var o) && o is CResourceReference<ITexture> r && r.DepotPath != ResourcePath.Empty
+                ? await LoadTextureAsBitmap(r.DepotPath)
+                : null;
+
+        using var rough = await Tex("RoughnessTexture");
+        using var metal = await Tex("MetalnessTexture");
+        float rScale = Param("RoughnessScale", 1f), rBias = Param("RoughnessBias", 0f);
+        float mScale = Param("MetalnessScale", 1f), mBias = Param("MetalnessBias", 0f);
+
+        using var rm = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        var rect = new Rectangle(0, 0, w, h);
+        var dst = rm.LockBits(rect, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        System.Drawing.Imaging.BitmapData? rd = null, md = null;
+        try
+        {
+            if (rough != null)
+                rd = rough.LockBits(new Rectangle(0, 0, rough.Width, rough.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            if (metal != null)
+                md = metal.LockBits(new Rectangle(0, 0, metal.Width, metal.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            unsafe
+            {
+                byte* dp = (byte*)dst.Scan0;
+                byte* rp = rd == null ? null : (byte*)rd.Scan0;
+                byte* mp = md == null ? null : (byte*)md.Scan0;
+                int rw = rough?.Width ?? 1, rh = rough?.Height ?? 1, mw = metal?.Width ?? 1, mh = metal?.Height ?? 1;
+                for (var y = 0; y < h; y++)
+                {
+                    var row = dp + y * dst.Stride;
+                    for (var x = 0; x < w; x++)
+                    {
+                        float r = rp != null ? rp[(y * rh / h) * rd!.Stride + (x * rw / w) * 4 + 2] / 255f : 0.5f;
+                        float m = mp != null ? mp[(y * mh / h) * md!.Stride + (x * mw / w) * 4 + 2] / 255f : 0f;
+                        row[x * 4 + 0] = (byte)(Math.Clamp(m * mScale + mBias, 0f, 1f) * 255f);
+                        row[x * 4 + 1] = (byte)(Math.Clamp(r * rScale + rBias, 0f, 1f) * 255f);
+                        row[x * 4 + 2] = 255;
+                        row[x * 4 + 3] = 255;
+                    }
+                }
+            }
+        }
+        finally
+        {
+            rm.UnlockBits(dst);
+            if (rd != null)
+                rough!.UnlockBits(rd);
+            if (md != null)
+                metal!.UnlockBits(md);
+        }
+
+        SavePngAtomic(rm, path);
+    }
+
+    /// <summary>Tangent normal map: XY scaled by the strength, Z rebuilt (glass NormalStrength).</summary>
+    private static void ScaleNormalStrength(Bitmap bmp, float strength)
+    {
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            unsafe
+            {
+                for (var y = 0; y < bmp.Height; y++)
+                {
+                    var row = (byte*)data.Scan0 + y * data.Stride;
+                    for (var x = 0; x < bmp.Width; x++)
+                    {
+                        var px = row + x * 4;
+                        var nx = Math.Clamp((px[2] / 255f * 2f - 1f) * strength, -1f, 1f);
+                        var ny = Math.Clamp((px[1] / 255f * 2f - 1f) * strength, -1f, 1f);
+                        var nz = MathF.Sqrt(Math.Max(0f, 1f - nx * nx - ny * ny));
+                        px[2] = (byte)((nx * 0.5f + 0.5f) * 255f);
+                        px[1] = (byte)((ny * 0.5f + 0.5f) * 255f);
+                        px[0] = (byte)((nz * 0.5f + 0.5f) * 255f);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+    }
+
+    /// <summary>glass_deferred.mt: glass look, but opaque (no transmission).</summary>
+    private bool IsDeferredGlass(string? name, Material? material = null)
+    {
+        if (material == null && (string.IsNullOrEmpty(name) || !TryGetRawMaterial(name, out material)))
+            return false;
+
+        return GetTemplateFileName(material).Equals("glass_deferred", StringComparison.OrdinalIgnoreCase);
+    }
+
     private string GetTemplateFileName(Material? material) =>
         Path.GetFileNameWithoutExtension(ResolveTemplatePath(material?.Instance as CMaterialInstance) ?? string.Empty);
 
@@ -10248,14 +10905,61 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         var instance = material?.Instance as CMaterialInstance;
         var template = ResolveTemplatePath(instance);
-        if (template != null && ClassifyByTemplate(template, name) is { } byTemplate)
+        var directBase = instance?.BaseMaterial.DepotPath.GetResolvedText();
+        if (template != null && ClassifyByTemplate(template, name, directBase) is { } byTemplate)
             return byTemplate;
 
-        var directBase = instance?.BaseMaterial.DepotPath.GetResolvedText();
-        return ClassifyMaterial(name, directBase);
+        var kind = ClassifyMaterial(name, directBase);
+
+        // The template could not be resolved (e.g. a mod .mi whose chain is incomplete):
+        // a skin is still a skin when its base chain goes through the character skin
+        // instances, whatever its name says ("..._tattoo" skins are not overlays).
+        if (!Has(kind, MaterialKind.Skin) && instance != null && IsSkinByBaseChain(instance))
+            return MaterialKind.Skin;
+
+        return kind;
     }
 
-    private static MaterialKind? ClassifyByTemplate(string templatePath, string? name)
+    /// <summary>
+    /// Walks the .mi chain (a few levels) looking for the character skin template or the
+    /// character skin instances (base\characters\common\skin\…, character_mat_instance).
+    /// </summary>
+    private bool IsSkinByBaseChain(CMaterialInstance instance)
+    {
+        CMaterialInstance? current = instance;
+        for (var depth = 0; depth < 6 && current != null; depth++)
+        {
+            if (current.BaseMaterial.DepotPath == ResourcePath.Empty)
+                return false;
+
+            var path = (current.BaseMaterial.DepotPath.GetResolvedText() ?? string.Empty).Replace('/', '\\').ToLowerInvariant();
+            if (IsSkinPath(path))
+                return true;
+            if (path.EndsWith(".mt", StringComparison.Ordinal) || path.EndsWith(".remt", StringComparison.Ordinal))
+                return false;
+
+            try
+            {
+                current = GetProjectOrDepotFile(current.BaseMaterial.DepotPath)?.RootChunk as CMaterialInstance;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsSkinPath(string path) =>
+        path.EndsWith("skin.mt", StringComparison.Ordinal) ||
+        path.EndsWith("skin_blendable.mt", StringComparison.Ordinal) ||
+        path.EndsWith("skin_morph.mt", StringComparison.Ordinal) ||
+        path.Contains("blackwall_blendable_skin", StringComparison.Ordinal) ||
+        path.Contains("character_mat_instance", StringComparison.Ordinal) ||
+        path.Contains("\\common\\skin\\", StringComparison.Ordinal);
+
+    private static MaterialKind? ClassifyByTemplate(string templatePath, string? name, string? directBase = null)
     {
         var file = Path.GetFileNameWithoutExtension(templatePath);
         name ??= string.Empty;
@@ -10291,7 +10995,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Face overlays are plain mesh_decal: only the name separates them from clothing decals.
             if (ContainsAny(name, "heb_", "hb_", "brow"))
                 return MaterialKind.Eyebrow;
-            if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips", "tattoo"))
+            // Tattoo decals stay plain decals: the makeup overlay bake (DiffuseTexture tint) made
+            // them, and the skin under them, look washed out.
+            if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips"))
+                return MaterialKind.Makeup;
+            // Character creator makeup (lips, eyes, cheeks) often has a plain name such as
+            // "gold_05_03": its .mi lives under character_customisation_items\makeup\.
+            if (directBase != null &&
+                directBase.Replace('/', '\\').Contains("character_customisation_items\\makeup\\", StringComparison.OrdinalIgnoreCase))
                 return MaterialKind.Makeup;
             return MaterialKind.Decal;
         }
@@ -10333,8 +11044,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // 1. Base material path (primary, like Blender addon registry)
         if (!string.IsNullOrEmpty(path))
         {
-            if (path.EndsWith("skin.mt") || path.EndsWith("skin_blendable.mt") || path.EndsWith("skin_morph.mt") ||
-                path.Contains("blackwall_blendable_skin"))
+            if (IsSkinPath(path))
                 kind |= MaterialKind.Skin;
 
             if (path.EndsWith("hair.mt") || path.EndsWith("hair_blendable.mt") ||
@@ -10395,8 +11105,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 "eye_wet", "wetness", "splineModeling", "eye_shadow", "eyemat", "_eye"))
                     kind |= MaterialKind.Eye;
 
-                if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lip", "tattoo"))
+                // A tattoo by name is a decal, unless the name already says skin ("..._skin_tattoo").
+                if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lip"))
                     kind |= MaterialKind.Makeup;
+                else if (name.Contains("tattoo", StringComparison.OrdinalIgnoreCase) && !Has(kind, MaterialKind.Skin))
+                    kind |= MaterialKind.Decal;
 
                 if (name.Contains("nail") || name.StartsWith("an0_") || name.StartsWith("an_"))
                     return MaterialKind.Nail;

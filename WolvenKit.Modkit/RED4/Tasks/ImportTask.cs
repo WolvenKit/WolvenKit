@@ -76,7 +76,7 @@ public partial class ConsoleFunctions
                 // check if the file can be directly imported
                 // if not, rebuild the single file
 
-                if (Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
+                if (RawFileFormatParser.TryParse(rawRelative.Extension, out _))
                 {
                     // the raw file can be imported directly
                     if (await _modTools.Import(rawRelative, settings, outDirectory))

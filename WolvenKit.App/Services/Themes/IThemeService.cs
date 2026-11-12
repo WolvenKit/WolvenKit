@@ -104,6 +104,13 @@ public interface IThemeService
     /// <summary>Effective color of a key: overrides of the theme chain, else the default.</summary>
     Color? ResolveColor(ThemeDto theme, string key);
 
+    /// <summary>
+    /// Every color the theme changes, including the variants derived from its colors
+    /// (dark / translucent variants, readable text on colored surfaces, linked HandyControl keys, accent).
+    /// Keys missing from the result keep their default.
+    /// </summary>
+    IReadOnlyDictionary<string, Color> ResolveEffectiveColors(ThemeDto theme);
+
     Color ResolveAccent(ThemeDto theme);
 
     Color? ResolveAccentForeground(ThemeDto theme);

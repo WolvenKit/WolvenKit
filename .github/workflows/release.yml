@@ -1,12 +1,18 @@
 name: release
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to release from (defaults to the branch selected when starting the workflow)"
+        required: false
+        type: string
 
 env:
   PROJ: ./WolvenKit/WolvenKit.csproj
   PROJC: ./WolvenKit.CLI/WolvenKit.CLI.csproj
   PROJU: ./WolvenKit.Unpacker/WolvenKit.Unpacker.csproj
   ARTIFACT_CLI_LIN: wolvenkit-cli-linux
+  BASE_BRANCH: "${{ inputs.branch || github.ref_name }}"
 
 jobs:
   console-linux:
@@ -14,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -38,6 +46,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -190,6 +200,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:

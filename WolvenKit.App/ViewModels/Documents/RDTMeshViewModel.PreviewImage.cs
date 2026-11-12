@@ -389,12 +389,18 @@ public partial class RDTMeshViewModel
                     var blue = new SharpDX.Color4(0f, 0f, 1f, 1f);
                     var green = new SharpDX.Color4(0f, 0.5f, 0f, 1f);
                     var white = new SharpDX.Color4(1f, 1f, 1f, 1f);
-                    _viewCubeTexture = new HelixToolkit.SharpDX.Core.TextureModel(
-                        HelixToolkit.SharpDX.Core.BitmapExtensions.CreateViewBoxTexture(effects,
-                            "B", "F", "L", "R", "U", "D",
-                            red, red, blue, blue, green, green,
-                            white, white, white, white, white, white),
-                        true);
+                    // Kept as bytes behind a loader: Helix loads a texture again whenever it
+                    // recreates its resources (viewport unloaded / reloaded, tab moved, device
+                    // reset). A TextureModel over a stream only loads once (the stream is closed
+                    // or at its end), and the cube turned black after such a reload.
+                    using var stream = HelixToolkit.SharpDX.Core.BitmapExtensions.CreateViewBoxTexture(effects,
+                        "B", "F", "L", "R", "U", "D",
+                        red, red, blue, blue, green, green,
+                        white, white, white, white, white, white);
+                    using var copy = new MemoryStream();
+                    stream.Position = 0;
+                    stream.CopyTo(copy);
+                    _viewCubeTexture = new HelixToolkit.SharpDX.Core.TextureModel(Guid.NewGuid(), new BytesTextureLoader(copy.ToArray()));
                 }
                 catch (Exception ex)
                 {
@@ -404,6 +410,20 @@ public partial class RDTMeshViewModel
 
             return _viewCubeTexture;
         }
+    }
+
+    /// <summary>Hands Helix a fresh stream over the same bytes on every (re)load.</summary>
+    private sealed class BytesTextureLoader : HelixToolkit.SharpDX.Core.ITextureInfoLoader
+    {
+        private readonly byte[] _data;
+
+        public BytesTextureLoader(byte[] data) => _data = data;
+
+        public HelixToolkit.SharpDX.Core.TextureInfo Load(Guid id) =>
+            new(new MemoryStream(_data, writable: false));
+
+        public void Complete(Guid id, HelixToolkit.SharpDX.Core.TextureInfo info, bool succeeded) =>
+            info?.Texture?.Dispose();
     }
 
     // ---- Icons for every appearance ----
@@ -418,7 +438,7 @@ public partial class RDTMeshViewModel
             await Task.Delay(50);
         }
 
-        await GenerateMaterials(clearCache: false);
+        await GenerateMaterials(clearCache: false, refreshFromDisk: false);
     }
 
     /// <summary>Asks for the folder of the per-appearance icons; null if cancelled or not confirmed.</summary>
