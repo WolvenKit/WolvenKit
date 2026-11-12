@@ -441,8 +441,15 @@ public partial class RDTMeshViewModel
     /// coverage = contrast(alpha, AlphaMaskContrast)^2 * (1 - SecondaryMask.r * SecondaryMaskInfluence).
     /// The normal map's XY turn with the UV.
     /// </summary>
-    private async Task PostProcessMeshDecalMaps(Dictionary<string, object> dictionary, string bd, string bn, string rm)
+    private async Task PostProcessMeshDecalMaps(Material material, Dictionary<string, object> dictionary, string bd, string bn, string rm)
     {
+        // Gradient-map decals (road markings, signs): colour and alpha come from the gradient.
+        var gradient = IsGradientDecalTemplate(GetTemplateFileName(material));
+        if (gradient)
+        {
+            await BakeGradientDecalColor(dictionary, bd);
+        }
+
         float P(string key, float fallback) => dictionary.TryGetValue(key, out var o) ? ReadFloat(o) : fallback;
 
         double offX = P("UVOffsetX", 0), offY = P("UVOffsetY", 0);
@@ -590,13 +597,17 @@ public partial class RDTMeshViewModel
                         a = Math.Clamp((a - 0.5f) * slope + 0.5f, 0f, 1f);
                     }
 
-                    var keep = a;
+                    // mesh_decal: alpha x alpha x (1 - secondary x influence); gradient decals:
+                    // alpha x lerp(1, secondary, influence), not squared (add-on decal_nodes.py).
+                    var keep = gradient ? 1f : a;
                     if (mask2 != null)
                     {
                         // Secondary mask on the transformed UV (before the flipbook), scaled.
                         var (tu, tv) = Map((x + 0.5) / target.W, v);
                         mask2.Sample(tu * cols * secScale, 1.0 - tv * rows * secScale, m4);
-                        keep = a * (1f - m4[2] * secInfluence);
+                        keep = gradient
+                            ? 1f - secInfluence + m4[2] * secInfluence
+                            : a * (1f - m4[2] * secInfluence);
                     }
 
                     target.Data[o + 3] = (byte)Math.Clamp(a * keep * 255f, 0f, 255f);
@@ -778,9 +789,94 @@ public partial class RDTMeshViewModel
     /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are).
     /// </summary>
     private static bool IsPlainMeshDecalTemplate(string template) =>
+        IsGradientDecalTemplate(template) ||
         template.Equals("mesh_decal", StringComparison.OrdinalIgnoreCase) ||
         template.Equals("mesh_decal_emissive", StringComparison.OrdinalIgnoreCase) ||
         template.Equals("mesh_decal_parallax", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsGradientDecalTemplate(string template) =>
+        template.Equals("mesh_decal_gradientmap_recolor", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// mesh_decal_gradientmap_recolor (add-on decal_nodes.py _gradient_color): DiffuseTexture.r
+    /// picks the colour along GradientMap (its middle row, clamped); colour x DiffuseColor,
+    /// alpha = GradientMap.a x MaskTexture.r x DiffuseAlpha (the composite then takes it as is).
+    /// Hair caps on this template are hair, not decals, and never get here.
+    /// </summary>
+    private async Task BakeGradientDecalColor(Dictionary<string, object> dictionary, string bd)
+    {
+        WolvenKit.RED4.Types.ResourcePath TexPath(string key) =>
+            dictionary.TryGetValue(key, out var o) && o is WolvenKit.RED4.Types.CResourceReference<WolvenKit.RED4.Types.ITexture> r
+                ? r.DepotPath
+                : WolvenKit.RED4.Types.ResourcePath.Empty;
+
+        try
+        {
+            using var diffuseBmp = await LoadTextureAsBitmap(TexPath("DiffuseTexture"));
+            using var gradientBmp = await LoadTextureAsBitmap(TexPath("GradientMap"));
+            using var maskBmp = await LoadTextureAsBitmap(TexPath("MaskTexture"));
+            var diffuse = Pixels.From(diffuseBmp);
+            if (diffuse == null)
+            {
+                return;
+            }
+
+            var gradientPixels = Pixels.From(gradientBmp);
+            var mask = Pixels.From(maskBmp);
+            float tr = 1f, tg = 1f, tb = 1f;
+            if (dictionary.TryGetValue("DiffuseColor", out var dcObj) && dcObj is WolvenKit.RED4.Types.CColor dc)
+            {
+                tr = dc.Red / 255f;
+                tg = dc.Green / 255f;
+                tb = dc.Blue / 255f;
+            }
+
+            var diffuseAlpha = dictionary.TryGetValue("DiffuseAlpha", out var daObj) ? Math.Max(0f, ReadFloat(daObj)) : 0f;
+            ComposeGradient(diffuse, gradientPixels, mask, tr, tg, tb, diffuseAlpha);
+            using var bmp = diffuse.ToBitmap();
+            SavePngAtomic(bmp, bd);
+        }
+        catch (Exception ex)
+        {
+            Parent?.GetLoggerService()?.Warning($"[Decals] gradient decal: {ex.Message}");
+        }
+    }
+
+    private static void ComposeGradient(Pixels diffuse, Pixels? gradient, Pixels? mask, float tr, float tg, float tb, float diffuseAlpha)
+    {
+        Span<float> g4 = stackalloc float[4];
+        Span<float> m4 = stackalloc float[4];
+        for (var y = 0; y < diffuse.H; y++)
+        {
+            for (var x = 0; x < diffuse.W; x++)
+            {
+                var o = (y * diffuse.W + x) * 4;
+                var position = diffuse.Data[o + 2] / 255f;
+                float r = position, g = position, b = position, a = 1f;
+                if (gradient != null)
+                {
+                    // Clamped along the ramp: sample texel centres only.
+                    var gx = Math.Clamp(position * gradient.W, 0.5, gradient.W - 0.5) / gradient.W;
+                    gradient.Sample(gx, 0.5, g4);
+                    r = g4[2];
+                    g = g4[1];
+                    b = g4[0];
+                    a = g4[3];
+                }
+
+                if (mask != null)
+                {
+                    mask.Sample((x + 0.5) / diffuse.W, (y + 0.5) / diffuse.H, m4);
+                    a *= m4[2];
+                }
+
+                diffuse.Data[o + 2] = (byte)Math.Clamp(r * tr * 255f, 0f, 255f);
+                diffuse.Data[o + 1] = (byte)Math.Clamp(g * tg * 255f, 0f, 255f);
+                diffuse.Data[o] = (byte)Math.Clamp(b * tb * 255f, 0f, 255f);
+                diffuse.Data[o + 3] = (byte)Math.Clamp(a * diffuseAlpha * 255f, 0f, 255f);
+            }
+        }
+    }
 
     private static float DecalAlpha(Material raw, string key) =>
         // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS). Values above
@@ -1433,7 +1529,8 @@ public partial class RDTMeshViewModel
                 ColorPng = dd,
                 NormalPng = dn,
                 RmPng = drm,
-                DiffuseAlpha = DecalAlpha(raw, "DiffuseAlpha"),
+                // Gradient decals carry DiffuseAlpha in the baked alpha already.
+                DiffuseAlpha = IsGradientDecalTemplate(GetTemplateFileName(raw)) ? 1f : DecalAlpha(raw, "DiffuseAlpha"),
                 NormalAlpha = DecalAlpha(raw, "NormalAlpha"),
                 RmAlpha = DecalAlpha(raw, "RoughnessMetalnessAlpha"),
                 Rnm = raw.Values?.TryGetValue("NormalsBlendingMode", out var nbm) == true && ReadFloat(nbm) > 0.5f,
