@@ -1,0 +1,30 @@
+{
+  "formatVersion": 1,
+  "name": "Clouds",
+  "author": "WolvenKit",
+  "description": "Neon pink and violet of the Clouds doll house on Jig-Jig Street, with cool blue bar light and warm lounge amber.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#FF5CC8",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#170B14",
+    "ContentBackgroundAlt": "#1C0E19",
+    "ContentBackgroundAlt2": "#21101D",
+    "ContentBackgroundAlt3": "#2A1426",
+    "ContentBackgroundAlt4": "#351A30",
+    "ContentBackgroundAlt5": "#42203C",
+    "BorderAlt": "#4A2443",
+    "ContentForeground": "#F5E1EE",
+    "ForegroundColor": "#F5E1EE",
+    "ForegroundColor_Grey1": "#B8A0B2",
+    "BackgroundColor_Control": "#21101D",
+    "WolvenKitPanelHeaderSelected": "#4A1A40",
+    "WolvenKitPanelTabSelected": "#3A1532",
+    "WolvenKitStatusBarReady": "#7A1E5E",
+    "WolvenKitStatusBarBusy": "#3D2F7A",
+    "WolvenKitProjectSource": "#5FC8FF",
+    "WolvenKitProjectResources": "#FFB45A",
+    "WolvenKitPurpleColor": "#B06CFF",
+    "WolvenKitTanColor": "#E8A86A"
+  }
+}

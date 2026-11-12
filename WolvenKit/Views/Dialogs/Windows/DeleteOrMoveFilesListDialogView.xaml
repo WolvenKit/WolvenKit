@@ -54,7 +54,7 @@
                     <TextBlock
                         Grid.Row="0"
                         Margin="{DynamicResource WolvenKitMarginSmallVertical}"
-                        Foreground="{StaticResource WolvenKitYellow}"
+                        Foreground="{DynamicResource WolvenKitYellow}"
                         FontSize="{DynamicResource WolvenKitFontMedium}"
                         FontWeight="Bold"
                         TextWrapping="Wrap">
@@ -76,7 +76,7 @@
                         x:Name="ContentTextBox"
                         Grid.Row="2"
                         VerticalContentAlignment="Top"
-                        Background="{StaticResource BackgroundColor_Frame_Background}"
+                        Background="{DynamicResource BackgroundColor_Frame_Background}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         AcceptsReturn="True"
                         TextWrapping="WrapWithOverflow"

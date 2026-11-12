@@ -208,7 +208,7 @@
                                                 IconPack="Material"
                                                 Kind="Delete"
                                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                                Foreground="{StaticResource WolvenKitRed}" />
+                                                Foreground="{DynamicResource WolvenKitRed}" />
                                         </Button>
                                     </DataTemplate>
                                 </syncfusion:GridTemplateColumn.CellTemplate>

@@ -16,11 +16,10 @@
     d:DesignWidth="800"
     d:DesignHeight="450">
     <Grid
-        Background="{StaticResource ContentBackground}"
+        Background="{DynamicResource ContentBackground}"
         IsSharedSizeScope="True"
         KeyboardNavigation.TabNavigation="Contained">
         <Grid.Resources>
-            <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
 
             <!-- Do not hide anything by style if it's hidden by search - we'll be filtering the item collection -->
             <Style
@@ -61,7 +60,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -84,7 +83,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -107,7 +106,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -130,7 +129,7 @@
                         Kind="CursorDefault"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitCyan}" />
+                        Foreground="{DynamicResource WolvenKitCyan}" />
                 </Button>
             </DataTemplate>
 
@@ -151,7 +150,7 @@
                         Kind="PlusCircle"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Size="{DynamicResource WolvenKitIconMilli}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -180,7 +179,7 @@
                                                 Kind="Delete"
                                                 Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                                 Size="{DynamicResource WolvenKitIconMilli}"
-                                                Foreground="{StaticResource WolvenKitRed}" />
+                                                Foreground="{DynamicResource WolvenKitRed}" />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -239,7 +238,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </DataTemplate>
@@ -270,7 +269,7 @@
                                                 Kind="Delete"
                                                 Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                                 Size="{DynamicResource WolvenKitIconMilli}"
-                                                Foreground="{StaticResource WolvenKitRed}" />
+                                                Foreground="{DynamicResource WolvenKitRed}" />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -329,7 +328,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </DataTemplate>
@@ -347,12 +346,14 @@
             <Style
                 x:Key="PGNameStyle"
                 TargetType="TextBlock">
+                <!--  a keyed style skips the app-wide TextBlock style, so set the theme text color here  -->
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding IsDefault}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -640,12 +641,13 @@
                                 <templates:IconBox
                                     IconPack="Empty"
                                     Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     Size="{DynamicResource WolvenKitIconMicro}" />
 
                                 <TextBlock
                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource RedTypeColor}"
+                                    Foreground="{DynamicResource WolvenKitTan}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Type,
                                                    Mode=OneTime}" />
@@ -653,7 +655,7 @@
                                 <TextBlock
                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                     VerticalAlignment="Center"
-                                    Foreground="White"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Descriptor}">
                                     <TextBlock.Style>
@@ -721,12 +723,13 @@
                                     IconPack="Codicons"
                                     Kind="SymbolClass"
                                     Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     Size="{DynamicResource WolvenKitIconMicro}" />
 
                                 <TextBlock
                                     Name="PropertyType"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource WolvenKitTan}"
+                                    Foreground="{DynamicResource WolvenKitTan}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Type,
                                                    Mode=OneTime}" />
@@ -753,12 +756,13 @@
                                         IconPack="Codicons"
                                         Kind="ArrowRight"
                                         Margin="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                                        Foreground="{DynamicResource ContentForeground}"
                                         Size="{DynamicResource WolvenKitIconNano}" />
 
                                     <TextBlock
                                         Margin="0"
                                         VerticalAlignment="Center"
-                                        Foreground="{StaticResource WolvenKitTan}"
+                                        Foreground="{DynamicResource WolvenKitTan}"
                                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                         Text="{Binding ResolvedType,
                                                        Mode=OneWay,
@@ -768,6 +772,7 @@
                                 <TextBlock
                                     Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                     VerticalAlignment="Center"
+                                    Foreground="{DynamicResource ContentForeground}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                     Text="{Binding Descriptor}">
                                     <TextBlock.Style>
@@ -814,7 +819,7 @@
                 <Border
                     x:Name="TopLine"
                     MinHeight="{DynamicResource WolvenKitRedTreeRowMinHeight}"
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,0,0,1"
                     Visibility="{Binding IsHiddenByEditorDifficultyLevel,
                                          Converter={StaticResource InvertBooleanConverter}}">
@@ -849,7 +854,7 @@
                         <GridSplitter
                             Grid.Column="2"
                             HorizontalAlignment="Stretch"
-                            Background="{StaticResource BorderAlt}" />
+                            Background="{DynamicResource BorderAlt}" />
 
                         <ContentControl
                             Grid.Column="3"
@@ -917,16 +922,20 @@
                 </HierarchicalDataTemplate.ItemTemplate-->
             </DataTemplate>
 
+            <!--  editor text boxes (float, string, …) without a style of their own: theme field colors  -->
             <Style TargetType="TextBox">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
             </Style>
 
             <Style
                 BasedOn="{StaticResource WPFComboBoxStyle}"
                 TargetType="ComboBox">
-                <Setter Property="Background" Value="#252525" />
+                <Setter Property="Background" Value="{DynamicResource WolvenKitGray25}" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -935,8 +944,11 @@
             <Style
                 BasedOn="{StaticResource CheckBoxBaseStyle}"
                 TargetType="CheckBox">
-                <Setter Property="Background" Value="#252525" />
+                <Setter Property="Background" Value="{DynamicResource WolvenKitGray25}" />
                 <Setter Property="BorderThickness" Value="1" />
+                <!--  visible outline and check mark in every theme (the library colors are fixed for dark)  -->
+                <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor_Grey1}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -961,7 +973,7 @@
         <Border
             Grid.Row="0"
             HorizontalAlignment="Stretch"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,2">
             <Border.Style>
                 <Style TargetType="Border">
@@ -1021,7 +1033,7 @@
                         Name="PropertyType"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WolvenKitTan}"
+                        Foreground="{DynamicResource WolvenKitTan}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Type,
                                        Mode=OneTime}" />
@@ -1046,11 +1058,12 @@
                         <templates:IconBox
                             IconPack="Codicons"
                             Kind="ArrowRight"
+                            Foreground="{DynamicResource ContentForeground}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitTan}"
+                            Foreground="{DynamicResource WolvenKitTan}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Text="{Binding ResolvedType,
                                            Mode=OneWay,
@@ -1120,7 +1133,7 @@
             Grid.Row="1"
             Margin="0"
             Padding="0"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             BorderThickness="0"
             AlternationCount="{Binding RelativeSource={RelativeSource Self},
                                        Path=Items.Count}"
