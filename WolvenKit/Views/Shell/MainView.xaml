@@ -5,6 +5,7 @@
     xmlns:converters="clr-namespace:WolvenKit.App.Converters;assembly=WolvenKit.App"
     xmlns:dialogVMs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:hpv="clr-namespace:WolvenKit.Views.HomePage"
     xmlns:hpvm="clr-namespace:WolvenKit.App.ViewModels.HomePage;assembly=WolvenKit.App"
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
@@ -418,6 +419,23 @@
             <shell:StatusBarView
                 Grid.Row="2"
                 Margin="0" />
+
+            <!--
+                In-app notifications (bottom right). Above the Settings page and dialogs (ZIndex 1000),
+                so a notification raised there, e.g. while a theme is applied, is not hidden under them.
+            -->
+            <hc:ScrollViewer
+                Grid.Row="1"
+                Margin="5,2,5,0"
+                HorizontalAlignment="Right"
+                Panel.ZIndex="1001"
+                IsPenetrating="True"
+                VerticalScrollBarVisibility="Hidden">
+                <StackPanel
+                    Margin="0,10,10,10"
+                    VerticalAlignment="Bottom"
+                    hc:Growl.GrowlParent="True" />
+            </hc:ScrollViewer>
         </Grid>
     </Grid>
 </syncfusion:ChromelessWindow>
