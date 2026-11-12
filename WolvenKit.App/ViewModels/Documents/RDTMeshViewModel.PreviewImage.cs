@@ -143,7 +143,7 @@ public partial class RDTMeshViewModel
     /// the camera, so back and side views are lit like the front; Flat = ambient only, for
     /// checking colours and textures without highlights.
     /// </summary>
-    public IReadOnlyList<string> PreviewLightingPresets { get; } = ["Default", "Icon (soft)", "Icon (follow camera)", "Flat"];
+    public IReadOnlyList<string> PreviewLightingPresets { get; } = ["Default", "Icon", "Icon (soft)", "Icon (follow camera)", "Flat"];
 
     private static string s_previewLighting = "Default";
 
@@ -155,6 +155,7 @@ public partial class RDTMeshViewModel
             if (SetProperty(ref s_previewLighting, value))
             {
                 OnPropertyChanged(nameof(UseWorkLighting));
+                OnPropertyChanged(nameof(UseIconContrastLighting));
                 OnPropertyChanged(nameof(UseIconLighting));
                 OnPropertyChanged(nameof(UseFollowLighting));
                 OnPropertyChanged(nameof(UseFlatLighting));
@@ -163,6 +164,7 @@ public partial class RDTMeshViewModel
     }
 
     public bool UseWorkLighting => PreviewLighting == "Default";
+    public bool UseIconContrastLighting => PreviewLighting == "Icon";
     public bool UseIconLighting => PreviewLighting == "Icon (soft)";
     public bool UseFollowLighting => PreviewLighting == "Icon (follow camera)";
     public bool UseFlatLighting => PreviewLighting == "Flat";

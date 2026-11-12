@@ -433,7 +433,7 @@ namespace WolvenKit.Views.Documents
             Dispatcher.BeginInvoke(new Action(UpdateFollowLights), DispatcherPriority.Background);
 
         /// <summary>
-        /// "Icon (follow camera)" lighting: the soft icon set placed relative to the camera, so
+        /// "Icon (follow camera)" lighting: the Icon set placed relative to the camera, so
         /// any angle is lit like the front view. Key from the camera's upper left, fill from the
         /// right, rim from behind the object, a little from above.
         /// </summary>
@@ -470,7 +470,7 @@ namespace WolvenKit.Views.Documents
                 switch (light.Tag as string)
                 {
                     case "FollowKey":
-                        SetLightDirection(light, look - 0.6 * up + 0.5 * right);
+                        SetLightDirection(light, look - 0.7 * up + 0.5 * right);
                         break;
                     case "FollowFill":
                         SetLightDirection(light, look - 0.2 * up - 1.0 * right);
