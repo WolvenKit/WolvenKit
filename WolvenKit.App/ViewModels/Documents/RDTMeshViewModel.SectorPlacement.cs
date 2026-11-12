@@ -1,0 +1,494 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Media.Media3D;
+using HelixToolkit.SharpDX.Core;
+using HelixToolkit.Wpf.SharpDX;
+using WolvenKit.App.Models;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
+using MeshGeometry3D = HelixToolkit.SharpDX.Core.MeshGeometry3D;
+using NMatrix = System.Numerics.Matrix4x4;
+using NQuaternion = System.Numerics.Quaternion;
+using NVector3 = System.Numerics.Vector3;
+
+namespace WolvenKit.App.ViewModels.Documents;
+
+/// <summary>
+/// Sector preview: where meshes of sector nodes go.
+/// - every nodeData entry of a cooked node (game 2.5) places only the inner node its
+///   instanceIndex picks; a worldInstancedMeshNode entry places the transform range of
+///   that inner node (the transforms are already in world space)
+/// - bended meshes (roads, rails...) and cables follow their deformation frames, the way
+///   the Blender add-on bends them
+/// </summary>
+public partial class RDTMeshViewModel
+{
+    /// <summary>The axis a deformed mesh runs along, in the mesh's own (game) space.</summary>
+    private enum SectorBendAxis
+    {
+        /// <summary>worldBendedMeshNode: +Y, from min to max.</summary>
+        PositiveY,
+
+        /// <summary>worldCableMeshNode: -X, from max to min.</summary>
+        NegativeX,
+    }
+
+    /// <param name="NodeDataIndex">index of the nodeData entry (shown in the node tree)</param>
+    /// <param name="Matrix">placement of the mesh</param>
+    /// <param name="Frames">deformation frames in the placement's space, or null</param>
+    private sealed record SectorMeshPlacement(int NodeDataIndex, Matrix3D Matrix, IReadOnlyList<CMatrix>? Frames = null);
+
+    private static Matrix3D SectorNodeMatrix(worldCompiledNodeInstanceSetupInfo info)
+    {
+        var matrix = new Matrix3D();
+        matrix.Scale(ToScaleVector3D(info.Scale));
+        matrix.Rotate(ToQuaternion(info.Transform.Orientation));
+        matrix.Translate(ToVector3D(info.Transform.Position));
+        return matrix;
+    }
+
+    private static Matrix3D SectorInstanceMatrix(RenderProxyTransform transform)
+    {
+        var matrix = new Matrix3D();
+        matrix.Scale(ToScaleVector3D(transform.Scale));
+        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+        matrix.Translate(ToVector3D(transform.Transform.Position));
+        return matrix;
+    }
+
+    private static IReadOnlyList<CMatrix> SliceFrames(IList<CMatrix> all, uint start, uint count)
+    {
+        if (start >= all.Count || count == 0)
+        {
+            return [];
+        }
+
+        var end = (int)Math.Min((long)start + count, all.Count);
+        var list = new List<CMatrix>(end - (int)start);
+        for (var i = (int)start; i < end; i++)
+        {
+            list.Add(all[i]);
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// Cooked node (game 2.5): each nodeData entry places the inner node its instanceIndex picks.
+    /// One tree row per inner node, one instance per entry.
+    /// </summary>
+    private void AddCookedSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
+        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, int innerCount,
+        Func<int, (ResourcePath Mesh, CName Appearance)> innerMesh,
+        Func<int, IReadOnlyList<CMatrix>?>? innerFrames = null,
+        SectorBendAxis bendAxis = SectorBendAxis.PositiveY)
+    {
+        var byInner = new SortedDictionary<int, List<SectorMeshPlacement>>();
+        foreach (var info in transforms)
+        {
+            var inner = (int)(uint)info.InstanceIndex;
+            if (inner < 0 || inner >= innerCount)
+            {
+                continue;
+            }
+
+            if (!byInner.TryGetValue(inner, out var placements))
+            {
+                placements = [];
+                byInner[inner] = placements;
+            }
+
+            placements.Add(new SectorMeshPlacement(buffer.IndexOf(info), SectorNodeMatrix(info), innerFrames?.Invoke(inner)));
+        }
+
+        foreach (var (inner, placements) in byInner)
+        {
+            var (mesh, appearance) = innerMesh(inner);
+            var rowName = byInner.Count > 1 ? $"{name}_{inner}" : name;
+            AddSectorMeshGroup(groups, app, rowName, typeStr, handleIndex, mesh, appearance, placements, bendAxis);
+        }
+    }
+
+    /// <summary>
+    /// worldInstancedMeshNode (game 2.5): an entry places the transform range of the inner node its
+    /// instanceIndex picks. The transforms are world space, so the entry's own transform is not applied.
+    /// </summary>
+    private void AddInstancedSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
+        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms,
+        worldInstancedMeshNodeBuffer inner, WorldTransformsBuffer world)
+    {
+        var dataIndices = new SortedDictionary<int, List<int>>();
+        foreach (var info in transforms)
+        {
+            var index = (int)(uint)info.InstanceIndex;
+            if (index < 0 || index >= inner.InnerNodes.Count || index >= inner.TransformRanges.Count)
+            {
+                continue;
+            }
+
+            if (!dataIndices.TryGetValue(index, out var list))
+            {
+                list = [];
+                dataIndices[index] = list;
+            }
+
+            list.Add(buffer.IndexOf(info));
+        }
+
+        foreach (var (index, entries) in dataIndices)
+        {
+            var node = inner.InnerNodes[index];
+            var range = inner.TransformRanges[index];
+
+            var placements = new List<SectorMeshPlacement>();
+            var start = (int)(ushort)range.TransformIndex;
+            var end = Math.Min(start + (ushort)range.TransformCount, world.Transforms.Count);
+            for (var j = start; j < end; j++)
+            {
+                if (world.Transforms[j] is { } transform)
+                {
+                    placements.Add(new SectorMeshPlacement(entries[0], SectorInstanceMatrix(transform)));
+                }
+            }
+
+            var rowName = dataIndices.Count > 1 ? $"{name}_{index}" : name;
+            AddSectorMeshGroup(groups, app, rowName, typeStr, handleIndex, node.Mesh.DepotPath, node.MeshAppearance, placements,
+                dataIndicesText: string.Join(", ", entries));
+        }
+    }
+
+    /// <summary>
+    /// One tree row for a mesh a sector node places, with one child per placement.
+    /// Geometry and materials are shared between placements, except for bended meshes,
+    /// which get their own deformed copy.
+    /// </summary>
+    private void AddSectorMeshGroup(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
+        ResourcePath meshRef, CName meshAppearance, IReadOnlyList<SectorMeshPlacement> placements,
+        SectorBendAxis bendAxis = SectorBendAxis.PositiveY, string? dataIndicesText = null)
+    {
+        if (placements.Count == 0)
+        {
+            return;
+        }
+
+        var meshFile = GetProjectOrDepotFile(meshRef);
+        if (meshFile?.RootChunk is not CMesh mesh)
+        {
+            return;
+        }
+
+        var meshPath = meshRef.GetResolvedText() ?? string.Empty;
+        foreach (var material in GetSectorMaterials(mesh, meshAppearance, meshPath))
+        {
+            app.RawMaterials[material.Name] = material;
+        }
+
+        // The node's appearance picks the chunk materials.
+        var appearanceIndex = GetMeshAppearanceIndex(mesh, meshAppearance);
+
+        var group = new MeshComponent()
+        {
+            Name = name,
+            Text = name,
+            WorldNodeIndex = $"{handleIndex}",
+            WorldNodeType = typeStr,
+            WorldNodeDataIndices = dataIndicesText ?? string.Join(", ", placements.Select(p => p.NodeDataIndex).Distinct()),
+            AppearanceName = meshAppearance,
+            DepotPath = meshRef
+        };
+
+        if (group.WorldNodeIndex == SelectedNodeIndex)
+        {
+            SelectedItem = group;
+        }
+
+        for (var i = 0; i < placements.Count; i++)
+        {
+            var placement = placements[i];
+            var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
+
+            if (placement.Frames is { Count: >= 2 } frames)
+            {
+                BendSectorSubmeshes(meshes, frames, bendAxis);
+            }
+
+            var subgroup = new MeshComponent()
+            {
+                Name = name + $"_instance_{i:D2}",
+                Text = name + $"_instance_{i:D2}",
+                AppearanceName = meshAppearance,
+                DepotPath = meshRef
+            };
+
+            foreach (var submesh in meshes)
+            {
+                if (!app.LODLUT.TryGetValue(submesh.LOD, out var lodMeshes))
+                {
+                    lodMeshes = [];
+                    app.LODLUT[submesh.LOD] = lodMeshes;
+                }
+
+                lodMeshes.Add(submesh);
+                subgroup.Children.Add(submesh);
+            }
+
+            subgroup.Transform = new MatrixTransform3D(placement.Matrix);
+            group.Children.Add(subgroup);
+        }
+
+        groups.Add(group);
+    }
+
+    #region bended meshes
+
+    /// <summary>
+    /// Bends the submeshes along the deformation frames. The submeshes share their geometry
+    /// with other placements, so each one gets a deformed copy.
+    /// </summary>
+    private void BendSectorSubmeshes(List<SubmeshComponent> meshes, IReadOnlyList<CMatrix> frames, SectorBendAxis axis)
+    {
+        try
+        {
+            var geometries = meshes.Select(m => m.Geometry as MeshGeometry3D).OfType<MeshGeometry3D>().ToList();
+            if (SectorBend.Create(frames, axis, geometries) is not { } bend)
+            {
+                return;
+            }
+
+            foreach (var submesh in meshes)
+            {
+                if (submesh.Geometry is MeshGeometry3D geometry)
+                {
+                    submesh.Geometry = bend.Apply(geometry);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // A broken frame list must not stop the sector: the mesh stays straight.
+            _loggerService.Warning($"[Sector] could not bend mesh: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Deformation of a bended / cable mesh, as in the Blender add-on (importers/sector/services/deformation.py):
+    /// a vertex's position along the axis, between the mesh's min and max on that axis, picks a point
+    /// between the frames (translation and scale interpolated, rotation slerped); the vertex's cross-section
+    /// (its other two coordinates, scaled by the frame) is rotated and moved to that point.
+    /// Worked in game space (Z up); preview geometry is (x, z, -y) of it.
+    /// </summary>
+    private sealed class SectorBend
+    {
+        private readonly NVector3[] _translations;
+        private readonly NQuaternion[] _rotations;
+        private readonly NVector3[] _scales;
+        private readonly SectorBendAxis _axis;
+        private readonly float _min;
+        private readonly float _span;
+
+        private SectorBend(NVector3[] translations, NQuaternion[] rotations, NVector3[] scales, SectorBendAxis axis, float min, float span)
+        {
+            _translations = translations;
+            _rotations = rotations;
+            _scales = scales;
+            _axis = axis;
+            _min = min;
+            _span = span;
+        }
+
+        public static SectorBend? Create(IReadOnlyList<CMatrix> frames, SectorBendAxis axis, IReadOnlyList<MeshGeometry3D> geometries)
+        {
+            if (frames.Count < 2)
+            {
+                return null;
+            }
+
+            var min = float.PositiveInfinity;
+            var max = float.NegativeInfinity;
+            foreach (var geometry in geometries)
+            {
+                if (geometry.Positions is not { } positions)
+                {
+                    continue;
+                }
+
+                foreach (var p in positions)
+                {
+                    var value = AxisValue(ToGame(p), axis);
+                    min = Math.Min(min, value);
+                    max = Math.Max(max, value);
+                }
+            }
+
+            if (!(max - min > 1e-8f))
+            {
+                return null;
+            }
+
+            var translations = new NVector3[frames.Count];
+            var rotations = new NQuaternion[frames.Count];
+            var scales = new NVector3[frames.Count];
+            for (var i = 0; i < frames.Count; i++)
+            {
+                Decompose(frames[i], out translations[i], out rotations[i], out scales[i]);
+            }
+
+            return new SectorBend(translations, rotations, scales, axis, min, max - min);
+        }
+
+        public MeshGeometry3D Apply(MeshGeometry3D source)
+        {
+            var positions = source.Positions;
+            if (positions is null || positions.Count == 0)
+            {
+                return source;
+            }
+
+            var normals = source.Normals;
+            var tangents = source.Tangents;
+            var bitangents = source.BiTangents;
+
+            var newPositions = new Vector3Collection(positions.Count);
+            var newNormals = normals is null ? null : new Vector3Collection(normals.Count);
+            var newTangents = tangents is null ? null : new Vector3Collection(tangents.Count);
+            var newBitangents = bitangents is null ? null : new Vector3Collection(bitangents.Count);
+
+            for (var i = 0; i < positions.Count; i++)
+            {
+                var p = ToGame(positions[i]);
+                Sample(Factor(p), out var t, out var r, out var s);
+
+                newPositions.Add(ToPreview(t + NVector3.Transform(CrossSection(p) * s, r)));
+
+                // Directions: the cross-section scale for vectors along the surface, its inverse for the normal.
+                var surfaceScale = WithAxis(s, 1f);
+                if (newNormals != null && i < normals!.Count)
+                {
+                    newNormals.Add(ToPreview(Direction(ToGame(normals[i]) / NonZero(surfaceScale), r)));
+                }
+
+                if (newTangents != null && i < tangents!.Count)
+                {
+                    newTangents.Add(ToPreview(Direction(ToGame(tangents[i]) * surfaceScale, r)));
+                }
+
+                if (newBitangents != null && i < bitangents!.Count)
+                {
+                    newBitangents.Add(ToPreview(Direction(ToGame(bitangents[i]) * surfaceScale, r)));
+                }
+            }
+
+            var result = new MeshGeometry3D()
+            {
+                Positions = newPositions,
+                Indices = source.Indices,
+                TextureCoordinates = source.TextureCoordinates,
+            };
+
+            if (newNormals != null)
+            {
+                result.Normals = newNormals;
+            }
+
+            if (newTangents != null)
+            {
+                result.Tangents = newTangents;
+            }
+
+            if (newBitangents != null)
+            {
+                result.BiTangents = newBitangents;
+            }
+
+            if (source.Colors != null)
+            {
+                result.Colors = source.Colors;
+            }
+
+            return result;
+        }
+
+        private float Factor(NVector3 p)
+        {
+            var value = AxisValue(p, _axis);
+            return _axis == SectorBendAxis.PositiveY
+                ? (value - _min) / _span
+                : (_min + _span - value) / _span;
+        }
+
+        private NVector3 CrossSection(NVector3 p) => _axis == SectorBendAxis.PositiveY
+            ? new NVector3(p.X, 0f, p.Z)
+            : new NVector3(0f, p.Y, p.Z);
+
+        private NVector3 WithAxis(NVector3 v, float value) => _axis == SectorBendAxis.PositiveY
+            ? new NVector3(v.X, value, v.Z)
+            : new NVector3(value, v.Y, v.Z);
+
+        private void Sample(float factor, out NVector3 translation, out NQuaternion rotation, out NVector3 scale)
+        {
+            var position = Math.Clamp(factor, 0f, 1f) * (_translations.Length - 1);
+            var index = Math.Min((int)MathF.Floor(position), _translations.Length - 2);
+            var blend = position - index;
+
+            translation = NVector3.Lerp(_translations[index], _translations[index + 1], blend);
+            rotation = NQuaternion.Slerp(_rotations[index], _rotations[index + 1], blend);
+            scale = NVector3.Lerp(_scales[index], _scales[index + 1], blend);
+        }
+
+        private static float AxisValue(NVector3 p, SectorBendAxis axis) => axis == SectorBendAxis.PositiveY ? p.Y : p.X;
+
+        private static NVector3 Direction(NVector3 v, NQuaternion r)
+        {
+            var d = NVector3.Transform(v, r);
+            var length = d.Length();
+            return length > 1e-12f ? d / length : d;
+        }
+
+        private static NVector3 NonZero(NVector3 v) => new(
+            MathF.Abs(v.X) > 1e-6f ? v.X : 1f,
+            MathF.Abs(v.Y) > 1e-6f ? v.Y : 1f,
+            MathF.Abs(v.Z) > 1e-6f ? v.Z : 1f);
+
+        /// <summary>
+        /// Frame matrix: columns X, Y, Z are the axes, W the translation (as the add-on reads them).
+        /// A mirrored frame (negative determinant) keeps the mirror in its X scale.
+        /// </summary>
+        private static void Decompose(CMatrix m, out NVector3 translation, out NQuaternion rotation, out NVector3 scale)
+        {
+            var x = new NVector3(m.X.X, m.X.Y, m.X.Z);
+            var y = new NVector3(m.Y.X, m.Y.Y, m.Y.Z);
+            var z = new NVector3(m.Z.X, m.Z.Y, m.Z.Z);
+            translation = new NVector3(m.W.X, m.W.Y, m.W.Z);
+
+            var sx = x.Length();
+            var sy = y.Length();
+            var sz = z.Length();
+            if (NVector3.Dot(NVector3.Cross(x, y), z) < 0f)
+            {
+                sx = -sx;
+            }
+
+            scale = new NVector3(sx, sy, sz);
+
+            var ax = sx != 0f ? x / sx : NVector3.UnitX;
+            var ay = sy != 0f ? y / sy : NVector3.UnitY;
+            var az = sz != 0f ? z / sz : NVector3.UnitZ;
+
+            // Row vectors (System.Numerics): rows are the axes.
+            var basis = new NMatrix(
+                ax.X, ax.Y, ax.Z, 0f,
+                ay.X, ay.Y, ay.Z, 0f,
+                az.X, az.Y, az.Z, 0f,
+                0f, 0f, 0f, 1f);
+            rotation = NQuaternion.Normalize(NQuaternion.CreateFromRotationMatrix(basis));
+        }
+
+        // preview (x, y, z) = game (x, z, -y)
+        private static NVector3 ToGame(SharpDX.Vector3 v) => new(v.X, -v.Z, v.Y);
+
+        private static SharpDX.Vector3 ToPreview(NVector3 v) => new(v.X, v.Z, -v.Y);
+    }
+
+    #endregion
+}

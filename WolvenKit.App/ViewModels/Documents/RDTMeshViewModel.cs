@@ -846,11 +846,34 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (_slotSets.TryGetValue(model.BindName, out var slotBind))
             {
                 if (model.SlotName != null && slotBind.Slots.TryGetValue(model.SlotName, out var slot) &&
-                    groups.ContainsKey(slotBind.BindName + ":" + slot))
+                    groups.TryGetValue(slotBind.BindName + ":" + slot, out var boneGroup))
                 {
-                    groups[slotBind.BindName + ":" + slot].Children.Add(group);
+                    // the slot sits at an offset from its bone
+                    if (slotBind.SlotTransforms.TryGetValue(model.SlotName, out var slotMatrix))
+                    {
+                        AppendTransform(group, slotMatrix);
+                    }
 
+                    boneGroup.Children.Add(group);
                 }
+                else
+                {
+                    // The bone is not drawn (rig skipped or missing): place the component from the
+                    // rig's bind pose, or at the slot component. It used to be left out.
+                    AppendTransform(group, BindingMatrix(model.BindName, model.SlotName) ?? Matrix3D.Identity);
+                    modelGroups.Add(group);
+                }
+            }
+            else if (groups.TryGetValue(model.BindName + ":" + model.SlotName, out var rigBoneGroup))
+            {
+                // bound straight to a bone of a drawn rig
+                rigBoneGroup.Children.Add(group);
+            }
+            else if (BindingMatrix(model.BindName, model.SlotName) is { } boneMatrix)
+            {
+                // bound to a bone of a rig that is not drawn
+                AppendTransform(group, boneMatrix);
+                modelGroups.Add(group);
             }
             else if (groups.TryGetValue(model.BindName, out var modelBind))
             {
@@ -8509,6 +8532,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
 
         var wave = new HashSet<ResourcePath>();
+        var wantedEntityApps = new Dictionary<ResourcePath, HashSet<string>>();
         foreach (var handle in data.Nodes)
         {
             switch (handle?.Chunk)
@@ -8518,6 +8542,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     break;
                 case worldEntityNode wen:
                     wave.Add(wen.EntityTemplate.DepotPath);
+                    AddWantedEntityAppearance(wantedEntityApps, wen);
+                    break;
+                // game 2.5 cooked nodes keep their meshes in inner nodes
+                case worldInstancedMeshNode { Buffer.Data: worldInstancedMeshNodeBuffer imnb }:
+                    foreach (var inner in imnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
+                    break;
+                case worldCookedBendedMeshNode { Buffer.Data: worldCookedBendedMeshNodeBuffer bmnb }:
+                    foreach (var inner in bmnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
+                    break;
+                case worldCookedStaticMeshNode { Buffer.Data: worldCookedStaticMeshNodeBuffer smnb }:
+                    foreach (var inner in smnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
+                    break;
+                case worldCookedGenericProxyMeshNode { Buffer.Data: worldCookedGenericProxyMeshNode_Buffer gpnb }:
+                    foreach (var inner in gpnb.InnerNodes)
+                        wave.Add(inner.Mesh.DepotPath);
                     break;
             }
         }
@@ -8532,7 +8574,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             foreach (var path in wave)
             {
                 if (_fileCache.TryGetValue(path, out var file) && file?.RootChunk is { } root)
-                    CollectPrefetchRefs(root, path, next, wantedApps);
+                    CollectPrefetchRefs(root, path, next, wantedApps, wantedEntityApps);
             }
 
             next.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
@@ -8561,8 +8603,23 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         });
     }
 
+    /// <summary>The ent appearance a sector entity node uses (see SectorEntityAppearances).</summary>
+    private static void AddWantedEntityAppearance(Dictionary<ResourcePath, HashSet<string>> wanted, worldEntityNode wen)
+    {
+        var path = wen.EntityTemplate.DepotPath;
+        if (!wanted.TryGetValue(path, out var names))
+        {
+            names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            wanted[path] = names;
+        }
+
+        if (StringHelper.StringifyOrNull(wen.AppearanceName) is { Length: > 0 } name)
+            names.Add(name);
+    }
+
     private static void CollectPrefetchRefs(RedBaseClass root, ResourcePath self,
-        HashSet<ResourcePath> next, Dictionary<ResourcePath, HashSet<string>> wantedApps)
+        HashSet<ResourcePath> next, Dictionary<ResourcePath, HashSet<string>> wantedApps,
+        Dictionary<ResourcePath, HashSet<string>> wantedEntityApps)
     {
         switch (root)
         {
@@ -8577,10 +8634,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 break;
 
             case entEntityTemplate ent:
-                // Sectors render the default appearance only (see RenderEntity).
+                // Sectors render the appearance their node names, else the default one (see SectorEntityAppearances).
+                wantedEntityApps.TryGetValue(self, out var nodeApps);
                 foreach (var a in ent.Appearances)
                 {
-                    if (a is null || a.Name != ent.DefaultAppearance)
+                    if (a is null)
+                        continue;
+                    var entAppName = StringHelper.StringifyOrNull(a.Name) ?? string.Empty;
+                    if (a.Name != ent.DefaultAppearance && (nodeApps == null || !nodeApps.Contains(entAppName)))
                         continue;
 
                     var appPath = a.AppearanceResource.DepotPath;
@@ -8664,7 +8725,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var indexStr = string.Join(", ", transforms.Select(x => buffer.IndexOf(x)));
             var typeStr = handle.Chunk.GetType().Name;
 
-            if (handle.Chunk is IRedMeshNode irmn)
+            if (handle.Chunk is IRedMeshNode plainMeshNode and not worldInstancedDestructibleMeshNode)
+            {
+                // worldBendedMeshNode (roads...) and worldCableMeshNode carry their deformation frames.
+                IReadOnlyList<CMatrix>? frames = plainMeshNode is worldBendedMeshNode { DeformationData.Count: >= 2 } wbmn
+                    ? wbmn.DeformationData.ToList()
+                    : null;
+                var placements = transforms
+                    .Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t), frames))
+                    .ToList();
+                AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, plainMeshNode.Mesh.DepotPath, plainMeshNode.MeshAppearance,
+                    placements, plainMeshNode is worldCableMeshNode ? SectorBendAxis.NegativeX : SectorBendAxis.PositiveY);
+            }
+            else if (handle.Chunk is worldInstancedDestructibleMeshNode irmn)
             {
                 var meshFile = GetProjectOrDepotFile(irmn.Mesh.DepotPath);
 
@@ -8709,58 +8782,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     app.RawMaterials[material.Name] = material;
                 }
 
-                if (handle.Chunk is worldInstancedMeshNode wimn)
-                {
-                    if (wimn.CookedWorldTransformsBuffer.Buffer.Data is not WorldTransformsBuffer wtb)
-                    {
-                        continue;
-                    }
-
-                    for (var i = 0; i < wtb.Transforms.Count; i++)
-                    {
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{i:D2}",
-                            Text = name + $"_instance_{i:D2}",
-                            //AppearanceName = wimn.MeshAppearance,
-                            DepotPath = irmn.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                        var wtbMatrix = new Matrix3D();
-                        if (wtb.Transforms[i] is { } wte)
-                        {
-                            wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
-                        }
-
-                        var transform = wtb.Transforms[i].NotNull();
-                        wtbMatrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        wtbMatrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        wtbMatrix.Append(matrix);
-
-                        subgroup.Transform = new MatrixTransform3D(wtbMatrix);
-
-                        group.Children.Add(subgroup);
-                    }
-                }
-                else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
+                if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
                 {
                     for (var i = 0; i < widmn.InstanceTransforms.Count; i++)
                     {
@@ -8804,327 +8826,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         //}
                     }
                 }
-                else
-                {
-                    var i = 0;
-                    foreach (var transform in transforms)
-                    {
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{i:D2}",
-                            Text = name + $"_instance_{i:D2}",
-                            AppearanceName = irmn.MeshAppearance,
-                            DepotPath = irmn.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        if (irmn is worldBendedMeshNode wbmn)
-                        {
-                            //matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
-                        }
-
-                        subgroup.Transform = new MatrixTransform3D(matrix);
-
-                        group.Children.Add(subgroup);
-                        i++;
-                    }
-                }
-
                 groups.Add(group);
             }
             else if (handle.Chunk is worldInstancedMeshNode imn)
             {
-                if (imn.Buffer.Data is not worldInstancedMeshNodeBuffer imnb || imn.CookedWorldTransformsBuffer.Data is not WorldTransformsBuffer wtb)
+                if (imn.Buffer.Data is worldInstancedMeshNodeBuffer imnb && imn.CookedWorldTransformsBuffer.Data is WorldTransformsBuffer wtb)
                 {
-                    continue;
-                }
-
-                for (var i = 0; i < imnb.InnerNodes.Count; i++)
-                {
-                    var node = imnb.InnerNodes[i];
-                    var transformRange = imnb.TransformRanges[i];
-
-                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
-
-                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                    {
-                        continue;
-                    }
-
-                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
-
-                    var group = new MeshComponent()
-                    {
-                        Name = name,
-                        Text = name,
-                        WorldNodeIndex = $"{handleIndex}",
-                        WorldNodeType = typeStr,
-                        WorldNodeDataIndices = indexStr,
-                        AppearanceName = node.MeshAppearance,
-                        DepotPath = node.Mesh.DepotPath
-                    };
-
-                    if (group.WorldNodeIndex == SelectedNodeIndex)
-                    {
-                        SelectedItem = group;
-                    }
-
-                    var model = new LoadableModel(name)
-                    {
-                        MeshFile = Parent.Cr2wFile,
-                        AppearanceIndex = 0,
-                        AppearanceName = node.MeshAppearance,
-                        Materials = appMaterials,
-                        IsEnabled = true,
-                    };
-
-                    foreach (var material in model.Materials)
-                    {
-                        app.RawMaterials[material.Name] = material;
-                    }
-
-                    for (var j = transformRange.TransformIndex; j < transformRange.TransformIndex + transformRange.TransformCount; j++)
-                    {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{j:D2}",
-                            Text = name + $"_instance_{j:D2}",
-                            //AppearanceName = wimn.MeshAppearance,
-                            DepotPath = node.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                        var wtbMatrix = new Matrix3D();
-                        if (wtb.Transforms[j] is { } wte)
-                        {
-                            wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
-                        }
-
-                        var transform = wtb.Transforms[j].NotNull();
-                        wtbMatrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        wtbMatrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        wtbMatrix.Append(matrix);
-
-                        subgroup.Transform = new MatrixTransform3D(wtbMatrix);
-
-                        group.Children.Add(subgroup);
-                    }
-
-                    groups.Add(group);
+                    AddInstancedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, imnb, wtb);
                 }
             }
-            else if (handle.Chunk is worldCookedAcousticSectorNode wcasn)
+            else if (handle.Chunk is worldCookedAcousticSectorNode)
             {
 
             }
             else if (handle.Chunk is worldCookedBendedMeshNode wcbmn)
             {
-                if (wcbmn.Buffer.Data is not worldCookedBendedMeshNodeBuffer wcbmnb)
+                // Cables are bended meshes too (worldCookedCableMeshNode derives from it), along -X.
+                if (wcbmn.Buffer.Data is worldCookedBendedMeshNodeBuffer wcbmnb)
                 {
-                    continue;
-                }
-
-                for (var i = 0; i < wcbmnb.InnerNodes.Count; i++)
-                {
-                    var node = wcbmnb.InnerNodes[i];
-                    var box = wcbmnb.DeformedBoxes[node.DeformedBoxIndex];
-
-                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
-
-                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                    {
-                        continue;
-                    }
-
-                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
-
-                    var group = new MeshComponent()
-                    {
-                        Name = name,
-                        Text = name,
-                        WorldNodeIndex = $"{handleIndex}",
-                        WorldNodeType = typeStr,
-                        WorldNodeDataIndices = indexStr,
-                        AppearanceName = node.MeshAppearance,
-                        DepotPath = node.Mesh.DepotPath
-                    };
-
-                    if (group.WorldNodeIndex == SelectedNodeIndex)
-                    {
-                        SelectedItem = group;
-                    }
-
-                    var model = new LoadableModel(name)
-                    {
-                        MeshFile = Parent.Cr2wFile,
-                        AppearanceIndex = 0,
-                        AppearanceName = node.MeshAppearance,
-                        Materials = appMaterials,
-                        IsEnabled = true,
-                    };
-
-                    foreach (var material in model.Materials)
-                    {
-                        app.RawMaterials[material.Name] = material;
-                    }
-
-                    var j = 0;
-                    foreach (var transform in transforms)
-                    {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{j:D2}",
-                            Text = name + $"_instance_{j:D2}",
-                            AppearanceName = node.MeshAppearance,
-                            DepotPath = node.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        //matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
-
-                        subgroup.Transform = new MatrixTransform3D(matrix);
-
-                        group.Children.Add(subgroup);
-                        j++;
-                    }
-
-                    groups.Add(group);
-                }
-            }
-            else if (handle.Chunk is worldCookedCableMeshNode wccmn)
-            {
-                if (wccmn.Buffer.Data is not worldCookedBendedMeshNodeBuffer wcbmnb)
-                {
-                    continue;
-                }
-
-                for (var i = 0; i < wcbmnb.InnerNodes.Count; i++)
-                {
-                    var node = wcbmnb.InnerNodes[i];
-
-                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
-
-                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                    {
-                        continue;
-                    }
-
-                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
-
-                    var group = new MeshComponent()
-                    {
-                        Name = name,
-                        Text = name,
-                        WorldNodeIndex = $"{handleIndex}",
-                        WorldNodeType = typeStr,
-                        WorldNodeDataIndices = indexStr,
-                        AppearanceName = node.MeshAppearance,
-                        DepotPath = node.Mesh.DepotPath
-                    };
-
-                    if (group.WorldNodeIndex == SelectedNodeIndex)
-                    {
-                        SelectedItem = group;
-                    }
-
-                    var model = new LoadableModel(name)
-                    {
-                        MeshFile = Parent.Cr2wFile,
-                        AppearanceIndex = 0,
-                        AppearanceName = node.MeshAppearance,
-                        Materials = appMaterials,
-                        IsEnabled = true,
-                    };
-
-                    foreach (var material in model.Materials)
-                    {
-                        app.RawMaterials[material.Name] = material;
-                    }
-
-                    var j = 0;
-                    foreach (var transform in transforms)
-                    {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{j:D2}",
-                            Text = name + $"_instance_{j:D2}",
-                            AppearanceName = node.MeshAppearance,
-                            DepotPath = node.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        subgroup.Transform = new MatrixTransform3D(matrix);
-
-                        group.Children.Add(subgroup);
-                        i++;
-                    }
-
-                    groups.Add(group);
+                    AddCookedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, wcbmnb.InnerNodes.Count,
+                        i => (wcbmnb.InnerNodes[i].Mesh.DepotPath, wcbmnb.InnerNodes[i].MeshAppearance),
+                        i => SliceFrames(wcbmnb.DeformationData, wcbmnb.InnerNodes[i].DeformationDataStartIndex, wcbmnb.InnerNodes[i].DeformationDataCount),
+                        handle.Chunk is worldCookedCableMeshNode ? SectorBendAxis.NegativeX : SectorBendAxis.PositiveY);
                 }
             }
             else if (handle.Chunk is worldCookedCollisionNode wcn)
@@ -9391,89 +9114,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }*/
             else if (handle.Chunk is worldCookedGenericProxyMeshNode wcgpmn)
             {
-                if (wcgpmn.Buffer.Data is not worldCookedGenericProxyMeshNode_Buffer wcgpmnb)
+                if (wcgpmn.Buffer.Data is worldCookedGenericProxyMeshNode_Buffer wcgpmnb)
                 {
-                    continue;
-                }
-
-                for (var i = 0; i < wcgpmnb.InnerNodes.Count; i++)
-                {
-                    var node = wcgpmnb.InnerNodes[i];
-
-                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
-
-                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                    {
-                        continue;
-                    }
-
-                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
-
-                    var group = new MeshComponent()
-                    {
-                        Name = name,
-                        Text = name,
-                        WorldNodeIndex = $"{handleIndex}",
-                        WorldNodeType = typeStr,
-                        WorldNodeDataIndices = indexStr,
-                        AppearanceName = node.MeshAppearance,
-                        DepotPath = node.Mesh.DepotPath
-                    };
-
-                    if (group.WorldNodeIndex == SelectedNodeIndex)
-                    {
-                        SelectedItem = group;
-                    }
-
-                    var model = new LoadableModel(name)
-                    {
-                        MeshFile = Parent.Cr2wFile,
-                        AppearanceIndex = 0,
-                        AppearanceName = node.MeshAppearance,
-                        Materials = appMaterials,
-                        IsEnabled = true,
-                    };
-
-                    foreach (var material in model.Materials)
-                    {
-                        app.RawMaterials[material.Name] = material;
-                    }
-
-                    var j = 0;
-                    foreach (var transform in transforms)
-                    {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{j:D2}",
-                            Text = name + $"_instance_{j:D2}",
-                            AppearanceName = node.MeshAppearance,
-                            DepotPath = node.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        subgroup.Transform = new MatrixTransform3D(matrix);
-
-                        group.Children.Add(subgroup);
-                        i++;
-                    }
-
-                    groups.Add(group);
+                    AddCookedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, wcgpmnb.InnerNodes.Count,
+                        i => (wcgpmnb.InnerNodes[i].Mesh.DepotPath, wcgpmnb.InnerNodes[i].MeshAppearance));
                 }
             }
             else if (handle.Chunk is worldCookedStaticDecalNode wcsdn)
@@ -9482,89 +9126,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (handle.Chunk is worldCookedStaticMeshNode wcsmn)
             {
-                if (wcsmn.Buffer.Data is not worldCookedStaticMeshNodeBuffer wcsmnb)
+                if (wcsmn.Buffer.Data is worldCookedStaticMeshNodeBuffer wcsmnb)
                 {
-                    continue;
-                }
-
-                for (var i = 0; i < wcsmnb.InnerNodes.Count; i++)
-                {
-                    var node = wcsmnb.InnerNodes[i];
-
-                    var meshFile = Parent.GetFileFromDepotPathOrCache(node.Mesh.DepotPath);
-
-                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                    {
-                        continue;
-                    }
-
-                    var appMaterials = GetMaterialsForAppearance(mesh, node.MeshAppearance);
-
-                    var group = new MeshComponent()
-                    {
-                        Name = name,
-                        Text = name,
-                        WorldNodeIndex = $"{handleIndex}",
-                        WorldNodeType = typeStr,
-                        WorldNodeDataIndices = indexStr,
-                        AppearanceName = node.MeshAppearance,
-                        DepotPath = node.Mesh.DepotPath
-                    };
-
-                    if (group.WorldNodeIndex == SelectedNodeIndex)
-                    {
-                        SelectedItem = group;
-                    }
-
-                    var model = new LoadableModel(name)
-                    {
-                        MeshFile = Parent.Cr2wFile,
-                        AppearanceIndex = 0,
-                        AppearanceName = node.MeshAppearance,
-                        Materials = appMaterials,
-                        IsEnabled = true,
-                    };
-
-                    foreach (var material in model.Materials)
-                    {
-                        app.RawMaterials[material.Name] = material;
-                    }
-
-                    var j = 0;
-                    foreach (var transform in transforms)
-                    {
-                        var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{j:D2}",
-                            Text = name + $"_instance_{j:D2}",
-                            AppearanceName = node.MeshAppearance,
-                            DepotPath = node.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Transform.Position));
-
-                        subgroup.Transform = new MatrixTransform3D(matrix);
-
-                        group.Children.Add(subgroup);
-                        i++;
-                    }
-
-                    groups.Add(group);
+                    AddCookedSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, wcsmnb.InnerNodes.Count,
+                        i => (wcsmnb.InnerNodes[i].Mesh.DepotPath, wcsmnb.InnerNodes[i].MeshAppearance));
                 }
             }
             else if (handle.Chunk is worldCookedMeshNode wcmn)
@@ -9641,40 +9206,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (handle.Chunk is worldEntityNode wen)
             {
-                //a little slow for what we want to do
-                // <3
-
                 try
                 {
-
                     var entFile = GetProjectOrDepotFile(wen.EntityTemplate.DepotPath);
 
                     if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
                     {
-                        var entity = RenderEntity(eet, app);
-                        if (entity != null)
+                        // every nodeData entry is one placement of the entity
+                        foreach (var transform in transforms)
                         {
+                            var entity = RenderEntity(eet, app, sectorAppearance: StringHelper.StringifyOrNull(wen.AppearanceName));
+                            if (entity == null)
+                            {
+                                break;
+                            }
+
                             entity.Name = "Entity";
                             entity.Text = "Entity";
-                            //var f = Shell.ChunkViewModel.FixRotation;
-
-                            var q = new System.Numerics.Quaternion()
-                            {
-                                W = transforms[0].Transform.Orientation.R,
-                                X = transforms[0].Transform.Orientation.I,
-                                Y = transforms[0].Transform.Orientation.J,
-                                Z = transforms[0].Transform.Orientation.K
-                            };
-
-                            //q = Shell.ChunkViewModel.FixRotation(q);
-                            var qq = new System.Windows.Media.Media3D.Quaternion(q.X, q.Y, q.Z, q.W);
-
-                            var matrix = new Matrix3D();
-                            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                            matrix.Rotate(qq);
-                            matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                            entity.Transform = new MatrixTransform3D(matrix);
+                            entity.Transform = new MatrixTransform3D(SectorNodeMatrix(transform));
 
                             groups.Add(entity);
                         }
@@ -10217,110 +9766,138 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
-    public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null)
+    /// <summary>
+    /// Rig (entAnimatedComponent) and slot (entSlotComponent) components: the bones and slots
+    /// other components are bound to. From the .ent and from the appearance's own components.
+    /// </summary>
+    private void CollectRigsAndSlots(IList<RedBaseClass> chunks)
+    {
+        foreach (var component in chunks)
+        {
+            switch (component)
+            {
+                case entSlotComponent slotset:
+                {
+                    var slots = new Dictionary<string, string>();
+                    var slotTransforms = new Dictionary<string, Matrix3D>();
+                    foreach (var slot in slotset.Slots)
+                    {
+                        var name = slot.SlotName.ToString().NotNull();
+
+                        if (!slots.ContainsKey(name))
+                        {
+                            slots.Add(name, slot.BoneName.ToString().NotNull());
+
+                            // the slot's offset from its bone
+                            var slotMatrix = new Matrix3D();
+                            slotMatrix.Rotate(ToQuaternion(slot.RelativeRotation));
+                            slotMatrix.Translate(ToVector3D(slot.RelativePosition));
+                            slotTransforms.Add(name, slotMatrix);
+                        }
+                    }
+
+                    string? bindName = null, slotName = null;
+                    if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
+                    {
+                        bindName = ehtb.BindName;
+                        slotName = ehtb.SlotName;
+                    }
+
+                    var slotSetName = slotset.Name.ToString().NotNull();
+                    if (!_slotSets.ContainsKey(slotSetName))
+                    {
+                        _slotSets.Add(slotSetName,
+                            new SlotSet(slotSetName, bindName)
+                            {
+                                Matrix = ToSeparateMatrix(slotset.LocalTransform),
+                                Slots = slots,
+                                SlotTransforms = slotTransforms,
+                                SlotName = slotName
+                            });
+                    }
+
+                    break;
+                }
+                case entAnimatedComponent enc:
+                {
+                    var rigFile = GetProjectOrDepotFile(enc.Rig.DepotPath);
+
+                    if (rigFile?.RootChunk is animRig rig)
+                    {
+                        var rigBones = new List<RigBone>();
+                        for (var i = 0; i < rig.BoneNames.Count; i++)
+                        {
+                            var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
+                            {
+                                Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
+                            };
+
+                            if (rig.BoneParentIndexes[i] != -1)
+                            {
+                                rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
+                            }
+
+                            rigBones.Add(rigBone);
+                        }
+
+                        string? bindName = null, slotName = null;
+                        if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                        {
+                            bindName = ehtb.BindName;
+                            slotName = ehtb.SlotName;
+                        }
+
+                        Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
+                        {
+                            Bones = rigBones,
+                            BindName = bindName,
+                            SlotName = slotName
+                        };
+                    }
+
+                    break;
+                }
+
+                default:
+                    break;
+            }
+        }
+
+        foreach (var rig in Rigs.Values)
+        {
+            if (rig.Parent is null && rig.BindName is not null && rig.BindName != rig.Name &&
+                Rigs.TryGetValue(rig.BindName, out var parentRig))
+            {
+                parentRig.AddChild(rig);
+            }
+        }
+    }
+
+    public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null,
+        string? sectorAppearance = null)
     {
         if (ent?.CompiledData.Data is not RedPackage pkg)
         {
             return null;
         }
 
+        if (appearance != null)
+        {
+            // Sector: one entity after another. Rigs and slots of the previous entity
+            // (same component names, other bones) must not place this one's components.
+            Rigs.Clear();
+            _slotSets.Clear();
+        }
+
         if (ent.Appearances.Count > 0)
         {
-            foreach (var component in pkg.Chunks)
-            {
-                switch (component)
-                {
-                    case entSlotComponent slotset:
-                    {
-                        var slots = new Dictionary<string, string>();
-                        foreach (var slot in slotset.Slots)
-                        {
-                            var name = slot.SlotName.ToString().NotNull();
-
-                            if (!slots.ContainsKey(name))
-                            {
-                                slots.Add(name, slot.BoneName.ToString().NotNull());
-                            }
-                        }
-
-                        string? bindName = null, slotName = null;
-                        if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
-                        {
-                            bindName = ehtb.BindName;
-                            slotName = ehtb.SlotName;
-                        }
-
-                        var slotSetName = slotset.Name.ToString().NotNull();
-                        if (!_slotSets.ContainsKey(slotSetName))
-                        {
-                            _slotSets.Add(slotSetName,
-                                new SlotSet(slotSetName, bindName)
-                                {
-                                    Matrix = ToSeparateMatrix(slotset.LocalTransform),
-                                    Slots = slots,
-                                    SlotName = slotName
-                                });
-                        }
-
-                        break;
-                    }
-                    case entAnimatedComponent enc:
-                    {
-                        var rigFile = GetProjectOrDepotFile(enc.Rig.DepotPath);
-
-                        if (rigFile?.RootChunk is animRig rig)
-                        {
-                            var rigBones = new List<RigBone>();
-                            for (var i = 0; i < rig.BoneNames.Count; i++)
-                            {
-                                var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
-                                {
-                                    Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
-                                };
-
-                                if (rig.BoneParentIndexes[i] != -1)
-                                {
-                                    rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
-                                }
-
-                                rigBones.Add(rigBone);
-                            }
-
-                            string? bindName = null, slotName = null;
-                            if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-                            {
-                                bindName = ehtb.BindName;
-                                slotName = ehtb.SlotName;
-                            }
-
-                            Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
-                            {
-                                Bones = rigBones,
-                                BindName = bindName,
-                                SlotName = slotName
-                            };
-                        }
-
-                        break;
-                    }
-
-                    default:
-                        break;
-                }
-            }
-
-            foreach (var rig in Rigs.Values)
-            {
-                if (rig.BindName is not null && Rigs.ContainsKey(rig.BindName))
-                {
-                    Rigs[rig.BindName].AddChild(rig);
-                }
-            }
+            CollectRigsAndSlots(pkg.Chunks);
+            var entPlaced = CollectPlacedComponents(pkg.Chunks);
 
             List<entTemplateAppearance> appearances;
             if (appearance != null)
             {
-                appearances = ent.Appearances.Where(x => x is not null && x.Name == ent.DefaultAppearance).ToList();
+                appearances = SectorEntityAppearances(ent, sectorAppearance);
             }
             else if (appearanceName == null)
             {
@@ -10375,8 +9952,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
                 List<LoadableModel> loadableModels = new();
+                var placed = new Dictionary<string, entIPlacedComponent>(entPlaced);
                 if (appDef.CompiledData?.Data is RedPackage appPkg)
                 {
+                    CollectRigsAndSlots(appPkg.Chunks);
+                    foreach (var (placedName, component) in CollectPlacedComponents(appPkg.Chunks))
+                    {
+                        placed[placedName] = component;
+                    }
+
                     loadableModels.AddRange(LoadMeshes(appPkg.Chunks));
                 }
 
@@ -10390,6 +9974,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
 
                 LoadPartsOverrides(appDef, loadableModels);
+                ResolvePlacedParents(loadableModels, placed);
 
                 var a = new Appearance(app.AppearanceName.ToString().NotNull())
                 {
@@ -10460,12 +10045,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         // ent.appearances.Count == null => it's not a root entity
+        CollectRigsAndSlots(pkg.Chunks);
+        var rootPlaced = CollectPlacedComponents(pkg.Chunks);
         var models = LoadMeshes(pkg.Chunks);
 
         if (models.Count == 0)
         {
             return null;
         }
+
+        ResolvePlacedParents(models, rootPlaced);
 
         var meshApp = appearance ?? new Appearance("Default") { Models = models };
 
@@ -10485,9 +10074,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 model.Meshes = MakeMeshShared(mesh, model.ChunkMask, model.AppearanceIndex, meshPath);
             }
 
+            // the component's place in the entity (its own transform, then what it is bound to)
+            var placedGroup = PlacedModelGroup(model, models);
+            cGroup.Children.Add(placedGroup);
+
             foreach (var m in model.Meshes)
             {
-                cGroup.Children.Add(m);
+                placedGroup.Children.Add(m);
                 if (!meshApp.LODLUT.ContainsKey(m.LOD))
                 {
                     meshApp.LODLUT[m.LOD] = new List<SubmeshComponent>();
@@ -10521,6 +10114,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 var variantModels = LoadMeshes(pkg.Chunks, variantName);
                 if (variantModels.Count == 0)
                     continue;
+                ResolvePlacedParents(variantModels, rootPlaced);
 
                 var variant = new Appearance(variantName)
                 {
@@ -10548,9 +10142,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         model.Meshes = MakeMeshShared(modelMesh, model.ChunkMask, model.AppearanceIndex, meshPath);
                     }
 
+                    var placedGroup = PlacedModelGroup(model, variantModels);
+                    variantGroup.Children.Add(placedGroup);
+
                     foreach (var submesh in model.Meshes)
                     {
-                        variantGroup.Children.Add(submesh);
+                        placedGroup.Children.Add(submesh);
                         if (!variant.LODLUT.TryGetValue(submesh.LOD, out var lodMeshes))
                         {
                             lodMeshes = [];
@@ -10568,6 +10165,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         var el = new GroupModel3DExt();
+        if (appearance != null)
+        {
+            // Sector: this entity's components. meshApp is the sector's appearance, whose
+            // ModelGroup holds no entity yet, so the entity used to come back empty.
+            el.Children.Add(cGroup);
+            return el;
+        }
+
         foreach (var model in meshApp.ModelGroup)
         {
             el.Children.Add(model);
