@@ -823,6 +823,13 @@
       "description": "Separator lines in menus and lists"
     },
     {
+      "key": "WolvenKitListSelection",
+      "group": "Palette",
+      "displayName": "List Selection",
+      "kind": "Brush",
+      "description": "Selected row in the Project Explorer, Asset Browser and other trees / lists"
+    },
+    {
       "key": "WolvenKitLogText",
       "group": "Palette",
       "displayName": "Log Text",

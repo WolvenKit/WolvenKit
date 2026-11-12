@@ -334,6 +334,8 @@
     <SolidColorBrush x:Key="WolvenKitProjectIconRed" Color="#DF2935" />
     <SolidColorBrush x:Key="WolvenKitProjectIconPurple" Color="#6495ED" />
     <SolidColorBrush x:Key="WolvenKitProjectIconTan" Color="#D0A467" />
+    <!--  selected row in trees and lists; follows ContentBackgroundAlt5 unless a theme sets it  -->
+    <SolidColorBrush x:Key="WolvenKitListSelection" Color="#424242" />
     <!--  log lines without a level color (info, important)  -->
     <SolidColorBrush x:Key="WolvenKitLogText" Color="#D3D3D3" />
 
@@ -443,6 +445,8 @@
     -->
     <Style TargetType="{x:Type others:InspectableTreeGrid}">
         <Setter Property="Background" Value="{DynamicResource ContentBackground}" />
+        <!--  selected row (Project Explorer, Asset Browser folders, …): theme color  -->
+        <Setter Property="SelectionBackground" Value="{DynamicResource WolvenKitListSelection}" />
         <!-- BorderThickness="0" etc. are usually set per-usage or via the
              local .Resources styles for cells; add more Setters here if other
              visual regressions appear on the subclass. -->
@@ -450,6 +454,7 @@
 
     <Style TargetType="{x:Type others:InspectableDataGrid}">
         <Setter Property="Background" Value="{DynamicResource ContentBackground}" />
+        <Setter Property="RowSelectionBrush" Value="{DynamicResource WolvenKitListSelection}" />
     </Style>
 
     <!-- Menu Bar Entry Style -->
