@@ -1,0 +1,28 @@
+{
+  "formatVersion": 1,
+  "name": "Biotechnica",
+  "author": "WolvenKit",
+  "description": "Biotechnica: deep teal-navy with the mint green of the logo.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#2FB574",
+  "accentForeground": "#00140A",
+  "colors": {
+    "ContentBackground": "#0C1A20",
+    "ContentBackgroundAlt": "#0F2028",
+    "ContentBackgroundAlt2": "#13272F",
+    "ContentBackgroundAlt3": "#183039",
+    "ContentBackgroundAlt4": "#1E3A44",
+    "ContentBackgroundAlt5": "#264651",
+    "BorderAlt": "#24434F",
+    "ContentForeground": "#E2EFEC",
+    "ForegroundColor": "#E2EFEC",
+    "BackgroundColor_Control": "#13272F",
+    "BackgroundColor_Frame_Active": "#183039",
+    "BackgroundColor_Frame_Background": "#0F2028",
+    "WolvenKitProjectSource": "#2FD39B",
+    "WolvenKitProjectSourceShadow": "#1A7A5A",
+    "WolvenKitProjectResources": "#6FB8E8",
+    "WolvenKitProjectResourcesShadow": "#3D6680",
+    "WolvenKitGreenColor": "#22B24C"
+  }
+}

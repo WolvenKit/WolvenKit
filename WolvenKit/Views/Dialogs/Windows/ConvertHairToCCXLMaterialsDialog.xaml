@@ -57,7 +57,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Main .mi file: " />
                     <ComboBox
@@ -73,7 +73,7 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Main style material:" />
                     <ComboBox
@@ -89,7 +89,7 @@
                         Grid.Row="4"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Include a Cap .mi file:" />
                     <CheckBox
