@@ -6,15 +6,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>
+    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>, IThemeAware
     {
         private bool _isStackedLayout;
         private bool _layoutModeInitialized;
         private Window _hostWindow;
+        private bool _refreshWhenShown;
 
         public WelcomePageView()
         {
@@ -25,6 +27,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            IsVisibleChanged += OnIsVisibleChanged;
+
+            Locator.Current.GetService<IThemeService>()?.Register(this);
             SizeChanged += (_, _) => UpdateLayoutMode();
 
             this.WhenActivated(disposables =>
@@ -105,6 +110,48 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         private void OnHostWindowSizeChanged(object sender, SizeChangedEventArgs e) => UpdateLayoutMode();
+
+        /// <summary>
+        /// Re-applying the skin re-templates the Syncfusion CardViews, which then show no cards although the
+        /// project lists are unchanged. Fill the lists again once this page is on screen with the new theme:
+        /// right away if it is shown, otherwise when it is shown again (e.g. the theme was switched with a
+        /// project open and the user goes back Home, or the main window is hidden while the skin is applied).
+        /// </summary>
+        void IThemeAware.OnThemeChanged()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            _refreshWhenShown = true;
+            if (IsVisible)
+            {
+                RefreshIfPending();
+            }
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                RefreshIfPending();
+            }
+        }
+
+        private void RefreshIfPending()
+        {
+            if (!_refreshWhenShown)
+            {
+                return;
+            }
+
+            _refreshWhenShown = false;
+            RefreshProjectListsWhenIdle();
+        }
+
+        private void RefreshProjectListsWhenIdle() =>
+            Dispatcher.BeginInvoke(() => ViewModel?.RefreshProjectLists(), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
         /// <summary>
         /// Side-by-side: projects and actions each scroll in place.

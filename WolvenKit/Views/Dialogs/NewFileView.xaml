@@ -18,7 +18,7 @@
     d:DataContext="{d:DesignInstance Type=dialogs:NewFileViewModel}"
     Width="800"
     Height="600"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -165,7 +165,7 @@
                 Grid.Column="1"
                 Margin="{DynamicResource WolvenKitMarginSmallRight}"
                 VerticalAlignment="Center"
-                Foreground="{StaticResource WolvenKitRed}"
+                Foreground="{DynamicResource WolvenKitRed}"
                 Text="{Binding WhyNotCreate}" />
 
             <Button
@@ -173,7 +173,7 @@
                 Grid.Column="2"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
                 HorizontalAlignment="Right"
-                Background="{StaticResource WolvenKitRed}"
+                Background="{DynamicResource WolvenKitRed}"
                 Content="Create" />
 
             <Button

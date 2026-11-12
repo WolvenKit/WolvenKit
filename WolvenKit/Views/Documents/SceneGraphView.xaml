@@ -33,10 +33,10 @@
                 x:Key="SpacedWolvenKitTabControl"
                 BasedOn="{StaticResource WolvenKitTabControl}"
                 TargetType="{x:Type syncfusion:TabControlExt}">
-                <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRed}" />
-                <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRed}" />
-                <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRedShadow}" />
-                <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="TabItemHoverBackground" Value="{DynamicResource WolvenKitRed}" />
+                <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource WolvenKitRed}" />
+                <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitRedShadow}" />
+                <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource WolvenKitRedShadow}" />
             </Style>
 
             <Style
@@ -65,15 +65,15 @@
                         <Style TargetType="{x:Type nodify:BaseConnection}">
                             <Setter Property="Cursor" Value="Hand" />
                             <Setter Property="Opacity" Value="1.0" />
-                            <Setter Property="Stroke" Value="#FF7F7F7F" />
+                            <Setter Property="Stroke" Value="{DynamicResource WolvenKitGray7F}" />
                             <Setter Property="StrokeThickness" Value="{Binding PathType, Converter={StaticResource PathTypeToThicknessConverter}}" />
 
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                    <Setter Property="Stroke" Value="{DynamicResource WolvenKitYellow}" />
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Stroke" Value="{StaticResource WolvenKitGreen}" />
+                                    <Setter Property="Stroke" Value="{DynamicResource WolvenKitGreen}" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -105,11 +105,11 @@
                 x:Key="SceneEditorButtonStyle"
                 TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitRedShadow}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="FontWeight" Value="Medium" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitRedShadow}" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
                 <Setter Property="Padding" Value="8,4" />
                 <Setter Property="Template">
@@ -128,13 +128,13 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Foreground" Value="White" />
-                                    <Setter TargetName="border" Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                    <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource WolvenKitRed}" />
+                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource WolvenKitRed}" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
                                     <Setter Property="Foreground" Value="White" />
-                                    <Setter TargetName="border" Property="Background" Value="{StaticResource WolvenKitRedShadow}" />
-                                    <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource WolvenKitRedShadow}" />
+                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource WolvenKitRedShadow}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -154,8 +154,8 @@
         <Border
             Grid.Row="0"
             Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
-            Background="{StaticResource ContentBackground}"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource ContentBackground}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal">
                 <templates:IconBox
@@ -282,8 +282,8 @@
                                 <Border
                                     Grid.Row="0"
                                     Padding="8,4"
-                                    Background="{StaticResource ContentBackgroundAlt}"
-                                    BorderBrush="{StaticResource BorderAlt}"
+                                    Background="{DynamicResource ContentBackgroundAlt}"
+                                    BorderBrush="{DynamicResource BorderAlt}"
                                     BorderThickness="0,1,0,1"
                                     Visibility="{Binding DataContext.IsButtonBarVisible,
                                                          RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -383,7 +383,7 @@
                                         Grid.Column="1"
                                         Width="4"
                                         HorizontalAlignment="Stretch"
-                                        Background="#FF404040" />
+                                        Background="{DynamicResource WolvenKitGray40}" />
 
                                     <editors:RedTypeView
                                         Grid.Column="2"
@@ -417,7 +417,7 @@
                 Grid.Column="1"
                 Width="4"
                 HorizontalAlignment="Stretch"
-                Background="#FF404040" />
+                Background="{DynamicResource WolvenKitGray40}" />
 
             <!-- Right Panel: Graph Editor Only -->
             <Grid Grid.Column="2">
@@ -439,7 +439,7 @@
                             Margin="{DynamicResource WolvenKitMarginBottom}"
                             HorizontalAlignment="Center"
                             Size="{DynamicResource WolvenKitIconHuge}"
-                            Foreground="{StaticResource WolvenKitYellow}">
+                            Foreground="{DynamicResource WolvenKitYellow}">
                             <templates:IconBox.RenderTransform>
                                 <RotateTransform />
                             </templates:IconBox.RenderTransform>
@@ -481,7 +481,7 @@
                 Grid.Row="1"
                 Height="4"
                 HorizontalAlignment="Stretch"
-                Background="#FF404040"
+                Background="{DynamicResource WolvenKitGray40}"
                 Visibility="{Binding ElementName=TimelinePanel, Path=DataContext.HasSectionNode, Converter={StaticResource BooleanToVisibilityConverter}}" />
             
             <!-- Timeline Panel - spans full width, visible only when section node is selected -->
