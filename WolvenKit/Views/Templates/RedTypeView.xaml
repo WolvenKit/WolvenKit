@@ -960,7 +960,7 @@
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FocusedBackground" Value="Transparent" />
                 <Setter Property="NegativeBackground" Value="Transparent" />
-                <Setter Property="ZeroColor" Value="White" />
+                <Setter Property="ZeroColor" Value="{DynamicResource ContentForeground}" />
             </Style>
         </Grid.Resources>
 
