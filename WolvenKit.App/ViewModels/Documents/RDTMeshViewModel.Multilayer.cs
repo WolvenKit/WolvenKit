@@ -620,7 +620,7 @@ public partial class RDTMeshViewModel
 
     private static bool IsExpectedKind(string kind, RedBaseClass root) => kind switch
     {
-        "texture" => root is ITexture,
+        "texture" or "microblend" => root is ITexture,
         "mlsetup" => root is Multilayer_Setup,
         "mlmask" => root is Multilayer_Mask,
         "mltemplate" => root is Multilayer_LayerTemplate,
@@ -853,11 +853,12 @@ public partial class RDTMeshViewModel
 
             // ---- microblend ----
             var mbIdx = -1f;
-            if (layer.Microblend.DepotPath != ResourcePath.Empty)
+            var mbPath = MicroblendOrDefault(layer.Microblend.DepotPath, layerLabel);
+            if (mbPath != ResourcePath.Empty)
             {
                 // Never a constant: a solid microblend (default.xbm: flat normal, alpha ~0.41)
                 // still drives the mask mixer, so it gets a tiny texture instead.
-                var mb = await GetMultilayerTexture(layer.Microblend.DepotPath, channel: -1, allowConstant: false, context: layerLabel);
+                var mb = await GetMultilayerTexture(mbPath, channel: -1, allowConstant: false, context: layerLabel);
                 if (mb?.Texture != null)
                 {
                     mbIdx = Slot(mb.Texture);

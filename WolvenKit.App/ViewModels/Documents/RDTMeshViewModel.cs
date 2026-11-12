@@ -4571,11 +4571,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         var mbOffV = (float)layer.MicroblendOffsetV;
 
                         Bitmap? microblendBmp = null;
-                        var useMbMask = layer.Microblend.DepotPath != ResourcePath.Empty;
+                        var mbPath = MicroblendOrDefault(layer.Microblend.DepotPath, $"{SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name}, layer {mls.Layers.IndexOf(layer)}");
+                        var useMbMask = mbPath != ResourcePath.Empty;
                         var useMbNormal = Math.Abs(mbNormalStr) > 0.001f;
                         if (useMbMask)
                         {
-                            microblendBmp = await GetTex(layer.Microblend.DepotPath, flipY: true, tile: mbTile);
+                            microblendBmp = await GetTex(mbPath, flipY: true, tile: mbTile);
                         }
 
                         Bitmap? colorTexBmp = null;
@@ -7904,6 +7905,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// mixed = lerp(burn, mask, safeC), out = saturate(mixed / safeC).
     /// contrast=0 thresholds the microblend pattern.
     /// </summary>
+    /// <summary>The engine's default microblend (the placeholder default .mlsetup files use).</summary>
+    private static readonly ResourcePath s_defaultMicroblend = @"base\surfaces\microblends\default.xbm";
+
+    /// <summary>
+    /// A layer's microblend, or the default one when its path leads nowhere (missing file, not
+    /// a texture): without any the mask mixer divides the bare mask by the contrast and the
+    /// layer spreads with hard edges. An empty path stays empty.
+    /// </summary>
+    private ResourcePath MicroblendOrDefault(ResourcePath path, string? context = null)
+    {
+        if (path == ResourcePath.Empty || GetProjectOrDepotFile(path)?.RootChunk is ITexture)
+        {
+            return path;
+        }
+
+        WarnMissingFile("microblend", path, (context ?? "") + " - using the default microblend");
+        return GetProjectOrDepotFile(s_defaultMicroblend)?.RootChunk is ITexture ? s_defaultMicroblend : path;
+    }
+
     private static float ApplyMicroblendContrast(float mask, float mbAlpha, float contrast)
     {
         var safeC = Math.Max(contrast, 1e-5f);
