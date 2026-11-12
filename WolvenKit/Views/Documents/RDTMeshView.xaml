@@ -575,16 +575,22 @@
                                                         Converter={StaticResource InvertBooleanConverter}}"
                                     Command="{Binding LoadMaterialsCommand}"
                                     ToolTip="Generate the material previews. Hold Ctrl to clear the cache and regenerate everything (or use the arrow menu).">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
-                                            <Setter Property="Content" Value="Generate Materials" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
-                                                    <Setter Property="Content" Value="Clear Cache and Regenerate" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
+                                    <!--
+                                        The label is the content, not a Button.Style: a button with its own style loses the skin
+                                        (grey background) and the app-wide TextBlock style would override its yellow text.
+                                    -->
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Text" Value="Generate Materials" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
+                                                        <Setter Property="Text" Value="Clear Cache and Regenerate" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Button>
 
                                 <Button
