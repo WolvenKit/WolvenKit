@@ -21,16 +21,16 @@
                 TargetType="{x:Type ToggleButton}">
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
                     </Trigger>
                     <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
+                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitRedShadow}" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt}" />
+                        <Setter Property="Foreground" Value="{DynamicResource BorderAlt}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
 
@@ -87,37 +87,9 @@
                 <Style
                     BasedOn="{StaticResource SyncfusionDocumentContainerStyle}"
                     TargetType="{x:Type syncfusion:DocumentContainer}">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <DrawingBrush
-                                Opacity="1.0"
-                                RenderOptions.CacheInvalidationThresholdMaximum="2.0"
-                                RenderOptions.CacheInvalidationThresholdMinimum="0.5"
-                                RenderOptions.CachingHint="Cache"
-                                Stretch="Uniform"
-                                TileMode="Tile"
-                                Viewport="{DynamicResource WolvenKitDockingAdapterViewport}"
-                                ViewportUnits="Absolute">
-                                <DrawingBrush.Drawing>
-                                    <DrawingGroup>
-                                        <GeometryDrawing Brush="{StaticResource ContentBackground}">
-                                            <GeometryDrawing.Geometry>
-                                                <GeometryGroup>
-                                                    <RectangleGeometry Rect="{DynamicResource WolvenKitDockingAdapterViewport}" />
-                                                </GeometryGroup>
-                                            </GeometryDrawing.Geometry>
-                                        </GeometryDrawing>
-                                        <DrawingGroup Opacity="0.02">
-                                            <ImageDrawing
-                                                ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
-                                                Rect="{DynamicResource WolvenKitDockingAdapterSammy}" />
-                                        </DrawingGroup>
-                                    </DrawingGroup>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt4}" />
+                    <!-- WolvenKitDocumentAreaBrush is recolored by the theme service (see App.Styles.xaml) -->
+                    <Setter Property="Background" Value="{DynamicResource WolvenKitDocumentAreaBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt4}" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="CloseTabOnMiddleClick" Value="True" />
                     <Style.Triggers>
@@ -136,32 +108,40 @@
                     BasedOn="{StaticResource SyncfusionDockingManagerStyle}"
                     TargetType="{x:Type syncfusion:DockingManager}">
                     <Setter Property="AwlButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <!--
+                        Strip with the auto-hidden panels (Tweak Browser, LocKey Browser, ...). Set explicitly, otherwise
+                        Syncfusion keeps the brushes it picked when the control was created and a theme switch misses them.
+                    -->
+                    <Setter Property="SidePanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <Setter Property="SidePanelBorderBrush" Value="{DynamicResource BorderAlt}" />
+                    <Setter Property="SideItemsBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <Setter Property="SideItemsBorderBrush" Value="{DynamicResource BorderAlt}" />
                     <Setter Property="CloseButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="ElementBorderThickness" Value="1" />
                     <Setter Property="EnableMouseHoverBackground" Value="False" />
-                    <Setter Property="HeaderBackground" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="HeaderBorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="HeaderBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <Setter Property="HeaderBorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="HeaderBorderThickness" Value="0" />
-                    <Setter Property="HeaderForeground" Value="White" />
-                    <Setter Property="HeaderForegroundSelected" Value="White" />
-                    <Setter Property="HeaderMouseOverBackground" Value="#1f1f1f" />
+                    <Setter Property="HeaderForeground" Value="{DynamicResource ContentForeground}" />
+                    <Setter Property="HeaderForegroundSelected" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
+                    <Setter Property="HeaderMouseOverBackground" Value="{DynamicResource WolvenKitPanelHeaderSelected}" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="MaximizeButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="MenuButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="MinimizeButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="RestoreButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
-                    <Setter Property="SelectedHeaderBackground" Value="#1f1f1f" />
-                    <Setter Property="SplitterBackground" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="TabItemBackgroundSelected" Value="#373737" />
+                    <Setter Property="SelectedHeaderBackground" Value="{DynamicResource WolvenKitPanelHeaderSelected}" />
+                    <Setter Property="SplitterBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <Setter Property="TabItemBackgroundSelected" Value="{DynamicResource WolvenKitPanelTabSelected}" />
                     <Setter Property="TabItemBorderThickness" Value="0" />
-                    <Setter Property="TabItemForegroundSelected" Value="White" />
-                    <Setter Property="TabItemsBackground" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="TabItemsBorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="TabItemForegroundSelected" Value="{DynamicResource ContentForeground}" />
+                    <Setter Property="TabItemsBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <Setter Property="TabItemsBorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBorderThicknessSelected" Value="0" />
-                    <Setter Property="TabItemsForeground" Value="White" />
-                    <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
-                    <Setter Property="TabPanelBorderBrush" Value="{StaticResource ContentBackground}" />
+                    <Setter Property="TabItemsForeground" Value="{DynamicResource ContentForeground}" />
+                    <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackground}" />
+                    <Setter Property="TabPanelBorderBrush" Value="{DynamicResource ContentBackground}" />
                     <Setter Property="TabPanelBorderThickness" Value="0" />
                     <!--Setter Property="HeaderMouseOverBackground" Value="#313131" />
                     <Setter Property="HeaderBackground" Value="#313131" />
@@ -175,22 +155,23 @@
                 <Style
                     BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
                     TargetType="{x:Type syncfusion:DocumentTabControl}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt3}" />
                     <Setter Property="BorderThickness" Value="1,0,1,1" />
                     <Setter Property="CloseButtonType" Value="Individual" />
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="TabItemHoverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
-                    <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
-                    <Setter Property="TabItemHoverForeground" Value="White" />
-                    <Setter Property="TabItemSelectedBackground" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="TabItemHoverBackground" Value="{DynamicResource ContentBackgroundAlt3}" />
+                    <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource ContentBackgroundAlt3}" />
+                    <Setter Property="TabItemHoverForeground" Value="{DynamicResource ContentForeground}" />
+                    <Setter Property="TabItemSelectedBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <!-- Setter Property="Margin" Value="-1" / -->
 
-                    <Setter Property="TabItemSelectedBackground" Value="#313131" />
-                    <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource BorderAlt}" />
-                    <Setter Property="TabItemSelectedForeground" Value="White" />
-                    <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
-                    <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitGray31}" />
+                    <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource BorderAlt}" />
+                    <!--  the active document tab is drawn in the accent color  -->
+                    <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />
+                    <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackground}" />
+                    <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
                 </Style>
             </syncfusion:DockingManager.DocumentTabControlStyle>
 
@@ -198,12 +179,12 @@
                 <Style
                     BasedOn="{StaticResource SyncfusionDocumentTabItemExtStyle}"
                     TargetType="{x:Type tools_controls:TabItemExt}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderThickness" Value="1,1,1,0" />
-                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                     <Setter Property="Height" Value="{DynamicResource WolvenKitFontHuge}" />
-                    <Setter Property="HoverBackground" Value="{StaticResource ContentBackgroundAlt4}" />
+                    <Setter Property="HoverBackground" Value="{DynamicResource ContentBackgroundAlt4}" />
                     <Setter Property="Margin" Value="0" />
 
                 </Style>
@@ -213,10 +194,10 @@
                 <Style
                     BasedOn="{StaticResource TabItemStyle}"
                     TargetType="{x:Type TabItem}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
 
-                    <Setter Property="Background" Value="#313131" />
-                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="{DynamicResource WolvenKitGray31}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 </Style>
             </syncfusion:DockingManager.TabItemStyle>
 
@@ -234,7 +215,7 @@
                                             Name="BorderWrap"
                                             Width="Auto"
                                             Background="Transparent"
-                                            BorderBrush="{StaticResource ContentBackgroundAlt4}"
+                                            BorderBrush="{DynamicResource ContentBackgroundAlt4}"
                                             BorderThickness="1"
                                             FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle),
                                                                        RelativeSource={RelativeSource TemplatedParent}}"
@@ -314,7 +295,7 @@
                                             Name="BorderWrapForTab"
                                             Width="Auto"
                                             Background="Transparent"
-                                            BorderBrush="{StaticResource ContentBackgroundAlt3}"
+                                            BorderBrush="{DynamicResource ContentBackgroundAlt3}"
                                             BorderThickness="1"
                                             SnapsToDevicePixels="True">
                                             <DockPanel
@@ -388,7 +369,7 @@
                                     Name="BorderWrap"
                                     Width="Auto"
                                     Background="Transparent"
-                                    BorderBrush="{StaticResource ContentBackgroundAlt4}"
+                                    BorderBrush="{DynamicResource ContentBackgroundAlt4}"
                                     BorderThickness="1"
                                     FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle),
                                                                RelativeSource={RelativeSource TemplatedParent}}"
@@ -486,9 +467,13 @@
                                 Margin="{DynamicResource WolvenKitMarginSmallRight}"
                                 Icon="{Binding Extension}" />
 
+                            <!--
+                                Style x:Null: skip the app-wide TextBlock style, so the text inherits the tab's
+                                foreground (the accent foreground on the active, accent-colored tab)
+                            -->
                             <TextBlock
                                 Margin="0,0,0,1"
-                                Foreground="{StaticResource ContentForeground}"
+                                Style="{x:Null}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Text="{Binding Path=Header}" />
 
@@ -503,10 +488,11 @@
                         <DockPanel
                             x:Name="RegularHeader"
                             Visibility="Collapsed">
+                            <!--  tool panels shown as tabs (Asset Browser, Import/Export Tool): same as above  -->
                             <TextBlock
                                 Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource ContentForeground}"
+                                Style="{x:Null}"
                                 Text="{Binding}" />
                         </DockPanel>
                     </Grid>

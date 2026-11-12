@@ -7,6 +7,7 @@
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
@@ -33,7 +34,6 @@
     <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
     <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
     <Color x:Key="WolvenKitPurpleColor">CornflowerBlue</Color>
-    <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
     <Color x:Key="WolvenKitOrangeColor">#FFA359</Color>
     <Color x:Key="WolvenKitOrangeShadowColor">#8C5A31</Color>
@@ -45,6 +45,13 @@
     <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
     <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
+
+    <!--  3D preview (File Information → Mesh); light themes keep it dark  -->
+    <Color x:Key="WolvenKitViewportBackgroundColor">#121212</Color>
+    <!--  folder icons (Project Explorer, Asset Browser); follow WolvenKitTanColor unless a theme sets them  -->
+    <Color x:Key="WolvenKitFolderColor">#D0A467</Color>
+    <!--  off state of toggle switches (e.g. Mod Browser): knob and outline  -->
+    <Color x:Key="WolvenKitToggleOffColor">#CCCCCC</Color>
 
     <Color x:Key="WolvenKitGraphGridColor">#0DFFFFFF</Color>
     <Color x:Key="WolvenKitGraphAxisColor">Black</Color>
@@ -175,13 +182,94 @@
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
 
-    <SolidColorBrush x:Key="WolvenKitSammyRed" Color="#DF2935" />
-    <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
-    <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
     <SolidColorBrush x:Key="WolvenKitRedPale" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
+
+    <!--
+        Accent of WolvenKit's own controls (tabs, status bar, progress). Literal colors on purpose:
+        the theme service sets them from the theme accent, independent of WolvenKitRed (used for errors etc.).
+    -->
+    <SolidColorBrush x:Key="WolvenKitAccent" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitAccentShadow" Color="#951C2D" />
+    <!--  text on WolvenKitAccent (selected tabs); themes set it with "accentForeground"  -->
+    <SolidColorBrush x:Key="WolvenKitAccentForeground" Color="White" />
+    <!--  text on WolvenKitAccentShadow (hovered tabs); for themes whose accent shadow is light  -->
+    <SolidColorBrush x:Key="WolvenKitAccentShadowForeground" Color="White" />
+    <SolidColorBrush x:Key="WolvenKitStatusBarReady" Color="#951C2D" />
+    <SolidColorBrush x:Key="WolvenKitStatusBarBusy" Color="#FF8C00" />
+
+    <!--
+        Panel colors that used to be hardcoded in views. Themes that change the Syncfusion surfaces
+        move these along (see s_surfaceLinks in ThemeService).
+    -->
+    <SolidColorBrush x:Key="WolvenKitPanelHeaderSelected" Color="#1F1F1F" />
+    <!--  title of the active panel (on WolvenKitPanelHeaderSelected)  -->
+    <SolidColorBrush x:Key="WolvenKitPanelHeaderSelectedForeground" Color="White" />
+    <SolidColorBrush x:Key="WolvenKitPanelTabSelected" Color="#373737" />
+    <SolidColorBrush x:Key="WolvenKitPanelLogBackground" Color="#131313" />
+    <SolidColorBrush x:Key="WolvenKitPanelCardHover" Color="#2D2D30" />
+    <SolidColorBrush x:Key="WolvenKitPanelProgressTrack" Color="#131313" />
+
+    <!--
+        Gray shades that used to be written as literals in views. Themes don't set them; the theme service
+        maps them into the theme palette together with the other neutral colors.
+    -->
+    <SolidColorBrush x:Key="WolvenKitGray12" Color="#121212" />
+    <SolidColorBrush x:Key="WolvenKitGray1E" Color="#1E1E1E" />
+    <SolidColorBrush x:Key="WolvenKitGray25" Color="#252525" />
+    <SolidColorBrush x:Key="WolvenKitGray31" Color="#313131" />
+    <SolidColorBrush x:Key="WolvenKitGray37" Color="#373737" />
+    <SolidColorBrush x:Key="WolvenKitGray40" Color="#404040" />
+    <SolidColorBrush x:Key="WolvenKitGray7F" Color="#7F7F7F" />
+    <SolidColorBrush x:Key="WolvenKitGray99" Color="#999999" />
+    <SolidColorBrush x:Key="WolvenKitGray66" Color="#666666" />
+    <SolidColorBrush x:Key="WolvenKitGray33" Color="#333333" />
+    <SolidColorBrush x:Key="WolvenKitGrayCC" Color="#CCCCCC" />
+    <SolidColorBrush x:Key="WolvenKitGray2D" Color="#2D2D30" />
+    <SolidColorBrush x:Key="WolvenKitGray88" Color="#888888" />
+    <SolidColorBrush x:Key="WolvenKitGray77" Color="#777777" />
+    <!-- Color (not a brush) for properties of type Color, e.g. 3D viewport backgrounds -->
+    <Color x:Key="WolvenKitGray12Color">#121212</Color>
+
+    <!--
+        Background of the empty document area (ContentBackground with a faint logo pattern). A DrawingBrush is a
+        Freezable, so the color inside can't be a DynamicResource; the theme service recolors a copy of it instead.
+    -->
+    <DrawingBrush
+        x:Key="WolvenKitDocumentAreaBrush"
+        Opacity="1.0"
+        RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+        RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+        RenderOptions.CachingHint="Cache"
+        Stretch="Uniform"
+        TileMode="Tile"
+        Viewport="{DynamicResource WolvenKitDockingAdapterViewport}"
+        ViewportUnits="Absolute">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource ContentBackground}">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="{DynamicResource WolvenKitDockingAdapterViewport}" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <DrawingGroup Opacity="0.02">
+                    <ImageDrawing
+                        ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
+                        Rect="{DynamicResource WolvenKitDockingAdapterSammy}" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+    <!-- Project Explorer tab groups: SOURCE (archive, raw) and RESOURCES. Category colors, not the accent. -->
+    <SolidColorBrush x:Key="WolvenKitProjectSource" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitProjectSourceShadow" Color="#951C2D" />
+    <SolidColorBrush x:Key="WolvenKitProjectResources" Color="#52F1FF" />
+    <SolidColorBrush x:Key="WolvenKitProjectResourcesShadow" Color="#4D8C9A" />
     <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
     <SolidColorBrush x:Key="WolvenKitGreenShadow" Color="{StaticResource WolvenKitGreenShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
@@ -189,7 +277,6 @@
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow" Color="{StaticResource WolvenKitYellowShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
-    <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
     <SolidColorBrush x:Key="WolvenKitOrange" Color="{StaticResource WolvenKitOrangeColor}" />
     <SolidColorBrush x:Key="WolvenKitOrangeShadow" Color="{StaticResource WolvenKitOrangeShadowColor}" />
@@ -199,10 +286,7 @@
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
-    <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="{StaticResource WolvenKitYellowShadow50Color}" />
-    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F6495ED" />
-    <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
 
     <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />
@@ -240,6 +324,18 @@
     <SolidColorBrush x:Key="WolvenKitGraphAxis" Color="{StaticResource WolvenKitGraphAxisColor}" />
     <SolidColorBrush x:Key="WolvenKitGraphLabel" Color="{StaticResource WolvenKitGraphLabelColor}" />
     <SolidColorBrush x:Key="WolvenKitGraphCurve" Color="{StaticResource WolvenKitGraphCurveColor}" />
+    <SolidColorBrush x:Key="WolvenKitFolder" Color="{StaticResource WolvenKitFolderColor}" />
+    <SolidColorBrush x:Key="WolvenKitToggleOff" Color="{StaticResource WolvenKitToggleOffColor}" />
+    <!--  menu / list separators; follow BorderAlt unless a theme sets them  -->
+    <SolidColorBrush x:Key="WolvenKitSeparator" Color="#424242" />
+    <!--  project icons on the welcome page (by project color); follow the palette colors unless a theme sets them  -->
+    <SolidColorBrush x:Key="WolvenKitProjectIconYellow" Color="#FFEA0A" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconCyan" Color="#52F1FF" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconRed" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconPurple" Color="#6495ED" />
+    <SolidColorBrush x:Key="WolvenKitProjectIconTan" Color="#D0A467" />
+    <!--  log lines without a level color (info, important)  -->
+    <SolidColorBrush x:Key="WolvenKitLogText" Color="#D3D3D3" />
 
     <!-- Generic label style - foreground, border thickness, alignment -->
     <Style
@@ -248,7 +344,7 @@
         TargetType="{x:Type Label}">
         <Setter Property="Background" Value="{StaticResource WolvenKitTransparentBrush}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource WolvenKitLabelBrush}" />
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
 
@@ -280,7 +376,7 @@
         x:Key="WolvenkitPlaceholderStyle"
         BasedOn="{StaticResource {x:Type TextBlock}}"
         TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Inactive}" />
         <Setter Property="IsHitTestVisible" Value="False" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="10,0" />
@@ -290,7 +386,7 @@
     <Style
         x:Key="WolvenkitExplanationStyle"
         TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey1}" />
         <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
     </Style>
 
@@ -299,12 +395,15 @@
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
         TargetType="{x:Type syncfusion:TabControlExt}">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRedShadow}" />
-        <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
-        <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRed}" />
-        <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
-        <Setter Property="TabItemSelectedForeground" Value="White" />
-        <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
+        <!--  the base template captures its border color on load; keep it on the current theme  -->
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+        <Setter Property="TabItemHoverBackground" Value="{DynamicResource WolvenKitAccentShadow}" />
+        <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+        <Setter Property="TabItemHoverForeground" Value="{DynamicResource WolvenKitAccentShadowForeground}" />
+        <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitAccent}" />
+        <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+        <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />
+        <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
 
         <!-- Setter Property="TabPanelBackground" Value="#313131" / -->
     </Style>
@@ -316,7 +415,7 @@
     <Style
         BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}"
         TargetType="{x:Type syncfusion:ComboBoxAdv}">
-        <Setter Property="Background" Value="#252525" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
     </Style>
 
     <!-- Give all textboxes the same background -->
@@ -324,18 +423,18 @@
         x:Key="WolvenkitTextBoxStyle"
         BasedOn="{StaticResource {x:Type TextBox}}"
         TargetType="{x:Type TextBox}">
-        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-        <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt3}" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
     </Style>
 
     <!-- Also counts for syncfusion:SfTextBoxExt -->
     <Style
         BasedOn="{StaticResource {x:Type syncfusion:SfTextBoxExt}}"
         TargetType="{x:Type syncfusion:SfTextBoxExt}">
-        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
     </Style>
 
     <!--
@@ -343,22 +442,22 @@
         UI test accessibility hooks via custom AutomationPeer).
     -->
     <Style TargetType="{x:Type others:InspectableTreeGrid}">
-        <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+        <Setter Property="Background" Value="{DynamicResource ContentBackground}" />
         <!-- BorderThickness="0" etc. are usually set per-usage or via the
              local .Resources styles for cells; add more Setters here if other
              visual regressions appear on the subclass. -->
     </Style>
 
     <Style TargetType="{x:Type others:InspectableDataGrid}">
-        <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+        <Setter Property="Background" Value="{DynamicResource ContentBackground}" />
     </Style>
 
     <!-- Menu Bar Entry Style -->
     <Style
         x:Key="WolvenKitToolBarItem"
         TargetType="{x:Type MenuItem}">
-        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
         <Setter Property="Margin" Value="3,4,3,0" />
         <Setter Property="Padding" Value="0,1,2,2" />
 
@@ -367,40 +466,40 @@
                 Binding="{Binding Path=IsEnabled,
                                   RelativeSource={RelativeSource Self}}"
                 Value="False">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Inactive}" />
             </DataTrigger>
 
             <DataTrigger
                 Binding="{Binding Path=IsEnabled,
                                   RelativeSource={RelativeSource Self}}"
                 Value="False">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Inactive}" />
             </DataTrigger>
 
             <DataTrigger
                 Binding="{Binding Path=IsFocused,
                                   RelativeSource={RelativeSource Self}}"
                 Value="False">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Frame_Active}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
             </DataTrigger>
 
             <DataTrigger
                 Binding="{Binding Path=IsMouseOver,
                                   RelativeSource={RelativeSource Self}}"
                 Value="False">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Frame_Active}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
             </DataTrigger>
 
             <DataTrigger
                 Binding="{Binding Path=IsPressed,
                                   RelativeSource={RelativeSource Self}}"
                 Value="False">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Frame_Background}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -413,7 +512,7 @@
             <DataTrigger
                 Binding="{Binding Path=IsValid}"
                 Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ContentBackgroundAlt3}" />
             </DataTrigger>
 
             <DataTrigger
@@ -428,7 +527,7 @@
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Border
                         Name="border"
-                        Background="{StaticResource ContentBackgroundAlt2}"
+                        Background="{DynamicResource ContentBackgroundAlt2}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="1">
                         <ScrollViewer x:Name="PART_ContentHost" />
@@ -511,15 +610,15 @@
                 Data="M 0,0 A 180,180 180 1 1 1,1 Z"
                 Fill="Transparent"
                 Stretch="Fill"
-                Stroke="{StaticResource CustomSliderForegroundBrush}"
+                Stroke="{DynamicResource CustomSliderForegroundBrush}"
                 StrokeThickness="2.5"
                 UseLayoutRounding="True" />
         </Grid>
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
-                <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
-                <Setter TargetName="grip" Property="Stroke" Value="{StaticResource CustomSliderForegroundBrush}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource CustomSliderForegroundBrush}" />
+                <Setter TargetName="grip" Property="Stroke" Value="{DynamicResource CustomSliderForegroundBrush}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="false">
@@ -527,7 +626,7 @@
             </Trigger>
 
             <Trigger Property="IsKeyboardFocused" Value="true">
-                <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource CustomSliderForegroundBrush}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -552,7 +651,7 @@
                         ClipToBounds="True">
                         <Rectangle
                             Margin="10,0,-10,0"
-                            Fill="{StaticResource CustomSliderForegroundBrush}"
+                            Fill="{DynamicResource CustomSliderForegroundBrush}"
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
@@ -563,7 +662,7 @@
                         ClipToBounds="True">
                         <Rectangle
                             Margin="20,0,10,0"
-                            Fill="{StaticResource CustomSliderBackgroundBrush}"
+                            Fill="{DynamicResource CustomSliderBackgroundBrush}"
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
@@ -616,7 +715,7 @@
                 Width="8"
                 Height="{Binding Path=Height,
                                  RelativeSource={RelativeSource TemplatedParent}}"
-                Fill="{StaticResource CustomSliderForegroundBrush}"
+                Fill="{DynamicResource CustomSliderForegroundBrush}"
                 RadiusX="3"
                 RadiusY="3"
                 Stretch="Fill"
@@ -626,15 +725,15 @@
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
-                <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderHighlightBrush}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource CustomSliderHighlightBrush}" />
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="false">
-                <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderBackgroundBrush}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource CustomSliderBackgroundBrush}" />
             </Trigger>
 
             <Trigger Property="IsKeyboardFocused" Value="true">
-                <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource CustomSliderForegroundBrush}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -659,7 +758,7 @@
                         ClipToBounds="True">
                         <Rectangle
                             Margin="4,0,-4,0"
-                            Fill="{StaticResource CustomSliderForegroundBrush}"
+                            Fill="{DynamicResource CustomSliderForegroundBrush}"
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
@@ -671,7 +770,7 @@
                         <Rectangle
                             x:Name="PART_NegativeSelection"
                             Margin="8,0,4,0"
-                            Fill="{StaticResource CustomSliderBackgroundBrush}"
+                            Fill="{DynamicResource CustomSliderBackgroundBrush}"
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
@@ -697,7 +796,7 @@
                 Binding="{Binding ElementName=Thumb,
                                   Path=IsDragging}"
                 Value="True">
-                <Setter TargetName="PART_NegativeSelection" Property="Fill" Value="{StaticResource CustomSliderHighlightBrush}" />
+                <Setter TargetName="PART_NegativeSelection" Property="Fill" Value="{DynamicResource CustomSliderHighlightBrush}" />
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -727,7 +826,7 @@
     <Style
         x:Key="NetworkProgressBarStyle"
         TargetType="{x:Type ProgressBar}">
-        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource CustomSliderBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="3" />
         <Setter Property="Margin" Value="10,0" />
@@ -754,7 +853,7 @@
 
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource CustomSliderHighlightBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Padding" Value="12" />
 
@@ -782,18 +881,18 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#22FFFFFF" />
-                <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource CustomSliderHighlightBrush}" />
             </Trigger>
 
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
-                <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource CustomSliderHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
 
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource CustomSliderHighlightBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Padding" Value="12" />
 
@@ -815,54 +914,124 @@
         <Setter Property="Width" Value="45" />
     </Style>
 
+    <!--
+        Button styles. Use these instead of local button styles:
+        - WKButtonStyle: regular button
+        - WKButtonPrimaryStyle: the main action of a dialog or view (accent color)
+        - WKToggleButtonStyle: on/off buttons (accent color while checked)
+        All colors are theme resources, so the buttons follow the color theme.
+    -->
     <Style
-        x:Key="DialogButtonStyle"
-        TargetType="Button">
-        <Setter Property="Background" Value="{x:Null}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
-        <Setter Property="MinWidth" Value="60" />
-        <Setter Property="Padding" Value="12,10" />
+        x:Key="WKButtonBaseStyle"
+        TargetType="{x:Type ButtonBase}">
+        <Style.Resources>
+            <!--  text in the button inherits the button's Foreground instead of the app-wide TextBlock color  -->
+            <Style TargetType="{x:Type TextBlock}" />
+        </Style.Resources>
 
+        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,4" />
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="Button">
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
                     <Border
-                        x:Name="border"
-                        Padding="5,3"
+                        x:Name="ButtonBorder"
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="4">
+                        CornerRadius="{DynamicResource WolvenKitSmallRadius}">
                         <ContentPresenter
-                            Margin="5"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <ContentPresenter.Resources>
+                                <!--
+                                    String content (Content="OK"): the default text template gets the app-wide
+                                    TextBlock style. Use a plain TextBlock that inherits the button foreground.
+                                -->
+                                <DataTemplate DataType="{x:Type system:String}">
+                                    <TextBlock
+                                        Style="{x:Null}"
+                                        Text="{Binding}" />
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Opacity" Value="0.95" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Opacity" Value="0.9" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Opacity" Value="0.6" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt4}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt5}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccent}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style
-        x:Key="DialogPrimaryButtonStyle"
-        BasedOn="{StaticResource DialogButtonStyle}"
-        TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-        <Setter Property="BorderBrush" Value="{x:Null}" />
+        x:Key="WKButtonStyle"
+        BasedOn="{StaticResource WKButtonBaseStyle}"
+        TargetType="{x:Type Button}" />
+
+    <!--  on/off buttons: accent color while checked  -->
+    <Style
+        x:Key="WKToggleButtonStyle"
+        BasedOn="{StaticResource WKButtonBaseStyle}"
+        TargetType="{x:Type ToggleButton}">
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccent}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccent}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitAccentForeground}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="WKButtonPrimaryStyle"
+        BasedOn="{StaticResource WKButtonStyle}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource WolvenKitAccent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccent}" />
+        <Setter Property="Foreground" Value="{DynamicResource WolvenKitAccentForeground}" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource WolvenKitAccentShadow}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitAccentForeground}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 
@@ -2362,35 +2531,35 @@
                 Binding="{Binding Icon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="archive">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconForkAwesomeKind.Archive}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="ModDirectoryTop">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="ModDirectoryTopOpen">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="RawDirectoryTop">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="RawDirectoryTopOpen">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
 
@@ -2398,14 +2567,14 @@
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="ResourceDirectoryTop">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitCyan}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="ResourceDirectoryTopOpen">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitCyan}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
 
@@ -2413,21 +2582,21 @@
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="ClosedDirImageKey">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="OpenDirImageKey">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding FullIcon,
                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Value="OpenDirImageKeyOpen">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Foreground" Value="{DynamicResource WolvenKitFolder}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
             <Trigger Property="Kind" Value="{x:Null}">
@@ -2440,27 +2609,27 @@
         x:Key="SearchBarButtonStyle"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
-        <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey_Dark}" />
-        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Dark}" />
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
             </Trigger>
 
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
             </Trigger>
 
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
             </Trigger>
 
             <DataTrigger
                 Binding="{Binding Path=(Validation.HasError),
                                   RelativeSource={RelativeSource Self}}"
                 Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Grey_Light}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -2469,8 +2638,8 @@
         x:Key="SearchBarStyle"
         BasedOn="{StaticResource SearchBarPlus}"
         TargetType="{x:Type hc:SearchBar}">
-        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Frame_Active}" />
         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
 
         <Style.Resources>
