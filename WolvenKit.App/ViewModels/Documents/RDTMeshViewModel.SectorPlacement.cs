@@ -277,6 +277,12 @@ public partial class RDTMeshViewModel
             RegisterSectorProxy(group);
         }
 
+        // foliage nodes ("Show foliage")
+        if (instances != null)
+        {
+            RegisterSectorFoliage(group);
+        }
+
         groups.Add(group);
     }
 

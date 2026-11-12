@@ -27,6 +27,9 @@ public class SectorGroup : GroupModel3DExt
     /// <summary>Groups of proxy mesh nodes (low detail stand-ins for other content).</summary>
     public List<HelixToolkit.Wpf.SharpDX.Element3D> ProxyGroups { get; set; } = new();
 
+    /// <summary>Groups of foliage nodes (grass, bushes, trees).</summary>
+    public List<HelixToolkit.Wpf.SharpDX.Element3D> FoliageGroups { get; set; } = new();
+
     /// <summary>Range of a nodeData index; -1 when the sector has no ranges.</summary>
     public int RangeOf(int nodeDataIndex)
     {

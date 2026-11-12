@@ -35,7 +35,7 @@ public sealed record SectorVariantOption(string Name, SectorVariantMode Mode, in
 /// variants a quest switches on and off (intact / destroyed building, decorations...). They were all
 /// drawn at once, over each other. The variant list picks which ranges show, like the appearance of
 /// a mesh or an entity. Proxy meshes (low detail stand-ins for content of other sectors) are hidden
-/// unless "Show proxy meshes" is on.
+/// unless "Show proxy meshes" is on; foliage can be hidden with "Show foliage" (dense sectors).
 /// </summary>
 public partial class RDTMeshViewModel
 {
@@ -43,10 +43,12 @@ public partial class RDTMeshViewModel
     [ObservableProperty] private SectorVariantOption? _selectedSectorVariant;
     [ObservableProperty] private bool _hasSectorVariants;
     [ObservableProperty] private bool _showSectorProxies;
+    [ObservableProperty] private bool _showSectorFoliage = true;
 
     // filled while RenderSector runs, then kept on the SectorGroup
     private List<(Element3D Element, int[] NodeDataIndices)>? _sectorPlacements;
     private List<Element3D>? _sectorProxyGroups;
+    private List<Element3D>? _sectorFoliageGroups;
 
     private SectorGroup? _soloSector;
 
@@ -54,10 +56,13 @@ public partial class RDTMeshViewModel
 
     partial void OnShowSectorProxiesChanged(bool value) => ApplySectorVisibility();
 
+    partial void OnShowSectorFoliageChanged(bool value) => ApplySectorVisibility();
+
     private void BeginSectorRegistry()
     {
         _sectorPlacements = new();
         _sectorProxyGroups = new();
+        _sectorFoliageGroups = new();
     }
 
     private void EndSectorRegistry(SectorGroup element, worldStreamingSector data, int nodeDataCount)
@@ -65,10 +70,12 @@ public partial class RDTMeshViewModel
         element.NodeDataCount = nodeDataCount;
         element.Placements = _sectorPlacements ?? new();
         element.ProxyGroups = _sectorProxyGroups ?? new();
+        element.FoliageGroups = _sectorFoliageGroups ?? new();
         element.RangeStarts = data.VariantIndices.Select(x => (int)x).ToArray();
         element.PersistentRange = data.PersisentNodeIndex;
         _sectorPlacements = null;
         _sectorProxyGroups = null;
+        _sectorFoliageGroups = null;
     }
 
     /// <summary>A scene element placed by these nodeData entries (it shows when any of them does).</summary>
@@ -81,6 +88,8 @@ public partial class RDTMeshViewModel
     }
 
     private void RegisterSectorProxy(Element3D group) => _sectorProxyGroups?.Add(group);
+
+    private void RegisterSectorFoliage(Element3D group) => _sectorFoliageGroups?.Add(group);
 
     /// <summary>Single sector: its variants, numbered (their names live in the block).</summary>
     private void FillSoloSectorVariants(SectorGroup sector)
@@ -170,6 +179,11 @@ public partial class RDTMeshViewModel
         foreach (var group in sector.ProxyGroups)
         {
             group.IsRendering = ShowSectorProxies;
+        }
+
+        foreach (var group in sector.FoliageGroups)
+        {
+            group.IsRendering = ShowSectorFoliage;
         }
     }
 

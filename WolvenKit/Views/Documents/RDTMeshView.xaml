@@ -439,6 +439,13 @@
                             Content="Show proxy meshes"
                             ToolTip="Proxy meshes are low detail stand-ins the game shows from far away instead of the real content. Off: hidden, so they don't cover the real meshes." />
 
+                        <!-- Foliage: grass, bushes, trees; can be thousands of instances -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding ShowSectorFoliage}"
+                            Content="Show foliage"
+                            ToolTip="Grass, bushes and trees (foliage nodes). Turn off to see the ground and the meshes under them, or when a sector with a lot of foliage is slow to move around." />
+
                         <!-- Search Coordinate -->
                         <StackPanel Orientation="Vertical">
                             <TextBlock
