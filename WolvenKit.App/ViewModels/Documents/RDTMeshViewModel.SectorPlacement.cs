@@ -163,22 +163,37 @@ public partial class RDTMeshViewModel
     /// Geometry and materials are shared between placements, except for bended meshes,
     /// which get their own deformed copy.
     /// </summary>
+    /// <param name="embeddedMesh">mesh kept in the node itself (terrain), used when meshRef is empty</param>
+    /// <param name="instances">hardware instances of every placement (foliage), in the placement's space</param>
     private void AddSectorMeshGroup(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
         ResourcePath meshRef, CName meshAppearance, IReadOnlyList<SectorMeshPlacement> placements,
-        SectorBendAxis bendAxis = SectorBendAxis.PositiveY, string? dataIndicesText = null)
+        SectorBendAxis bendAxis = SectorBendAxis.PositiveY, string? dataIndicesText = null,
+        CMesh? embeddedMesh = null, IList<SharpDX.Matrix>? instances = null)
     {
         if (placements.Count == 0)
         {
             return;
         }
 
-        var meshFile = GetProjectOrDepotFile(meshRef);
-        if (meshFile?.RootChunk is not CMesh mesh)
+        CMesh? mesh;
+        string meshPath;
+        if (meshRef != ResourcePath.Empty || embeddedMesh is null)
+        {
+            mesh = GetProjectOrDepotFile(meshRef)?.RootChunk as CMesh;
+            meshPath = meshRef.GetResolvedText() ?? string.Empty;
+        }
+        else
+        {
+            mesh = embeddedMesh;
+            // no depot path: key the shared geometry by the mesh object
+            meshPath = $"embedded mesh {System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(embeddedMesh)}";
+        }
+
+        if (mesh is null)
         {
             return;
         }
 
-        var meshPath = meshRef.GetResolvedText() ?? string.Empty;
         foreach (var material in GetSectorMaterials(mesh, meshAppearance, meshPath))
         {
             app.RawMaterials[material.Name] = material;
@@ -223,6 +238,11 @@ public partial class RDTMeshViewModel
 
             foreach (var submesh in meshes)
             {
+                if (instances != null)
+                {
+                    submesh.Instances = instances;
+                }
+
                 if (!app.LODLUT.TryGetValue(submesh.LOD, out var lodMeshes))
                 {
                     lodMeshes = [];
@@ -239,6 +259,174 @@ public partial class RDTMeshViewModel
 
         groups.Add(group);
     }
+
+    /// <summary>
+    /// worldFoliageNode: the node places its span of the foliage resource's populations
+    /// (position, rotation, uniform scale, relative to the node), as the Blender add-on does.
+    /// Drawn with hardware instancing: grass and bushes come in thousands.
+    /// It used to be one mesh at the node's origin.
+    /// </summary>
+    private void AddFoliageSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
+        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldFoliageNode node)
+    {
+        if (GetProjectOrDepotFile(node.FoliageResource.DepotPath)?.RootChunk is not worldFoliageCompiledResource resource ||
+            resource.DataBuffer.Data is not FoliageBuffer foliage)
+        {
+            return;
+        }
+
+        var span = node.PopulationSpanInfo;
+        var begin = (int)Math.Min((uint)span.StancesBegin, (uint)foliage.Populations.Count);
+        var end = (int)Math.Min((long)begin + (uint)span.StancesCount, foliage.Populations.Count);
+
+        var instances = new List<SharpDX.Matrix>(end - begin);
+        for (var i = begin; i < end; i++)
+        {
+            var population = foliage.Populations[i];
+            float scale = population.Scale;
+            if (!float.IsFinite(scale) || scale <= 0f)
+            {
+                continue;
+            }
+
+            // Rotation is (X, Y, Z, W) = (i, j, k, r); preview space is (x, z, -y)
+            var r = population.Rotation;
+            var rotation = new System.Windows.Media.Media3D.Quaternion(r.X, r.Z, -r.Y, r.W);
+            if (rotation.X * rotation.X + rotation.Y * rotation.Y + rotation.Z * rotation.Z + rotation.W * rotation.W <= 1e-12)
+            {
+                rotation = System.Windows.Media.Media3D.Quaternion.Identity;
+            }
+            else
+            {
+                rotation.Normalize();
+            }
+
+            var matrix = new Matrix3D();
+            matrix.Scale(new Vector3D(scale, scale, scale));
+            matrix.Rotate(rotation);
+            matrix.Translate(ToVector3D(population.Position));
+            instances.Add(ToSharpDXMatrix(matrix));
+        }
+
+        if (instances.Count == 0)
+        {
+            return;
+        }
+
+        var placements = transforms
+            .Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t)))
+            .ToList();
+        AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, node.Mesh.DepotPath, node.MeshAppearance, placements,
+            instances: instances);
+    }
+
+    /// <summary>
+    /// worldInstancedDestructibleMeshNode: every instance transform (relative to the node) at every
+    /// nodeData entry of the node. Only the first entry was used.
+    /// </summary>
+    private void AddDestructibleSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
+        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldInstancedDestructibleMeshNode node)
+    {
+        var placements = new List<SectorMeshPlacement>();
+        foreach (var info in transforms)
+        {
+            var nodeMatrix = SectorNodeMatrix(info);
+            foreach (var transform in node.InstanceTransforms)
+            {
+                if (transform is null)
+                {
+                    continue;
+                }
+
+                var matrix = new Matrix3D();
+                matrix.Rotate(ToQuaternion(transform.Orientation));
+                matrix.Translate(ToVector3D(transform.Position));
+                matrix.Append(nodeMatrix);
+                placements.Add(new SectorMeshPlacement(buffer.IndexOf(info), matrix));
+            }
+        }
+
+        // The node may name its mesh in staticMesh only.
+        var mesh = node.Mesh.DepotPath != ResourcePath.Empty ? node.Mesh.DepotPath : node.StaticMesh.DepotPath;
+        var appearance = node.Mesh.DepotPath != ResourcePath.Empty ? node.MeshAppearance : node.StaticMeshAppearance;
+        AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, mesh, appearance, placements);
+    }
+
+    /// <summary>
+    /// Area nodes (triggers, interiors, ambient / GI / light channel areas, world boundaries...):
+    /// their outline extruded by its height, centred on the outline as in the Blender add-on,
+    /// in the node's colour. They were drawn as a box sized from the first outline point.
+    /// </summary>
+    private void AddAreaShape(List<Element3D> groups, string name, string typeStr, ulong handleIndex, string indexStr,
+        List<worldCompiledNodeInstanceSetupInfo> transforms, worldAreaShapeNode node)
+    {
+        if (node.Outline.Chunk is not { Points.Count: >= 3 } outline)
+        {
+            return;
+        }
+
+        var points = outline.Points.Where(p => p is not null).Select(p => new SharpDX.Vector3(p.X, p.Y, p.Z)).ToList();
+        if (points.Count < 3)
+        {
+            return;
+        }
+
+        float half = outline.Height * 0.5f;
+        SharpDX.Vector3 Preview(SharpDX.Vector3 p, float dz) => new(p.X, p.Z + dz, -p.Y);
+
+        var mb = new MeshBuilder();
+        for (var i = 1; i + 1 < points.Count; i++)
+        {
+            // caps (fan: fine for the convex outlines most areas have)
+            mb.AddTriangle(Preview(points[0], -half), Preview(points[i + 1], -half), Preview(points[i], -half));
+            mb.AddTriangle(Preview(points[0], half), Preview(points[i], half), Preview(points[i + 1], half));
+        }
+
+        for (var i = 0; i < points.Count; i++)
+        {
+            var a = points[i];
+            var b = points[(i + 1) % points.Count];
+            mb.AddQuad(Preview(a, -half), Preview(b, -half), Preview(b, half), Preview(a, half));
+        }
+
+        mb.ComputeNormalsAndTangents(MeshFaces.Default);
+        var geometry = mb.ToMeshGeometry3D();
+
+        var material = SetupPBRMaterial("DefaultMaterial");
+        byte red = node.Color?.Red ?? (byte)0, green = node.Color?.Green ?? (byte)0, blue = node.Color?.Blue ?? (byte)0;
+        material.AlbedoColor = red == 0 && green == 0 && blue == 0
+            ? new SharpDX.Color4(1f, 1f, 1f, 0.1f)
+            : new SharpDX.Color4(red / 255f, green / 255f, blue / 255f, 0.15f);
+
+        var group = new MeshComponent()
+        {
+            Name = name,
+            Text = name,
+            WorldNodeIndex = $"{handleIndex}",
+            WorldNodeType = typeStr,
+            WorldNodeDataIndices = indexStr,
+        };
+
+        foreach (var info in transforms)
+        {
+            group.Children.Add(new MeshGeometryModel3D()
+            {
+                Geometry = geometry,
+                Material = material,
+                IsTransparent = true,
+                CullMode = SharpDX.Direct3D11.CullMode.None,
+                Transform = new MatrixTransform3D(SectorNodeMatrix(info))
+            });
+        }
+
+        groups.Add(group);
+    }
+
+    private static SharpDX.Matrix ToSharpDXMatrix(Matrix3D m) => new(
+        (float)m.M11, (float)m.M12, (float)m.M13, (float)m.M14,
+        (float)m.M21, (float)m.M22, (float)m.M23, (float)m.M24,
+        (float)m.M31, (float)m.M32, (float)m.M33, (float)m.M34,
+        (float)m.OffsetX, (float)m.OffsetY, (float)m.OffsetZ, (float)m.M44);
 
     #region bended meshes
 

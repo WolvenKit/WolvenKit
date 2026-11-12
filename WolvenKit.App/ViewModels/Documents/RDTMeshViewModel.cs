@@ -8539,10 +8539,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 case IRedMeshNode irmn:
                     wave.Add(irmn.Mesh.DepotPath);
+                    if (irmn is worldFoliageNode fn)
+                        wave.Add(fn.FoliageResource.DepotPath);
+                    else if (irmn is worldInstancedDestructibleMeshNode idmn)
+                        wave.Add(idmn.StaticMesh.DepotPath);
                     break;
                 case worldEntityNode wen:
                     wave.Add(wen.EntityTemplate.DepotPath);
                     AddWantedEntityAppearance(wantedEntityApps, wen);
+                    break;
+                case worldTerrainMeshNode tmn:
+                    wave.Add(tmn.MeshRef.DepotPath);
+                    break;
+                case worldPhysicalDestructionNode pdn:
+                    wave.Add(pdn.Mesh.DepotPath);
                     break;
                 // game 2.5 cooked nodes keep their meshes in inner nodes
                 case worldInstancedMeshNode { Buffer.Data: worldInstancedMeshNodeBuffer imnb }:
@@ -8725,7 +8735,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var indexStr = string.Join(", ", transforms.Select(x => buffer.IndexOf(x)));
             var typeStr = handle.Chunk.GetType().Name;
 
-            if (handle.Chunk is IRedMeshNode plainMeshNode and not worldInstancedDestructibleMeshNode)
+            if (handle.Chunk is worldFoliageNode foliageNode)
+            {
+                AddFoliageSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, foliageNode);
+            }
+            else if (handle.Chunk is IRedMeshNode plainMeshNode and not worldInstancedDestructibleMeshNode)
             {
                 // worldBendedMeshNode (roads...) and worldCableMeshNode carry their deformation frames.
                 IReadOnlyList<CMatrix>? frames = plainMeshNode is worldBendedMeshNode { DeformationData.Count: >= 2 } wbmn
@@ -8737,96 +8751,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, plainMeshNode.Mesh.DepotPath, plainMeshNode.MeshAppearance,
                     placements, plainMeshNode is worldCableMeshNode ? SectorBendAxis.NegativeX : SectorBendAxis.PositiveY);
             }
-            else if (handle.Chunk is worldInstancedDestructibleMeshNode irmn)
+            else if (handle.Chunk is worldInstancedDestructibleMeshNode destructibleNode)
             {
-                var meshFile = GetProjectOrDepotFile(irmn.Mesh.DepotPath);
-
-                if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                {
-                    continue;
-                }
-
-                var meshPath = irmn.Mesh.DepotPath.GetResolvedText() ?? string.Empty;
-                var appMaterials = GetSectorMaterials(mesh, irmn.MeshAppearance, meshPath);
-                // The node's appearance picks the chunk materials; index 0 named the submeshes
-                // after the first appearance while the materials came from the node's one.
-                var appearanceIndex = GetMeshAppearanceIndex(mesh, irmn.MeshAppearance);
-
-                var group = new MeshComponent()
-                {
-                    Name = name,
-                    Text = name,
-                    WorldNodeIndex = $"{handleIndex}",
-                    WorldNodeType = typeStr,
-                    WorldNodeDataIndices = indexStr,
-                    AppearanceName = irmn.MeshAppearance,
-                    DepotPath = irmn.Mesh.DepotPath
-                };
-
-                if (group.WorldNodeIndex == SelectedNodeIndex)
-                {
-                    SelectedItem = group;
-                }
-
-                var model = new LoadableModel(name)
-                {
-                    MeshFile = Parent?.Cr2wFile,
-                    AppearanceIndex = 0,
-                    AppearanceName = irmn.MeshAppearance,
-                    Materials = appMaterials,
-                    IsEnabled = true,
-                };
-
-                foreach (var material in model.Materials)
-                {
-                    app.RawMaterials[material.Name] = material;
-                }
-
-                if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
-                {
-                    for (var i = 0; i < widmn.InstanceTransforms.Count; i++)
-                    {
-                        //for (int j = 0; j < transforms.Count; j++)
-                        //{
-                        var meshes = MakeMeshShared(mesh, ulong.MaxValue, appearanceIndex, meshPath);
-
-                        var subgroup = new MeshComponent()
-                        {
-                            Name = name + $"_instance_{i:D2}",
-                            Text = name + $"_instance_{i:D2}",
-                            AppearanceName = widmn.MeshAppearance,
-                            DepotPath = irmn.Mesh.DepotPath
-                        };
-
-                        foreach (var submesh in meshes)
-                        {
-                            if (!app.LODLUT.ContainsKey(submesh.LOD))
-                            {
-                                app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                            }
-                            app.LODLUT[submesh.LOD].Add(submesh);
-                            subgroup.Children.Add(submesh);
-                        }
-
-                        var matrix = new Matrix3D();
-                        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                        var citbMatrix = new Matrix3D();
-                        var transform = widmn.InstanceTransforms[i].NotNull();
-                        citbMatrix.Rotate(ToQuaternion(transform.Orientation));
-                        citbMatrix.Translate(ToVector3D(transform.Position));
-
-                        citbMatrix.Append(matrix);
-
-                        subgroup.Transform = new MatrixTransform3D(citbMatrix);
-
-                        group.Children.Add(subgroup);
-                        //}
-                    }
-                }
-                groups.Add(group);
+                AddDestructibleSectorMeshes(groups, app, name, typeStr, handleIndex, buffer, transforms, destructibleNode);
+            }
+            else if (handle.Chunk is worldTerrainMeshNode terrainNode)
+            {
+                // terrain was not drawn; its mesh is a reference or kept in the node
+                var placements = transforms.Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t))).ToList();
+                AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, terrainNode.MeshRef.DepotPath, CName.Empty, placements,
+                    embeddedMesh: terrainNode.Mesh?.Chunk);
+            }
+            else if (handle.Chunk is worldPhysicalDestructionNode physicalNode)
+            {
+                // destructible props (not a worldMeshNode): were not drawn
+                var placements = transforms.Select(t => new SectorMeshPlacement(buffer.IndexOf(t), SectorNodeMatrix(t))).ToList();
+                AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, physicalNode.Mesh.DepotPath, physicalNode.MeshAppearance, placements);
             }
             else if (handle.Chunk is worldInstancedMeshNode imn)
             {
@@ -9260,47 +9200,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (handle.Chunk is worldAreaShapeNode wasn)
             {
-                var shape = wasn.Outline.Chunk.NotNull();
-                var mb = new MeshBuilder();
-
-                var center = new SharpDX.Vector3();
-
-                foreach (var point in shape.Points)
-                {
-                    center.X += point.X / shape.Points.Count;
-                    center.Y += point.Z / shape.Points.Count;
-                    center.Z += -point.Y / shape.Points.Count;
-                }
-
-                mb.AddBox(center, Math.Abs(shape.Points[0].NotNull().X) * 2, shape.Height, Math.Abs(shape.Points[0].NotNull().Y) * 2);
-                mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
-                var material = SetupPBRMaterial("DefaultMaterial");
-                material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
-
-                var mesh = new MeshGeometryModel3D()
-                {
-                    Geometry = mb.ToMeshGeometry3D(),
-                    Material = material,
-                    IsTransparent = true
-                };
-
-                var matrix = new Matrix3D();
-                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
-                matrix.Translate(ToVector3D(transforms[0].Transform.Position));
-
-                var group = new MeshComponent()
-                {
-                    Name = name,
-                    Text = name,
-                    Transform = new MatrixTransform3D(matrix)
-                };
-
-                group.Children.Add(mesh);
-
-                groups.Add(group);
-
+                AddAreaShape(groups, name, typeStr, handleIndex, indexStr, transforms, wasn);
             }
         }
 
@@ -9580,6 +9480,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             Name = "Navigation",
             Text = "Navigation",
         };
+        var alwaysLoaded = new GroupModel3DExt()
+        {
+            Name = "AlwaysLoaded",
+            Text = "AlwaysLoaded",
+        };
         var other = new GroupModel3DExt()
         {
             Name = "Other",
@@ -9685,6 +9590,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 navigation.Children.Add(bbText);
             }
+            else if (desc.Category == Enums.worldStreamingSectorCategory.AlwaysLoaded)
+            {
+                alwaysLoaded.Children.Add(bbText);
+            }
             else
             {
                 other.Children.Add(bbText);
@@ -9701,6 +9610,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         texts.Children.Add(interior);
         texts.Children.Add(quest);
         texts.Children.Add(navigation);
+        texts.Children.Add(alwaysLoaded);
         texts.Children.Add(other);
         app.ModelGroup.Add(texts);
 
