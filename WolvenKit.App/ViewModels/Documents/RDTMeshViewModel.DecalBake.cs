@@ -65,6 +65,10 @@ public partial class RDTMeshViewModel
     // so kept between applies.
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<SubmeshComponent, Dictionary<SubmeshComponent, List<(int Triangle, double[] SurfaceUv, double Distance)>>> _decalMaps = new();
 
+    // decal submesh -> its triangles on UV the surface also uses elsewhere (mirrored / shared UV):
+    // drawn into the texture they would show on the other place too, so they stay decal meshes.
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<SubmeshComponent, HashSet<int>> _decalSharedUv = new();
+
     // decal submesh -> its own geometry and the triangles now carried by surfaces.
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<SubmeshComponent, DecalHideState> _decalHidden = new();
 
@@ -157,10 +161,6 @@ public partial class RDTMeshViewModel
                         {
                             BakeDecalComposite(job, cd, cn, crm);
                         }
-
-                        Parent?.GetLoggerService()?.Debug(overlay
-                            ? $"[Decals] {job.Layers.Count} decal(s) drawn into the overlay of multilayer '{SubmeshComponent.StripMeshPrefix(surfaceName)}'"
-                            : $"[Decals] {job.Layers.Count} decal(s) baked into '{SubmeshComponent.StripMeshPrefix(surfaceName)}'");
                     }
                     catch (Exception ex)
                     {
@@ -187,7 +187,7 @@ public partial class RDTMeshViewModel
         }
         catch (Exception ex)
         {
-            Parent?.GetLoggerService()?.Debug($"[Decals] {ex.Message}");
+            Parent?.GetLoggerService()?.Warning($"[Decals] {ex.Message}");
         }
     }
 
@@ -207,6 +207,7 @@ public partial class RDTMeshViewModel
         }
 
         var grids = new Dictionary<SubmeshComponent, SurfaceTriangleGrid?>();
+        var uvGrids = new Dictionary<SubmeshComponent, Dictionary<(int, int), List<int>>>();
         var geometries = new Dictionary<SubmeshComponent, SurfaceGeometry?>();
         SurfaceGeometry? Geo(LoadableModel m, SubmeshComponent sm)
         {
@@ -233,6 +234,7 @@ public partial class RDTMeshViewModel
             }
 
             var maps = _decalMaps.GetOrCreateValue(decal);
+            var sharedUv = _decalSharedUv.GetOrCreateValue(decal);
             var total = dg.Indices.Length / 3;
 
             // triangle -> (surface, its UVs, distance + LOD penalty)
@@ -255,6 +257,24 @@ public partial class RDTMeshViewModel
                         {
                             MapDecalTriangles(dg, sg, grid, out mapped);
                         }
+
+                        // A gun's two sides often share (mirror) one UV island: a decal drawn into
+                        // that texture would show on both sides. Those triangles are left out.
+                        if (mapped.Count > 0)
+                        {
+                            if (!uvGrids.TryGetValue(surface, out var uvGrid))
+                            {
+                                uvGrid = BuildUvGrid(sg);
+                                uvGrids[surface] = uvGrid;
+                            }
+
+                            var shared = SharedUvTriangles(dg, sg, uvGrid, mapped);
+                            if (shared.Count > 0)
+                            {
+                                mapped = mapped.Where(m => !shared.Contains(m.Triangle)).ToList();
+                                sharedUv.UnionWith(shared);
+                            }
+                        }
                     }
 
                     maps[surface] = mapped;
@@ -273,7 +293,7 @@ public partial class RDTMeshViewModel
 
             // Edge pieces that float a little higher (a decal's rim over a collarbone): when only a
             // few triangles are left, give each the surface of its neighbours, searched wider.
-            var leftover = Enumerable.Range(0, total).Where(t => !bestFor.ContainsKey(t)).ToList();
+            var leftover = Enumerable.Range(0, total).Where(t => !bestFor.ContainsKey(t) && !sharedUv.Contains(t)).ToList();
             if (leftover.Count > 0 && leftover.Count <= total * DecalLeftoverShare && bestFor.Count > 0)
             {
                 // Centres of the triangles that found a surface (decal meshes often split their
@@ -350,10 +370,11 @@ public partial class RDTMeshViewModel
             // standing off the skin, slivers): in the game a decal only paints the surface, they
             // add nothing there, so they are not drawn either instead of showing as a lit patch.
             var dropped = new List<int>();
-            if (parts.Count > 0 && total - assigned > 0 && total - assigned <= Math.Max(4, total * DecalDropShare))
+            var unplaced = total - assigned - sharedUv.Count;
+            if (parts.Count > 0 && unplaced > 0 && unplaced <= Math.Max(4, total * DecalDropShare))
             {
                 var used = parts.SelectMany(p => p.Triangles.Select(x => x.Key)).ToHashSet();
-                dropped = Enumerable.Range(0, total).Where(t => !used.Contains(t)).ToList();
+                dropped = Enumerable.Range(0, total).Where(t => !used.Contains(t) && !sharedUv.Contains(t)).ToList();
             }
 
             var whole = assigned + dropped.Count == total;
@@ -364,23 +385,117 @@ public partial class RDTMeshViewModel
                 result.Add(new DecalLayer(decalGroup.Key, decalModel, decal, dg, surfaceModel, surface,
                     triangles.Select(x => (x.Key, x.Uv)).ToList(), whole, pi == 0 ? dropped : new List<int>()));
             }
-
-            var name = SubmeshComponent.StripMeshPrefix(decalGroup.Key);
-            if (parts.Count == 0)
-            {
-                Parent?.GetLoggerService()?.Debug($"[Decals] '{name}' not on a baked surface; drawn as its own mesh");
-            }
-            else
-            {
-                var onto = string.Join(", ", parts.Select(p =>
-                    $"'{SubmeshComponent.StripMeshPrefix(surfaces[p.Index].Mesh.MaterialName)}' {p.Triangles.Count * 100 / total}%"));
-                Parent?.GetLoggerService()?.Debug(whole
-                    ? $"[Decals] '{name}' lies on {onto}" + (dropped.Count > 0 ? $" ({dropped.Count} stray triangles not drawn)" : "")
-                    : $"[Decals] '{name}' lies on {onto}; the other {total - assigned} of {total} triangles are drawn as the decal");
-            }
         }
 
         return result;
+    }
+
+    private const int UvGridCells = 512;          // per UV unit
+    private const double SharedUvDistance = 0.02; // 2 cm apart on the mesh = another place
+
+    /// <summary>Surface triangles bucketed by their (wrapped) UV.</summary>
+    private static Dictionary<(int, int), List<int>> BuildUvGrid(SurfaceGeometry g)
+    {
+        var cells = new Dictionary<(int, int), List<int>>();
+        var triangles = g.Indices.Length / 3;
+        for (var t = 0; t < triangles; t++)
+        {
+            int a = g.Indices[t * 3], b = g.Indices[t * 3 + 1], c = g.Indices[t * 3 + 2];
+            double u0 = g.Uvs[a * 2], v0 = g.Uvs[a * 2 + 1], u1 = g.Uvs[b * 2], v1 = g.Uvs[b * 2 + 1], u2 = g.Uvs[c * 2], v2 = g.Uvs[c * 2 + 1];
+            double minU = Math.Min(u0, Math.Min(u1, u2)), maxU = Math.Max(u0, Math.Max(u1, u2));
+            double minV = Math.Min(v0, Math.Min(v1, v2)), maxV = Math.Max(v0, Math.Max(v1, v2));
+            if (maxU - minU > 0.5 || maxV - minV > 0.5)
+            {
+                continue;
+            }
+
+            for (var x = (int)Math.Floor(minU * UvGridCells); x <= (int)Math.Floor(maxU * UvGridCells); x++)
+            for (var y = (int)Math.Floor(minV * UvGridCells); y <= (int)Math.Floor(maxV * UvGridCells); y++)
+            {
+                var key = (((x % UvGridCells) + UvGridCells) % UvGridCells, ((y % UvGridCells) + UvGridCells) % UvGridCells);
+                if (!cells.TryGetValue(key, out var list))
+                {
+                    list = new List<int>(2);
+                    cells[key] = list;
+                }
+
+                list.Add(t);
+            }
+        }
+
+        return cells;
+    }
+
+    /// <summary>
+    /// Decal triangles whose UV spot on the surface is also used by a part of the surface far
+    /// from them (the other side of a mirrored mesh, a shared UV island, a tiled repeat).
+    /// </summary>
+    private static HashSet<int> SharedUvTriangles(SurfaceGeometry decal, SurfaceGeometry surface,
+        Dictionary<(int, int), List<int>> uvGrid, List<(int Triangle, double[] SurfaceUv, double Distance)> mapped)
+    {
+        var shared = new HashSet<int>();
+        var d2 = SharedUvDistance * SharedUvDistance;
+        foreach (var (t, suv, _) in mapped)
+        {
+            var a = decal.Positions[decal.Indices[t * 3]];
+            var b = decal.Positions[decal.Indices[t * 3 + 1]];
+            var c = decal.Positions[decal.Indices[t * 3 + 2]];
+            var centre = new Point3D((a.X + b.X + c.X) / 3, (a.Y + b.Y + c.Y) / 3, (a.Z + b.Z + c.Z) / 3);
+            var u = (suv[0] + suv[2] + suv[4]) / 3;
+            var v = (suv[1] + suv[3] + suv[5]) / 3;
+            var wu = u - Math.Floor(u);
+            var wv = v - Math.Floor(v);
+            var key = ((int)(wu * UvGridCells) % UvGridCells, (int)(wv * UvGridCells) % UvGridCells);
+            if (!uvGrid.TryGetValue(key, out var list))
+            {
+                continue;
+            }
+
+            foreach (var st in list)
+            {
+                int ia = surface.Indices[st * 3], ib = surface.Indices[st * 3 + 1], ic = surface.Indices[st * 3 + 2];
+                double u0 = surface.Uvs[ia * 2], v0 = surface.Uvs[ia * 2 + 1];
+                double u1 = surface.Uvs[ib * 2], v1 = surface.Uvs[ib * 2 + 1];
+                double u2 = surface.Uvs[ic * 2], v2 = surface.Uvs[ic * 2 + 1];
+                var su = Math.Floor(Math.Min(u0, Math.Min(u1, u2)));
+                var sv = Math.Floor(Math.Min(v0, Math.Min(v1, v2)));
+                var det = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
+                if (Math.Abs(det) < 1e-14)
+                {
+                    continue;
+                }
+
+                // The spot in this triangle's own UV repeat (it may straddle a whole number).
+                for (var ou = 0; ou <= 1; ou++)
+                for (var ov = 0; ov <= 1; ov++)
+                {
+                    double pu = wu + su + ou, pv = wv + sv + ov;
+                    var w1 = ((pu - u0) * (v2 - v0) - (u2 - u0) * (pv - v0)) / det;
+                    var w2 = ((u1 - u0) * (pv - v0) - (pu - u0) * (v1 - v0)) / det;
+                    var w0 = 1 - w1 - w2;
+                    if (w0 < -1e-4 || w1 < -1e-4 || w2 < -1e-4)
+                    {
+                        continue;
+                    }
+
+                    var pa = surface.Positions[ia];
+                    var pb = surface.Positions[ib];
+                    var pc = surface.Positions[ic];
+                    var q = new Point3D(pa.X * w0 + pb.X * w1 + pc.X * w2, pa.Y * w0 + pb.Y * w1 + pc.Y * w2, pa.Z * w0 + pb.Z * w1 + pc.Z * w2);
+                    if ((q - centre).LengthSquared > d2)
+                    {
+                        shared.Add(t);
+                    }
+                }
+
+                if (shared.Contains(t))
+                {
+                    break;
+                }
+            }
+        }
+
+        return shared;
     }
 
     /// <summary>A plain mesh_decal (not emissive, not the makeup / hair / wet variants).</summary>
@@ -913,8 +1028,7 @@ public partial class RDTMeshViewModel
             rnm.Count(x => x) * 2 > rnm.Count);
         if (withOverlay == null)
         {
-            Parent?.GetLoggerService()?.Debug(
-                $"[Decals] '{SubmeshComponent.StripMeshPrefix(surfaceName)}': no room for the decal overlay in the shader's texture pool; decals drawn on their own");
+            // no room for the decal overlay in the shader's texture pool: decals stay drawn on their own
             return;
         }
 
