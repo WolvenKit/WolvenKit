@@ -8437,7 +8437,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         IsRendered = true;
         if (_data is worldStreamingSector wss)
         {
-            RenderSector(wss, Appearances[0]);
+            _soloSector = RenderSector(wss, Appearances[0]);
+            FillSoloSectorVariants(_soloSector);
         }
     }
 
@@ -8722,6 +8723,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // Read every file the sector will need up front, in parallel.
         // Sequential archive reads were most of the sector load time.
         PrefetchSectorFiles(data);
+
+        // what each nodeData entry placed, for the variant list and the proxy switch
+        BeginSectorRegistry();
 
         var ssTransforms = buffer.Lookup;
 
@@ -9164,6 +9168,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             entity.Name = "Entity";
                             entity.Text = "Entity";
                             entity.Transform = new MatrixTransform3D(SectorNodeMatrix(transform));
+                            RegisterSectorPlacement(entity, buffer.IndexOf(transform));
 
                             groups.Add(entity);
                         }
@@ -9200,7 +9205,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (handle.Chunk is worldAreaShapeNode wasn)
             {
-                AddAreaShape(groups, name, typeStr, handleIndex, indexStr, transforms, wasn);
+                AddAreaShape(groups, name, typeStr, handleIndex, indexStr, buffer, transforms, wasn);
             }
         }
 
@@ -9213,6 +9218,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             element.Children.Add(group);
         }
+
+        EndSectorRegistry(element, data, buffer.Count);
+        ApplySectorVisibility(element);
+
         app.ModelGroup.Add(element);
 
         SelectWorldNode();
@@ -9335,6 +9344,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         sector.Element = RenderSector(wss, Appearances[0]);
+
+        // the block names the sector's variants and says which the game loads by default
+        foreach (var variant in sector.Variants)
+        {
+            if (variant is not null)
+            {
+                sector.Element.Variants[(int)(uint)variant.RangeIndex] =
+                    (StringHelper.StringifyOrNull(variant.Name) ?? string.Empty, variant.EnabledByDefault);
+            }
+        }
+
+        ApplySectorVisibility(sector.Element);
         sector.Element.Name = sector.Name.Replace("-", "n");
         sector.Element.Text = sector.Name;
         sector.IsLoaded = true;
@@ -9602,7 +9623,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()), bbText)
             {
                 DepotPath = desc.Data.DepotPath,
-                NumberOfHandles = desc.NumNodeRanges
+                NumberOfHandles = desc.NumNodeRanges,
+                Variants = desc.Variants
             });
         }
         Sectors = new List<Sector>(sectors.OrderBy(x => x.Name).ToList());
@@ -9613,6 +9635,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         texts.Children.Add(alwaysLoaded);
         texts.Children.Add(other);
         app.ModelGroup.Add(texts);
+
+        FillBlockSectorVariants();
 
     }
 

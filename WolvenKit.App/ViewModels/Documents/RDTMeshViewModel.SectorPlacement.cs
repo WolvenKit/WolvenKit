@@ -153,8 +153,9 @@ public partial class RDTMeshViewModel
             }
 
             var rowName = dataIndices.Count > 1 ? $"{name}_{index}" : name;
+            // the transforms are shared by the entries: the group shows with any of them
             AddSectorMeshGroup(groups, app, rowName, typeStr, handleIndex, node.Mesh.DepotPath, node.MeshAppearance, placements,
-                dataIndicesText: string.Join(", ", entries));
+                groupDataIndices: entries.ToArray());
         }
     }
 
@@ -167,7 +168,7 @@ public partial class RDTMeshViewModel
     /// <param name="instances">hardware instances of every placement (foliage), in the placement's space</param>
     private void AddSectorMeshGroup(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
         ResourcePath meshRef, CName meshAppearance, IReadOnlyList<SectorMeshPlacement> placements,
-        SectorBendAxis bendAxis = SectorBendAxis.PositiveY, string? dataIndicesText = null,
+        SectorBendAxis bendAxis = SectorBendAxis.PositiveY, int[]? groupDataIndices = null,
         CMesh? embeddedMesh = null, IList<SharpDX.Matrix>? instances = null)
     {
         if (placements.Count == 0)
@@ -208,7 +209,9 @@ public partial class RDTMeshViewModel
             Text = name,
             WorldNodeIndex = $"{handleIndex}",
             WorldNodeType = typeStr,
-            WorldNodeDataIndices = dataIndicesText ?? string.Join(", ", placements.Select(p => p.NodeDataIndex).Distinct()),
+            WorldNodeDataIndices = groupDataIndices != null
+                ? string.Join(", ", groupDataIndices)
+                : string.Join(", ", placements.Select(p => p.NodeDataIndex).Distinct()),
             AppearanceName = meshAppearance,
             DepotPath = meshRef
         };
@@ -255,6 +258,23 @@ public partial class RDTMeshViewModel
 
             subgroup.Transform = new MatrixTransform3D(placement.Matrix);
             group.Children.Add(subgroup);
+
+            if (groupDataIndices == null)
+            {
+                // variants: the placement shows with its nodeData entry
+                RegisterSectorPlacement(subgroup, placement.NodeDataIndex);
+            }
+        }
+
+        if (groupDataIndices != null)
+        {
+            RegisterSectorPlacement(group, groupDataIndices);
+        }
+
+        // proxy mesh nodes (worldPrefabProxyMeshNode / worldCooked*ProxyMeshNode and their kinds)
+        if (typeStr.Contains("ProxyMesh", StringComparison.Ordinal))
+        {
+            RegisterSectorProxy(group);
         }
 
         groups.Add(group);
@@ -358,7 +378,7 @@ public partial class RDTMeshViewModel
     /// in the node's colour. They were drawn as a box sized from the first outline point.
     /// </summary>
     private void AddAreaShape(List<Element3D> groups, string name, string typeStr, ulong handleIndex, string indexStr,
-        List<worldCompiledNodeInstanceSetupInfo> transforms, worldAreaShapeNode node)
+        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldAreaShapeNode node)
     {
         if (node.Outline.Chunk is not { Points.Count: >= 3 } outline)
         {
@@ -409,14 +429,16 @@ public partial class RDTMeshViewModel
 
         foreach (var info in transforms)
         {
-            group.Children.Add(new MeshGeometryModel3D()
+            var volume = new MeshGeometryModel3D()
             {
                 Geometry = geometry,
                 Material = material,
                 IsTransparent = true,
                 CullMode = SharpDX.Direct3D11.CullMode.None,
                 Transform = new MatrixTransform3D(SectorNodeMatrix(info))
-            });
+            };
+            group.Children.Add(volume);
+            RegisterSectorPlacement(volume, buffer.IndexOf(info));
         }
 
         groups.Add(group);
