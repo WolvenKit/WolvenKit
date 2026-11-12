@@ -6,11 +6,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>
+    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>, IThemeAware
     {
         private bool _isStackedLayout;
         private bool _layoutModeInitialized;
@@ -25,6 +26,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            IsVisibleChanged += OnIsVisibleChanged;
+
+            Locator.Current.GetService<IThemeService>()?.Register(this);
             SizeChanged += (_, _) => UpdateLayoutMode();
 
             this.WhenActivated(disposables =>
@@ -105,6 +109,32 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         private void OnHostWindowSizeChanged(object sender, SizeChangedEventArgs e) => UpdateLayoutMode();
+
+        /// <summary>
+        /// Re-applying the skin re-templates the Syncfusion CardViews, which then show no cards although the
+        /// project lists are unchanged. Home is shown again as a new page after a theme switch made elsewhere
+        /// (e.g. with a project open), and that page's CardViews are skinned after their cards were made.
+        /// So the lists are filled again whenever the page comes on screen, and after a theme change while it
+        /// is shown. Only a few cards: cheap.
+        /// </summary>
+        void IThemeAware.OnThemeChanged()
+        {
+            if (IsVisible)
+            {
+                RefreshProjectListsWhenIdle();
+            }
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                RefreshProjectListsWhenIdle();
+            }
+        }
+
+        private void RefreshProjectListsWhenIdle() =>
+            Dispatcher.BeginInvoke(() => ViewModel?.RefreshProjectLists(), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
         /// <summary>
         /// Side-by-side: projects and actions each scroll in place.

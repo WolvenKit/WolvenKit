@@ -23,14 +23,14 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,1,0" />
 
         <Border
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1" />
 
         <TextBlock
