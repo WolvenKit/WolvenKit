@@ -925,7 +925,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             foreach (var entityTemplateComponent in components)
             {
-                if (entityTemplateComponent is not IRedMeshComponent irm || irm.Name.GetResolvedText() is not string s || s == "")
+                if (entityTemplateComponent is not (IRedMeshComponent or entPhysicalDestructionComponent or entClothComponent) ||
+                    entityTemplateComponent is not entIComponent { Name: var componentCName } ||
+                    componentCName.GetResolvedText() is not string s || s == "")
                 {
                     continue;
                 }
@@ -1073,6 +1075,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             meshApp = mc.MeshAppearance;
             chunkMask = mc.ChunkMask;
             componentName = mc.Name;
+        }
+        // Destructible parts (fan blades, glass, signs...) and simulated cloth (flags, curtains)
+        // have a mesh too, but are not IRedMeshComponent: they were left out of entities.
+        else if (component is entPhysicalDestructionComponent destruction)
+        {
+            depotPath = destruction.Mesh.DepotPath;
+            meshApp = destruction.MeshAppearance;
+            componentName = destruction.Name;
+            enabled = destruction.IsEnabled;
+        }
+        else if (component is entClothComponent clothMesh)
+        {
+            depotPath = clothMesh.Mesh.DepotPath;
+            componentName = clothMesh.Name;
+            enabled = clothMesh.IsEnabled;
         }
 
         var enabledChunks = new ObservableCollection<int>();
@@ -8703,6 +8720,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     break;
                 case IRedMeshComponent mc:
                     next.Add(mc.Mesh.DepotPath);
+                    break;
+                case entPhysicalDestructionComponent destruction:
+                    next.Add(destruction.Mesh.DepotPath);
+                    break;
+                case entClothComponent clothMesh:
+                    next.Add(clothMesh.Mesh.DepotPath);
                     break;
                 case entAnimatedComponent anim:
                     next.Add(anim.Rig.DepotPath);
