@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3284
+      author: "Ametis81"
+      description: "Project Explorer: folder expansion state is kept, also after Expand All / Collapse All and when closing WolvenKit."
