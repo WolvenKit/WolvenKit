@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3268
+      author: "Ametis81"
+      description: "Light themes: Arasaka White, Militech Field, Netrunner Daylight and Trauma Team Clinical."
