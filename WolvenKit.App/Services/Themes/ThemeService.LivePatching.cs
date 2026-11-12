@@ -388,6 +388,8 @@ public sealed partial class ThemeService
         ("BackgroundColor_Frame_Background", "ContentBackgroundAlt", c => c),
         ("BackgroundColor_Frame_Active", "ContentBackgroundAlt2", c => c),
         ("WolvenKitSeparator", "BorderAlt", c => c),
+        ("WolvenKitListSelection", "ContentBackgroundAlt5", c => c),
+        ("WolvenKitActionText", "WolvenKitYellowColor", c => c),
         ("WolvenKitFolderColor", "WolvenKitTanColor", c => c),
         ("WolvenKitProjectIconYellow", "WolvenKitYellowColor", c => c),
         ("WolvenKitProjectIconCyan", "WolvenKitCyanColor", c => c),

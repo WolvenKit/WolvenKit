@@ -107,11 +107,13 @@
   "WolvenKitProjectIconRed": "Welcome page: icon background of projects with the red project color",
   "WolvenKitProjectIconPurple": "Welcome page: icon background of projects with the purple project color",
   "WolvenKitProjectIconTan": "Welcome page: icon background of projects with the tan project color",
+  "WolvenKitListSelection": "Selected row in the Project Explorer, Asset Browser and other trees / lists",
   "WolvenKitGraphEditorGridMinor": "Node graph editors: fine background grid lines",
   "WolvenKitGraphEditorGridMajor": "Node graph editors: major background grid lines (every 5 cells)",
   "WolvenKitGraphConnection": "Data graphs (RDT graph / data views): connection lines",
   "WolvenKitGraphGroupBackground": "Data graphs: background and header of phase/group nodes",
   "WolvenKitGraphOverlayBackground": "Quest phase graph: breadcrumb bar over the graph",
   "WolvenKitTimelineTrack": "Section timeline: track background",
-  "WolvenKitTimelineGridLine": "Section timeline: vertical grid lines"
+  "WolvenKitTimelineGridLine": "Section timeline: vertical grid lines",
+  "WolvenKitActionText": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
 }

@@ -1049,7 +1049,9 @@ public partial class RDTMeshViewModel
         Set(c, 0, written, globalIdx, globalIntensity, 0f);
         Set(c, 4, gScaleU, gScaleV, gBiasU, gBiasV);
         Set(c, MultilayerConstants.DebugOffset, 0f, -1f, 0f, 0f); // filled per draw
-        Set(c, MultilayerConstants.OverlayOffset, -1f, -1f, -1f, 0f); // no decal overlay
+        Set(c, MultilayerConstants.OverlayOffset, -1f, -1f, -1f, -1f); // no decal overlay
+        Set(c, MultilayerConstants.OverlayBOffset, -1f, -1f, -1f, -1f);
+        Set(c, MultilayerConstants.OverlayFlagsOffset, 0f, 0f, 0f, 0f);
 
         _multilayerGpuData[material.Name] = new MultilayerGpuData(pool.ToArray(), Pack(c), layerLabels);
         Parent?.GetLoggerService()?.Debug(
