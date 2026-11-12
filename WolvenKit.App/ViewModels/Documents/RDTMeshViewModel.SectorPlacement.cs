@@ -455,6 +455,7 @@ public partial class RDTMeshViewModel
             SelectedItem = group;
         }
 
+        RegisterSectorArea(group); // "Show areas"
         groups.Add(group);
     }
 

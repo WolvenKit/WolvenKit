@@ -446,6 +446,13 @@
                             Content="Show foliage"
                             ToolTip="Grass, bushes and trees (foliage nodes). Turn off to see the ground and the meshes under them, or when a sector with a lot of foliage is slow to move around." />
 
+                        <!-- Area volumes (triggers, light channels, GI spaces...): quick switch for all of them -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding ShowSectorAreas}"
+                            Content="Show areas"
+                            ToolTip="Area volumes: triggers, interiors, ambient (sound), light channel and GI areas, world boundaries... Off: all hidden; single areas can still be switched in the tree." />
+
                         <!-- Area volumes coloured by kind (trigger, light channel, GI space...) or all plain -->
                         <CheckBox
                             Margin="{DynamicResource WolvenKitMarginTiny}"

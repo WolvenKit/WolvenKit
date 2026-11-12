@@ -27,6 +27,9 @@ public class SectorGroup : GroupModel3DExt
     /// <summary>Groups of proxy mesh nodes (low detail stand-ins for other content).</summary>
     public List<HelixToolkit.Wpf.SharpDX.Element3D> ProxyGroups { get; set; } = new();
 
+    /// <summary>Groups of area nodes (triggers, light channels, GI spaces...): "Show areas".</summary>
+    public List<HelixToolkit.Wpf.SharpDX.Element3D> AreaGroups { get; set; } = new();
+
     /// <summary>Materials of the area volumes with their colour by type ("Color areas by type").</summary>
     public List<(HelixToolkit.Wpf.SharpDX.PBRMaterial Material, SharpDX.Color4 Color)> AreaMaterials { get; set; } = new();
 
