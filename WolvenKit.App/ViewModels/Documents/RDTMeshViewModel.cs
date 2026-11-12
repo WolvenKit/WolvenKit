@@ -93,6 +93,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         _modifierSvc.ModifierStateChanged += ModifierStateChanged;
 
         Parent = parent;
+
+        // The preview's shaders are needed as soon as the tab is shown: compile (or read from
+        // the disk cache) in the background while the document opens.
+        MultilayerShader.WarmUp();
     }
 
     private void ModifierStateChanged() => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
@@ -125,6 +129,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             geometryCacheService, modifierSvc, archiveManager)
     {
         _data = data;
+        // collision geometry of all of Night City, read on first use: start while the file opens
+        geometryCacheService.Preload();
     }
 
     public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file,
@@ -139,6 +145,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             geometryCacheService, modifierSvc, archiveManager)
     {
         _data = data;
+        // collision geometry of all of Night City, read on first use: start while the file opens
+        geometryCacheService.Preload();
     }
 
     public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file,
@@ -516,6 +524,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyRenderFlags(sm);
         }
 
+        ApplyDecalsToSurfaces(app);
         ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
     }
@@ -2863,6 +2872,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             maskRef.DepotPath == ResourcePath.Empty)
             return;
 
+        // DiffuseTextureAsMaskTexture: the diffuse alpha is the mask; MaskTexture is not applied.
+        if (dictionary.TryGetValue("DiffuseTextureAsMaskTexture", out var asMask) && ReadFloat(asMask) >= 0.5f)
+            return;
+
         var maskXbm = GetProjectOrDepotFile(maskRef.DepotPath);
         if (maskXbm?.RootChunk is not ITexture maskIt)
             return;
@@ -3030,11 +3043,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         var am = ResolveArchiveManager();
-
         if (am != null)
         {
-            // includeProject: true → project file if present, otherwise mods/archive
-            result = am.GetCR2WFile(depotPath, includeMods: true, includeProject: true);
+            // project file if present, otherwise mods/archive
+            result = ReadDepotFile(am, depotPath);
         }
 
         result ??= Parent?.GetFileFromDepotPathOrCache(depotPath) as CR2WFile;
@@ -3110,8 +3122,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   D|P|<path>|<len>|<ticks> dependency found in the project (size + write time)
     //   D|A|<path>               dependency from the game archive / mods (never changes)
     // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
-    // v4: see-through glass, makeup roughness / metalness, glowing tattoos).
-    private const string DepsFormat = "v4";
+    // v4: see-through glass, makeup roughness / metalness, glowing tattoos;
+    // v5: mesh_decal UV transform, flipbook frame, coverage; v6: mesh_decal_parallax too;
+    // v7: mesh_decal_gradientmap_recolor colour from its gradient map).
+    private const string DepsFormat = "v7";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
@@ -7921,6 +7935,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             #endregion
 
+            // mesh_decal UV transform, flipbook frame and coverage (contrast, secondary mask).
+            if (material != null && IsUvTransformedDecal(material))
+            {
+                await PostProcessMeshDecalMaps(material, dictionary, filename_bd, filename_bn, filename_rm);
+            }
+
             // Record what this bake read, so the next pass can skip it if nothing changed.
             WriteBakeDependencies(depsPath, valuesStamp, bakeResolution, filename_bd, filename_bn, filename_rm, emissivePng);
         }
@@ -8448,6 +8468,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
 
 
+    private System.Diagnostics.Stopwatch? _sectorFirstFrame;
+    private long _sectorBuildMs;
+
+    /// <summary>Called by the view after each rendered frame: logs how long the sector took to show.</summary>
+    public void OnViewportRendered()
+    {
+        if (_sectorFirstFrame is { } sw)
+        {
+            _sectorFirstFrame = null;
+            _loggerService.Debug($"[Sector] built in {_sectorBuildMs} ms, first frame {sw.ElapsedMilliseconds} ms later");
+        }
+    }
+
     public void RenderSectorSolo()
     {
         RetoreSelectedMeshMaterial();
@@ -8459,8 +8492,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         IsRendered = true;
         if (_data is worldStreamingSector wss)
         {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             _soloSector = RenderSector(wss, Appearances[0]);
             FillSoloSectorVariants(_soloSector);
+            _sectorBuildMs = sw.ElapsedMilliseconds;
+            _sectorFirstFrame = System.Diagnostics.Stopwatch.StartNew();
         }
     }
 
@@ -8598,20 +8634,36 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         var wantedApps = new Dictionary<ResourcePath, HashSet<string>>();
-        for (var depth = 0; depth < 6 && wave.Count > 0; depth++)
+        // entity -> appearance -> part -> mesh -> .mi -> base .mi chain: deeper than meshes alone
+        var walked = new HashSet<ResourcePath>();
+        for (var depth = 0; depth < 10 && wave.Count > 0; depth++)
         {
-            // embedded files are not read from the archive: the archive copy would hide them
-            wave.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p) || IsEmbeddedForSector(p));
-            PrefetchFiles(am, wave);
+            wave.RemoveWhere(p => p == ResourcePath.Empty || !walked.Add(p));
+
+            // Embedded files (the sector's inplace resource holds devices, lootables...) are not
+            // read from the archive, whose copy would hide them, but what they reference is.
+            var embedded = new List<(ResourcePath Path, RedBaseClass Root)>();
+            foreach (var p in wave)
+            {
+                if (EmbeddedForSector(p) is { } content)
+                    embedded.Add((p, content));
+            }
+
+            var toRead = wave.Where(p => !_fileCache.ContainsKey(p) && EmbeddedForSector(p) == null).ToList();
+            PrefetchFiles(am, toRead);
 
             var next = new HashSet<ResourcePath>();
+            foreach (var (path, root) in embedded)
+            {
+                CollectPrefetchRefs(root, path, next, wantedApps, wantedEntityApps);
+            }
+
             foreach (var path in wave)
             {
-                if (_fileCache.TryGetValue(path, out var file) && file?.RootChunk is { } root)
+                if (EmbeddedForSector(path) == null && _fileCache.TryGetValue(path, out var file) && file?.RootChunk is { } root)
                     CollectPrefetchRefs(root, path, next, wantedApps, wantedEntityApps);
             }
 
-            next.RemoveWhere(p => p == ResourcePath.Empty || _fileCache.ContainsKey(p));
             wave = next;
         }
     }
@@ -8626,7 +8678,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             try
             {
-                var file = am.GetCR2WFile(path, includeMods: true, includeProject: true);
+                var file = ReadDepotFile(am, path);
                 if (file != null)
                     _fileCache.TryAdd(path, file);
             }
@@ -8635,6 +8687,102 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 // left out of the cache: the sequential path loads it (and reports errors)
             }
         });
+    }
+
+    // The project "archive" (FileSystemArchive) walks the whole project folder and hashes every
+    // path on each lookup (ArchiveManager.GetGameFile) and again on each extract (TryGetFile):
+    // with a big project that was most of the sector load time. While a sector is built the
+    // project folder is listed once (hash -> file on disk) and project files are read directly.
+    private Dictionary<ulong, string?>? _projectFileSnapshot;
+
+    // ArchiveManager.GetGameFile copies its archive list (under a lock) twice per lookup; the
+    // build takes the lists once and looks files up in the same order: project, mods, game.
+    private IGameArchive[]? _modArchiveSnapshot;
+    private IGameArchive[]? _gameArchiveSnapshot;
+
+    private void TakeProjectFileSnapshot(IArchiveManager? am)
+    {
+        try
+        {
+            var files = new Dictionary<ulong, string?>();
+            if (am?.ProjectArchive is FileSystemArchive fsa &&
+                fsa.Project.ModDirectory is { Length: > 0 } modDirectory && Directory.Exists(modDirectory))
+            {
+                foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
+                {
+                    // same key as FileSystemArchive: the path relative to the archive folder
+                    files.TryAdd(ResourcePath.CalculateHash(filePath[(modDirectory.Length + 1)..]), filePath);
+                }
+            }
+            else if (am?.ProjectArchive is { } other)
+            {
+                foreach (var hash in other.Files.Keys)
+                    files.TryAdd(hash, null); // unknown kind of project archive: read through it
+            }
+
+            _projectFileSnapshot = files;
+            _modArchiveSnapshot = am?.GetModArchives().ToArray();
+            _gameArchiveSnapshot = am?.GetGameArchives().ToArray();
+        }
+        catch
+        {
+            _projectFileSnapshot = null; // lookups go through the archive manager as before
+            _modArchiveSnapshot = null;
+            _gameArchiveSnapshot = null;
+        }
+    }
+
+    /// <summary>GetCR2WFile (project, mods, game), using the snapshot while a sector is built.</summary>
+    private CR2WFile? ReadDepotFile(IArchiveManager am, ResourcePath path)
+    {
+        if (_projectFileSnapshot is not { } project || _modArchiveSnapshot is not { } mods || _gameArchiveSnapshot is not { } game)
+        {
+            return am.GetCR2WFile(path, includeMods: true, includeProject: true);
+        }
+
+        var hash = path.GetRedHash();
+        if (project.TryGetValue(hash, out var projectPath))
+        {
+            if (projectPath == null)
+            {
+                return am.GetCR2WFile(path, includeMods: true, includeProject: true);
+            }
+
+            using var fs = new FileStream(projectPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return ParseRed4File(fs);
+        }
+
+        IGameFile? gameFile = null;
+        foreach (var archive in mods)
+        {
+            if (archive.Files.TryGetValue(hash, out gameFile))
+                break;
+        }
+
+        if (gameFile == null)
+        {
+            foreach (var archive in game)
+            {
+                if (archive.Files.TryGetValue(hash, out gameFile))
+                    break;
+            }
+        }
+
+        if (gameFile == null)
+        {
+            return null;
+        }
+
+        using var ms = new MemoryStream();
+        gameFile.Extract(ms);
+        ms.Position = 0;
+        return ParseRed4File(ms);
+    }
+
+    private static CR2WFile? ParseRed4File(Stream stream)
+    {
+        using var reader = new CR2WReader(stream, System.Text.Encoding.Default, true);
+        return reader.ReadFile(out var file) == WolvenKit.RED4.Archive.IO.EFileReadErrorCodes.NoError ? file : null;
     }
 
     /// <summary>The ent appearance a sector entity node uses (see SectorEntityAppearances).</summary>
@@ -8647,8 +8795,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             wanted[path] = names;
         }
 
-        if (StringHelper.StringifyOrNull(wen.AppearanceName) is { Length: > 0 } name)
-            names.Add(name);
+        // empty: the node shows the entity's default appearance
+        names.Add(StringHelper.StringifyOrNull(wen.AppearanceName) ?? string.Empty);
     }
 
     private static void CollectPrefetchRefs(RedBaseClass root, ResourcePath self,
@@ -8665,19 +8813,43 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     foreach (var r in mesh.PreloadExternalMaterials)
                         next.Add(r.DepotPath);
                 }
+
+                // Local instances: their base .mi chain is walked to classify the material.
+                if (mesh.LocalMaterialBuffer?.Materials is { } local)
+                {
+                    foreach (var m in local)
+                        AddMaterialBase(m as CMaterialInstance, next);
+                }
+                if (mesh.LocalMaterialBuffer?.RawData?.Buffer.Data is CR2WList raw)
+                {
+                    foreach (var f in raw.Files)
+                        AddMaterialBase(f.RootChunk as CMaterialInstance, next);
+                }
+                foreach (var h in mesh.PreloadLocalMaterialInstances)
+                    AddMaterialBase(h?.GetValue() as CMaterialInstance, next);
+                break;
+
+            case CMaterialInstance mi:
+                AddMaterialBase(mi, next);
                 break;
 
             case entEntityTemplate ent:
-                // Sectors render the appearance their node names, else the default one (see SectorEntityAppearances).
+                // The same choice as the build (SectorEntityAppearances): the node's appearance, else
+                // the default one, else the first ("random" defaults name no appearance).
                 wantedEntityApps.TryGetValue(self, out var nodeApps);
-                foreach (var a in ent.Appearances)
+                var chosen = new HashSet<entTemplateAppearance>();
+                if (nodeApps is { Count: > 0 })
                 {
-                    if (a is null)
-                        continue;
-                    var entAppName = StringHelper.StringifyOrNull(a.Name) ?? string.Empty;
-                    if (a.Name != ent.DefaultAppearance && (nodeApps == null || !nodeApps.Contains(entAppName)))
-                        continue;
+                    foreach (var nodeApp in nodeApps)
+                        chosen.UnionWith(SectorEntityAppearances(ent, nodeApp));
+                }
+                else
+                {
+                    chosen.UnionWith(SectorEntityAppearances(ent, null));
+                }
 
+                foreach (var a in chosen)
+                {
                     var appPath = a.AppearanceResource.DepotPath;
                     next.Add(appPath);
                     if (!wantedApps.TryGetValue(appPath, out var names))
@@ -8692,6 +8864,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
                 if (ent.CompiledData.Data is RedPackage pkg)
                     AddComponentRefs(pkg.Chunks, next);
+                // appearance parts are read from their components list (LoadPartsValues)
+                AddComponentRefs(ent.Components, next);
                 break;
 
             case appearanceAppearanceResource aar:
@@ -8713,6 +8887,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
                 break;
         }
+    }
+
+    /// <summary>The base of a material instance, unless it is the template (.mt / .remt, not read for the preview).</summary>
+    private static void AddMaterialBase(CMaterialInstance? instance, HashSet<ResourcePath> next)
+    {
+        if (instance == null || instance.BaseMaterial.DepotPath == ResourcePath.Empty)
+            return;
+
+        var text = instance.BaseMaterial.DepotPath.GetResolvedText() ?? string.Empty;
+        if (text.EndsWith(".mt", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".remt", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        next.Add(instance.BaseMaterial.DepotPath);
     }
 
     private static void AddComponentRefs(IEnumerable<RedBaseClass> chunks, HashSet<ResourcePath> next)
@@ -8745,6 +8932,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// <param name="sectorFile">the sector's file when it is not the open document (block preview), for its embedded files</param>
     public SectorGroup RenderSector(worldStreamingSector data, Appearance app, CR2WFile? sectorFile = null)
     {
+        var ownSnapshot = _projectFileSnapshot == null;
+        if (ownSnapshot)
+        {
+            TakeProjectFileSnapshot(ResolveArchiveManager());
+        }
+
         PrepareSectorEmbeddedFiles(data, sectorFile);
         try
         {
@@ -8753,6 +8946,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         finally
         {
             _sectorEmbeddedFiles = null;
+            if (ownSnapshot)
+            {
+                _projectFileSnapshot = null;
+                _modArchiveSnapshot = null;
+                _gameArchiveSnapshot = null;
+            }
         }
     }
 
@@ -8761,6 +8960,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (data.NodeData.Data is not worldNodeDataBuffer buffer)
         {
             throw new ArgumentNullException();
+        }
+
+        // The collision geometry cache (all of Night City) is read on first use and takes
+        // seconds: start it now, so it loads while the sector's files are prefetched.
+        if (data.Nodes.Any(h => h?.Chunk is worldCookedCollisionNode))
+        {
+            _geometryCacheService.Preload();
         }
 
         // Read every file the sector will need up front, in parallel.

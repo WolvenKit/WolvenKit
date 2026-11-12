@@ -1,0 +1,11 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3280
+      author: "Ametis81"
+      description: "Material preview: mesh decals are blended into the surface under them, also on multilayer materials (Blend decals option), incl. parallax and gradient-map recolor decals."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3280
+      author: "Ametis81"
+      description: "Sector previews open much faster: files prefetched once, preview shaders cached on disk, node tree filled after the first frame."
