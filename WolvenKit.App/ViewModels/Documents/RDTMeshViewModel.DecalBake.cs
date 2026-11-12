@@ -69,6 +69,10 @@ public partial class RDTMeshViewModel
     // drawn into the texture they would show on the other place too, so they stay decal meshes.
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<SubmeshComponent, HashSet<int>> _decalSharedUv = new();
 
+    // decal submesh -> multilayer surfaces it lies on with shared UV: kept there (the overlay is
+    // one-sided: it stores which way the decals faced and the shader checks it).
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<SubmeshComponent, HashSet<SubmeshComponent>> _decalSharedOnOverlay = new();
+
     // decal submesh -> its own geometry and the triangles now carried by surfaces.
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<SubmeshComponent, DecalHideState> _decalHidden = new();
 
@@ -89,6 +93,25 @@ public partial class RDTMeshViewModel
         public Point3D[] Positions { get; init; } = null!;
         public double[] Uvs { get; init; } = null!;
         public int[] Indices { get; init; } = null!;
+
+        /// <summary>World-space vertex normals (null when the mesh has none).</summary>
+        public Vector3D[]? Normals { get; init; }
+
+        /// <summary>Which way a triangle faces (vertex normals, else its winding).</summary>
+        public Vector3D Facing(int t)
+        {
+            int a = Indices[t * 3], b = Indices[t * 3 + 1], c = Indices[t * 3 + 2];
+            var n = Normals != null
+                ? Normals[a] + Normals[b] + Normals[c]
+                : Vector3D.CrossProduct(Positions[b] - Positions[a], Positions[c] - Positions[a]);
+            if (n.LengthSquared < 1e-20)
+            {
+                return new Vector3D(0, 0, 1);
+            }
+
+            n.Normalize();
+            return n;
+        }
     }
 
     // ---- entry point -------------------------------------------------------------------------
@@ -120,12 +143,13 @@ public partial class RDTMeshViewModel
                 var overlay = IsOverlaySurface(decals[0].Surface);
                 var key = DecalCompositeKey(surfaceName, decals) + (overlay ? "|ov" : "");
                 var (cd, cn, crm) = DecalCompositePaths(surfaceName, key, overlay);
+                var op = OverlayPaths(cd);
 
                 void Use()
                 {
                     if (overlay)
                     {
-                        UseDecalOverlay(app, surfaceName, decals, cd, cn, crm);
+                        UseDecalOverlay(app, surfaceName, decals, op);
                     }
                     else
                     {
@@ -133,7 +157,7 @@ public partial class RDTMeshViewModel
                     }
                 }
 
-                if (File.Exists(cd) || (overlay && (File.Exists(cn) || File.Exists(crm))))
+                if (overlay ? File.Exists(op.Done) : File.Exists(cd))
                 {
                     Use();
                     continue;
@@ -155,7 +179,7 @@ public partial class RDTMeshViewModel
                     {
                         if (overlay)
                         {
-                            BakeDecalOverlay(job, cd, cn, crm);
+                            BakeDecalOverlay(job, op);
                         }
                         else
                         {
@@ -176,7 +200,7 @@ public partial class RDTMeshViewModel
                         context.Post(_ =>
                         {
                             if (!_disposed && BlendDecalsIntoSurfaces && SelectedAppearance == app &&
-                                (File.Exists(cd) || File.Exists(cn) || File.Exists(crm)))
+                                (overlay ? File.Exists(op.Done) : File.Exists(cd)))
                             {
                                 Use();
                             }
@@ -269,7 +293,11 @@ public partial class RDTMeshViewModel
                             }
 
                             var shared = SharedUvTriangles(dg, sg, uvGrid, mapped);
-                            if (shared.Count > 0)
+                            if (shared.Count > 0 && IsOverlaySurface(surface))
+                            {
+                                _decalSharedOnOverlay.GetOrCreateValue(decal).Add(surface);
+                            }
+                            else if (shared.Count > 0)
                             {
                                 mapped = mapped.Where(m => !shared.Contains(m.Triangle)).ToList();
                                 sharedUv.UnionWith(shared);
@@ -574,15 +602,21 @@ public partial class RDTMeshViewModel
         var matrix = model.Transform?.Value ?? Matrix3D.Identity;
         var positions = new Point3D[g.Positions.Count];
         var uvs = new double[g.Positions.Count * 2];
+        Vector3D[]? normals = g.Normals != null && g.Normals.Count == g.Positions.Count ? new Vector3D[g.Positions.Count] : null;
         for (var i = 0; i < positions.Length; i++)
         {
             var p = g.Positions[i];
             positions[i] = matrix.Transform(new Point3D(p.X, p.Y, p.Z));
             uvs[i * 2] = g.TextureCoordinates[i].X;
             uvs[i * 2 + 1] = g.TextureCoordinates[i].Y;
+            if (normals != null)
+            {
+                var n = g.Normals![i];
+                normals[i] = matrix.Transform(new Vector3D(n.X, n.Y, n.Z));
+            }
         }
 
-        return new SurfaceGeometry { Positions = positions, Uvs = uvs, Indices = g.Indices.ToArray() };
+        return new SurfaceGeometry { Positions = positions, Uvs = uvs, Indices = g.Indices.ToArray(), Normals = normals };
     }
 
     /// <summary>Surface triangles bucketed by position, plus its usual UV-per-metre density.</summary>
@@ -906,8 +940,8 @@ public partial class RDTMeshViewModel
 
     private string DecalCompositeKey(string surfaceName, List<DecalLayer> decals)
     {
-        // Composite format: bump when the bake changes (v2: decal detail resolution).
-        var sb = new System.Text.StringBuilder("v2;");
+        // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay).
+        var sb = new System.Text.StringBuilder("v3;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
@@ -1009,7 +1043,7 @@ public partial class RDTMeshViewModel
     /// A multilayer surface with its decal overlay: a copy of its material whose shader data
     /// carries the overlay maps (the material of other uses stays as it is).
     /// </summary>
-    private void UseDecalOverlay(Appearance app, string surfaceName, List<DecalLayer> decals, string oc, string on, string orm)
+    private void UseDecalOverlay(Appearance app, string surfaceName, List<DecalLayer> decals, DecalOverlayFiles files)
     {
         var meshes = app.Models.SelectMany(m => m.Meshes).ToList();
         if (meshes.FirstOrDefault(sm => sm.MaterialName == surfaceName)?.Material is not MultilayerPBRMaterial { MultilayerData: { } data } original)
@@ -1021,11 +1055,11 @@ public partial class RDTMeshViewModel
             .Where(d => TryGetRawMaterial(d.DecalName, out var raw) && raw != null && DecalAlpha(raw, "NormalAlpha") > 0f)
             .Select(d => TryGetRawMaterial(d.DecalName, out var raw) && raw?.Values?.TryGetValue("NormalsBlendingMode", out var nbm) == true && ReadFloat(nbm) > 0.5f)
             .ToList();
-        var withOverlay = data.WithOverlay(
-            File.Exists(oc) ? GetOrCreateTexture(oc) : null,
-            File.Exists(on) ? GetOrCreateTexture(on) : null,
-            File.Exists(orm) ? GetOrCreateTexture(orm) : null,
-            rnm.Count(x => x) * 2 > rnm.Count);
+
+        HelixToolkit.SharpDX.Core.TextureModel? Tex(string path) => File.Exists(path) ? GetOrCreateTexture(path) : null;
+        var slotA = new MultilayerOverlaySlot(Tex(files.ColorA), Tex(files.NormalA), Tex(files.RmA), Tex(files.FacingA));
+        var slotB = new MultilayerOverlaySlot(Tex(files.ColorB), Tex(files.NormalB), Tex(files.RmB), Tex(files.FacingB));
+        var withOverlay = data.WithOverlay(slotA, slotB.IsEmpty ? null : slotB, rnm.Count(x => x) * 2 > rnm.Count);
         if (withOverlay == null)
         {
             // no room for the decal overlay in the shader's texture pool: decals stay drawn on their own
@@ -1046,6 +1080,20 @@ public partial class RDTMeshViewModel
         {
             HideDecalTriangles(app, layer);
         }
+    }
+
+    /// <summary>The overlay maps of a surface: slot A, slot B (the other side), facings, a marker.</summary>
+    private sealed record DecalOverlayFiles(
+        string ColorA, string NormalA, string RmA, string FacingA,
+        string ColorB, string NormalB, string RmB, string FacingB, string Done);
+
+    private static DecalOverlayFiles OverlayPaths(string colorPath)
+    {
+        var stem = colorPath[..^"_d.png".Length];
+        return new DecalOverlayFiles(
+            stem + "_d.png", stem + "_n.png", stem + "_rm.png", stem + "fa_d.png",
+            stem + "b_d.png", stem + "b_n.png", stem + "b_rm.png", stem + "fb_d.png",
+            stem + "done_d.png");
     }
 
     /// <summary>Back to the decals' own geometry before the layers are worked out again.</summary>
@@ -1143,6 +1191,9 @@ public partial class RDTMeshViewModel
         public bool Rnm { get; init; }
         public float ConstRoughness { get; init; }
         public float ConstMetalness { get; init; }
+
+        /// <summary>The decal lies on UV the surface also uses elsewhere: the overlay is one-sided.</summary>
+        public bool SharedUv { get; init; }
     }
 
     private sealed class DecalJob
@@ -1183,6 +1234,7 @@ public partial class RDTMeshViewModel
                 Rnm = raw.Values?.TryGetValue("NormalsBlendingMode", out var nbm) == true && ReadFloat(nbm) > 0.5f,
                 ConstRoughness = rough,
                 ConstMetalness = metal,
+                SharedUv = _decalSharedOnOverlay.TryGetValue(layer.Decal, out var so) && so.Contains(layer.Surface),
             });
         }
 
@@ -1493,7 +1545,7 @@ public partial class RDTMeshViewModel
     /// normal, roughness / metalness, each with its coverage in alpha); the shader blends them.
     /// Size: enough for the decals' own texel density (75th percentile), power of two.
     /// </summary>
-    private static void BakeDecalOverlay(DecalJob job, string outColor, string outNormal, string outRm)
+    private static void BakeDecalOverlay(DecalJob job, DecalOverlayFiles files)
     {
         if (job.Layers.Count == 0)
         {
@@ -1504,6 +1556,7 @@ public partial class RDTMeshViewModel
         var anyColor = job.Layers.Any(l => l.DiffuseAlpha > 0f && File.Exists(l.ColorPng));
         var anyNormal = job.Layers.Any(l => l.NormalAlpha > 0f && File.Exists(l.NormalPng));
         var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
+        var oneSided = job.Layers.Any(l => l.SharedUv);
 
         Pixels Blank(byte b, byte g, byte r)
         {
@@ -1518,9 +1571,16 @@ public partial class RDTMeshViewModel
             return p;
         }
 
-        var color = anyColor ? Blank(0, 0, 0) : null;
-        var normal = anyNormal ? Blank(255, 128, 128) : null;
-        var rm = anyRm ? Blank(0, 128, 255) : null;
+        // Slot A, and slot B for texels the other side (facing away) already uses.
+        var slots = new OverlaySlotPixels?[2];
+        OverlaySlotPixels Slot(int i) => slots[i] ??= new OverlaySlotPixels
+        {
+            Color = anyColor ? Blank(0, 0, 0) : null,
+            Normal = anyNormal ? Blank(255, 128, 128) : null,
+            Rm = anyRm ? Blank(0, 128, 255) : null,
+            Facing = oneSided ? Blank(128, 128, 128) : null,
+        };
+        Slot(0);
 
         // "Over" in straight alpha: the later decal on top.
         static void Over(byte[] d, int px, float r, float g, float b, float a)
@@ -1540,6 +1600,35 @@ public partial class RDTMeshViewModel
             d[px + 3] = (byte)Math.Clamp(oa * 255f, 0f, 255f);
         }
 
+        // The slot for a decal texel facing f: A when free or facing the same way, else B the
+        // same way, else A (a third side on the same texel: the later decal wins).
+        int SlotFor(int px, Vector3D f)
+        {
+            if (!oneSided)
+            {
+                return 0;
+            }
+
+            for (var i = 0; i < 2; i++)
+            {
+                var facing = Slot(i).Facing!;
+                if (facing.Data[px + 3] == 0)
+                {
+                    return i;
+                }
+
+                var fx = facing.Data[px + 2] / 255.0 * 2 - 1;
+                var fy = facing.Data[px + 1] / 255.0 * 2 - 1;
+                var fz = facing.Data[px] / 255.0 * 2 - 1;
+                if (fx * f.X + fy * f.Y + fz * f.Z > 0.5)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
+        }
+
         foreach (var layer in job.Layers)
         {
             using var dcb = LoadPng32(layer.ColorPng);
@@ -1556,55 +1645,54 @@ public partial class RDTMeshViewModel
                 int i0 = dIdx[tri * 3], i1 = dIdx[tri * 3 + 1], i2 = dIdx[tri * 3 + 2];
                 double[] d = { duv[i0 * 2], duv[i0 * 2 + 1], duv[i1 * 2], duv[i1 * 2 + 1], duv[i2 * 2], duv[i2 * 2 + 1] };
                 var (m00, m01, m10, m11) = UvFrameRotation(d, suv);
+                var facing = layer.Decal.Facing(tri);
 
-                if (color is { } cTarget && dColor is { } dC && layer.DiffuseAlpha > 0f)
+                RasterizeInto(Slot(0).Facing ?? Slot(0).Color ?? Slot(0).Normal ?? Slot(0).Rm!, suv, d, (px, uv) =>
                 {
-                    RasterizeInto(cTarget, suv, d, (px, uv) =>
+                    Span<float> c4 = stackalloc float[4];
+                    var coverage = 1f;
+                    if (dColor != null)
                     {
-                        Span<float> s4 = stackalloc float[4];
-                        dC.Sample(uv.U, uv.V, s4);
-                        var a = s4[3] * layer.DiffuseAlpha;
-                        if (a > 0f)
-                        {
-                            Over(cTarget.Data, px, s4[2], s4[1], s4[0], a);
-                        }
-                    });
-                }
+                        dColor.Sample(uv.U, uv.V, c4);
+                        coverage = c4[3];
+                    }
 
-                if (normal is { } nTarget && dNormal is { } dN && layer.NormalAlpha > 0f)
-                {
-                    RasterizeInto(nTarget, suv, d, (px, uv) =>
+                    var aColor = dColor != null ? coverage * layer.DiffuseAlpha : 0f;
+                    var aNormal = coverage * layer.NormalAlpha;
+                    var aRm = coverage * layer.RmAlpha;
+                    var aAny = Math.Max(aColor, Math.Max(aNormal, aRm));
+                    if (aAny <= 0f)
                     {
-                        var a = Coverage(dColor, uv) * layer.NormalAlpha;
-                        if (a <= 0f)
-                        {
-                            return;
-                        }
+                        return;
+                    }
 
+                    var slot = Slot(SlotFor(px, facing));
+
+                    if (slot.Facing is { } f)
+                    {
+                        Over(f.Data, px, (float)(facing.X * 0.5 + 0.5), (float)(facing.Y * 0.5 + 0.5), (float)(facing.Z * 0.5 + 0.5), aAny);
+                    }
+
+                    if (slot.Color is { } c && aColor > 0f)
+                    {
+                        Over(c.Data, px, c4[2], c4[1], c4[0], aColor);
+                    }
+
+                    if (slot.Normal is { } n && dNormal != null && aNormal > 0f)
+                    {
                         Span<float> n4 = stackalloc float[4];
-                        dN.Sample(uv.U, uv.V, n4);
+                        dNormal.Sample(uv.U, uv.V, n4);
                         float dx = n4[2] * 2f - 1f, dy = n4[1] * 2f - 1f, dz = n4[0] * 2f - 1f;
                         float rx = m00 * dx - m01 * dy, ry = -m10 * dx + m11 * dy;
                         var len = MathF.Sqrt(rx * rx + ry * ry + dz * dz);
-                        if (len < 1e-5f)
+                        if (len > 1e-5f)
                         {
-                            return;
+                            Over(n.Data, px, rx / len * 0.5f + 0.5f, ry / len * 0.5f + 0.5f, dz / len * 0.5f + 0.5f, aNormal);
                         }
+                    }
 
-                        Over(nTarget.Data, px, rx / len * 0.5f + 0.5f, ry / len * 0.5f + 0.5f, dz / len * 0.5f + 0.5f, a);
-                    });
-                }
-
-                if (rm is { } rmTarget && layer.RmAlpha > 0f)
-                {
-                    RasterizeInto(rmTarget, suv, d, (px, uv) =>
+                    if (slot.Rm is { } rmT && aRm > 0f)
                     {
-                        var a = Coverage(dColor, uv) * layer.RmAlpha;
-                        if (a <= 0f)
-                        {
-                            return;
-                        }
-
                         float r = layer.ConstRoughness, m = layer.ConstMetalness;
                         if (dRm != null)
                         {
@@ -1614,13 +1702,13 @@ public partial class RDTMeshViewModel
                             m = r4[0];
                         }
 
-                        Over(rmTarget.Data, px, 1f, r, m, a);
-                    });
-                }
+                        Over(rmT.Data, px, 1f, r, m, aRm);
+                    }
+                });
             }
         }
 
-        void Save(Pixels? p, string path)
+        void Save(Pixels? p, string path, bool dilate = true)
         {
             if (p == null)
             {
@@ -1628,15 +1716,52 @@ public partial class RDTMeshViewModel
             }
 
             using var bmp = p.ToBitmap();
-            // Colour of the covered pixels into the uncovered ones: filtering at the edge must
-            // not pull in black (or the flat normal) with the coverage.
-            DilateColorIntoTransparent(bmp);
+            if (dilate)
+            {
+                // Colour of the covered pixels into the uncovered ones: filtering at the edge must
+                // not pull in black (or the flat normal) with the coverage.
+                DilateColorIntoTransparent(bmp);
+            }
+
             SavePngAtomic(bmp, path);
         }
 
-        Save(color, outColor);
-        Save(normal, outNormal);
-        Save(rm, outRm);
+        foreach (var path in new[] { files.ColorB, files.NormalB, files.RmB, files.FacingB, files.FacingA })
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch
+            {
+                // not there
+            }
+        }
+
+        var a = slots[0]!;
+        Save(a.Color, files.ColorA);
+        Save(a.Normal, files.NormalA);
+        Save(a.Rm, files.RmA);
+        Save(a.Facing, files.FacingA);
+        if (slots[1] is { } b)
+        {
+            Save(b.Color, files.ColorB);
+            Save(b.Normal, files.NormalB);
+            Save(b.Rm, files.RmB);
+            Save(b.Facing, files.FacingB);
+        }
+
+        // Written last: the overlay is complete.
+        using var marker = new Bitmap(1, 1, PixelFormat.Format32bppArgb);
+        SavePngAtomic(marker, files.Done);
+    }
+
+    private sealed class OverlaySlotPixels
+    {
+        public Pixels? Color;
+        public Pixels? Normal;
+        public Pixels? Rm;
+        public Pixels? Facing;
     }
 
     private static int DecalOverlaySize(DecalJob job)
