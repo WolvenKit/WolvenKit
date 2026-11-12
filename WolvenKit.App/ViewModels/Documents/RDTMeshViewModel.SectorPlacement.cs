@@ -419,10 +419,8 @@ public partial class RDTMeshViewModel
         var geometry = mb.ToMeshGeometry3D();
 
         var material = SetupPBRMaterial("DefaultMaterial");
-        byte red = node.Color?.Red ?? (byte)0, green = node.Color?.Green ?? (byte)0, blue = node.Color?.Blue ?? (byte)0;
-        material.AlbedoColor = red == 0 && green == 0 && blue == 0
-            ? new SharpDX.Color4(1f, 1f, 1f, 0.1f)
-            : new SharpDX.Color4(red / 255f, green / 255f, blue / 255f, 0.15f);
+        var (areaColor, areaKind) = AreaShapeLook(node);
+        material.AlbedoColor = areaColor;
 
         var group = new MeshComponent()
         {
@@ -440,6 +438,7 @@ public partial class RDTMeshViewModel
             {
                 Name = name + "_volume",
                 Text = name + "_volume",
+                MaterialName = areaKind, // Material column of the tree: what kind of area this is
                 Geometry = geometry,
                 Material = material,
                 IsTransparent = true,
@@ -456,6 +455,51 @@ public partial class RDTMeshViewModel
         }
 
         groups.Add(group);
+    }
+
+    /// <summary>
+    /// Area colours by node type (the Blender add-on's palette), so the colour tells the kind of area:
+    /// the type itself, else its nearest listed base type (other triggers are trigger orange).
+    /// </summary>
+    private static readonly (Type Type, SharpDX.Color4 Color, string Kind)[] s_areaPalette =
+    [
+        (typeof(gameKillTriggerNode), new SharpDX.Color4(1f, 0f, 0f, 0.15f), "Area: kill trigger"),
+        (typeof(gameWorldBoundaryNode), new SharpDX.Color4(1f, 0f, 0.4f, 0.15f), "Area: world boundary"),
+        (typeof(worldLightChannelVolumeNode), new SharpDX.Color4(0.75f, 0.2f, 1f, 0.15f), "Area: light channel"),
+        (typeof(worldGISpaceNode), new SharpDX.Color4(0.2f, 1f, 0.65f, 0.15f), "Area: GI space"),
+        (typeof(worldAmbientAreaNode), new SharpDX.Color4(0.15f, 0.55f, 1f, 0.15f), "Area: ambient (sound)"),
+        (typeof(worldInteriorAreaNode), new SharpDX.Color4(0.2f, 0.65f, 1f, 0.15f), "Area: interior"),
+        (typeof(worldTriggerAreaNode), new SharpDX.Color4(1f, 0.35f, 0.05f, 0.15f), "Area: trigger"),
+    ];
+
+    /// <summary>
+    /// Colour and label of an area node: by type (see s_areaPalette); for other areas the colour
+    /// the node carries for the editor, else a faint white.
+    /// </summary>
+    private static (SharpDX.Color4 Color, string Kind) AreaShapeLook(worldAreaShapeNode node)
+    {
+        // exact types first, then base types (the order of the palette)
+        foreach (var entry in s_areaPalette)
+        {
+            if (node.GetType() == entry.Type)
+            {
+                return (entry.Color, entry.Kind);
+            }
+        }
+
+        foreach (var entry in s_areaPalette)
+        {
+            if (entry.Type.IsInstanceOfType(node))
+            {
+                return (entry.Color, entry.Kind);
+            }
+        }
+
+        var kind = "Area: " + node.GetType().Name;
+        byte red = node.Color?.Red ?? (byte)0, green = node.Color?.Green ?? (byte)0, blue = node.Color?.Blue ?? (byte)0;
+        return red == 0 && green == 0 && blue == 0
+            ? (new SharpDX.Color4(1f, 1f, 1f, 0.1f), kind)
+            : (new SharpDX.Color4(red / 255f, green / 255f, blue / 255f, 0.15f), kind);
     }
 
     private static SharpDX.Matrix ToSharpDXMatrix(Matrix3D m) => new(
