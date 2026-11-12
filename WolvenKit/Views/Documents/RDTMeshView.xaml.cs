@@ -34,6 +34,10 @@ namespace WolvenKit.Views.Documents
                     // The view only makes sure one exists; it never disposes it.
                     vm.EnsureEffectsManager();
 
+                    // Sectors hold a lot of transparent geometry: depth peeling multiplies the
+                    // draw calls (8 passes) and the UI thread has no time left for the mouse.
+                    SetOitMode(IsSectorPreview(vm) ? "SinglePassWeighted" : "DepthPeeling");
+
                     // Subscribe once per activation and unsubscribe on deactivation,
                     // otherwise every tab switch adds another handler.
                     hxViewport.MouseDown3D += vm.MouseDown3D;
@@ -57,6 +61,18 @@ namespace WolvenKit.Views.Documents
                         view => view.hxContentVisual.ItemsSource)
                     .DisposeWith(disposables);
             });
+        }
+
+        private static bool IsSectorPreview(RDTMeshViewModel vm) =>
+            vm.Header is WolvenKit.App.Models.MeshViewHeaders.SectorPreview or WolvenKit.App.Models.MeshViewHeaders.AllSectorPreview;
+
+        private void SetOitMode(string mode)
+        {
+            var property = HelixToolkit.Wpf.SharpDX.Viewport3DX.OITRenderModeProperty;
+            if (Enum.TryParse(property.PropertyType, mode, out var value))
+            {
+                hxViewport.SetCurrentValue(property, value);
+            }
         }
 
         private static void ResetModifierFlags(RDTMeshViewModel vm)
@@ -571,6 +587,7 @@ namespace WolvenKit.Views.Documents
             var showAxes = hxViewport.ShowCoordinateSystem;
             var showViewCube = hxViewport.ShowViewCube;
             var dynamicReflection = hxReflection.IsDynamicScene;
+            var oitMode = hxViewport.GetValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.OITRenderModeProperty);
             var width = hxViewport.Width;
             var height = hxViewport.Height;
             System.IO.MemoryStream overBlack = null;
@@ -592,6 +609,7 @@ namespace WolvenKit.Views.Documents
 
                 hxViewport.SetCurrentValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.ShowCoordinateSystemProperty, false);
                 hxViewport.SetCurrentValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.ShowViewCubeProperty, false);
+                SetOitMode("DepthPeeling"); // saved images keep the exact transparency
                 (await RenderOnceAsync())?.Dispose(); // reflections settle on the usual background
                 hxReflection.SetCurrentValue(HelixToolkit.Wpf.SharpDX.DynamicReflectionMap3D.IsDynamicSceneProperty, false);
 
@@ -614,6 +632,7 @@ namespace WolvenKit.Views.Documents
                 hxViewport.SetCurrentValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.BackgroundColorProperty, background);
                 hxViewport.SetCurrentValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.ShowCoordinateSystemProperty, showAxes);
                 hxViewport.SetCurrentValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.ShowViewCubeProperty, showViewCube);
+                hxViewport.SetCurrentValue(HelixToolkit.Wpf.SharpDX.Viewport3DX.OITRenderModeProperty, oitMode);
                 hxReflection.SetCurrentValue(HelixToolkit.Wpf.SharpDX.DynamicReflectionMap3D.IsDynamicSceneProperty, dynamicReflection);
             }
 
