@@ -9156,6 +9156,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                     if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
                     {
+                        // One row for the node, like mesh nodes: a click on the entity in the
+                        // viewport selects it in the tree, selecting it highlights the entity.
+                        var row = new MeshComponent()
+                        {
+                            Name = name,
+                            Text = name,
+                            WorldNodeIndex = $"{handleIndex}",
+                            WorldNodeType = typeStr,
+                            WorldNodeDataIndices = indexStr,
+                            DepotPath = wen.EntityTemplate.DepotPath
+                        };
+
                         // every nodeData entry is one placement of the entity
                         foreach (var transform in transforms)
                         {
@@ -9170,7 +9182,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             entity.Transform = new MatrixTransform3D(SectorNodeMatrix(transform));
                             RegisterSectorPlacement(entity, buffer.IndexOf(transform));
 
-                            groups.Add(entity);
+                            row.Children.Add(entity);
+                        }
+
+                        if (row.Children.Count > 0)
+                        {
+                            if (row.WorldNodeIndex == SelectedNodeIndex)
+                            {
+                                SelectedItem = row;
+                            }
+
+                            groups.Add(row);
                         }
                     }
                 }
@@ -9269,7 +9291,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         });
     }
 
-    private void UpdateChildrenSubmesh(MeshComponent? mesh, Action<SubmeshComponent>? submeshUpdater)
+    private void UpdateChildrenSubmesh(GroupModel3D? mesh, Action<SubmeshComponent>? submeshUpdater)
     {
         if (mesh == null)
         {
@@ -9280,20 +9302,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             switch (child)
             {
-                case MeshComponent childMesh:
-                    UpdateChildrenSubmesh(childMesh, submeshUpdater);
-                    break;
                 case SubmeshComponent childSubMesh:
-                {
-                    if (submeshUpdater != null)
-                    {
-                        submeshUpdater(childSubMesh);
-                    }
-
+                    submeshUpdater?.Invoke(childSubMesh);
                     break;
-                }
-                default:
-                    Parent?.GetLoggerService().Warning("Child is a " + child.GetType());
+                // node groups, placements, and the component / rig / bone groups of entities
+                case GroupModel3D childGroup:
+                    UpdateChildrenSubmesh(childGroup, submeshUpdater);
                     break;
             }
         }
@@ -9302,7 +9316,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
     {
 
-        if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+        if (Header == MeshViewHeaders.SectorPreview && SectorNodeRowOf(args.HitTestResult.ModelHit) is { } mesh)
         {
             if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
             {
@@ -9317,6 +9331,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+
+    /// <summary>
+    /// The node row (a direct child of the sector group) an object hit in the viewport belongs to:
+    /// meshes and their instances, entities (any depth of components, rigs and bones), area volumes.
+    /// </summary>
+    private static MeshComponent? SectorNodeRowOf(object? hit)
+    {
+        var current = hit as DependencyObject;
+        for (var depth = 0; current != null && depth < 64; depth++)
+        {
+            if (current is MeshComponent { WorldNodeIndex.Length: > 0 } row && row.Parent is SectorGroup)
+            {
+                return row;
+            }
+
+            current = (current as FrameworkContentElement)?.Parent ?? LogicalTreeHelper.GetParent(current);
+        }
+
+        return null;
+    }
 
     #endregion
 

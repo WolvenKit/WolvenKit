@@ -435,8 +435,11 @@ public partial class RDTMeshViewModel
 
         foreach (var info in transforms)
         {
-            var volume = new MeshGeometryModel3D()
+            // a submesh, so that selecting the node highlights it like a mesh
+            var volume = new SubmeshComponent()
             {
+                Name = name + "_volume",
+                Text = name + "_volume",
                 Geometry = geometry,
                 Material = material,
                 IsTransparent = true,
@@ -445,6 +448,11 @@ public partial class RDTMeshViewModel
             };
             group.Children.Add(volume);
             RegisterSectorPlacement(volume, buffer.IndexOf(info));
+        }
+
+        if (group.WorldNodeIndex == SelectedNodeIndex)
+        {
+            SelectedItem = group;
         }
 
         groups.Add(group);
