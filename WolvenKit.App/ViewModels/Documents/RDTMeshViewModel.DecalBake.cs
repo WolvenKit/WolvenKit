@@ -11,6 +11,7 @@ using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf.SharpDX;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents.Multilayer;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -56,6 +57,9 @@ public partial class RDTMeshViewModel
         }
     }
     private PBRMaterial? _hiddenDecalMaterial;
+
+    // surface material -> its copy with the decal overlay (for the shader debug views)
+    private readonly Dictionary<string, MultilayerPBRMaterial> _decalOverlayMaterials = new();
 
     // decal submesh -> (surface submesh -> its triangles on that surface): geometry only,
     // so kept between applies.
@@ -109,12 +113,25 @@ public partial class RDTMeshViewModel
             {
                 var surfaceName = group.Key;
                 var decals = group.ToList();
-                var key = DecalCompositeKey(surfaceName, decals);
-                var (cd, cn, crm) = DecalCompositePaths(surfaceName, key);
+                var overlay = IsOverlaySurface(decals[0].Surface);
+                var key = DecalCompositeKey(surfaceName, decals) + (overlay ? "|ov" : "");
+                var (cd, cn, crm) = DecalCompositePaths(surfaceName, key, overlay);
 
-                if (File.Exists(cd))
+                void Use()
                 {
-                    UseDecalComposite(app, surfaceName, decals, cd, cn, crm);
+                    if (overlay)
+                    {
+                        UseDecalOverlay(app, surfaceName, decals, cd, cn, crm);
+                    }
+                    else
+                    {
+                        UseDecalComposite(app, surfaceName, decals, cd, cn, crm);
+                    }
+                }
+
+                if (File.Exists(cd) || (overlay && (File.Exists(cn) || File.Exists(crm))))
+                {
+                    Use();
                     continue;
                 }
 
@@ -132,9 +149,18 @@ public partial class RDTMeshViewModel
                 {
                     try
                     {
-                        BakeDecalComposite(job, cd, cn, crm);
-                        Parent?.GetLoggerService()?.Debug(
-                            $"[Decals] {job.Layers.Count} decal(s) baked into '{SubmeshComponent.StripMeshPrefix(surfaceName)}'");
+                        if (overlay)
+                        {
+                            BakeDecalOverlay(job, cd, cn, crm);
+                        }
+                        else
+                        {
+                            BakeDecalComposite(job, cd, cn, crm);
+                        }
+
+                        Parent?.GetLoggerService()?.Debug(overlay
+                            ? $"[Decals] {job.Layers.Count} decal(s) drawn into the overlay of multilayer '{SubmeshComponent.StripMeshPrefix(surfaceName)}'"
+                            : $"[Decals] {job.Layers.Count} decal(s) baked into '{SubmeshComponent.StripMeshPrefix(surfaceName)}'");
                     }
                     catch (Exception ex)
                     {
@@ -149,9 +175,10 @@ public partial class RDTMeshViewModel
                     {
                         context.Post(_ =>
                         {
-                            if (!_disposed && BlendDecalsIntoSurfaces && SelectedAppearance == app && File.Exists(cd))
+                            if (!_disposed && BlendDecalsIntoSurfaces && SelectedAppearance == app &&
+                                (File.Exists(cd) || File.Exists(cn) || File.Exists(crm)))
                             {
-                                UseDecalComposite(app, surfaceName, decals, cd, cn, crm);
+                                Use();
                             }
                         }, null);
                     }
@@ -389,7 +416,13 @@ public partial class RDTMeshViewModel
         // Not sm.IsTransparent: skin albedo PNGs often carry an alpha channel, which makes the
         // submesh "transparent" for drawing although it is the opaque surface decals lie on.
         var name = sm.MaterialName!;
-        if (_multilayerGpuData.ContainsKey(name) || sm.Material is not PBRMaterial)
+        if (_multilayerGpuData.ContainsKey(name))
+        {
+            // Multilayer drawn by the shader: decals go to an overlay the shader blends in.
+            return IsOverlaySurface(sm);
+        }
+
+        if (sm.Material is not PBRMaterial)
         {
             return false;
         }
@@ -404,6 +437,11 @@ public partial class RDTMeshViewModel
         var (bd, _, _) = GetMaterialFilePathsFromCache(name);
         return File.Exists(bd);
     }
+
+    /// <summary>A multilayer surface drawn by the live shader (decals become its overlay).</summary>
+    private bool IsOverlaySurface(SubmeshComponent sm) =>
+        UseMultilayerShader && MultilayerShader.IsAvailable &&
+        sm.Material is MultilayerPBRMaterial { MultilayerData: not null };
 
     private static float DecalAlpha(Material raw, string key) =>
         // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS).
@@ -804,11 +842,11 @@ public partial class RDTMeshViewModel
         return surfaceName + "|" + Convert.ToHexString(bytes)[..10];
     }
 
-    private static (string D, string N, string RM) DecalCompositePaths(string surfaceName, string key)
+    private static (string D, string N, string RM) DecalCompositePaths(string surfaceName, string key, bool overlay = false)
     {
-        var hash = key[(key.LastIndexOf('|') + 1)..];
+        var hash = key.Split('|')[1];
         var dir = ISettingsManager.GetTemp_OBJPath();
-        var stem = Path.Combine(dir, surfaceName + "__decals_" + hash);
+        var stem = Path.Combine(dir, surfaceName + (overlay ? "__decaloverlay_" : "__decals_") + hash);
         return (stem + "_d.png", stem + "_n.png", stem + "_rm.png");
     }
 
@@ -852,9 +890,54 @@ public partial class RDTMeshViewModel
         }
     }
 
+    /// <summary>
+    /// A multilayer surface with its decal overlay: a copy of its material whose shader data
+    /// carries the overlay maps (the material of other uses stays as it is).
+    /// </summary>
+    private void UseDecalOverlay(Appearance app, string surfaceName, List<DecalLayer> decals, string oc, string on, string orm)
+    {
+        var meshes = app.Models.SelectMany(m => m.Meshes).ToList();
+        if (meshes.FirstOrDefault(sm => sm.MaterialName == surfaceName)?.Material is not MultilayerPBRMaterial { MultilayerData: { } data } original)
+        {
+            return;
+        }
+
+        var rnm = decals
+            .Where(d => TryGetRawMaterial(d.DecalName, out var raw) && raw != null && DecalAlpha(raw, "NormalAlpha") > 0f)
+            .Select(d => TryGetRawMaterial(d.DecalName, out var raw) && raw?.Values?.TryGetValue("NormalsBlendingMode", out var nbm) == true && ReadFloat(nbm) > 0.5f)
+            .ToList();
+        var withOverlay = data.WithOverlay(
+            File.Exists(oc) ? GetOrCreateTexture(oc) : null,
+            File.Exists(on) ? GetOrCreateTexture(on) : null,
+            File.Exists(orm) ? GetOrCreateTexture(orm) : null,
+            rnm.Count(x => x) * 2 > rnm.Count);
+        if (withOverlay == null)
+        {
+            Parent?.GetLoggerService()?.Debug(
+                $"[Decals] '{SubmeshComponent.StripMeshPrefix(surfaceName)}': no room for the decal overlay in the shader's texture pool; decals drawn on their own");
+            return;
+        }
+
+        var copy = (MultilayerPBRMaterial)original.CloneMaterial();
+        copy.MultilayerData = withOverlay;
+        copy.DebugMode = original.DebugMode;
+        copy.SoloLayer = original.SoloLayer;
+        _decalOverlayMaterials[surfaceName] = copy;
+        foreach (var sm in meshes.Where(sm => sm.MaterialName == surfaceName))
+        {
+            sm.Material = copy;
+        }
+
+        foreach (var layer in decals)
+        {
+            HideDecalTriangles(app, layer);
+        }
+    }
+
     /// <summary>Back to the decals' own geometry before the layers are worked out again.</summary>
     private void RestoreDecals(Appearance app)
     {
+        _decalOverlayMaterials.Clear();
         foreach (var sm in app.Models.SelectMany(m => m.Meshes))
         {
             if (_decalHidden.TryGetValue(sm, out var state))
@@ -1205,7 +1288,8 @@ public partial class RDTMeshViewModel
                         Span<float> n4 = stackalloc float[4];
                         dN.Sample(uv.U, uv.V, n4);
                         float dx = n4[2] * 2f - 1f, dy = n4[1] * 2f - 1f, dz = n4[0] * 2f - 1f;
-                        float rx = m00 * dx + m01 * dy, ry = m10 * dx + m11 * dy;
+                        // PNG normals are Y up, M works in UV space (V down): flip, rotate, flip back.
+                        float rx = m00 * dx - m01 * dy, ry = -m10 * dx + m11 * dy;
                         float bx = nTarget.Data[px + 2] / 255f * 2f - 1f;
                         float by = nTarget.Data[px + 1] / 255f * 2f - 1f;
                         float bz = nTarget.Data[px] / 255f * 2f - 1f;
@@ -1288,6 +1372,205 @@ public partial class RDTMeshViewModel
     }
 
     private const int DecalCompositeMaxSize = 4096;
+    private const int DecalOverlayMinSize = 256;
+
+    /// <summary>
+    /// Decals of a multilayer surface drawn into transparent maps in its UV space (colour,
+    /// normal, roughness / metalness, each with its coverage in alpha); the shader blends them.
+    /// Size: enough for the decals' own texel density (75th percentile), power of two.
+    /// </summary>
+    private static void BakeDecalOverlay(DecalJob job, string outColor, string outNormal, string outRm)
+    {
+        if (job.Layers.Count == 0)
+        {
+            return;
+        }
+
+        var size = DecalOverlaySize(job);
+        var anyColor = job.Layers.Any(l => l.DiffuseAlpha > 0f && File.Exists(l.ColorPng));
+        var anyNormal = job.Layers.Any(l => l.NormalAlpha > 0f && File.Exists(l.NormalPng));
+        var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
+
+        Pixels Blank(byte b, byte g, byte r)
+        {
+            var p = new Pixels { W = size, H = size, Data = new byte[size * size * 4] };
+            for (var i = 0; i < p.Data.Length; i += 4)
+            {
+                p.Data[i] = b;
+                p.Data[i + 1] = g;
+                p.Data[i + 2] = r;
+            }
+
+            return p;
+        }
+
+        var color = anyColor ? Blank(0, 0, 0) : null;
+        var normal = anyNormal ? Blank(255, 128, 128) : null;
+        var rm = anyRm ? Blank(0, 128, 255) : null;
+
+        // "Over" in straight alpha: the later decal on top.
+        static void Over(byte[] d, int px, float r, float g, float b, float a)
+        {
+            var da = d[px + 3] / 255f;
+            var oa = a + da * (1 - a);
+            if (oa <= 0f)
+            {
+                return;
+            }
+
+            var keep = da * (1 - a) / oa;
+            var take = a / oa;
+            d[px + 2] = (byte)Math.Clamp(r * 255f * take + d[px + 2] * keep, 0f, 255f);
+            d[px + 1] = (byte)Math.Clamp(g * 255f * take + d[px + 1] * keep, 0f, 255f);
+            d[px] = (byte)Math.Clamp(b * 255f * take + d[px] * keep, 0f, 255f);
+            d[px + 3] = (byte)Math.Clamp(oa * 255f, 0f, 255f);
+        }
+
+        foreach (var layer in job.Layers)
+        {
+            using var dcb = LoadPng32(layer.ColorPng);
+            var dColor = Pixels.From(dcb);
+            using var dnb = layer.NormalAlpha > 0f ? LoadPng32(layer.NormalPng) : null;
+            var dNormal = Pixels.From(dnb);
+            using var drb = layer.RmAlpha > 0f ? LoadPng32(layer.RmPng) : null;
+            var dRm = Pixels.From(drb);
+
+            foreach (var (tri, suv) in layer.Triangles)
+            {
+                var dIdx = layer.Decal.Indices;
+                var duv = layer.Decal.Uvs;
+                int i0 = dIdx[tri * 3], i1 = dIdx[tri * 3 + 1], i2 = dIdx[tri * 3 + 2];
+                double[] d = { duv[i0 * 2], duv[i0 * 2 + 1], duv[i1 * 2], duv[i1 * 2 + 1], duv[i2 * 2], duv[i2 * 2 + 1] };
+                var (m00, m01, m10, m11) = UvFrameRotation(d, suv);
+
+                if (color is { } cTarget && dColor is { } dC && layer.DiffuseAlpha > 0f)
+                {
+                    RasterizeInto(cTarget, suv, d, (px, uv) =>
+                    {
+                        Span<float> s4 = stackalloc float[4];
+                        dC.Sample(uv.U, uv.V, s4);
+                        var a = s4[3] * layer.DiffuseAlpha;
+                        if (a > 0f)
+                        {
+                            Over(cTarget.Data, px, s4[2], s4[1], s4[0], a);
+                        }
+                    });
+                }
+
+                if (normal is { } nTarget && dNormal is { } dN && layer.NormalAlpha > 0f)
+                {
+                    RasterizeInto(nTarget, suv, d, (px, uv) =>
+                    {
+                        var a = Coverage(dColor, uv) * layer.NormalAlpha;
+                        if (a <= 0f)
+                        {
+                            return;
+                        }
+
+                        Span<float> n4 = stackalloc float[4];
+                        dN.Sample(uv.U, uv.V, n4);
+                        float dx = n4[2] * 2f - 1f, dy = n4[1] * 2f - 1f, dz = n4[0] * 2f - 1f;
+                        float rx = m00 * dx - m01 * dy, ry = -m10 * dx + m11 * dy;
+                        var len = MathF.Sqrt(rx * rx + ry * ry + dz * dz);
+                        if (len < 1e-5f)
+                        {
+                            return;
+                        }
+
+                        Over(nTarget.Data, px, rx / len * 0.5f + 0.5f, ry / len * 0.5f + 0.5f, dz / len * 0.5f + 0.5f, a);
+                    });
+                }
+
+                if (rm is { } rmTarget && layer.RmAlpha > 0f)
+                {
+                    RasterizeInto(rmTarget, suv, d, (px, uv) =>
+                    {
+                        var a = Coverage(dColor, uv) * layer.RmAlpha;
+                        if (a <= 0f)
+                        {
+                            return;
+                        }
+
+                        float r = layer.ConstRoughness, m = layer.ConstMetalness;
+                        if (dRm != null)
+                        {
+                            Span<float> r4 = stackalloc float[4];
+                            dRm.Sample(uv.U, uv.V, r4);
+                            r = r4[1];
+                            m = r4[0];
+                        }
+
+                        Over(rmTarget.Data, px, 1f, r, m, a);
+                    });
+                }
+            }
+        }
+
+        void Save(Pixels? p, string path)
+        {
+            if (p == null)
+            {
+                return;
+            }
+
+            using var bmp = p.ToBitmap();
+            // Colour of the covered pixels into the uncovered ones: filtering at the edge must
+            // not pull in black (or the flat normal) with the coverage.
+            DilateColorIntoTransparent(bmp);
+            SavePngAtomic(bmp, path);
+        }
+
+        Save(color, outColor);
+        Save(normal, outNormal);
+        Save(rm, outRm);
+    }
+
+    private static int DecalOverlaySize(DecalJob job)
+    {
+        var ratios = new List<double>();
+        foreach (var layer in job.Layers)
+        {
+            var (dw, dh) = PngSize(layer.ColorPng);
+            if (dw == 0)
+            {
+                (dw, dh) = PngSize(layer.NormalPng);
+            }
+
+            if (dw == 0)
+            {
+                dw = dh = 512;
+            }
+
+            foreach (var (tri, suv) in layer.Triangles)
+            {
+                var idx = layer.Decal.Indices;
+                var uv = layer.Decal.Uvs;
+                int a = idx[tri * 3], b = idx[tri * 3 + 1], c = idx[tri * 3 + 2];
+                var decalPixels = Math.Abs((uv[b * 2] - uv[a * 2]) * (uv[c * 2 + 1] - uv[a * 2 + 1]) -
+                                           (uv[c * 2] - uv[a * 2]) * (uv[b * 2 + 1] - uv[a * 2 + 1])) * dw * dh;
+                var surfaceUv = Math.Abs((suv[2] - suv[0]) * (suv[5] - suv[1]) - (suv[4] - suv[0]) * (suv[3] - suv[1]));
+                if (surfaceUv > 1e-12 && decalPixels > 1e-6)
+                {
+                    ratios.Add(Math.Sqrt(decalPixels / surfaceUv));
+                }
+            }
+        }
+
+        if (ratios.Count == 0)
+        {
+            return 1024;
+        }
+
+        ratios.Sort();
+        var needed = ratios[(int)(ratios.Count * 0.75)];
+        var size = DecalOverlayMinSize;
+        while (size < needed && size < DecalCompositeMaxSize)
+        {
+            size *= 2;
+        }
+
+        return size;
+    }
 
     /// <summary>
     /// How much larger than the surface texture the composite must be to keep the decals'
