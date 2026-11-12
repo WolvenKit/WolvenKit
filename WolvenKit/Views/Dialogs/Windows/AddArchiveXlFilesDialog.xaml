@@ -35,7 +35,7 @@
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
                 <Style TargetType="{x:Type ComboBoxItem}">
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                     <Setter Property="OverridesDefaultStyle" Value="true" />
                     <Setter Property="SnapsToDevicePixels" Value="true" />
                     <Setter Property="Template">
@@ -79,9 +79,9 @@
                     x:Key="ComboboxStyle"
                     BasedOn="{StaticResource {x:Type ComboBox}}"
                     TargetType="ComboBox">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                    <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
                     <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                     <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyBottom}" />
                     <Setter Property="MaxWidth" Value="{DynamicResource WolvenKitDialogWidth}" />
                 </Style>
@@ -356,11 +356,11 @@
                         <Grid.Resources>
                             <DataTemplate x:Key="SelectedTagTemplate">
                                 <Border
-                                    Background="{StaticResource ContentBackgroundAlt2}"
+                                    Background="{DynamicResource ContentBackgroundAlt2}"
                                     CornerRadius="6">
                                     <TextBlock
                                         Width="{DynamicResource WolvenKitLabelWidthLarge}"
-                                        Foreground="{StaticResource ForegroundColor}"
+                                        Foreground="{DynamicResource ForegroundColor}"
                                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                         Text="{Binding}"
                                         TextTrimming="CharacterEllipsis"
@@ -533,8 +533,8 @@
                                 Grid.Column="1"
                                 Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                                 VerticalContentAlignment="Top"
-                                Background="{StaticResource ContentBackgroundAlt2}"
-                                BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                                Background="{DynamicResource ContentBackgroundAlt2}"
+                                BorderBrush="{DynamicResource ForegroundColor_Grey_Dark}"
                                 BorderThickness="1"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 helpers:TextBoxBehavior.TripleClickSelectAll="True"
@@ -604,8 +604,8 @@
                                 x:Name="SecondaryItemVariantsTextBox"
                                 Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                                 VerticalContentAlignment="Top"
-                                Background="{StaticResource ContentBackgroundAlt2}"
-                                BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                                Background="{DynamicResource ContentBackgroundAlt2}"
+                                BorderBrush="{DynamicResource ForegroundColor_Grey_Dark}"
                                 BorderThickness="1"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 helpers:TextBoxBehavior.TripleClickSelectAll="True"
@@ -689,8 +689,8 @@
                             Grid.Column="1"
                             Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                             VerticalContentAlignment="Top"
-                            Background="{StaticResource ContentBackgroundAlt2}"
-                            BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                            Background="{DynamicResource ContentBackgroundAlt2}"
+                            BorderBrush="{DynamicResource ForegroundColor_Grey_Dark}"
                             BorderThickness="1"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Visibility="{Binding EnableToggles,

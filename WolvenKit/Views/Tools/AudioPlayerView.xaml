@@ -69,7 +69,7 @@
                         IconPack="Material"
                         Kind="Play"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </Button>
 
                 <Button
@@ -84,7 +84,7 @@
                         IconPack="Material"
                         Kind="Pause"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitCyan}" />
+                        Foreground="{DynamicResource WolvenKitCyan}" />
                 </Button>
 
                 <Button
@@ -99,7 +99,7 @@
                         IconPack="Material"
                         Kind="Stop"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </Button>
 
                 <ComboBox

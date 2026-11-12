@@ -1,0 +1,29 @@
+{
+  "formatVersion": 1,
+  "name": "High Contrast",
+  "author": "WolvenKit",
+  "description": "Black surfaces, white text and borders, yellow accent.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#FFEA0A",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#000000",
+    "ContentBackgroundAlt": "#000000",
+    "ContentBackgroundAlt2": "#0A0A0A",
+    "ContentBackgroundAlt3": "#141414",
+    "ContentBackgroundAlt4": "#1E1E1E",
+    "ContentBackgroundAlt5": "#282828",
+    "BorderAlt": "#BFBFBF",
+    "ContentForeground": "#FFFFFF",
+    "ForegroundColor": "#FFFFFF",
+    "ForegroundColor_Grey_Light": "#F0F0F0",
+    "ForegroundColor_Grey1": "#E0E0E0",
+    "ForegroundColor_Grey_Dark": "#C8C8C8",
+    "ForegroundColor_Grey_Inactive": "#9A9A9A",
+    "BackgroundColor_Control": "#000000",
+    "BackgroundColor_Frame_Active": "#1A1A1A",
+    "BackgroundColor_Frame_Background": "#000000",
+    "WolvenKitBorderColor": "#FFFFFF",
+    "WolvenKitFrameColor": "#FFFFFF"
+  }
+}
