@@ -143,7 +143,7 @@ public partial class RDTMeshViewModel
     /// the camera, so back and side views are lit like the front; Flat = ambient only, for
     /// checking colours and textures without highlights.
     /// </summary>
-    public IReadOnlyList<string> PreviewLightingPresets { get; } = ["Default", "Icon (soft)", "Icon (follow camera)", "Flat"];
+    public IReadOnlyList<string> PreviewLightingPresets { get; } = ["Default", "Icon", "Icon (soft)", "Icon (follow camera)", "Flat"];
 
     private static string s_previewLighting = "Default";
 
@@ -155,6 +155,7 @@ public partial class RDTMeshViewModel
             if (SetProperty(ref s_previewLighting, value))
             {
                 OnPropertyChanged(nameof(UseWorkLighting));
+                OnPropertyChanged(nameof(UseIconContrastLighting));
                 OnPropertyChanged(nameof(UseIconLighting));
                 OnPropertyChanged(nameof(UseFollowLighting));
                 OnPropertyChanged(nameof(UseFlatLighting));
@@ -165,6 +166,7 @@ public partial class RDTMeshViewModel
     // Sector / block previews have no Camera section: they keep the default lights even when
     // another preview tab picked a preset (the preset is shared by all tabs).
     public bool UseWorkLighting => !IsObjectPreview || PreviewLighting == "Default";
+    public bool UseIconContrastLighting => IsObjectPreview && PreviewLighting == "Icon";
     public bool UseIconLighting => IsObjectPreview && PreviewLighting == "Icon (soft)";
     public bool UseFollowLighting => IsObjectPreview && PreviewLighting == "Icon (follow camera)";
     public bool UseFlatLighting => IsObjectPreview && PreviewLighting == "Flat";

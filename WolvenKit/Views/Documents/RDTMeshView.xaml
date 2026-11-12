@@ -138,6 +138,13 @@
                 Direction="-1, 0, 0"
                 Color="White" />
 
+            <!-- Icon: like the game's inventory icons - one strong key from the viewer's upper left, little fill and ambient
+                 so the shadows stay dark, a bright rim from behind for the edge highlights on metal -->
+            <hx:AmbientLight3D IsRendering="{Binding UseIconContrastLighting}" Color="#121212" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconContrastLighting}" Direction="-0.5, -0.7, 1" Color="#FFFFFF" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconContrastLighting}" Direction="1, -0.2, 0.6" Color="#2A2A2A" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconContrastLighting}" Direction="0, -0.5, -1" Color="#8C8C8C" />
+            <hx:DirectionalLight3D IsRendering="{Binding UseIconContrastLighting}" Direction="0, -1, 0" Color="#2E2E2E" />
             <!-- Lighting presets (Camera section). Icon (soft): soft key from the viewer's upper left when looking at the
                  front (-Z), weaker fill from the right, rim from behind, a little from above and ambient -->
             <hx:AmbientLight3D IsRendering="{Binding UseIconLighting}" Color="#383838" />
@@ -145,12 +152,12 @@
             <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="1, -0.2, 0.6" Color="#6A6A6A" />
             <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="0, -0.5, -1" Color="#8A8A8A" />
             <hx:DirectionalLight3D IsRendering="{Binding UseIconLighting}" Direction="0, -1, 0" Color="#505050" />
-            <!-- Icon (follow camera): same set, directions set from the camera in code-behind -->
-            <hx:AmbientLight3D IsRendering="{Binding UseFollowLighting}" Color="#383838" />
-            <hx:DirectionalLight3D Tag="FollowKey" IsRendering="{Binding UseFollowLighting}" Direction="-0.5, -0.6, 1" Color="#E0E0E0" />
-            <hx:DirectionalLight3D Tag="FollowFill" IsRendering="{Binding UseFollowLighting}" Direction="1, -0.2, 0.6" Color="#6A6A6A" />
-            <hx:DirectionalLight3D Tag="FollowRim" IsRendering="{Binding UseFollowLighting}" Direction="0, -0.5, -1" Color="#8A8A8A" />
-            <hx:DirectionalLight3D Tag="FollowTop" IsRendering="{Binding UseFollowLighting}" Direction="0, -1, 0" Color="#505050" />
+            <!-- Icon (follow camera): the Icon set, directions set from the camera in code-behind -->
+            <hx:AmbientLight3D IsRendering="{Binding UseFollowLighting}" Color="#121212" />
+            <hx:DirectionalLight3D Tag="FollowKey" IsRendering="{Binding UseFollowLighting}" Direction="-0.5, -0.7, 1" Color="#FFFFFF" />
+            <hx:DirectionalLight3D Tag="FollowFill" IsRendering="{Binding UseFollowLighting}" Direction="1, -0.2, 0.6" Color="#2A2A2A" />
+            <hx:DirectionalLight3D Tag="FollowRim" IsRendering="{Binding UseFollowLighting}" Direction="0, -0.5, -1" Color="#8C8C8C" />
+            <hx:DirectionalLight3D Tag="FollowTop" IsRendering="{Binding UseFollowLighting}" Direction="0, -1, 0" Color="#2E2E2E" />
             <!-- Flat: ambient only -->
             <hx:AmbientLight3D IsRendering="{Binding UseFlatLighting}" Color="#707070" />
 
@@ -843,7 +850,7 @@
                             <ComboBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewLightingPresets}" SelectedItem="{Binding PreviewLighting}"
                                       SelectionChanged="Lighting_OnSelectionChanged"
-                                      ToolTip="Default: the usual work lights. Icon (soft): soft key light from the front upper left, fill and rim light. Icon (follow camera): the same, turning with the camera. Flat: ambient only, no highlights. Applies to the preview and to saved images." />
+                                      ToolTip="Default: the usual work lights. Icon: like the game's inventory icons - a strong key light from the front upper left, dark shadows, a rim light for edge highlights. Icon (soft): softer, with more fill. Icon (follow camera): the Icon set turning with the camera. Flat: ambient only, no highlights. Applies to the preview and to saved images." />
                         </Grid>
                         <WrapPanel Margin="{DynamicResource WolvenKitMarginTiny}" Orientation="Horizontal">
                             <Button
