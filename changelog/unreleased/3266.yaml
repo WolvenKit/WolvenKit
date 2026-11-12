@@ -1,0 +1,11 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3266
+      author: "Ametis81"
+      description: "Color themes: built-in dark themes, custom themes with a theme editor (simple / advanced / all colors), switching without restart from Settings or View > Theme."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3266
+      author: "Ametis81"
+      description: "The UI uses theme colors instead of hardcoded ones; buttons share one style."
