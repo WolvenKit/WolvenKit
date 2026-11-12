@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3265
+      author: "Ametis81"
+      description: "Project Explorer: file watcher handles renames and moves made outside WolvenKit, folder expansion state is kept (also after Expand / Collapse All), faster search filtering."
