@@ -125,7 +125,11 @@ public partial class RDTMeshViewModel
         try
         {
             RestoreDecals(app);
-            if (!BlendDecalsIntoSurfaces)
+            // Sectors: a surface material is shared by many placed meshes, so a decal baked into
+            // its texture would show on every copy; and matching every decal against every mesh
+            // of a sector takes long on the UI thread. Decals stay as they are there.
+            if (!BlendDecalsIntoSurfaces ||
+                Header is MeshViewHeaders.SectorPreview or MeshViewHeaders.AllSectorPreview)
             {
                 return;
             }
@@ -237,6 +241,18 @@ public partial class RDTMeshViewModel
         }
 
         var grids = new Dictionary<SubmeshComponent, SurfaceTriangleGrid?>();
+        var bounds = new Dictionary<SubmeshComponent, Rect3D>();
+        Rect3D Bounds(LoadableModel m, SubmeshComponent sm)
+        {
+            if (!bounds.TryGetValue(sm, out var b))
+            {
+                b = WorldBounds(m, sm);
+                bounds[sm] = b;
+            }
+
+            return b;
+        }
+
         var uvGrids = new Dictionary<SubmeshComponent, Dictionary<(int, int), List<int>>>();
         var geometries = new Dictionary<SubmeshComponent, SurfaceGeometry?>();
         SurfaceGeometry? Geo(LoadableModel m, SubmeshComponent sm)
@@ -263,6 +279,7 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
+            var decalBounds = Bounds(decalModel, decal);
             var maps = _decalMaps.GetOrCreateValue(decal);
             var sharedUv = _decalSharedUv.GetOrCreateValue(decal);
             var total = dg.Indices.Length / 3;
@@ -275,7 +292,8 @@ public partial class RDTMeshViewModel
                 if (!maps.TryGetValue(surface, out var mapped))
                 {
                     mapped = new List<(int, double[], double)>();
-                    if (Geo(surfaceModel, surface) is { } sg)
+                    // Only surfaces whose box reaches the decal: the geometry of the others is never read.
+                    if (Near(decalBounds, Bounds(surfaceModel, surface)) && Geo(surfaceModel, surface) is { } sg)
                     {
                         if (!grids.TryGetValue(surface, out var grid))
                         {
@@ -882,6 +900,47 @@ public partial class RDTMeshViewModel
         // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS). Values above
         // 1 occur (DiffuseAlpha 2): coverage x alpha is saturated where it is used.
         raw.Values != null && raw.Values.TryGetValue(key, out var v) ? Math.Clamp(ReadFloat(v), 0f, 16f) : 0f;
+
+    /// <summary>World-space box of a submesh (empty when it has no geometry).</summary>
+    private static Rect3D WorldBounds(LoadableModel model, SubmeshComponent sm)
+    {
+        if (sm.Geometry is not HelixToolkit.SharpDX.Core.MeshGeometry3D g || g.Positions == null || g.Positions.Count == 0)
+        {
+            return Rect3D.Empty;
+        }
+
+        float x0 = float.MaxValue, y0 = float.MaxValue, z0 = float.MaxValue;
+        float x1 = float.MinValue, y1 = float.MinValue, z1 = float.MinValue;
+        foreach (var p in g.Positions)
+        {
+            x0 = Math.Min(x0, p.X); y0 = Math.Min(y0, p.Y); z0 = Math.Min(z0, p.Z);
+            x1 = Math.Max(x1, p.X); y1 = Math.Max(y1, p.Y); z1 = Math.Max(z1, p.Z);
+        }
+
+        var matrix = model.Transform?.Value ?? Matrix3D.Identity;
+        var result = Rect3D.Empty;
+        for (var i = 0; i < 8; i++)
+        {
+            var corner = matrix.Transform(new Point3D((i & 1) == 0 ? x0 : x1, (i & 2) == 0 ? y0 : y1, (i & 4) == 0 ? z0 : z1));
+            result.Union(corner);
+        }
+
+        return result;
+    }
+
+    /// <summary>The boxes touch, with room for decals that float a little above the surface.</summary>
+    private static bool Near(Rect3D a, Rect3D b)
+    {
+        if (a.IsEmpty || b.IsEmpty)
+        {
+            return false;
+        }
+
+        const double pad = DecalLeftoverTolerance;
+        return a.X - pad <= b.X + b.SizeX && b.X - pad <= a.X + a.SizeX &&
+               a.Y - pad <= b.Y + b.SizeY && b.Y - pad <= a.Y + a.SizeY &&
+               a.Z - pad <= b.Z + b.SizeZ && b.Z - pad <= a.Z + a.SizeZ;
+    }
 
     private static SurfaceGeometry? ReadSurfaceGeometry(LoadableModel model, SubmeshComponent sm)
     {
