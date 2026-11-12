@@ -35,11 +35,15 @@
                 </ControlTemplate.Triggers>
 
                 <StackPanel>
+                    <!--
+                        Transparent, not the button background: Syncfusion gives the buttons of the active panel an
+                        accent background on hover; all panel buttons only change their icon color (red on hover).
+                    -->
                     <Border
                         Name="ButtonBorder"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
-                        Background="{TemplateBinding Background}"
+                        Background="Transparent"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="0"
                         CornerRadius="{StaticResource MaterialDark.ThemeCornerRadiusVariant1}">
