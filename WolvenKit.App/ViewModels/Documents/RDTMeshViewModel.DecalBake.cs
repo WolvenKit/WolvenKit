@@ -32,6 +32,9 @@ public partial class RDTMeshViewModel
 {
     private const double DecalPositionTolerance = 0.006;   // 6 mm: decals float slightly above
     private const double DecalMinPart = 0.02;              // smaller pieces stay in the decal
+    private const double DecalLeftoverShare = 0.05;        // left-over edge pieces searched wider
+    private const double DecalLeftoverTolerance = 0.03;    // 3 cm
+    private const double DecalDropShare = 0.01;            // stray triangles not drawn
 
     private readonly ConcurrentDictionary<string, byte> _decalBakesRunning = new();
     private PBRMaterial? _hiddenDecalMaterial;
@@ -53,7 +56,7 @@ public partial class RDTMeshViewModel
     private sealed record DecalLayer(
         string DecalName, LoadableModel DecalModel, SubmeshComponent Decal, SurfaceGeometry DecalGeometry,
         LoadableModel SurfaceModel, SubmeshComponent Surface,
-        List<(int Triangle, double[] SurfaceUv)> Triangles, bool Whole);
+        List<(int Triangle, double[] SurfaceUv)> Triangles, bool Whole, List<int> Dropped);
 
     private sealed class SurfaceGeometry
     {
@@ -218,6 +221,73 @@ public partial class RDTMeshViewModel
                 }
             }
 
+            // Edge pieces that float a little higher (a decal's rim over a collarbone): when only a
+            // few triangles are left, give each the surface of its neighbours, searched wider.
+            var leftover = Enumerable.Range(0, total).Where(t => !bestFor.ContainsKey(t)).ToList();
+            if (leftover.Count > 0 && leftover.Count <= total * DecalLeftoverShare && bestFor.Count > 0)
+            {
+                // Centres of the triangles that found a surface (decal meshes often split their
+                // vertices, so neighbours are found by distance, not by shared indices).
+                Point3D Centre(int t)
+                {
+                    var a = dg.Positions[dg.Indices[t * 3]];
+                    var b = dg.Positions[dg.Indices[t * 3 + 1]];
+                    var c = dg.Positions[dg.Indices[t * 3 + 2]];
+                    return new Point3D((a.X + b.X + c.X) / 3, (a.Y + b.Y + c.Y) / 3, (a.Z + b.Z + c.Z) / 3);
+                }
+
+                var placed = bestFor.Select(kv => (Centre: Centre(kv.Key), kv.Value.Surface)).ToList();
+
+                foreach (var group in leftover
+                             .Select(t => (Triangle: t, Surface: NeighbourSurface(t)))
+                             .Where(x => x.Surface >= 0)
+                             .GroupBy(x => x.Surface))
+                {
+                    var (surfaceModel, surface) = surfaces[group.Key];
+                    if (Geo(surfaceModel, surface) is not { } sg)
+                    {
+                        continue;
+                    }
+
+                    if (!grids.TryGetValue(surface, out var grid))
+                    {
+                        grid = BuildTriangleGrid(sg);
+                        grids[surface] = grid;
+                    }
+
+                    if (grid == null)
+                    {
+                        continue;
+                    }
+
+                    var only = group.Select(x => x.Triangle).ToHashSet();
+                    MapDecalTriangles(dg, sg, grid, out var wide, only, DecalLeftoverTolerance);
+                    foreach (var (t, uv, distance) in wide)
+                    {
+                        bestFor[t] = (group.Key, uv, distance + 1);
+                    }
+                }
+
+                int NeighbourSurface(int t)
+                {
+                    // The surface of the nearest triangle that has one.
+                    var c = Centre(t);
+                    var best = -1;
+                    var bestD = double.MaxValue;
+                    foreach (var (centre, placedSurface) in placed)
+                    {
+                        var d = (centre - c).LengthSquared;
+                        if (d < bestD)
+                        {
+                            bestD = d;
+                            best = placedSurface;
+                        }
+                    }
+
+                    return best;
+                }
+            }
+
             var parts = bestFor
                 .GroupBy(kv => kv.Value.Surface)
                 .Select(g => (Index: g.Key, Triangles: g.Select(kv => (kv.Key, kv.Value.Uv)).OrderBy(x => x.Key).ToList()))
@@ -225,12 +295,24 @@ public partial class RDTMeshViewModel
                 .ToList();
 
             var assigned = parts.Sum(p => p.Triangles.Count);
-            var whole = assigned == total;
-            foreach (var (index, triangles) in parts)
+
+            // A handful of triangles still without a surface once all the rest is baked (walls
+            // standing off the skin, slivers): in the game a decal only paints the surface, they
+            // add nothing there, so they are not drawn either instead of showing as a lit patch.
+            var dropped = new List<int>();
+            if (parts.Count > 0 && total - assigned > 0 && total - assigned <= Math.Max(4, total * DecalDropShare))
             {
+                var used = parts.SelectMany(p => p.Triangles.Select(x => x.Key)).ToHashSet();
+                dropped = Enumerable.Range(0, total).Where(t => !used.Contains(t)).ToList();
+            }
+
+            var whole = assigned + dropped.Count == total;
+            for (var pi = 0; pi < parts.Count; pi++)
+            {
+                var (index, triangles) = parts[pi];
                 var (surfaceModel, surface) = surfaces[index];
                 result.Add(new DecalLayer(decalGroup.Key, decalModel, decal, dg, surfaceModel, surface,
-                    triangles.Select(x => (x.Key, x.Uv)).ToList(), whole));
+                    triangles.Select(x => (x.Key, x.Uv)).ToList(), whole, pi == 0 ? dropped : new List<int>()));
             }
 
             var name = SubmeshComponent.StripMeshPrefix(decalGroup.Key);
@@ -243,8 +325,8 @@ public partial class RDTMeshViewModel
                 var onto = string.Join(", ", parts.Select(p =>
                     $"'{SubmeshComponent.StripMeshPrefix(surfaces[p.Index].Mesh.MaterialName)}' {p.Triangles.Count * 100 / total}%"));
                 Parent?.GetLoggerService()?.Debug(whole
-                    ? $"[Decals] '{name}' lies on {onto}"
-                    : $"[Decals] '{name}' lies on {onto}; the other {(total - assigned) * 100 / total}% is drawn as the decal");
+                    ? $"[Decals] '{name}' lies on {onto}" + (dropped.Count > 0 ? $" ({dropped.Count} stray triangles not drawn)" : "")
+                    : $"[Decals] '{name}' lies on {onto}; the other {total - assigned} of {total} triangles are drawn as the decal");
             }
         }
 
@@ -493,15 +575,39 @@ public partial class RDTMeshViewModel
 
     /// <summary>The surface triangle nearest to p (within the tolerance) and the point on it.</summary>
     private (int Triangle, double U, double V, double W, double Distance)? ProjectOnSurface(
-        Point3D p, SurfaceGeometry surface, SurfaceTriangleGrid grid)
+        Point3D p, SurfaceGeometry surface, SurfaceTriangleGrid grid, double tolerance = DecalPositionTolerance)
     {
-        if (!grid.Cells.TryGetValue(GridCell(grid, p), out var list))
+        IEnumerable<int> list;
+        if (tolerance <= DecalPositionTolerance)
         {
-            return null;
+            if (!grid.Cells.TryGetValue(GridCell(grid, p), out var cell))
+            {
+                return null;
+            }
+
+            list = cell;
+        }
+        else
+        {
+            // Wider search: the cells around p as far as the extra distance reaches.
+            var reach = (long)Math.Ceiling((tolerance - DecalPositionTolerance) / grid.CellSize);
+            var (cx, cy, cz) = GridCell(grid, p);
+            var found = new HashSet<int>();
+            for (var x = cx - reach; x <= cx + reach; x++)
+            for (var y = cy - reach; y <= cy + reach; y++)
+            for (var z = cz - reach; z <= cz + reach; z++)
+            {
+                if (grid.Cells.TryGetValue((x, y, z), out var cell))
+                {
+                    found.UnionWith(cell);
+                }
+            }
+
+            list = found;
         }
 
         (int, double, double, double, double)? best = null;
-        var bestD2 = DecalPositionTolerance * DecalPositionTolerance;
+        var bestD2 = tolerance * tolerance;
         foreach (var t in list)
         {
             var a = surface.Positions[surface.Indices[t * 3]];
@@ -535,7 +641,8 @@ public partial class RDTMeshViewModel
     /// Decal vertices need not be surface vertices (decals are often their own geometry).
     /// </summary>
     private bool MapDecalTriangles(SurfaceGeometry decal, SurfaceGeometry surface, SurfaceTriangleGrid grid,
-        out List<(int Triangle, double[] SurfaceUv, double Distance)> mapped)
+        out List<(int Triangle, double[] SurfaceUv, double Distance)> mapped,
+        ICollection<int>? only = null, double tolerance = DecalPositionTolerance)
     {
         mapped = new List<(int, double[], double)>();
         var projected = new Dictionary<int, (int Triangle, double U, double V, double W, double Distance)?>();
@@ -543,7 +650,7 @@ public partial class RDTMeshViewModel
         {
             if (!projected.TryGetValue(vertex, out var r))
             {
-                r = ProjectOnSurface(decal.Positions[vertex], surface, grid);
+                r = ProjectOnSurface(decal.Positions[vertex], surface, grid, tolerance);
                 projected[vertex] = r;
             }
 
@@ -554,6 +661,11 @@ public partial class RDTMeshViewModel
         var triangles = decal.Indices.Length / 3;
         for (var t = 0; t < triangles; t++)
         {
+            if (only != null && !only.Contains(t))
+            {
+                continue;
+            }
+
             int ia = decal.Indices[t * 3], ib = decal.Indices[t * 3 + 1], ic = decal.Indices[t * 3 + 2];
             var pa = Project(ia);
             var pb = Project(ib);
@@ -579,7 +691,7 @@ public partial class RDTMeshViewModel
             {
                 // Seam: all three corners from the plane of the triangle under the centre.
                 var centre = new Point3D((A.X + B.X + C.X) / 3, (A.Y + B.Y + C.Y) / 3, (A.Z + B.Z + C.Z) / 3);
-                if (ProjectOnSurface(centre, surface, grid) is not { } under)
+                if (ProjectOnSurface(centre, surface, grid, tolerance) is not { } under)
                 {
                     continue;
                 }
@@ -752,6 +864,8 @@ public partial class RDTMeshViewModel
         {
             state.Baked.Add(triangle);
         }
+
+        state.Baked.UnionWith(layer.Dropped);
 
         var total = layer.DecalGeometry.Indices.Length / 3;
         if (state.Baked.Count >= total)
