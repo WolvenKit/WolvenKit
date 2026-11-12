@@ -516,6 +516,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyRenderFlags(sm);
         }
 
+        ApplyDecalsToSurfaces(app);
         ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
     }
