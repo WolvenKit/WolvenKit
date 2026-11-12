@@ -2593,10 +2593,23 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (ev > 0.01f)
             {
                 float intensity = Math.Clamp(MathF.Pow(2f, ev) * 0.04f, 0.2f, 4f);
-                material.EmissiveColor = new SharpDX.Color4(intensity * cr, intensity * cg, intensity * cb, 1f);
 
                 // Emissive map is baked in LoadMaterial; here we only consume it.
                 var emissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
+
+                // The glow follows the emissive map. While a material that has an emissive texture
+                // has no baked map yet, the colour alone lit the whole mesh (pale, shading washed
+                // out): no glow until the map is there. Without an emissive texture the colour is
+                // the glow itself (panels lit by EmissiveColor / EV only) and stays.
+                if (File.Exists(emissivePng) || !HasEmissiveTexture(name))
+                {
+                    material.EmissiveColor = new SharpDX.Color4(intensity * cr, intensity * cg, intensity * cb, 1f);
+                }
+                else
+                {
+                    material.EmissiveColor = new SharpDX.Color4(0f, 0f, 0f, 1f);
+                    material.RenderEmissiveMap = false;
+                }
 
                 bool scaleBlack = false;
                 if (TryGetRawMaterial(name, out var scaleMat) &&
@@ -2734,6 +2747,27 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             Parent?.GetLoggerService()?.Warning($"[Emissive] bake failed for {name}: {ex.Message}");
         }
+    }
+
+    /// <summary>The material has an emissive texture (Emissive, or AdTexture on screens / billboards).</summary>
+    private bool HasEmissiveTexture(string name)
+    {
+        if (!TryGetRawMaterial(name, out var raw) || raw?.Values == null)
+        {
+            return false;
+        }
+
+        foreach (var key in new[] { "Emissive", "AdTexture" })
+        {
+            if (raw.Values.TryGetValue(key, out var value) &&
+                value is CResourceReference<ITexture> texture &&
+                texture.DepotPath != ResourcePath.Empty)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static void SavePngAtomic(Bitmap bmp, string path)
