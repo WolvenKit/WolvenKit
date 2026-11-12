@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
@@ -332,27 +333,35 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
         MenuItemTheme.Items.Clear();
 
-        var hadBuiltIn = false;
-        var separatorAdded = false;
-        foreach (var theme in themeService.Themes)
+        // one submenu per group (dark / light built-in themes, the user's own), so the menu stays short
+        // however many themes there are; each theme with a background + accent swatch
+        foreach (var (group, themes) in ThemeListHelper.Group(themeService))
         {
-            if (hadBuiltIn && !theme.IsBuiltIn && !separatorAdded)
+            var containsCurrent = themes.Contains(current);
+            var groupItem = new MenuItem
             {
-                MenuItemTheme.Items.Add(new Separator());
-                separatorAdded = true;
-            }
-            hadBuiltIn |= theme.IsBuiltIn;
-
-            var item = new MenuItem
-            {
-                Header = theme.DisplayName,
-                IsCheckable = true,
-                IsChecked = ReferenceEquals(theme, current),
-                ToolTip = string.IsNullOrEmpty(theme.Description) ? null : theme.Description
+                Header = containsCurrent ? $"{group}  ✓" : group,
+                FontWeight = containsCurrent ? FontWeights.SemiBold : FontWeights.Normal
             };
-            var name = theme.Name;
-            item.Click += (_, _) => themeService.SetActive(name);
-            MenuItemTheme.Items.Add(item);
+            MenuItemTheme.Items.Add(groupItem);
+
+            foreach (var theme in themes)
+            {
+                var item = new MenuItem
+                {
+                    Header = theme.DisplayName,
+                    Icon = ThemeListHelper.CreateSwatch(themeService, theme),
+                    FontWeight = ReferenceEquals(theme, current) ? FontWeights.SemiBold : FontWeights.Normal,
+                    ToolTip = string.IsNullOrEmpty(theme.Description) ? null : theme.Description
+                };
+                if (ReferenceEquals(theme, current))
+                {
+                    item.Header = $"{theme.DisplayName}  ✓";
+                }
+                var name = theme.Name;
+                item.Click += (_, _) => themeService.SetActive(name);
+                groupItem.Items.Add(item);
+            }
         }
 
         MenuItemTheme.Items.Add(new Separator());

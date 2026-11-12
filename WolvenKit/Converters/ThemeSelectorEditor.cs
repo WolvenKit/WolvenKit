@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -98,14 +99,34 @@ namespace WolvenKit.Converters
 
         private void RefreshItems()
         {
-            var items = _themeService.Themes
-                .Select(t => new ComboBoxItem
+            // grouped like the View → Theme menu: dark, light, the user's own; with a color swatch per theme
+            var items = new List<ComboBoxItem>();
+            foreach (var (group, themes) in ThemeListHelper.Group(_themeService))
+            {
+                items.Add(new ComboBoxItem
                 {
-                    Content = t.IsDefault ? t.DisplayName : t.IsBuiltIn ? $"{t.Name}  (built-in)" : t.Name,
-                    Tag = t.Name,
-                    ToolTip = string.IsNullOrEmpty(t.Description) ? null : t.Description
-                })
-                .ToList();
+                    Content = group,
+                    IsEnabled = false,
+                    Focusable = false,
+                    FontWeight = FontWeights.SemiBold
+                });
+
+                items.AddRange(themes.Select(t =>
+                {
+                    var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(8, 0, 0, 0) };
+                    var swatch = ThemeListHelper.CreateSwatch(_themeService, t);
+                    swatch.Margin = new Thickness(0, 0, 6, 0);
+                    row.Children.Add(swatch);
+                    row.Children.Add(new TextBlock { Text = t.DisplayName, VerticalAlignment = VerticalAlignment.Center });
+
+                    return new ComboBoxItem
+                    {
+                        Content = row,
+                        Tag = t.Name,
+                        ToolTip = string.IsNullOrEmpty(t.Description) ? null : t.Description
+                    };
+                }));
+            }
             _comboBox.SetCurrentValue(Selector.SelectedValuePathProperty, nameof(ComboBoxItem.Tag));
             _comboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, items);
         }

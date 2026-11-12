@@ -20,6 +20,7 @@
     "BackgroundColor_Frame_Background": "#152027",
     "BackgroundColor_Button_Active": "#1E2D36",
     "WolvenKitProjectSource": "#FF2E88",
-    "WolvenKitProjectSourceShadow": "#8F1A4E"
+    "WolvenKitProjectSourceShadow": "#8F1A4E",
+    "WolvenKitProjectResources": "#B98CFF"
   }
 }
