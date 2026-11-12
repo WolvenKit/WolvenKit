@@ -17,7 +17,7 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTWidgetViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    BorderBrush="{StaticResource BorderAlt}"
+    BorderBrush="{DynamicResource BorderAlt}"
     BorderThickness="1">
     <Grid>
         <Grid.Resources>
@@ -70,7 +70,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="Magnify"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
@@ -78,7 +78,7 @@
 
             <Border
                 x:Name="WidgetPreviewCanvas"
-                Background="{StaticResource ContentBackground}"
+                Background="{DynamicResource ContentBackground}"
                 ClipToBounds="True">
                 <Grid>
                     <Canvas
@@ -191,7 +191,7 @@
                 </Grid>
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <Grid>
@@ -231,7 +231,7 @@
                 </Grid-->
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <TextBlock
@@ -241,7 +241,7 @@
                     Text="Animations" />
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <ItemsControl x:Name="AnimationList">
@@ -275,7 +275,7 @@
                                 <GridSplitter
                                     Grid.Column="1"
                                     HorizontalAlignment="Stretch"
-                                    Background="{StaticResource WolvenKitCyan}" />
+                                    Background="{DynamicResource WolvenKitCyan}" />
 
                                 <StackPanel
                                     Grid.Column="2"
@@ -291,7 +291,7 @@
                                             Kind="Play"
                                             Margin="0"
                                             Size="{DynamicResource WolvenKitIconMicro}"
-                                            Foreground="{StaticResource WolvenKitGreen}" />
+                                            Foreground="{DynamicResource WolvenKitGreen}" />
                                     </Button>
 
                                     <Button
@@ -304,7 +304,7 @@
                                             Kind="Stop"
                                             Margin="0"
                                             Size="{DynamicResource WolvenKitIconMicro}"
-                                            Foreground="{StaticResource WolvenKitRed}" />
+                                            Foreground="{DynamicResource WolvenKitRed}" />
                                     </Button>
                                 </StackPanel>
                             </Grid>
@@ -313,7 +313,7 @@
                 </ItemsControl>
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <StackPanel Orientation="Horizontal">
@@ -325,7 +325,7 @@
                 </StackPanel>
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <ItemsControl x:Name="TextWidgetList">
@@ -360,13 +360,13 @@
                                 <Border
                                     Grid.Column="0"
                                     Grid.ColumnSpan="3"
-                                    BorderBrush="{StaticResource BorderAlt}"
+                                    BorderBrush="{DynamicResource BorderAlt}"
                                     BorderThickness="0,0,0,1" />
 
                                 <GridSplitter
                                     Grid.Column="1"
                                     HorizontalAlignment="Stretch"
-                                    Background="{StaticResource WolvenKitCyan}" />
+                                    Background="{DynamicResource WolvenKitCyan}" />
 
                                 <editors:RedStringEditor
                                     Grid.Column="2"
@@ -386,7 +386,7 @@
                 </StackPanel>
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <ItemsControl ItemsSource="{Binding Bindings}">
@@ -410,7 +410,7 @@
                                     Text="{Binding}" />
 
                                 <Border
-                                    BorderBrush="{StaticResource BorderAlt}"
+                                    BorderBrush="{DynamicResource BorderAlt}"
                                     BorderThickness="0,0,0,1" />
                             </StackPanel>
                         </DataTemplate>
@@ -426,7 +426,7 @@
                 </StackPanel>
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <ItemsControl ItemsSource="{Binding InkEffects}">
@@ -450,7 +450,7 @@
                                     Text="{Binding EffectName}" />
 
                                 <Border
-                                    BorderBrush="{StaticResource BorderAlt}"
+                                    BorderBrush="{DynamicResource BorderAlt}"
                                     BorderThickness="0,0,0,1" />
                             </StackPanel>
                         </DataTemplate>
@@ -466,7 +466,7 @@
                 </StackPanel>
 
                 <Border
-                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderBrush="{DynamicResource BorderAlt}"
                     BorderThickness="0,1,0,0" />
 
                 <ItemsControl
@@ -506,7 +506,7 @@
                                             Kind="Save"
                                             Margin="0"
                                             Size="{DynamicResource WolvenKitIconMicro}"
-                                            Foreground="{StaticResource WolvenKitCyan}" />
+                                            Foreground="{DynamicResource WolvenKitCyan}" />
 
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"

@@ -18,7 +18,7 @@
     d:DesignHeight="450"
     Width="{DynamicResource WolvenKitDialogWidthMedium}"
     Height="600"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -58,8 +58,8 @@
                 HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
                 RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
                 SelectedItem="{Binding SelectedTemplate}"
-                Background="{StaticResource ContentBackground}"
-                BorderBrush="#373737"
+                Background="{DynamicResource ContentBackground}"
+                BorderBrush="{DynamicResource WolvenKitGray37}"
                 GridLinesVisibility="Both"
                 AutoGenerateColumns="False"
                 ItemsSource="{Binding Templates}"
@@ -73,34 +73,34 @@
                 <syncfusion:SfDataGrid.Resources>
                     <!-- Normal data cell grid lines -->
                     <Style TargetType="syncfusion:GridCell">
-                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGray37}" />
                     </Style>
 
                     <!-- Main column headers: Name / Type / Action -->
                     <Style TargetType="syncfusion:GridHeaderCellControl">
-                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGray37}" />
                     </Style>
 
                     <!-- Group/source sub headers -->
                     <Style TargetType="syncfusion:GridCaptionSummaryCell">
-                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGray37}" />
                     </Style>
 
                     <!-- Grid outer border when style-based resolution is needed -->
                     <Style TargetType="syncfusion:SfDataGrid">
-                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGray37}" />
                     </Style>
 
                     <!-- Group drop area border, if enabled later -->
                     <Style TargetType="syncfusion:GroupDropArea">
-                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGray37}" />
                     </Style>
 
                     <!-- Indent cells used by grouping/expander area -->
                     <Style TargetType="syncfusion:GridIndentCell">
-                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGray37}" />
                     </Style>
                 </syncfusion:SfDataGrid.Resources>
 
@@ -140,7 +140,7 @@
                                             Width="{DynamicResource WolvenKitIconMicro}"
                                             Height="{DynamicResource WolvenKitIconMicro}"
                                             Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                            Foreground="{StaticResource WolvenKitGreen}" />
+                                            Foreground="{DynamicResource WolvenKitGreen}" />
                                     </Button>
 
                                     <Button
@@ -154,7 +154,7 @@
                                             Width="{DynamicResource WolvenKitIconMicro}"
                                             Height="{DynamicResource WolvenKitIconMicro}"
                                             Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                            Foreground="{StaticResource WolvenKitRed}" />
+                                            Foreground="{DynamicResource WolvenKitRed}" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -165,12 +165,12 @@
 
             <Border
                 Grid.Column="1"
-                BorderBrush="#373737"
+                BorderBrush="{DynamicResource WolvenKitGray37}"
                 BorderThickness="1"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
-                Background="{StaticResource ContentBackground}">
+                Background="{DynamicResource ContentBackground}">
                 <Grid
-                    Background="{StaticResource ContentBackground}">
+                    Background="{DynamicResource ContentBackground}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -264,7 +264,7 @@
                             Kind="NewFile"
                             Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
