@@ -453,9 +453,10 @@
                             Content="Show areas"
                             ToolTip="Area volumes: triggers, interiors, ambient (sound), light channel and GI areas, world boundaries... Off: all hidden; single areas can still be switched in the tree." />
 
-                        <!-- Area volumes coloured by kind (trigger, light channel, GI space...) or all plain -->
+                        <!-- Area volumes coloured by kind (trigger, light channel, GI space...) or all plain; shown with the areas -->
                         <CheckBox
                             Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Visibility="{Binding ShowSectorAreas, Converter={StaticResource VisibilityConverter}}"
                             IsChecked="{Binding ColorSectorAreas}"
                             Content="Color areas by type"
                             ToolTip="On: triggers orange, kill triggers red, world boundaries crimson, light channels purple, GI spaces teal, ambient (sound) areas blue, interiors light blue; other areas in the color the node carries. Off: all areas faint white. The Material column of an area's volume row names its kind." />

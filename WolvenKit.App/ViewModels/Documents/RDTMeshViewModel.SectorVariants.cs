@@ -59,15 +59,28 @@ public partial class RDTMeshViewModel
 
     private SectorGroup? _soloSector;
 
-    partial void OnSelectedSectorVariantChanged(SectorVariantOption? value) => ApplySectorVisibility();
+    // Each switch applies only to its own objects, so rows hidden by hand in the tree
+    // stay hidden when another switch or the variant changes.
+    partial void OnSelectedSectorVariantChanged(SectorVariantOption? value) => ApplySectorVisibility(SectorSwitches.Variants);
 
-    partial void OnShowSectorProxiesChanged(bool value) => ApplySectorVisibility();
+    partial void OnShowSectorProxiesChanged(bool value) => ApplySectorVisibility(SectorSwitches.Proxies);
 
-    partial void OnShowSectorFoliageChanged(bool value) => ApplySectorVisibility();
+    partial void OnShowSectorFoliageChanged(bool value) => ApplySectorVisibility(SectorSwitches.Foliage);
 
-    partial void OnColorSectorAreasChanged(bool value) => ApplySectorVisibility();
+    partial void OnColorSectorAreasChanged(bool value) => ApplySectorVisibility(SectorSwitches.AreaColors);
 
-    partial void OnShowSectorAreasChanged(bool value) => ApplySectorVisibility();
+    partial void OnShowSectorAreasChanged(bool value) => ApplySectorVisibility(SectorSwitches.Areas);
+
+    [System.Flags]
+    private enum SectorSwitches
+    {
+        Variants = 1,
+        Proxies = 2,
+        Foliage = 4,
+        Areas = 8,
+        AreaColors = 16,
+        All = Variants | Proxies | Foliage | Areas | AreaColors,
+    }
 
     private void BeginSectorRegistry()
     {
@@ -172,49 +185,66 @@ public partial class RDTMeshViewModel
         return System.Math.Max(0, end - start);
     }
 
-    /// <summary>Applies the variant choice and the proxy switch to the sector(s) shown.</summary>
-    private void ApplySectorVisibility()
+    /// <summary>Applies the variant list and the switches to the sector(s) shown.</summary>
+    private void ApplySectorVisibility(SectorSwitches what)
     {
         if (_soloSector != null)
         {
-            ApplySectorVisibility(_soloSector);
+            ApplySectorVisibility(_soloSector, what);
         }
 
         foreach (var sector in Sectors)
         {
             if (sector.Element != null)
             {
-                ApplySectorVisibility(sector.Element);
+                ApplySectorVisibility(sector.Element, what);
             }
         }
     }
 
-    private void ApplySectorVisibility(SectorGroup sector)
+    /// <param name="what">which switches to apply; a sector just drawn gets all of them</param>
+    private void ApplySectorVisibility(SectorGroup sector, SectorSwitches what = SectorSwitches.All)
     {
-        var option = SelectedSectorVariant;
-
-        foreach (var (element, indices) in sector.Placements)
+        if (what.HasFlag(SectorSwitches.Variants))
         {
-            var visible = option is null || indices.Any(i => IsRangeShown(sector, sector.RangeOf(i), option));
-            if (element.IsRendering != visible)
+            var option = SelectedSectorVariant;
+            foreach (var (element, indices) in sector.Placements)
             {
-                element.IsRendering = visible;
+                var visible = option is null || indices.Any(i => IsRangeShown(sector, sector.RangeOf(i), option));
+                if (element.IsRendering != visible)
+                {
+                    element.IsRendering = visible;
+                }
             }
         }
 
-        foreach (var group in sector.ProxyGroups)
+        if (what.HasFlag(SectorSwitches.Proxies))
         {
-            group.IsRendering = ShowSectorProxies;
+            foreach (var group in sector.ProxyGroups)
+            {
+                group.IsRendering = ShowSectorProxies;
+            }
         }
 
-        foreach (var group in sector.FoliageGroups)
+        if (what.HasFlag(SectorSwitches.Foliage))
         {
-            group.IsRendering = ShowSectorFoliage;
+            foreach (var group in sector.FoliageGroups)
+            {
+                group.IsRendering = ShowSectorFoliage;
+            }
         }
 
-        foreach (var group in sector.AreaGroups)
+        if (what.HasFlag(SectorSwitches.Areas))
         {
-            group.IsRendering = ShowSectorAreas;
+            foreach (var group in sector.AreaGroups)
+            {
+                group.IsRendering = ShowSectorAreas;
+            }
+        }
+
+        if (!what.HasFlag(SectorSwitches.AreaColors))
+        {
+            return;
         }
 
         foreach (var (material, color) in sector.AreaMaterials)
