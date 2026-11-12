@@ -16,7 +16,6 @@ namespace WolvenKit.Views.HomePage.Pages
         private bool _isStackedLayout;
         private bool _layoutModeInitialized;
         private Window _hostWindow;
-        private bool _refreshWhenShown;
 
         public WelcomePageView()
         {
@@ -113,21 +112,16 @@ namespace WolvenKit.Views.HomePage.Pages
 
         /// <summary>
         /// Re-applying the skin re-templates the Syncfusion CardViews, which then show no cards although the
-        /// project lists are unchanged. Fill the lists again once this page is on screen with the new theme:
-        /// right away if it is shown, otherwise when it is shown again (e.g. the theme was switched with a
-        /// project open and the user goes back Home, or the main window is hidden while the skin is applied).
+        /// project lists are unchanged. Home is shown again as a new page after a theme switch made elsewhere
+        /// (e.g. with a project open), and that page's CardViews are skinned after their cards were made.
+        /// So the lists are filled again whenever the page comes on screen, and after a theme change while it
+        /// is shown. Only a few cards: cheap.
         /// </summary>
         void IThemeAware.OnThemeChanged()
         {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            _refreshWhenShown = true;
             if (IsVisible)
             {
-                RefreshIfPending();
+                RefreshProjectListsWhenIdle();
             }
         }
 
@@ -135,19 +129,8 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (IsVisible)
             {
-                RefreshIfPending();
+                RefreshProjectListsWhenIdle();
             }
-        }
-
-        private void RefreshIfPending()
-        {
-            if (!_refreshWhenShown)
-            {
-                return;
-            }
-
-            _refreshWhenShown = false;
-            RefreshProjectListsWhenIdle();
         }
 
         private void RefreshProjectListsWhenIdle() =>
