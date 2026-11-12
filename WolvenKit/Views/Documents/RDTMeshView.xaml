@@ -570,7 +570,7 @@
                                     Grid.Column="0"
                                     Margin="{DynamicResource WolvenKitMarginTiny}"
                                     Padding="{DynamicResource WolvenKitMarginTiny}"
-                                    Foreground="{DynamicResource WolvenKitYellow}"
+                                    Foreground="{DynamicResource WolvenKitActionText}"
                                     IsEnabled="{Binding IsLoadingMaterials,
                                                         Converter={StaticResource InvertBooleanConverter}}"
                                     Command="{Binding LoadMaterialsCommand}"
@@ -598,7 +598,7 @@
                                     Grid.Column="1"
                                     Margin="0,4,4,4"
                                     Padding="6,0"
-                                    Foreground="{DynamicResource WolvenKitYellow}"
+                                    Foreground="{DynamicResource WolvenKitActionText}"
                                     IsEnabled="{Binding IsLoadingMaterials,
                                                         Converter={StaticResource InvertBooleanConverter}}"
                                     Content="&#x25BE;"
