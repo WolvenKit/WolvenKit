@@ -14,7 +14,7 @@
     d:DesignHeight="350"
     Width="{DynamicResource WolvenKitDialogWidth}"
     Height="{DynamicResource WolvenKitDialogHeight}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -77,7 +77,7 @@
                                         <TextBlock
                                             Grid.Column="2"
                                             VerticalAlignment="Center"
-                                            Foreground="{StaticResource BorderAlt2}"
+                                            Foreground="{DynamicResource BorderAlt2}"
                                             Text="{Binding Description}" />
                                     </Grid>
                                 </DataTemplate>
@@ -141,7 +141,7 @@
                 x:Name="OkButton"
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
-                Background="{StaticResource WolvenKitRed}"
+                Background="{DynamicResource WolvenKitRed}"
                 Content="Create" />
 
             <Button

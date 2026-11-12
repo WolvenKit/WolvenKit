@@ -154,6 +154,7 @@
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                         Orientation="Horizontal">
                         <Button
+                            Style="{StaticResource WKButtonStyle}"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
                             Padding="{DynamicResource WolvenKitMarginTiny}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
@@ -162,6 +163,7 @@
                             Command="{Binding PasteFromClipboardCommand}" />
 
                         <Button
+                            Style="{StaticResource WKButtonStyle}"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
                             Padding="{DynamicResource WolvenKitMarginTiny}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
@@ -170,6 +172,7 @@
                             Click="OnLoadFileClick" />
 
                         <Button
+                            Style="{StaticResource WKButtonStyle}"
                             Padding="{DynamicResource WolvenKitMarginTiny}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Content="Clear"
@@ -225,6 +228,7 @@
                                 Margin="{DynamicResource WolvenKitMarginTinyTop}"
                                 Orientation="Horizontal">
                                 <Button
+                                    Style="{StaticResource WKButtonStyle}"
                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                     Padding="{DynamicResource WolvenKitMarginTiny}"
                                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
@@ -477,12 +481,14 @@
                             Visibility="{Binding HasEntries,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Button
+                                Style="{StaticResource WKButtonStyle}"
                                 Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                 Padding="{DynamicResource WolvenKitMarginTiny}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Content="Select all"
                                 Command="{Binding SelectAllCommand}" />
                             <Button
+                                Style="{StaticResource WKButtonStyle}"
                                 Margin="{DynamicResource WolvenKitMarginTinyRight}"
                                 Padding="{DynamicResource WolvenKitMarginTiny}"
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
