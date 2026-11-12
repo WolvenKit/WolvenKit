@@ -31,6 +31,27 @@ namespace WolvenKit.Views.Documents
             {
                 if (DataContext is RDTMeshViewModel vm)
                 {
+                    // The node tree is filled once the preview is on screen: a sector has
+                    // thousands of nodes, and filling the tree held the first frame back.
+                    if (!System.Windows.Data.BindingOperations.IsDataBound(NodeTreeGrid, Syncfusion.UI.Xaml.TreeGrid.SfTreeGrid.ItemsSourceProperty))
+                    {
+                        _ = Dispatcher.InvokeAsync(() =>
+                        {
+                            if (!vm.IsObjectPreview)
+                            {
+                                // A sector's root holds every node of it (thousands): opened on
+                                // demand, or by a click in the viewport, not on every open.
+                                NodeTreeGrid.SetCurrentValue(SfTreeGrid.AutoExpandModeProperty, AutoExpandMode.None);
+                            }
+
+                            NodeTreeGrid.SetBinding(Syncfusion.UI.Xaml.TreeGrid.SfTreeGrid.ItemsSourceProperty,
+                                new System.Windows.Data.Binding(nameof(RDTMeshViewModel.SelectedModelGroup))
+                                {
+                                    Mode = System.Windows.Data.BindingMode.TwoWay
+                                });
+                        }, DispatcherPriority.ApplicationIdle);
+                    }
+
                     SetCurrentValue(ViewModelProperty, vm);
 
                     // The view model owns the EffectsManager (created in Load, disposed in Dispose).
@@ -46,6 +67,12 @@ namespace WolvenKit.Views.Documents
                     hxViewport.MouseDown3D += vm.MouseDown3D;
                     Disposable
                         .Create(() => hxViewport.MouseDown3D -= vm.MouseDown3D)
+                        .DisposeWith(disposables);
+
+                    EventHandler rendered = (_, _) => vm.OnViewportRendered();
+                    hxViewport.OnRendered += rendered;
+                    Disposable
+                        .Create(() => hxViewport.OnRendered -= rendered)
                         .DisposeWith(disposables);
 
                     // Viewport → tree: when the selection changes (e.g. a click in the viewport),

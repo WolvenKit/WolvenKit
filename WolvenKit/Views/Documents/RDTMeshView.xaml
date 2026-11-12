@@ -679,14 +679,16 @@
                                     Grid.Column="3"
                                     Margin="2,4,6,4"
                                     VerticalAlignment="Center"
+                                    Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                                     IsChecked="{Binding BlendDecalsIntoSurfaces}"
                                     ToolTip="Blend decals into the surface under them, as the game does: colour, normal and roughness / metalness of mesh decals are baked into the skin or material they lie on, which is then lit as one surface. Off: decals are drawn as their own meshes (faster, but lit differently). Decals on multilayer materials are always drawn on their own for now."
                                     Content="Blend decals" />
                             </Grid>
                         </Grid>
 
-                        <!-- Export Materials: bake every material to PNG; multilayer at the chosen size -->
-                        <Grid>
+                        <!-- Export Materials: bake every material to PNG; multilayer at the chosen size.
+                             Not for sectors: hundreds of materials, and they belong to other meshes. -->
+                        <Grid Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
@@ -1010,9 +1012,6 @@
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
                 FilterLevel="Extended"
-                ItemsSource="{Binding SelectedModelGroup,
-                                      Mode=TwoWay}"
-                LiveNodeUpdateMode="AllowDataShaping"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 SelectedItem="{Binding SelectedItem}"
                 ShowCheckBox="True"

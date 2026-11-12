@@ -562,8 +562,11 @@ public partial class RDTMeshViewModel
         }
     }
 
-    private bool IsEmbeddedForSector(ResourcePath path) =>
-        (_sectorEmbeddedFiles?.ContainsKey(path) ?? false) || FindEmbeddedContent(path) != null;
+    /// <summary>Content of a file embedded in the sector (or the open document) under this path.</summary>
+    private RedBaseClass? EmbeddedForSector(ResourcePath path) =>
+        _sectorEmbeddedFiles != null && _sectorEmbeddedFiles.TryGetValue(path, out var file)
+            ? file.RootChunk
+            : FindEmbeddedContent(path);
 
     #endregion
 
