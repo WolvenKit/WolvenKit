@@ -107,5 +107,6 @@
   "WolvenKitProjectIconRed": "Welcome page: icon background of projects with the red project color",
   "WolvenKitProjectIconPurple": "Welcome page: icon background of projects with the purple project color",
   "WolvenKitProjectIconTan": "Welcome page: icon background of projects with the tan project color",
-  "WolvenKitListSelection": "Selected row in the Project Explorer, Asset Browser and other trees / lists"
+  "WolvenKitListSelection": "Selected row in the Project Explorer, Asset Browser and other trees / lists",
+  "WolvenKitActionText": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
 }

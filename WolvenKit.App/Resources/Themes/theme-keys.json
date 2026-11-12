@@ -830,6 +830,13 @@
       "description": "Selected row in the Project Explorer, Asset Browser and other trees / lists"
     },
     {
+      "key": "WolvenKitActionText",
+      "group": "Palette",
+      "displayName": "Action Button Text",
+      "kind": "Brush",
+      "description": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
+    },
+    {
       "key": "WolvenKitLogText",
       "group": "Palette",
       "displayName": "Log Text",

@@ -336,6 +336,8 @@
     <SolidColorBrush x:Key="WolvenKitProjectIconTan" Color="#D0A467" />
     <!--  selected row in trees and lists; follows ContentBackgroundAlt5 unless a theme sets it  -->
     <SolidColorBrush x:Key="WolvenKitListSelection" Color="#424242" />
+    <!--  text of the main action buttons (Generate Materials); follows WolvenKitYellowColor unless a theme sets it  -->
+    <SolidColorBrush x:Key="WolvenKitActionText" Color="{StaticResource WolvenKitYellowColor}" />
     <!--  log lines without a level color (info, important)  -->
     <SolidColorBrush x:Key="WolvenKitLogText" Color="#D3D3D3" />
 
