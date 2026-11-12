@@ -420,7 +420,7 @@ public partial class RDTMeshViewModel
 
         var material = SetupPBRMaterial("DefaultMaterial");
         var (areaColor, areaKind) = AreaShapeLook(node);
-        material.AlbedoColor = areaColor;
+        material.AlbedoColor = RegisterSectorAreaMaterial(material, areaColor);
 
         var group = new MeshComponent()
         {

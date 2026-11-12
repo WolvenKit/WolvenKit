@@ -44,11 +44,16 @@ public partial class RDTMeshViewModel
     [ObservableProperty] private bool _hasSectorVariants;
     [ObservableProperty] private bool _showSectorProxies;
     [ObservableProperty] private bool _showSectorFoliage = true;
+    [ObservableProperty] private bool _colorSectorAreas = true;
+
+    /// <summary>Area volumes without the colour by type.</summary>
+    private static readonly SharpDX.Color4 s_plainAreaColor = new(1f, 1f, 1f, 0.1f);
 
     // filled while RenderSector runs, then kept on the SectorGroup
     private List<(Element3D Element, int[] NodeDataIndices)>? _sectorPlacements;
     private List<Element3D>? _sectorProxyGroups;
     private List<Element3D>? _sectorFoliageGroups;
+    private List<(PBRMaterial Material, SharpDX.Color4 Color)>? _sectorAreaMaterials;
 
     private SectorGroup? _soloSector;
 
@@ -58,11 +63,14 @@ public partial class RDTMeshViewModel
 
     partial void OnShowSectorFoliageChanged(bool value) => ApplySectorVisibility();
 
+    partial void OnColorSectorAreasChanged(bool value) => ApplySectorVisibility();
+
     private void BeginSectorRegistry()
     {
         _sectorPlacements = new();
         _sectorProxyGroups = new();
         _sectorFoliageGroups = new();
+        _sectorAreaMaterials = new();
     }
 
     private void EndSectorRegistry(SectorGroup element, worldStreamingSector data, int nodeDataCount)
@@ -71,11 +79,13 @@ public partial class RDTMeshViewModel
         element.Placements = _sectorPlacements ?? new();
         element.ProxyGroups = _sectorProxyGroups ?? new();
         element.FoliageGroups = _sectorFoliageGroups ?? new();
+        element.AreaMaterials = _sectorAreaMaterials ?? new();
         element.RangeStarts = data.VariantIndices.Select(x => (int)x).ToArray();
         element.PersistentRange = data.PersisentNodeIndex;
         _sectorPlacements = null;
         _sectorProxyGroups = null;
         _sectorFoliageGroups = null;
+        _sectorAreaMaterials = null;
     }
 
     /// <summary>A scene element placed by these nodeData entries (it shows when any of them does).</summary>
@@ -90,6 +100,13 @@ public partial class RDTMeshViewModel
     private void RegisterSectorProxy(Element3D group) => _sectorProxyGroups?.Add(group);
 
     private void RegisterSectorFoliage(Element3D group) => _sectorFoliageGroups?.Add(group);
+
+    /// <summary>An area volume material and its colour by type; returns the colour to start with.</summary>
+    private SharpDX.Color4 RegisterSectorAreaMaterial(PBRMaterial material, SharpDX.Color4 color)
+    {
+        _sectorAreaMaterials?.Add((material, color));
+        return ColorSectorAreas ? color : s_plainAreaColor;
+    }
 
     /// <summary>Single sector: its variants, numbered (their names live in the block).</summary>
     private void FillSoloSectorVariants(SectorGroup sector)
@@ -184,6 +201,15 @@ public partial class RDTMeshViewModel
         foreach (var group in sector.FoliageGroups)
         {
             group.IsRendering = ShowSectorFoliage;
+        }
+
+        foreach (var (material, color) in sector.AreaMaterials)
+        {
+            var wanted = ColorSectorAreas ? color : s_plainAreaColor;
+            if (material.AlbedoColor != wanted)
+            {
+                material.AlbedoColor = wanted;
+            }
         }
     }
 

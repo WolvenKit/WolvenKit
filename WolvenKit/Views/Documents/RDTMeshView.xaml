@@ -446,6 +446,13 @@
                             Content="Show foliage"
                             ToolTip="Grass, bushes and trees (foliage nodes). Turn off to see the ground and the meshes under them, or when a sector with a lot of foliage is slow to move around." />
 
+                        <!-- Area volumes coloured by kind (trigger, light channel, GI space...) or all plain -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding ColorSectorAreas}"
+                            Content="Color areas by type"
+                            ToolTip="On: triggers orange, kill triggers red, world boundaries crimson, light channels purple, GI spaces teal, ambient (sound) areas blue, interiors light blue; other areas in the color the node carries. Off: all areas faint white. The Material column of an area's volume row names its kind." />
+
                         <!-- Search Coordinate -->
                         <StackPanel Orientation="Vertical">
                             <TextBlock
