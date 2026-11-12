@@ -44,24 +44,28 @@ public struct SurfaceExtraConstants
     /// <summary>x: edge tint exponent (0 = off), y: vertex colour tint amount, zw: unused.</summary>
     public SharpDX.Vector4 Glass;
 
-    /// <summary>x: 1 = back faces shaded as glass backs, y: back reflection power, z: back opacity, w: unused.</summary>
+    /// <summary>x: 1 = back faces shaded as glass backs, y: back reflection power, z: back opacity, w: alpha clip threshold (0 = off).</summary>
     public SharpDX.Vector4 GlassBack;
 }
 
-/// <summary>Per-material glass extras (see <see cref="SurfaceExtraConstants"/>).</summary>
+/// <summary>
+/// Per-material extras of the plain PBR pass (see <see cref="SurfaceExtraConstants"/>): glass, and the alpha clip of
+/// cut-out materials (foliage, fences, chains), which are drawn opaque with an alpha test instead of blended.
+/// </summary>
 public sealed record SurfaceExtras(
     SharpDX.Vector3? SpecularTint = null,
     float EdgeTintExponent = 0f,
     float VertexTint = 0f,
     bool GlassBackFaces = false,
     float BackReflectionPower = 1f,
-    float BackOpacity = 0f)
+    float BackOpacity = 0f,
+    float AlphaClip = 0f)
 {
     public SurfaceExtraConstants ToConstants() => new()
     {
         SpecularTint = SpecularTint is { } t ? new SharpDX.Vector4(t, 1f) : new SharpDX.Vector4(1f, 1f, 1f, 0f),
         Glass = new SharpDX.Vector4(EdgeTintExponent, VertexTint, 0f, 0f),
-        GlassBack = new SharpDX.Vector4(GlassBackFaces ? 1f : 0f, BackReflectionPower, BackOpacity, 0f),
+        GlassBack = new SharpDX.Vector4(GlassBackFaces ? 1f : 0f, BackReflectionPower, BackOpacity, AlphaClip),
     };
 }
 
