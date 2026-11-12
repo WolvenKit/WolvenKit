@@ -618,7 +618,8 @@ public partial class RDTMeshViewModel
 
     private string DecalCompositeKey(string surfaceName, List<DecalLayer> decals)
     {
-        var sb = new System.Text.StringBuilder();
+        // Composite format: bump when the bake changes (v2: decal detail resolution).
+        var sb = new System.Text.StringBuilder("v2;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
@@ -959,12 +960,18 @@ public partial class RDTMeshViewModel
             return;
         }
 
-        using var colorBmp = LoadPng32(job.SurfaceColor);
-        var color = Pixels.From(colorBmp);
-        if (color == null)
+        using var surfaceColor = LoadPng32(job.SurfaceColor);
+        if (surfaceColor == null)
         {
             return;
         }
+
+        // Composite at the decals' detail: a sharp decal over a small part of a low-resolution
+        // skin texture would otherwise be blurred down to the skin's texel size.
+        var scale = DecalDetailScale(job, surfaceColor.Width, surfaceColor.Height);
+        int tw = surfaceColor.Width * scale, th = surfaceColor.Height * scale;
+        using var colorBmp = Resized(surfaceColor, tw, th);
+        var color = Pixels.From(colorBmp)!;
 
         var anyNormal = job.Layers.Any(l => l.NormalAlpha > 0f && File.Exists(l.NormalPng));
         var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
@@ -973,7 +980,8 @@ public partial class RDTMeshViewModel
         Pixels? normal = null;
         if (anyNormal || File.Exists(job.SurfaceNormal))
         {
-            using var nb = LoadPng32(job.SurfaceNormal);
+            using var nbRaw = LoadPng32(job.SurfaceNormal);
+            using var nb = nbRaw == null ? null : Resized(nbRaw, tw, th);
             normal = Pixels.From(nb);
             if (normal == null && anyNormal)
             {
@@ -992,7 +1000,8 @@ public partial class RDTMeshViewModel
         Pixels? rm = null;
         if (anyRm)
         {
-            using var rb = job.SurfaceUsesRmMap ? LoadPng32(job.SurfaceRm) : null;
+            using var rbRaw = job.SurfaceUsesRmMap ? LoadPng32(job.SurfaceRm) : null;
+            using var rb = rbRaw == null ? null : Resized(rbRaw, tw, th);
             rm = Pixels.From(rb) ?? new Pixels { W = color.W, H = color.H, Data = new byte[color.W * color.H * 4] };
             var fill = rb == null;
             for (var i = 0; i < rm.Data.Length; i += 4)
@@ -1139,6 +1148,96 @@ public partial class RDTMeshViewModel
             using var outRmBmp = rm.ToBitmap();
             SavePngAtomic(outRmBmp, outRm);
         }
+    }
+
+    private const int DecalCompositeMaxSize = 4096;
+
+    /// <summary>
+    /// How much larger than the surface texture the composite must be to keep the decals'
+    /// detail: decal texels per surface texel over the decal triangles (75th percentile),
+    /// as a power of two, up to <see cref="DecalCompositeMaxSize"/>.
+    /// </summary>
+    private static int DecalDetailScale(DecalJob job, int w, int h)
+    {
+        var ratios = new List<double>();
+        foreach (var layer in job.Layers)
+        {
+            var (dw, dh) = PngSize(layer.ColorPng);
+            if (dw == 0)
+            {
+                (dw, dh) = PngSize(layer.NormalPng);
+            }
+
+            if (dw == 0)
+            {
+                continue;
+            }
+
+            foreach (var (tri, suv) in layer.Triangles)
+            {
+                var idx = layer.Decal.Indices;
+                var uv = layer.Decal.Uvs;
+                int a = idx[tri * 3], b = idx[tri * 3 + 1], c = idx[tri * 3 + 2];
+                var decalArea = Math.Abs((uv[b * 2] - uv[a * 2]) * (uv[c * 2 + 1] - uv[a * 2 + 1]) -
+                                         (uv[c * 2] - uv[a * 2]) * (uv[b * 2 + 1] - uv[a * 2 + 1])) * dw * dh;
+                var surfaceArea = Math.Abs((suv[2] - suv[0]) * (suv[5] - suv[1]) -
+                                           (suv[4] - suv[0]) * (suv[3] - suv[1])) * w * h;
+                if (surfaceArea > 1e-6 && decalArea > 1e-6)
+                {
+                    ratios.Add(Math.Sqrt(decalArea / surfaceArea));
+                }
+            }
+        }
+
+        if (ratios.Count == 0)
+        {
+            return 1;
+        }
+
+        ratios.Sort();
+        var needed = ratios[(int)(ratios.Count * 0.75)];
+        var scale = 1;
+        while (scale < needed && Math.Max(w, h) * scale * 2 <= DecalCompositeMaxSize)
+        {
+            scale *= 2;
+        }
+
+        return scale;
+    }
+
+    private static (int W, int H) PngSize(string path)
+    {
+        try
+        {
+            if (!File.Exists(path))
+            {
+                return (0, 0);
+            }
+
+            using var stream = File.OpenRead(path);
+            using var img = System.Drawing.Image.FromStream(stream, false, false);
+            return (img.Width, img.Height);
+        }
+        catch
+        {
+            return (0, 0);
+        }
+    }
+
+    /// <summary>The bitmap at w x h (a new one; the same size gives a copy).</summary>
+    private static Bitmap Resized(Bitmap src, int w, int h)
+    {
+        var bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+        using var g = Graphics.FromImage(bmp);
+        g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+        g.InterpolationMode = w == src.Width && h == src.Height
+            ? System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
+            : System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        using var attributes = new ImageAttributes();
+        attributes.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY); // no dark border
+        g.DrawImage(src, new Rectangle(0, 0, w, h), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attributes);
+        return bmp;
     }
 
     /// <summary>Decal coverage at a decal UV: the colour PNG's alpha (1 without one).</summary>
