@@ -1,0 +1,11 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3271
+      author: "Ametis81"
+      description: "Sector preview places entities, cooked and instanced meshes, roads and cables, foliage, terrain, destruction and area nodes; variant list, area colours by type and show / hide switches."
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3271
+      author: "Ametis81"
+      description: "Destructible and cloth components are drawn in entity and sector previews."
