@@ -173,10 +173,16 @@ public partial class RDTMeshViewModel
                     .First(sm => sm.MaterialName == surfaceName).Material as PBRMaterial;
                 var job = PrepareDecalJob(surfaceName, surfaceMaterial, decals);
 
-                _ = Task.Run(() =>
+                _ = Task.Run(async () =>
                 {
                     try
                     {
+                        foreach (var l in job.Layers.Where(l => l.UseNormalAlphaTex && l.NormalAlphaTexPath != WolvenKit.RED4.Types.ResourcePath.Empty))
+                        {
+                            using var natBmp = await LoadTextureAsBitmap(l.NormalAlphaTexPath);
+                            l.NormalAlphaTex = Pixels.From(natBmp);
+                        }
+
                         if (overlay)
                         {
                             BakeDecalOverlay(job, op);
@@ -424,8 +430,7 @@ public partial class RDTMeshViewModel
     private bool IsUvTransformedDecal(Material material)
     {
         var template = GetTemplateFileName(material);
-        return (template.Equals("mesh_decal", StringComparison.OrdinalIgnoreCase) ||
-                template.Equals("mesh_decal_emissive", StringComparison.OrdinalIgnoreCase)) &&
+        return IsPlainMeshDecalTemplate(template) &&
                Has(ClassifyMaterialFor(material.Name, material), MaterialKind.Decal);
     }
 
@@ -721,7 +726,7 @@ public partial class RDTMeshViewModel
             return false;
         }
 
-        if (!GetTemplateFileName(raw).Equals("mesh_decal", StringComparison.OrdinalIgnoreCase))
+        if (!IsPlainMeshDecalTemplate(GetTemplateFileName(raw)))
         {
             return false;
         }
@@ -768,9 +773,19 @@ public partial class RDTMeshViewModel
         UseMultilayerShader && MultilayerShader.IsAvailable &&
         sm.Material is MultilayerPBRMaterial { MultilayerData: not null };
 
+    /// <summary>
+    /// mesh_decal and the variants with the same parameters: emissive (glow skipped elsewhere),
+    /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are).
+    /// </summary>
+    private static bool IsPlainMeshDecalTemplate(string template) =>
+        template.Equals("mesh_decal", StringComparison.OrdinalIgnoreCase) ||
+        template.Equals("mesh_decal_emissive", StringComparison.OrdinalIgnoreCase) ||
+        template.Equals("mesh_decal_parallax", StringComparison.OrdinalIgnoreCase);
+
     private static float DecalAlpha(Material raw, string key) =>
-        // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS).
-        raw.Values != null && raw.Values.TryGetValue(key, out var v) ? Math.Clamp(ReadFloat(v), 0f, 1f) : 0f;
+        // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS). Values above
+        // 1 occur (DiffuseAlpha 2): coverage x alpha is saturated where it is used.
+        raw.Values != null && raw.Values.TryGetValue(key, out var v) ? Math.Clamp(ReadFloat(v), 0f, 16f) : 0f;
 
     private static SurfaceGeometry? ReadSurfaceGeometry(LoadableModel model, SubmeshComponent sm)
     {
@@ -1122,8 +1137,8 @@ public partial class RDTMeshViewModel
 
     private string DecalCompositeKey(string surfaceName, List<DecalLayer> decals)
     {
-        // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay).
-        var sb = new System.Text.StringBuilder("v3;");
+        // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay; v4: alpha above 1, NormalAlphaTex).
+        var sb = new System.Text.StringBuilder("v4;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
@@ -1376,6 +1391,14 @@ public partial class RDTMeshViewModel
 
         /// <summary>The decal lies on UV the surface also uses elsewhere: the overlay is one-sided.</summary>
         public bool SharedUv { get; init; }
+
+        /// <summary>UseNormalAlphaTex: the normal's coverage is NormalAlphaTex.r (white by default).</summary>
+        public bool UseNormalAlphaTex { get; init; }
+
+        public WolvenKit.RED4.Types.ResourcePath NormalAlphaTexPath { get; init; }
+
+        /// <summary>Loaded before the bake (null: the default white).</summary>
+        public Pixels? NormalAlphaTex { get; set; }
     }
 
     private sealed class DecalJob
@@ -1417,6 +1440,11 @@ public partial class RDTMeshViewModel
                 ConstRoughness = rough,
                 ConstMetalness = metal,
                 SharedUv = _decalSharedOnOverlay.TryGetValue(layer.Decal, out var so) && so.Contains(layer.Surface),
+                UseNormalAlphaTex = raw.Values?.TryGetValue("UseNormalAlphaTex", out var unat) == true && ReadFloat(unat) >= 0.5f,
+                NormalAlphaTexPath = raw.Values?.TryGetValue("NormalAlphaTex", out var natObj) == true &&
+                                     natObj is WolvenKit.RED4.Types.CResourceReference<WolvenKit.RED4.Types.ITexture> natRef
+                    ? natRef.DepotPath
+                    : WolvenKit.RED4.Types.ResourcePath.Empty,
             });
         }
 
@@ -1541,7 +1569,7 @@ public partial class RDTMeshViewModel
         using var colorBmp = Resized(surfaceColor, tw, th);
         var color = Pixels.From(colorBmp)!;
 
-        var anyNormal = job.Layers.Any(l => l.NormalAlpha > 0f && File.Exists(l.NormalPng));
+        var anyNormal = job.Layers.Any(l => (l.NormalAlpha > 0f || l.UseNormalAlphaTex) && File.Exists(l.NormalPng));
         var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
 
         // Normal target: the surface's map, or a flat one when only the decals have normals.
@@ -1589,7 +1617,7 @@ public partial class RDTMeshViewModel
             using var dcb = LoadPng32(layer.ColorPng);
             var dColor = Pixels.From(dcb);
 
-            using var dnb = layer.NormalAlpha > 0f ? LoadPng32(layer.NormalPng) : null;
+            using var dnb = layer.NormalAlpha > 0f || layer.UseNormalAlphaTex ? LoadPng32(layer.NormalPng) : null;
             var dNormal = Pixels.From(dnb);
             using var drb = layer.RmAlpha > 0f ? LoadPng32(layer.RmPng) : null;
             var dRm = Pixels.From(drb);
@@ -1611,7 +1639,7 @@ public partial class RDTMeshViewModel
                     {
                         Span<float> s = stackalloc float[4];
                         dC.Sample(uv.U, uv.V, s);
-                        var a = s[3] * layer.DiffuseAlpha;
+                        var a = Math.Min(1f, s[3] * layer.DiffuseAlpha);
                         if (a > 0f)
                         {
                             for (var c = 0; c < 3; c++)
@@ -1623,11 +1651,11 @@ public partial class RDTMeshViewModel
                     });
                 }
 
-                if (normal is { } nTarget && dNormal is { } dN && layer.NormalAlpha > 0f)
+                if (normal is { } nTarget && dNormal is { } dN && (layer.NormalAlpha > 0f || layer.UseNormalAlphaTex))
                 {
                     RasterizeInto(nTarget, suv, d, (px, uv) =>
                     {
-                        var a = Coverage(dColor, uv) * layer.NormalAlpha;
+                        var a = NormalCoverage(layer, dColor, uv);
                         if (a <= 0f)
                         {
                             return;
@@ -1679,7 +1707,7 @@ public partial class RDTMeshViewModel
                 {
                     RasterizeInto(rmTarget, suv, d, (px, uv) =>
                     {
-                        var a = Coverage(dColor, uv) * layer.RmAlpha;
+                        var a = Math.Min(1f, Coverage(dColor, uv) * layer.RmAlpha);
                         if (a <= 0f)
                         {
                             return;
@@ -1736,7 +1764,7 @@ public partial class RDTMeshViewModel
 
         var size = DecalOverlaySize(job);
         var anyColor = job.Layers.Any(l => l.DiffuseAlpha > 0f && File.Exists(l.ColorPng));
-        var anyNormal = job.Layers.Any(l => l.NormalAlpha > 0f && File.Exists(l.NormalPng));
+        var anyNormal = job.Layers.Any(l => (l.NormalAlpha > 0f || l.UseNormalAlphaTex) && File.Exists(l.NormalPng));
         var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
         var oneSided = job.Layers.Any(l => l.SharedUv);
 
@@ -1815,7 +1843,7 @@ public partial class RDTMeshViewModel
         {
             using var dcb = LoadPng32(layer.ColorPng);
             var dColor = Pixels.From(dcb);
-            using var dnb = layer.NormalAlpha > 0f ? LoadPng32(layer.NormalPng) : null;
+            using var dnb = layer.NormalAlpha > 0f || layer.UseNormalAlphaTex ? LoadPng32(layer.NormalPng) : null;
             var dNormal = Pixels.From(dnb);
             using var drb = layer.RmAlpha > 0f ? LoadPng32(layer.RmPng) : null;
             var dRm = Pixels.From(drb);
@@ -1839,9 +1867,9 @@ public partial class RDTMeshViewModel
                         coverage = c4[3];
                     }
 
-                    var aColor = dColor != null ? coverage * layer.DiffuseAlpha : 0f;
-                    var aNormal = coverage * layer.NormalAlpha;
-                    var aRm = coverage * layer.RmAlpha;
+                    var aColor = dColor != null ? Math.Min(1f, coverage * layer.DiffuseAlpha) : 0f;
+                    var aNormal = NormalCoverage(layer, dColor, uv);
+                    var aRm = Math.Min(1f, coverage * layer.RmAlpha);
                     var aAny = Math.Max(aColor, Math.Max(aNormal, aRm));
                     if (aAny <= 0f)
                     {
@@ -2079,6 +2107,27 @@ public partial class RDTMeshViewModel
         attributes.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY); // no dark border
         g.DrawImage(src, new Rectangle(0, 0, w, h), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attributes);
         return bmp;
+    }
+
+    /// <summary>
+    /// Coverage of the decal's normal: NormalAlphaTex.r with UseNormalAlphaTex (white = everywhere
+    /// on the decal mesh), else the colour coverage x NormalAlpha; saturated.
+    /// </summary>
+    private static float NormalCoverage(DecalJobLayer layer, Pixels? color, (double U, double V) uv)
+    {
+        if (layer.UseNormalAlphaTex)
+        {
+            if (layer.NormalAlphaTex == null)
+            {
+                return 1f;
+            }
+
+            Span<float> t4 = stackalloc float[4];
+            layer.NormalAlphaTex.Sample(uv.U, uv.V, t4);
+            return t4[2];
+        }
+
+        return Math.Min(1f, Coverage(color, uv) * layer.NormalAlpha);
     }
 
     /// <summary>Decal coverage at a decal UV: the colour PNG's alpha (1 without one).</summary>

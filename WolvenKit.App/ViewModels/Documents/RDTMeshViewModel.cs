@@ -3069,8 +3069,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   D|A|<path>               dependency from the game archive / mods (never changes)
     // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
     // v4: see-through glass, makeup roughness / metalness, glowing tattoos;
-    // v5: mesh_decal UV transform, flipbook frame, coverage).
-    private const string DepsFormat = "v5";
+    // v5: mesh_decal UV transform, flipbook frame, coverage; v6: mesh_decal_parallax too).
+    private const string DepsFormat = "v6";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
