@@ -1723,7 +1723,10 @@ public partial class RDTMeshViewModel
         var scale = DecalDetailScale(job, surfaceColor.Width, surfaceColor.Height);
         int tw = surfaceColor.Width * scale, th = surfaceColor.Height * scale;
         using var colorBmp = Resized(surfaceColor, tw, th);
-        var color = Pixels.From(colorBmp)!;
+        if (Pixels.From(colorBmp) is not { } color)
+        {
+            return;
+        }
 
         var anyNormal = job.Layers.Any(l => (l.NormalAlpha > 0f || l.UseNormalAlphaTex) && File.Exists(l.NormalPng));
         var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
@@ -1923,6 +1926,10 @@ public partial class RDTMeshViewModel
         var anyNormal = job.Layers.Any(l => (l.NormalAlpha > 0f || l.UseNormalAlphaTex) && File.Exists(l.NormalPng));
         var anyRm = job.Layers.Any(l => l.RmAlpha > 0f);
         var oneSided = job.Layers.Any(l => l.SharedUv);
+        if (!anyColor && !anyNormal && !anyRm && !oneSided)
+        {
+            return; // nothing to draw (e.g. the decals' colour PNGs are not baked yet)
+        }
 
         Pixels Blank(byte b, byte g, byte r)
         {
@@ -2013,7 +2020,12 @@ public partial class RDTMeshViewModel
                 var (m00, m01, m10, m11) = UvFrameRotation(d, suv);
                 var facing = layer.Decal.Facing(tri);
 
-                RasterizeInto(Slot(0).Facing ?? Slot(0).Color ?? Slot(0).Normal ?? Slot(0).Rm!, suv, d, (px, uv) =>
+                if ((Slot(0).Facing ?? Slot(0).Color ?? Slot(0).Normal ?? Slot(0).Rm) is not { } raster)
+                {
+                    continue;
+                }
+
+                RasterizeInto(raster, suv, d, (px, uv) =>
                 {
                     Span<float> c4 = stackalloc float[4];
                     var coverage = 1f;
