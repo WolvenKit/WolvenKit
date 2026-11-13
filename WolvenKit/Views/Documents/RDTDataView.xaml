@@ -170,7 +170,7 @@
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
                                 <Setter Property="Cursor" Value="Hand" />
-                                <Setter Property="Stroke" Value="#33FFFFFF" />
+                                <Setter Property="Stroke" Value="{DynamicResource WolvenKitGraphConnection}" />
                                 <Setter Property="StrokeThickness" Value="2" />
                                 <Setter Property="ToolTip" Value="Double click to split" />
 

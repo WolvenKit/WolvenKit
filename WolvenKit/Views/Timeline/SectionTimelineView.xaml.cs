@@ -226,17 +226,17 @@ public partial class SectionTimelineView : UserControl
                 Y1 = 16,
                 X2 = x,
                 Y2 = 24,
-                Stroke = new SolidColorBrush(Color.FromRgb(100, 100, 100)),
                 StrokeThickness = 1
             };
+            line.SetResourceReference(Shape.StrokeProperty, "WolvenKitGray66");
             TimeRulerCanvas.Children.Add(line);
             
             // Time label
             var label = new TextBlock
             {
-                Text = FormatTime(time),
-                Foreground = new SolidColorBrush(Color.FromRgb(150, 150, 150))
+                Text = FormatTime(time)
             };
+            label.SetResourceReference(TextBlock.ForegroundProperty, "WolvenKitGray99");
             label.SetResourceReference(TextBlock.FontSizeProperty, "WolvenKitFontAltTitle");
             Canvas.SetLeft(label, x + 2);
             Canvas.SetTop(label, 2);
@@ -295,10 +295,10 @@ public partial class SectionTimelineView : UserControl
             {
                 Width = _viewModel.TimelineWidth,
                 Height = trackHeight,
-                Fill = new SolidColorBrush(Color.FromArgb(20, 255, 255, 255)),
-                Stroke = new SolidColorBrush(Color.FromRgb(50, 50, 50)),
                 StrokeThickness = 0.5
             };
+            trackBg.SetResourceReference(Shape.FillProperty, "WolvenKitTimelineTrack");
+            trackBg.SetResourceReference(Shape.StrokeProperty, "WolvenKitGray33");
             Canvas.SetLeft(trackBg, 0);
             Canvas.SetTop(trackBg, yOffset);
             TimelineCanvas.Children.Add(trackBg);
@@ -425,9 +425,12 @@ public partial class SectionTimelineView : UserControl
             return highlightBrush;
         }
 
-        return new SolidColorBrush(_viewModel?.IsSectionDurationTooShort == true
-            ? Color.FromRgb(223, 41, 53)
-            : Color.FromRgb(120, 120, 120));
+        if (_viewModel?.IsSectionDurationTooShort == true)
+        {
+            return new SolidColorBrush(Color.FromRgb(223, 41, 53));
+        }
+
+        return TryFindResource("WolvenKitGray77") as Brush ?? new SolidColorBrush(Color.FromRgb(120, 120, 120));
     }
 
     private void SectionEndHandle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -603,9 +606,9 @@ public partial class SectionTimelineView : UserControl
                 Y1 = 0,
                 X2 = x,
                 Y2 = totalHeight,
-                Stroke = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
                 StrokeThickness = 1
             };
+            line.SetResourceReference(Shape.StrokeProperty, "WolvenKitTimelineGridLine");
             TimelineCanvas.Children.Add(line);
         }
     }

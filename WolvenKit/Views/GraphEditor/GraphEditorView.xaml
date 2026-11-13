@@ -55,7 +55,7 @@
                     <GeometryDrawing.Pen>
                         <!-- Thin subtle grid lines -->
                         <Pen
-                            Brush="#FF1C1C1C"
+                            Brush="{DynamicResource WolvenKitGraphEditorGridMinor}"
                             Thickness="0.5" />
                     </GeometryDrawing.Pen>
                     <GeometryDrawing.Geometry>
@@ -87,7 +87,7 @@
                 <GeometryDrawing Brush="Transparent">
                     <GeometryDrawing.Pen>
                         <Pen
-                            Brush="#FF222222"
+                            Brush="{DynamicResource WolvenKitGraphEditorGridMajor}"
                             Thickness="1.0" />
                     </GeometryDrawing.Pen>
                     <GeometryDrawing.Geometry>
@@ -433,7 +433,7 @@
                                             -->
                                             <TextBlock
                                                 VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 FontSize="14"
                                                 FontWeight="Normal"
                                                 Text="{Binding Title}" />
@@ -510,7 +510,7 @@
                                             <TextBlock
                                                 Margin="4,0,0,0"
                                                 VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 FontSize="14"
                                                 FontWeight="Normal"
                                                 Text="{Binding Subtitle}">
@@ -536,7 +536,7 @@
                                             <!-- Quest nodes: Show Title only (socket name) -->
                                             <TextBlock
                                                 VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 FontSize="14"
                                                 FontWeight="Normal"
                                                 Text="{Binding Title}">

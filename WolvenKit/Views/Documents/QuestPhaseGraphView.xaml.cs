@@ -1706,11 +1706,12 @@ namespace WolvenKit.Views.Documents
                 {
                     Text = text,
                     Tag = graph,
-                    Foreground = graph != null ? Brushes.White : Brushes.Gray,
                     FontWeight = graph != null ? FontWeights.Medium : FontWeights.Normal,
                     Cursor = graph != null ? Cursors.Hand : Cursors.Arrow,
                     VerticalAlignment = VerticalAlignment.Center
                 };
+
+                textBlock.SetResourceReference(TextBlock.ForegroundProperty, graph != null ? "ContentForeground" : "ForegroundColor_Grey_Dark");
 
                 if (graph != null)
                 {
@@ -1720,7 +1721,7 @@ namespace WolvenKit.Views.Documents
                     textBlock.MouseEnter += (_, _) =>
                         textBlock.Foreground =
                             new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF6B35"));
-                    textBlock.MouseLeave += (_, _) => textBlock.Foreground = Brushes.White;
+                    textBlock.MouseLeave += (_, _) => textBlock.SetResourceReference(TextBlock.ForegroundProperty, "ContentForeground");
                 }
 
                 Breadcrumb.Children.Add(textBlock);
