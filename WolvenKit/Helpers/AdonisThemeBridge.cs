@@ -23,6 +23,9 @@ namespace WolvenKit.Helpers
             "MahApps.Brushes.ToggleSwitch.KnobFillOffPressed",
         ];
 
+        /// <summary>The library colors, merged last into the application resources and replaced as a whole.</summary>
+        private static ResourceDictionary s_dictionary;
+
         public static void Apply()
         {
             if (Application.Current is not { } app)
@@ -30,13 +33,17 @@ namespace WolvenKit.Helpers
                 return;
             }
 
+            // Every write into the application resources makes WPF re-evaluate the resource references of all
+            // windows. Fill a new dictionary and swap it in once instead of writing the keys one by one.
+            var resources = new ResourceDictionary();
+
             if (app.TryFindResource("WolvenKitToggleOff") is SolidColorBrush toggleOff)
             {
                 foreach (var key in s_toggleOffKeys)
                 {
                     var brush = new SolidColorBrush(toggleOff.Color);
                     brush.Freeze();
-                    app.Resources[key] = brush;
+                    resources[key] = brush;
                 }
             }
 
@@ -59,8 +66,21 @@ namespace WolvenKit.Helpers
 
                 var brush = new SolidColorBrush(source.Color);
                 brush.Freeze();
-                app.Resources[key] = brush;
+                resources[key] = brush;
             }
+
+            var merged = app.Resources.MergedDictionaries;
+            var index = s_dictionary is null ? -1 : merged.IndexOf(s_dictionary);
+            if (index >= 0)
+            {
+                merged[index] = resources;
+            }
+            else
+            {
+                // after the AdonisUI and MahApps dictionaries, so these values win
+                merged.Add(resources);
+            }
+            s_dictionary = resources;
         }
 
         /// <summary>WolvenKit theme key for an AdonisUI brush (by its field name), or null to keep the AdonisUI color.</summary>

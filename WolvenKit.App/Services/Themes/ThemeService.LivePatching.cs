@@ -684,15 +684,31 @@ public sealed partial class ThemeService
             }
         }
 
+        // Every write into an attached dictionary makes WPF re-evaluate resource references; Syncfusion's Brushes.xaml
+        // takes dozens of writes. Many of them go with the other operations of its root, which is then detached.
+        var weights = new Dictionary<ResourceDictionary, int>(ReferenceEqualityComparer.Instance);
         foreach (var (dictionary, writes) in readOnlyWrites)
         {
-            WriteUnlocked(dictionary, writes);
+            // Detaching the root of Brushes.xaml costs ~0.1 s even for few writes; written in place a color costs ~5 ms.
+            if (writes.Count < MinUnlockedWritesToDetach || !_rootOf.TryGetValue(dictionary, out var root))
+            {
+                WriteUnlocked(dictionary, writes);
+                continue;
+            }
+            if (!batches.TryGetValue(root, out var ops))
+            {
+                ops = [];
+                batches[root] = ops;
+            }
+            // first, as before: the other operations may add shadows after this dictionary
+            ops.Insert(0, () => WriteUnlocked(dictionary, writes));
+            weights[root] = (weights.TryGetValue(root, out var w) ? w : 0) + writes.Count - 1;
         }
         foreach (var (root, operations) in batches)
         {
             // Detaching and re-attaching a dictionary of the application resources makes WPF re-evaluate every
             // resource reference once (~0.3 s). That pays off for many writes, not for a few.
-            if (operations.Count < MinOperationsToDetach)
+            if (operations.Count + (weights.TryGetValue(root, out var extra) ? extra : 0) < MinOperationsToDetach)
             {
                 RunAll(operations);
             }
@@ -800,6 +816,9 @@ public sealed partial class ThemeService
             dictionaries.Clear();
         }
     }
+
+    /// <summary>Below this many writes a read-only dictionary is written in place, without detaching its root.</summary>
+    private const int MinUnlockedWritesToDetach = 30;
 
     private void WriteUnlocked(ResourceDictionary dictionary, List<(string Key, object Value)> writes)
     {
