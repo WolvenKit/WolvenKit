@@ -10,7 +10,7 @@
     d:DesignWidth="400"
     d:DesignHeight="100">
     <Grid
-        Background="#252525"
+        Background="{DynamicResource WolvenKitGray25}"
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
                                                              AncestorType={x:Type local:RedIntegerEditor}}}">
         <Grid.RowDefinitions>

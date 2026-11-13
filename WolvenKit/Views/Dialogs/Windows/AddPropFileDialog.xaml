@@ -35,7 +35,7 @@
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
                 <Style TargetType="{x:Type ComboBoxItem}">
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                     <Setter Property="OverridesDefaultStyle" Value="true" />
                     <Setter Property="SnapsToDevicePixels" Value="true" />
                     <Setter Property="Template">
@@ -334,8 +334,8 @@
                         Grid.Column="1"
                         Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                         VerticalContentAlignment="Top"
-                        Background="{StaticResource ContentBackgroundAlt2}"
-                        BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                        Background="{DynamicResource ContentBackgroundAlt2}"
+                        BorderBrush="{DynamicResource ForegroundColor_Grey_Dark}"
                         BorderThickness="1"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         helpers:TextBoxBehavior.TripleClickSelectAll="True"

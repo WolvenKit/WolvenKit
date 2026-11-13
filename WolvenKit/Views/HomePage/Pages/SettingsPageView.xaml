@@ -20,7 +20,6 @@
                 <system:Boolean x:Key="FalseValue">False</system:Boolean>
 
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
@@ -34,9 +33,9 @@
             Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style
-                    BasedOn="{StaticResource ButtonDefault}"
+                    BasedOn="{StaticResource WKButtonStyle}"
                     TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginHorizontal}" />
                 </Style>
@@ -46,7 +45,7 @@
                 MinWidth="{DynamicResource WolvenKitHomeSharedHeaderWidth}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource ContentForeground}"
                 FontSize="{DynamicResource WolvenKitFontHeader}"
                 Text="Settings" />
 
@@ -67,7 +66,7 @@
                         Kind="Sync"
                         Width="{DynamicResource WolvenKitIcon}"
                         Height="{DynamicResource WolvenKitIcon}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
 
                     <TextBlock
                         Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
@@ -87,7 +86,7 @@
                         Height="{DynamicResource WolvenKitIcon}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WolvenKitCyan}" />
+                        Foreground="{DynamicResource WolvenKitCyan}" />
 
                     <TextBlock
                         Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
@@ -115,7 +114,7 @@
             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
             UpdateSourceMode="ReturnOrLostFocus"
             ButtonPanelVisibility="Collapsed"
-            CategoryForeground="{StaticResource WolvenKitRed}"
+            CategoryForeground="{DynamicResource WolvenKitRed}"
             EnableGrouping="True"
             PropertyNameColumnDefinition="{DynamicResource WolvenKitSettingsGridLabelWidth}"
             SearchBoxVisibility="Collapsed">

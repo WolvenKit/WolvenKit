@@ -29,17 +29,113 @@
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
 
+            <!--  tab text color follows the (theme-colored) tab background  -->
+            <converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter" />
+
+            <ControlTemplate x:Key="PEArchiveTabTemplate" TargetType="{x:Type syncfusion:TabItemExt}">
+                <!--
+                    The selected look is set on the named Border: the TabControl sets the tab's own
+                    Background to its selected (accent) color, which would hide WolvenKitProjectSource.
+                -->
+                <Border
+                    x:Name="TabBorder"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
+                        Text="{TemplateBinding Header}" />
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsSelected" Value="False">
+                        <Setter TargetName="TabBorder" Property="Background" Value="Transparent" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
+                        <Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSource}" />
+                    </Trigger>
+                    <!--  hover: the darker source color, like the unselected SOURCE tab  -->
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="False" />
+                            <Condition Property="IsMouseOver" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
+                    </MultiTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="PESourceTabTemplate" TargetType="{x:Type syncfusion:TabItemExt}">
+                <Border
+                    x:Name="TabBorder"
+                    Background="{DynamicResource WolvenKitProjectSourceShadow}">
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontWeight="Normal"
+                        Text="SOURCE" />
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectSource}" />
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="False" />
+                            <Condition Property="IsMouseOver" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Opacity" Value="0.8" />
+                    </MultiTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="PEResourcesTabTemplate" TargetType="{x:Type syncfusion:TabItemExt}">
+                <Border
+                    x:Name="TabBorder"
+                    Background="{DynamicResource WolvenKitProjectResourcesShadow}">
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{Binding Background, ElementName=TabBorder, Converter={StaticResource ContrastForegroundConverter}}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontWeight="Normal"
+                        Text="RESOURCES" />
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WolvenKitProjectResources}" />
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="False" />
+                            <Condition Property="IsMouseOver" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Opacity" Value="0.8" />
+                    </MultiTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
             <DataTemplate x:Key="DragDropTemplate">
                 <Border
                     x:Name="border"
                     MinWidth="{DynamicResource WolvenKitDragDropTooltipWidth}"
                     Padding="{DynamicResource WolvenKitMarginSmall}"
-                    Background="{StaticResource ContentBackgroundAlt}"
+                    Background="{DynamicResource ContentBackgroundAlt}"
                     BorderBrush="{StaticResource Border}"
                     BorderThickness="1">
                     <!-- this should update based on the context -->
                     <TextBlock
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="Move file(s) here - hold control to copy" />
                 </Border>
@@ -313,7 +409,7 @@
                             Kind="Delete"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -457,7 +553,7 @@
                             Kind="ArrowCircleRight"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -512,7 +608,7 @@
                             Kind="FolderPlus"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -526,7 +622,7 @@
                             Kind="FolderOpen"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitTan}" />
+                            Foreground="{DynamicResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>
@@ -645,18 +741,18 @@
                     <!-- Copy relative path - Open in Windows Explorer - Open file - Delete -->
                     <StackPanel
                         Grid.Column="2"
-                        Background="{StaticResource ContentBackground}"
+                        Background="{DynamicResource ContentBackground}"
                         Orientation="Horizontal">
 
                         <!-- Copy relative path -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitOrange}"
+                            BorderBrush="{DynamicResource WolvenKitOrange}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             Command="{Binding ViewModel.CopyRelPathCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
-                            HoverBackground="{StaticResource WolvenKitOrangeShadow}"
+                            HoverBackground="{DynamicResource WolvenKitOrangeShadow}"
                             ToolTip="Copy relative path to game file">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -670,13 +766,13 @@
 
                         <!-- Open in Explorer -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitYellow}"
+                            BorderBrush="{DynamicResource WolvenKitYellow}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             Command="{Binding ViewModel.OpenInFileExplorerCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
-                            HoverBackground="{StaticResource WolvenKitYellowShadow}"
+                            HoverBackground="{DynamicResource WolvenKitYellowShadow}"
                             ToolTip="Open in Windows Explorer">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -690,13 +786,13 @@
 
                         <!-- Open File -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitCyan}"
+                            BorderBrush="{DynamicResource WolvenKitCyan}"
                             Style="{StaticResource WolvenKitTreeGridButton}"
                             Command="{Binding ViewModel.OpenFileCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
-                            HoverBackground="{StaticResource WolvenKitCyanShadow}"
+                            HoverBackground="{DynamicResource WolvenKitCyanShadow}"
                             ToolTip="Open this file">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -710,13 +806,13 @@
 
                         <!-- Delete -->
                         <helpers:TreeGridButton
-                            BorderBrush="{StaticResource WolvenKitRed}"
+                            BorderBrush="{DynamicResource WolvenKitRed}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             syncfusion:FocusManagerHelper.FocusedElement="True"
                             Command="{Binding ViewModel.DeleteFileCommand,
                                               RelativeSource={RelativeSource FindAncestor,
                                                                              AncestorType={x:Type local:ProjectExplorerView}}}"
-                            HoverBackground="{StaticResource WolvenKitRedShadow}"
+                            HoverBackground="{DynamicResource WolvenKitRedShadow}"
                             ToolTip="Delete this file/folder">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
@@ -772,49 +868,35 @@
             </DataTemplate>
 
             <Style
-                x:Key="WolvenKitPESourceTabs"
                 BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
+                x:Key="WolvenKitPESourceTabs"
                 TargetType="{x:Type syncfusion:TabItemExt}">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
-                <Setter Property="BorderThickness" Value="0,0,0,2" />
+                <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
+                <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
-                            <Border
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                                <TextBlock
-                                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{TemplateBinding Foreground}"
-                                    Text="{TemplateBinding Header}" />
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsSelected" Value="False">
-                                    <Setter Property="Foreground" Value="White" />
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
-                                    <Setter Property="Foreground" Value="White" />
-                                </Trigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsSelected" Value="False" />
-                                        <Condition Property="IsMouseOver" Value="True" />
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Opacity" Value="0.8" />
-                                </MultiTrigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
+                <!--
+                    The Syncfusion base style swaps in its own template (accent background, other padding)
+                    depending on the state. Our triggers come after its triggers, so they win.
+                -->
+                <Style.Triggers>
+                    <Trigger Property="TabStripPlacement" Value="Top">
+                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="False">
+                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Template" Value="{StaticResource PEArchiveTabTemplate}" />
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </ResourceDictionary>
 
@@ -848,40 +930,30 @@
                     <Style
                         BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                         TargetType="{x:Type syncfusion:TabItemExt}">
-                        <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow}" />
+                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectSourceShadow}" />
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
-                                    <Border Background="{TemplateBinding Background}">
-                                        <TextBlock
-                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Foreground="White"
-                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                            FontWeight="Normal"
-                                            Text="SOURCE" />
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                            <Setter Property="FontWeight" Value="Bold" />
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="False" />
-                                                <Condition Property="IsMouseOver" Value="True" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Opacity" Value="0.8" />
-                                        </MultiTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
+                        <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <!--
+                            The Syncfusion base style swaps in its own template (accent background, other padding)
+                            depending on the state. Our triggers come after its triggers, so they win.
+                        -->
+                        <Style.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Top">
+                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Template" Value="{StaticResource PESourceTabTemplate}" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
@@ -899,39 +971,30 @@
                     <Style
                         BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                         TargetType="{x:Type syncfusion:TabItemExt}">
-                        <Setter Property="Background" Value="{StaticResource WolvenKitCyanShadow}" />
+                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectResourcesShadow}" />
                         <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
-                                    <Border Background="{TemplateBinding Background}">
-                                        <TextBlock
-                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Foreground="Black"
-                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                            FontWeight="Normal"
-                                            Text="RESOURCES" />
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
-                                            <Setter Property="FontWeight" Value="Bold" />
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="False" />
-                                                <Condition Property="IsMouseOver" Value="True" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Opacity" Value="0.8" />
-                                        </MultiTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
+                        <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
+                        <!--
+                            The Syncfusion base style swaps in its own template (accent background, other padding)
+                            depending on the state. Our triggers come after its triggers, so they win.
+                        -->
+                        <Style.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Top">
+                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Template" Value="{StaticResource PEResourcesTabTemplate}" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
@@ -940,7 +1003,7 @@
         <Border
             Grid.Row="1"
             Height="Auto"
-            BorderBrush="{StaticResource BorderBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.RowDefinitions>
@@ -967,8 +1030,8 @@
                     Grid.ColumnSpan="2"
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Background="Transparent"
-                    BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
-                    BorderThickness="0"
+                    BorderBrush="{DynamicResource WolvenKitSearchBorder}"
+                    BorderThickness="1"
                     Style="{StaticResource SearchBarExtendBaseStyle}"
                     hc:InfoElement.Necessary="True"
                     hc:InfoElement.Placeholder="Search"
@@ -982,6 +1045,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Padding="0"
                         AutomationProperties.AutomationId="ExpandAllButton"
@@ -993,6 +1057,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1004,6 +1069,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1016,6 +1082,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1028,6 +1095,7 @@
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
@@ -1044,20 +1112,9 @@
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Padding="0"
-                        hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"
+                        Style="{StaticResource WKToggleButtonStyle}"
                         IsChecked="{Binding IsFlatModeEnabled}"
                         ToolTip="Toggle Flat File List">
-                        <ToggleButton.Style>
-                            <Style
-                                BasedOn="{StaticResource {x:Type ToggleButton}}"
-                                TargetType="ToggleButton">
-                                <Style.Triggers>
-                                    <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ToggleButton.Style>
 
                         <ToggleButton.Resources>
                             <converters:TreeFlatIconConverter x:Key="TreeFlatIconConverter" />
@@ -1077,6 +1134,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="RefreshButton"
                         Height="Auto"
                         Padding="0"
@@ -1084,10 +1142,11 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Refresh"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
                     </Button>
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="OpenFolderButton"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
@@ -1096,7 +1155,7 @@
                         <templates:IconBox
                             IconPack="Codicons"
                             Kind="RootFolderOpened"
-                            Foreground="{StaticResource WolvenKitYellow}" />
+                            Foreground="{DynamicResource WolvenKitYellow}" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -1213,8 +1272,8 @@
                 </Style>
 
                 <Style TargetType="syncfusion:GridHeaderCellControl">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Setter Property="Foreground" Value="#CCCCCC" />
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
+                    <Setter Property="Foreground" Value="{DynamicResource WolvenKitGrayCC}" />
                     <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                     <Setter Property="FontWeight" Value="SemiBold" />
                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -1290,7 +1349,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Background="Transparent"
-            Foreground="Gray"
+            Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
             FontSize="{DynamicResource WolvenKitFontHuge}"
             Opacity="0.8"
             Text="Loading..." />
