@@ -95,7 +95,7 @@
                 x:Key="Value"
                 TargetType="TextBlock">
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginRight}" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
@@ -167,7 +167,7 @@
                 <TextBlock
                     Margin="{DynamicResource WolvenKitMarginRight}"
                     VerticalAlignment="Center"
-                    Foreground="White"
+                    Foreground="{DynamicResource ContentForeground}"
                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     FontWeight="Medium"
                     Text="{Binding SceneTitleWithCategory}" />

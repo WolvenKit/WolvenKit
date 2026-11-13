@@ -2042,7 +2042,7 @@
                                 Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"
         SelectionBackgroundColor="{DynamicResource BackgroundColor_Control}"
-        SelectionForegroundColor="White"
+        SelectionForegroundColor="{DynamicResource ContentForeground}"
         FocusBorderColor="{DynamicResource WolvenKitRedShadow}"
         FocusBorderThickness="1"
         MouseDoubleClick="OnDoubleClick"
