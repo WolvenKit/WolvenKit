@@ -13,7 +13,7 @@
     d:DesignHeight="320"
     MinWidth="{DynamicResource WolvenKitDialogWidth}"
     MinHeight="{DynamicResource WolvenKitDialogHeight}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -165,7 +165,7 @@
                 Grid.Column="2"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
                 HorizontalAlignment="Right"
-                Background="{StaticResource WolvenKitRed}"
+                Background="{DynamicResource WolvenKitRed}"
                 Content="Save" />
             <Button
                 x:Name="CancelButton"

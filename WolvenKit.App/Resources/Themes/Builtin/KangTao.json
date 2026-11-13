@@ -1,0 +1,28 @@
+{
+  "formatVersion": 1,
+  "name": "Kang Tao",
+  "author": "WolvenKit",
+  "description": "Kang Tao: signal orange on slate-blue armor, cold blue lights.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#F07A22",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#12161B",
+    "ContentBackgroundAlt": "#161B21",
+    "ContentBackgroundAlt2": "#1B2128",
+    "ContentBackgroundAlt3": "#222932",
+    "ContentBackgroundAlt4": "#2A323D",
+    "ContentBackgroundAlt5": "#333D4A",
+    "BorderAlt": "#34404D",
+    "ContentForeground": "#E3E8EE",
+    "ForegroundColor": "#E3E8EE",
+    "BackgroundColor_Control": "#1B2128",
+    "BackgroundColor_Frame_Active": "#222932",
+    "BackgroundColor_Frame_Background": "#161B21",
+    "WolvenKitProjectSource": "#4FA8FF",
+    "WolvenKitProjectSourceShadow": "#2A5C8F",
+    "WolvenKitProjectResources": "#C9D3DE",
+    "WolvenKitProjectResourcesShadow": "#5D6876",
+    "WolvenKitOrangeColor": "#F07A22"
+  }
+}
