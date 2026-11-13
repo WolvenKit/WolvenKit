@@ -677,6 +677,12 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case questCharacterWorkspot_ConditionType workspotCon:
+                Descriptor = StringHelper.FormatCharacterWorkspotCondition(workspotCon).Split(" at ")[0];
+                return;
+            case questCharacterCondition when GetPropertyChild("Type") is { ResolvedData: questCharacterWorkspot_ConditionType questCon } child:
+                Descriptor = child.Descriptor ?? StringHelper.FormatCharacterWorkspotCondition(questCon).Split(" at ")[0];
+                return;
             case questNodeDefinition qnd:
                 Descriptor = qnd.Id.ToString();
                 return;

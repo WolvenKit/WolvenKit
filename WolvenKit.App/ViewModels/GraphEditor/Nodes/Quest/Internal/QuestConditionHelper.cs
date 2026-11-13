@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
 
@@ -54,7 +55,7 @@ public class QuestConditionHelper
     public static Dictionary<string, string> GetSemanticConditionDisplay(questIBaseCondition? condition)
     {
         var details = new Dictionary<string, string>();
-        
+
         if (condition == null)
         {
             details["Type"] = "None";
@@ -71,7 +72,7 @@ public class QuestConditionHelper
         {
             var operation = logical.Operation.ToString().ToUpper();
             details["Condition"] = $"{operation} of {logical.Conditions.Count} conditions";
-            
+
             // Add individual conditions as separate detail lines (up to 15)
             var validConditions = logical.Conditions.Where(c => c?.Chunk != null).Take(15).ToList();
             for (int i = 0; i < validConditions.Count; i++)
@@ -80,7 +81,7 @@ public class QuestConditionHelper
                 var condTypeName = GetDetailedConditionTypeName(validConditions[i].Chunk!);
                 details[$"#{i + 1} {condTypeName}"] = condDesc;
             }
-            
+
             if (logical.Conditions.Count > 15)
             {
                 details["..."] = $"+ {logical.Conditions.Count - 15} more conditions";
@@ -137,7 +138,7 @@ public class QuestConditionHelper
         var actor = trigger.IsPlayerActivator ? "Player" : "Actor";
         var area = trigger.TriggerAreaRef.GetResolvedText();
         var action = trigger.Type.ToString();
-        
+
         return $"{actor} {action} {area}";
     }
 
@@ -173,8 +174,8 @@ public class QuestConditionHelper
         else if (obj.Type?.Chunk is questInventory_ConditionType inventory)
         {
             var target = inventory.IsPlayer ? "Player" : ParseGameEntityReference(inventory.ObjectRef);
-            var item = !string.IsNullOrEmpty(inventory.ItemID.GetResolvedText()) 
-                ? inventory.ItemID.GetResolvedText() 
+            var item = !string.IsNullOrEmpty(inventory.ItemID.GetResolvedText())
+                ? inventory.ItemID.GetResolvedText()
                 : inventory.ItemTag.GetResolvedText();
             var op = MapComparisonOperator((object)inventory.ComparisonType);
             return $"{target} {op} {inventory.Quantity} {item}";
@@ -247,67 +248,66 @@ public class QuestConditionHelper
     {
         return character.Type?.Chunk switch
         {
-            questCharacterBodyType_CondtionType bodyType => 
+            questCharacterBodyType_CondtionType bodyType =>
                 $"{(bodyType.IsPlayer ? "Player" : ParseGameEntityReference(bodyType.ObjectRef))} is {bodyType.Gender}",
-            
-            questCharacterSpawned_ConditionType spawned => 
+
+            questCharacterSpawned_ConditionType spawned =>
                 FormatCharacterSpawnedCondition(spawned),
-            
-            questCharacterMount_ConditionType mount => 
+
+            questCharacterMount_ConditionType mount =>
                 FormatMountCondition(mount),
-            
-            questCharacterHit_ConditionType hit => 
+
+            questCharacterHit_ConditionType hit =>
                 $"{(hit.IsAttackerPlayer ? "Player" : ParseGameEntityReference(hit.AttackerRef))} hits {(hit.IsTargetPlayer ? "Player" : ParseGameEntityReference(hit.TargetRef))}",
-            
-            questCharacterHealth_ConditionType health => 
+
+            questCharacterHealth_ConditionType health =>
                 $"{(health.IsPlayer ? "Player" : ParseGameEntityReference(health.ObjectRef))} health {MapComparisonOperator((object)health.ComparisonType)} {health.Percent}%",
-            
-            questCharacterStatPool_ConditionType statPool => 
+
+            questCharacterStatPool_ConditionType statPool =>
                 $"{(statPool.IsPlayer ? "Player" : ParseGameEntityReference(statPool.ObjectRef))} {statPool.StatPoolType} {MapComparisonOperator((object)statPool.ComparisonType)} {statPool.Percent}%",
-            
-            questCharacterStatusEffect_CondtionType statusEffect => 
+
+            questCharacterStatusEffect_CondtionType statusEffect =>
                 $"{(statusEffect.IsPlayer ? "Player" : ParseGameEntityReference(statusEffect.ObjectRef))} {(statusEffect.Inverted ? "does not have " : "has ")}{statusEffect.StatusEffectID}",
-            
-            questCharacterCombat_ConditionType combat => 
+
+            questCharacterCombat_ConditionType combat =>
                 $"{(combat.IsPlayer ? "Player" : ParseGameEntityReference(combat.ObjectRef))} {(combat.Inverted ? "not in" : "in")} combat",
-            
-            questCharacterState_ConditionType state => 
+
+            questCharacterState_ConditionType state =>
                 FormatCharacterStateCondition(state),
-            
-            questCharacterKilled_ConditionType killed => 
+
+            questCharacterKilled_ConditionType killed =>
                 FormatCharacterKilledCondition(killed),
-            
-            questCharacterWorkspot_ConditionType workspot => 
+
+            questCharacterWorkspot_ConditionType workspot =>
                 FormatCharacterWorkspotCondition(workspot),
-            
-            questCharacterAim_ConditionType aim => 
+
+            questCharacterAim_ConditionType aim =>
                 FormatCharacterAimCondition(aim),
-            
-            questCharacterAppearancePrefetched_ConditionType appearance => 
+
+            questCharacterAppearancePrefetched_ConditionType appearance =>
                 FormatCharacterAppearanceCondition(appearance),
-            
-            questCharacterAttack_ConditionType attack => 
+
+            questCharacterAttack_ConditionType attack =>
                 FormatCharacterAttackCondition(attack),
-            
-            questCharacterCallReinforcements_ConditionType reinforcements => 
+
+            questCharacterCallReinforcements_ConditionType reinforcements =>
                 FormatCharacterCallReinforcementsCondition(reinforcements),
-            
-            questCharacterControlledObjectHit_ConditionType controlledHit => 
+
+            questCharacterControlledObjectHit_ConditionType controlledHit =>
                 FormatCharacterControlledObjectHitCondition(controlledHit),
-            
-            questCharacterCover_ConditionType cover => 
+ questCharacterCover_ConditionType cover =>
                 FormatCharacterCoverCondition(cover),
-            
-            questCharacterCyberdeckProgram_ConditionType cyberdeck => 
+
+            questCharacterCyberdeckProgram_ConditionType cyberdeck =>
                 FormatCharacterCyberdeckProgramCondition(cyberdeck),
-            
-            questCharacterEquippedItem_ConditionType equippedItem => 
+
+            questCharacterEquippedItem_ConditionType equippedItem =>
                 FormatCharacterEquippedItemCondition(equippedItem),
-            
-            questCharacterEquippedWeapon_ConditionType equippedWeapon => 
+
+            questCharacterEquippedWeapon_ConditionType equippedWeapon =>
                 FormatCharacterEquippedWeaponCondition(equippedWeapon),
-            
-            questCharacterLifePath_ConditionType lifePath => 
+
+            questCharacterLifePath_ConditionType lifePath =>
                 FormatCharacterLifePathCondition(lifePath),
 
             questCharacterMountedTogether_ConditionType mountedTogether =>
@@ -324,7 +324,7 @@ public class QuestConditionHelper
 
             questCharacterQuickHackUploadBegin_ConditionType quickHackUploadBegin =>
                 FormatCharacterQuickHackUploadBeginCondition(quickHackUploadBegin),
-            
+
             _ => $"Character {character.Type?.Chunk?.GetType().Name.Replace("questCharacter", "").Replace("_ConditionType", "").Replace("_CondtionType", "")} condition"
         };
     }
@@ -383,7 +383,7 @@ public class QuestConditionHelper
                 .Where(c => c?.Chunk != null)
                 .Select(c => FormatConditionSemantically(c.Chunk!))
                 .ToList();
-            
+
             if (conditionDescriptions.Count == 1)
                 return conditionDescriptions[0];
             else if (conditionDescriptions.Count == 2)
@@ -392,7 +392,7 @@ public class QuestConditionHelper
             {
                 // For many conditions, use a more compact format and handle truncation
                 var maxDisplayLength = 200; // Reasonable limit for display
-                var compactConditions = conditionDescriptions.Select(c => 
+                var compactConditions = conditionDescriptions.Select(c =>
                 {
                     // Make individual conditions more compact
                     return c.Replace("Player isinside ", "≻")
@@ -406,9 +406,9 @@ public class QuestConditionHelper
                            .Replace(" >= ", "≥")
                            .Replace(" <= ", "≤");
                 }).ToList();
-                
+
                 var result = $"{operation}({string.Join(", ", compactConditions)})";
-                
+
                 // If still too long, show count and first few
                 if (result.Length > maxDisplayLength)
                 {
@@ -416,7 +416,7 @@ public class QuestConditionHelper
                     var remaining = conditionDescriptions.Count - firstFew.Count;
                     result = $"{operation}({string.Join(", ", firstFew)}{(remaining > 0 ? $", +{remaining} more" : "")})";
                 }
-                
+
                 return result;
             }
         }
@@ -441,7 +441,7 @@ public class QuestConditionHelper
         {
             var state = entryState.State.ToString();
             var inverted = entryState.Inverted ? "not " : "";
-            
+
             // Get the journal path details
             var path = entryState.Path?.Chunk;
             if (path != null)
@@ -450,9 +450,9 @@ public class QuestConditionHelper
                 var className = path.ClassName.ToString()?
                     .Replace("gameJournal", "")
                     .Replace("Entry", "");
-                
+
                 var realPath = path.RealPath.ToString();
-                
+
                 return $"{className} ({realPath}) {inverted}{state}";
             }
             else
@@ -505,7 +505,7 @@ public class QuestConditionHelper
         return "Journal condition";
     }
 
-    private static string ParseGameEntityReference(gameEntityReference? entRef)
+    public static string ParseGameEntityReference(gameEntityReference? entRef)
     {
         if (entRef == null) return "-";
 
@@ -598,177 +598,177 @@ public class QuestConditionHelper
     private static string GetCharacterConditionSubTypeName(questCharacterCondition character)
     {
         if (character.Type?.Chunk == null) return "Character";
-        
+
         var subtype = character.Type.Chunk.GetType().Name
             .Replace("questCharacter", "")
             .Replace("_ConditionType", "")
             .Replace("_CondtionType", ""); // Handle the typo in some class names
-        
+
         return $"Character ({subtype})";
     }
 
     private static string GetObjectConditionSubTypeName(questObjectCondition obj)
     {
         if (obj.Type?.Chunk == null) return "Object";
-        
+
         var subtype = obj.Type.Chunk.GetType().Name
             .Replace("quest", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Object ({subtype})";
     }
 
     private static string GetFactsConditionSubTypeName(questFactsDBCondition facts)
     {
         if (facts.Type?.Chunk == null) return "Facts";
-        
+
         var subtype = facts.Type.Chunk.GetType().Name
             .Replace("questVar", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Facts ({subtype})";
     }
 
     private static string GetTimeConditionSubTypeName(questTimeCondition time)
     {
         if (time.Type?.Chunk == null) return "Time";
-        
+
         var subtype = time.Type.Chunk.GetType().Name
             .Replace("quest", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Time ({subtype})";
     }
 
     private static string GetSystemConditionSubTypeName(questSystemCondition system)
     {
         if (system.Type?.Chunk == null) return "System";
-        
+
         var subtype = system.Type.Chunk.GetType().Name
             .Replace("quest", "")
             .Replace("_ConditionType", "");
-        
+
         return $"System ({subtype})";
     }
 
     private static string GetVehicleConditionSubTypeName(questVehicleCondition vehicle)
     {
         if (vehicle.Type?.Chunk == null) return "Vehicle";
-        
+
         var subtype = vehicle.Type.Chunk.GetType().Name
             .Replace("questVehicle", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Vehicle ({subtype})";
     }
 
     private static string GetUIConditionSubTypeName(questUICondition ui)
     {
         if (ui.Type?.Chunk == null) return "UI";
-        
+
         var subtype = ui.Type.Chunk.GetType().Name
             .Replace("questUI", "")
             .Replace("_ConditionType", "");
-        
+
         return $"UI ({subtype})";
     }
 
     private static string GetStatsConditionSubTypeName(questStatsCondition stats)
     {
         if (stats.Type?.Chunk == null) return "Stats";
-        
+
         var subtype = stats.Type.Chunk.GetType().Name
             .Replace("quest", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Stats ({subtype})";
     }
 
     private static string GetSpawnerConditionSubTypeName(questSpawnerCondition spawner)
     {
         if (spawner.Type?.Chunk == null) return "Spawner";
-        
+
         var subtype = spawner.Type.Chunk.GetType().Name
             .Replace("questSpawner", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Spawner ({subtype})";
     }
 
     private static string GetSensesConditionSubTypeName(questSensesCondition senses)
     {
         if (senses.Type?.Chunk == null) return "Senses";
-        
+
         var subtype = senses.Type.Chunk.GetType().Name
             .Replace("quest", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Senses ({subtype})";
     }
 
     private static string GetPaymentConditionSubTypeName(questPaymentCondition payment)
     {
         if (payment.Type?.Chunk == null) return "Payment";
-        
+
         var subtype = payment.Type.Chunk.GetType().Name
             .Replace("questPayment", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Payment ({subtype})";
     }
 
     private static string GetEntityConditionSubTypeName(questEntityCondition entity)
     {
         if (entity.Type?.Chunk == null) return "Entity";
-        
+
         var subtype = entity.Type.Chunk.GetType().Name
             .Replace("questEntity", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Entity ({subtype})";
     }
 
     private static string GetContentConditionSubTypeName(questContentCondition content)
     {
         if (content.Type?.Chunk == null) return "Content";
-        
+
         var subtype = content.Type.Chunk.GetType().Name
             .Replace("questContent", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Content ({subtype})";
     }
 
     private static string GetDistanceConditionSubTypeName(questDistanceCondition distance)
     {
         if (distance.Type?.Chunk == null) return "Distance";
-        
+
         var subtype = distance.Type.Chunk.GetType().Name
             .Replace("questDistance", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Distance ({subtype})";
     }
 
     private static string GetSceneConditionSubTypeName(questSceneCondition scene)
     {
         if (scene.Type?.Chunk == null) return "Scene";
-        
+
         var subtype = scene.Type.Chunk.GetType().Name
             .Replace("quest", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Scene ({subtype})";
     }
 
     private static string GetJournalConditionSubTypeName(questJournalCondition journal)
     {
         if (journal.Type?.Chunk == null) return "Journal";
-        
+
         var subtype = journal.Type.Chunk.GetType().Name
             .Replace("questJournal", "")
             .Replace("_ConditionType", "");
-        
+
         return $"Journal ({subtype})";
     }
 
@@ -919,38 +919,27 @@ public class QuestConditionHelper
         return $"{target}{suffix}";
     }
 
-    private static string FormatCharacterWorkspotCondition(questCharacterWorkspot_ConditionType workspot)
-    {
-        var subject = workspot.IsPlayer ? "Player" : ParseGameEntityReference(workspot.PuppetRef);
-        var spotRef = workspot.SpotRef.GetResolvedText();
-        
-        if (!string.IsNullOrEmpty(workspot.AnimationName) && workspot.AnimationName != "None")
-        {
-            var waitText = workspot.WaitForAnimEnd ? " (wait for end)" : "";
-            return $"{subject} at {spotRef} with animation: {workspot.AnimationName}{waitText}";
-        }
-        
-        return $"{subject} at {spotRef}";
-    }
+    private static string FormatCharacterWorkspotCondition(questCharacterWorkspot_ConditionType workspot) =>
+        StringHelper.FormatCharacterWorkspotCondition(workspot);
 
     private static string FormatCharacterAimCondition(questCharacterAim_ConditionType aim)
     {
         var subject = aim.IsPlayer ? "Player" : "Character";
         var target = ParseGameEntityReference(aim.TargetRef);
         var aimType = aim.PreciseAiming ? "precisely aiming at" : "aiming at";
-        
+
         return $"{subject} {aimType} {target}";
     }
 
     private static string FormatCharacterAppearanceCondition(questCharacterAppearancePrefetched_ConditionType appearance)
     {
         var subject = appearance.IsPlayer ? "Player" : ParseGameEntityReference(appearance.PuppetRef);
-        
+
         if (!string.IsNullOrEmpty(appearance.AppearanceName) && appearance.AppearanceName != "None")
         {
             return $"{subject} appearance {appearance.AppearanceName} prefetched";
         }
-        
+
         return $"{subject} appearance prefetched";
     }
 
@@ -958,7 +947,7 @@ public class QuestConditionHelper
     {
         var attacker = ParseGameEntityReference(attack.AttackerRef);
         var target = attack.IsTargetPlayer ? "Player" : ParseGameEntityReference(attack.TargetRef);
-        
+
         return $"{attacker} attacks {target}";
     }
 
@@ -972,9 +961,9 @@ public class QuestConditionHelper
     {
         var attacker = ParseGameEntityReference(controlledHit.AttackerRef);
         var target = controlledHit.IsTargetPlayer ? "Player" : ParseGameEntityReference(controlledHit.TargetRef);
-        
+
         var hitDetails = new List<string>();
-        
+
         // Add hit types if specified
         if (controlledHit.IncludeHitTypes?.Count > 0)
         {
@@ -984,7 +973,7 @@ public class QuestConditionHelper
         {
             hitDetails.Add($"exclude types: {string.Join(", ", controlledHit.ExcludeHitTypes.Select(t => t.ToString()))}");
         }
-        
+
         // Add hit shapes if specified
         if (controlledHit.IncludeHitShapes?.Count > 0)
         {
@@ -994,7 +983,7 @@ public class QuestConditionHelper
         {
             hitDetails.Add($"exclude shapes: {string.Join(", ", controlledHit.ExcludeHitShapes)}");
         }
-        
+
         var detailsText = hitDetails.Count > 0 ? $" ({string.Join(", ", hitDetails)})" : "";
         return $"{attacker} hits controlled object of {target}{detailsText}";
     }
@@ -1003,24 +992,24 @@ public class QuestConditionHelper
     {
         var puppet = ParseGameEntityReference(cover.PuppetRef);
         var coverRef = cover.CoverRef.GetResolvedText();
-        
+
         if (!string.IsNullOrEmpty(coverRef) && coverRef != "-")
         {
             return $"{puppet} using cover {coverRef}";
         }
-        
+
         return $"{puppet} using cover";
     }
 
     private static string FormatCharacterCyberdeckProgramCondition(questCharacterCyberdeckProgram_ConditionType cyberdeck)
     {
         var programID = cyberdeck.CyberdeckProgramID.GetResolvedText();
-        
+
         if (!string.IsNullOrEmpty(programID))
         {
             return $"Cyberdeck program {programID} active";
         }
-        
+
         return "Cyberdeck program active";
     }
 
@@ -1028,10 +1017,10 @@ public class QuestConditionHelper
     {
         var subject = equippedItem.IsPlayer ? "Player" : ParseGameEntityReference(equippedItem.PuppetRef);
         var hasText = equippedItem.Inverted ? "does not have" : "has";
-        
+
         // Determine what item to check for
         var itemDescription = "";
-        
+
         if (!string.IsNullOrEmpty(equippedItem.ItemID.GetResolvedText()))
         {
             itemDescription = equippedItem.ItemID.GetResolvedText();
@@ -1044,7 +1033,7 @@ public class QuestConditionHelper
         {
             itemDescription = "item";
         }
-        
+
         var exclusions = new List<string>();
         if (equippedItem.ExcludedTweakDBIDs?.Count > 0)
         {
@@ -1054,7 +1043,7 @@ public class QuestConditionHelper
         {
             exclusions.Add($"exclude tags: {string.Join(", ", equippedItem.ExcludedTags)}");
         }
-        
+
         var exclusionText = exclusions.Count > 0 ? $" ({string.Join(", ", exclusions)})" : "";
         return $"{subject} {hasText} equipped {itemDescription}{exclusionText}";
     }
@@ -1062,14 +1051,14 @@ public class QuestConditionHelper
     private static string FormatCharacterEquippedWeaponCondition(questCharacterEquippedWeapon_ConditionType equippedWeapon)
     {
         var hasText = equippedWeapon.Inverted ? "does not have" : "has";
-        
+
         if (equippedWeapon.AnyWeaponEquipped)
         {
             return $"Player {hasText} any weapon equipped";
         }
-        
+
         var weaponDescription = "";
-        
+
         if (!string.IsNullOrEmpty(equippedWeapon.WeaponID))
         {
             weaponDescription = equippedWeapon.WeaponID;
@@ -1082,24 +1071,24 @@ public class QuestConditionHelper
         {
             weaponDescription = "weapon";
         }
-        
+
         return $"Player {hasText} {weaponDescription} equipped";
     }
 
     private static string FormatCharacterLifePathCondition(questCharacterLifePath_ConditionType lifePath)
     {
         var lifePathID = lifePath.LifePathID.GetResolvedText();
-        
+
         if (!string.IsNullOrEmpty(lifePathID))
         {
             // Clean up the life path ID for better readability
             var cleanLifePath = lifePathID
                 .Replace("LifePaths.", "")
                 .Replace("_", " ");
-            
+
             return $"Player life path is {cleanLifePath}";
         }
-        
+
         return "Player life path condition";
     }
 
@@ -1278,15 +1267,15 @@ public class QuestConditionHelper
     {
         return system.Type?.Chunk switch
         {
-            questCameraFocus_ConditionType cameraFocus => 
+            questCameraFocus_ConditionType cameraFocus =>
                 $"Camera focused on {ParseGameEntityReference(cameraFocus.ObjectRef)} {(cameraFocus.Inverted ? "(inverted)" : "")}",
-            
-            questPrereq_ConditionType prereq => 
+
+            questPrereq_ConditionType prereq =>
                 $"{(prereq.IsObjectPlayer ? "Player" : ParseGameEntityReference(prereq.ObjectRef))} meets prerequisite",
-            
-            questPhone_ConditionType phone => 
+
+            questPhone_ConditionType phone =>
                 FormatPhoneCondition(phone),
-            
+
             _ => $"System {system.Type?.Chunk?.GetType().Name.Replace("quest", "").Replace("_ConditionType", "")} condition"
         };
     }
@@ -1295,37 +1284,34 @@ public class QuestConditionHelper
     {
         return vehicle.Type?.Chunk switch
         {
-            questVehicleSpeed_ConditionType speed => 
+            questVehicleSpeed_ConditionType speed =>
                 $"Vehicle speed {MapComparisonOperator((object)speed.ComparisonType)} {speed.Speed}",
-            
-            questVehicleSpawned_ConditionType spawned => 
+
+            questVehicleSpawned_ConditionType spawned =>
                 $"Vehicle {ParseGameEntityReference(spawned.VehicleRef)} spawned",
-            
-            questVehicleCollision_ConditionType collision => 
+
+            questVehicleCollision_ConditionType collision =>
                 $"Vehicle collision with {collision.Magnitude} magnitude",
-            
-            questVehicleDestruction_ConditionType destruction => 
+
+            questVehicleDestruction_ConditionType destruction =>
                 $"Vehicle destruction {MapComparisonOperator((object)destruction.ComparisonType)} {destruction.Destruction}%",
-            
+
             _ => $"Vehicle {vehicle.Type?.Chunk?.GetType().Name.Replace("questVehicle", "").Replace("_ConditionType", "")} condition"
         };
     }
 
-    private static string FormatUICondition(questUICondition ui)
-    {
-        return $"UI {ui.Type?.Chunk?.GetType().Name.Replace("questUI", "").Replace("_ConditionType", "")} condition";
-    }
+    private static string FormatUICondition(questUICondition ui) => $"UI {ui.Type?.Chunk?.GetType().Name.Replace("questUI", "").Replace("_ConditionType", "")} condition";
 
     private static string FormatStatsCondition(questStatsCondition stats)
     {
         return stats.Type?.Chunk switch
         {
-            questStat_ConditionType stat => 
+            questStat_ConditionType stat =>
                 $"Stat {stat.StatType} {MapComparisonOperator((object)stat.ComparisonType)} {stat.Value}",
-            
-            questDifficulty_ConditionType difficulty => 
+
+            questDifficulty_ConditionType difficulty =>
                 $"Difficulty is {difficulty.Difficulty}",
-            
+
             _ => $"Stats {stats.Type?.Chunk?.GetType().Name.Replace("quest", "").Replace("_ConditionType", "")} condition"
         };
     }
@@ -1334,12 +1320,12 @@ public class QuestConditionHelper
     {
         return spawner.Type?.Chunk switch
         {
-            questSpawnerReady_ConditionType ready => 
+            questSpawnerReady_ConditionType ready =>
                 $"Spawner {ready.SpawnerReference.GetResolvedText()} is ready",
-            
-            questSpawnerNotReady_ConditionType notReady => 
+
+            questSpawnerNotReady_ConditionType notReady =>
                 $"Spawner {notReady.SpawnerReference.GetResolvedText()} is not ready",
-            
+
             _ => $"Spawner {spawner.Type?.Chunk?.GetType().Name.Replace("questSpawner", "").Replace("_ConditionType", "")} condition"
         };
     }
@@ -1371,12 +1357,12 @@ public class QuestConditionHelper
     {
         return content.Type?.Chunk switch
         {
-            questContentToken_ConditionType token => 
+            questContentToken_ConditionType token =>
                 $"Content Token Type is {token.Type}",
-            
+
             questContentLock_ConditionType lockCond =>
                 lockCond.IsContentBlocked ? "Content is blocked" : "Content is not blocked",
-            
+
             _ => $"Content {content.Type?.Chunk?.GetType().Name.Replace("questContent", "").Replace("_ConditionType", "")} condition"
         };
     }
@@ -1385,7 +1371,7 @@ public class QuestConditionHelper
     {
         var beginTime = FormatGameTime(timePeriod.Begin);
         var endTime = FormatGameTime(timePeriod.End);
-        
+
         return $"Time between {beginTime} and {endTime}";
     }
 
@@ -1400,7 +1386,7 @@ public class QuestConditionHelper
         var totalSeconds = gameTime.Seconds;
         var hours = (totalSeconds / 3600) % 24;
         var minutes = (totalSeconds % 3600) / 60;
-        
+
         return $"{hours:D2}:{minutes:D2}";
     }
 }
