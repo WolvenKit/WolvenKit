@@ -1,12 +1,14 @@
-﻿using WolvenKit.App.Controllers;
+using WolvenKit.App.Controllers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Factories;
@@ -20,6 +22,7 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
     private readonly IModTools _modTools;
     private readonly GeometryCacheService _geometryCacheService;
     private readonly IModifierViewStateService _modifierSvc;
+    private readonly IArchiveManager _archiveManager;
 
     public DocumentTabViewmodelFactory(
         ILoggerService loggerService,
@@ -28,7 +31,8 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
         IGameControllerFactory gameController,
         IModTools modTools,
         GeometryCacheService geometryCacheService,
-        IModifierViewStateService modifierSvc)
+        IModifierViewStateService modifierSvc,
+        IArchiveManager archiveManager)
     {
         _loggerService = loggerService;
         _parserService = parserService;
@@ -37,6 +41,7 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
         _modTools = modTools;
         _geometryCacheService = geometryCacheService;
         _modifierSvc = modifierSvc;
+        _archiveManager = archiveManager;
     }
 
     public RDTInkTextureAtlasViewModel RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, RedDocumentViewModel file) => new(atlas, file);
@@ -51,14 +56,14 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
         => new(header, data, file, appViewModel, chunkViewmodelFactory, _settingsManager, _gameController);
 
     public RDTMeshViewModel RDTMeshViewModel(CMesh data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _archiveManager);
 
     public RDTMeshViewModel RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _archiveManager);
 
     public RDTMeshViewModel RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _archiveManager);
 
     public RDTMeshViewModel RDTMeshViewModel(entEntityTemplate data, RedDocumentViewModel file)
-        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
+        => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc, _archiveManager);
 }
