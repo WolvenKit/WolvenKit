@@ -5,6 +5,7 @@
     xmlns:converters="clr-namespace:WolvenKit.App.Converters;assembly=WolvenKit.App"
     xmlns:dialogVMs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:hpv="clr-namespace:WolvenKit.Views.HomePage"
     xmlns:hpvm="clr-namespace:WolvenKit.App.ViewModels.HomePage;assembly=WolvenKit.App"
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
@@ -14,6 +15,7 @@
     MinWidth="960"
     MinHeight="600"
     Background="Transparent"
+    Foreground="{DynamicResource ContentForeground}"
     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
     AllowsTransparency="True"
     Closing="ChromelessWindow_Closing"
@@ -262,7 +264,7 @@
                             Grid.ColumnSpan="5"
                             Visibility="{Binding IsDialogShown,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Fill="{StaticResource ContentBackground}"
+                            Fill="{DynamicResource ContentBackground}"
                             MouseLeftButtonDown="Overlay_MouseLeftButtonDown"
                             Opacity="0.8" />
 
@@ -388,7 +390,7 @@
                                 BorderThickness="1"
                                 CornerRadius="8" />
                             <Border
-                                Background="{StaticResource ContentBackgroundAlt2}"
+                                Background="{DynamicResource ContentBackgroundAlt2}"
                                 CornerRadius="8" />
                             <TextBlock
                                 Margin="20,10"
@@ -396,7 +398,7 @@
                                 Text="Loading..." />
                             <ContentControl Content="{Binding ActiveDialog}" />
                             <Border
-                                BorderBrush="{StaticResource BorderAlt}"
+                                BorderBrush="{DynamicResource BorderAlt}"
                                 BorderThickness="1"
                                 CornerRadius="8" />
                         </Grid>
@@ -412,11 +414,28 @@
                 x:Name="dockingAdapter"
                 Grid.Row="1"
                 Margin="5,2,5,0"
-                Background="{StaticResource ContentBackground}" />
+                Background="{DynamicResource ContentBackground}" />
 
             <shell:StatusBarView
                 Grid.Row="2"
                 Margin="0" />
+
+            <!--
+                In-app notifications (bottom right). Above the Settings page and dialogs (ZIndex 1000),
+                so a notification raised there, e.g. while a theme is applied, is not hidden under them.
+            -->
+            <hc:ScrollViewer
+                Grid.Row="1"
+                Margin="5,2,5,0"
+                HorizontalAlignment="Right"
+                Panel.ZIndex="1001"
+                IsPenetrating="True"
+                VerticalScrollBarVisibility="Hidden">
+                <StackPanel
+                    Margin="0,10,10,10"
+                    VerticalAlignment="Bottom"
+                    hc:Growl.GrowlParent="True" />
+            </hc:ScrollViewer>
         </Grid>
     </Grid>
 </syncfusion:ChromelessWindow>

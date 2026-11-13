@@ -71,7 +71,7 @@
             Width="{StaticResource WolvenKitLabelWidthMedium}"
             HorizontalAlignment="Left"
             BorderThickness="0"
-            Foreground="White"
+            Foreground="{DynamicResource ContentForeground}"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Content="{Binding Label}" />
 

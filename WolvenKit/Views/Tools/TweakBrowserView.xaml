@@ -16,7 +16,7 @@
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignWidth="800"
     d:DesignHeight="450">
-    <Grid Background="{StaticResource ContentBackground}">
+    <Grid Background="{DynamicResource ContentBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -25,8 +25,8 @@
         <!-- Search and filters -->
         <Border
             Grid.Row="0"
-            Background="{StaticResource ContentBackgroundAlt2}"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource ContentBackgroundAlt2}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.RowDefinitions>
@@ -106,7 +106,7 @@
             d:Visibility="Hidden"
             x:Name="LoadingBorder"
             Grid.Row="1"
-            Background="{StaticResource ContentBackgroundAlt3}"
+            Background="{DynamicResource ContentBackgroundAlt3}"
             BorderBrush="Black"
             BorderThickness="0"
             Visibility="{Binding Path=IsLoading,
@@ -115,7 +115,7 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="#7EFFFFFF"
+                    Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                     FontSize="{DynamicResource WolvenKitFontHuge}"
                     FontWeight="Bold"
                     Text="Loading TweakDB Browser..."
@@ -141,7 +141,7 @@
                     <ListBox
                         d:ItemsSource="{d:SampleData}"
                         d:SelectedIndex="1"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding Records}"
                         SelectedItem="{Binding SelectedRecordEntry,
@@ -167,7 +167,7 @@
                                             IconPack="Codicons"
                                             Kind="SaveAs"
                                             Size="{DynamicResource WolvenKitIconTiny}"
-                                            Foreground="{StaticResource WolvenKitCyan}" />
+                                            Foreground="{DynamicResource WolvenKitCyan}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
@@ -202,7 +202,7 @@
 
                     <local:RedTreeView
                         Grid.Column="2"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding SelectedRecord}" />
                 </Grid>
@@ -219,7 +219,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding Flats}"
                         SelectedItem="{Binding SelectedFlatEntry,
@@ -239,7 +239,7 @@
 
                     <local:RedTreeView
                         Grid.Column="2"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding SelectedFlat}" />
                 </Grid>
@@ -256,7 +256,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding Queries}"
                         SelectedItem="{Binding SelectedQueryEntry,
@@ -276,7 +276,7 @@
 
                     <local:RedTreeView
                         Grid.Column="2"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding SelectedQuery}" />
                 </Grid>
@@ -293,7 +293,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         ItemsSource="{Binding GroupTags}"
                         SelectedItem="{Binding SelectedGroupTagEntry,
@@ -313,7 +313,7 @@
 
                     <editors:RedTypeView
                         Grid.Column="2"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,1,0,0"
                         DataContext="{Binding SelectedGroupTag}" />
                 </Grid>
