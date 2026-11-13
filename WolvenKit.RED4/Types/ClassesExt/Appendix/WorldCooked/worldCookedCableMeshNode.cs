@@ -31,7 +31,7 @@ public partial class worldCookedCableMeshNode
             entry.MeshAppearance = br.BaseReader.ReadUInt64();
             entry.DeformationDataStartIndex = br.ReadCUInt32();
             entry.DeformationDataCount = br.ReadCUInt32();
-            entry.Index = br.ReadCUInt16();
+            entry.DeformedBoxIndex = br.ReadCUInt16();
             entry.CastShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
             entry.CastLocalShadows = (shadowsShadowCastingMode)br.BaseReader.ReadByte();
             entry.RemoveFromRainMap = br.ReadCBool();
@@ -110,7 +110,7 @@ public partial class worldCookedCableMeshNode
             bw.BaseWriter.Write((ulong)castedEntry.MeshAppearance);
             bw.Write(castedEntry.DeformationDataStartIndex);
             bw.Write(castedEntry.DeformationDataCount);
-            bw.Write(castedEntry.Index);
+            bw.Write(castedEntry.DeformedBoxIndex);
             bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)castedEntry.CastShadows);
             bw.BaseWriter.Write((byte)(shadowsShadowCastingMode)castedEntry.CastLocalShadows);
             bw.Write(castedEntry.RemoveFromRainMap);
