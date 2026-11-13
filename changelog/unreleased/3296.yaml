@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3296
+      author: "Ametis81"
+      description: "Mesh preview: wireframe (over shaded with opacity and edge colour, or wireframe only) and clay views, switched from the viewport and shared by all preview tabs."
