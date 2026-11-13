@@ -1,0 +1,27 @@
+{
+  "formatVersion": 1,
+  "name": "Netrunner Violet",
+  "author": "WolvenKit",
+  "description": "Deep cyberspace purple with a hot magenta accent.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#E040FB",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#140F1C",
+    "ContentBackgroundAlt": "#191324",
+    "ContentBackgroundAlt2": "#1E172B",
+    "ContentBackgroundAlt3": "#251D35",
+    "ContentBackgroundAlt4": "#2D2440",
+    "ContentBackgroundAlt5": "#372C4E",
+    "BorderAlt": "#3A2D52",
+    "ContentForeground": "#E6DDF5",
+    "ForegroundColor": "#E6DDF5",
+    "BackgroundColor_Control": "#1E172B",
+    "BackgroundColor_Frame_Active": "#251D35",
+    "BackgroundColor_Frame_Background": "#191324",
+    "WolvenKitProjectSource": "#FF2E88",
+    "WolvenKitProjectSourceShadow": "#8F1A4E",
+    "WolvenKitProjectResources": "#52F1FF",
+    "WolvenKitProjectResourcesShadow": "#2E7F8C"
+  }
+}

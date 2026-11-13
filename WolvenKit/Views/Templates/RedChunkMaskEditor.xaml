@@ -20,7 +20,7 @@
             Name="comboboxadv"
             MinHeight="{DynamicResource WolvenKitTreeRowHeight}"
             Padding="{DynamicResource WolvenKitMarginTiny}"
-            Background="#252525"
+            Background="{DynamicResource WolvenKitGray25}"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             AllowMultiSelect="True"
             ItemsSource="{Binding BindingCollection,
@@ -34,7 +34,7 @@
 
         <Border
             Grid.Column="1"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,0,0" />
 
         <TextBox
