@@ -99,7 +99,7 @@
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
                                 <Setter Property="Cursor" Value="Hand" />
-                                <Setter Property="Stroke" Value="#33FFFFFF" />
+                                <Setter Property="Stroke" Value="{DynamicResource WolvenKitGraphConnection}" />
                                 <Setter Property="StrokeThickness" Value="2" />
 
                                 <Style.Triggers>
@@ -287,9 +287,9 @@
                     <nodify:GroupingNode
                         Width="{Binding Width}"
                         Height="{Binding Height}"
-                        Background="#33282828"
+                        Background="{DynamicResource WolvenKitGraphGroupBackground}"
                         Header="{Binding Header}"
-                        HeaderBrush="#33282828"
+                        HeaderBrush="{DynamicResource WolvenKitGraphGroupBackground}"
                         HeaderTemplate="{StaticResource HeaderTemplate}" />
                 </DataTemplate>
 
