@@ -1,0 +1,11 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3246
+      author: "seberoth"
+      description: "Initial sector preview support for game version 2.5"
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3246
+      author: "seberoth"
+      description: "Adjusted index property name in bended mesh node to deformedboxindex"
