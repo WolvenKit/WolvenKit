@@ -38,6 +38,14 @@ Texture2D mlTex[ML_POOL] : register(t64);
 #endif
 SamplerState mlSampler : register(s10);
 
+// Plain PBR passes only (glass extras), written for every plain draw. See SurfaceExtraConstants.
+cbuffer cbSurfaceExtra : register(b12)
+{
+    float4 sxSpecTint;   // rgb specular tint, w: 1 = use it
+    float4 sxGlass;      // x: edge tint exponent (0 = off), y: vertex colour tint amount
+    float4 sxGlassBack;  // x: 1 = back faces are glass backs, y: back reflection power, z: back opacity
+};
+
 cbuffer cbMultilayer : register(b11)
 {
     // x: layer count, y: GlobalNormal pool index (-1 none), z: GlobalNormalIntensity, w: unused
@@ -504,12 +512,18 @@ float4 mlMain(MLVSOutput vsOut) : SV_Target
 
 // Plain PBR (baked / single-texture materials): Helix's psMeshPBR main, with the smooth
 // tangent frame above instead of PeturbNormal. Same bindings as Helix's PBR pass.
-float4 pbrMain(MLVSOutput vsOut) : SV_Target
+float4 pbrMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
 {
     PSInput input = mlToPSInput(vsOut);
     const float3 V = normalize(input.vEye.xyz);
 
     float3 N = bRenderFlat ? normalize(cross(ddy(input.wp.xyz), ddx(input.wp.xyz))) : normalize(input.n);
+    // Glass drawn from both sides: the back faces are lit from their own side.
+    const bool glassBack = sxGlassBack.x > 0.5 && !isFront;
+    if (glassBack)
+    {
+        N = -N;
+    }
     if (bHasNormalMap)
     {
         float3 localNormal = BiasX2(texNormalMap.Sample(samplerSurface, input.t).xyz);
@@ -528,6 +542,20 @@ float4 pbrMain(MLVSOutput vsOut) : SV_Target
         albedo *= texDiffuseMap.Sample(samplerSurface, input.t);
     }
     albedo = lerp(albedo, input.c, vertColorBlending);
+
+    // Glass (Blender add-on glass.py): TintFromVertexPaint multiplies the tint by the vertex
+    // colour; towards grazing angles the tint deepens to tint^1.5 * 0.75, with the Fresnel
+    // exponent FresnelBias picks (0.5 / 1.5 / 4).
+    if (sxGlass.y > 0)
+    {
+        albedo.rgb *= lerp(float3(1, 1, 1), input.c.rgb, saturate(sxGlass.y));
+    }
+    if (sxGlass.x > 0)
+    {
+        float edge = pow(saturate((1 - saturate(dot(N, V))) / 0.8), sxGlass.x);
+        albedo.rgb = lerp(albedo.rgb, pow(saturate(albedo.rgb), 1.5) * 0.75, edge);
+    }
+
     if (bHasRMMap)
     {
         RMA.gb *= texRMMap.Sample(samplerSurface, input.t).gb;
@@ -541,7 +569,20 @@ float4 pbrMain(MLVSOutput vsOut) : SV_Target
         float2 quadTex = input.p.xy * vResolution.zw;
         RMA.r *= texSSAOMap.SampleLevel(samplerSurface, quadTex, 0).r;
     }
+
+    gSpecTint = sxSpecTint.w > 0.5 ? sxSpecTint.rgb : float3(1, 1, 1);
+    // A glass back face mostly only reflects (BackFacesReflectionPower); OpacityBackFace
+    // keeps some of the tint. Blending cannot add light, so the back gets a faint alpha.
+    const float frontAlpha = albedo.a * input.cDiffuse.a;
+    if (glassBack)
+    {
+        albedo.rgb *= saturate(sxGlassBack.z);
+    }
     float3 color = LightSurface(input.wp, V, N, albedo.rgb, RMA.g, RMA.b, RMA.r, ConstantReflectance, ClearCoat, ClearCoatRoughness);
+    if (glassBack)
+    {
+        color *= max(sxGlassBack.y, 0);
+    }
     float s = 1;
     if (bHasShadowMap)
     {
@@ -561,9 +602,10 @@ float4 pbrMain(MLVSOutput vsOut) : SV_Target
         emissive *= texEmissiveMap.Sample(samplerSurface, input.t).rgb;
     }
     float3 ambient = vLightAmbient.rgb * RMA.r;
-    color += emissive + ambient;
+    color += emissive + (glassBack ? ambient * saturate(sxGlassBack.z) : ambient);
     color += mlKeepInputs(vsOut) * mlDebug.w; // always 0: keeps every interpolator (see mlMain)
-    return float4(color, albedo.a * input.cDiffuse.a);
+    const float backAlpha = lerp(0.08 * saturate(sxGlassBack.y), frontAlpha, saturate(sxGlassBack.z));
+    return float4(color, glassBack ? backAlpha : frontAlpha);
 }
 
 // Transparent materials (hair cards, glass, decals): the same PBR as pbrMain, written the way
@@ -571,9 +613,9 @@ float4 pbrMain(MLVSOutput vsOut) : SV_Target
 // baked-normal Y fix too.
 
 // Weighted blended OIT (Helix's psMeshPBROIT).
-PSOITOutput pbrOIT(MLVSOutput vsOut)
+PSOITOutput pbrOIT(MLVSOutput vsOut, bool isFront : SV_IsFrontFace)
 {
-    float4 color = pbrMain(vsOut);
+    float4 color = pbrMain(vsOut, isFront);
     return calculateOIT(color, vsOut.vEye.w, vsOut.p.z);
 }
 
@@ -589,9 +631,9 @@ struct MLDepthPeelOutput
     float4 BackColor : SV_Target2;
 };
 
-MLDepthPeelOutput pbrOITDP(MLVSOutput vsOut)
+MLDepthPeelOutput pbrOITDP(MLVSOutput vsOut, bool isFront : SV_IsFrontFace)
 {
-    float4 color = pbrMain(vsOut);
+    float4 color = pbrMain(vsOut, isFront);
     float4 pos = vsOut.p;
     MLDepthPeelOutput o = (MLDepthPeelOutput)0;
     float fragDepth = pos.z;
@@ -1940,6 +1982,9 @@ float3 calcNormal(PSInput input)
     return normal;
 }
 
+// WolvenKit: tint of the specular reflectance (glass GlassSpecularColor); white elsewhere.
+static float3 gSpecTint = float3(1, 1, 1);
+
 float3 LightSurface(in float4 wp,
     in float3 V, in float3 N, in float3 albedo, in float roughness, in float metallic, in float ambientOcclusion, in float reflectance, in float clearCoat, in float clearCoatRoughness)
 {
@@ -1950,7 +1995,7 @@ float3 LightSurface(in float4 wp,
 
     // Blend base colors
     const float3 c_diff = lerp(albedo, float3(0, 0, 0), metallic) * ambientOcclusion;
-    const float3 c_spec = 0.16 * reflectance * reflectance * (1 - metallic) + albedo * metallic; //lerp(reflectance, albedo, metallic) * ambientOcclusion;
+    const float3 c_spec = (0.16 * reflectance * reflectance * (1 - metallic) + albedo * metallic) * gSpecTint; //lerp(reflectance, albedo, metallic) * ambientOcclusion;
 #if defined(CLEARCOAT)
     // remapping and linearization of clear coat roughness
     clearCoatRoughness = lerp(0.089, 0.6, clearCoatRoughness);

@@ -38,6 +38,42 @@ public struct MultilayerConstants
     private float _element0;
 }
 
+/// <summary>
+/// Contents of the HLSL <c>cbSurfaceExtra</c> buffer: per-material extras of the plain PBR passes
+/// (glass). Uploaded for every plain draw, so no material sees another one's values.
+/// </summary>
+[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+public struct SurfaceExtraConstants
+{
+    public const int SizeInBytes = 3 * 16;
+
+    /// <summary>rgb: specular tint, w: 1 = use it.</summary>
+    public SharpDX.Vector4 SpecularTint;
+
+    /// <summary>x: edge tint exponent (0 = off), y: vertex colour tint amount, zw: unused.</summary>
+    public SharpDX.Vector4 Glass;
+
+    /// <summary>x: 1 = back faces shaded as glass backs, y: back reflection power, z: back opacity, w: unused.</summary>
+    public SharpDX.Vector4 GlassBack;
+}
+
+/// <summary>Per-material glass extras (see <see cref="SurfaceExtraConstants"/>).</summary>
+public sealed record SurfaceExtras(
+    SharpDX.Vector3? SpecularTint = null,
+    float EdgeTintExponent = 0f,
+    float VertexTint = 0f,
+    bool GlassBackFaces = false,
+    float BackReflectionPower = 1f,
+    float BackOpacity = 0f)
+{
+    public SurfaceExtraConstants ToConstants() => new()
+    {
+        SpecularTint = SpecularTint is { } t ? new SharpDX.Vector4(t, 1f) : new SharpDX.Vector4(1f, 1f, 1f, 0f),
+        Glass = new SharpDX.Vector4(EdgeTintExponent, VertexTint, 0f, 0f),
+        GlassBack = new SharpDX.Vector4(GlassBackFaces ? 1f : 0f, BackReflectionPower, BackOpacity, 0f),
+    };
+}
+
 /// <summary>Everything one multilayer material needs on the GPU.</summary>
 public sealed class MultilayerGpuData
 {
@@ -121,6 +157,13 @@ public class MultilayerPBRMaterial : PBRMaterial
         set => ((MultilayerPBRMaterialCore)Core).SoloLayer = value;
     }
 
+    /// <summary>Glass extras of the plain passes; null = none.</summary>
+    public SurfaceExtras? Extras
+    {
+        get => ((MultilayerPBRMaterialCore)Core).Extras;
+        set => ((MultilayerPBRMaterialCore)Core).Extras = value;
+    }
+
     /// <summary>Redraw without touching the GPU data (debug view switches).</summary>
     public void RequestRedraw() => ((MultilayerPBRMaterialCore)Core).RedrawToken++;
 
@@ -173,13 +216,14 @@ public class MultilayerPBRMaterial : PBRMaterial
     }
 
     // Freezable.Clone() creates the instance here, then copies the dependency properties.
-    protected override Freezable CreateInstanceCore() => new MultilayerPBRMaterial { MultilayerData = MultilayerData };
+    protected override Freezable CreateInstanceCore() => new MultilayerPBRMaterial { MultilayerData = MultilayerData, Extras = Extras };
 
     public override PBRMaterial CloneMaterial()
     {
         var clone = new MultilayerPBRMaterial();
         CopyTo(clone);
         clone.MultilayerData = MultilayerData;
+        clone.Extras = Extras;
         return clone;
     }
 
@@ -253,6 +297,15 @@ public sealed class MultilayerPBRMaterialCore : PBRMaterialCore
         set => Set(ref _soloLayer, value);
     }
 
+    private SurfaceExtras? _extras;
+
+    /// <summary>Glass extras of the plain passes; null = none.</summary>
+    public SurfaceExtras? Extras
+    {
+        get => _extras;
+        set => Set(ref _extras, value);
+    }
+
     private int _redrawToken;
 
     /// <summary>Any change raises PropertyChanged, which makes the viewport redraw (debug view switches).</summary>
@@ -280,6 +333,8 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
     private readonly ShaderPass _smoothPbrOitPass;
     private readonly ShaderPass _smoothPbrOitDpPass;
     private readonly ConstantBufferComponent _constantBuffer;
+    private readonly ConstantBufferComponent _extraBuffer;
+    private SurfaceExtraConstants _extraConstants;
     private SamplerStateProxy? _sampler;
     private ShaderResourceViewProxy?[] _views = Array.Empty<ShaderResourceViewProxy?>();
     private MultilayerConstants _constants;
@@ -299,6 +354,9 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
         _constantBuffer = new ConstantBufferComponent(
             new ConstantBufferDescription(MultilayerShader.ConstantBufferName, MultilayerConstants.SizeInBytes));
         _constantBuffer.Attach(technique);
+        _extraBuffer = new ConstantBufferComponent(
+            new ConstantBufferDescription(MultilayerShader.ExtraConstantBufferName, SurfaceExtraConstants.SizeInBytes));
+        _extraBuffer.Attach(technique);
     }
 
     private bool CanUseMultilayerPass => _hasData && !_multilayerPass.IsNULL;
@@ -389,6 +447,13 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
             _constants[MultilayerConstants.DebugOffset + 1] = _core.SoloLayer;
             _constantBuffer.Upload(deviceContext, ref _constants);
         }
+        else if (ReferenceEquals(shaderPass, _smoothPbrPass) || ReferenceEquals(shaderPass, _smoothPbrOitPass) ||
+                 ReferenceEquals(shaderPass, _smoothPbrOitDpPass))
+        {
+            // Every plain draw writes the buffer, so none reads the previous material's extras.
+            _extraConstants = _core.Extras?.ToConstants() ?? new SurfaceExtras().ToConstants();
+            _extraBuffer.Upload(deviceContext, ref _extraConstants);
+        }
 
         return result;
     }
@@ -399,6 +464,8 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
         RemoveAndDispose(ref _sampler);
         _constantBuffer.Detach();
         _constantBuffer.Dispose();
+        _extraBuffer.Detach();
+        _extraBuffer.Dispose();
         base.OnDispose(disposeManagedResources);
     }
 }

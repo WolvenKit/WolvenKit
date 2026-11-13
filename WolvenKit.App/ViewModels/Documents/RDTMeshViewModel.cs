@@ -1745,6 +1745,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             sm.MaterialName = GetUniqueMaterialName(chosenMatName, cMesh, meshPath);
             sm.Material = SetupPBRMaterial(sm.MaterialName);
 
+            // Glass tinted by vertex paint (TintFromVertexPaint) reads the vertex colours; loaded
+            // only for it. Without colours the tint stays white rather than black.
+            if (sm.Material is MultilayerPBRMaterial { Extras.VertexTint: > 0f } &&
+                sm.Geometry is HelixToolkit.SharpDX.Core.MeshGeometry3D tintGeometry)
+            {
+                var colors = new HelixToolkit.SharpDX.Core.Color4Collection(positions.Count);
+                for (var vi = 0; vi < positions.Count; vi++)
+                {
+                    colors.Add(mesh.colors0 is { } vertexColors && vertexColors.Length == positions.Count
+                        ? new SharpDX.Color4(vertexColors[vi].X, vertexColors[vi].Y, vertexColors[vi].Z, vertexColors[vi].W)
+                        : new SharpDX.Color4(1f, 1f, 1f, 1f));
+                }
+
+                tintGeometry.Colors = colors;
+            }
+
             // Skip invisible decals (logos_invisible etc.) — empty mesh_decal with no params.
             if (sm.MaterialName.Contains("invisible", StringComparison.OrdinalIgnoreCase))
             {
@@ -1816,6 +1832,23 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 sm.IsTransparent = true;
                 sm.DepthBias = -1;
+
+                // One-sided glass shows only its front in the game (drawn from both sides, a
+                // closed piece looked twice as dark). glass.mt keeps its back faces: the shader
+                // draws them as glass backs (BackFacesReflectionPower / OpacityBackFace), so it
+                // needs to know which winding is the front.
+                if (TryGetRawMaterial(sm.MaterialName, out var glassFaceMat))
+                {
+                    var glassTemplate = GetTemplateFileName(glassFaceMat);
+                    if (glassTemplate.Contains("onesided", StringComparison.OrdinalIgnoreCase))
+                    {
+                        SetFrontWinding(sm, SharpDX.Direct3D11.CullMode.Back);
+                    }
+                    else if (glassTemplate.Equals("glass", StringComparison.OrdinalIgnoreCase))
+                    {
+                        SetFrontWinding(sm, SharpDX.Direct3D11.CullMode.None);
+                    }
+                }
             }
         }
         else if (Has(kind, MaterialKind.Decal))
@@ -1905,6 +1938,43 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         sm.FrontCounterClockwise = twoSided.FrontCounterClockwise;
         sm.CullMode = SharpDX.Direct3D11.CullMode.Back;
+    }
+
+    /// <summary>TintFromVertexPaint of a glass material (0..1), 0 when not set.</summary>
+    private float GlassVertexTint(Material material) =>
+        Math.Clamp(FindMaterialFloat(material, "TintFromVertexPaint") ?? 0f, 0f, 1f);
+
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<HelixToolkit.SharpDX.Core.Geometry3D, object> _frontCounterClockwise = new();
+
+    /// <summary>
+    /// Sets which winding is a submesh's front, read from the mesh itself (most triangles turn
+    /// the same way as their vertex normals), and its cull mode.
+    /// </summary>
+    private void SetFrontWinding(SubmeshComponent sm, SharpDX.Direct3D11.CullMode cullMode)
+    {
+        if (sm.Geometry is not HelixToolkit.SharpDX.Core.MeshGeometry3D geometry ||
+            geometry.Positions is not { } positions || geometry.Indices is not { } indices ||
+            geometry.Normals is not { } normals || normals.Count != positions.Count || indices.Count < 3)
+        {
+            return;
+        }
+
+        var ccw = (bool)_frontCounterClockwise.GetValue(geometry, _ =>
+        {
+            var agree = 0;
+            for (var i = 0; i + 2 < indices.Count; i += 3)
+            {
+                int a = indices[i], b = indices[i + 1], c = indices[i + 2];
+                var face = SharpDX.Vector3.Cross(positions[b] - positions[a], positions[c] - positions[a]);
+                var normal = normals[a] + normals[b] + normals[c];
+                agree += SharpDX.Vector3.Dot(face, normal) >= 0 ? 1 : -1;
+            }
+
+            return agree >= 0;
+        });
+
+        sm.FrontCounterClockwise = ccw;
+        sm.CullMode = cullMode;
     }
 
     private static TwoSidedGeometry BuildTwoSided(HelixToolkit.SharpDX.Core.Geometry3D source)
@@ -2608,16 +2678,56 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             material.RenderEnvironmentMap = true;
             material.MetallicFactor = 0.1f;
-            material.RoughnessFactor = 0.05f;
             material.RenderAlbedoMap = false;
 
             float opacity = GlassDefaultOpacity;
             float tr = 1f, tg = 1f, tb = 1f;
-            if (TryGetRawMaterial(name, out var glassMat) && glassMat?.Values != null)
+            TryGetRawMaterial(name, out var glassMat);
+
+            // Glass lobe as in the Blender add-on (glass.py): roughness = Roughness texture
+            // + GlassRoughnessBias (template default -1: smooth); reflection strength from
+            // FresnelBias (F0 0.25 / 0.08 / 0.04 at 0 / 1 / 2) times FrontFacesReflectionPower.
+            // GlassSpecularColor tints the reflections in the game; the preview has no tinted
+            // specular, so only its brightness scales them. IOR and BlurRadius need a refraction
+            // pass and are not used.
+            // (CResourceReference is a struct: a pattern, not "as".)
+            var roughnessPath = glassMat != null && FindMaterialValue(glassMat, "Roughness") is CResourceReference<ITexture> roughnessTex
+                ? roughnessTex.DepotPath.GetResolvedText()
+                : null;
+            var sampledRoughness = PlaceholderTextureValue(roughnessPath)
+                ?? (_glassRoughnessMean.TryGetValue(name, out var mean) ? mean : 0.5f);
+            var roughnessBias = Math.Clamp(FindMaterialFloat(glassMat, "GlassRoughnessBias") ?? -1f, -1f, 1f);
+            material.RoughnessFactor = Math.Clamp(sampledRoughness + roughnessBias, 0.02f, 1f);
+
+            var fresnelBias = Math.Clamp(FindMaterialFloat(glassMat, "FresnelBias") ?? 1f, 0f, 2f);
+            var f0 = fresnelBias <= 1f ? 0.25f + (0.08f - 0.25f) * fresnelBias : 0.08f + (0.04f - 0.08f) * (fresnelBias - 1f);
+            f0 *= Math.Max(0f, FindMaterialFloat(glassMat, "FrontFacesReflectionPower") ?? 1f);
+            // The shader's dielectric F0 is 0.16 * reflectance².
+            material.ReflectanceFactor = Math.Clamp(MathF.Sqrt(Math.Max(f0, 0f) / 0.16f), 0f, 1f);
+
+            // Shader extras (plain PBR pass): GlassSpecularColor tints the reflections; the tint
+            // deepens towards the edges with the exponent FresnelBias picks (0.5 / 1.5 / 4);
+            // TintFromVertexPaint multiplies it by the vertex colour (loaded in MakeMesh);
+            // glass.mt draws its back faces with BackFacesReflectionPower / OpacityBackFace.
+            if (material is MultilayerPBRMaterial glassShaderMaterial && glassMat != null)
             {
-                if (glassMat.Values.TryGetValue("Opacity", out var opObj))
-                    opacity = Math.Clamp(ReadFloat(opObj), 0f, 1f);
-                if (glassMat.Values.TryGetValue("TintColor", out var tintObj))
+                var spec = FindMaterialValue(glassMat, "GlassSpecularColor") is { } specObj ? ReadColor(specObj) : null;
+                var edgeExponent = fresnelBias <= 1f ? 0.5f + (1.5f - 0.5f) * fresnelBias : 1.5f + (4f - 1.5f) * (fresnelBias - 1f);
+                var twoSidedGlass = GetTemplateFileName(glassMat).Equals("glass", StringComparison.OrdinalIgnoreCase);
+                glassShaderMaterial.Extras = new SurfaceExtras(
+                    SpecularTint: spec,
+                    EdgeTintExponent: edgeExponent,
+                    VertexTint: GlassVertexTint(glassMat),
+                    GlassBackFaces: twoSidedGlass,
+                    BackReflectionPower: Math.Max(0f, FindMaterialFloat(glassMat, "BackFacesReflectionPower") ?? 1f),
+                    BackOpacity: Math.Clamp(FindMaterialFloat(glassMat, "OpacityBackFace") ?? 0f, 0f, 1f));
+            }
+
+            if (glassMat != null)
+            {
+                if (FindMaterialFloat(glassMat, "Opacity") is { } glassOpacity)
+                    opacity = Math.Clamp(glassOpacity, 0f, 1f);
+                if (FindMaterialValue(glassMat, "TintColor") is { } tintObj)
                 {
                     if (tintObj is CColor cc)
                     {
@@ -6460,6 +6570,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 {
                     var (gBd, gBn, gRm) = GetMaterialFilePathsFromCache(material?.Name ?? "glass");
                     var deferredGlass = IsDeferredGlass(material?.Name, material);
+
+                    // Mean of the Roughness texture's red channel: the glass lobe's roughness is
+                    // that plus GlassRoughnessBias (see SetupPBRMaterial). Placeholders need no read.
+                    if (!deferredGlass && material?.Name is { } glassName &&
+                        !_glassRoughnessMean.ContainsKey(glassName) &&
+                        dictionary.TryGetValue("Roughness", out var meanRoughObj) &&
+                        meanRoughObj is CResourceReference<ITexture> meanRoughRef &&
+                        meanRoughRef.DepotPath != ResourcePath.Empty &&
+                        PlaceholderTextureValue(meanRoughRef.DepotPath.GetResolvedText()) == null)
+                    {
+                        using var meanBmp = await LoadTextureAsBitmap(meanRoughRef.DepotPath);
+                        if (meanBmp != null)
+                        {
+                            _glassRoughnessMean[glassName] = MeanRed(meanBmp);
+                        }
+                    }
                     if (forceBake || !File.Exists(gBd) || (deferredGlass && !File.Exists(gRm)))
                     {
                         static bool IsPlaceholderTex(string path)
@@ -6560,7 +6686,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             roughBmp = await LoadTextureAsBitmap(rgRef.DepotPath);
                             if (roughBmp != null)
                             {
-                                var roughTiled = ApplyUvTileOffset(roughBmp, uvTX, uvTY, uvOX, uvOY);
+                                var (rTX, rTY, rOX, rOY) = ReadTileOffset(dictionary, "RoughnessTileAndOffset");
+                                var roughTiled = ApplyUvTileOffset(roughBmp, uvTX * rTX, uvTY * rTY, uvOX * rTX + rOX, uvOY * rTY + rOY);
                                 if (!ReferenceEquals(roughTiled, roughBmp))
                                 {
                                     roughBmp.Dispose();
@@ -6749,9 +6876,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                     {
                                         var (nTX, nTY, nOX, nOY) = ReadTileOffset(dictionary, "NormalTileAndOffset");
                                         nTiled = ApplyUvTileOffset(nBmp, uvTX * nTX, uvTY * nTY, uvOX * nTX + nOX, uvOY * nTY + nOY);
-                                        if (dictionary.TryGetValue("NormalStrength", out var nsObj))
+                                        // On glass the normal map only bends the reflections, so
+                                        // NormalMapAffectsSpecular (0..1, default 1) scales it as well.
+                                        var specularShare = material == null ? 1f
+                                            : Math.Clamp(FindMaterialFloat(material, "NormalMapAffectsSpecular") ?? 1f, 0f, 1f);
+                                        if (dictionary.TryGetValue("NormalStrength", out var nsObj) || specularShare < 0.999f)
                                         {
-                                            var strength = ReadFloat(nsObj);
+                                            var strength = (nsObj != null ? ReadFloat(nsObj) : 1f) * specularShare;
                                             if (Math.Abs(strength - 1f) > 0.001f)
                                             {
                                                 if (ReferenceEquals(nTiled, nBmp))
@@ -8265,16 +8396,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     /// <summary>A float parameter of a material: its own values, then up its instance chain.</summary>
-    private float? FindMaterialFloat(Material? material, string key)
-    {
-        if (material == null)
-        {
-            return null;
-        }
+    private float? FindMaterialFloat(Material? material, string key) =>
+        material != null && FindMaterialValue(material, key) is { } value ? ReadFloat(value) : null;
 
+    /// <summary>
+    /// A parameter of a material: its own values, then up its instance chain, then the default
+    /// the chain's template (.mt / .remt) declares for it.
+    /// </summary>
+    private object? FindMaterialValue(Material material, string key)
+    {
         if (material.Values.TryGetValue(key, out var own) && own != null)
         {
-            return ReadFloat(own);
+            return own;
         }
 
         var current = material.Instance as CMaterialInstance;
@@ -8284,7 +8417,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 if (pair.Key.ToString() == key)
                 {
-                    return ReadFloat(pair.Value);
+                    return pair.Value;
                 }
             }
 
@@ -8293,10 +8426,111 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 break;
             }
 
-            current = GetProjectOrDepotFile(current.BaseMaterial.DepotPath)?.RootChunk as CMaterialInstance;
+            switch (GetProjectOrDepotFile(current.BaseMaterial.DepotPath)?.RootChunk)
+            {
+                case CMaterialInstance next:
+                    current = next;
+                    break;
+                case CMaterialTemplate template:
+                    return TemplateDefault(template, key);
+                default:
+                    return null;
+            }
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// The default a material template declares for a parameter. Scalars carry their range too
+    /// (what the editor shows as "min..max"); the default is kept inside it.
+    /// </summary>
+    private static object? TemplateDefault(CMaterialTemplate template, string key)
+    {
+        if (template.Parameters == null)
+        {
+            return null;
+        }
+
+        foreach (var list in template.Parameters)
+        {
+            if (list == null)
+            {
+                continue;
+            }
+
+            foreach (var handle in list)
+            {
+                if (handle?.GetValue() is not CMaterialParameter parameter || parameter.ParameterName.ToString() != key)
+                {
+                    continue;
+                }
+
+                switch (parameter)
+                {
+                    case CMaterialParameterScalar scalar:
+                        float value = scalar.Scalar, min = scalar.Min, max = scalar.Max;
+                        return (CFloat)(min < max ? Math.Clamp(value, min, max) : value);
+                    case CMaterialParameterColor color:
+                        return color.Color;
+                    case CMaterialParameterVector vector:
+                        return vector.Vector;
+                    case CMaterialParameterTexture texture when texture.Texture.DepotPath != ResourcePath.Empty:
+                        return texture.Texture;
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>Linear 0..1 RGB of a Color / Vector4 material value.</summary>
+    private static SharpDX.Vector3? ReadColor(object? obj) => obj switch
+    {
+        CColor c => new SharpDX.Vector3(c.Red / 255f, c.Green / 255f, c.Blue / 255f),
+        Vector4 v => new SharpDX.Vector3(v.X, v.Y, v.Z),
+        _ => null,
+    };
+
+    /// <summary>Glass material → mean red of its Roughness texture (filled when materials are generated).</summary>
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, float> _glassRoughnessMean = new();
+
+    /// <summary>The value of a solid placeholder texture (white / grey / black), or null for a real one.</summary>
+    private static float? PlaceholderTextureValue(string? path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        var file = Path.GetFileNameWithoutExtension(path.Replace('/', '\\'));
+        return file.ToLowerInvariant() switch
+        {
+            "white" or "small_white" => 1f,
+            "black" or "small_black" => 0f,
+            "grey" or "gray" or "small_grey" => 0.5f,
+            _ => null,
+        };
+    }
+
+    /// <summary>Mean of a bitmap's red channel, 0..1 (sampled on a grid for big textures).</summary>
+    private static float MeanRed(Bitmap bmp)
+    {
+        var step = Math.Max(1, Math.Max(bmp.Width, bmp.Height) / 128);
+        double sum = 0;
+        var count = 0;
+        for (var y = 0; y < bmp.Height; y += step)
+        {
+            for (var x = 0; x < bmp.Width; x += step)
+            {
+                sum += bmp.GetPixel(x, y).R;
+                count++;
+            }
+        }
+
+        return count == 0 ? 0.5f : (float)(sum / count / 255.0);
     }
 
     private static float ReadFloat(object? obj)

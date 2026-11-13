@@ -33,6 +33,9 @@ public static class MultilayerShader
     /// <summary>cbuffer name in the HLSL; Helix pools constant buffers by name.</summary>
     public const string ConstantBufferName = "cbMultilayer";
 
+    /// <summary>Glass extras of the plain PBR passes (register b12).</summary>
+    public const string ExtraConstantBufferName = "cbSurfaceExtra";
+
     /// <summary>First texture register of the pool (t64); Helix's pixel shaders stop at t33.</summary>
     public const int TextureSlot = 64;
 
