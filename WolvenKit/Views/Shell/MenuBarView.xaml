@@ -67,10 +67,8 @@
                     ToolTip="Generate complex files">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Material"
-                            Kind="FileCogOutline"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{DynamicResource WolvenKitYellow}" />
+                            IconPack="Empty"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
 
                     <!-- Photo mode files -->
@@ -210,10 +208,8 @@
                     Header="Import">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Material"
-                            Kind="Import"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{DynamicResource WolvenKitCyan}" />
+                            IconPack="Empty"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
 
                     <MenuItem
@@ -345,11 +341,7 @@
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Clean up">
                     <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Material"
-                            Kind="Broom"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{DynamicResource WolvenKitRed}" />
+                        <local:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
 
                     <MenuItem
@@ -401,10 +393,8 @@
                     Header="Utilities">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Material"
-                            Kind="Tools"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{DynamicResource WolvenKitTan}" />
+                            IconPack="Empty"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
 
                     <MenuItem
@@ -1013,8 +1003,7 @@
                     Header="Creating mods">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Material"
-                            Kind="BookOpenVariant"
+                            IconPack="Empty"
                             Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
 
@@ -1037,8 +1026,7 @@
                         Header="Adding new items">
                         <MenuItem.Icon>
                             <local:IconBox
-                                IconPack="Material"
-                                Kind="PackageVariantPlus"
+                                IconPack="Empty"
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
 
@@ -1075,8 +1063,7 @@
                         Header="NPCs and V">
                         <MenuItem.Icon>
                             <local:IconBox
-                                IconPack="Material"
-                                Kind="AccountGroup"
+                                IconPack="Empty"
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
 
