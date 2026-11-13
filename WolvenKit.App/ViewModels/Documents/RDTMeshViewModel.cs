@@ -393,7 +393,32 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     [ObservableProperty] private List<Appearance> _appearances = new();
 
-    [ObservableProperty] private Appearance? _selectedAppearance;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(LodLevels))]
+    [NotifyPropertyChangedFor(nameof(SelectedLod))]
+    private Appearance? _selectedAppearance;
+
+    /// <summary>
+    /// LOD levels of the selected appearance, for the Level of Detail picker. A sector fills its
+    /// appearance after the view is bound, so the picker reads this list (raised again then)
+    /// rather than the appearance's dictionary.
+    /// </summary>
+    public IReadOnlyList<uint> LodLevels => SelectedAppearance?.LODLUT.Keys.OrderBy(k => k).ToList() ?? [];
+
+    public uint SelectedLod
+    {
+        get => SelectedAppearance?.SelectedLOD ?? 1;
+        set
+        {
+            if (SelectedAppearance is null || SelectedAppearance.SelectedLOD == value)
+            {
+                return;
+            }
+
+            SelectedAppearance.SelectedLOD = value;
+            OnPropertyChanged();
+        }
+    }
 
     [ObservableProperty] private bool _isCtrlKeyPressed;
 
@@ -1613,13 +1638,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 {
                     // Terrain vertices carry positions only: the game makes the UVs from them,
                     // uv = position.xy * UVGenScaleOffset.xy + UVGenScaleOffset.zw (the cell's
-                    // textures cover it with a border, e.g. 1/130 for a 128 m cell), sampled
-                    // as image rows: V grows northwards. Preview positions are Y up (game Y = -Z).
+                    // textures cover it with a border, e.g. 1/130 for a 128 m cell). Preview
+                    // positions are Y up (game Y = -Z); the textures have north at the top,
+                    // so V grows southwards (with Z).
                     for (var i = 0; i < mesh.positions.Length; i++)
                     {
                         textureCoordinates.Add(new SharpDX.Vector2(
                             mesh.positions[i].X * uvGen.X + uvGen.Z,
-                            -mesh.positions[i].Z * uvGen.Y + uvGen.W));
+                            mesh.positions[i].Z * uvGen.Y + uvGen.W));
                     }
                 }
                 else if (cMesh.Parameters.Count > 0 &&
@@ -1627,7 +1653,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     mesh.positions.Length > 0)
                 {
                     // No UVGenScaleOffset: the textures span the submesh's own bounds, as the
-                    // Blender add-on does (uv 0..1 over its X and game Y; V northwards, as above).
+                    // Blender add-on does (uv 0..1 over its X and game Y, north at the top).
                     float xMin = float.MaxValue, xMax = float.MinValue, yMin = float.MaxValue, yMax = float.MinValue;
                     foreach (var vp in mesh.positions)
                     {
@@ -1644,7 +1670,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         var u = ex > 1e-6f ? (mesh.positions[i].X - xMin) / ex : 0f;
                         var v = ey > 1e-6f ? (-mesh.positions[i].Z - yMin) / ey : 0f;
-                        textureCoordinates.Add(new SharpDX.Vector2(u, v));
+                        textureCoordinates.Add(new SharpDX.Vector2(u, 1f - v));
                     }
                 }
             }
@@ -2300,6 +2326,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         TryGetRawMaterial(name, out var classMat);
         var kind = ClassifyMaterialFor(name, classMat);
         var basePath = GetClassificationPath(classMat);
+
+        // metal_base.remt repeats all its maps LayerTile times over the UVs (a chain-link fence
+        // is one small tile repeated); the value may sit on any instance of the chain.
+        var layerTile = GetTemplateFileName(classMat).StartsWith("metal_base", StringComparison.OrdinalIgnoreCase)
+            ? FindMaterialFloat(classMat, "LayerTile")
+            : null;
+        material.UVTransform = layerTile is float t && t > 0f && Math.Abs(t - 1f) > 1e-4f
+            ? new UVTransform(0f, t, t)
+            : UVTransform.Identity;
 
         bool isSkin = Has(kind, MaterialKind.Skin);
         bool isHair = Has(kind, MaterialKind.Hair);
@@ -3658,6 +3693,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
                 return;
             }
+        }
+
+        // A mesh may point straight at a material template (.mt / .remt) instead of an instance:
+        // that is valid, the template's defaults apply. Treat it as an instance without values
+        // whose base is the template, so the base-material chain reads the defaults.
+        var templateRef = me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count
+            ? mesh.ExternalMaterials[me.Index]
+            : mesh.PreloadExternalMaterials != null && me.Index >= 0 && me.Index < mesh.PreloadExternalMaterials.Count
+                ? mesh.PreloadExternalMaterials[me.Index]
+                : null;
+        if (templateRef != null && templateRef.DepotPath != ResourcePath.Empty &&
+            GetProjectOrDepotFile(templateRef.DepotPath)?.RootChunk is CMaterialTemplate)
+        {
+            material.Instance = new CMaterialInstance
+            {
+                BaseMaterial = new CResourceReference<IMaterial>(templateRef.DepotPath)
+            };
+            return;
         }
 
         var label = SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name;
@@ -8210,6 +8263,41 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
     }
 
+    /// <summary>A float parameter of a material: its own values, then up its instance chain.</summary>
+    private float? FindMaterialFloat(Material? material, string key)
+    {
+        if (material == null)
+        {
+            return null;
+        }
+
+        if (material.Values.TryGetValue(key, out var own) && own != null)
+        {
+            return ReadFloat(own);
+        }
+
+        var current = material.Instance as CMaterialInstance;
+        for (var depth = 0; current != null && depth < 8; depth++)
+        {
+            foreach (var pair in current.Values)
+            {
+                if (pair.Key.ToString() == key)
+                {
+                    return ReadFloat(pair.Value);
+                }
+            }
+
+            if (current.BaseMaterial.DepotPath == ResourcePath.Empty)
+            {
+                break;
+            }
+
+            current = GetProjectOrDepotFile(current.BaseMaterial.DepotPath)?.RootChunk as CMaterialInstance;
+        }
+
+        return null;
+    }
+
     private static float ReadFloat(object? obj)
     {
         if (obj is CFloat cf)
@@ -8685,8 +8773,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             FillSoloSectorVariants(_soloSector);
             ReleaseSectorMeshFiles();
 
-            // the tree and the camera were set up for the empty scene
+            // the tree, the LOD picker and the camera were set up for the empty scene
             OnPropertyChanged(nameof(SelectedModelGroup));
+            OnPropertyChanged(nameof(LodLevels));
+            OnPropertyChanged(nameof(SelectedLod));
             ZoomExtentsRequested = SelectedItem == null;
             _sectorBuildMs = sw.ElapsedMilliseconds - readMs;
             _sectorReadMs = readMs;
@@ -10449,8 +10539,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                 if (loadableModels.Count == 0)
                 {
-                    _loggerService.Error(
-                        $"No no components loaded for {app.AppearanceName} from {app.AppearanceResource.DepotPath}");
+                    // e.g. an "invisible" appearance: valid, there is just nothing to draw
+                    _loggerService.Info(
+                        $"No components loaded for {app.AppearanceName} from {app.AppearanceResource.DepotPath}");
                     continue;
                 }
 

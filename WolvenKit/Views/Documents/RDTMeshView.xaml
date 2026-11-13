@@ -355,9 +355,9 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
-                        ItemsSource="{Binding SelectedAppearance.LODLUT.Keys,
+                        ItemsSource="{Binding LodLevels,
                                               Mode=OneWay}"
-                        SelectedItem="{Binding SelectedAppearance.SelectedLOD,
+                        SelectedItem="{Binding SelectedLod,
                                                Mode=TwoWay,
                                                UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
@@ -959,7 +959,7 @@
                                 ItemsSource="{Binding MultilayerDebugMaterials}"
                                 SelectedItem="{Binding SelectedMultilayerDebugMaterial}"
                                 DisplayMemberPath="Label"
-                                ToolTip="Multilayer material for the solo views (selecting a submesh in the tree picks its material)" />
+                                ToolTip="Multilayer material the debug view applies to (selecting a submesh in the tree picks its material; sectors also offer All materials)" />
                             <ComboBox
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -967,7 +967,7 @@
                                 ItemsSource="{Binding MultilayerDebugLayers}"
                                 SelectedItem="{Binding SelectedMultilayerDebugLayer}"
                                 DisplayMemberPath="Label"
-                                ToolTip="Show one layer of the selected material (mlsetup layer number and template); other materials show all layers" />
+                                ToolTip="Show one layer of the selected material (mlsetup layer number and template); other materials keep their normal look" />
                         </Grid>
                     </StackPanel>
                 </Expander>

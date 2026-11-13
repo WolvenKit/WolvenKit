@@ -114,7 +114,12 @@ public partial class RDTMeshViewModel
             MultilayerDebugLayers.Add(new MultilayerDebugChoice(material?.Key ?? "", -1, "All layers"));
         }
 
-        if (material != null && _multilayerGpuData.TryGetValue(material.Key, out var data))
+        // "All materials" (sector previews) lists the layers of the first material: the solo
+        // layer then goes by number to every material (terrain cells share one mlsetup).
+        var labelsFrom = material is { Key: "" }
+            ? MultilayerDebugMaterials.FirstOrDefault(c => c.Key.Length > 0)?.Key
+            : material?.Key;
+        if (material != null && labelsFrom != null && _multilayerGpuData.TryGetValue(labelsFrom, out var data))
         {
             for (var i = 0; i < data.LayerLabels.Count; i++)
             {
@@ -151,15 +156,15 @@ public partial class RDTMeshViewModel
     }
 
     /// <summary>
-    /// Object previews: the debug view and the solo layer apply to the selected material only;
-    /// every other mesh keeps its normal shaded look (debugging the pants does not turn the
-    /// jacket into a mask). Without a selection the view applies to all.
-    /// Sector / block previews: the view and the solo layer index apply to every multilayer
-    /// material, so neighbouring pieces (terrain cells sharing one mlsetup) can be compared.
+    /// The debug view and the solo layer apply to the selected material only; every other mesh
+    /// keeps its normal shaded look (debugging the pants does not turn the jacket into a mask).
+    /// Sector / block previews also offer "All materials": the view and the solo layer number
+    /// then apply to every multilayer material, so neighbouring pieces (terrain cells sharing
+    /// one mlsetup) can be compared.
     /// </summary>
     private void ApplyMultilayerDebugView()
     {
-        var target = SelectedMultilayerDebugMaterial?.Key;
+        var target = SelectedMultilayerDebugMaterial?.Key is { Length: > 0 } key ? key : null;
         var layer = SelectedMultilayerDebugLayer;
         // Copies carrying a decal overlay are debugged like their material.
         foreach (var (name, material) in Materials.Concat(_decalOverlayMaterials.Select(x => new KeyValuePair<string, PBRMaterial>(x.Key, x.Value))))
@@ -169,10 +174,10 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
-            var isTarget = !IsObjectPreview || target == null || name == target;
+            var isTarget = target == null || name == target;
             var mode = isTarget ? MultilayerShader.DebugMode : 0;
             var solo = !isTarget || layer == null ? -1
-                : !IsObjectPreview || layer.Key == name ? layer.Index : -1;
+                : target != null || !IsObjectPreview || layer.Key == name ? layer.Index : -1;
 
             if (ml.DebugMode != mode)
             {
@@ -204,6 +209,11 @@ public partial class RDTMeshViewModel
             .Select(g => g.Key)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+        if (!IsObjectPreview && names.Count > 1)
+        {
+            MultilayerDebugMaterials.Add(new MultilayerDebugChoice("", -1, "All materials"));
+        }
+
         foreach (var name in names.OrderBy(Plain, StringComparer.OrdinalIgnoreCase).ThenBy(n => n))
         {
             var label = Plain(name);
@@ -225,7 +235,9 @@ public partial class RDTMeshViewModel
         var previousLayer = SelectedMultilayerDebugLayer;
         _selectedMultilayerDebugMaterial = null;
         SelectedMultilayerDebugMaterial =
-            MultilayerDebugMaterials.FirstOrDefault(c => c.Key == previous) ?? MultilayerDebugMaterials.FirstOrDefault();
+            MultilayerDebugMaterials.FirstOrDefault(c => c.Key == previous)
+            ?? MultilayerDebugMaterials.FirstOrDefault(c => c.Key.Length > 0)
+            ?? MultilayerDebugMaterials.FirstOrDefault();
 
         if (previousLayer != null && MultilayerDebugLayers.FirstOrDefault(l => l == previousLayer) is { } sameLayer)
         {
@@ -1048,11 +1060,7 @@ public partial class RDTMeshViewModel
             return false;
         }
 
-        // Terrain cells (multilayered_terrain.mt, the only template with UVGenScaleOffset) store
-        // their .mlmask bottom-up against their GlobalNormal: with the mask sampled as is,
-        // neighbouring cells did not meet north-south while the GlobalNormal did.
-        var flipMaskV = dictionary.ContainsKey("UVGenScaleOffset") ? 1f : 0f;
-        Set(c, 0, written, globalIdx, globalIntensity, flipMaskV);
+        Set(c, 0, written, globalIdx, globalIntensity, 0f);
         Set(c, 4, gScaleU, gScaleV, gBiasU, gBiasV);
         Set(c, MultilayerConstants.DebugOffset, 0f, -1f, 0f, 0f); // filled per draw
         Set(c, MultilayerConstants.OverlayOffset, -1f, -1f, -1f, -1f); // no decal overlay

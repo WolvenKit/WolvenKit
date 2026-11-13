@@ -40,7 +40,7 @@ SamplerState mlSampler : register(s10);
 
 cbuffer cbMultilayer : register(b11)
 {
-    // x: layer count, y: GlobalNormal pool index (-1 none), z: GlobalNormalIntensity, w: mask V flipped (terrain)
+    // x: layer count, y: GlobalNormal pool index (-1 none), z: GlobalNormalIntensity, w: unused
     float4 mlHeader;
     // GlobalNormalUVScale.xy, GlobalNormalUVBias.xy
     float4 mlGlobalUV;
@@ -144,7 +144,6 @@ MLSurface mlEvaluate(float2 uv)
 
     int layerCount = (int) mlHeader.x;
     int solo = (int) mlDebug.y;
-    float2 maskUV = mlHeader.w > 0.5 ? float2(uv.x, 1.0 - uv.y) : uv;
     float topLayer = -1;
     float soloFactor = 0;
 
@@ -185,7 +184,7 @@ MLSurface mlEvaluate(float2 uv)
         // All samples of a layer go through one mlSample call site (each call site expands
         // to the whole switch): 0 mask, 1 microblend, 2 colour, 3 roughness, 4 metalness, 5 normal.
         int sIdx[6] = { isBase ? -1 : maskIdx, mbIdx, colorIdx, roughIdx, metalIdx, normalIdx };
-        float2 sUV[6] = { maskUV, mbUV, matUV, matUV, matUV, matUV };
+        float2 sUV[6] = { uv, mbUV, matUV, matUV, matUV, matUV };
         float sScale[6] = { 1.0, mbTile, matTile, matTile, matTile, matTile };
         float baseMask = isBase ? 1.0 : v7.w; // constant mask when the mask is a solid placeholder
         float4 sRes[6] = { baseMask.xxxx, float4(0.5, 0.5, 1, 1), float4(1, 1, 1, 1),
@@ -268,11 +267,12 @@ MLSurface mlEvaluate(float2 uv)
     int globalIdx = (int) mlHeader.y;
     if (globalIdx >= 0)
     {
-        // Scale / bias act on the Blender V (bottom-up); the result is turned back to the
-        // image row, as the bake does. (Sampling the Blender V directly mirrored the whole
-        // map vertically: a terrain cell's slopes were lit from the wrong side north-south.)
+        // Scale / bias act on the Blender V (bottom-up). The pool holds the xbm as stored,
+        // which is upside down against the image the bake reads, so the Blender V is sampled
+        // directly. (Turning it back to an image row mirrored the map: clothing showed other
+        // UV islands' normals, terrain cells only met north-south with a flipped mask.)
         float2 gUV = float2(uv.x * mlGlobalUV.x + mlGlobalUV.z,
-                            1.0 - ((1.0 - uv.y) * mlGlobalUV.y + mlGlobalUV.w));
+                            (1.0 - uv.y) * mlGlobalUV.y + mlGlobalUV.w);
         float2 g = mlSample(globalIdx, gUV, dx * mlGlobalUV.xy, dy * mlGlobalUV.xy).rg * 2.0 - 1.0;
         float gz = sqrt(max(0.0, 1.0 - dot(g, g)));
         float intensity = mlHeader.z;
