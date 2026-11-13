@@ -14,26 +14,31 @@
             <Style
                 x:Key="CNameStyle"
                 TargetType="TextBox">
+                <!--  e.g. an empty CName (None): same color as other input controls, follows the theme  -->
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor_Control}" />
+                <!--  keyed style: no app-wide TextBox colors, so set the theme text color here  -->
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource ContentForeground}" />
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding IsValid}"
                         Value="True">
                         <!-- <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" /> -->
-                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
                     </DataTrigger>
 
                     <DataTrigger
                         Binding="{Binding HasWarning}"
                         Value="True">
                         <!--<Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />-->
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
+                        <Setter Property="Background" Value="{DynamicResource BackgroundColor_Yellow_Dark}" />
                     </DataTrigger>
 
                     <DataTrigger
                         Binding="{Binding HasError}"
                         Value="True">
                         <!--<Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />-->
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
+                        <Setter Property="Background" Value="{DynamicResource BackgroundColor_Red_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -80,10 +85,10 @@
             Margin="0"
             Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
             VerticalContentAlignment="Center"
-            Background="{StaticResource ContentBackgroundAlt}"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource ContentBackgroundAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,0,0"
-            Foreground="#666666"
+            Foreground="{DynamicResource WolvenKitGray66}"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             PreviewTextInput="HashBox_OnPreviewTextInput"

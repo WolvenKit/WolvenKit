@@ -17,7 +17,7 @@
     <Grid
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        hc:ThemeManager.RequestedAccentColor="{StaticResource MahApps.Brushes.Accent3}">
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -85,7 +85,7 @@
                         Grid.Column="0"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="New name:"
@@ -107,7 +107,7 @@
                         Grid.Column="0"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Depot Path:" />
@@ -131,7 +131,7 @@
                         Grid.Column="0"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Mesh appearance:" />
@@ -156,7 +156,7 @@
                         Grid.Row="8"
                         Grid.Column="0" 
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Chunkmask" />
@@ -176,7 +176,7 @@
                         Grid.Row="10"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Remember values?" />

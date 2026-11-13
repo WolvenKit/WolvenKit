@@ -61,6 +61,7 @@ public interface ISettingsDto
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }
     public string? ThemeAccentString { get; set; }
+    public string? ActiveTheme { get; set; }
     public string? DefaultProjectPath { get; set; }
     public string? ModderName { get; set; }
     public string? ModderEmail { get; set; }
