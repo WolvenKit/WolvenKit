@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3295
+      author: "Ametis81"
+      description: "Menu: icons for Launch Game with Steam and the Utilities items (Generate item codes, Add items to store/vendor); the Cyberpunk Blender Add-on entry opens its page again"
