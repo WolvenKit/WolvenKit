@@ -1,0 +1,26 @@
+{
+  "formatVersion": 1,
+  "name": "Night City Cyan",
+  "author": "WolvenKit",
+  "description": "Cold blue-black surfaces with a cyan accent.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#2BC4D3",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#131C22",
+    "ContentBackgroundAlt": "#17232B",
+    "ContentBackgroundAlt2": "#1B2932",
+    "ContentBackgroundAlt3": "#22323C",
+    "ContentBackgroundAlt4": "#2A3D48",
+    "ContentBackgroundAlt5": "#334855",
+    "BorderAlt": "#2C424F",
+    "ForegroundColor": "#DCEFF2",
+    "BackgroundColor_Control": "#1B2932",
+    "BackgroundColor_Frame_Active": "#22323C",
+    "BackgroundColor_Frame_Background": "#152027",
+    "BackgroundColor_Button_Active": "#1E2D36",
+    "WolvenKitProjectSource": "#FF2E88",
+    "WolvenKitProjectSourceShadow": "#8F1A4E",
+    "WolvenKitProjectResources": "#B98CFF"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "formatVersion": 1,
+  "name": "Pacifica Sunset",
+  "author": "WolvenKit",
+  "description": "Dusk over the Pacifica coast: plum shadows, coral neon.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#FF6F61",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#170F17",
+    "ContentBackgroundAlt": "#1D131D",
+    "ContentBackgroundAlt2": "#241824",
+    "ContentBackgroundAlt3": "#2C1E2C",
+    "ContentBackgroundAlt4": "#352536",
+    "ContentBackgroundAlt5": "#412E42",
+    "BorderAlt": "#432F44",
+    "ContentForeground": "#F5E1EC",
+    "ForegroundColor": "#F5E1EC",
+    "BackgroundColor_Control": "#241824",
+    "BackgroundColor_Frame_Active": "#2C1E2C",
+    "BackgroundColor_Frame_Background": "#1D131D",
+    "WolvenKitProjectSource": "#FFC93C",
+    "WolvenKitProjectSourceShadow": "#8F7022",
+    "WolvenKitProjectResources": "#3DDBD9",
+    "WolvenKitProjectResourcesShadow": "#227A79"
+  }
+}
