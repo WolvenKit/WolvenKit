@@ -28,7 +28,7 @@
 
         <Border
             Grid.Column="0"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,1,0" />
         <TextBlock
             Grid.Column="0"
@@ -42,7 +42,7 @@
             Padding="{DynamicResource WolvenKitMarginTinyLeft}"
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
-            Background="{StaticResource ContentBackgroundAlt}"
+            Background="{DynamicResource ContentBackgroundAlt}"
             BorderThickness="0"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             KeyboardNavigation.TabIndex="1"
@@ -53,7 +53,7 @@
 
         <Border
             Grid.Column="2"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="2"
@@ -67,7 +67,7 @@
             Padding="{DynamicResource WolvenKitMarginTinyLeft}"
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
-            Background="{StaticResource ContentBackgroundAlt}"
+            Background="{DynamicResource ContentBackgroundAlt}"
             BorderThickness="0"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             KeyboardNavigation.TabIndex="2"
@@ -78,7 +78,7 @@
 
         <Border
             Grid.Column="4"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="4"
@@ -92,7 +92,7 @@
             Padding="{DynamicResource WolvenKitMarginTinyLeft}"
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
-            Background="{StaticResource ContentBackgroundAlt}"
+            Background="{DynamicResource ContentBackgroundAlt}"
             BorderThickness="0"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             KeyboardNavigation.TabIndex="3"
@@ -103,7 +103,7 @@
 
         <Border
             Grid.Column="6"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="6"
@@ -117,7 +117,7 @@
             Padding="{DynamicResource WolvenKitMarginTinyLeft}"
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
-            Background="{StaticResource ContentBackgroundAlt}"
+            Background="{DynamicResource ContentBackgroundAlt}"
             BorderThickness="0"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             KeyboardNavigation.TabIndex="4"

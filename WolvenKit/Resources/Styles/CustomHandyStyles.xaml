@@ -315,7 +315,10 @@
 
     <Style
         BasedOn="{StaticResource TextBoxBaseStyle}"
-        TargetType="TextBox" />
+        TargetType="TextBox">
+        <!--  themed Cut / Copy / Paste (App.Styles.xaml) instead of the white system menu  -->
+        <Setter Property="ContextMenu" Value="{DynamicResource WolvenKitTextEditContextMenu}" />
+    </Style>
 
     <Style
         x:Key="TextBoxExtend"
