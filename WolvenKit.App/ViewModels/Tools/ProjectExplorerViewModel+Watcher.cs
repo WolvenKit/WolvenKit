@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -316,12 +317,42 @@ public partial class ProjectExplorerViewModel
 
             void ExpandParentsOf(FileSystemModel dir)
             {
-                ExpansionStateDictionary[dir.RawRelativePath] = true;
-
-                if (dir.Parent != null)
+                // Stop below the project root model: its RawRelativePath is the absolute project path.
+                var paths = new List<string>();
+                for (var d = dir; d is not null && !ReferenceEquals(d, _projectFileSystemModel); d = d.Parent)
                 {
-                    ExpandParentsOf(dir.Parent);
+                    paths.Add(d.RawRelativePath);
                 }
+
+                if (paths.Count == 0)
+                {
+                    return;
+                }
+
+                // ExpansionStateDictionary is a plain Dictionary that the UI thread reads and serializes,
+                // so only write to it there. Capture the instance: if a different project gets loaded
+                // before this runs, its dictionary must not receive our paths.
+                var state = ExpansionStateDictionary;
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (!ReferenceEquals(state, ExpansionStateDictionary))
+                    {
+                        return;
+                    }
+
+                    foreach (var path in paths)
+                    {
+                        if (state.TryGetValue(path, out var isExpanded) && isExpanded)
+                        {
+                            continue;
+                        }
+
+                        state[path] = true;
+                        // Mark dirty, or the auto-expansion only reaches disk if the user also
+                        // happens to expand/collapse something by hand.
+                        _hasUnsavedFileTreeChanges = true;
+                    }
+                });
             }
 
             if (current is not null)
