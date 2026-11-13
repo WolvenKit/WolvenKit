@@ -1314,6 +1314,15 @@ namespace WolvenKit.Views.Tools
             {
                 // A new file may have landed in a folder the current search hasn't opened yet.
                 _lastExpandedQuery = null;
+
+                // While searching, the visible-path set predates this file, so the filter would hide it
+                // even if it matches. Re-run the search; the debounce timer coalesces a burst of new files.
+                if (!string.IsNullOrWhiteSpace(_currentFolderQuery))
+                {
+                    _searchDebounceTimer.Stop();
+                    _searchDebounceTimer.Start();
+                }
+
                 RevealMaterializedModelCore(model);
             }, DispatcherPriority.Background);
         }
