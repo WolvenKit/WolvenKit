@@ -955,6 +955,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             };
 
             _projectManager.ActiveProject = np;
+            (_archiveManager.ProjectArchive as IDisposable)?.Dispose(); // its folder watcher
             _archiveManager.ProjectArchive = np.AsArchive();
 
             await _projectManager.SaveAsync();
