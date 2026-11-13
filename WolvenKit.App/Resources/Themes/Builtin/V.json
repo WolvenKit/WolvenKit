@@ -1,0 +1,29 @@
+{
+  "formatVersion": 1,
+  "name": "V",
+  "author": "WolvenKit",
+  "description": "The game's own UI: neon red and teal-cyan lines on dark teal glass.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#F2384F",
+  "accentForeground": "#0A1216",
+  "colors": {
+    "ContentBackground": "#0A1216",
+    "ContentBackgroundAlt": "#0D171C",
+    "ContentBackgroundAlt2": "#111D23",
+    "ContentBackgroundAlt3": "#16252C",
+    "ContentBackgroundAlt4": "#1C2E36",
+    "ContentBackgroundAlt5": "#243841",
+    "BorderAlt": "#1F3A42",
+    "ContentForeground": "#D8F3F1",
+    "ForegroundColor": "#D8F3F1",
+    "BackgroundColor_Control": "#111D23",
+    "BackgroundColor_Frame_Active": "#16252C",
+    "BackgroundColor_Frame_Background": "#0D171C",
+    "WolvenKitProjectSource": "#5EF2DE",
+    "WolvenKitProjectSourceShadow": "#2B7D72",
+    "WolvenKitProjectResources": "#FF8A94",
+    "WolvenKitProjectResourcesShadow": "#8F4249",
+    "WolvenKitRedColor": "#F2384F",
+    "WolvenKitCyanColor": "#5EF2DE"
+  }
+}
