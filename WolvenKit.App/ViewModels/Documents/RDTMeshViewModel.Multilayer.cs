@@ -151,9 +151,11 @@ public partial class RDTMeshViewModel
     }
 
     /// <summary>
-    /// The debug view and the solo layer apply to the selected material only; every other mesh
-    /// keeps its normal shaded look (debugging the pants does not turn the jacket into a mask).
-    /// Without a selection (no multilayer material yet) the view applies to all.
+    /// Object previews: the debug view and the solo layer apply to the selected material only;
+    /// every other mesh keeps its normal shaded look (debugging the pants does not turn the
+    /// jacket into a mask). Without a selection the view applies to all.
+    /// Sector / block previews: the view and the solo layer index apply to every multilayer
+    /// material, so neighbouring pieces (terrain cells sharing one mlsetup) can be compared.
     /// </summary>
     private void ApplyMultilayerDebugView()
     {
@@ -166,11 +168,10 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
-            // Sector / block previews have no Shader Debug section: always shaded there, even when
-            // another tab set a debug mode (the mode is shared).
-            var isTarget = IsObjectPreview && (target == null || name == target);
+            var isTarget = !IsObjectPreview || target == null || name == target;
             var mode = isTarget ? MultilayerShader.DebugMode : 0;
-            var solo = isTarget && layer != null && layer.Key == name ? layer.Index : -1;
+            var solo = !isTarget || layer == null ? -1
+                : !IsObjectPreview || layer.Key == name ? layer.Index : -1;
 
             if (ml.DebugMode != mode)
             {
@@ -1046,7 +1047,11 @@ public partial class RDTMeshViewModel
             return false;
         }
 
-        Set(c, 0, written, globalIdx, globalIntensity, 0f);
+        // Terrain cells (multilayered_terrain.mt, the only template with UVGenScaleOffset) store
+        // their .mlmask bottom-up against their GlobalNormal: with the mask sampled as is,
+        // neighbouring cells did not meet north-south while the GlobalNormal did.
+        var flipMaskV = dictionary.ContainsKey("UVGenScaleOffset") ? 1f : 0f;
+        Set(c, 0, written, globalIdx, globalIntensity, flipMaskV);
         Set(c, 4, gScaleU, gScaleV, gBiasU, gBiasV);
         Set(c, MultilayerConstants.DebugOffset, 0f, -1f, 0f, 0f); // filled per draw
 
