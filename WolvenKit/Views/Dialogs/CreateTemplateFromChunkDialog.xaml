@@ -16,7 +16,7 @@
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
     Padding="{DynamicResource WolvenKitMargin}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -108,11 +108,15 @@
             <Button
                 Click="CancelButton_OnClick"
                 Content="Cancel"
-                Style="{StaticResource DialogButtonStyle}"/>
+                Style="{StaticResource WKButtonStyle}"
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                MinWidth="80"/>
             <Button
                 Click="CreateButton_OnClick"
                 Content="Create"
-                Style="{StaticResource DialogPrimaryButtonStyle}"
+                Style="{StaticResource WKButtonPrimaryStyle}"
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                MinWidth="80"
                 IsEnabled="{Binding IsTemplateNameValid}"/>
 
         </StackPanel>

@@ -20,7 +20,7 @@
     <Grid
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        hc:ThemeManager.RequestedAccentColor="{StaticResource MahApps.Brushes.Accent3}">
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -72,7 +72,7 @@
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Visibility="{Binding ShowInputField,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -105,7 +105,7 @@
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Remember values?" />
 

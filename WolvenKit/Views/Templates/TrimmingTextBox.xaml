@@ -111,11 +111,13 @@
                 x:Name="StartTrimming"
                 Grid.Column="0"
                 Visibility="Hidden">
+                <!--  Theme background with a darkening fade toward the edge  -->
+                <Rectangle Fill="{Binding ElementName=UserControl, Path=Background}" />
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                            <GradientStop Offset="0.0" Color="Black" />
-                            <GradientStop Offset="1.0" Color="#292929" />
+                            <GradientStop Offset="0.0" Color="#FF000000" />
+                            <GradientStop Offset="1.0" Color="#00000000" />
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
@@ -123,7 +125,7 @@
                 <TextBox
                     Padding="0"
                     Background="Transparent"
-                    Foreground="White"
+                    Foreground="{DynamicResource ContentForeground}"
                     Text="…" />
             </Grid>
 
@@ -131,11 +133,13 @@
                 x:Name="EndTrimming"
                 Grid.Column="2"
                 Visibility="Hidden">
+                <!--  Theme background with a darkening fade toward the edge  -->
+                <Rectangle Fill="{Binding ElementName=UserControl, Path=Background}" />
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                            <GradientStop Offset="0.0" Color="#292929" />
-                            <GradientStop Offset="1.0" Color="Black" />
+                            <GradientStop Offset="0.0" Color="#00000000" />
+                            <GradientStop Offset="1.0" Color="#FF000000" />
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
@@ -143,7 +147,7 @@
                 <TextBox
                     Padding="{DynamicResource WolvenKitMarginMicroLeft}"
                     Background="Transparent"
-                    Foreground="White"
+                    Foreground="{DynamicResource ContentForeground}"
                     Text="…" />
             </Grid>
         </Grid>
