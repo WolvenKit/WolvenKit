@@ -179,7 +179,8 @@ public partial class RDTMeshViewModel
     {
         var target = SelectedMultilayerDebugMaterial?.Key is { Length: > 0 } key ? key : null;
         var layer = SelectedMultilayerDebugLayer;
-        foreach (var (name, material) in Materials)
+        // Copies carrying a decal overlay are debugged like their material.
+        foreach (var (name, material) in Materials.Concat(_decalOverlayMaterials.Select(x => new KeyValuePair<string, PBRMaterial>(x.Key, x.Value))))
         {
             if (material is not MultilayerPBRMaterial ml)
             {
@@ -1075,6 +1076,9 @@ public partial class RDTMeshViewModel
         Set(c, 0, written, globalIdx, globalIntensity, 0f);
         Set(c, 4, gScaleU, gScaleV, gBiasU, gBiasV);
         Set(c, MultilayerConstants.DebugOffset, 0f, -1f, 0f, 0f); // filled per draw
+        Set(c, MultilayerConstants.OverlayOffset, -1f, -1f, -1f, -1f); // no decal overlay
+        Set(c, MultilayerConstants.OverlayBOffset, -1f, -1f, -1f, -1f);
+        Set(c, MultilayerConstants.OverlayFlagsOffset, 0f, 0f, 0f, 0f);
 
         _multilayerGpuData[material.Name] = new MultilayerGpuData(pool.ToArray(), Pack(c), layerLabels);
         Parent?.GetLoggerService()?.Debug(
