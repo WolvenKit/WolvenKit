@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
@@ -7,7 +8,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
 using System.Windows.Threading;
+using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.UI.Xaml.TreeGrid.Helpers;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.RED4.Types;
 
@@ -45,6 +48,13 @@ namespace WolvenKit.Views.Documents
                         .Create(() => hxViewport.MouseDown3D -= vm.MouseDown3D)
                         .DisposeWith(disposables);
 
+                    // Viewport → tree: when the selection changes (e.g. a click in the viewport),
+                    // expand the branch that holds it and scroll it into view.
+                    vm.PropertyChanged += OnViewModelPropertyChanged;
+                    Disposable
+                        .Create(() => vm.PropertyChanged -= OnViewModelPropertyChanged)
+                        .DisposeWith(disposables);
+
                     // Modifier flags must not stay "pressed" when the tab is left mid-keypress.
                     Disposable
                         .Create(() => ResetModifierFlags(vm))
@@ -61,6 +71,82 @@ namespace WolvenKit.Views.Documents
                         view => view.hxContentVisual.ItemsSource)
                     .DisposeWith(disposables);
             });
+        }
+
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(RDTMeshViewModel.SelectedItem))
+            {
+                return;
+            }
+
+            // Let the tree finish its own update first.
+            Dispatcher.BeginInvoke(new Action(RevealSelectedItem), DispatcherPriority.Background);
+        }
+
+        /// <summary>
+        /// The tree only expands root nodes, so a deeper item has no row yet.
+        /// Walk from the tree root to the item, expanding each ancestor, then select and scroll.
+        /// </summary>
+        private void RevealSelectedItem()
+        {
+            if (ViewModel?.SelectedItem is not DependencyObject target || NodeTreeGrid.View == null)
+            {
+                return;
+            }
+
+            var chain = new List<DependencyObject>();
+            for (var current = target; current != null; current = LogicalTreeHelper.GetParent(current))
+            {
+                chain.Insert(0, current);
+            }
+
+            // View.Nodes is a TreeNodeCollection, ChildNodes is TreeNodes: walk both as TreeNode sequences.
+            IEnumerable<TreeNode> nodes = NodeTreeGrid.View.Nodes;
+            TreeNode found = null;
+            foreach (var item in chain)
+            {
+                var node = nodes.FirstOrDefault(n => ReferenceEquals(n.Item, item));
+                if (node == null)
+                {
+                    if (found == null)
+                    {
+                        continue; // still above the tree's root items
+                    }
+
+                    return; // branch not in the tree (e.g. filtered out)
+                }
+
+                found = node;
+                if (ReferenceEquals(item, target))
+                {
+                    break;
+                }
+
+                if (!node.IsExpanded)
+                {
+                    NodeTreeGrid.ExpandNode(node);
+                }
+
+                nodes = node.ChildNodes;
+            }
+
+            if (found == null || !ReferenceEquals(found.Item, target))
+            {
+                return;
+            }
+
+            if (!ReferenceEquals(NodeTreeGrid.SelectedItem, target))
+            {
+                // SetCurrentValue keeps the XAML binding to the view model's SelectedItem intact.
+                NodeTreeGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfGridBase.SelectedItemProperty, target);
+            }
+
+            var rowIndex = NodeTreeGrid.ResolveToRowIndex(found);
+            if (rowIndex >= 0)
+            {
+                NodeTreeGrid.ScrollInView(new RowColumnIndex(rowIndex, 0));
+            }
         }
 
         private static bool IsSectorPreview(RDTMeshViewModel vm) =>
