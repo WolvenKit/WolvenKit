@@ -14,6 +14,9 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
 public static class GraphNodeStyling
 {
     private static ConcurrentDictionary<string, Brush> BrushCache = [];
+
+    /// <summary>Example of usage: after color theme changed.</summary>
+    public static void ClearBrushCache() => BrushCache.Clear();
     private static ConcurrentDictionary<string, string> TitleCache = [];
 
     public static Brush GetBackgroundForSceneNodeType(scnSceneGraphNode node)
