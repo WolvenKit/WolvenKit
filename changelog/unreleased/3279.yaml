@@ -14,3 +14,8 @@ changes:
       pr-number: 3279
       author: "Ametis81"
       description: "Sector previews open much faster: files prefetched once, preview shaders cached on disk, node tree filled after the first frame."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector files are read in the background with progress in the viewport; the window stays responsive while a sector opens."
