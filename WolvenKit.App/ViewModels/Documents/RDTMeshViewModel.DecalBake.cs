@@ -1292,8 +1292,9 @@ public partial class RDTMeshViewModel
 
     private string DecalCompositeKey(string surfaceName, List<DecalLayer> decals)
     {
-        // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay; v4: alpha above 1, NormalAlphaTex).
-        var sb = new System.Text.StringBuilder("v4;");
+        // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay; v4: alpha above 1, NormalAlphaTex;
+        // v5: each texel takes a layer once, no triangle lines).
+        var sb = new System.Text.StringBuilder("v5;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
@@ -1781,8 +1782,16 @@ public partial class RDTMeshViewModel
             using var drb = layer.RmAlpha > 0f ? LoadPng32(layer.RmPng) : null;
             var dRm = Pixels.From(drb);
 
+            // Each texel takes a layer once: triangles first claim the texels they really
+            // cover, then their half-pixel rims fill what is left at the decal's border.
+            // (Rims overlapped along shared edges and blended there twice: the decal
+            // mesh's triangles showed as faint lines.)
+            var claims = new Dictionary<Pixels, bool[]>(ReferenceEqualityComparer.Instance);
+            bool[] Claims(Pixels p) => claims.TryGetValue(p, out var mask) ? mask : claims[p] = new bool[p.W * p.H];
+            for (var pass = 0; pass < 2; pass++)
             foreach (var (tri, suv) in layer.Triangles)
             {
+                var rim = pass == 1;
                 var dIdx = layer.Decal.Indices;
                 var duv = layer.Decal.Uvs;
                 int i0 = dIdx[tri * 3], i1 = dIdx[tri * 3 + 1], i2 = dIdx[tri * 3 + 2];
@@ -1794,7 +1803,7 @@ public partial class RDTMeshViewModel
 
                 if (dColor is { } dC && layer.DiffuseAlpha > 0f)
                 {
-                    RasterizeInto(color, suv, d, (px, uv) =>
+                    RasterizeInto(color, suv, d, Claims(color), rim, (px, uv) =>
                     {
                         Span<float> s = stackalloc float[4];
                         dC.Sample(uv.U, uv.V, s);
@@ -1812,7 +1821,7 @@ public partial class RDTMeshViewModel
 
                 if (normal is { } nTarget && dNormal is { } dN && (layer.NormalAlpha > 0f || layer.UseNormalAlphaTex))
                 {
-                    RasterizeInto(nTarget, suv, d, (px, uv) =>
+                    RasterizeInto(nTarget, suv, d, Claims(nTarget), rim, (px, uv) =>
                     {
                         var a = NormalCoverage(layer, dColor, uv);
                         if (a <= 0f)
@@ -1864,7 +1873,7 @@ public partial class RDTMeshViewModel
 
                 if (rm is { } rmTarget && layer.RmAlpha > 0f)
                 {
-                    RasterizeInto(rmTarget, suv, d, (px, uv) =>
+                    RasterizeInto(rmTarget, suv, d, Claims(rmTarget), rim, (px, uv) =>
                     {
                         var a = Math.Min(1f, Coverage(dColor, uv) * layer.RmAlpha);
                         if (a <= 0f)
@@ -2011,8 +2020,16 @@ public partial class RDTMeshViewModel
             using var drb = layer.RmAlpha > 0f ? LoadPng32(layer.RmPng) : null;
             var dRm = Pixels.From(drb);
 
+            // Each texel takes a layer once: triangles first claim the texels they really
+            // cover, then their half-pixel rims fill what is left at the decal's border.
+            // (Rims overlapped along shared edges and blended there twice: the decal
+            // mesh's triangles showed as faint lines.)
+            var claims = new Dictionary<Pixels, bool[]>(ReferenceEqualityComparer.Instance);
+            bool[] Claims(Pixels p) => claims.TryGetValue(p, out var mask) ? mask : claims[p] = new bool[p.W * p.H];
+            for (var pass = 0; pass < 2; pass++)
             foreach (var (tri, suv) in layer.Triangles)
             {
+                var rim = pass == 1;
                 var dIdx = layer.Decal.Indices;
                 var duv = layer.Decal.Uvs;
                 int i0 = dIdx[tri * 3], i1 = dIdx[tri * 3 + 1], i2 = dIdx[tri * 3 + 2];
@@ -2025,7 +2042,7 @@ public partial class RDTMeshViewModel
                     continue;
                 }
 
-                RasterizeInto(raster, suv, d, (px, uv) =>
+                RasterizeInto(raster, suv, d, Claims(raster), rim, (px, uv) =>
                 {
                     Span<float> c4 = stackalloc float[4];
                     var coverage = 1f;
@@ -2343,9 +2360,12 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// Pixels of the target inside the triangle given in the target's UV space (wrapped),
-    /// with the decal UV interpolated at each pixel centre.
+    /// with the decal UV interpolated at each pixel centre. Each pixel is visited once per
+    /// claim mask: the inside pass takes the centres within the triangle (shared edges go to
+    /// the first triangle), the rim pass the still free ones within about half a pixel of it.
     /// </summary>
-    private static void RasterizeInto(Pixels target, double[] suv, double[] duv, Action<int, (double U, double V)> pixel)
+    private static void RasterizeInto(Pixels target, double[] suv, double[] duv, bool[] claimed, bool rim,
+        Action<int, (double U, double V)> pixel)
     {
         double x0 = suv[0] * target.W, y0 = suv[1] * target.H;
         double x1 = suv[2] * target.W, y1 = suv[3] * target.H;
@@ -2369,7 +2389,7 @@ public partial class RDTMeshViewModel
         var longest = Math.Max(Math.Max(Math.Sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)),
                                         Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))),
                                Math.Sqrt((x0 - x2) * (x0 - x2) + (y0 - y2) * (y0 - y2)));
-        var edge = 0.5 * longest / Math.Abs(area);
+        var edge = rim ? 0.5 * longest / Math.Abs(area) : 1e-9;
         for (var py = minY; py <= maxY; py++)
         {
             for (var px = minX; px <= maxX; px++)
@@ -2383,11 +2403,18 @@ public partial class RDTMeshViewModel
                     continue;
                 }
 
-                var u = w0 * duv[0] + w1 * duv[2] + w2 * duv[4];
-                var v = w0 * duv[1] + w1 * duv[3] + w2 * duv[5];
                 var tx = ((px % target.W) + target.W) % target.W;
                 var ty = ((py % target.H) + target.H) % target.H;
-                pixel((ty * target.W + tx) * 4, (u, v));
+                var index = ty * target.W + tx;
+                if (claimed[index])
+                {
+                    continue;
+                }
+
+                claimed[index] = true;
+                var u = w0 * duv[0] + w1 * duv[2] + w2 * duv[4];
+                var v = w0 * duv[1] + w1 * duv[3] + w2 * duv[5];
+                pixel(index * 4, (u, v));
             }
         }
     }
