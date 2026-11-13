@@ -375,6 +375,13 @@ namespace WolvenKit.Views.Documents
             vm.IsSavingImage = true;
             try
             {
+                if (vm.ActiveCameraPreset is { } batchPreset)
+                {
+                    // The preset's projection and lighting for the whole batch.
+                    vm.ApplyCameraPresetSettings(batchPreset);
+                    await WaitFramesAsync(2);
+                }
+
                 foreach (var appearance in appearances)
                 {
                     if (vm.CancelSavingImages)
@@ -387,7 +394,17 @@ namespace WolvenKit.Views.Documents
                     vm.SelectedAppearance = appearance;
                     await WaitFramesAsync(2); // the view swaps the models in
                     await vm.GenerateMaterialsForPreviewImageAsync();
-                    FrameObject();
+                    // With a camera preset each appearance is shot from the preset's view (sized
+                    // to that appearance); without one it is framed from the current direction.
+                    if (vm.ActiveCameraPreset is { } iconPreset)
+                    {
+                        PlaceCameraPreset(iconPreset);
+                    }
+                    else
+                    {
+                        FrameObject();
+                    }
+
                     await WaitFramesAsync(2);
 
                     if (await CapturePreviewAsync(vm) is not { } shot)
@@ -634,6 +651,125 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>A new projection needs a new distance to frame the object.</summary>
+        // ---- Camera presets ----
+
+        /// <summary>Centre and radius of the bounding sphere of what is shown; null when empty.</summary>
+        private (System.Windows.Media.Media3D.Point3D Center, double Radius)? SceneSphere()
+        {
+            var bounds = HelixToolkit.Wpf.SharpDX.ViewportExtensions.FindBounds3D(hxViewport);
+            if (bounds.IsEmpty || bounds.SizeX + bounds.SizeY + bounds.SizeZ <= 0)
+            {
+                return null;
+            }
+
+            var center = new System.Windows.Media.Media3D.Point3D(
+                bounds.X + bounds.SizeX / 2, bounds.Y + bounds.SizeY / 2, bounds.Z + bounds.SizeZ / 2);
+            var radius = 0.5 * Math.Sqrt(bounds.SizeX * bounds.SizeX + bounds.SizeY * bounds.SizeY + bounds.SizeZ * bounds.SizeZ);
+            return radius > 0 ? (center, radius) : null;
+        }
+
+        /// <summary>Saves the current view as a preset, relative to the object's bounding sphere.</summary>
+        private void SaveCameraPreset_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is not { } vm ||
+                vm.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera ||
+                SceneSphere() is not { } sphere)
+            {
+                return;
+            }
+
+            var name = WolvenKit.App.Interaction.Interactions.AskForTextInput(
+                ("Camera preset name", vm.ActiveCameraPreset?.Name ?? ""))?.Trim();
+            if (string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+
+            // The render camera: mouse navigation changes only that one.
+            var core = camera.CameraInternal;
+            var look = new System.Windows.Media.Media3D.Vector3D(core.LookDirection.X, core.LookDirection.Y, core.LookDirection.Z);
+            var up = new System.Windows.Media.Media3D.Vector3D(core.UpDirection.X, core.UpDirection.Y, core.UpDirection.Z);
+            if (look.LengthSquared < 1e-12)
+            {
+                return;
+            }
+
+            var target = new System.Windows.Media.Media3D.Point3D(core.Position.X, core.Position.Y, core.Position.Z) + look;
+            var distance = look.Length;
+            look.Normalize();
+            up.Normalize();
+            var r = sphere.Radius;
+
+            vm.StoreCameraPreset(new WolvenKit.App.ViewModels.Documents.RDTMeshViewModel.CameraPreset
+            {
+                Name = name,
+                LookX = look.X,
+                LookY = look.Y,
+                LookZ = look.Z,
+                UpX = up.X,
+                UpY = up.Y,
+                UpZ = up.Z,
+                Distance = distance / r,
+                TargetX = (target.X - sphere.Center.X) / r,
+                TargetY = (target.Y - sphere.Center.Y) / r,
+                TargetZ = (target.Z - sphere.Center.Z) / r,
+                OrthoWidth = camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera ortho ? ortho.Width / r : 0,
+                Projection = vm.PreviewCamera.Label,
+                Lighting = vm.PreviewLighting,
+            });
+        }
+
+        private void ApplyCameraPreset_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is not { ActiveCameraPreset: { } preset } vm)
+            {
+                return;
+            }
+
+            // Projection and lighting first: a new projection swaps the camera and frames the
+            // object (at Background); the preset's view is placed after that.
+            vm.ApplyCameraPresetSettings(preset);
+            Dispatcher.BeginInvoke(new Action(() => PlaceCameraPreset(preset)), DispatcherPriority.ContextIdle);
+        }
+
+        private void DeleteCameraPreset_OnClick(object sender, RoutedEventArgs e) => ViewModel?.DeleteSelectedCameraPreset();
+
+        /// <summary>Puts the camera where the preset says, scaled to the object shown now.</summary>
+        private void PlaceCameraPreset(WolvenKit.App.ViewModels.Documents.RDTMeshViewModel.CameraPreset preset)
+        {
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera || SceneSphere() is not { } sphere)
+            {
+                return;
+            }
+
+            var r = sphere.Radius;
+            var look = new System.Windows.Media.Media3D.Vector3D(preset.LookX, preset.LookY, preset.LookZ);
+            var up = new System.Windows.Media.Media3D.Vector3D(preset.UpX, preset.UpY, preset.UpZ);
+            if (look.LengthSquared < 1e-12 || up.LengthSquared < 1e-12)
+            {
+                return;
+            }
+
+            look.Normalize();
+            up.Normalize();
+            var target = sphere.Center + new System.Windows.Media.Media3D.Vector3D(preset.TargetX, preset.TargetY, preset.TargetZ) * r;
+            var lookVector = look * (Math.Max(preset.Distance, 1e-3) * r);
+            var position = target - lookVector;
+
+            if (camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera orthographic && preset.OrthoWidth > 0)
+            {
+                orthographic.AnimateWidth(preset.OrthoWidth * r, 0);
+            }
+
+            camera.AnimateTo(position, lookVector, up, 0);
+            camera.CameraInternal.AnimateTo(
+                new((float)position.X, (float)position.Y, (float)position.Z),
+                new((float)lookVector.X, (float)lookVector.Y, (float)lookVector.Z),
+                new((float)up.X, (float)up.Y, (float)up.Z),
+                0);
+            UpdateFollowLights();
+        }
+
         private void PreviewCamera_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
             Dispatcher.BeginInvoke(new Action(() => FrameObject()), DispatcherPriority.Background);
 
