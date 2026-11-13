@@ -3698,17 +3698,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // A mesh may point straight at a material template (.mt / .remt) instead of an instance:
         // that is valid, the template's defaults apply. Treat it as an instance without values
         // whose base is the template, so the base-material chain reads the defaults.
-        var templateRef = me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count
-            ? mesh.ExternalMaterials[me.Index]
+        // (ExternalMaterials are async references, PreloadExternalMaterials plain ones: compare paths.)
+        var templatePath = me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count
+            ? mesh.ExternalMaterials[me.Index].DepotPath
             : mesh.PreloadExternalMaterials != null && me.Index >= 0 && me.Index < mesh.PreloadExternalMaterials.Count
-                ? mesh.PreloadExternalMaterials[me.Index]
-                : null;
-        if (templateRef != null && templateRef.DepotPath != ResourcePath.Empty &&
-            GetProjectOrDepotFile(templateRef.DepotPath)?.RootChunk is CMaterialTemplate)
+                ? mesh.PreloadExternalMaterials[me.Index].DepotPath
+                : ResourcePath.Empty;
+        if (templatePath != ResourcePath.Empty &&
+            GetProjectOrDepotFile(templatePath)?.RootChunk is CMaterialTemplate)
         {
             material.Instance = new CMaterialInstance
             {
-                BaseMaterial = new CResourceReference<IMaterial>(templateRef.DepotPath)
+                BaseMaterial = new CResourceReference<IMaterial>(templatePath)
             };
             return;
         }
