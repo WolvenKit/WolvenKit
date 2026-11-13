@@ -448,11 +448,10 @@ float4 mlClay(MLVSOutput vsOut, bool isFront)
 {
     PSInput input = mlToPSInput(vsOut);
     const float3 V = normalize(input.vEye.xyz);
+    // The vertex normal as it is, like an ungenerated material: the game's meshes do not wind
+    // their triangles the way Helix counts "front", so flipping back faces by SV_IsFrontFace
+    // turned every normal inside out (the light seemed to come from below).
     float3 N = bRenderFlat ? normalize(cross(ddy(input.wp.xyz), ddx(input.wp.xyz))) : normalize(input.n);
-    if (!isFront)
-    {
-        N = -N;
-    }
     float3 color = LightSurface(input.wp, V, N, float3(0.5, 0.5, 0.5), 0, 0, 1, 0.5, 0, 0);
     if (bHasShadowMap && bRenderShadowMap && dot(getLookDir(vLightView), N) > 0)
     {
