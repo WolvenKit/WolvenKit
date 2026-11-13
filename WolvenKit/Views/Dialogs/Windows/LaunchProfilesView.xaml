@@ -67,7 +67,7 @@
                                     <templates:IconBox
                                         IconPack="Codicons"
                                         Kind="NewFile"
-                                        Foreground="{StaticResource WolvenKitYellow}" />
+                                        Foreground="{DynamicResource WolvenKitYellow}" />
 
                                     <TextBlock Text="New" />
                                 </StackPanel>
@@ -81,7 +81,7 @@
                                     <templates:IconBox
                                         IconPack="Material"
                                         Kind="ContentDuplicate"
-                                        Foreground="{StaticResource WolvenKitCyan}" />
+                                        Foreground="{DynamicResource WolvenKitCyan}" />
 
                                     <TextBlock Text="Duplicate" />
                                 </StackPanel>
@@ -95,7 +95,7 @@
                                     <templates:IconBox
                                         IconPack="Material"
                                         Kind="DeleteOutline"
-                                        Foreground="{StaticResource WolvenKitRed}" />
+                                        Foreground="{DynamicResource WolvenKitRed}" />
 
                                     <TextBlock Text="Delete" />
                                 </StackPanel>
@@ -111,7 +111,7 @@
                                     <templates:IconBox
                                         IconPack="Material"
                                         Kind="ChevronUp"
-                                        Foreground="{StaticResource WolvenKitTan}" />
+                                        Foreground="{DynamicResource WolvenKitTan}" />
 
                                     <TextBlock Text="Up" />
                                 </StackPanel>
@@ -128,7 +128,7 @@
                                     <templates:IconBox
                                         IconPack="Material"
                                         Kind="ChevronDown"
-                                        Foreground="{StaticResource WolvenKitTan}" />
+                                        Foreground="{DynamicResource WolvenKitTan}" />
 
                                     <TextBlock Text="Down" />
                                 </StackPanel>

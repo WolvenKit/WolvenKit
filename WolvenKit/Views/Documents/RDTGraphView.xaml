@@ -16,7 +16,7 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTGraphViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450">
-    <Grid Background="#1E1E1E">
+    <Grid Background="{DynamicResource WolvenKitGray1E}">
         <Grid.Resources>
             <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
         </Grid.Resources>
@@ -26,7 +26,7 @@
         <editors:AutomaticNodifyEditor
             x:Name="Editor"
             Grid.Column="0"
-            Background="{StaticResource ContentBackground}"
+            Background="{DynamicResource ContentBackground}"
             IsEnabled="{Binding IsLoaded}"
             Connections="{Binding Connections}"
             DisplayConnectionsOnTop="True"
@@ -40,6 +40,7 @@
                     <MenuItem Command="{x:Static nodify:EditorCommands.ZoomIn}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Foreground="{DynamicResource ContentForeground}"
                                 Kind="MagnifyPlusOutline"
                                 Width="13"
                                 Height="13"
@@ -51,6 +52,7 @@
                     <MenuItem Command="{x:Static nodify:EditorCommands.ZoomOut}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Foreground="{DynamicResource ContentForeground}"
                                 Kind="MagnifyMinusOutline"
                                 Width="13"
                                 Height="13"
@@ -64,6 +66,7 @@
                     <MenuItem Command="SelectAll">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Foreground="{DynamicResource ContentForeground}"
                                 Kind="SelectAll"
                                 Width="13"
                                 Height="13"
@@ -75,6 +78,7 @@
                     <MenuItem Command="{x:Static nodify:EditorCommands.FitToScreen}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Foreground="{DynamicResource ContentForeground}"
                                 Kind="FitToScreen"
                                 Width="13"
                                 Height="13"
@@ -100,7 +104,7 @@
 
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                        <Setter Property="Stroke" Value="{DynamicResource WolvenKitYellow}" />
                                     </Trigger>
 
                                     <DataTrigger
@@ -229,7 +233,7 @@
                                         Orientation="Horizontal">
                                         <TextBlock
                                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                            Foreground="#999999"
+                                            Foreground="{DynamicResource WolvenKitGray99}"
                                             Text="{Binding Key}"
                                             TextTrimming="CharacterEllipsis"
                                             ToolTip="{Binding Key}" />
@@ -250,7 +254,7 @@
                 <DataTemplate x:Key="FooterTemplate">
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginTiny}"
-                        Foreground="{StaticResource WolvenKitTan}"
+                        Foreground="{DynamicResource WolvenKitTan}"
                         Text="{Binding}" />
                 </DataTemplate>
 
@@ -320,6 +324,7 @@
                                         Header="_Top">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 Kind="AlignVerticalTop"
                                                 Width="13"
                                                 Height="13"
@@ -334,6 +339,7 @@
                                         Header="_Left">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 Kind="AlignHorizontalLeft"
                                                 Width="13"
                                                 Height="13"
@@ -348,6 +354,7 @@
                                         Header="_Bottom">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 Kind="AlignVerticalBottom"
                                                 Width="13"
                                                 Height="13"
@@ -362,6 +369,7 @@
                                         Header="_Right">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 Kind="AlignHorizontalRight"
                                                 Width="13"
                                                 Height="13"
@@ -376,6 +384,7 @@
                                         Header="_Middle">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 Kind="AlignVerticalCenter"
                                                 Width="13"
                                                 Height="13"
@@ -390,6 +399,7 @@
                                         Header="_Center">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
+                                                Foreground="{DynamicResource ContentForeground}"
                                                 Kind="AlignHorizontalCenter"
                                                 Width="13"
                                                 Height="13"
@@ -404,7 +414,7 @@
 
                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                     <Setter Property="Location" Value="{Binding Location}" />
-                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitYellow}" />
+                    <Setter Property="SelectedBrush" Value="{DynamicResource WolvenKitYellow}" />
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
         </editors:AutomaticNodifyEditor>
