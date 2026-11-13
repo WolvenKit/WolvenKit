@@ -116,6 +116,9 @@ public class GeometryCacheService
         }
     }
 
+    /// <summary>Starts reading the cache in the background (it takes seconds) without waiting for it.</summary>
+    public void Preload() => _ = _loadTask.Value;
+
     public PhysXMesh? GetEntry(ulong sectorHash, ulong entryHash)
     {
         _loadTask.Value.Wait();
