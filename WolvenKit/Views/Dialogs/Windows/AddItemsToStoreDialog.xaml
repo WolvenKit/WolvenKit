@@ -91,7 +91,7 @@
                     HorizontalAlignment="Left"
                     Background="Transparent"
                     BorderThickness="0"
-                    Foreground="White"
+                    Foreground="{DynamicResource ContentForeground}"
                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     Content="Remember values" />
 
@@ -111,7 +111,7 @@
                     HorizontalContentAlignment="Left"
                     Background="Transparent"
                     BorderThickness="0"
-                    Foreground="White"
+                    Foreground="{DynamicResource ContentForeground}"
                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     Content="Item Codes (separate with , or new line)" />
 

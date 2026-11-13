@@ -10,7 +10,7 @@
                 x:Key="DynamicTextStyle"
                 TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontMega}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Control_Secondary}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Control_Secondary}" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
 
                 <Style.Triggers>
@@ -27,7 +27,7 @@
                 x:Key="DynamicHeaderStyle"
                 TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontGiga}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Control_Secondary}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor_Control_Secondary}" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
 
                 <Style.Triggers>

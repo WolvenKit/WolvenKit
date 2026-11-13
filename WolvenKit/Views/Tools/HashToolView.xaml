@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450">
-    <Grid Background="{StaticResource ContentBackground}">
+    <Grid Background="{DynamicResource ContentBackground}">
         <TabControl>
             <TabItem Header="Calculate">
                 <Grid Margin="{DynamicResource WolvenKitMarginSmall}">

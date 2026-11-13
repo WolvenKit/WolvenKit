@@ -94,7 +94,7 @@
         x:Key="TextBoxExtendBaseStyleCustom"
         BasedOn="{StaticResource TextBoxBaseStyle}"
         TargetType="hc:TextBox">
-        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
