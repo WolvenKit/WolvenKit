@@ -39,6 +39,12 @@ public partial class RDTMeshViewModel
         set => SetProperty(ref _useMultilayerShader, value);
     }
 
+    /// <summary>
+    /// The material and layer pickers only matter in the debug views: Shaded draws every
+    /// material whole, so they are greyed out there.
+    /// </summary>
+    public bool IsMultilayerDebugPickerEnabled => MultilayerShader.DebugMode != 0;
+
     /// <summary>Debug view of the multilayer shader (see <see cref="MultilayerShader.DebugMode"/>).</summary>
     public int MultilayerDebugMode
     {
@@ -53,10 +59,17 @@ public partial class RDTMeshViewModel
             var wasSingleLayerMode = IsSingleLayerDebugMode(MultilayerShader.DebugMode);
             MultilayerShader.DebugMode = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(IsMultilayerDebugPickerEnabled));
 
-            // Layer mask / Layer tiling show one layer, so their list has no "All layers".
-            if (wasSingleLayerMode != IsSingleLayerDebugMode(value))
+            if (value == 0)
             {
+                // Back to Shaded: the whole material again, not the layer picked for debugging.
+                _selectedMultilayerDebugLayer = null;
+                RebuildMultilayerDebugLayers();
+            }
+            else if (wasSingleLayerMode != IsSingleLayerDebugMode(value))
+            {
+                // Layer mask / Layer tiling show one layer, so their list has no "All layers".
                 RebuildMultilayerDebugLayers();
             }
 
