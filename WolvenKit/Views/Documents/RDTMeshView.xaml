@@ -225,6 +225,23 @@
             VisibilityFlag="{Binding IsLoaded}"
             Small="True" />
 
+        <!-- Sector loading: its files are read in the background, then the scene is built -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Padding="16,8"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="#C0121212"
+            CornerRadius="4"
+            IsHitTestVisible="False"
+            Visibility="{Binding IsSectorLoading, Converter={StaticResource VisibilityConverter}}">
+            <TextBlock
+                Foreground="White"
+                FontSize="14"
+                Text="{Binding SectorLoadingText}" />
+        </Border>
+
         <syncfusion:SfGridSplitter
             Grid.Row="0"
             Grid.Column="1"

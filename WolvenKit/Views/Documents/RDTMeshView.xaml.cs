@@ -69,7 +69,16 @@ namespace WolvenKit.Views.Documents
                         .Create(() => hxViewport.MouseDown3D -= vm.MouseDown3D)
                         .DisposeWith(disposables);
 
-                    EventHandler rendered = (_, _) => vm.OnViewportRendered();
+                    EventHandler rendered = (_, _) =>
+                    {
+                        vm.OnViewportRendered();
+                        if (vm.ZoomExtentsRequested)
+                        {
+                            // the sector was built after the view was shown: frame it now
+                            vm.ZoomExtentsRequested = false;
+                            _ = Dispatcher.InvokeAsync(() => hxViewport.ZoomExtents(), DispatcherPriority.Background);
+                        }
+                    };
                     hxViewport.OnRendered += rendered;
                     Disposable
                         .Create(() => hxViewport.OnRendered -= rendered)

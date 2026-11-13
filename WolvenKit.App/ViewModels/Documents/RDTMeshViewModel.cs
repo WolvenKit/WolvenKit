@@ -8470,6 +8470,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     private System.Diagnostics.Stopwatch? _sectorFirstFrame;
     private long _sectorBuildMs;
+    private long _sectorReadMs;
+    private string? _sectorReadDetail;
 
     /// <summary>Called by the view after each rendered frame: logs how long the sector took to show.</summary>
     public void OnViewportRendered()
@@ -8477,7 +8479,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (_sectorFirstFrame is { } sw)
         {
             _sectorFirstFrame = null;
-            _loggerService.Debug($"[Sector] built in {_sectorBuildMs} ms, first frame {sw.ElapsedMilliseconds} ms later");
+            _loggerService.Debug($"[Sector] files read in {_sectorReadMs} ms ({_sectorReadDetail}), built in {_sectorBuildMs} ms, " +
+                                 $"first frame {sw.ElapsedMilliseconds} ms later");
         }
     }
 
@@ -8492,11 +8495,142 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         IsRendered = true;
         if (_data is worldStreamingSector wss)
         {
-            var sw = System.Diagnostics.Stopwatch.StartNew();
+            _ = RenderSectorSoloAsync(wss);
+        }
+    }
+
+    /// <summary>Text over the viewport while a sector loads; null when it is shown.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSectorLoading))]
+    private string? _sectorLoadingText;
+
+    public bool IsSectorLoading => SectorLoadingText != null;
+
+    /// <summary>Set when the view should frame the whole scene after its next frame.</summary>
+    public bool ZoomExtentsRequested { get; set; }
+
+    private bool _sectorFilesPrefetched;
+
+    /// <summary>
+    /// The sector's files are read on a background thread (the window stays responsive and shows
+    /// how many are read), then the scene is built on the UI thread from the read files.
+    /// </summary>
+    private async Task RenderSectorSoloAsync(worldStreamingSector wss)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        long readMs = 0;
+        SectorLoadingText = "Reading the sector's files…";
+        try
+        {
+            TakeProjectFileSnapshot(ResolveArchiveManager());
+            var snapshotMs = sw.ElapsedMilliseconds;
+            PrepareSectorEmbeddedFiles(wss, null);
+            var embeddedMs = sw.ElapsedMilliseconds - snapshotMs;
+            if (wss.Nodes.Any(h => h?.Chunk is worldCookedCollisionNode))
+            {
+                _geometryCacheService.Preload();
+            }
+
+            _prefetchRead = 0;
+            lock (_slowReads)
+            {
+                _slowReads.Clear();
+            }
+            _prefetchProgress = new Progress<int>(n =>
+            {
+                if (SectorLoadingText != null && _sectorFilesPrefetched == false)
+                {
+                    SectorLoadingText = $"Reading the sector's files… {n}";
+                }
+            });
+
+            long prefetchMs = 0;
+            var gcPause = GC.GetTotalPauseDuration();
+            var gen2 = GC.CollectionCount(2);
+            await Task.Run(() =>
+            {
+                var t = System.Diagnostics.Stopwatch.StartNew();
+                PrefetchSectorFiles(wss);
+                prefetchMs = t.ElapsedMilliseconds;
+            });
+            _prefetchProgress = null;
+            readMs = sw.ElapsedMilliseconds;
+            // where the reading time went: listing the project, the sector's embedded files,
+            // the parallel read itself, and waiting for the UI thread to come back
+            _sectorReadDetail = $"project listing {snapshotMs} ms, embedded {embeddedMs} ms, " +
+                                $"{_prefetchRead} files {prefetchMs} ms (GC pauses {(GC.GetTotalPauseDuration() - gcPause).TotalMilliseconds:0} ms, " +
+                                $"{GC.CollectionCount(2) - gen2} full), UI wait {readMs - snapshotMs - embeddedMs - prefetchMs} ms";
+            lock (_slowReads)
+            {
+                if (_slowReads.Count > 0)
+                {
+                    _loggerService.Debug("[Sector] slowest files: " + string.Join(", ", _slowReads
+                        .OrderByDescending(r => r.Ms).Take(8)
+                        .Select(r => $"{Path.GetFileName(r.Path)} {r.Ms} ms")));
+                }
+            }
+            if (_disposed)
+            {
+                return;
+            }
+
+            // let the text be drawn before the UI thread is busy building
+            SectorLoadingText = "Building the scene…";
+            await System.Windows.Threading.Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Background);
+            if (_disposed)
+            {
+                return;
+            }
+
+            _sectorFilesPrefetched = true;
             _soloSector = RenderSector(wss, Appearances[0]);
             FillSoloSectorVariants(_soloSector);
-            _sectorBuildMs = sw.ElapsedMilliseconds;
+            ReleaseSectorMeshFiles();
+
+            // the tree and the camera were set up for the empty scene
+            OnPropertyChanged(nameof(SelectedModelGroup));
+            ZoomExtentsRequested = SelectedItem == null;
+            _sectorBuildMs = sw.ElapsedMilliseconds - readMs;
+            _sectorReadMs = readMs;
             _sectorFirstFrame = System.Diagnostics.Stopwatch.StartNew();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to load the sector preview: {ex.Message}");
+            _loggerService.Error(ex);
+        }
+        finally
+        {
+            _sectorFilesPrefetched = false;
+            _prefetchProgress = null;
+            _sectorEmbeddedFiles = null;
+            _projectFileSnapshot = null;
+            _modArchiveSnapshot = null;
+            _gameArchiveSnapshot = null;
+            SectorLoadingText = null;
+        }
+    }
+
+    /// <summary>
+    /// After the scene is built the sector's meshes live on as preview geometry: their files
+    /// (vertex and index buffers - most of the read data) are dropped from the file cache.
+    /// Materials, entities and appearances stay for material generation and live updates;
+    /// a mesh needed again is simply read again.
+    /// </summary>
+    private void ReleaseSectorMeshFiles()
+    {
+        var released = 0;
+        foreach (var (path, file) in _fileCache)
+        {
+            if (file?.RootChunk is CMesh && _fileCache.TryRemove(path, out _))
+            {
+                released++;
+            }
+        }
+
+        if (released > 0)
+        {
+            _loggerService.Debug($"[Sector] released {released} mesh files from the cache");
         }
     }
 
@@ -8676,6 +8810,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var options = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount - 1) };
         Parallel.ForEach(paths, options, path =>
         {
+            var start = System.Diagnostics.Stopwatch.GetTimestamp();
             try
             {
                 var file = ReadDepotFile(am, path);
@@ -8686,8 +8821,32 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 // left out of the cache: the sequential path loads it (and reports errors)
             }
+
+            NoteSlowRead(path, System.Diagnostics.Stopwatch.GetTimestamp() - start);
+            var read = System.Threading.Interlocked.Increment(ref _prefetchRead);
+            if (read % 25 == 0)
+                _prefetchProgress?.Report(read);
         });
     }
+
+    // the slowest files of the running prefetch (path, ms), for the timing line
+    private readonly List<(string Path, long Ms)> _slowReads = new();
+
+    private void NoteSlowRead(ResourcePath path, long ticks)
+    {
+        var ms = ticks * 1000 / System.Diagnostics.Stopwatch.Frequency;
+        if (ms < 200)
+            return;
+
+        lock (_slowReads)
+        {
+            _slowReads.Add((path.GetResolvedText() ?? path.ToString() ?? "?", ms));
+        }
+    }
+
+    // files read by the running prefetch, reported to the loading text of the preview
+    private int _prefetchRead;
+    private IProgress<int>? _prefetchProgress;
 
     // The project "archive" (FileSystemArchive) walks the whole project folder and hashes every
     // path on each lookup (ArchiveManager.GetGameFile) and again on each extract (TryGetFile):
@@ -8971,7 +9130,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         // Read every file the sector will need up front, in parallel.
         // Sequential archive reads were most of the sector load time.
-        PrefetchSectorFiles(data);
+        // (The solo sector preview has done it in the background already.)
+        if (!_sectorFilesPrefetched)
+        {
+            PrefetchSectorFiles(data);
+        }
 
         // what each nodeData entry placed, for the variant list and the proxy switch
         BeginSectorRegistry();
