@@ -328,6 +328,8 @@
     <SolidColorBrush x:Key="WolvenKitToggleOff" Color="{StaticResource WolvenKitToggleOffColor}" />
     <!--  menu / list separators; follow BorderAlt unless a theme sets them  -->
     <SolidColorBrush x:Key="WolvenKitSeparator" Color="#424242" />
+    <!--  search field borders (Project Explorer, documents); MahApps semi-transparent gray by default, follows BorderAlt unless a theme sets it  -->
+    <SolidColorBrush x:Key="WolvenKitSearchBorder" Color="#40808080" />
     <!--  project icons on the welcome page (by project color); follow the palette colors unless a theme sets them  -->
     <SolidColorBrush x:Key="WolvenKitProjectIconYellow" Color="#FFEA0A" />
     <SolidColorBrush x:Key="WolvenKitProjectIconCyan" Color="#52F1FF" />

@@ -232,22 +232,6 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- .scene -->
-            <Style
-                x:Key="ShowSceneMenuItemStyle"
-                BasedOn="{StaticResource MenuItemStyle}"
-                TargetType="{x:Type MenuItem}">
-                <Setter Property="Visibility" Value="Collapsed" />
-
-                <Style.Triggers>
-                    <DataTrigger
-                        Binding="{Binding Path=ContentType}"
-                        Value="{x:Static documents:RedDocumentItemType.Scene}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
             <!-- App file: .app -->
             <Style
                 x:Key="ShowAppMenuItemStyle"
@@ -1061,34 +1045,6 @@
                 </MenuItem>
             </MenuItem>
 
-            <!-- .scene -->
-            <MenuItem
-                Style="{StaticResource ShowSceneMenuItemStyle}"
-                Header="Scene"
-                SubmenuOpened="OnMenuOpened"
-                SubmenuClosed="OnMenuClosed">
-                <MenuItem.Icon>
-                    <templates:IconBox
-                        IconPack="Material"
-                        Kind="MovieOpen"
-                        Foreground="{DynamicResource ContentForeground}" />
-                </MenuItem.Icon>
-
-                <!-- Generate lipsync anim sets -->
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
-                    Header="Generate vanilla lipsync anim sets"
-                    ToolTip="Copies the base game lipsync animations of this scene's dialogue lines into anim sets of the project, and registers them for this scene in a lipmap through ArchiveXL"
-                    Command="{Binding Path=GenerateLipsyncAnimSetsCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="AccountVoice"
-                            Foreground="{DynamicResource ContentForeground}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-
             <!-- .app/.ent: CRUID -->
             <MenuItem
                 Style="{StaticResource MenuItemStyle}"
@@ -1168,7 +1124,7 @@
             Margin="0,0,0,2"
             HorizontalAlignment="Right"
             Background="{DynamicResource BackgroundColor_Frame_Background}"
-            BorderBrush="{DynamicResource ForegroundColor_Grey_Dark}"
+            BorderBrush="{DynamicResource WolvenKitSearchBorder}"
             BorderThickness="1"
             Style="{StaticResource SearchBarStyle}"
             hc:BorderElement.CornerRadius="0"

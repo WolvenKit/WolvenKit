@@ -823,6 +823,13 @@
       "description": "Separator lines in menus and lists"
     },
     {
+      "key": "WolvenKitSearchBorder",
+      "group": "Palette",
+      "displayName": "Search Border",
+      "kind": "Brush",
+      "description": "Border of the search fields in the Project Explorer and in documents"
+    },
+    {
       "key": "WolvenKitListSelection",
       "group": "Palette",
       "displayName": "List Selection",
