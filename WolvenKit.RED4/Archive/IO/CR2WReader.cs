@@ -246,7 +246,9 @@ public partial class CR2WReader : Red4Reader
                 ParseBuffer(shared.Buffer);
             }
 
-            if (internalValue is IRedArray arr)
+            // Arrays of value types (numbers, bytes, vectors...) hold no buffers: not walked.
+            // Walking boxed every element - ~10 million for a vegetation mesh's opacityMicromaps.
+            if (internalValue is IRedArray arr && !arr.InnerType.IsValueType)
             {
                 foreach (IRedType entry in arr)
                 {
