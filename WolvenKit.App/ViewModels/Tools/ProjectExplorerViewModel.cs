@@ -942,14 +942,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            if (BeginDeferredRefreshContext == null)
-            {
-                await ConvertToJsonInternal(selection);
-                return;
-            }
-
-            await BeginDeferredRefreshContext(() => ConvertToJsonInternal(selection));
-
+            await RunFileConversionAsync(selection, () => ConvertToJsonInternal(selection));
             return;
         }
 
@@ -961,13 +954,66 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        if (BeginDeferredRefreshContext == null)
+        await RunFileConversionAsync(convertSelection, () => ConvertToJsonInternal(convertSelection));
+    }
+
+    /// <summary>
+    /// From this many files on, a conversion runs inside <see cref="BeginDeferredRefreshContext"/>:
+    /// the grids are frozen and rebuilt once at the end, instead of re-sorting/filtering per new file.
+    /// Below it, the rebuild (all folders collapse, then get re-expanded) costs more than it saves,
+    /// and the new files simply show up in the tree as the watcher picks them up.
+    /// </summary>
+    private const int DeferredRefreshFileThreshold = 50;
+
+    private async Task RunFileConversionAsync(IReadOnlyCollection<FileSystemModel> selection, Func<Task> convert)
+    {
+        if (BeginDeferredRefreshContext is null || !HasAtLeastFiles(selection, DeferredRefreshFileThreshold))
         {
-            await ConvertToJsonInternal(selection);
+            await convert();
             return;
         }
 
-        await BeginDeferredRefreshContext(() => ConvertToJsonInternal(convertSelection));
+        await BeginDeferredRefreshContext(convert);
+    }
+
+    /// <summary>
+    /// Counts the selected files, including files inside selected folders, and stops as soon as
+    /// <paramref name="threshold"/> is reached, so selecting a huge folder doesn't enumerate all of it.
+    /// </summary>
+    private static bool HasAtLeastFiles(IEnumerable<FileSystemModel> selection, int threshold)
+    {
+        var count = 0;
+
+        try
+        {
+            foreach (var item in selection)
+            {
+                if (!item.IsDirectory)
+                {
+                    if (++count >= threshold)
+                    {
+                        return true;
+                    }
+
+                    continue;
+                }
+
+                foreach (var _ in Directory.EnumerateFiles(item.FullName, "*", SearchOption.AllDirectories))
+                {
+                    if (++count >= threshold)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            // Can't tell how big it is: take the safe route for big batches.
+            return true;
+        }
+
+        return false;
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1484,14 +1530,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var selection = SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder).ToList();
             EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
 
-            if (BeginDeferredRefreshContext == null)
+            try
             {
-                await ConvertFromJsonInternal(selection);
-                return;
+                await RunFileConversionAsync(selection, () => ConvertFromJsonInternal(selection));
+            }
+            finally
+            {
+                DisableLoadingMode();
             }
 
-            await BeginDeferredRefreshContext(() => ConvertFromJsonInternal(selection));
-            DisableLoadingMode();
             return;
         }
 
@@ -1504,14 +1551,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         EnableLoadingMode(LoadingMode.ShowLoadingDuringOperation);
 
-        if (BeginDeferredRefreshContext == null)
+        try
         {
-            await ConvertFromJsonInternal(convertSelection);
-            return;
+            await RunFileConversionAsync(convertSelection, () => ConvertFromJsonInternal(convertSelection));
         }
-
-        await BeginDeferredRefreshContext(() => ConvertFromJsonInternal(convertSelection));
-        DisableLoadingMode();
+        finally
+        {
+            DisableLoadingMode();
+        }
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -2150,7 +2197,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = true;
     }
 
-    private void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
+    /// <summary>
+    /// Writes the folder expand/collapse state to the project's tree state file, if it changed.
+    /// Called every 10 seconds, on project switch and when WolvenKit closes.
+    /// </summary>
+    public void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
 
     private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
     {
@@ -2159,8 +2210,20 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
-        _hasUnsavedFileTreeChanges = false;
+        try
+        {
+            File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
+            _hasUnsavedFileTreeChanges = false;
+        }
+        catch (IOException e)
+        {
+            // File locked (OneDrive, antivirus...): stay dirty and try again on the next tick.
+            _loggerService.Debug($"Project Explorer: couldn't save folder expansion state: {e.Message}");
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            _loggerService.Debug($"Project Explorer: couldn't save folder expansion state: {e.Message}");
+        }
     }
 
     #endregion expansion state
