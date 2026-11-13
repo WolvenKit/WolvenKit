@@ -1391,8 +1391,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 s_cameraAnimationTime);
     }
 
+    // Left press on empty space: a click (not a camera drag) there clears the selection.
+    private System.Windows.Point? _emptyPressAt;
+
     public void MouseDown3D(object sender, RoutedEventArgs e)
     {
+        _emptyPressAt = null;
+        if (e is MouseDown3DEventArgs { HitTestResult: null } empty &&
+            empty.OriginalInputEventArgs is MouseButtonEventArgs { ChangedButton: MouseButton.Left })
+        {
+            _emptyPressAt = empty.Position;
+            return;
+        }
+
         if (e is not MouseDown3DEventArgs args || args.HitTestResult == null)
         {
             return;
@@ -1406,6 +1417,30 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     public event EventHandler<string?>? OnSectorNodeSelected;
+
+    /// <summary>Released where an empty-space press began (moved under 4 px): clears the selection.</summary>
+    public void MouseUp3D(object sender, RoutedEventArgs e)
+    {
+        if (_emptyPressAt is not { } down || e is not MouseUp3DEventArgs args ||
+            args.OriginalInputEventArgs is not MouseButtonEventArgs { ChangedButton: MouseButton.Left })
+        {
+            return;
+        }
+
+        _emptyPressAt = null;
+        if ((args.Position - down).Length < 4)
+        {
+            ClearSelection();
+        }
+    }
+
+    /// <summary>Removes the selection highlight and the tree selection.</summary>
+    public void ClearSelection()
+    {
+        RetoreSelectedMeshMaterial();
+        CurrentSelection.Unselect();
+        SelectedItem = null;
+    }
 
 
     private void CommonMouseDownEvents(object modelHit, MouseButtonEventArgs mouseButtonEventArgs)
@@ -1573,29 +1608,44 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 // Mesh material preview in WolvenKit fix for vehicles/entity preview (e.g. Villefort Columbus)
                 // Prevents crash on cMesh.Parameters[0] when the mesh has no Parameters (most non-terrain meshes)
                 if (cMesh.Parameters.Count > 0 &&
-                    cMesh.Parameters[0]?.Chunk is meshMeshParamTerrain mmpt)
+                    cMesh.Parameters[0]?.Chunk is meshMeshParamTerrain &&
+                    TryGetTerrainUvGen(cMesh, out var uvGen))
                 {
-                    float xMax = 0, xMin = 0, yMin = 0, yMax = 0;
-                    foreach (var chunk in mmpt.ChunkBoundingBoxes)
-                    {
-                        xMax = Math.Max(xMax, chunk.Max.X);
-                        yMax = Math.Max(yMax, chunk.Max.Y);
-                        xMin = Math.Min(xMin, chunk.Min.X);
-                        yMin = Math.Min(yMin, chunk.Min.Y);
-                    }
-                    // Snap UV range to the next power-of-two tile (128..2048).
-                    var ext = Math.Max(Math.Max(xMax, -xMin), Math.Max(yMax, -yMin));
-                    var size = 128f;
-                    while (size < ext && size < 2048f)
-                        size *= 2f;
-                    xMin = yMin = -size;
-                    xMax = yMax = size;
+                    // Terrain vertices carry positions only: the game makes the UVs from them,
+                    // uv = position.xy * UVGenScaleOffset.xy + UVGenScaleOffset.zw (the cell's
+                    // textures cover it with a border, e.g. 1/130 for a 128 m cell). Preview
+                    // positions are Y up (game Y = -Z); the textures have north at the top,
+                    // so V grows southwards (with Z).
                     for (var i = 0; i < mesh.positions.Length; i++)
                     {
                         textureCoordinates.Add(new SharpDX.Vector2(
-                            (mesh.positions[i].X - xMin) / (xMax - xMin),
-                            1f - (mesh.positions[i].Z - yMin) / (yMax - yMin)
-                        ));
+                            mesh.positions[i].X * uvGen.X + uvGen.Z,
+                            mesh.positions[i].Z * uvGen.Y + uvGen.W));
+                    }
+                }
+                else if (cMesh.Parameters.Count > 0 &&
+                    cMesh.Parameters[0]?.Chunk is meshMeshParamTerrain &&
+                    mesh.positions.Length > 0)
+                {
+                    // No UVGenScaleOffset: the textures span the submesh's own bounds, as the
+                    // Blender add-on does (uv 0..1 over its X and game Y, north at the top).
+                    float xMin = float.MaxValue, xMax = float.MinValue, yMin = float.MaxValue, yMax = float.MinValue;
+                    foreach (var vp in mesh.positions)
+                    {
+                        var gy = -vp.Z;
+                        xMin = Math.Min(xMin, vp.X);
+                        xMax = Math.Max(xMax, vp.X);
+                        yMin = Math.Min(yMin, gy);
+                        yMax = Math.Max(yMax, gy);
+                    }
+
+                    var ex = xMax - xMin;
+                    var ey = yMax - yMin;
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        var u = ex > 1e-6f ? (mesh.positions[i].X - xMin) / ex : 0f;
+                        var v = ey > 1e-6f ? (-mesh.positions[i].Z - yMin) / ey : 0f;
+                        textureCoordinates.Add(new SharpDX.Vector2(u, 1f - v));
                     }
                 }
             }
@@ -11295,6 +11345,40 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return false;
 
         return GetTemplateFileName(material).Equals("glass_deferred", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>UVGenScaleOffset of a terrain mesh's material (its local instances), if it has one.</summary>
+    private static bool TryGetTerrainUvGen(CMesh mesh, out SharpDX.Vector4 uvGen)
+    {
+        IEnumerable<CMaterialInstance?> Instances()
+        {
+            foreach (var h in mesh.PreloadLocalMaterialInstances)
+                yield return h?.GetValue() as CMaterialInstance;
+            if (mesh.LocalMaterialBuffer?.Materials is { } local)
+            {
+                foreach (var m in local)
+                    yield return m as CMaterialInstance;
+            }
+        }
+
+        foreach (var instance in Instances())
+        {
+            if (instance == null)
+                continue;
+
+            foreach (var pair in instance.Values)
+            {
+                if (pair.Key.GetResolvedText() == "UVGenScaleOffset" && pair.Value is Vector4 v &&
+                    Math.Abs((float)v.X) > 1e-6f && Math.Abs((float)v.Y) > 1e-6f)
+                {
+                    uvGen = new SharpDX.Vector4(v.X, v.Y, v.Z, v.W);
+                    return true;
+                }
+            }
+        }
+
+        uvGen = default;
+        return false;
     }
 
     /// <summary>Vegetation materials (speedtree_3d_v8_*.mt: twosided, onesided, seams, billboard, gradient recolor).</summary>

@@ -65,6 +65,10 @@ namespace WolvenKit.Views.Documents
                     // Subscribe once per activation and unsubscribe on deactivation,
                     // otherwise every tab switch adds another handler.
                     hxViewport.MouseDown3D += vm.MouseDown3D;
+                    hxViewport.MouseUp3D += vm.MouseUp3D;
+                    Disposable
+                        .Create(() => hxViewport.MouseUp3D -= vm.MouseUp3D)
+                        .DisposeWith(disposables);
                     Disposable
                         .Create(() => hxViewport.MouseDown3D -= vm.MouseDown3D)
                         .DisposeWith(disposables);
