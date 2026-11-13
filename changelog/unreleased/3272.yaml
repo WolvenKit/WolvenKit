@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3272
+      author: "Ametis81"
+      description: "The mesh preview follows the color theme."
