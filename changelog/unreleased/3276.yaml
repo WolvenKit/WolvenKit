@@ -14,3 +14,8 @@ changes:
       pr-number: 3276
       author: "Ametis81"
       description: "Faster appearance switching in the mesh preview."
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3276
+      author: "Ametis81"
+      description: "Material preview: vegetation (SpeedTree) materials, leaves alpha-clipped and two-sided, trunks and bark opaque."

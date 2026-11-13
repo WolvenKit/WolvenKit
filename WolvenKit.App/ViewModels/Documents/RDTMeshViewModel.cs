@@ -1760,6 +1760,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (sm.IsTransparent || !TryGetRawMaterial(sm.MaterialName, out var alphaMat) || alphaMat.Values == null)
             return;
 
+        // Vegetation: leaves and fronds are cut-out cards seen from both sides (one-sided
+        // trunks and seams stay culled).
+        if (IsSpeedTreeMaterial(alphaMat))
+        {
+            if (IsOpaqueSpeedTree(alphaMat))
+            {
+                return; // trunks / bark: opaque whatever the diffuse alpha holds
+            }
+
+            MakeTwoSided(sm);
+        }
+
         // Cutout / masked materials (chains, fences). The bake makes their alpha binary,
         // so blending it shows exactly the cut-out shape. Rendered opaque, the transparent
         // parts of the strip would show as a solid band around the chain.
@@ -3028,6 +3040,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (_sectorEmbeddedFiles != null && _sectorEmbeddedFiles.TryGetValue(depotPath, out var sectorEmbedded))
             return sectorEmbedded;
 
+        // Materials find what the shown sectors and the read files embed, also after building
+        // (a terrain mesh's mlmask, base colour and global normal are its inplace resources).
+        if (KeptEmbeddedFile(depotPath) is { } keptEmbedded)
+            return keptEmbedded;
+
         if (_fileCache.TryGetValue(depotPath, out var cached))
             return cached;
 
@@ -3051,6 +3068,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         result ??= Parent?.GetFileFromDepotPathOrCache(depotPath) as CR2WFile;
 
+        KeepEmbeddedFiles(result);
         _fileCache[depotPath] = result;
         return result;
     }
@@ -3996,6 +4014,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
             }
 
+            // Vegetation (SpeedTree) names its maps DiffuseMap / NormalMap / TransGlossMap:
+            // read as base colour and normal, alpha-clipped at 0.5 like the game's foliage.
+            AddSpeedTreeAliases(material, dictionary);
+
             // Set numeric roughness / metalness values from material parameters
             adjustRoughness(dictionary, material);
 
@@ -4036,8 +4058,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             // Deferred glass bakes an RM map too; older bakes of it (as transparent glass) have none.
+            // Vegetation was cached without textures before it was read: bake it once.
             if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution) &&
-                (File.Exists(filename_rm) || !IsDeferredGlass(material.Name, material)))
+                (File.Exists(filename_rm) || !IsDeferredGlass(material.Name, material)) &&
+                (File.Exists(filename_bd) || !IsSpeedTreeMaterial(material)) &&
+                (!IsOpaqueSpeedTree(material) || File.Exists(filename_bd + ".opaque")))
             {
                 Parent?.GetLoggerService()?.Debug($"[Cache] '{material.Name}' up to date");
                 return;
@@ -7575,6 +7600,29 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             }
                         }
 
+                        // Opaque vegetation (trunks, bark): the diffuse alpha is not coverage.
+                        if (IsOpaqueSpeedTree(material))
+                        {
+                            var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                            var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            try
+                            {
+                                unsafe
+                                {
+                                    byte* ptr = (byte*)data.Scan0;
+                                    int stride = data.Stride;
+                                    for (int y = 0; y < bmp.Height; y++)
+                                        for (int x = 0; x < bmp.Width; x++)
+                                            ptr[y * stride + x * 4 + 3] = 255;
+                                }
+                            }
+                            finally { bmp.UnlockBits(data); }
+
+                            try
+                            { File.WriteAllText(filename_bd + ".opaque", string.Empty); }
+                            catch { /* ignore */ }
+                        }
+
                         // Cutout (chains, fences): hard alpha clip.
                         // Binary alpha so soft edges don't halo on the body.
                         bool isChain = material?.Name?.Contains("chain", StringComparison.OrdinalIgnoreCase) == true;
@@ -7666,7 +7714,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             bool isMetalBaseMat = GetTemplateFileName(material).StartsWith("metal_base", StringComparison.Ordinal) ||
                                   material?.Name?.Contains("chain", StringComparison.OrdinalIgnoreCase) == true ||
                                   material?.Name?.Contains("metal_base", StringComparison.OrdinalIgnoreCase) == true;
-            if (!Has(matKind, MaterialKind.Decal) && !isMetalBaseMat)
+            if (!Has(matKind, MaterialKind.Decal) && !isMetalBaseMat && !IsSpeedTreeMaterial(material))
             {
                 goto SkipNormals;
             }
@@ -8815,7 +8863,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 var file = ReadDepotFile(am, path);
                 if (file != null)
+                {
+                    KeepEmbeddedFiles(file);
                     _fileCache.TryAdd(path, file);
+                }
             }
             catch
             {
@@ -11244,6 +11295,53 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return false;
 
         return GetTemplateFileName(material).Equals("glass_deferred", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>Vegetation materials (speedtree_3d_v8_*.mt: twosided, onesided, seams, billboard, gradient recolor).</summary>
+    private bool IsSpeedTreeMaterial(Material? material) =>
+        GetTemplateFileName(material).StartsWith("speedtree_", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// SpeedTree maps under the names the bake reads: DiffuseMap -> BaseColor (its alpha is the
+    /// leaf cut-out), NormalMap -> Normal, and an alpha threshold of 0.5 (as the Blender add-on).
+    /// TransGlossMap (translucency / gloss packing) is not interpreted. Existing keys win.
+    /// </summary>
+    private void AddSpeedTreeAliases(Material? material, Dictionary<string, object> dictionary)
+    {
+        if (!IsSpeedTreeMaterial(material))
+        {
+            return;
+        }
+
+        if (!dictionary.ContainsKey("BaseColor") && dictionary.TryGetValue("DiffuseMap", out var diffuse))
+        {
+            dictionary["BaseColor"] = diffuse;
+        }
+
+        if (!dictionary.ContainsKey("Normal") && dictionary.TryGetValue("NormalMap", out var normal))
+        {
+            dictionary["Normal"] = normal;
+        }
+
+        // Trunks, bark and seams (onesided / seams) are opaque: their diffuse alpha is not a cut-out.
+        if (!IsOpaqueSpeedTree(material) && !dictionary.ContainsKey("AlphaThreshold"))
+        {
+            dictionary["AlphaThreshold"] = (CFloat)0.5f;
+        }
+    }
+
+    /// <summary>One-sided and seam vegetation (trunks, bark): drawn opaque, culled.</summary>
+    private bool IsOpaqueSpeedTree(Material? material)
+    {
+        if (!IsSpeedTreeMaterial(material))
+        {
+            return false;
+        }
+
+        var template = GetTemplateFileName(material);
+        return (template.Contains("onesided", StringComparison.OrdinalIgnoreCase) &&
+                !template.Contains("gradient", StringComparison.OrdinalIgnoreCase)) ||
+               template.Contains("seams", StringComparison.OrdinalIgnoreCase);
     }
 
     private string GetTemplateFileName(Material? material) =>

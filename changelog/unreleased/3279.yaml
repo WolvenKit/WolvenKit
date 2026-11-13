@@ -19,3 +19,8 @@ changes:
       pr-number: 3279
       author: "Ametis81"
       description: "Sector files are read in the background with progress in the viewport; the window stays responsive while a sector opens."
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector preview: materials find files embedded in the sector and the inplace resources of its meshes."

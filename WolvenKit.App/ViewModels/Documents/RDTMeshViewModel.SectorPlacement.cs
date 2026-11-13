@@ -515,6 +515,29 @@ public partial class RDTMeshViewModel
     // Files embedded in the sector being drawn and in its extern inplace resource, by path.
     private Dictionary<ResourcePath, CR2WFile>? _sectorEmbeddedFiles;
 
+    // What the shown sectors and the read files embed besides meshes (material instances,
+    // mlsetups, masks, textures - a terrain mesh carries its mask, base colour and global
+    // normal as inplace resources), kept after building: materials are generated later.
+    // The first file to embed a path wins.
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<ResourcePath, CR2WFile> _keptEmbeddedFiles = new();
+
+    /// <summary>Keeps the non-mesh files a read file embeds (called for every file read).</summary>
+    private void KeepEmbeddedFiles(CR2WFile? file)
+    {
+        if (file == null)
+        {
+            return;
+        }
+
+        foreach (var embedded in file.EmbeddedFiles)
+        {
+            if (embedded?.Content is { } content and not CMesh && embedded.FileName != ResourcePath.Empty)
+            {
+                _keptEmbeddedFiles.TryAdd(embedded.FileName, new CR2WFile { RootChunk = content });
+            }
+        }
+    }
+
     /// <summary>
     /// Sectors often keep their foliage (and other resources) embedded: in the sector file itself,
     /// or in its extern inplace resource (.streamingsector_inplace). The open document's embedded files
@@ -559,8 +582,19 @@ public partial class RDTMeshViewModel
         if (found.Count > 0)
         {
             _sectorEmbeddedFiles = found;
+            foreach (var (path, file) in found)
+            {
+                if (file.RootChunk is not CMesh)
+                {
+                    _keptEmbeddedFiles.TryAdd(path, file);
+                }
+            }
         }
     }
+
+    /// <summary>A non-mesh file embedded in a sector or a file read for this preview, for material generation.</summary>
+    private CR2WFile? KeptEmbeddedFile(ResourcePath path) =>
+        _keptEmbeddedFiles.TryGetValue(path, out var file) ? file : null;
 
     /// <summary>Content of a file embedded in the sector (or the open document) under this path.</summary>
     private RedBaseClass? EmbeddedForSector(ResourcePath path) =>
