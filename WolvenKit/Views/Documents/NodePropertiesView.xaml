@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
         
         <!-- Header -->
-        <Border Grid.Row="0" Background="{StaticResource ContentBackgroundAlt}" Padding="12,8" Margin="0,0,0,1">
+        <Border Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt}" Padding="12,8" Margin="0,0,0,1">
             <StackPanel Orientation="Horizontal">
                 <iconPacks:PackIconMaterial Kind="CubeOutline" VerticalAlignment="Center" Margin="0,0,8,0"/>
                 <TextBlock VerticalAlignment="Center" FontWeight="Bold">
@@ -82,7 +82,7 @@
                 </tools:RedTreeView.ItemsSource>
             </tools:RedTreeView>
             
-            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="{DynamicResource WolvenKitGray40}"/>
             
             <!-- Right: Detail editor for selected property -->
             <editors:RedTypeView Grid.Column="2" DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
