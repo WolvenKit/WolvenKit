@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3281
+      author: "Ametis81"
+      description: "Project Explorer: files and folders renamed or moved outside WolvenKit are updated in the tree instead of disappearing or keeping old names."
