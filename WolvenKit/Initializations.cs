@@ -29,6 +29,7 @@ namespace WolvenKit
             var settingsManager = Locator.Current.GetService<ISettingsManager>();
 
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
+            WolvenKit.Helpers.ColorDialogThemeFix.Register();
             if (settingsManager.UiScale == 0)
             {
                 settingsManager.UiScale = (int)(100.0 * ComputeScaleFromResolution(SystemParameters.PrimaryScreenHeight));

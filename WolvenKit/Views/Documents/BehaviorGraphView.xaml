@@ -27,10 +27,10 @@
                 x:Key="SpacedWolvenKitTabControl"
                 BasedOn="{StaticResource WolvenKitTabControl}"
                 TargetType="{x:Type syncfusion:TabControlExt}">
-                <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRed}" />
-                <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRed}" />
-                <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRedShadow}" />
-                <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="TabItemHoverBackground" Value="{DynamicResource WolvenKitRed}" />
+                <Setter Property="TabItemHoverBorderBrush" Value="{DynamicResource WolvenKitRed}" />
+                <Setter Property="TabItemSelectedBackground" Value="{DynamicResource WolvenKitRedShadow}" />
+                <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource WolvenKitRedShadow}" />
             </Style>
 
             <Style
@@ -70,8 +70,8 @@
         <Border
             Grid.Row="0"
             Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
-            Background="{StaticResource ContentBackground}"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource ContentBackground}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal">
                 <templates:IconBox
@@ -186,7 +186,7 @@
                                     Grid.Column="1"
                                     Width="4"
                                     HorizontalAlignment="Stretch"
-                                    Background="#FF404040" />
+                                    Background="{DynamicResource WolvenKitGray40}" />
 
                                 <editors:RedTypeView
                                     Grid.Column="2"
@@ -217,7 +217,7 @@
                 Grid.Column="1"
                 Width="4"
                 HorizontalAlignment="Stretch"
-                Background="#FF404040" />
+                Background="{DynamicResource WolvenKitGray40}" />
 
             <Grid Grid.Column="2">
                 <graphEditor:GraphEditorView
@@ -237,7 +237,7 @@
                             Margin="{DynamicResource WolvenKitMarginBottom}"
                             HorizontalAlignment="Center"
                             Size="{DynamicResource WolvenKitIconHuge}"
-                            Foreground="{StaticResource WolvenKitYellow}">
+                            Foreground="{DynamicResource WolvenKitYellow}">
                             <templates:IconBox.RenderTransform>
                                 <RotateTransform />
                             </templates:IconBox.RenderTransform>

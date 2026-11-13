@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Navigation;
 using DynamicData;
 using HandyControl.Tools.Extension;
@@ -25,7 +24,7 @@ using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
 {
-    public record LogEntry(Logtype Level, string Message, Uri Uri, Brush TextColor);
+    public record LogEntry(Logtype Level, string Message, Uri Uri);
 
     /// <summary>
     /// Interaction logic for LogView.xaml
@@ -44,6 +43,7 @@ namespace WolvenKit.Views.Tools
 
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
+
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -137,15 +137,13 @@ namespace WolvenKit.Views.Tools
                 level = Logtype.Success;
             }
 
-            var brush = GetBrushForLevel(level);
-
             var message = item.RenderMessage();
             var uri = item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj)
                       && infoCodeObj is ScalarValue { Value: int infoCode }
                 ? LogCodeHelper.GetUrl(infoCode)
                 : null;
 
-            var entry = new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", uri, brush);
+            var entry = new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", uri);
             LogEntries.Add(entry);
 
             if (PassesFilter(entry))
@@ -165,17 +163,6 @@ namespace WolvenKit.Views.Tools
                 LogEventLevel.Fatal => Logtype.Error,
                 _ => Logtype.Normal,
             };
-
-        private static Brush GetBrushForLevel(Logtype level) => level switch
-        {
-            Logtype.Normal or Logtype.Important => Brushes.LightGray,
-            Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-            Logtype.Debug => (Brush)Application.Current.FindResource("WolvenKitPurple"),
-            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitGreen"),
-
-            _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
-        };
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
         {

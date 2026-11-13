@@ -16,6 +16,10 @@ namespace WolvenKit.Functionality.Helpers
             PreviewMouseLeftButtonDown += OnLeftMouseButtonDownPreview;
             PreviewMouseLeftButtonUp += OnLeftMouseButtonUpPreview;
             MouseLeave += OnMouseLeave;
+
+            // theme-aware defaults (same shades as the old literals); a value set in XAML replaces them
+            SetResourceReference(HoverBackgroundProperty, "WolvenKitGray37");
+            SetResourceReference(PressedBackgroundProperty, "WolvenKitGray12");
         }
 
         #endregion
