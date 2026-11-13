@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3288
+      author: "Ametis81"
+      description: "Much faster reading of files with large byte arrays, e.g. vegetation meshes with big opacity micromaps (about 10 s per mesh before)."
