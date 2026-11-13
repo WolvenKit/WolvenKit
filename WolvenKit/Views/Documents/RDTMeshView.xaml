@@ -923,7 +923,6 @@
                 <Expander
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Header="Shader Debug"
-                    Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsDebugSectionExpanded}">
                     <StackPanel Orientation="Vertical">
                         <!-- Multilayer shader debug view (temporary, for comparing with the bake / Blender) -->

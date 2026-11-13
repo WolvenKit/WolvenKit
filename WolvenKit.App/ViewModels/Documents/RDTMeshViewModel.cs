@@ -1613,14 +1613,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 {
                     // Terrain vertices carry positions only: the game makes the UVs from them,
                     // uv = position.xy * UVGenScaleOffset.xy + UVGenScaleOffset.zw (the cell's
-                    // textures cover it with a border, e.g. 1/130 for a 128 m cell). Preview
-                    // positions are Y up (game Y = -Z); the textures have north at the top,
-                    // so V grows southwards (with Z).
+                    // textures cover it with a border, e.g. 1/130 for a 128 m cell), sampled
+                    // as image rows: V grows northwards. Preview positions are Y up (game Y = -Z).
                     for (var i = 0; i < mesh.positions.Length; i++)
                     {
                         textureCoordinates.Add(new SharpDX.Vector2(
                             mesh.positions[i].X * uvGen.X + uvGen.Z,
-                            mesh.positions[i].Z * uvGen.Y + uvGen.W));
+                            -mesh.positions[i].Z * uvGen.Y + uvGen.W));
                     }
                 }
                 else if (cMesh.Parameters.Count > 0 &&
@@ -1628,7 +1627,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     mesh.positions.Length > 0)
                 {
                     // No UVGenScaleOffset: the textures span the submesh's own bounds, as the
-                    // Blender add-on does (uv 0..1 over its X and game Y, north at the top).
+                    // Blender add-on does (uv 0..1 over its X and game Y; V northwards, as above).
                     float xMin = float.MaxValue, xMax = float.MinValue, yMin = float.MaxValue, yMax = float.MinValue;
                     foreach (var vp in mesh.positions)
                     {
@@ -1645,7 +1644,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         var u = ex > 1e-6f ? (mesh.positions[i].X - xMin) / ex : 0f;
                         var v = ey > 1e-6f ? (-mesh.positions[i].Z - yMin) / ey : 0f;
-                        textureCoordinates.Add(new SharpDX.Vector2(u, 1f - v));
+                        textureCoordinates.Add(new SharpDX.Vector2(u, v));
                     }
                 }
             }
@@ -5166,7 +5165,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 //   x, y = rg * 2 - 1, z = sqrt(max(0, 1 - x² - y²));
                 //   n = normalize(x * I, y * I, (z - 1) * I + 1), I = GlobalNormalIntensity;
                 //   n.xy is added to the layer normal before Z is rebuilt.
-                if (dictionary.TryGetValue("GlobalNormal", out var gNormObj) &&
+                if (UsesGlobalNormal(dictionary) &&
+                    dictionary.TryGetValue("GlobalNormal", out var gNormObj) &&
                     gNormObj is CResourceReference<ITexture> gNormRef &&
                     gNormRef.DepotPath != ResourcePath.Empty)
                 {

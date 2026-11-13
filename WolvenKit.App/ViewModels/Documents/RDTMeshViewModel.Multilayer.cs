@@ -151,9 +151,11 @@ public partial class RDTMeshViewModel
     }
 
     /// <summary>
-    /// The debug view and the solo layer apply to the selected material only; every other mesh
-    /// keeps its normal shaded look (debugging the pants does not turn the jacket into a mask).
-    /// Without a selection (no multilayer material yet) the view applies to all.
+    /// Object previews: the debug view and the solo layer apply to the selected material only;
+    /// every other mesh keeps its normal shaded look (debugging the pants does not turn the
+    /// jacket into a mask). Without a selection the view applies to all.
+    /// Sector / block previews: the view and the solo layer index apply to every multilayer
+    /// material, so neighbouring pieces (terrain cells sharing one mlsetup) can be compared.
     /// </summary>
     private void ApplyMultilayerDebugView()
     {
@@ -167,11 +169,10 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
-            // Sector / block previews have no Shader Debug section: always shaded there, even when
-            // another tab set a debug mode (the mode is shared).
-            var isTarget = IsObjectPreview && (target == null || name == target);
+            var isTarget = !IsObjectPreview || target == null || name == target;
             var mode = isTarget ? MultilayerShader.DebugMode : 0;
-            var solo = isTarget && layer != null && layer.Key == name ? layer.Index : -1;
+            var solo = !isTarget || layer == null ? -1
+                : !IsObjectPreview || layer.Key == name ? layer.Index : -1;
 
             if (ml.DebugMode != mode)
             {
@@ -1007,11 +1008,12 @@ public partial class RDTMeshViewModel
             return false;
         }
 
-        // ---- GlobalNormal ----
+        // ---- GlobalNormal (off when the material sets UseGlobalNormal to 0) ----
         var globalIdx = -1f;
         var globalIntensity = 1f;
         float gScaleU = 1f, gScaleV = 1f, gBiasU = 0f, gBiasV = 0f;
-        if (dictionary.TryGetValue("GlobalNormal", out var gObj) &&
+        if (UsesGlobalNormal(dictionary) &&
+            dictionary.TryGetValue("GlobalNormal", out var gObj) &&
             gObj is CResourceReference<ITexture> gRef &&
             gRef.DepotPath != ResourcePath.Empty)
         {
@@ -1046,7 +1048,11 @@ public partial class RDTMeshViewModel
             return false;
         }
 
-        Set(c, 0, written, globalIdx, globalIntensity, 0f);
+        // Terrain cells (multilayered_terrain.mt, the only template with UVGenScaleOffset) store
+        // their .mlmask bottom-up against their GlobalNormal: with the mask sampled as is,
+        // neighbouring cells did not meet north-south while the GlobalNormal did.
+        var flipMaskV = dictionary.ContainsKey("UVGenScaleOffset") ? 1f : 0f;
+        Set(c, 0, written, globalIdx, globalIntensity, flipMaskV);
         Set(c, 4, gScaleU, gScaleV, gBiasU, gBiasV);
         Set(c, MultilayerConstants.DebugOffset, 0f, -1f, 0f, 0f); // filled per draw
         Set(c, MultilayerConstants.OverlayOffset, -1f, -1f, -1f, -1f); // no decal overlay
@@ -1475,4 +1481,11 @@ public partial class RDTMeshViewModel
 
         return material;
     }
+
+    /// <summary>
+    /// The GlobalNormal map is applied unless the material switches it off: terrain materials
+    /// carry UseGlobalNormal (0 / 1); without the parameter it is on, as before.
+    /// </summary>
+    private static bool UsesGlobalNormal(Dictionary<string, object> dictionary) =>
+        !dictionary.TryGetValue("UseGlobalNormal", out var use) || ReadFloat(use) > 0.5f;
 }
