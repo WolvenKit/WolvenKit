@@ -1,0 +1,26 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector preview places entities, cooked and instanced meshes, roads and cables, foliage, terrain, destruction and area nodes; variant list, area colours by type and show / hide switches."
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Destructible and cloth components are drawn in entity and sector previews."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector previews open much faster: files prefetched once, preview shaders cached on disk, node tree filled after the first frame."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector files are read in the background with progress in the viewport; the window stays responsive while a sector opens."
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector preview: materials find files embedded in the sector and the inplace resources of its meshes."
