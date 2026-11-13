@@ -47,6 +47,15 @@ cbuffer cbMultilayer : register(b11)
     // Debug view: x mode (0 shaded, 1 albedo, 2 roughness, 3 metalness, 4 normal, 5 layer coverage,
     // 6 layer mask, 7 layer tiling), y solo layer (-1 = all), z unused, w always 0 (see mlKeepInputs)
     float4 mlDebug;
+    // Decal overlay (mesh decals blended on this surface, drawn in its UV space), two slots for
+    // texels shared by both sides of a mirrored mesh. Pool index of x colour (sRGB rgb,
+    // a = coverage), y normal (baked-PNG encoding, a = coverage), z roughness (g) / metalness (b)
+    // (a = coverage), w facing (world normal of the decals *0.5+0.5, a = coverage); -1 none.
+    // Without a facing map the slot applies everywhere.
+    float4 mlOverlay;
+    float4 mlOverlayB;
+    // x: 1 = normals blended as RNM.
+    float4 mlOverlayFlags;
     // Per layer, ML_VEC_PER_LAYER vectors:
     //  0: colorScale.rgb, opacity
     //  1: matTile, mbTile, offsetU, offsetV
@@ -332,6 +341,87 @@ float3 mlCalcNormal(PSInput input, float3 localNormal)
         : mlPerturbVertex(localNormal, input.wp.xyz, normal, input.t, input.t1, input.t2);
 }
 
+// Mesh decals on this surface, as the game blends them into the G-buffer: colour, normal and
+// roughness / metalness each by their own coverage. The overlay is drawn in the mesh UV as
+// Helix passes it (input.t, wrapped), like the baked maps.
+void mlApplyOverlay(inout MLSurface surf, float2 t, float3 worldNormal)
+{
+    bool hasA = mlOverlay.x >= 0 || mlOverlay.y >= 0 || mlOverlay.z >= 0;
+    bool hasB = mlOverlayB.x >= 0 || mlOverlayB.y >= 0 || mlOverlayB.z >= 0;
+    if (!hasA && !hasB)
+    {
+        return;
+    }
+
+    float2 dx = ddx(t);
+    float2 dy = ddy(t);
+
+    // k 0, 1: facing of slot A, B (decals are one-sided: a slot applies where the surface faces
+    // the way its decals faced; the mirrored side shares the texels but faces away);
+    // k 2..4: colour, normal, roughness / metalness of the chosen slot. One mlSample call site.
+    float4 o[5] = { float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0.5, 0.5, 1, 0), float4(0, 0, 0, 0) };
+    int idxA[3] = { (int) mlOverlay.x, (int) mlOverlay.y, (int) mlOverlay.z };
+    int idxB[3] = { (int) mlOverlayB.x, (int) mlOverlayB.y, (int) mlOverlayB.z };
+    int slot = -1;
+
+    [loop]
+    for (int k = 0; k < 5; ++k)
+    {
+        int index = -1;
+        if (k == 0)
+        {
+            index = (int) mlOverlay.w;
+        }
+        else if (k == 1)
+        {
+            index = (int) mlOverlayB.w;
+        }
+        else
+        {
+            if (k == 2)
+            {
+                // Slot A unless it has a facing map that points elsewhere here; then B the same way.
+                bool aFits = hasA && (mlOverlay.w < 0 || (o[0].a > 0 && dot(o[0].xyz * 2.0 - 1.0, worldNormal) > 0.2));
+                bool bFits = hasB && (mlOverlayB.w < 0 || (o[1].a > 0 && dot(o[1].xyz * 2.0 - 1.0, worldNormal) > 0.2));
+                slot = aFits ? 0 : (bFits ? 1 : -1);
+                if (slot < 0)
+                {
+                    return;
+                }
+            }
+
+            index = slot == 0 ? idxA[k - 2] : idxB[k - 2];
+        }
+
+        if (index >= 0)
+        {
+            o[k] = mlSample(index, t, dx, dy);
+        }
+    }
+
+    surf.albedo = lerp(surf.albedo, o[2].rgb, o[2].a);
+    surf.roughness = lerp(surf.roughness, o[4].g, o[4].a);
+    surf.metallic = lerp(surf.metallic, o[4].b, o[4].a);
+
+    if (o[3].a > 0)
+    {
+        // Baked-PNG normals are OpenGL (Y up); the surface normal here is DirectX.
+        float3 d = o[3].xyz * 2.0 - 1.0;
+        d.y = -d.y;
+        float3 base = surf.localNormal;
+        float3 n = d;
+        if (mlOverlayFlags.x > 0.5)
+        {
+            // Reoriented normal mapping: the decal's relief on top of the surface's.
+            float3 tb = base + float3(0, 0, 1);
+            float3 u = d * float3(-1, -1, 1);
+            n = tb * dot(tb, u) / tb.z - u;
+        }
+
+        surf.localNormal = normalize(lerp(base, normalize(n), o[3].a));
+    }
+}
+
 // The vertex shader is Helix's compiled vsMeshDefault from the installed package. Its output
 // layout is read from that bytecode at run time and declared here as MLVSOutput, then copied
 // into PSInput, so the interpolators line up even if the package's headers differ from the
@@ -347,6 +437,7 @@ float4 mlMain(MLVSOutput vsOut) : SV_Target
     // Helix gets the mesh UV as (u, -v); the bake works on image rows v_img = 1 - v = 1 + t.y.
     float2 uvImg = float2(input.t.x, input.t.y + 1.0);
     MLSurface surf = mlEvaluate(uvImg);
+    mlApplyOverlay(surf, input.t, normalize(input.n));
 
     int debugMode = (int) mlDebug.x;
     if (debugMode == 1) return float4(surf.albedo, 1);
