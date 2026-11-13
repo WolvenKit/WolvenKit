@@ -18,7 +18,7 @@
     d:DesignHeight="720"
     MinWidth="960"
     Background="{DynamicResource ContentBackgroundAlt2}"
-    BorderBrush="{StaticResource ContentBackgroundAlt4}"
+    BorderBrush="{DynamicResource ContentBackgroundAlt4}"
     BorderThickness="1"
     MouseLeftButtonDown="Grid_MouseLeftButtonDown_1">
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
@@ -50,12 +50,13 @@
 
             <!-- Continue to Editor Button -->
             <Button
+                Style="{StaticResource WKButtonStyle}"
                 x:Name="ToEditorButton"
                 Grid.Row="0"
                 Margin="4,4,4,30"
                 Padding="0"
                 HorizontalAlignment="Left"
-                Background="{StaticResource ContentBackgroundAlt}"
+                Background="{DynamicResource ContentBackgroundAlt}"
                 BorderThickness="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -68,7 +69,7 @@
                         Padding="{DynamicResource WolvenKitMarginLeft}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="Continue to editor" />
 
@@ -121,7 +122,7 @@
                 <TextBlock
                     Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                     VerticalAlignment="Center"
-                    Foreground="{StaticResource WolvenKitRed}"
+                    Foreground="{DynamicResource WolvenKitRed}"
                     FontSize="{DynamicResource WolvenKitFontBody}"
                     IsEnabled="False"
                     FlowDirection="LeftToRight"
@@ -134,9 +135,10 @@
                         IconPack="Codicons"
                         Kind="Versions"
                         Size="{DynamicResource WolvenKitIcon}"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
 
                     <Button
+                        Style="{StaticResource WKButtonStyle}"
                         x:Name="CheckForUpdateButton"
                         Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                         Padding="0"
@@ -149,7 +151,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Foreground="{DynamicResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -190,12 +192,12 @@
 
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                            <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitRed}" />
                         </Trigger>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt3}" />
+                            <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -224,7 +226,7 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="2"
                                         Grid.Column="0"
-                                        Background="{StaticResource ContentBackgroundAlt}" />
+                                        Background="{DynamicResource ContentBackgroundAlt}" />
 
                                     <Border
                                         Grid.Row="0"
@@ -310,7 +312,7 @@
                             Kind="Home"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -333,7 +335,7 @@
                             Kind="Extensions"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -356,7 +358,7 @@
                             Kind="Tune"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIcon}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallLeft}"
