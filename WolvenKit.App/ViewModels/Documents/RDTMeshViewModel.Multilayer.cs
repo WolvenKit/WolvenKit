@@ -127,7 +127,12 @@ public partial class RDTMeshViewModel
             MultilayerDebugLayers.Add(new MultilayerDebugChoice(material?.Key ?? "", -1, "All layers"));
         }
 
-        if (material != null && _multilayerGpuData.TryGetValue(material.Key, out var data))
+        // "All materials" (sector previews) lists the layers of the first material: the solo
+        // layer then goes by number to every material (terrain cells share one mlsetup).
+        var labelsFrom = material is { Key: "" }
+            ? MultilayerDebugMaterials.FirstOrDefault(c => c.Key.Length > 0)?.Key
+            : material?.Key;
+        if (material != null && labelsFrom != null && _multilayerGpuData.TryGetValue(labelsFrom, out var data))
         {
             for (var i = 0; i < data.LayerLabels.Count; i++)
             {
@@ -166,11 +171,13 @@ public partial class RDTMeshViewModel
     /// <summary>
     /// The debug view and the solo layer apply to the selected material only; every other mesh
     /// keeps its normal shaded look (debugging the pants does not turn the jacket into a mask).
-    /// Without a selection (no multilayer material yet) the view applies to all.
+    /// Sector / block previews also offer "All materials": the view and the solo layer number
+    /// then apply to every multilayer material, so neighbouring pieces (terrain cells sharing
+    /// one mlsetup) can be compared.
     /// </summary>
     private void ApplyMultilayerDebugView()
     {
-        var target = SelectedMultilayerDebugMaterial?.Key;
+        var target = SelectedMultilayerDebugMaterial?.Key is { Length: > 0 } key ? key : null;
         var layer = SelectedMultilayerDebugLayer;
         foreach (var (name, material) in Materials)
         {
@@ -179,11 +186,10 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
-            // Sector / block previews have no Shader Debug section: always shaded there, even when
-            // another tab set a debug mode (the mode is shared).
-            var isTarget = IsObjectPreview && (target == null || name == target);
+            var isTarget = target == null || name == target;
             var mode = isTarget ? MultilayerShader.DebugMode : 0;
-            var solo = isTarget && layer != null && layer.Key == name ? layer.Index : -1;
+            var solo = !isTarget || layer == null ? -1
+                : target != null || !IsObjectPreview || layer.Key == name ? layer.Index : -1;
 
             if (ml.DebugMode != mode)
             {
@@ -215,6 +221,11 @@ public partial class RDTMeshViewModel
             .Select(g => g.Key)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+        if (!IsObjectPreview && names.Count > 1)
+        {
+            MultilayerDebugMaterials.Add(new MultilayerDebugChoice("", -1, "All materials"));
+        }
+
         foreach (var name in names.OrderBy(Plain, StringComparer.OrdinalIgnoreCase).ThenBy(n => n))
         {
             var label = Plain(name);
@@ -236,7 +247,9 @@ public partial class RDTMeshViewModel
         var previousLayer = SelectedMultilayerDebugLayer;
         _selectedMultilayerDebugMaterial = null;
         SelectedMultilayerDebugMaterial =
-            MultilayerDebugMaterials.FirstOrDefault(c => c.Key == previous) ?? MultilayerDebugMaterials.FirstOrDefault();
+            MultilayerDebugMaterials.FirstOrDefault(c => c.Key == previous)
+            ?? MultilayerDebugMaterials.FirstOrDefault(c => c.Key.Length > 0)
+            ?? MultilayerDebugMaterials.FirstOrDefault();
 
         if (previousLayer != null && MultilayerDebugLayers.FirstOrDefault(l => l == previousLayer) is { } sameLayer)
         {

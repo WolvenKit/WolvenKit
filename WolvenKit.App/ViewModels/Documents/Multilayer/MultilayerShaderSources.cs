@@ -269,7 +269,7 @@ MLSurface mlEvaluate(float2 uv)
         // Scale / bias act on the Blender V (bottom-up). The pool holds the xbm as stored,
         // which is upside down against the image the bake reads, so the Blender V is sampled
         // directly. (Turning it back to an image row mirrored the map: clothing showed other
-        // UV islands' normals.)
+        // UV islands' normals, terrain cells only met north-south with a flipped mask.)
         float2 gUV = float2(uv.x * mlGlobalUV.x + mlGlobalUV.z,
                             (1.0 - uv.y) * mlGlobalUV.y + mlGlobalUV.w);
         float2 g = mlSample(globalIdx, gUV, dx * mlGlobalUV.xy, dy * mlGlobalUV.xy).rg * 2.0 - 1.0;

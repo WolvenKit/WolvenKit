@@ -225,6 +225,23 @@
             VisibilityFlag="{Binding IsLoaded}"
             Small="True" />
 
+        <!-- Sector loading: its files are read in the background, then the scene is built -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Padding="16,8"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="#C0121212"
+            CornerRadius="4"
+            IsHitTestVisible="False"
+            Visibility="{Binding IsSectorLoading, Converter={StaticResource VisibilityConverter}}">
+            <TextBlock
+                Foreground="White"
+                FontSize="14"
+                Text="{Binding SectorLoadingText}" />
+        </Border>
+
         <syncfusion:SfGridSplitter
             Grid.Row="0"
             Grid.Column="1"
@@ -338,9 +355,9 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
-                        ItemsSource="{Binding SelectedAppearance.LODLUT.Keys,
+                        ItemsSource="{Binding LodLevels,
                                               Mode=OneWay}"
-                        SelectedItem="{Binding SelectedAppearance.SelectedLOD,
+                        SelectedItem="{Binding SelectedLod,
                                                Mode=TwoWay,
                                                UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
@@ -414,6 +431,60 @@
                     Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsSectorSectionExpanded}">
                     <StackPanel Orientation="Vertical">
+                        <!-- Variants: which node ranges show, like the appearance of a mesh or an entity -->
+                        <Grid Visibility="{Binding HasSectorVariants, Converter={StaticResource VisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Grid.Column="0"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                VerticalAlignment="Center"
+                                Text="Variant:" />
+                            <ComboBox
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                DisplayMemberPath="Name"
+                                ItemsSource="{Binding SectorVariants,
+                                                      Mode=OneWay}"
+                                SelectedItem="{Binding SelectedSectorVariant,
+                                                       Mode=TwoWay,
+                                                       UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="Sector variants are node sets a quest switches on and off (intact / destroyed, decorations...). Nodes that are always loaded always show." />
+                        </Grid>
+
+                        <!-- Proxy meshes: low detail stand-ins for content of other sectors -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding ShowSectorProxies}"
+                            Content="Show proxy meshes"
+                            ToolTip="Proxy meshes are low detail stand-ins the game shows from far away instead of the real content. Off: hidden, so they don't cover the real meshes." />
+
+                        <!-- Foliage: grass, bushes, trees; can be thousands of instances -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding ShowSectorFoliage}"
+                            Content="Show foliage"
+                            ToolTip="Grass, bushes and trees (foliage nodes). Turn off to see the ground and the meshes under them, or when a sector with a lot of foliage is slow to move around." />
+
+                        <!-- Area volumes (triggers, light channels, GI spaces...): quick switch for all of them -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            IsChecked="{Binding ShowSectorAreas}"
+                            Content="Show areas"
+                            ToolTip="Area volumes: triggers, interiors, ambient (sound), light channel and GI areas, world boundaries... Off: all hidden; single areas can still be switched in the tree." />
+
+                        <!-- Area volumes coloured by kind (trigger, light channel, GI space...) or all plain; shown with the areas -->
+                        <CheckBox
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Visibility="{Binding ShowSectorAreas, Converter={StaticResource VisibilityConverter}}"
+                            IsChecked="{Binding ColorSectorAreas}"
+                            Content="Color areas by type"
+                            ToolTip="On: triggers orange, kill triggers red, world boundaries crimson, light channels purple, GI spaces teal, ambient (sound) areas blue, interiors light blue; other areas in the color the node carries. Off: all areas faint white. The Material column of an area's volume row names its kind." />
+
                         <!-- Search Coordinate -->
                         <StackPanel Orientation="Vertical">
                             <TextBlock
@@ -616,8 +687,9 @@
                             </Grid>
                         </Grid>
 
-                        <!-- Export Materials: bake every material to PNG; multilayer at the chosen size -->
-                        <Grid>
+                        <!-- Export Materials: bake every material to PNG; multilayer at the chosen size.
+                             Not for sectors: hundreds of materials, and they belong to other meshes. -->
+                        <Grid Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
@@ -835,7 +907,6 @@
                 <Expander
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Header="Shader Debug"
-                    Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsDebugSectionExpanded}">
                     <StackPanel Orientation="Vertical">
                         <!-- Multilayer shader debug view (temporary, for comparing with the bake / Blender) -->
@@ -873,7 +944,7 @@
                                 ItemsSource="{Binding MultilayerDebugMaterials}"
                                 SelectedItem="{Binding SelectedMultilayerDebugMaterial}"
                                 DisplayMemberPath="Label"
-                                ToolTip="Multilayer material for the solo views (selecting a submesh in the tree picks its material)" />
+                                ToolTip="Multilayer material the debug view applies to (selecting a submesh in the tree picks its material; sectors also offer All materials)" />
                             <ComboBox
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -882,7 +953,7 @@
                                 ItemsSource="{Binding MultilayerDebugLayers}"
                                 SelectedItem="{Binding SelectedMultilayerDebugLayer}"
                                 DisplayMemberPath="Label"
-                                ToolTip="Show one layer of the selected material (mlsetup layer number and template); other materials show all layers" />
+                                ToolTip="Show one layer of the selected material (mlsetup layer number and template); other materials keep their normal look" />
                         </Grid>
                     </StackPanel>
                 </Expander>
@@ -943,9 +1014,6 @@
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
                 FilterLevel="Extended"
-                ItemsSource="{Binding SelectedModelGroup,
-                                      Mode=TwoWay}"
-                LiveNodeUpdateMode="AllowDataShaping"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 SelectedItem="{Binding SelectedItem}"
                 ShowCheckBox="True"
