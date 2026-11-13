@@ -101,6 +101,8 @@
   "WolvenKitFolderColor": "Folder icons in the Project Explorer (raw) and the Asset Browser",
   "WolvenKitToggleOffColor": "Toggle switches when off (e.g. Mod Browser in the Asset Browser): knob and outline",
   "WolvenKitSeparator": "Separator lines in menus and lists",
+  "WolvenKitButtonBackground": "Regular buttons, e.g. the Project Explorer and Asset Browser toolbars: background",
+  "WolvenKitButtonBorder": "Regular buttons, e.g. the Project Explorer and Asset Browser toolbars: border",
   "WolvenKitSearchBorder": "Border of the search fields in the Project Explorer and in documents",
   "WolvenKitLogText": "Log panel: info / important lines (errors, warnings, debug and success use the palette colors)",
   "WolvenKitProjectIconYellow": "Welcome page: icon background of projects with the yellow project color",

@@ -823,6 +823,20 @@
       "description": "Separator lines in menus and lists"
     },
     {
+      "key": "WolvenKitButtonBackground",
+      "group": "Palette",
+      "displayName": "Button Background",
+      "kind": "Brush",
+      "description": "Regular buttons, e.g. the Project Explorer and Asset Browser toolbars: background"
+    },
+    {
+      "key": "WolvenKitButtonBorder",
+      "group": "Palette",
+      "displayName": "Button Border",
+      "kind": "Brush",
+      "description": "Regular buttons, e.g. the Project Explorer and Asset Browser toolbars: border"
+    },
+    {
       "key": "WolvenKitSearchBorder",
       "group": "Palette",
       "displayName": "Search Border",

@@ -330,6 +330,9 @@
     <SolidColorBrush x:Key="WolvenKitSeparator" Color="#424242" />
     <!--  search field borders (Project Explorer, documents); MahApps semi-transparent gray by default, follows BorderAlt unless a theme sets it  -->
     <SolidColorBrush x:Key="WolvenKitSearchBorder" Color="#40808080" />
+    <!--  regular buttons (WKButtonStyle); the default look of the buttons before themes, follow ContentBackgroundAlt3 / BorderAlt unless a theme sets them  -->
+    <SolidColorBrush x:Key="WolvenKitButtonBackground" Color="#1C1C1C" />
+    <SolidColorBrush x:Key="WolvenKitButtonBorder" Color="#5A5A5A" />
     <!--  project icons on the welcome page (by project color); follow the palette colors unless a theme sets them  -->
     <SolidColorBrush x:Key="WolvenKitProjectIconYellow" Color="#FFEA0A" />
     <SolidColorBrush x:Key="WolvenKitProjectIconCyan" Color="#52F1FF" />
@@ -947,8 +950,8 @@
             <Style TargetType="{x:Type TextBlock}" />
         </Style.Resources>
 
-        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+        <Setter Property="Background" Value="{DynamicResource WolvenKitButtonBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitButtonBorder}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
