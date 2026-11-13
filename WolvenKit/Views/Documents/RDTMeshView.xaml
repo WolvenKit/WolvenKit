@@ -842,7 +842,7 @@
                             IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
                             Click="SaveAppearanceIcons_OnClick"
                             Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
-                            ToolTip="Pick appearances, then save one icon per appearance into a folder as &lt;file&gt;_&lt;appearance&gt;.png: materials are generated and the item is framed for each, with the size, camera, angle and lighting chosen here"
+                            ToolTip="Pick appearances, then save one icon per appearance into a folder as &lt;file&gt;_&lt;appearance&gt;.png: materials are generated and the item is framed for each, with the size, camera, angle and lighting chosen here. With a camera preset selected, every icon is taken from that preset (its view, projection and lighting)."
                             Content="Save Appearance Icons..." />
                     </StackPanel>
                 </Expander>
@@ -916,6 +916,40 @@
                                 Click="StandardView_OnClick"
                                 ToolTip="Three-quarter view, slightly from above. Click again to go around: front-right (FR), front-left (FL), back-left (BL), back-right (BR)"
                                 Content="3/4" />
+                        </WrapPanel>
+                        <!-- Camera presets: a saved view, relative to the object, with projection and lighting -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Preset" />
+                            <ComboBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding CameraPresets}" SelectedItem="{Binding SelectedCameraPreset}"
+                                      DisplayMemberPath="Name"
+                                      ToolTip="Saved camera views. A preset keeps the angle, the distance and framing (relative to the object's size, so it suits any item), the projection and the lighting. Shared by all preview tabs." />
+                        </Grid>
+                        <WrapPanel Margin="{DynamicResource WolvenKitMarginTiny}" Orientation="Horizontal">
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Click="ApplyCameraPreset_OnClick"
+                                IsEnabled="{Binding HasSelectedCameraPreset}"
+                                ToolTip="Put the camera where the selected preset says, scaled to the object shown"
+                                Content="Apply" />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Click="SaveCameraPreset_OnClick"
+                                ToolTip="Save the current view (angle, distance, framing, projection, lighting) as a preset; a name already used replaces that preset"
+                                Content="Save..." />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Click="DeleteCameraPreset_OnClick"
+                                IsEnabled="{Binding HasSelectedCameraPreset}"
+                                ToolTip="Delete the selected preset"
+                                Content="Delete" />
                         </WrapPanel>
                     </StackPanel>
                 </Expander>
