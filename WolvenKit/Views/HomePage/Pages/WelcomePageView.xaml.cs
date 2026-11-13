@@ -2,15 +2,18 @@ using System;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.HomePage.Pages;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>
+    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>, IThemeAware
     {
         private bool _isStackedLayout;
         private bool _layoutModeInitialized;
@@ -25,6 +28,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            IsVisibleChanged += OnIsVisibleChanged;
+
+            Locator.Current.GetService<IThemeService>()?.Register(this);
             SizeChanged += (_, _) => UpdateLayoutMode();
 
             this.WhenActivated(disposables =>
@@ -105,6 +111,66 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         private void OnHostWindowSizeChanged(object sender, SizeChangedEventArgs e) => UpdateLayoutMode();
+
+        /// <summary>
+        /// Re-applying the skin re-templates the Syncfusion CardViews, which then show no cards although the
+        /// project lists are unchanged. Home is shown again as a new page after a theme switch made elsewhere
+        /// (e.g. with a project open), and that page's CardViews are skinned after their cards were made.
+        /// So the lists are filled again whenever the page comes on screen, and after a theme change while it
+        /// is shown. Only a few cards: cheap.
+        /// </summary>
+        void IThemeAware.OnThemeChanged()
+        {
+            if (IsVisible)
+            {
+                RefreshProjectListsWhenIdle();
+            }
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                RefreshProjectListsWhenIdle();
+            }
+        }
+
+        private void RefreshProjectListsWhenIdle() =>
+            Dispatcher.BeginInvoke(RefreshProjectLists, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+
+        /// <summary>
+        /// Fills the project lists again and gives both CardViews their ItemsSource anew, so a CardView that was
+        /// re-templated by the skin builds its cards again instead of keeping an empty panel.
+        /// </summary>
+        private void RefreshProjectLists()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.RefreshProjectLists();
+
+            foreach (var cardView in new object[] { PinnedCardView, RecentCardView })
+            {
+                if (cardView is not ItemsControl itemsControl)
+                {
+                    continue;
+                }
+
+                var binding = BindingOperations.GetBindingBase(itemsControl, ItemsControl.ItemsSourceProperty);
+                if (binding is null)
+                {
+                    continue;
+                }
+
+                BindingOperations.ClearBinding(itemsControl, ItemsControl.ItemsSourceProperty);
+                BindingOperations.SetBinding(itemsControl, ItemsControl.ItemsSourceProperty, binding);
+            }
+
+            Locator.Current.GetService<ILoggerService>()?.Debug(
+                $"Welcome page: project lists refilled ({ViewModel.FancyPinnedProjects.Count} pinned, {ViewModel.FancyProjects.Count} recent)");
+        }
 
         /// <summary>
         /// Side-by-side: projects and actions each scroll in place.
