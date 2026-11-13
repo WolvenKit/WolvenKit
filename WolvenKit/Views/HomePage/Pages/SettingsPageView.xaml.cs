@@ -5,6 +5,7 @@ using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.Services;
 using WolvenKit.Controls;
+using WolvenKit.Converters;
 using WolvenKit.ViewModels;
 using static WolvenKit.Converters.PropertyGridEditors;
 
@@ -75,6 +76,9 @@ namespace WolvenKit.Views.HomePage.Pages
                     break;
                 case nameof(ISettingsDto.ThemeAccentString):
                     propertyItem.Editor = new BrushEditor();
+                    break;
+                case nameof(ISettingsDto.ActiveTheme):
+                    propertyItem.Editor = new ThemeSelectorEditor();
                     break;
                 default:
                     break;

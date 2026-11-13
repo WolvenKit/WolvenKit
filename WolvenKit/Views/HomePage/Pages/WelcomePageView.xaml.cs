@@ -6,14 +6,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.HomePage.Pages;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>
+    public partial class WelcomePageView : ReactiveUserControl<WelcomePageViewModel>, IThemeAware
     {
         private bool _isStackedLayout;
         private bool _layoutModeInitialized;
+        private bool _reskinned;
+        private bool _refreshQueued;
         private Window _hostWindow;
 
         public WelcomePageView()
@@ -25,6 +29,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            IsVisibleChanged += OnIsVisibleChanged;
+
+            Locator.Current.GetService<IThemeService>()?.Register(this);
             SizeChanged += (_, _) => UpdateLayoutMode();
 
             this.WhenActivated(disposables =>
@@ -105,6 +112,75 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         private void OnHostWindowSizeChanged(object sender, SizeChangedEventArgs e) => UpdateLayoutMode();
+
+        /// <summary>
+        /// Re-applying the skin re-templates the Syncfusion CardViews of this page, and afterwards they show no
+        /// cards, whatever ItemsSource they get. A new page built after the switch is fine (as when the theme was
+        /// changed with a project open), so once Home is on screen again the page puts a new instance of itself
+        /// in its place. The lists live in the (shared) view model, nothing is lost.
+        /// </summary>
+        void IThemeAware.OnThemeChanged()
+        {
+            _reskinned = true;
+            if (IsVisible)
+            {
+                RefreshProjectListsWhenIdle();
+            }
+        }
+
+        /// <summary>
+        /// The lists are filled again whenever the page comes on screen (e.g. Home opened from a project).
+        /// Only a few cards: cheap.
+        /// </summary>
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                RefreshProjectListsWhenIdle();
+            }
+        }
+
+        /// <summary>
+        /// One refill per idle: the theme switch and the window coming back both ask for one.
+        /// </summary>
+        private void RefreshProjectListsWhenIdle()
+        {
+            if (_refreshQueued)
+            {
+                return;
+            }
+
+            _refreshQueued = true;
+            Dispatcher.BeginInvoke(RefreshProjectLists, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+        }
+
+        /// <summary>
+        /// Fills the project lists again; the view model hands both CardViews new collections. After a theme
+        /// switch, replaces the page instead (see <see cref="IThemeAware.OnThemeChanged"/>).
+        /// </summary>
+        private void RefreshProjectLists()
+        {
+            _refreshQueued = false;
+
+            // While the window is hidden for the theme switch it is too early; the window coming back asks again.
+            if (ViewModel is null || !IsVisible)
+            {
+                return;
+            }
+
+            if (_reskinned && Parent is ContentControl host)
+            {
+                _reskinned = false;
+                host.SetCurrentValue(ContentControl.ContentProperty, new WelcomePageView());
+                Locator.Current.GetService<ILoggerService>()?.Debug("Welcome page: rebuilt after a theme switch.");
+                return;
+            }
+
+            ViewModel.RefreshProjectLists();
+
+            Locator.Current.GetService<ILoggerService>()?.Debug(
+                $"Welcome page: project lists refilled ({ViewModel.FancyPinnedProjects.Count} pinned, {ViewModel.FancyProjects.Count} recent)");
+        }
 
         /// <summary>
         /// Side-by-side: projects and actions each scroll in place.
