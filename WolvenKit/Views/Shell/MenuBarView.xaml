@@ -404,7 +404,7 @@
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
-                                Kind="FormatList"
+                                Kind="CodeBraces"
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
                     </MenuItem>
@@ -416,7 +416,7 @@
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
-                                Kind="FormatList"
+                                Kind="StorePlus"
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
                     </MenuItem>
@@ -910,7 +910,8 @@
                     Header="Launch Game with Steam">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Empty"
+                            IconPack="ForkAwesome"
+                            Kind="Steam"
                             Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
                 </MenuItem>
@@ -969,7 +970,6 @@
                     Header="Cyberpunk Blender Add-on"
                     Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                     CommandParameter="{Binding WikiLinks.CyberpunkBlenderAddon}">
-                    >
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Codicons"
