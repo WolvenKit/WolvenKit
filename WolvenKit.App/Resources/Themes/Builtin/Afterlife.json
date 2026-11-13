@@ -1,0 +1,27 @@
+{
+  "formatVersion": 1,
+  "name": "Afterlife",
+  "author": "WolvenKit",
+  "description": "The Afterlife bar: deep teal shadows, cyan-green neon, acid lime sign.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#2EF2C2",
+  "accentForeground": "#00140F",
+  "colors": {
+    "ContentBackground": "#0B1513",
+    "ContentBackgroundAlt": "#0E1B18",
+    "ContentBackgroundAlt2": "#12221E",
+    "ContentBackgroundAlt3": "#172A25",
+    "ContentBackgroundAlt4": "#1D342E",
+    "ContentBackgroundAlt5": "#253F38",
+    "BorderAlt": "#21463C",
+    "ContentForeground": "#D6F5EA",
+    "ForegroundColor": "#D6F5EA",
+    "BackgroundColor_Control": "#12221E",
+    "BackgroundColor_Frame_Active": "#172A25",
+    "BackgroundColor_Frame_Background": "#0E1B18",
+    "WolvenKitProjectSource": "#C6FF3D",
+    "WolvenKitProjectSourceShadow": "#6A8A1F",
+    "WolvenKitProjectResources": "#FFB347",
+    "WolvenKitProjectResourcesShadow": "#8F6127"
+  }
+}

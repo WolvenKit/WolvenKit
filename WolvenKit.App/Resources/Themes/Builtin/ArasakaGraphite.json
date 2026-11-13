@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "name": "Arasaka Graphite",
+  "author": "WolvenKit",
+  "description": "Neutral graphite surfaces with a deep red accent.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#B71C34",
+  "accentForeground": "#FFFFFF",
+  "colors": {
+    "ContentBackground": "#161616",
+    "ContentBackgroundAlt": "#1B1B1B",
+    "ContentBackgroundAlt2": "#202020",
+    "ContentBackgroundAlt3": "#262626",
+    "ContentBackgroundAlt4": "#2C2C2C",
+    "ContentBackgroundAlt5": "#333333",
+    "BorderAlt": "#2E2E2E",
+    "ForegroundColor": "#D9D9D9",
+    "BackgroundColor_Control": "#1F1F1F",
+    "BackgroundColor_Frame_Active": "#2A2A2A",
+    "BackgroundColor_Frame_Background": "#181818",
+    "WolvenKitRedColor": "#B71C34",
+    "WolvenKitRedShadowColor": "#7A1222"
+  }
+}

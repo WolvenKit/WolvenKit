@@ -15,50 +15,6 @@
     d:DesignWidth="800"
     d:DesignHeight="600">
     <Grid Background="{DynamicResource ContentBackgroundAlt2}">
-        <Grid.Resources>
-            <!-- TODO: refactor all button styles -->
-            <Style
-                x:Key="ButtonStyle"
-                TargetType="{x:Type Button}">
-                <Setter Property="Border.Background" Value="{DynamicResource ContentBackground}" />
-                <Setter Property="Border.Padding" Value="{DynamicResource WolvenKitMarginSmall}" />
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border
-                                Padding="{TemplateBinding Border.Padding}"
-                                Background="{TemplateBinding Border.Background}"
-                                CornerRadius="3">
-                                <ContentPresenter
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt5}" />
-                    </Trigger>
-
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="templates:IconBox.Opacity" Value="0.4" />
-                    </Trigger>
-
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsMouseOver" Value="True" />
-                            <Condition Property="IsPressed" Value="True" />
-                        </MultiTrigger.Conditions>
-                        <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    </MultiTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -75,7 +31,7 @@
                 <Button
                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding ProcessSelectedCommand}"
                     ToolTip="Import selected files to the engine format">
                     <StackPanel Orientation="Horizontal">
@@ -83,7 +39,7 @@
                             IconPack="Codicons"
                             Kind="Play"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                            Foreground="{StaticResource WolvenKitGreen}" />
+                            Foreground="{DynamicResource WolvenKitGreen}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
@@ -97,7 +53,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     Padding="{DynamicResource WolvenKitMarginSmall}"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding ProcessAllCommand}"
                     ToolTip="Import all files to the engine format">
                     <StackPanel Orientation="Horizontal">
@@ -105,7 +61,7 @@
                             IconPack="Codicons"
                             Kind="RunAll"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                            Foreground="{StaticResource WolvenKitGreen}" />
+                            Foreground="{DynamicResource WolvenKitGreen}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
@@ -118,7 +74,7 @@
                 <Button
                     Padding="{DynamicResource WolvenKitMarginSmall}"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding RefreshCommand}"
                     ToolTip="Reload all files">
                     <StackPanel Orientation="Horizontal">
@@ -126,7 +82,7 @@
                             IconPack="Material"
                             Kind="Refresh"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                            Foreground="{StaticResource WolvenKitPurple}" />
+                            Foreground="{DynamicResource WolvenKitPurple}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
@@ -147,7 +103,7 @@
                 <Button
                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding ImportSettingsCommand}"
                     ToolTip="Load import settings from vanilla">
                     <templates:IconBox
@@ -161,7 +117,7 @@
                 <Button
                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding DefaultSettingsCommand}"
                     ToolTip="Reset">
                     <templates:IconBox
@@ -175,7 +131,7 @@
                 <Button
                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding CopyArgumentsTemplateToCommand}"
                     ToolTip="Copy import settings from selected file">
                     <templates:IconBox
@@ -188,7 +144,7 @@
                 <!-- PasteArgumentsTemplateToCommand -->
                 <Button
                     VerticalAlignment="Center"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource WKButtonStyle}"
                     Command="{Binding PasteArgumentsTemplateToCommand}"
                     ToolTip="Paste import settings to all selected files">
                     <templates:IconBox
