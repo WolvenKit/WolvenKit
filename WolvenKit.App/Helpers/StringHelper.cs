@@ -8,6 +8,7 @@ using System.Windows.Media;
 using DynamicData;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
@@ -546,5 +547,34 @@ public abstract partial class StringHelper
 
     public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 
-    public static string? StringifyHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : hash.ToString();
+    public static string? StringifyNodeRefHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : hash.ToString();
+
+    public static string Stringify(gameEntityReference entityRef)
+    {
+        if (entityRef.Reference.GetResolvedText() is string s && !string.IsNullOrEmpty(s))
+        {
+            return s;
+        }
+
+        if (entityRef.DynamicEntityUniqueName.GetResolvedText() is string s2 && !string.IsNullOrEmpty(s2))
+        {
+            return s2;
+        }
+
+        return Stringify(entityRef.Names.FirstOrDefault());
+    }
+
+    public static string FormatCharacterWorkspotCondition(questCharacterWorkspot_ConditionType workspot)
+    {
+        var subject = workspot.IsPlayer ? "Player" : QuestConditionHelper.ParseGameEntityReference(workspot.PuppetRef);
+        var spotRef = workspot.SpotRef.GetResolvedText();
+
+        if (string.IsNullOrEmpty(workspot.AnimationName) || workspot.AnimationName == "None")
+        {
+            return $"{subject} at {spotRef}";
+        }
+
+        var waitText = workspot.WaitForAnimEnd ? " (wait for end)" : "";
+        return $"{subject} at {spotRef} with animation: {workspot.AnimationName}{waitText}";
+    }
 }

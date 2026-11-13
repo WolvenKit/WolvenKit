@@ -102,7 +102,7 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(CUInt64)) && Data is CUInt64 uInt64)
         {
-            Value = StringHelper.StringifyHash(uInt64);
+            Value = StringHelper.StringifyNodeRefHash(uInt64);
         }
         else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
         {
@@ -552,15 +552,8 @@ public partial class ChunkViewModel
 
             #endregion
 
-            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
-                                                             (int)(ulong)sst.NodeIdx < wss.Nodes.Count:
-                var node = wss.Nodes[(int)(ulong)sst.NodeIdx].Chunk;
-                Value = $"#{(int)(ulong)sst.NodeIdx}";
-                if (node?.GetType().Name is string nodeName && !string.IsNullOrEmpty(nodeName))
-                {
-                    Value = $"{Value} => {nodeName}";
-                }
-
+            case worldCompiledNodeInstanceSetupInfo { GlobalNodeId: { } worldGlobalNodeID } sst:
+                Value = $"#{sst.NodeIdx} => {StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
             case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
@@ -745,6 +738,23 @@ public partial class ChunkViewModel
                     .ToList();
                 Value = $"{string.Join(", ", childDescriptors)}";
                 IsValueExtrapolated = true;
+                break;
+            case questCharacterWorkspot_ConditionType workspotCon:
+                Value = StringHelper.FormatCharacterWorkspotCondition(workspotCon).Split(" at ")[^1];
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questCharacterCondition charCon when GetPropertyChild("Type") is
+                { ResolvedData: questCharacterWorkspot_ConditionType questCon } typeChild:
+                if (typeChild.Value is string childValue)
+                {
+                    Value = childValue;
+                }
+                else
+                {
+                    Value = StringHelper.FormatCharacterWorkspotCondition(questCon).Split(" at ")[^1];
+                }
+
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
                 break;
             case questFactsDBCondition condition:
                 switch (condition.Type?.GetValue())
@@ -1299,11 +1309,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 return;
             case worldGlobalNodeID worldGlobalNodeID:
-                Value = $"{StringHelper.StringifyHash(worldGlobalNodeID.Hash)}";
-                IsValueExtrapolated = true;
-                return;
-            case worldCompiledNodeInstanceSetupInfo { GlobalNodeId: { } worldGlobalNodeID }:
-                Value = $"{StringHelper.StringifyHash(worldGlobalNodeID.Hash)}";
+                Value = $"{StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
             case rendRenderTextureBlobMemoryLayout rendTexBlobLayout:
