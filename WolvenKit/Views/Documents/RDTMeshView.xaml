@@ -758,46 +758,7 @@
                     Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsImageSectionExpanded}">
                     <StackPanel Orientation="Vertical">
-                        <!-- Save Preview Image: the current view as a PNG with a transparent background (icons) -->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <ComboBox
-                                Grid.Column="0"
-                                MinWidth="80"
-                                Margin="{DynamicResource WolvenKitMarginTiny}"
-                                ItemsSource="{Binding PreviewImageFormats}"
-                                SelectedItem="{Binding PreviewImageFormat}"
-                                DisplayMemberPath="Label"
-                                ToolTip="Size of the saved image (px). Icon sizes follow the modding wiki: clothing up to 160 × 160, guns 320 × 80–160, melee 320 × 60–145. Custom... sets any size. The object keeps its proportions." />
-                            <Button
-                                Grid.Column="1"
-                                Margin="{DynamicResource WolvenKitMarginTiny}"
-                                Padding="{DynamicResource WolvenKitMarginTiny}"
-                                HorizontalAlignment="Stretch"
-                                IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
-                                Click="SavePreviewImage_OnClick"
-                                ToolTip="Save the current view as a PNG with a transparent background, e.g. for an inventory icon. The object is cropped and centered; zoom in or enlarge the preview for a sharper result."
-                                Content="Save Preview Image..." />
-                        </Grid>
-
-                        <!-- Custom size (when "Custom..." is selected) -->
-                        <Grid Visibility="{Binding IsCustomImageSize, Converter={StaticResource VisibilityConverter}}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Width" />
-                            <TextBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}" Text="{Binding CustomImageWidth, UpdateSourceTrigger=LostFocus}" ToolTip="Image width in pixels (16 to 8192)" />
-                            <TextBlock Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Height" />
-                            <TextBox Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}" Text="{Binding CustomImageHeight, UpdateSourceTrigger=LostFocus}" ToolTip="Image height in pixels (16 to 8192)" />
-                        </Grid>
-
-                        <!-- Layout and quality of the saved image -->
+                        <!-- Settings shared by both buttons below: size, layout, background and quality -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -808,36 +769,74 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Margin %" />
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Size" />
                             <ComboBox Grid.Row="0" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewImageFormats}" SelectedItem="{Binding PreviewImageFormat}"
+                                      DisplayMemberPath="Label"
+                                      ToolTip="Size of the saved image (px). Icon sizes follow the modding wiki: clothing up to 160 × 160, guns 320 × 80–160, melee 320 × 60–145. Custom... sets any size. The object keeps its proportions." />
+                            <TextBlock Grid.Row="0" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Quality ×" />
+                            <ComboBox Grid.Row="0" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewSupersampleFactors}" SelectedItem="{Binding PreviewSupersample}"
+                                      ToolTip="Supersampling: render the preview this many times larger for the capture, then scale down. Cleaner edges, and large images no longer depend on the window size. The preview flickers briefly while capturing." />
+
+                            <!-- Custom size (when "Custom..." is selected) -->
+                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
+                                  Visibility="{Binding IsCustomImageSize, Converter={StaticResource VisibilityConverter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Width" />
+                                <TextBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}" Text="{Binding CustomImageWidth, UpdateSourceTrigger=LostFocus}" ToolTip="Image width in pixels (16 to 8192)" />
+                                <TextBlock Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Height" />
+                                <TextBox Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}" Text="{Binding CustomImageHeight, UpdateSourceTrigger=LostFocus}" ToolTip="Image height in pixels (16 to 8192)" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Margin %" />
+                            <ComboBox Grid.Row="2" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewImageMargins}" SelectedItem="{Binding PreviewImageMargin}"
                                       ToolTip="Empty space around the item, in percent of the shorter side" />
-                            <TextBlock Grid.Row="0" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Align" />
-                            <ComboBox Grid.Row="0" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
+                            <TextBlock Grid.Row="2" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Align" />
+                            <ComboBox Grid.Row="2" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewImageAlignments}" SelectedItem="{Binding PreviewImageAlignment}"
                                       ToolTip="Center the item, or stand it on the bottom margin (shoes, props)" />
-                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Background" />
-                            <ComboBox Grid.Row="1" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                            <TextBlock Grid.Row="3" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Background" />
+                            <ComboBox Grid.Row="3" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewBackgrounds}" SelectedItem="{Binding PreviewBackground}"
                                       DisplayMemberPath="Label"
                                       ToolTip="Transparent, or a solid colour (e.g. white to mask the icon in an image editor)" />
-                            <TextBlock Grid.Row="1" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Quality ×" />
-                            <ComboBox Grid.Row="1" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
-                                      ItemsSource="{Binding PreviewSupersampleFactors}" SelectedItem="{Binding PreviewSupersample}"
-                                      ToolTip="Supersampling: render the preview this many times larger for the capture, then scale down. Cleaner edges, and large images no longer depend on the window size. The preview flickers briefly while capturing." />
                         </Grid>
 
-                        <!-- Appearance icons: one icon per picked appearance -->
-                        <Button
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Padding="{DynamicResource WolvenKitMarginTiny}"
-                            HorizontalAlignment="Stretch"
-                            IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
-                            Click="SaveAppearanceIcons_OnClick"
-                            Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
-                            ToolTip="Pick appearances, then save one icon per appearance into a folder as &lt;file&gt;_&lt;appearance&gt;.png: materials are generated and the item is framed for each, with the size, camera, angle and lighting chosen here"
-                            Content="Save Appearance Icons..." />
+                        <!-- One image of what is on screen, or one icon per picked appearance -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                Grid.Column="0"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
+                                Click="SavePreviewImage_OnClick"
+                                ToolTip="Save what is on screen now (this appearance, view, shading, wireframe) as one PNG with the settings above, e.g. for an inventory icon. The object is cropped and placed; zoom in or enlarge the preview for a sharper result."
+                                Content="Save Image..." />
+                            <Button
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Padding="{DynamicResource WolvenKitMarginTiny}"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
+                                Click="SaveAppearanceIcons_OnClick"
+                                ToolTip="Pick appearances, then save one icon per appearance into a folder as &lt;file&gt;_&lt;appearance&gt;.png: materials are generated and the item is framed for each, with the size, camera, angle and lighting chosen here. With a camera preset selected, every icon is taken from that preset (its view, projection and lighting)."
+                                Content="Save Appearance Icons..." />
+                        </Grid>
                     </StackPanel>
                 </Expander>
 
@@ -846,17 +845,25 @@
                     Header="Camera"
                     Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                     IsExpanded="{Binding IsCameraSectionExpanded}">
-                    <StackPanel Orientation="Vertical">
-                        <ComboBox
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            ItemsSource="{Binding PreviewCameraOptions}"
-                            SelectedItem="{Binding PreviewCamera}"
-                            DisplayMemberPath="Label"
-                            SelectionChanged="PreviewCamera_OnSelectionChanged"
-                            ToolTip="Camera projection. A narrow field of view or orthographic removes perspective distortion, so icons of different items line up." />
+                    <StackPanel Grid.IsSharedSizeScope="True" Orientation="Vertical">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="CameraLabel" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Projection" />
+                            <ComboBox
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                ItemsSource="{Binding PreviewCameraOptions}"
+                                SelectedItem="{Binding PreviewCamera}"
+                                DisplayMemberPath="Label"
+                                SelectionChanged="PreviewCamera_OnSelectionChanged"
+                                ToolTip="Camera projection. A narrow field of view or orthographic removes perspective distortion, so icons of different items line up." />
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="CameraLabel" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Lighting" />
@@ -865,7 +872,8 @@
                                       SelectionChanged="Lighting_OnSelectionChanged"
                                       ToolTip="Default: the usual work lights. Icon: like the game's inventory icons - a strong key light from the front upper left, dark shadows, a rim light for edge highlights. Icon (soft): softer, with more fill. Icon (follow camera): the Icon set turning with the camera. Flat: ambient only, no highlights. Applies to the preview and to saved images." />
                         </Grid>
-                        <WrapPanel Margin="{DynamicResource WolvenKitMarginTiny}" Orientation="Horizontal">
+                        <!-- one row, the buttons share the width -->
+                        <UniformGrid Margin="{DynamicResource WolvenKitMarginTiny}" Rows="1">
                             <Button
                                 Margin="1"
                                 Padding="4,2"
@@ -910,7 +918,42 @@
                                 Click="StandardView_OnClick"
                                 ToolTip="Three-quarter view, slightly from above. Click again to go around: front-right (FR), front-left (FL), back-left (BL), back-right (BR)"
                                 Content="3/4" />
-                        </WrapPanel>
+                        </UniformGrid>
+                        <!-- Camera presets: a saved view, relative to the object, with projection and lighting -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="CameraLabel" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Preset" />
+                            <ComboBox Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding CameraPresets}" SelectedItem="{Binding SelectedCameraPreset}"
+                                      DisplayMemberPath="Name"
+                                      ToolTip="Saved camera views. A preset keeps the angle, the distance and framing (relative to the object's size, so it suits any item), the projection and the lighting. Shared by all preview tabs." />
+                        </Grid>
+                        <!-- one row, the buttons share the width -->
+                        <UniformGrid Margin="{DynamicResource WolvenKitMarginTiny}" Rows="1">
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Click="ApplyCameraPreset_OnClick"
+                                IsEnabled="{Binding HasSelectedCameraPreset}"
+                                ToolTip="Put the camera where the selected preset says, scaled to the object shown"
+                                Content="Apply" />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Click="SaveCameraPreset_OnClick"
+                                ToolTip="Save the current view (angle, distance, framing, projection, lighting) as a preset; a name already used replaces that preset"
+                                Content="Save..." />
+                            <Button
+                                Margin="1"
+                                Padding="4,2"
+                                Click="DeleteCameraPreset_OnClick"
+                                IsEnabled="{Binding HasSelectedCameraPreset}"
+                                ToolTip="Delete the selected preset"
+                                Content="Delete" />
+                        </UniformGrid>
                     </StackPanel>
                 </Expander>
 

@@ -555,7 +555,7 @@ public partial class RDTMeshViewModel
 
         var dlg = new Microsoft.Win32.SaveFileDialog
         {
-            Title = $"Save Preview Image ({PreviewImageSize.Width}x{PreviewImageSize.Height}, {PreviewBackground.Label.ToLowerInvariant()} background)",
+            Title = $"Save Image ({PreviewImageSize.Width}x{PreviewImageSize.Height}, {PreviewBackground.Label.ToLowerInvariant()} background)",
             Filter = "PNG image (*.png)|*.png",
             DefaultExt = ".png",
             AddExtension = true,
