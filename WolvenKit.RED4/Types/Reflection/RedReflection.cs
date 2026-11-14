@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -18,6 +19,9 @@ public static class RedReflection
     private static readonly ConcurrentDictionary<string, ExtendedTypeInfo> s_dynamicTypeInfoCache = new();
 
     private static readonly ConcurrentDictionary<int, string> s_csTypeCache = new();
+    // Types whose RED name can't be built because they contain an enum without RTTI (e.g. WolvenKit-internal enums).
+    // Cached so the lookup isn't repeated on every call: fallback display name + the enum that failed.
+    private static readonly ConcurrentDictionary<int, (string Name, Type UnknownEnum)> s_csTypeFallbackCache = new();
     private static readonly ConcurrentDictionary<string, (Type, Flags)> s_csTypeCache2 = new();
 
 
@@ -118,6 +122,9 @@ public static class RedReflection
 
     public static ExtendedEnumInfo GetEnumTypeInfo(Type type) =>
         s_enumInfoCache.TryGetValue(type, out var info) ? info : throw new NotSupportedException(type.Name);
+
+    public static bool TryGetEnumTypeInfo(Type type, [NotNullWhen(true)] out ExtendedEnumInfo? info) =>
+        s_enumInfoCache.TryGetValue(type, out info);
 
     public static string GetEnumRedName(Type type) => GetEnumTypeInfo(type).RedName;
 
@@ -223,14 +230,43 @@ public static class RedReflection
 
     public static string GetRedTypeFromCSType(Type type, Flags? flags = null)
     {
-        flags ??= Flags.Empty;
-
-        var hash = HashCode.Combine(type, flags);
-        if (s_csTypeCache.TryGetValue(hash, out var result))
+        if (!TryBuildRedTypeName(type, flags, out var result, out var unknownEnum))
         {
-            return result;
+            // Same exception as before (from GetEnumTypeInfo): serialization must stay strict.
+            throw new NotSupportedException(unknownEnum!.Name);
         }
 
+        return result;
+    }
+
+    /// <summary>
+    /// Like <see cref="GetRedTypeFromCSType"/>, but doesn't throw for types that contain an enum without RTTI
+    /// (e.g. WolvenKit-internal enums shown in the property editor). Returns false in that case, with a
+    /// display name that uses the enum's C# name instead. Meant for UI, not for serialization.
+    /// </summary>
+    public static bool TryGetRedTypeFromCSType(Type type, Flags? flags, out string result) =>
+        TryBuildRedTypeName(type, flags, out result, out _);
+
+    private static bool TryBuildRedTypeName(Type type, Flags? flags, out string result, out Type? unknownEnum)
+    {
+        flags ??= Flags.Empty;
+        unknownEnum = null;
+
+        var hash = HashCode.Combine(type, flags);
+        if (s_csTypeCache.TryGetValue(hash, out var cached))
+        {
+            result = cached;
+            return true;
+        }
+
+        if (s_csTypeFallbackCache.TryGetValue(hash, out var fallback))
+        {
+            result = fallback.Name;
+            unknownEnum = fallback.UnknownEnum;
+            return false;
+        }
+
+        result = "";
         var tType = type;
 
         while (true)
@@ -247,7 +283,17 @@ public static class RedReflection
 
                 if (genericType == typeof(CEnum<>) || genericType == typeof(CBitField<>))
                 {
-                    result += GetEnumRedName(innerType);
+                    if (TryGetEnumTypeInfo(innerType, out var enumInfo))
+                    {
+                        result += enumInfo.RedName;
+                    }
+                    else
+                    {
+                        // Same shape as real enums (just the enum name), so the UI looks consistent.
+                        result += innerType.Name;
+                        unknownEnum = innerType;
+                    }
+
                     break;
                 }
 
@@ -270,9 +316,15 @@ public static class RedReflection
             }
         }
 
+        if (unknownEnum is not null)
+        {
+            s_csTypeFallbackCache.TryAdd(hash, (result, unknownEnum));
+            return false;
+        }
+
         s_csTypeCache.TryAdd(hash, result);
 
-        return result;
+        return true;
     }
 
     public static bool AddRedType(Type type)
