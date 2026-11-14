@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -36,6 +38,19 @@ public partial class ProjectExplorerViewModel
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
+    /// <summary>
+    /// Files WolvenKit itself is moving: ProjectResourceTools.MoveFileAsync renames "a" to
+    /// "{target}_{guid}.tmp" and then right away to "{target}". Keyed by the temp name, with the file's
+    /// model and its key in <see cref="_fileLookup"/>. The node stays in the tree meanwhile, so a rename
+    /// doesn't make the file vanish and come back. Only touched on the watcher thread.
+    /// </summary>
+    private readonly Dictionary<string, (FileSystemModel Model, string OriginalKey)> _pendingTempRenames = new();
+
+    /// <summary>Matches the temp names MoveFileAsync generates: "..._{guid}.tmp".</summary>
+    private static readonly Regex s_wolvenKitTempName = new(
+        @"_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.tmp$",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
     private static readonly List<string> s_ignoredExtensions =
     [
         "tmp",
@@ -56,6 +71,14 @@ public partial class ProjectExplorerViewModel
         return fileExtension is not null && s_ignoredExtensions.Any(partial =>
             fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
     }
+
+    /// <summary>How often a create event is retried while its file doesn't exist on disk yet.</summary>
+    private const int MaxCreateRetries = 10;
+
+    /// <summary>Delay between those retries, in milliseconds.</summary>
+    private const int CreateRetryDelayMs = 100;
+
+    private static long NowMs() => DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
     private bool _isWatcherStopped;
 
@@ -136,6 +159,10 @@ public partial class ProjectExplorerViewModel
 
     private void Update(CancellationToken cancellationToken)
     {
+        // Number of delayed events we've put back in a row without processing anything.
+        // Used to sleep instead of busy-spinning when the queue only holds delayed retries.
+        var deferredInARow = 0;
+
         while (true)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -146,10 +173,28 @@ public partial class ProjectExplorerViewModel
             if (!_fileChanges.TryDequeue(out var e))
             {
                 _removedFiles.Clear();
+                deferredInARow = 0;
 
                 Thread.Sleep(100);
                 continue;
             }
+
+            // Delayed retry whose time hasn't come yet: put it back. If everything in the queue is
+            // waiting, sleep a little instead of spinning through it at 100% CPU.
+            if (e.Ticks > NowMs())
+            {
+                _fileChanges.Enqueue(e);
+
+                if (++deferredInARow >= _fileChanges.Count)
+                {
+                    deferredInARow = 0;
+                    Thread.Sleep(10);
+                }
+
+                continue;
+            }
+
+            deferredInARow = 0;
 
             var extension = Path.GetExtension(e.Name);
             if (!string.IsNullOrEmpty(extension) && (HasIgnoredExtension(e.Name) && e.ChangeType != WatcherChangeTypes.Renamed))
@@ -189,17 +234,8 @@ public partial class ProjectExplorerViewModel
         }
         void Create(FileSystemEventArgsWrapper e)
         {
-            var timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-
             if (HasIgnoredExtension(e.Name))
             {
-                return;
-            }
-
-            // Check if delay has passed
-            if (e.Ticks > timestamp)
-            {
-                _fileChanges.Enqueue(e);
                 return;
             }
 
@@ -212,20 +248,20 @@ public partial class ProjectExplorerViewModel
                 }
             }
 
-            // Create event was sent but file doesn't exist yet?!?! Don't know why. Just requeue with delay
+            // Create event was sent but the file isn't there (yet). It may still be in the middle of being
+            // written, so retry a few times with a delay. If it never shows up, it was a short-lived file
+            // (e.g. a temp file that got renamed or deleted right away): drop the event.
             if (!File.Exists(e.FullPath) && !Directory.Exists(e.FullPath))
             {
-                e.Ticks = timestamp + 100;
+                if (e.RetryCount >= MaxCreateRetries)
+                {
+                    return;
+                }
+
+                e.Ticks = NowMs() + CreateRetryDelayMs;
                 e.RetryCount++;
 
                 _fileChanges.Enqueue(e);
-                return;
-            }
-
-            if (e.RetryCount > 10)
-            {
-                // If it still doesn't work after 10 retries... idk
-                _loggerService?.Warning($"Project explorer: Failed adding {e.Name}. You can try a manual refresh.");
                 return;
             }
 
@@ -295,12 +331,42 @@ public partial class ProjectExplorerViewModel
 
             void ExpandParentsOf(FileSystemModel dir)
             {
-                ExpansionStateDictionary[dir.RawRelativePath] = true;
-
-                if (dir.Parent != null)
+                // Stop below the project root model: its RawRelativePath is the absolute project path.
+                var paths = new List<string>();
+                for (var d = dir; d is not null && !ReferenceEquals(d, _projectFileSystemModel); d = d.Parent)
                 {
-                    ExpandParentsOf(dir.Parent);
+                    paths.Add(d.RawRelativePath);
                 }
+
+                if (paths.Count == 0)
+                {
+                    return;
+                }
+
+                // ExpansionStateDictionary is a plain Dictionary that the UI thread reads and serializes,
+                // so only write to it there. Capture the instance: if a different project gets loaded
+                // before this runs, its dictionary must not receive our paths.
+                var state = ExpansionStateDictionary;
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (!ReferenceEquals(state, ExpansionStateDictionary))
+                    {
+                        return;
+                    }
+
+                    foreach (var path in paths)
+                    {
+                        if (state.TryGetValue(path, out var isExpanded) && isExpanded)
+                        {
+                            continue;
+                        }
+
+                        state[path] = true;
+                        // Mark dirty, or the auto-expansion only reaches disk if the user also
+                        // happens to expand/collapse something by hand.
+                        _hasUnsavedFileTreeChanges = true;
+                    }
+                });
             }
 
             if (current is not null)
@@ -342,6 +408,20 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
+            // Renamed in place a moment ago and the UI thread hasn't applied the new name yet:
+            // the model still points at the old path. Retry shortly instead of failing on it.
+            if (!string.Equals(item.RawRelativePath, e.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                if (e.RetryCount < MaxCreateRetries)
+                {
+                    e.Ticks = NowMs() + 20;
+                    e.RetryCount++;
+                    _fileChanges.Enqueue(e);
+                }
+
+                return;
+            }
+
             item.UpdateFileInfo();
         }
 
@@ -357,47 +437,120 @@ public partial class ProjectExplorerViewModel
                 throw new Exception();
             }
 
-            if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
+            var oldName = renamedEventArgs.OldName;
+            var newName = renamedEventArgs.Name;
+
+            if (Path.GetExtension(oldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
             {
-                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
+                // Second half of a WolvenKit move: temp name -> final name.
+                if (_pendingTempRenames.Remove(oldName, out var pending))
+                {
+                    if (!TryRenameFileInPlace(pending.Model, pending.OriginalKey, newName))
+                    {
+                        EnqueueDeleted(pending.OriginalKey);
+                        EnqueueCreated(newName);
+                    }
+
+                    return;
+                }
+
+                EnqueueCreated(newName);
                 return;
             }
 
-            if (!_fileLookup.TryGetValue(renamedEventArgs.OldName, out var renamedModel))
+            if (!_fileLookup.TryGetValue(oldName, out var renamedModel))
             {
-                _loggerService?.Warning($"Renamed file was not in the database: {renamedEventArgs.OldName}. Recommend to restart WolvenKit.");
+                // We never knew the old name (e.g. a temp file an external tool wrote and then renamed
+                // before its create event got processed). Just add whatever is there now.
+                EnqueueCreated(newName);
                 return;
             }
 
             if (!renamedModel.IsDirectory)
             {
-                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(
-                    new FileSystemEventArgs(WatcherChangeTypes.Deleted, _projectDirectory, renamedEventArgs.OldName)));
+                // First half of a WolvenKit move (see _pendingTempRenames): keep the node where it is
+                // until the file gets its final name.
+                if (s_wolvenKitTempName.IsMatch(newName))
+                {
+                    _pendingTempRenames[newName] = (renamedModel, oldName);
+                    return;
+                }
+
+                // Plain rename in the same folder (F2 in Windows Explorer, ...): rename the node itself.
+                if (TryRenameFileInPlace(renamedModel, oldName, newName))
+                {
+                    return;
+                }
+            }
+
+            // Files we can't rename in place, top-level folders, moves into another folder, and renames
+            // onto a name we already track: drop the old node and add the new path from scratch.
+            if (!renamedModel.IsDirectory
+                || renamedModel.Parent is null
+                || ReferenceEquals(renamedModel.Parent, _projectFileSystemModel)
+                || _fileLookup.ContainsKey(newName)
+                || !string.Equals(Path.GetDirectoryName(oldName), Path.GetDirectoryName(newName), StringComparison.Ordinal))
+            {
+                EnqueueDeleted(oldName);
+                EnqueueCreated(newName);
                 return;
             }
 
-            foreach (var key in _fileLookup.Keys)
+            // Directory renamed in place: re-key the directory and everything below it,
+            // then rename the model (Rename() updates the children's paths recursively).
+            var oldPrefix = oldName + Path.DirectorySeparatorChar;
+            foreach (var key in _fileLookup.Keys.ToList())
             {
-                if (!key.StartsWith(renamedEventArgs.OldName + Path.DirectorySeparatorChar))
+                if (key != oldName && !key.StartsWith(oldPrefix, StringComparison.Ordinal))
                 {
                     continue;
                 }
 
-                var newKey = renamedEventArgs.Name + key.Substring(renamedEventArgs.OldName.Length);
-                if (!_fileLookup.TryRemove(key, out var item) || !_fileLookup.TryAdd(newKey, item))
+                var newKey = newName + key[oldName.Length..];
+                if (_fileLookup.TryRemove(key, out var item))
                 {
-                    throw new Exception();
+                    _fileLookup[newKey] = item;
                 }
-
-                if (key != renamedEventArgs.OldName)
-                {
-                    continue;
-                }
-
-                var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
-                item.Rename(newName);
             }
+
+            renamedModel.Rename(Path.GetFileName(newName));
         }
+
+        // Renames a file node without removing it from the tree: no flicker, selection kept.
+        // Only for a rename within the same folder to a name we show and don't track yet.
+        bool TryRenameFileInPlace(FileSystemModel model, string oldKey, string newName)
+        {
+            if (model.IsDirectory
+                || model.Parent is null
+                || HasIgnoredExtension(newName)
+                || _fileLookup.ContainsKey(newName)
+                || !string.Equals(Path.GetDirectoryName(oldKey), Path.GetDirectoryName(newName), StringComparison.Ordinal)
+                || !File.Exists(Path.Combine(_projectDirectory, newName)))
+            {
+                return false;
+            }
+
+            if (!_fileLookup.TryRemove(oldKey, out _))
+            {
+                return false;
+            }
+
+            _fileLookup[newName] = model;
+
+            // Name/path changes are bound to the grids (sorting, filtering): apply them on the UI thread.
+            var fileName = Path.GetFileName(newName);
+            DispatcherHelper.RunOnMainThread(() => model.Rename(fileName, updateChildren: false));
+
+            return true;
+        }
+
+        void EnqueueCreated(string name) =>
+            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(
+                new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
+
+        void EnqueueDeleted(string name) =>
+            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(
+                new FileSystemEventArgs(WatcherChangeTypes.Deleted, _projectDirectory, name)));
 
         void Delete(FileSystemEventArgsWrapper e)
         {
@@ -469,7 +622,7 @@ public partial class ProjectExplorerViewModel
         public int RetryCount { get; set; }
         public long Ticks { get; set; }
 
-        public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        public long EventAddedAt { get; } = NowMs();
     }
 
     public void RefreshWatcher()
@@ -502,6 +655,7 @@ public partial class ProjectExplorerViewModel
     {
         _fileChanges.Clear();
         _fileLookup.Clear();
+        _pendingTempRenames.Clear();
         FileTree.Clear();
         FileList.Clear();
     }

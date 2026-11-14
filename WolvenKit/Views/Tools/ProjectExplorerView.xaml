@@ -832,22 +832,6 @@
 
             <DataTemplate x:Key="TreeGridCellTemplateSimple">
                 <Grid>
-                    <Grid.Resources>
-                        <Style
-                            x:Key="PE_FileIconStyle"
-                            TargetType="{x:Type others:FileIcon}">
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
-                                        <Condition Binding="{Binding Path=HasChildNodes, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Type" Value="Open" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Resources>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{DynamicResource WolvenKitTreeGridColumnIconWidth}" />
                         <ColumnDefinition Width="*" />
@@ -857,7 +841,6 @@
                     <others:FileIcon
                         Width="Auto"
                         Height="{DynamicResource WolvenKitTreeGridIconHeight}"
-                        Style="{StaticResource PE_FileIconStyle}"
                         Icon="{Binding Extension}" />
 
                     <TextBlock

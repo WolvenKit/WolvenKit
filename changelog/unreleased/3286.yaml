@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3286
+      author: "Ametis81"
+      description: "Project Explorer: small JSON conversions no longer collapse and redraw the whole tree."

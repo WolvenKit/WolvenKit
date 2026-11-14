@@ -86,6 +86,18 @@ namespace WolvenKit.Views.Tools
         private bool _automatic;
         private HashSet<string> _searchVisiblePaths;
 
+        // Folders that contain search matches; filled by RebuildSearchVisiblePaths.
+        private readonly List<FileSystemModel> _searchDirsToExpand = [];
+
+        // Query the tree was last expanded for. While the user keeps typing (query only gets longer),
+        // matches are a subset of the previous ones and no new folders need opening.
+        // Reset whenever the tree's expansion may have changed under us.
+        private string _lastExpandedQuery;
+
+        private static readonly string s_archivePrefix = "archive" + Path.DirectorySeparatorChar;
+        private static readonly string s_rawPrefix = "raw" + Path.DirectorySeparatorChar;
+        private static readonly string s_resourcesPrefix = "resources" + Path.DirectorySeparatorChar;
+
         private readonly DispatcherTimer _searchDebounceTimer;
         private bool _isDragging;
         private CancellationTokenSource _deferRefreshTokenSource = new();
@@ -473,6 +485,7 @@ namespace WolvenKit.Views.Tools
         {
             _currentFolderQuery = "";
             _searchVisiblePaths = null;
+            _lastExpandedQuery = null;
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
         }
 
@@ -636,44 +649,47 @@ namespace WolvenKit.Views.Tools
         private void ExpandAllNodes(TreeNode node)
         {
             TreeGrid.ExpandAllNodes(node);
-            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
-            {
-                RecursiveStateSave(node.ChildNodes);
-            }
 
-            return;
-
-            void RecursiveStateSave(TreeNodes childNodes)
-            {
-                foreach (var childNode in childNodes)
-                {
-                    if (childNode.Item is FileSystemModel fileSystemModel)
-                    {
-                        ViewModel!.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = true;
-                    }
-                    RecursiveStateSave(childNode.ChildNodes);
-                }
-            }
+            // Child nodes only exist once expanded, so record the state after expanding.
+            SaveSubtreeExpansionState(node, true);
         }
 
         private void CollapseAllNodes(TreeNode node)
         {
-            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
-            {
-                RecursiveStateSave(node.ChildNodes);
-            }
-            TreeGrid.CollapseAllNodes(node);
+            // Record before collapsing, while the child nodes are still populated.
+            SaveSubtreeExpansionState(node, false);
 
-            return;
-            void RecursiveStateSave(TreeNodes childNodes)
+            TreeGrid.CollapseAllNodes(node);
+        }
+
+        /// <summary>
+        /// Persists the expansion state of <paramref name="node"/> itself and every folder below it.
+        /// The node itself matters: restore stops at the first collapsed folder, so if e.g. "archive"
+        /// isn't recorded as expanded, nothing below it gets reopened.
+        /// Goes through SaveNodeExpansionState so the state is marked dirty and actually written to disk.
+        /// </summary>
+        private void SaveSubtreeExpansionState(TreeNode node, bool isExpanded)
+        {
+            // While searching, expansion is temporary and gets reverted when the search is cleared.
+            if (ViewModel is not { } vm || !string.IsNullOrEmpty(_currentFolderQuery))
             {
-                foreach (var childNode in childNodes)
+                return;
+            }
+
+            Save(node);
+
+            void Save(TreeNode current)
+            {
+                if (current.Item is not FileSystemModel { IsDirectory: true } model)
                 {
-                    if (childNode.Item is FileSystemModel fileSystemModel)
-                    {
-                        ViewModel!.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = false;
-                    }
-                    RecursiveStateSave(childNode.ChildNodes);
+                    return;
+                }
+
+                vm.SaveNodeExpansionState(model.RawRelativePath, isExpanded);
+
+                foreach (var child in current.ChildNodes)
+                {
+                    Save(child);
                 }
             }
         }
@@ -766,8 +782,11 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var model = ViewModel.SelectedItem;
-            var node = TreeGrid.View.Nodes.GetNode(model);
+            if (GetSelectedTreeNode() is not { } node)
+            {
+                return;
+            }
+
             ExpandAllNodes(node);
         }
 
@@ -778,11 +797,30 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var model = ViewModel.SelectedItem;
-            var node = TreeGrid.View.Nodes.GetNode(model);
+            if (GetSelectedTreeNode() is not { } node)
+            {
+                return;
+            }
+
             CollapseAllNodes(node);
+
+            // The selected folder itself stays open, only everything below it is collapsed.
             TreeGrid.ExpandNode(node);
+            if (node.Item is FileSystemModel { IsDirectory: true } model && string.IsNullOrEmpty(_currentFolderQuery))
+            {
+                ViewModel.SaveNodeExpansionState(model.RawRelativePath, true);
+            }
         }
+
+        /// <summary>
+        /// Tree node of the selected item, found by walking down its parent chain from the root,
+        /// the same way search and reveal do. Null if nothing is selected or the node isn't found,
+        /// instead of passing null on to ExpandAllNodes / CollapseAllNodes.
+        /// </summary>
+        private TreeNode GetSelectedTreeNode() =>
+            ViewModel?.SelectedItem is { } model && TreeGrid?.View is not null
+                ? FindNodeIgnoringFilter(model)
+                : null;
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e)
         {
@@ -808,6 +846,9 @@ namespace WolvenKit.Views.Tools
 
         private void RestoreExpansionRecursive(IEnumerable<TreeNode> nodes)
         {
+            // Folders opened for the search may get closed here, so the next search must re-open them.
+            _lastExpandedQuery = null;
+
             if (ViewModel is null || nodes is null)
             {
                 return;
@@ -907,6 +948,9 @@ namespace WolvenKit.Views.Tools
             }
 
             TreeGrid.View.NodeCollectionChanged += View_OnNodeCollectionChanged;
+
+            // New view, new nodes: nothing the search expanded before is open any more.
+            _lastExpandedQuery = null;
 
             TreeGrid.View.Filter = IsFileIn;
             TreeGrid.View.RefreshFilter();
@@ -1046,16 +1090,17 @@ namespace WolvenKit.Views.Tools
             return tabControl.SelectedIndex switch
             {
                 0 => true,
-                1 => IsFileInInternal("archive"),
-                2 => IsFileInInternal("raw"),
-                3 => IsFileInInternal("resources"),
+                1 => IsFileInInternal("archive", s_archivePrefix),
+                2 => IsFileInInternal("raw", s_rawPrefix),
+                3 => IsFileInInternal("resources", s_resourcesPrefix),
                 _ => true
             };
 
-            bool IsFileInInternal(string folder)
+            // Called for every node on every filter refresh: no string building here.
+            bool IsFileInInternal(string folder, string folderPrefix)
             {
                 return fm.RawRelativePath == folder ||
-                       fm.RawRelativePath.StartsWith($"{folder}{Path.DirectorySeparatorChar}");
+                       fm.RawRelativePath.StartsWith(folderPrefix, StringComparison.Ordinal);
             }
         }
 
@@ -1072,6 +1117,8 @@ namespace WolvenKit.Views.Tools
 
         private void RebuildSearchVisiblePaths()
         {
+            _searchDirsToExpand.Clear();
+
             if (string.IsNullOrWhiteSpace(_currentFolderQuery) || ViewModel is null)
             {
                 _searchVisiblePaths = null;
@@ -1093,6 +1140,13 @@ namespace WolvenKit.Views.Tools
                     if (!visible.Add(p.RawRelativePath))
                     {
                         break;
+                    }
+
+                    // Every folder on the way up holds a match, so the tree has to open it.
+                    // Collected here so ExpandAncestorsOfSearchMatches doesn't walk FileList again.
+                    if (p.IsDirectory)
+                    {
+                        _searchDirsToExpand.Add(p);
                     }
                 }
             }
@@ -1146,16 +1200,25 @@ namespace WolvenKit.Views.Tools
             bool searchBarHadFocus = PESearchBar != null && PESearchBar.IsKeyboardFocused;
             var hasQuery = !string.IsNullOrWhiteSpace(_currentFolderQuery);
 
+            if (!hasQuery)
+            {
+                _lastExpandedQuery = null;
+            }
+
             // Must run before RefreshFilter so IsFileIn sees the up-to-date ancestor set.
             RebuildSearchVisiblePaths();
 
-            if (TreeGridFlat?.View is not null)
+            // Only re-filter the grid that is on screen. The hidden one gets re-filtered when the user
+            // switches over (OnToggleFlatMode calls this method again), so it never shows stale results.
+            var isFlat = ViewModel?.IsFlatModeEnabled ?? false;
+
+            if (isFlat && TreeGridFlat?.View is not null)
             {
                 TreeGridFlat.View.Filter = IsFileInFlat;
                 TreeGridFlat.View.RefreshFilter();
             }
 
-            if (TreeGrid?.View is not null)
+            if (!isFlat && TreeGrid?.View is not null)
             {
                 TreeGrid.View.Filter = IsFileIn;
                 // Filter first so only relevant hierarchy is considered for expand.
@@ -1198,26 +1261,18 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            // Collect unique directory models that must be expanded for hits to be visible.
-            var parentsToExpand = new HashSet<FileSystemModel>();
-
-            foreach (var fm in ViewModel.FileList)
+            // The query only got longer (user typed more): every match is also a match of the previous query,
+            // so all folders it needs are already open. Skip the expand pass entirely.
+            if (_lastExpandedQuery is not null
+                && _currentFolderQuery.Contains(_lastExpandedQuery, StringComparison.OrdinalIgnoreCase))
             {
-                // Only actual matches — ancestors are already in the visible set via RebuildSearchVisiblePaths.
-                if (!MatchesSearchQuery(fm))
-                {
-                    continue;
-                }
-
-                // Matching directories need to be open so filtered children can show.
-                for (var p = fm.IsDirectory ? fm : fm.Parent; p != null; p = p.Parent)
-                {
-                    parentsToExpand.Add(p);
-                }
+                return;
             }
 
-            if (parentsToExpand.Count == 0)
+            // Collected by RebuildSearchVisiblePaths in the same pass that builds the visible set.
+            if (_searchDirsToExpand.Count == 0)
             {
+                _lastExpandedQuery = _currentFolderQuery;
                 return;
             }
 
@@ -1225,9 +1280,16 @@ namespace WolvenKit.Views.Tools
 
             try
             {
-                foreach (var dir in parentsToExpand
-                             .OrderBy(d => d.RawRelativePath.Length)
-                             .ThenBy(d => d.RawRelativePath, StringComparer.OrdinalIgnoreCase))
+                // Parents before children, so a child's node exists when we look it up.
+                _searchDirsToExpand.Sort((a, b) =>
+                {
+                    var byLength = a.RawRelativePath.Length.CompareTo(b.RawRelativePath.Length);
+                    return byLength != 0
+                        ? byLength
+                        : string.Compare(a.RawRelativePath, b.RawRelativePath, StringComparison.OrdinalIgnoreCase);
+                });
+
+                foreach (var dir in _searchDirsToExpand)
                 {
                     var node = FindNodeIgnoringFilter(dir);
                     if (node is { IsExpanded: false })
@@ -1237,6 +1299,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 _searchMutatedExpansion = true;
+                _lastExpandedQuery = _currentFolderQuery;
             }
             finally
             {
@@ -1246,7 +1309,22 @@ namespace WolvenKit.Views.Tools
 
         private void RevealMaterializedModel(FileSystemModel model)
         {
-            DispatcherHelper.PostOnMainThread(() => RevealMaterializedModelCore(model), DispatcherPriority.Background);
+            // Called from the file watcher thread, so touch view state only on the UI thread.
+            DispatcherHelper.PostOnMainThread(() =>
+            {
+                // A new file may have landed in a folder the current search hasn't opened yet.
+                _lastExpandedQuery = null;
+
+                // While searching, the visible-path set predates this file, so the filter would hide it
+                // even if it matches. Re-run the search; the debounce timer coalesces a burst of new files.
+                if (!string.IsNullOrWhiteSpace(_currentFolderQuery))
+                {
+                    _searchDebounceTimer.Stop();
+                    _searchDebounceTimer.Start();
+                }
+
+                RevealMaterializedModelCore(model);
+            }, DispatcherPriority.Background);
         }
 
         private void RevealMaterializedModelCore(FileSystemModel model)

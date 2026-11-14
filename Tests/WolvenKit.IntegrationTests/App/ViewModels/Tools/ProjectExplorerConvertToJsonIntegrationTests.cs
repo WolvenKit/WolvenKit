@@ -121,6 +121,46 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         Assert.True(count - priorCount == 1, $"expected exactly one new file node, went from {priorCount} to {count}.");
     }
 
+    /// <summary>
+    /// Converting a few files must not freeze and rebuild the whole tree (all folders collapse and are
+    /// re-expanded, see #2951); only big batches run inside <see cref="ProjectExplorerViewModel.BeginDeferredRefreshContext"/>.
+    /// </summary>
+    [StaFact]
+    public async Task WhenOneFileIsConvertedToJsonThenTheTreeIsNotRebuilt()
+    {
+        await LoadANewProject();
+
+        Assert.NotNull(_host);
+
+        var assetBrowser = _host.Services.GetRequiredService<AssetBrowserViewModel>();
+        AddDirs(assetBrowser._boundRootNodes.First(), assetBrowser);
+        NavigateToAnimMotionDbFolder(assetBrowser);
+        await AddRightItemsToProject(assetBrowser);
+
+        Assert.NotNull(_projectExplorerVm);
+        await WaitForExtractedFilesAsync();
+
+        var deferredRefreshes = 0;
+        _projectExplorerVm.BeginDeferredRefreshContext = task =>
+        {
+            deferredRefreshes++;
+            return task();
+        };
+
+        var list = _projectExplorerVm.FileList.Where(model => !model.IsDirectory).ToList();
+        list.Sort(Comparison);
+        var priorCount = list.Count;
+
+        Assert.NotNull(_projectExplorerVm.SelectedItems);
+        _projectExplorerVm.SelectedItems.Add(list.First());
+        await _projectExplorerVm.ConvertArchiveFile();
+        PumpDispatcher();
+
+        await AsyncWait.UntilAsync(() => FilesInList() == priorCount + 1, TimeSpan.FromSeconds(60));
+
+        Assert.Equal(0, deferredRefreshes);
+    }
+
     private int Comparison(FileSystemModel x, FileSystemModel y)
         => string.Compare(x.GameRelativePath, y.GameRelativePath, StringComparison.Ordinal);
 

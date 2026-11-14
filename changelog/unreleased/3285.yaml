@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3285
+      author: "Ametis81"
+      description: "Project Explorer: no binding error from the flat list view."
