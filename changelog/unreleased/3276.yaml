@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3276
+      author: "Ametis81"
+      description: "Mesh, entity and sector previews show generated materials (GPU multilayer shader, skin, eyes, hair, glass, makeup, tattoos, SpeedTree vegetation) with live update while editing, Bake / Export Materials, Save Preview Image and Save Appearance Icons; appearances switch faster."
