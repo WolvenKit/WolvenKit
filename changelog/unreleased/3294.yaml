@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3294
+      author: "Ametis81"
+      description: "Mesh preview: camera presets (view, projection and lighting) shared by all preview tabs; Save Appearance Icons can shoot from a preset."
