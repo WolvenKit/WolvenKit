@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3298
+      author: "Ametis81"
+      description: "Preview node tree: flat entity component list with binding labels, sector nodes in type folders with index labels and a Type filter, search (name, path or node number: 264, 0264 and #264 find #0264 and select it; opens the found rows, Ctrl+F / Esc, found count), Shift / Ctrl expand and collapse; the tree opens on the selected object when the tab is shown again."
