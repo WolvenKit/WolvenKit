@@ -16,12 +16,12 @@
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTMeshViewModel}}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    BorderBrush="{StaticResource BorderAlt}"
+    BorderBrush="{DynamicResource BorderAlt}"
     BorderThickness="1">
     <Grid>
         <Grid.Resources>
             <Style TargetType="ToolTip">
-                <Setter Property="Background" Value="Black" />
+                <Setter Property="Background" Value="{DynamicResource ContentBackground}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
             </Style>
 
@@ -88,9 +88,9 @@
             Grid.Row="0"
             Grid.Column="0"
             IsEnabled="{Binding IsLoaded}"
-            BackgroundColor="#121212"
+            BackgroundColor="{DynamicResource WolvenKitViewportBackgroundColor}"
             Camera="{Binding Camera}"
-            CoordinateSystemLabelForeground="White"
+            CoordinateSystemLabelForeground="{DynamicResource PrimaryTextColor}"
             EffectsManager="{Binding EffectsManager}"
             EnableRenderFrustum="True"
             EnableRenderOrder="True"
@@ -177,7 +177,7 @@
                             <templates:IconBox
                                 IconPack="Material"
                                 Kind="MagnifyExpand"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
@@ -273,7 +273,7 @@
         <Border
             Grid.Row="0"
             Grid.Column="0"
-            Background="#121212"
+            Background="{DynamicResource ContentBackground}"
             Visibility="{Binding IsSavingImage, Converter={StaticResource VisibilityConverter}}">
             <StackPanel
                 MinWidth="260"
@@ -283,7 +283,7 @@
                 <TextBlock
                     Margin="0,0,0,8"
                     HorizontalAlignment="Center"
-                    Foreground="White"
+                    Foreground="{DynamicResource ContentForeground}"
                     FontSize="14"
                     TextAlignment="Center"
                     TextWrapping="Wrap"
@@ -364,7 +364,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="0"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,1,1" />
 
                     <TextBlock
@@ -378,7 +378,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="1"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,0,1" />
 
                     <ComboBox
@@ -395,7 +395,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="2"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,0,1" />
 
                     <Button
@@ -411,7 +411,7 @@
                             Kind="ContentCopy"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIconMicro}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
                     </Button>
                 </Grid>
 
@@ -425,7 +425,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="0"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,1,1" />
 
                     <TextBlock
@@ -439,7 +439,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="1"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,0,1" />
 
                     <ComboBox
@@ -463,7 +463,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="0"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,1,1" />
 
                     <TextBlock
@@ -477,7 +477,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="1"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,0,1" />
 
                     <StackPanel
@@ -493,12 +493,12 @@
                             Kind="SymbolClass"
                             Margin="0"
                             Size="{DynamicResource WolvenKitIconMicro}"
-                            Foreground="White" />
+                            Foreground="{DynamicResource ContentForeground}" />
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitTan}"
+                            Foreground="{DynamicResource WolvenKitTan}"
                             Text="worldNodeData" />
 
                         <TextBlock
@@ -587,7 +587,7 @@
                                 ToolTip="Collision nodes (the shapes the game uses for physics). Off: hidden." />
                         </UniformGrid>
 
-                        <Border Margin="{DynamicResource WolvenKitMarginTiny}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
+                        <Border Margin="{DynamicResource WolvenKitMarginTiny}" BorderBrush="{DynamicResource BorderAlt}" BorderThickness="0,0,0,1" />
 
                         <!-- Search Coordinate -->
                         <StackPanel Orientation="Vertical">
@@ -664,7 +664,7 @@
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
-                                    BorderBrush="{StaticResource BorderAlt}"
+                                    BorderBrush="{DynamicResource BorderAlt}"
                                     BorderThickness="0,0,0,1" />
 
                                 <Button
@@ -690,7 +690,7 @@
                         <!-- Adding the sectors to the project (block previews) -->
                         <Border
                             Margin="{DynamicResource WolvenKitMarginTiny}"
-                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderBrush="{DynamicResource BorderAlt}"
                             BorderThickness="0,0,0,1"
                             Visibility="{Binding PanelVisibility.ShowAddSectors, Converter={StaticResource VisibilityConverter}}" />
                         <Button
@@ -740,21 +740,27 @@
                                     Grid.Column="0"
                                     Margin="{DynamicResource WolvenKitMarginTiny}"
                                     Padding="{DynamicResource WolvenKitMarginTiny}"
-                                    Foreground="{StaticResource WolvenKitYellow}"
+                                    Foreground="{DynamicResource WolvenKitActionText}"
                                     IsEnabled="{Binding IsLoadingMaterials,
                                                         Converter={StaticResource InvertBooleanConverter}}"
                                     Command="{Binding LoadMaterialsCommand}"
                                     ToolTip="Generate the material previews. Hold Ctrl to clear the cache and regenerate everything (or use the arrow menu).">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
-                                            <Setter Property="Content" Value="Generate Materials" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
-                                                    <Setter Property="Content" Value="Clear Cache and Regenerate" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
+                                    <!--
+                                        The label is the content, not a Button.Style: a button with its own style loses the skin
+                                        (grey background) and the app-wide TextBlock style would override its yellow text.
+                                    -->
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Text" Value="Generate Materials" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
+                                                        <Setter Property="Text" Value="Clear Cache and Regenerate" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Button>
 
                                 <Button
@@ -762,7 +768,7 @@
                                     Grid.Column="1"
                                     Margin="0,4,4,4"
                                     Padding="6,0"
-                                    Foreground="{StaticResource WolvenKitYellow}"
+                                    Foreground="{DynamicResource WolvenKitActionText}"
                                     IsEnabled="{Binding IsLoadingMaterials,
                                                         Converter={StaticResource InvertBooleanConverter}}"
                                     Content="&#x25BE;"
@@ -1097,7 +1103,7 @@
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Padding="{DynamicResource WolvenKitMarginTiny}"
                             HorizontalAlignment="Stretch"
-                            Foreground="{StaticResource WolvenKitYellow}"
+                            Foreground="{DynamicResource WolvenKitYellow}"
                             Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}"
                             Command="{Binding ExportEntityCommand}"
                             ToolTip="This feature is experimental"
@@ -1133,7 +1139,7 @@
                             <DataTemplate>
                                 <syncfusion:ComboBoxAdv
                                     AllowMultiSelect="True"
-                                    Background="#252525"
+                                    Background="{DynamicResource WolvenKitGray25}"
                                     BorderThickness="0"
                                     ItemsSource="{Binding AllChunks, Mode=OneTime}"
                                     SelectedItems="{Binding EnabledChunks, Mode=TwoWay}"
