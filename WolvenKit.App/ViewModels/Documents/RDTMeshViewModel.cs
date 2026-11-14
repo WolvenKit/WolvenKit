@@ -469,6 +469,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
         }
 
+        // Meshes of a newly shown appearance / sector scene get the tab's wireframe mode.
+        if (EffectiveWireframeMode != WireframeOff &&
+            e.PropertyName is nameof(SelectedAppearance) or nameof(SelectedModelGroup))
+        {
+            ApplyWireframe();
+        }
+
         base.OnPropertyChanged(e);
     }
 
@@ -2396,6 +2403,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // tangent frame (Helix's own PBR shows the triangles of normal-mapped surfaces).
             material = new MultilayerPBRMaterial
             {
+                // The clay view is for mesh / entity previews, not sectors.
+                ClayExempt = !IsObjectPreview,
                 // Vertex tangent frame (smooth); geometry always carries tangents + bitangents.
                 EnableAutoTangent = false,
                 RenderShadowMap = true,

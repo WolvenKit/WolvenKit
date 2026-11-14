@@ -1470,6 +1470,7 @@ public partial class RDTMeshViewModel
             {
                 EnableAutoTangent = true,
                 RenderShadowMap = true,
+                ClayExempt = !IsObjectPreview,
             };
             Materials[name] = material;
         }

@@ -184,6 +184,90 @@
             </hx:Viewport3DX.ContextMenu>
         </hx:Viewport3DX>
 
+        <!-- View switches on the viewport (mesh / entity previews): shading Material / Clay, and
+             wireframe Off / Over shaded / Wireframe only, one click each; "Over shaded" also gets
+             an opacity slider -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="6"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="#99121212"
+            BorderBrush="#40FFFFFF"
+            BorderThickness="1"
+            Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}">
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Padding="6,2"
+                    Background="Transparent"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="#40FFFFFF"
+                    Foreground="#DDFFFFFF"
+                    FontSize="11"
+                    Cursor="Hand"
+                    Focusable="False"
+                    Command="{Binding ToggleClayShadingCommand}"
+                    ToolTip="Shading: Material (textures) or Clay (matte grey with the mesh normals, no textures: shows the shape). Same in every mesh / entity preview tab.">
+                    <TextBlock>
+                        <Run Text="Shading:" />
+                        <Run Text="{Binding ShadingLabel, Mode=OneWay}" />
+                    </TextBlock>
+                </Button>
+                <Button
+                    Padding="6,2"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#DDFFFFFF"
+                    FontSize="11"
+                    Cursor="Hand"
+                    Focusable="False"
+                    Command="{Binding CycleWireframeModeCommand}"
+                    ToolTip="Wireframe: click to switch Off → Over shaded (edges over the shaded meshes) → Wireframe only (edges in the material's colour)">
+                    <TextBlock>
+                        <Run Text="Wireframe:" />
+                        <Run Text="{Binding WireframeMode, Mode=OneWay}" />
+                    </TextBlock>
+                </Button>
+                <Slider
+                    Width="90"
+                    Margin="4,0,6,0"
+                    VerticalAlignment="Center"
+                    Minimum="0.05"
+                    Maximum="1"
+                    SmallChange="0.05"
+                    LargeChange="0.2"
+                    Focusable="False"
+                    Value="{Binding WireframeOpacity, Mode=TwoWay}"
+                    Visibility="{Binding IsWireframeOverlay, Converter={StaticResource VisibilityConverter}}"
+                    ToolTip="Opacity of the wireframe edges" />
+                <ComboBox
+                    Width="92"
+                    Margin="0,2,4,2"
+                    VerticalAlignment="Center"
+                    Focusable="False"
+                    ItemsSource="{Binding WireframeColors, Mode=OneWay}"
+                    SelectedItem="{Binding WireframeColor, Mode=TwoWay}"
+                    Visibility="{Binding IsWireframeOverlay, Converter={StaticResource VisibilityConverter}}"
+                    ToolTip="Colour of the wireframe edges (Auto: light over the materials, dark over clay)">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" ToolTip="{Binding Name}">
+                                <Border
+                                    Width="14"
+                                    Height="14"
+                                    Margin="0,0,4,0"
+                                    Background="{Binding Swatch}"
+                                    BorderBrush="#80FFFFFF"
+                                    BorderThickness="1" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+
         <!-- Cover while saving images: hides the resizing and appearance switching; the capture
              reads the render buffer, so the cover is not in the images -->
         <Border

@@ -36,6 +36,9 @@ public static class MultilayerShader
     /// <summary>Glass extras of the plain PBR passes (register b12).</summary>
     public const string ExtraConstantBufferName = "cbSurfaceExtra";
 
+    /// <summary>Helix's wireframe pass with alpha blending (wireframe opacity).</summary>
+    public const string WireframeAlphaPassName = "WolvenKitWireframeAlpha";
+
     /// <summary>First texture register of the pool (t64); Helix's pixel shaders stop at t33.</summary>
     public const int TextureSlot = 64;
 
@@ -50,6 +53,12 @@ public static class MultilayerShader
     /// 2 roughness, 3 metalness, 4 normal, 5 layer coverage, 6 layer mask, 7 layer tiling.
     /// </summary>
     public static int DebugMode { get; set; }
+
+    /// <summary>
+    /// Clay view chosen on the viewport: every WolvenKit material drawn matte grey with its
+    /// mesh normals, no textures. Read when a material is bound, like <see cref="DebugMode"/>.
+    /// </summary>
+    public static bool ClayView { get; set; }
 
     public const int MaxLayers = 20;
     public const int VectorsPerLayer = 9;
