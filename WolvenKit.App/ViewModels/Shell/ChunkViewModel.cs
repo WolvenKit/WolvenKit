@@ -837,7 +837,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             try
             {
-                var redName = GetRedTypeFromCSType(PropertyType, Flags);
+                // Try-variant: types WolvenKit builds itself for display (e.g. CBitField<InternalEnums.EGroupTag>
+                // in the TweakDB browser) have no RED name. That's expected, so no exception and no log spam;
+                // the enum's C# name is shown instead. WPF reads this property a lot.
+                TryGetRedTypeFromCSType(PropertyType, Flags, out var redName);
                 return redName != "" ? redName : PropertyType.Name;
             }
             catch (Exception ex)
