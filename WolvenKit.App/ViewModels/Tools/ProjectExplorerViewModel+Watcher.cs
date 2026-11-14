@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -36,6 +37,19 @@ public partial class ProjectExplorerViewModel
 
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
+
+    /// <summary>
+    /// Files WolvenKit itself is moving: ProjectResourceTools.MoveFileAsync renames "a" to
+    /// "{target}_{guid}.tmp" and then right away to "{target}". Keyed by the temp name, with the file's
+    /// model and its key in <see cref="_fileLookup"/>. The node stays in the tree meanwhile, so a rename
+    /// doesn't make the file vanish and come back. Only touched on the watcher thread.
+    /// </summary>
+    private readonly Dictionary<string, (FileSystemModel Model, string OriginalKey)> _pendingTempRenames = new();
+
+    /// <summary>Matches the temp names MoveFileAsync generates: "..._{guid}.tmp".</summary>
+    private static readonly Regex s_wolvenKitTempName = new(
+        @"_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.tmp$",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
     private static readonly List<string> s_ignoredExtensions =
     [
@@ -394,6 +408,20 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
+            // Renamed in place a moment ago and the UI thread hasn't applied the new name yet:
+            // the model still points at the old path. Retry shortly instead of failing on it.
+            if (!string.Equals(item.RawRelativePath, e.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                if (e.RetryCount < MaxCreateRetries)
+                {
+                    e.Ticks = NowMs() + 20;
+                    e.RetryCount++;
+                    _fileChanges.Enqueue(e);
+                }
+
+                return;
+            }
+
             item.UpdateFileInfo();
         }
 
@@ -409,14 +437,26 @@ public partial class ProjectExplorerViewModel
                 throw new Exception();
             }
 
-            if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
-            {
-                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
-                return;
-            }
-
             var oldName = renamedEventArgs.OldName;
             var newName = renamedEventArgs.Name;
+
+            if (Path.GetExtension(oldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
+            {
+                // Second half of a WolvenKit move: temp name -> final name.
+                if (_pendingTempRenames.Remove(oldName, out var pending))
+                {
+                    if (!TryRenameFileInPlace(pending.Model, pending.OriginalKey, newName))
+                    {
+                        EnqueueDeleted(pending.OriginalKey);
+                        EnqueueCreated(newName);
+                    }
+
+                    return;
+                }
+
+                EnqueueCreated(newName);
+                return;
+            }
 
             if (!_fileLookup.TryGetValue(oldName, out var renamedModel))
             {
@@ -426,8 +466,25 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
-            // Files, top-level folders, moves into another folder, and renames onto a name we already
-            // track: drop the old node and add the new path from scratch.
+            if (!renamedModel.IsDirectory)
+            {
+                // First half of a WolvenKit move (see _pendingTempRenames): keep the node where it is
+                // until the file gets its final name.
+                if (s_wolvenKitTempName.IsMatch(newName))
+                {
+                    _pendingTempRenames[newName] = (renamedModel, oldName);
+                    return;
+                }
+
+                // Plain rename in the same folder (F2 in Windows Explorer, ...): rename the node itself.
+                if (TryRenameFileInPlace(renamedModel, oldName, newName))
+                {
+                    return;
+                }
+            }
+
+            // Files we can't rename in place, top-level folders, moves into another folder, and renames
+            // onto a name we already track: drop the old node and add the new path from scratch.
             if (!renamedModel.IsDirectory
                 || renamedModel.Parent is null
                 || ReferenceEquals(renamedModel.Parent, _projectFileSystemModel)
@@ -457,6 +514,34 @@ public partial class ProjectExplorerViewModel
             }
 
             renamedModel.Rename(Path.GetFileName(newName));
+        }
+
+        // Renames a file node without removing it from the tree: no flicker, selection kept.
+        // Only for a rename within the same folder to a name we show and don't track yet.
+        bool TryRenameFileInPlace(FileSystemModel model, string oldKey, string newName)
+        {
+            if (model.IsDirectory
+                || model.Parent is null
+                || HasIgnoredExtension(newName)
+                || _fileLookup.ContainsKey(newName)
+                || !string.Equals(Path.GetDirectoryName(oldKey), Path.GetDirectoryName(newName), StringComparison.Ordinal)
+                || !File.Exists(Path.Combine(_projectDirectory, newName)))
+            {
+                return false;
+            }
+
+            if (!_fileLookup.TryRemove(oldKey, out _))
+            {
+                return false;
+            }
+
+            _fileLookup[newName] = model;
+
+            // Name/path changes are bound to the grids (sorting, filtering): apply them on the UI thread.
+            var fileName = Path.GetFileName(newName);
+            DispatcherHelper.RunOnMainThread(() => model.Rename(fileName, updateChildren: false));
+
+            return true;
         }
 
         void EnqueueCreated(string name) =>
@@ -570,6 +655,7 @@ public partial class ProjectExplorerViewModel
     {
         _fileChanges.Clear();
         _fileLookup.Clear();
+        _pendingTempRenames.Clear();
         FileTree.Clear();
         FileList.Clear();
     }

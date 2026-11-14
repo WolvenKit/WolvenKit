@@ -679,12 +679,11 @@ public partial class RDTMeshViewModel
     {
         var shared = new HashSet<int>();
         var d2 = SharedUvDistance * SharedUvDistance;
-        foreach (var (t, suv, _) in mapped)
+        foreach (var (t, mappedUv, _) in mapped)
+        for (var k = 0; k < DecalPieceCount(mappedUv) && !shared.Contains(t); k++)
         {
-            var a = decal.Positions[decal.Indices[t * 3]];
-            var b = decal.Positions[decal.Indices[t * 3 + 1]];
-            var c = decal.Positions[decal.Indices[t * 3 + 2]];
-            var centre = new Point3D((a.X + b.X + c.X) / 3, (a.Y + b.Y + c.Y) / 3, (a.Z + b.Z + c.Z) / 3);
+            var suv = DecalPieceSurfaceUv(mappedUv, k);
+            var centre = DecalPieceCentre(decal, t, mappedUv, k);
             var u = (suv[0] + suv[2] + suv[4]) / 3;
             var v = (suv[1] + suv[3] + suv[5]) / 3;
             var wu = u - Math.Floor(u);
@@ -1248,6 +1247,20 @@ public partial class RDTMeshViewModel
             var ub = SurfaceUvAt(surface, pb.Value.Triangle, pb.Value.U, pb.Value.V, pb.Value.W);
             var uc = SurfaceUvAt(surface, pc.Value.Triangle, pc.Value.U, pc.Value.V, pc.Value.W);
             double[] uv = { ua.U, ua.V, ub.U, ub.V, uc.U, uc.V };
+            var distance = (pa.Value.Distance + pb.Value.Distance + pc.Value.Distance) / 3;
+
+            // A decal triangle reaching over a bend or a seam of the surface (decals that follow
+            // a gun's shape have long ones): its corners alone do not place its inside. Then it
+            // is drawn in pieces, each placed where it lies on the surface.
+            if (SubdivideDecalTriangle(A, B, C, ua, ub, uc, surface, grid, tolerance, maxDensity) is { } pieces)
+            {
+                if (pieces.Length > 0)
+                {
+                    mapped.Add((t, pieces, distance));
+                }
+
+                continue;
+            }
 
             if (UvPerimeter(uv) / world > maxDensity)
             {
@@ -1275,11 +1288,169 @@ public partial class RDTMeshViewModel
                 }
             }
 
-            var distance = (pa.Value.Distance + pb.Value.Distance + pc.Value.Distance) / 3;
             mapped.Add((t, uv, distance));
         }
 
         return mapped.Count > 0;
+    }
+
+    // ---- decal triangles drawn in pieces --------------------------------------------------------
+    //
+    // A mapped triangle's UV array is either 6 values (the surface UV of its corners; the decal UV
+    // are the triangle's own) or pieces of 12: the surface UV of the piece's corners, then where
+    // the corners are in the decal triangle (b1, b2: A + b1 (B - A) + b2 (C - A)).
+
+    private const int DecalPieceDepth = 5;            // up to 4^5 pieces per triangle
+    private const double DecalPieceError = 0.001;     // UV: about 2 texels of a 2K map
+    private const double DecalPieceMinSize = 0.003;   // 3 mm around: smaller pieces are not split
+
+    /// <summary>Number of pieces in a mapped triangle's UV array.</summary>
+    private static int DecalPieceCount(double[] uv) => uv.Length == 6 ? 1 : uv.Length / 12;
+
+    /// <summary>Surface UV (6 values) of a piece.</summary>
+    private static double[] DecalPieceSurfaceUv(double[] uv, int k) => uv.Length == 6 ? uv : uv[(k * 12)..(k * 12 + 6)];
+
+    /// <summary>Decal UV (6 values) of a piece of decal triangle <paramref name="tri"/>.</summary>
+    private static double[] DecalPieceDecalUv(SurfaceGeometry decal, int tri, double[] uv, int k)
+    {
+        var duv = decal.Uvs;
+        int i0 = decal.Indices[tri * 3], i1 = decal.Indices[tri * 3 + 1], i2 = decal.Indices[tri * 3 + 2];
+        double[] d = { duv[i0 * 2], duv[i0 * 2 + 1], duv[i1 * 2], duv[i1 * 2 + 1], duv[i2 * 2], duv[i2 * 2 + 1] };
+        if (uv.Length == 6)
+        {
+            return d;
+        }
+
+        var r = new double[6];
+        for (var c = 0; c < 3; c++)
+        {
+            double b1 = uv[k * 12 + 6 + c * 2], b2 = uv[k * 12 + 7 + c * 2];
+            r[c * 2] = d[0] + b1 * (d[2] - d[0]) + b2 * (d[4] - d[0]);
+            r[c * 2 + 1] = d[1] + b1 * (d[3] - d[1]) + b2 * (d[5] - d[1]);
+        }
+
+        return r;
+    }
+
+    /// <summary>Centre of a piece of decal triangle <paramref name="tri"/>.</summary>
+    private static Point3D DecalPieceCentre(SurfaceGeometry decal, int tri, double[] uv, int k)
+    {
+        var a = decal.Positions[decal.Indices[tri * 3]];
+        var b = decal.Positions[decal.Indices[tri * 3 + 1]];
+        var c = decal.Positions[decal.Indices[tri * 3 + 2]];
+        double b1 = 1.0 / 3, b2 = 1.0 / 3;
+        if (uv.Length != 6)
+        {
+            b1 = (uv[k * 12 + 6] + uv[k * 12 + 8] + uv[k * 12 + 10]) / 3;
+            b2 = (uv[k * 12 + 7] + uv[k * 12 + 9] + uv[k * 12 + 11]) / 3;
+        }
+
+        return a + b1 * (b - a) + b2 * (c - a);
+    }
+
+    /// <summary>
+    /// Pieces of a decal triangle whose inside is not where its corners put it on the surface
+    /// (the middles of its edges land elsewhere in the surface's UV): halved until each piece
+    /// lies where it should, or small. Null when the whole triangle maps well (the usual case).
+    /// </summary>
+    private double[]? SubdivideDecalTriangle(Point3D A, Point3D B, Point3D C,
+        (double U, double V) ua, (double U, double V) ub, (double U, double V) uc,
+        SurfaceGeometry surface, SurfaceTriangleGrid grid, double tolerance, double maxDensity)
+    {
+        Point3D Pos((double B1, double B2) q) => A + q.B1 * (B - A) + q.B2 * (C - A);
+
+        (double U, double V)? SurfaceUv((double B1, double B2) q)
+        {
+            if (ProjectOnSurface(Pos(q), surface, grid, tolerance) is not { } p)
+            {
+                return null;
+            }
+
+            return SurfaceUvAt(surface, p.Triangle, p.U, p.V, p.W);
+        }
+
+        static (double, double) Mid((double, double) a, (double, double) b) => ((a.Item1 + b.Item1) / 2, (a.Item2 + b.Item2) / 2);
+
+        static double Error((double U, double V)? at, (double U, double V) a, (double U, double V) b) =>
+            at is { } p ? Math.Max(Math.Abs(p.U - (a.U + b.U) / 2), Math.Abs(p.V - (a.V + b.V) / 2)) : 0;
+
+        var pieces = new List<double>();
+        var split = false;
+
+        void Piece((double B1, double B2) q0, (double B1, double B2) q1, (double B1, double B2) q2,
+            (double U, double V) s0, (double U, double V) s1, (double U, double V) s2, int depth)
+        {
+            var m01 = Mid(q0, q1);
+            var m12 = Mid(q1, q2);
+            var m20 = Mid(q2, q0);
+            (double U, double V)? u01 = null, u12 = null, u20 = null;
+            var error = 0.0;
+            Point3D P0 = Pos(q0), P1 = Pos(q1), P2 = Pos(q2);
+            var world = (P0 - P1).Length + (P1 - P2).Length + (P2 - P0).Length;
+            if (depth < DecalPieceDepth && world > DecalPieceMinSize)
+            {
+                u01 = SurfaceUv(m01);
+                u12 = SurfaceUv(m12);
+                u20 = SurfaceUv(m20);
+                error = Math.Max(Error(u01, s0, s1), Math.Max(Error(u12, s1, s2), Error(u20, s2, s0)));
+            }
+
+            if (error > DecalPieceError)
+            {
+                split = true;
+                var t01 = u01 ?? Mid(s0, s1);
+                var t12 = u12 ?? Mid(s1, s2);
+                var t20 = u20 ?? Mid(s2, s0);
+                Piece(q0, m01, m20, s0, t01, t20, depth + 1);
+                Piece(m01, q1, m12, t01, s1, t12, depth + 1);
+                Piece(m20, m12, q2, t20, t12, s2, depth + 1);
+                Piece(m01, m12, m20, t01, t12, t20, depth + 1);
+                return;
+            }
+
+            double[] suv = { s0.U, s0.V, s1.U, s1.V, s2.U, s2.V };
+            if (world < 1e-9)
+            {
+                return;
+            }
+
+            if (UvPerimeter(suv) / world > maxDensity)
+            {
+                // A piece still over a seam: its corners from the plane of the triangle under its centre.
+                var centre = new Point3D((P0.X + P1.X + P2.X) / 3, (P0.Y + P1.Y + P2.Y) / 3, (P0.Z + P1.Z + P2.Z) / 3);
+                if (ProjectOnSurface(centre, surface, grid, tolerance) is not { } under)
+                {
+                    return;
+                }
+
+                var st = under.Triangle;
+                var sa = surface.Positions[surface.Indices[st * 3]];
+                var sb = surface.Positions[surface.Indices[st * 3 + 1]];
+                var sc = surface.Positions[surface.Indices[st * 3 + 2]];
+                var b0 = PlaneBarycentric(P0, sa, sb, sc);
+                var b1 = PlaneBarycentric(P1, sa, sb, sc);
+                var b2 = PlaneBarycentric(P2, sa, sb, sc);
+                var x0 = SurfaceUvAt(surface, st, b0.U, b0.V, b0.W);
+                var x1 = SurfaceUvAt(surface, st, b1.U, b1.V, b1.W);
+                var x2 = SurfaceUvAt(surface, st, b2.U, b2.V, b2.W);
+                suv = new[] { x0.U, x0.V, x1.U, x1.V, x2.U, x2.V };
+                if (UvPerimeter(suv) / world > maxDensity)
+                {
+                    return;
+                }
+            }
+
+            pieces.AddRange(suv);
+            pieces.Add(q0.B1);
+            pieces.Add(q0.B2);
+            pieces.Add(q1.B1);
+            pieces.Add(q1.B2);
+            pieces.Add(q2.B1);
+            pieces.Add(q2.B2);
+        }
+
+        Piece((0, 0), (1, 0), (0, 1), ua, ub, uc, 0);
+        return split ? pieces.ToArray() : null;
     }
 
     private static double UvPerimeter(double[] uv)
@@ -1293,8 +1464,8 @@ public partial class RDTMeshViewModel
     private string DecalCompositeKey(string surfaceName, List<DecalLayer> decals)
     {
         // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay; v4: alpha above 1, NormalAlphaTex;
-        // v5: each texel takes a layer once, no triangle lines).
-        var sb = new System.Text.StringBuilder("v5;");
+        // v5: each texel takes a layer once, no triangle lines; v6: triangles over bends and seams in pieces).
+        var sb = new System.Text.StringBuilder("v6;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
@@ -1789,13 +1960,12 @@ public partial class RDTMeshViewModel
             var claims = new Dictionary<Pixels, bool[]>(ReferenceEqualityComparer.Instance);
             bool[] Claims(Pixels p) => claims.TryGetValue(p, out var mask) ? mask : claims[p] = new bool[p.W * p.H];
             for (var pass = 0; pass < 2; pass++)
-            foreach (var (tri, suv) in layer.Triangles)
+            foreach (var (tri, mappedUv) in layer.Triangles)
+            for (var piece = 0; piece < DecalPieceCount(mappedUv); piece++)
             {
                 var rim = pass == 1;
-                var dIdx = layer.Decal.Indices;
-                var duv = layer.Decal.Uvs;
-                int i0 = dIdx[tri * 3], i1 = dIdx[tri * 3 + 1], i2 = dIdx[tri * 3 + 2];
-                double[] d = { duv[i0 * 2], duv[i0 * 2 + 1], duv[i1 * 2], duv[i1 * 2 + 1], duv[i2 * 2], duv[i2 * 2 + 1] };
+                var suv = DecalPieceSurfaceUv(mappedUv, piece);
+                var d = DecalPieceDecalUv(layer.Decal, tri, mappedUv, piece);
 
                 // Decal tangent frame -> surface tangent frame: M = S * D^-1 (UV edge matrices),
                 // made a rotation (/ sqrt|det|) for the normal's XY.
@@ -2020,20 +2190,34 @@ public partial class RDTMeshViewModel
             using var drb = layer.RmAlpha > 0f ? LoadPng32(layer.RmPng) : null;
             var dRm = Pixels.From(drb);
 
-            // Each texel takes a layer once: triangles first claim the texels they really
-            // cover, then their half-pixel rims fill what is left at the decal's border.
-            // (Rims overlapped along shared edges and blended there twice: the decal
-            // mesh's triangles showed as faint lines.)
-            var claims = new Dictionary<Pixels, bool[]>(ReferenceEqualityComparer.Instance);
-            bool[] Claims(Pixels p) => claims.TryGetValue(p, out var mask) ? mask : claims[p] = new bool[p.W * p.H];
+            // Each texel takes a layer once per side: triangles first claim the texels they
+            // really cover, then their half-pixel rims fill what is left at the decal's border.
+            // (Rims overlapped along shared edges and blended there twice: the decal mesh's
+            // triangles showed as faint lines.) Per side: on mirrored UV the decal's other side
+            // covers the same texels and goes to slot B; one mask for both lost it.
+            var sides = new List<(Vector3D Facing, bool[] Mask)>();
+            bool[] Claims(Pixels p, Vector3D f)
+            {
+                foreach (var (sideFacing, mask) in sides)
+                {
+                    if (!oneSided || Vector3D.DotProduct(sideFacing, f) > 0.5)
+                    {
+                        return mask;
+                    }
+                }
+
+                var created = new bool[p.W * p.H];
+                sides.Add((f, created));
+                return created;
+            }
+
             for (var pass = 0; pass < 2; pass++)
-            foreach (var (tri, suv) in layer.Triangles)
+            foreach (var (tri, mappedUv) in layer.Triangles)
+            for (var piece = 0; piece < DecalPieceCount(mappedUv); piece++)
             {
                 var rim = pass == 1;
-                var dIdx = layer.Decal.Indices;
-                var duv = layer.Decal.Uvs;
-                int i0 = dIdx[tri * 3], i1 = dIdx[tri * 3 + 1], i2 = dIdx[tri * 3 + 2];
-                double[] d = { duv[i0 * 2], duv[i0 * 2 + 1], duv[i1 * 2], duv[i1 * 2 + 1], duv[i2 * 2], duv[i2 * 2 + 1] };
+                var suv = DecalPieceSurfaceUv(mappedUv, piece);
+                var d = DecalPieceDecalUv(layer.Decal, tri, mappedUv, piece);
                 var (m00, m01, m10, m11) = UvFrameRotation(d, suv);
                 var facing = layer.Decal.Facing(tri);
 
@@ -2042,7 +2226,7 @@ public partial class RDTMeshViewModel
                     continue;
                 }
 
-                RasterizeInto(raster, suv, d, Claims(raster), rim, (px, uv) =>
+                RasterizeInto(raster, suv, d, Claims(raster, facing), rim, (px, uv) =>
                 {
                     Span<float> c4 = stackalloc float[4];
                     var coverage = 1f;
@@ -2175,13 +2359,12 @@ public partial class RDTMeshViewModel
                 dw = dh = 512;
             }
 
-            foreach (var (tri, suv) in layer.Triangles)
+            foreach (var (tri, mappedUv) in layer.Triangles)
+            for (var piece = 0; piece < DecalPieceCount(mappedUv); piece++)
             {
-                var idx = layer.Decal.Indices;
-                var uv = layer.Decal.Uvs;
-                int a = idx[tri * 3], b = idx[tri * 3 + 1], c = idx[tri * 3 + 2];
-                var decalPixels = Math.Abs((uv[b * 2] - uv[a * 2]) * (uv[c * 2 + 1] - uv[a * 2 + 1]) -
-                                           (uv[c * 2] - uv[a * 2]) * (uv[b * 2 + 1] - uv[a * 2 + 1])) * dw * dh;
+                var suv = DecalPieceSurfaceUv(mappedUv, piece);
+                var uv = DecalPieceDecalUv(layer.Decal, tri, mappedUv, piece);
+                var decalPixels = Math.Abs((uv[2] - uv[0]) * (uv[5] - uv[1]) - (uv[4] - uv[0]) * (uv[3] - uv[1])) * dw * dh;
                 var surfaceUv = Math.Abs((suv[2] - suv[0]) * (suv[5] - suv[1]) - (suv[4] - suv[0]) * (suv[3] - suv[1]));
                 if (surfaceUv > 1e-12 && decalPixels > 1e-6)
                 {
@@ -2227,13 +2410,12 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
-            foreach (var (tri, suv) in layer.Triangles)
+            foreach (var (tri, mappedUv) in layer.Triangles)
+            for (var piece = 0; piece < DecalPieceCount(mappedUv); piece++)
             {
-                var idx = layer.Decal.Indices;
-                var uv = layer.Decal.Uvs;
-                int a = idx[tri * 3], b = idx[tri * 3 + 1], c = idx[tri * 3 + 2];
-                var decalArea = Math.Abs((uv[b * 2] - uv[a * 2]) * (uv[c * 2 + 1] - uv[a * 2 + 1]) -
-                                         (uv[c * 2] - uv[a * 2]) * (uv[b * 2 + 1] - uv[a * 2 + 1])) * dw * dh;
+                var suv = DecalPieceSurfaceUv(mappedUv, piece);
+                var uv = DecalPieceDecalUv(layer.Decal, tri, mappedUv, piece);
+                var decalArea = Math.Abs((uv[2] - uv[0]) * (uv[5] - uv[1]) - (uv[4] - uv[0]) * (uv[3] - uv[1])) * dw * dh;
                 var surfaceArea = Math.Abs((suv[2] - suv[0]) * (suv[5] - suv[1]) -
                                            (suv[4] - suv[0]) * (suv[3] - suv[1])) * w * h;
                 if (surfaceArea > 1e-6 && decalArea > 1e-6)
