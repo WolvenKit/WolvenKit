@@ -27,6 +27,16 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+            // The side panel's settings take up to 60 % of the height and scroll beyond it, so the
+            // node tree keeps room on short windows.
+            SidePanelGrid.SizeChanged += (_, e) => SidePanelScroll.SetCurrentValue(MaxHeightProperty, Math.Max(120, e.NewSize.Height * 0.6));
+
+            NodeTreeGrid.NodeExpanded += NodeTreeGrid_OnNodeToggled;
+            NodeTreeGrid.NodeCollapsed += NodeTreeGrid_OnNodeToggled;
+            // a new scene (appearance, sector) gets the search that is typed in
+            NodeTreeGrid.ItemsSourceChanged += (_, _) =>
+                Dispatcher.InvokeAsync(() => ApplyNodeSearch(NodeSearchBox.Text?.Trim()), DispatcherPriority.Background);
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is RDTMeshViewModel vm)
@@ -39,9 +49,10 @@ namespace WolvenKit.Views.Documents
                         {
                             if (!vm.IsObjectPreview)
                             {
-                                // A sector's root holds every node of it (thousands): opened on
-                                // demand, or by a click in the viewport, not on every open.
-                                NodeTreeGrid.SetCurrentValue(SfTreeGrid.AutoExpandModeProperty, AutoExpandMode.None);
+                                // A sector's root opens on its type folders (a dozen); the
+                                // folders, with up to thousands of nodes, stay closed.
+                                // node type column (its funnel picks the kinds of nodes to show)
+                                NodeTypeColumn.SetCurrentValue(Syncfusion.UI.Xaml.Grid.GridColumnBase.IsHiddenProperty, false);
                             }
 
                             NodeTreeGrid.SetBinding(Syncfusion.UI.Xaml.TreeGrid.SfTreeGrid.ItemsSourceProperty,
@@ -833,6 +844,175 @@ namespace WolvenKit.Views.Documents
                 new((float)up.X, (float)up.Y, (float)up.Z),
                 0);
             UpdateFollowLights();
+        }
+
+        // ---- Node tree: search ----
+        // Keeps the rows whose name, node index or path contains the text, with their parents
+        // (the tree's FilterLevel) and everything under them.
+
+        private DispatcherTimer _nodeSearchTimer;
+        private HashSet<object> _nodeSearchMatches;
+
+        private void NodeSearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            _nodeSearchTimer ??= new DispatcherTimer(TimeSpan.FromMilliseconds(250), DispatcherPriority.Background,
+                (_, _) =>
+                {
+                    _nodeSearchTimer.Stop();
+                    ApplyNodeSearch(NodeSearchBox.Text?.Trim());
+                }, Dispatcher);
+            _nodeSearchTimer.Stop();
+            _nodeSearchTimer.Start();
+        }
+
+        private void ApplyNodeSearch(string text)
+        {
+            if (NodeTreeGrid.View is not { } view)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(text))
+            {
+                _nodeSearchMatches = null;
+                view.Filter = null;
+                view.RefreshFilter();
+                return;
+            }
+
+            var matches = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            if (ViewModel?.SelectedModelGroup is { } roots)
+            {
+                foreach (var root in roots)
+                {
+                    CollectNodeSearchMatches(root, text, false, matches);
+                }
+            }
+
+            _nodeSearchMatches = matches;
+            view.Filter = item => _nodeSearchMatches?.Contains(item) != false;
+            view.RefreshFilter();
+        }
+
+        private static void CollectNodeSearchMatches(object element, string text, bool underMatch, HashSet<object> matches)
+        {
+            var match = underMatch || NodeMatches(element, text);
+            if (match)
+            {
+                matches.Add(element);
+            }
+
+            if (element is HelixToolkit.Wpf.SharpDX.GroupModel3D group)
+            {
+                foreach (var child in group.Children)
+                {
+                    CollectNodeSearchMatches(child, text, match, matches);
+                }
+            }
+        }
+
+        private static bool NodeMatches(object element, string text)
+        {
+            static bool Has(string value, string text) =>
+                !string.IsNullOrEmpty(value) && value.Contains(text, StringComparison.OrdinalIgnoreCase);
+
+            return element switch
+            {
+                WolvenKit.App.Models.MeshComponent mesh =>
+                    Has(mesh.Text, text) || Has(mesh.Name, text) || mesh.WorldNodeIndex == text ||
+                    Has(mesh.DepotPath.GetResolvedText(), text) || Has(mesh.WorldNodeType, text),
+                WolvenKit.App.Models.GroupModel3DExt group => Has(group.Text, text) || Has(group.Name, text),
+                WolvenKit.App.Models.SubmeshComponent submesh => Has(submesh.Text, text) || Has(submesh.Name, text),
+                HelixToolkit.Wpf.SharpDX.Element3D other => Has(other.Name, text),
+                _ => false,
+            };
+        }
+
+        // ---- Node tree: expand / collapse with modifiers, as in Blender's outliner ----
+        // Shift: the node's whole branch. Ctrl: its siblings too. Ctrl+Shift: the siblings' branches.
+
+        private bool _togglingNodes;
+
+        private void NodeTreeGrid_OnNodeToggled(object sender, EventArgs e)
+        {
+            var node = e switch
+            {
+                NodeExpandedEventArgs expanded => expanded.Node,
+                NodeCollapsedEventArgs collapsed => collapsed.Node,
+                _ => null,
+            };
+            var modifiers = Keyboard.Modifiers;
+            // Only the user's own clicks / keys in the tree: a viewport click with Shift opens
+            // the tree to the picked mesh and must not open whole branches.
+            if (_togglingNodes || node == null ||
+                (modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) == 0 ||
+                !(NodeTreeGrid.IsMouseOver || NodeTreeGrid.IsKeyboardFocusWithin))
+            {
+                return;
+            }
+
+            // From the event, not node.IsExpanded: the grid raises it before the flag is set.
+            var expand = e is NodeExpandedEventArgs;
+            var branch = (modifiers & ModifierKeys.Shift) != 0;
+            var siblings = (modifiers & ModifierKeys.Control) != 0;
+
+            // Right away: queued on the dispatcher it waited for the 3D view's frames (seconds).
+            // The grid echoes these toggles later, in the same direction, so the echoes change nothing.
+            ToggleNodes(node, expand, branch, siblings);
+        }
+
+        private void ToggleNodes(TreeNode node, bool expand, bool branch, bool siblings)
+        {
+            _togglingNodes = true;
+            try
+            {
+                // Copied by hand: Syncfusion's node collections throw on CopyTo, which ToList uses.
+                var targets = new List<TreeNode>();
+                if (siblings)
+                {
+                    foreach (var sibling in node.ParentNode?.ChildNodes ?? (IEnumerable<TreeNode>)NodeTreeGrid.View.Nodes)
+                    {
+                        targets.Add(sibling);
+                    }
+                }
+                else
+                {
+                    targets.Add(node);
+                }
+
+                // The clicked node itself was already toggled by the grid.
+                if (!branch)
+                {
+                    targets.Remove(node);
+                }
+
+                foreach (var target in targets)
+                {
+                    if (branch)
+                    {
+                        if (expand)
+                        {
+                            NodeTreeGrid.ExpandAllNodes(target);
+                        }
+                        else
+                        {
+                            NodeTreeGrid.CollapseAllNodes(target);
+                        }
+                    }
+                    else if (expand && !target.IsExpanded)
+                    {
+                        NodeTreeGrid.ExpandNode(target);
+                    }
+                    else if (!expand && target.IsExpanded)
+                    {
+                        NodeTreeGrid.CollapseNode(target);
+                    }
+                }
+            }
+            finally
+            {
+                _togglingNodes = false;
+            }
         }
 
         private void PreviewCamera_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>

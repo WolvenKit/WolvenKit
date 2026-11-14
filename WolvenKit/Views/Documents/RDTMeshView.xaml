@@ -332,6 +332,7 @@
             HorizontalAlignment="Stretch" />
 
         <Grid
+            x:Name="SidePanelGrid"
             Grid.Row="0"
             Grid.Column="2">
             <Grid.RowDefinitions>
@@ -339,9 +340,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel
+            <!-- The settings scroll once they need more than 60 % of the height (set in code
+                 behind), so the node tree below always keeps room -->
+            <ScrollViewer
+                x:Name="SidePanelScroll"
                 Grid.Row="0"
                 Grid.Column="0"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+            <StackPanel
                 Width="Auto"
                 IsEnabled="{Binding IsLoaded}"
                 Grid.IsSharedSizeScope="True"
@@ -1102,6 +1109,7 @@
 
                 <!-- Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" / -->
             </StackPanel>
+            </ScrollViewer>
 
             <!--syncfusion:SfTreeGrid
                 Grid.Row="1"
@@ -1140,10 +1148,21 @@
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid-->
 
+            <!-- Node tree with a search box: name, node index or path; matches keep their branch -->
+            <DockPanel Grid.Row="1" Grid.Column="0">
+            <DockPanel DockPanel.Dock="Top" Margin="{DynamicResource WolvenKitMarginTiny}">
+                <TextBlock
+                    DockPanel.Dock="Left"
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Text="Search" />
+                <TextBox
+                    x:Name="NodeSearchBox"
+                    TextChanged="NodeSearchBox_OnTextChanged"
+                    ToolTip="Keeps the rows whose name, node index (e.g. 264) or path contains this text, with their parents and what is under them" />
+            </DockPanel>
             <syncfusion:SfTreeGrid
                 x:Name="NodeTreeGrid"
-                Grid.Row="1"
-                Grid.Column="0"
                 Margin="-1,0,-1,-1"
                 FontSize="{DynamicResource WolvenKitFontAltTitle}"
                 ColumnSizer="AutoFillColumn"
@@ -1311,6 +1330,14 @@
                         MappingName="Text"
                         MinimumWidth="100" />
 
+                    <!-- Node type (sectors): the funnel picks the kinds to show -->
+                    <syncfusion:TreeGridTextColumn
+                        x:Name="NodeTypeColumn"
+                        ColumnSizer="Auto"
+                        HeaderText="Type"
+                        IsHidden="True"
+                        MappingName="WorldNodeType" />
+
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="SizeToCells"
                         HeaderText="Appearance"
@@ -1348,6 +1375,7 @@
                         MinimumWidth="80" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
+            </DockPanel>
 
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                     <ItemsControl.ItemsPanel>

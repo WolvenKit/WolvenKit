@@ -315,7 +315,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (sw.ElapsedMilliseconds > 200)
             {
-                _loggerService.Debug($"[ML shader] effects ready in {sw.ElapsedMilliseconds} ms");
+                PreviewTrace($"[ML shader] effects ready in {sw.ElapsedMilliseconds} ms");
             }
 
             // The full report (vertex output / pixel input layouts, constant buffer check) only
@@ -652,7 +652,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         if (element is GroupModel3DExt groupModel)
         {
-            if (groupModel.Text != null && groupModel.Text.StartsWith("collisionNode_"))
+            if (groupModel.Name != null && groupModel.Name.StartsWith("collisionNode_"))
             {
                 groupModel.IsRendering = _isCollisionRendered;
                 return;
@@ -664,7 +664,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
         }
 
-        if (element is not SubmeshComponent submesh || submesh.Text == null || !submesh.Text.StartsWith("collisionNode_"))
+        if (element is not SubmeshComponent submesh || submesh.Name == null || !submesh.Name.StartsWith("collisionNode_"))
         {
             return;
         }
@@ -871,79 +871,90 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         return group;
     }
 
+    /// <summary>
+    /// The entity's mesh components, flat, as the Blender add-on lists them. Rigs are not tree
+    /// nodes (their bone chains drew nothing and hid nothing useful): a component bound to a
+    /// bone or slot is placed from the bone's pose and the rig's transform, and its binding is
+    /// written next to its name unless it is the base rig (root / deformations).
+    /// </summary>
     private List<Element3D> AddMeshesToRiggedGroups(Appearance app)
     {
-        var groups = new Dictionary<string, GroupModel3D>();
         var modelGroups = new List<Element3D>();
-        foreach (var (name, rig) in Rigs)
-        {
-            if (name is "deformations" or "root")
-            {
-                continue;
-            }
-            var group = new GroupModel3DExt()
-            {
-                Name = $"{rig.Name}",
-                Text = $"{rig.Name}",
-                Transform = new MatrixTransform3D(rig.Matrix.ToMatrix3D())
-            };
-            group.Children.Add(GroupFromRigBone(rig, rig.Bones[0], groups));
-            groups.Add(name, group);
-            modelGroups.Add(group);
-        }
-
         foreach (var model in app.BindableModels)
         {
             var group = GroupFromModel(model);
-
-            if (model.BindName is null || model.SlotName is null or "None")
+            if (EntityPlacementMatrix(model) is { } placement)
             {
-                modelGroups.Add(group);
-                continue;
+                AppendTransform(group, placement);
             }
 
-            if (_slotSets.TryGetValue(model.BindName, out var slotBind))
+            if (BindingLabel(model) is { } label && group is GroupModel3DExt named)
             {
-                if (model.SlotName != null && slotBind.Slots.TryGetValue(model.SlotName, out var slot) &&
-                    groups.TryGetValue(slotBind.BindName + ":" + slot, out var boneGroup))
-                {
-                    // the slot sits at an offset from its bone
-                    if (slotBind.SlotTransforms.TryGetValue(model.SlotName, out var slotMatrix))
-                    {
-                        AppendTransform(group, slotMatrix);
-                    }
+                named.Text = $"{model.Name}  ({label})";
+            }
 
-                    boneGroup.Children.Add(group);
-                }
-                else
-                {
-                    // The bone is not drawn (rig skipped or missing): place the component from the
-                    // rig's bind pose, or at the slot component. It used to be left out.
-                    AppendTransform(group, BindingMatrix(model.BindName, model.SlotName) ?? Matrix3D.Identity);
-                    modelGroups.Add(group);
-                }
-            }
-            else if (groups.TryGetValue(model.BindName + ":" + model.SlotName, out var rigBoneGroup))
-            {
-                // bound straight to a bone of a drawn rig
-                rigBoneGroup.Children.Add(group);
-            }
-            else if (BindingMatrix(model.BindName, model.SlotName) is { } boneMatrix)
-            {
-                // bound to a bone of a rig that is not drawn
-                AppendTransform(group, boneMatrix);
-                modelGroups.Add(group);
-            }
-            else if (groups.TryGetValue(model.BindName, out var modelBind))
-            {
-                modelBind.Children.Add(group);
-            }
-            else
-            {
-                modelGroups.Add(group);
-            }
+            modelGroups.Add(group);
         }
+
         return modelGroups;
+    }
+
+    /// <summary>Rigs every entity has; bindings to them are not worth a label.</summary>
+    private static bool IsBaseRig(string? name) => name is null or "" or "root" or "deformations";
+
+    /// <summary>Where a component bound to a rig, a bone or a slot goes, or null when nowhere special.</summary>
+    private Matrix3D? EntityPlacementMatrix(LoadableModel model)
+    {
+        if (model.BindName is not { } bind)
+        {
+            return null;
+        }
+
+        // The rigs that used to be drawn as tree groups placed their bones with their transform.
+        Matrix3D RigMatrix(string? rigName) =>
+            !IsBaseRig(rigName) && rigName != null && Rigs.TryGetValue(rigName, out var rig)
+                ? rig.Matrix.ToMatrix3D()
+                : Matrix3D.Identity;
+
+        if (model.SlotName is null or "None")
+        {
+            return null;
+        }
+
+        if (_slotSets.TryGetValue(bind, out var slotSet))
+        {
+            return BindingMatrix(bind, model.SlotName) is { } slotMatrix
+                ? slotMatrix * (slotSet.Slots.ContainsKey(model.SlotName) ? RigMatrix(slotSet.BindName) : Matrix3D.Identity)
+                : null;
+        }
+
+        if (BoneBindMatrix(bind, model.SlotName) is { } bone)
+        {
+            return bone * RigMatrix(bind);
+        }
+
+        return Rigs.ContainsKey(bind) && !IsBaseRig(bind) ? RigMatrix(bind) : null;
+    }
+
+    /// <summary>"skin: face_rig", "bind: weapon_slots · Hand_R"... or null for the base rig.</summary>
+    private static string? BindingLabel(LoadableModel model)
+    {
+        var parts = new List<string>();
+        if (!IsBaseRig(model.SkinName))
+        {
+            parts.Add($"skin: {model.SkinName}");
+        }
+
+        if (!IsBaseRig(model.BindName) && model.BindName != model.SkinName)
+        {
+            parts.Add(model.SlotName is null or "None" ? $"bind: {model.BindName}" : $"bind: {model.BindName} · {model.SlotName}");
+        }
+        else if (!IsBaseRig(model.BindName) && model.SlotName is not (null or "None"))
+        {
+            parts.Add($"bone: {model.SlotName}");
+        }
+
+        return parts.Count > 0 ? string.Join(", ", parts) : null;
     }
 
     private IEnumerable<LoadableModel> LoadPartsValues(appearanceAppearanceDefinition appDef)
@@ -1186,6 +1197,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             slotName = ehtb.SlotName;
         }
 
+        var skinName = epc is entISkinTargetComponent { Skinning: var skinning } &&
+                       skinning?.GetValue() is entSkinningBinding skin
+            ? skin.BindName.GetResolvedText()
+            : null;
+
         matrix.Scale(ToScaleVector3D(scale));
 
         var materials = new Dictionary<string, Material>();
@@ -1300,6 +1316,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             IsEnabled = enabled,
             BindName = bindName,
             SlotName = slotName,
+            SkinName = skinName,
             ChunkMask = chunkMask,
             ChunkList = chunkList,
             EnabledChunks = enabledChunks,
@@ -4051,7 +4068,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (refreshFromDisk || clearCache)
                 Parent?.GetLoggerService()?.Info("All materials loaded!");
             else
-                Parent?.GetLoggerService()?.Debug("Materials updated");
+                PreviewTrace("Materials updated");
             _materialsGenerated = true;
             EnsureLiveMaterialUpdate();
         }
@@ -4318,11 +4335,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 (File.Exists(filename_bd) || !IsSpeedTreeMaterial(material)) &&
                 (!IsOpaqueSpeedTree(material) || File.Exists(filename_bd + ".opaque")))
             {
-                Parent?.GetLoggerService()?.Debug($"[Cache] '{material.Name}' up to date");
+                PreviewTrace($"[Cache] '{material.Name}' up to date");
                 return;
             }
 
-            Parent?.GetLoggerService()?.Debug($"Baking material: {material.Name}");
+            PreviewTrace($"Baking material: {material.Name}");
 
             // Something changed (or no cache yet): drop old outputs so every branch bakes again.
             foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng })
@@ -4387,10 +4404,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             { if (File.Exists(f)) File.Delete(f); }
                             catch { /* ignore */ }
                         }
-#if DEBUG
-                        Parent?.GetLoggerService()?.Info(
-                            $"[Cache] '{material.Name}' mlsetup changed — re-baking");
-#endif
                     }
                 }
 
@@ -4988,17 +5001,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         TryGetLevels(mllt.Overrides.MetalLevelsOut, layer.MetalLevelsOut, mllt.DefaultOverrides?.MetalLevelsOut, x => x.N, x => x.V,
                                      out float metalOutScale, out float metalOutOffset);
 
-#if DEBUG
-                        // Temporary debug logging for levels (helps catch extreme foil values and wrong fallbacks)
-                        System.Diagnostics.Debug.WriteLine(
-                            $"[Levels] RoughIn: {roughInScale:F3},{roughInOffset:F3}  RoughOut: {roughOutScale:F3},{roughOutOffset:F3}");
-                        System.Diagnostics.Debug.WriteLine(
-                            $"[Levels] MetalIn: {metalInScale:F3},{metalInOffset:F3}  MetalOut: {metalOutScale:F3},{metalOutOffset:F3}");
-                        if (Math.Abs(roughInScale) > 5f || Math.Abs(metalInScale) > 5f)
-                        {
-                            System.Diagnostics.Debug.WriteLine("[Levels] WARNING: extreme scale detected (possible foil / strong contrast)");
-                        }
-#endif
 
                         Bitmap? roughTexBmp = null;
                         Bitmap? metalTexBmp = null;
@@ -5009,9 +5011,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             roughTexBmp = await GetTex(mllt.RoughnessTexture.DepotPath, flipY: true, tile: effectiveMatTile);
                             if (roughTexBmp == null)
                             {
-#if DEBUG
-                                System.Diagnostics.Debug.WriteLine($"[Tex] Failed to load roughness: {mllt.RoughnessTexture.DepotPath}");
-#endif
                             }
                         }
 
@@ -5020,9 +5019,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             metalTexBmp = await GetTex(mllt.MetalnessTexture.DepotPath, flipY: true, tile: effectiveMatTile);
                             if (metalTexBmp == null)
                             {
-#if DEBUG
-                                System.Diagnostics.Debug.WriteLine($"[Tex] Failed to load metalness: {mllt.MetalnessTexture.DepotPath}");
-#endif
                             }
                         }
 
@@ -5146,10 +5142,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 var hasRoughPtr = roughPtr != null;
                                 var hasMetalPtr = metalPtr != null;
 
-#if DEBUG
-                                System.Diagnostics.Debug.WriteLine(
-                                    $"[TexFlags] roughExists={hasRoughPtr} metalExists={hasMetalPtr} sameRmPath={sameRmPath}");
-#endif
 
                                 Parallel.For(0, maxHeight, y =>
                                 {
@@ -7252,9 +7244,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                     if (bmpSource.CanFreeze && !bmpSource.IsFrozen)
                                         bmpSource.Freeze();
                                     alphaBmp = BitmapSourceToBitmap(bmpSource);
-#if DEBUG
-                                    Parent?.GetLoggerService()?.Info($"[Hair] Loaded alpha from {key} for {material?.Name}");
-#endif
                                     break;
                                 }
                             }
@@ -7265,7 +7254,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         // Cap materials (hat hair, beard) often bake alpha from the diffuse itself.
                         // Missing Strand_Alpha is expected, not an error.
-                        Parent?.GetLoggerService()?.Debug($"[Hair] Cap material '{material?.Name}' has no MaskTexture / Strand_Alpha");
+                        PreviewTrace($"[Hair] Cap material '{material?.Name}' has no MaskTexture / Strand_Alpha");
                     }
 
                     // === Haircard colour (not for cap) ===
@@ -7322,10 +7311,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 g.DrawImage(colorBmp, 0, 0, targetW, targetH);
                             colorBmp.Dispose();
                             colorBmp = resizedColor;
-#if DEBUG
-                            Parent?.GetLoggerService()?.Info(
-                                $"[Hair] Cap '{material?.Name}' color resized to {targetW}x{targetH}");
-#endif
                         }
 
                         // Gradient mixes with DiffuseTexture (or white base), not with the mask
@@ -7463,36 +7448,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 alphaBmp!.UnlockBits(alphaData);
                         }
 
-#if DEBUG
-                        // Debug: report alpha stats for hair/cap so we can see if coverage was written
-                        if (isCapMat)
-                        {
-                            int minA = 255, maxA = 0, sumA = 0, count = 0;
-                            var dbgRect = new Rectangle(0, 0, colorBmp.Width, colorBmp.Height);
-                            var dbgData = colorBmp.LockBits(dbgRect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                            try
-                            {
-                                unsafe
-                                {
-                                    byte* p = (byte*)dbgData.Scan0;
-                                    int st = dbgData.Stride;
-                                    for (int yy = 0; yy < colorBmp.Height; yy += 4)
-                                        for (int xx = 0; xx < colorBmp.Width; xx += 4)
-                                        {
-                                            int o = yy * st + xx * 4;
-                                            int aa = p[o + 3];
-                                            if (aa < minA) minA = aa;
-                                            if (aa > maxA) maxA = aa;
-                                            sumA += aa;
-                                            count++;
-                                        }
-                                }
-                            }
-                            finally { colorBmp.UnlockBits(dbgData); }
-                            Parent?.GetLoggerService()?.Info(
-                                $"[Hair] Cap '{material?.Name}' alpha min={minA} max={maxA} avg={(count > 0 ? sumA / count : 0)}");
-                        }
-#endif
 
                         SavePngAtomic(colorBmp, filename_bd);
                         colorBmp.Dispose();
@@ -8140,10 +8095,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                     }
 
-#if DEBUG
-                    Parent?.GetLoggerService()?.Info(
-                        $"[Decal] RM '{material?.Name}' metal={metalBmp?.Width}x{metalBmp?.Height} rough={roughBmp?.Width}x{roughBmp?.Height} → {w}x{h}");
-#endif
 
                     if (roughBmp != null || metalBmp != null || w > 1)
                     {
@@ -8941,7 +8892,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (_sectorFirstFrame is { } sw)
         {
             _sectorFirstFrame = null;
-            _loggerService.Debug($"[Sector] files read in {_sectorReadMs} ms ({_sectorReadDetail}), built in {_sectorBuildMs} ms, " +
+            PreviewTrace($"[Sector] files read in {_sectorReadMs} ms ({_sectorReadDetail}), built in {_sectorBuildMs} ms, " +
                                  $"first frame {sw.ElapsedMilliseconds} ms later");
         }
     }
@@ -9026,7 +8977,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 if (_slowReads.Count > 0)
                 {
-                    _loggerService.Debug("[Sector] slowest files: " + string.Join(", ", _slowReads
+                    PreviewTrace("[Sector] slowest files: " + string.Join(", ", _slowReads
                         .OrderByDescending(r => r.Ms).Take(8)
                         .Select(r => $"{Path.GetFileName(r.Path)} {r.Ms} ms")));
                 }
@@ -9046,6 +8997,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             _sectorFilesPrefetched = true;
             _soloSector = RenderSector(wss, Appearances[0]);
+            _soloSector.Text = Path.GetFileNameWithoutExtension(Parent.ContentId);
             FillSoloSectorVariants(_soloSector);
             ReleaseSectorMeshFiles();
 
@@ -9094,7 +9046,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         if (released > 0)
         {
-            _loggerService.Debug($"[Sector] released {released} mesh files from the cache");
+            PreviewTrace($"[Sector] released {released} mesh files from the cache");
         }
     }
 
@@ -10115,7 +10067,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             Name = "",
             Text = "",
         };
-        foreach (var group in groups)
+        // Nodes in folders by type, labelled with their index (see SectorTree)
+        LabelSectorNodes(groups, data);
+        foreach (var group in GroupSectorNodesByType(groups))
         {
             element.Children.Add(group);
         }

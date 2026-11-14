@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3298
+      author: "Ametis81"
+      description: "Preview node tree: flat entity component list with binding labels, sector nodes in type folders with index labels and a Type filter, search, Shift / Ctrl expand and collapse."

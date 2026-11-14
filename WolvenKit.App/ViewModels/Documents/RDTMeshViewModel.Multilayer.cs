@@ -1081,7 +1081,7 @@ public partial class RDTMeshViewModel
         Set(c, MultilayerConstants.OverlayFlagsOffset, 0f, 0f, 0f, 0f);
 
         _multilayerGpuData[material.Name] = new MultilayerGpuData(pool.ToArray(), Pack(c), layerLabels);
-        Parent?.GetLoggerService()?.Debug(
+        PreviewTrace(
             $"[ML shader] '{material.Name}': {written} layers, {pool.Count} textures\n  " + string.Join("\n  ", layerLog));
         return true;
 
