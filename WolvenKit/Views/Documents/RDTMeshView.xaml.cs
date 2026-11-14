@@ -325,7 +325,7 @@ namespace WolvenKit.Views.Documents
 
         /// <summary>
         /// Save Appearance Icons: for each picked appearance, select it, generate its materials
-        /// (cached ones are reused), frame it and save &lt;file&gt;_&lt;appearance&gt;.png with the
+        /// (cached ones are reused), frame it and save &lt;prefix&gt;&lt;appearance&gt;&lt;suffix&gt;.png with the
         /// current size, camera angle and projection. The selected appearance is restored after.
         /// </summary>
         private async void SaveAppearanceIcons_OnClick(object sender, RoutedEventArgs e)
@@ -342,19 +342,17 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (appearances.Count > 1)
+            // File name (prefix / suffix, remembered per file) and, with several, which appearances.
+            var picked = PickAppearances(vm, appearances.Select(a => a.Name).ToList());
+            if (picked == null)
             {
-                var picked = PickAppearances(appearances.Select(a => a.Name).ToList());
-                if (picked == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                appearances = appearances.Where(a => picked.Contains(a.Name)).ToList();
-                if (appearances.Count == 0)
-                {
-                    return;
-                }
+            appearances = appearances.Where(a => picked.Contains(a.Name)).ToList();
+            if (appearances.Count == 0)
+            {
+                return;
             }
 
             var folder = vm.PickPreviewIconFolder(appearances.Select(a => a.Name).ToList());
@@ -375,6 +373,13 @@ namespace WolvenKit.Views.Documents
             vm.IsSavingImage = true;
             try
             {
+                if (vm.ActiveCameraPreset is { } batchPreset)
+                {
+                    // The preset's projection and lighting for the whole batch.
+                    vm.ApplyCameraPresetSettings(batchPreset);
+                    await WaitFramesAsync(2);
+                }
+
                 foreach (var appearance in appearances)
                 {
                     if (vm.CancelSavingImages)
@@ -387,7 +392,17 @@ namespace WolvenKit.Views.Documents
                     vm.SelectedAppearance = appearance;
                     await WaitFramesAsync(2); // the view swaps the models in
                     await vm.GenerateMaterialsForPreviewImageAsync();
-                    FrameObject();
+                    // With a camera preset each appearance is shot from the preset's view (sized
+                    // to that appearance); without one it is framed from the current direction.
+                    if (vm.ActiveCameraPreset is { } iconPreset)
+                    {
+                        PlaceCameraPreset(iconPreset);
+                    }
+                    else
+                    {
+                        FrameObject();
+                    }
+
                     await WaitFramesAsync(2);
 
                     if (await CapturePreviewAsync(vm) is not { } shot)
@@ -435,23 +450,66 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>
-        /// Small checklist of appearances for the icon batch: all ticked, with All / None.
-        /// Null if cancelled. Built in code, it is only used here.
+        /// Dialog of the icon batch: the file name as prefix + appearance + suffix (the prefix
+        /// starts as the file's name, focused and selected; both are remembered per file), an
+        /// example name, and a checklist of the appearances (all ticked, with All / None) when
+        /// there are several. Null if cancelled. Built in code, it is only used here.
         /// </summary>
-        private HashSet<string> PickAppearances(IReadOnlyList<string> names)
+        private HashSet<string> PickAppearances(RDTMeshViewModel vm, IReadOnlyList<string> names)
         {
-            var boxes = names.Select(n => new CheckBox { Content = n, IsChecked = true, Margin = new Thickness(4, 2, 4, 2) }).ToList();
+            // A TextBlock, not the string: WPF reads the first '_' of a string label as an access key and hides it.
+            var boxes = names.Select(n => new CheckBox
+            {
+                Content = new TextBlock { Text = n },
+                Tag = n,
+                IsChecked = true,
+                Margin = new Thickness(4, 2, 4, 2),
+            }).ToList();
             var list = new StackPanel();
             foreach (var box in boxes)
             {
                 list.Children.Add(box);
             }
 
+            var parts = vm.GetIconNameParts();
+            var prefix = new TextBox { Text = parts.Prefix, MinWidth = 110, VerticalContentAlignment = VerticalAlignment.Center };
+            var suffix = new TextBox { Text = parts.Suffix, MinWidth = 60, VerticalContentAlignment = VerticalAlignment.Center };
+            var nameRow = new DockPanel { Margin = new Thickness(4, 2, 4, 2) };
+            var nameLabel = new TextBlock { Text = "File name:", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 6, 0) };
+            var appearanceLabel = new TextBlock { Text = "$(appearance)", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Opacity = 0.7 };
+            var extensionLabel = new TextBlock { Text = ".png", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 0, 0), Opacity = 0.7 };
+            DockPanel.SetDock(nameLabel, Dock.Left);
+            DockPanel.SetDock(extensionLabel, Dock.Right);
+            DockPanel.SetDock(suffix, Dock.Right);
+            DockPanel.SetDock(appearanceLabel, Dock.Right);
+            nameRow.Children.Add(nameLabel);
+            nameRow.Children.Add(extensionLabel);
+            nameRow.Children.Add(suffix);
+            nameRow.Children.Add(appearanceLabel);
+            nameRow.Children.Add(prefix);
+
+            var example = new TextBlock { Margin = new Thickness(4, 2, 4, 8), Opacity = 0.7, TextTrimming = TextTrimming.CharacterEllipsis };
+            void UpdateExample()
+            {
+                var shown = boxes.FirstOrDefault(b => b.IsChecked == true)?.Tag as string ?? names.FirstOrDefault() ?? "";
+                example.SetCurrentValue(TextBlock.TextProperty, "→ " + RDTMeshViewModel.BuildIconFileName(prefix.Text, shown, suffix.Text));
+            }
+
+            prefix.TextChanged += (_, _) => UpdateExample();
+            suffix.TextChanged += (_, _) => UpdateExample();
+            boxes.ForEach(b =>
+            {
+                b.Checked += (_, _) => UpdateExample();
+                b.Unchecked += (_, _) => UpdateExample();
+            });
+            UpdateExample();
+
+            var several = names.Count > 1;
             var window = new System.Windows.Window
             {
                 Title = "Save Appearance Icons",
-                Width = 380,
-                Height = Math.Min(560, 150 + 26 * names.Count),
+                Width = 420,
+                Height = several ? Math.Min(620, 210 + 26 * names.Count) : 170,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 Owner = System.Windows.Window.GetWindow(this),
                 ResizeMode = ResizeMode.CanResize,
@@ -466,34 +524,58 @@ namespace WolvenKit.Views.Documents
             }
 
             var buttons = new DockPanel { LastChildFill = false, Margin = new Thickness(4) };
-            var all = MakeButton("All", () => boxes.ForEach(b => b.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, true)));
-            var none = MakeButton("None", () => boxes.ForEach(b => b.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false)));
             var cancel = MakeButton("Cancel", () => window.DialogResult = false, isCancel: true);
             var ok = MakeButton("Save", () => window.DialogResult = true, isDefault: true);
-            DockPanel.SetDock(all, Dock.Left);
-            DockPanel.SetDock(none, Dock.Left);
+            if (several)
+            {
+                var all = MakeButton("All", () => boxes.ForEach(b => b.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, true)));
+                var none = MakeButton("None", () => boxes.ForEach(b => b.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false)));
+                DockPanel.SetDock(all, Dock.Left);
+                DockPanel.SetDock(none, Dock.Left);
+                buttons.Children.Add(all);
+                buttons.Children.Add(none);
+            }
+
             DockPanel.SetDock(cancel, Dock.Right);
             DockPanel.SetDock(ok, Dock.Right);
-            buttons.Children.Add(all);
-            buttons.Children.Add(none);
             buttons.Children.Add(cancel);
             buttons.Children.Add(ok);
 
+            var top = new StackPanel();
+            top.Children.Add(nameRow);
+            top.Children.Add(example);
+            if (several)
+            {
+                top.Children.Add(new TextBlock { Text = "Appearances to save:", Margin = new Thickness(4, 2, 4, 6) });
+            }
+
             var root = new DockPanel { Margin = new Thickness(6) };
-            var header = new TextBlock { Text = "Appearances to save:", Margin = new Thickness(4, 2, 4, 6) };
-            DockPanel.SetDock(header, Dock.Top);
+            DockPanel.SetDock(top, Dock.Top);
             DockPanel.SetDock(buttons, Dock.Bottom);
-            root.Children.Add(header);
+            root.Children.Add(top);
             root.Children.Add(buttons);
-            root.Children.Add(new ScrollViewer { Content = list, VerticalScrollBarVisibility = ScrollBarVisibility.Auto });
+            root.Children.Add(new ScrollViewer
+            {
+                Content = list,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                Visibility = several ? Visibility.Visible : Visibility.Collapsed,
+            });
             window.Content = root;
+
+            // Ready to type over the file name.
+            window.Loaded += (_, _) =>
+            {
+                prefix.Focus();
+                prefix.SelectAll();
+            };
 
             if (window.ShowDialog() != true)
             {
                 return null;
             }
 
-            return boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Content).ToHashSet();
+            vm.StoreIconNameParts(prefix.Text, suffix.Text);
+            return boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToHashSet();
         }
 
         /// <summary>
@@ -634,6 +716,125 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>A new projection needs a new distance to frame the object.</summary>
+        // ---- Camera presets ----
+
+        /// <summary>Centre and radius of the bounding sphere of what is shown; null when empty.</summary>
+        private (System.Windows.Media.Media3D.Point3D Center, double Radius)? SceneSphere()
+        {
+            var bounds = HelixToolkit.Wpf.SharpDX.ViewportExtensions.FindBounds3D(hxViewport);
+            if (bounds.IsEmpty || bounds.SizeX + bounds.SizeY + bounds.SizeZ <= 0)
+            {
+                return null;
+            }
+
+            var center = new System.Windows.Media.Media3D.Point3D(
+                bounds.X + bounds.SizeX / 2, bounds.Y + bounds.SizeY / 2, bounds.Z + bounds.SizeZ / 2);
+            var radius = 0.5 * Math.Sqrt(bounds.SizeX * bounds.SizeX + bounds.SizeY * bounds.SizeY + bounds.SizeZ * bounds.SizeZ);
+            return radius > 0 ? (center, radius) : null;
+        }
+
+        /// <summary>Saves the current view as a preset, relative to the object's bounding sphere.</summary>
+        private void SaveCameraPreset_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is not { } vm ||
+                vm.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera ||
+                SceneSphere() is not { } sphere)
+            {
+                return;
+            }
+
+            var name = WolvenKit.App.Interaction.Interactions.AskForTextInput(
+                ("Camera preset name", vm.ActiveCameraPreset?.Name ?? ""))?.Trim();
+            if (string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+
+            // The render camera: mouse navigation changes only that one.
+            var core = camera.CameraInternal;
+            var look = new System.Windows.Media.Media3D.Vector3D(core.LookDirection.X, core.LookDirection.Y, core.LookDirection.Z);
+            var up = new System.Windows.Media.Media3D.Vector3D(core.UpDirection.X, core.UpDirection.Y, core.UpDirection.Z);
+            if (look.LengthSquared < 1e-12)
+            {
+                return;
+            }
+
+            var target = new System.Windows.Media.Media3D.Point3D(core.Position.X, core.Position.Y, core.Position.Z) + look;
+            var distance = look.Length;
+            look.Normalize();
+            up.Normalize();
+            var r = sphere.Radius;
+
+            vm.StoreCameraPreset(new WolvenKit.App.ViewModels.Documents.RDTMeshViewModel.CameraPreset
+            {
+                Name = name,
+                LookX = look.X,
+                LookY = look.Y,
+                LookZ = look.Z,
+                UpX = up.X,
+                UpY = up.Y,
+                UpZ = up.Z,
+                Distance = distance / r,
+                TargetX = (target.X - sphere.Center.X) / r,
+                TargetY = (target.Y - sphere.Center.Y) / r,
+                TargetZ = (target.Z - sphere.Center.Z) / r,
+                OrthoWidth = camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera ortho ? ortho.Width / r : 0,
+                Projection = vm.PreviewCamera.Label,
+                Lighting = vm.PreviewLighting,
+            });
+        }
+
+        private void ApplyCameraPreset_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is not { ActiveCameraPreset: { } preset } vm)
+            {
+                return;
+            }
+
+            // Projection and lighting first: a new projection swaps the camera and frames the
+            // object (at Background); the preset's view is placed after that.
+            vm.ApplyCameraPresetSettings(preset);
+            Dispatcher.BeginInvoke(new Action(() => PlaceCameraPreset(preset)), DispatcherPriority.ContextIdle);
+        }
+
+        private void DeleteCameraPreset_OnClick(object sender, RoutedEventArgs e) => ViewModel?.DeleteSelectedCameraPreset();
+
+        /// <summary>Puts the camera where the preset says, scaled to the object shown now.</summary>
+        private void PlaceCameraPreset(WolvenKit.App.ViewModels.Documents.RDTMeshViewModel.CameraPreset preset)
+        {
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera || SceneSphere() is not { } sphere)
+            {
+                return;
+            }
+
+            var r = sphere.Radius;
+            var look = new System.Windows.Media.Media3D.Vector3D(preset.LookX, preset.LookY, preset.LookZ);
+            var up = new System.Windows.Media.Media3D.Vector3D(preset.UpX, preset.UpY, preset.UpZ);
+            if (look.LengthSquared < 1e-12 || up.LengthSquared < 1e-12)
+            {
+                return;
+            }
+
+            look.Normalize();
+            up.Normalize();
+            var target = sphere.Center + new System.Windows.Media.Media3D.Vector3D(preset.TargetX, preset.TargetY, preset.TargetZ) * r;
+            var lookVector = look * (Math.Max(preset.Distance, 1e-3) * r);
+            var position = target - lookVector;
+
+            if (camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera orthographic && preset.OrthoWidth > 0)
+            {
+                orthographic.AnimateWidth(preset.OrthoWidth * r, 0);
+            }
+
+            camera.AnimateTo(position, lookVector, up, 0);
+            camera.CameraInternal.AnimateTo(
+                new((float)position.X, (float)position.Y, (float)position.Z),
+                new((float)lookVector.X, (float)lookVector.Y, (float)lookVector.Z),
+                new((float)up.X, (float)up.Y, (float)up.Z),
+                0);
+            UpdateFollowLights();
+        }
+
         private void PreviewCamera_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
             Dispatcher.BeginInvoke(new Action(() => FrameObject()), DispatcherPriority.Background);
 
