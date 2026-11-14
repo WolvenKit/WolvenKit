@@ -13,17 +13,26 @@ using HelixToolkit.Wpf.SharpDX;
 namespace WolvenKit.App.ViewModels.Documents.Multilayer;
 
 /// <summary>
-/// Contents of the HLSL <c>cbMultilayer</c> buffer: header (3 vectors) + 20 layers × 9 vectors.
+/// Contents of the HLSL <c>cbMultilayer</c> buffer: header (6 vectors) + 20 layers × 9 vectors.
 /// Layout is documented in the shader source.
 /// </summary>
 [InlineArray(FloatCount)]
 public struct MultilayerConstants
 {
-    public const int HeaderVectors = 3;
+    public const int HeaderVectors = 6;
     public const int FloatCount = (HeaderVectors + (MultilayerShader.MaxLayers * MultilayerShader.VectorsPerLayer)) * 4;
 
     /// <summary>Float index of the debug vector (header vector 2).</summary>
     public const int DebugOffset = 8;
+
+    /// <summary>Float index of the decal overlay slot A (header vector 3): pool indices of colour, normal, roughness-metalness, facing.</summary>
+    public const int OverlayOffset = 12;
+
+    /// <summary>Float index of the decal overlay slot B (header vector 4): the other side of shared UV.</summary>
+    public const int OverlayBOffset = 16;
+
+    /// <summary>Float index of the overlay flags (header vector 5): x = normals as RNM.</summary>
+    public const int OverlayFlagsOffset = 20;
     public const int SizeInBytes = FloatCount * sizeof(float);
 
     private float _element0;
@@ -82,6 +91,41 @@ public sealed class MultilayerGpuData
     public TextureModel[] Textures { get; }
 
     public MultilayerConstants Constants { get; }
+
+    /// <summary>
+    /// The same material with a decal overlay: the overlay maps are added to the texture pool
+    /// and their indices written to the overlay vectors. Null when the pool would be too large.
+    /// </summary>
+    public MultilayerGpuData? WithOverlay(MultilayerOverlaySlot a, MultilayerOverlaySlot? b, bool rnm)
+    {
+        var textures = new List<TextureModel>(Textures);
+        float Add(TextureModel? texture)
+        {
+            if (texture == null)
+            {
+                return -1;
+            }
+
+            textures.Add(texture);
+            return textures.Count - 1;
+        }
+
+        var constants = Constants;
+        void Slot(int offset, MultilayerOverlaySlot? slot)
+        {
+            constants[offset] = Add(slot?.Color);
+            constants[offset + 1] = Add(slot?.Normal);
+            constants[offset + 2] = Add(slot?.RoughMetal);
+            constants[offset + 3] = Add(slot?.Facing);
+        }
+
+        Slot(MultilayerConstants.OverlayOffset, a);
+        Slot(MultilayerConstants.OverlayBOffset, b);
+        constants[MultilayerConstants.OverlayFlagsOffset] = rnm ? 1 : 0;
+        return textures.Count > MultilayerShader.PoolSize
+            ? null
+            : new MultilayerGpuData(textures.ToArray(), constants, LayerLabels);
+    }
 }
 
 /// <summary>
@@ -486,4 +530,10 @@ public class MultilayerEffectsManager : DefaultEffectsManager
         BlendStateDescription = blend,
         DepthStencilStateDescription = depth,
     };
+}
+
+/// <summary>One decal overlay slot: colour, normal, roughness-metalness and facing maps (each optional).</summary>
+public sealed record MultilayerOverlaySlot(TextureModel? Color, TextureModel? Normal, TextureModel? RoughMetal, TextureModel? Facing)
+{
+    public bool IsEmpty => Color == null && Normal == null && RoughMetal == null;
 }

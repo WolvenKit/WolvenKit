@@ -553,6 +553,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyRenderFlags(sm);
         }
 
+        ApplyDecalsToSurfaces(app);
         ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
     }
@@ -3081,6 +3082,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             maskRef.DepotPath == ResourcePath.Empty)
             return;
 
+        // DiffuseTextureAsMaskTexture: the diffuse alpha is the mask; MaskTexture is not applied.
+        if (dictionary.TryGetValue("DiffuseTextureAsMaskTexture", out var asMask) && ReadFloat(asMask) >= 0.5f)
+            return;
+
         var maskXbm = GetProjectOrDepotFile(maskRef.DepotPath);
         if (maskXbm?.RootChunk is not ITexture maskIt)
             return;
@@ -3347,8 +3352,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   D|P|<path>|<len>|<ticks> dependency found in the project (size + write time)
     //   D|A|<path>               dependency from the game archive / mods (never changes)
     // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
-    // v4: see-through glass, makeup roughness / metalness, glowing tattoos).
-    private const string DepsFormat = "v4";
+    // v4: see-through glass, makeup roughness / metalness, glowing tattoos;
+    // v5: mesh_decal UV transform, flipbook frame, coverage; v6: mesh_decal_parallax too;
+    // v7: mesh_decal_gradientmap_recolor colour from its gradient map).
+    private const string DepsFormat = "v7";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
@@ -8228,6 +8235,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             #endregion
+
+            // mesh_decal UV transform, flipbook frame and coverage (contrast, secondary mask).
+            if (material != null && IsUvTransformedDecal(material))
+            {
+                await PostProcessMeshDecalMaps(material, dictionary, filename_bd, filename_bn, filename_rm);
+            }
 
             // Record what this bake read, so the next pass can skip it if nothing changed.
             WriteBakeDependencies(depsPath, valuesStamp, bakeResolution, filename_bd, filename_bn, filename_rm, emissivePng);
