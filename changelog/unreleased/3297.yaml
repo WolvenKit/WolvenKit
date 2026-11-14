@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3297
+      author: "Ametis81"
+      description: "TweakDB browser no longer floods the log with \"Redtype could not be determined\" errors for internal enum types like EGroupTag."
