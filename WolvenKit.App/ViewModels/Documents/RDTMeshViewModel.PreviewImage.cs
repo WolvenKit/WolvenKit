@@ -264,10 +264,24 @@ public partial class RDTMeshViewModel
         set => SetProperty(ref s_cameraSectionExpanded, value);
     }
 
+    // Shader Debug: collapsed by default, and kept apart for sectors and for meshes / entities,
+    // so opening it to check terrain does not leave it open on every mesh (or the other way).
+    private static bool s_sectorDebugSectionExpanded;
+
     public bool IsDebugSectionExpanded
     {
-        get => s_debugSectionExpanded;
-        set => SetProperty(ref s_debugSectionExpanded, value);
+        get => IsObjectPreview ? s_debugSectionExpanded : s_sectorDebugSectionExpanded;
+        set
+        {
+            if (IsObjectPreview)
+            {
+                SetProperty(ref s_debugSectionExpanded, value);
+            }
+            else
+            {
+                SetProperty(ref s_sectorDebugSectionExpanded, value);
+            }
+        }
     }
 
     // ---- Camera for icons ----
@@ -555,7 +569,7 @@ public partial class RDTMeshViewModel
 
         var dlg = new Microsoft.Win32.SaveFileDialog
         {
-            Title = $"Save Preview Image ({PreviewImageSize.Width}x{PreviewImageSize.Height}, {PreviewBackground.Label.ToLowerInvariant()} background)",
+            Title = $"Save Image ({PreviewImageSize.Width}x{PreviewImageSize.Height}, {PreviewBackground.Label.ToLowerInvariant()} background)",
             Filter = "PNG image (*.png)|*.png",
             DefaultExt = ".png",
             AddExtension = true,
