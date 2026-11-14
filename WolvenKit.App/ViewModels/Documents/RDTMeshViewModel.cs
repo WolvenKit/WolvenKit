@@ -584,6 +584,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyRenderFlags(sm);
         }
 
+        ApplyDecalsToSurfaces(app);
         ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
         PinAppearanceTextures(app);
@@ -1273,6 +1274,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var appIndex = ResolveAppearanceIndex(apps, meshApp);
 
         var appMaterials = new List<Material>();
+        var chunkMaterialNames = new List<string>();
 
         if (appIndex >= 0 && appIndex < mesh.Appearances.Count)
         {
@@ -1281,6 +1283,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 foreach (var m in ChunkMaterialNames(mesh, appIndex))
                 {
+                    chunkMaterialNames.Add(m.ToString() ?? string.Empty);
                     appMaterials.Add(ChunkMaterial(materials, m.ToString().NotNull(), mesh, meshPath));
                 }
             }
@@ -1307,7 +1310,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             AppearanceName = meshApp,
             Matrix = matrix,
             Materials = appMaterials,
-            IsEnabled = enabled,
+            IsEnabled = enabled && !IsProxyMesh(depotPath, chunkMaterialNames),
             BindName = bindName,
             SlotName = slotName,
             ChunkMask = chunkMask,
@@ -1317,6 +1320,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         };
 
         appModels.Add(modelName, model);
+    }
+
+    private static readonly HashSet<string> s_proxyMaterialNames = new(StringComparer.OrdinalIgnoreCase) { "Body", "Hair", "Glass", "Lights" };
+
+    /// <summary>
+    /// A simplified stand-in of the whole character or vehicle (distance / appearance proxy):
+    /// a "proxy" mesh file, or a mesh whose materials are only the proxy's generic Body, Hair,
+    /// Glass, Lights. Hidden like AppearanceProxyMesh: drawn, it doubles the real meshes.
+    /// </summary>
+    private static bool IsProxyMesh(ResourcePath depotPath, List<string> chunkMaterialNames)
+    {
+        var file = Path.GetFileNameWithoutExtension(depotPath.GetResolvedText() ?? string.Empty);
+        if (file.Contains("proxy", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return chunkMaterialNames.Count > 0 &&
+               chunkMaterialNames.Contains("Body", StringComparer.OrdinalIgnoreCase) &&
+               chunkMaterialNames.All(s_proxyMaterialNames.Contains);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
@@ -1886,9 +1909,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         else if (Has(kind, MaterialKind.Decal))
         {
-            // Lies on the base mesh: tiny bias only.
-            sm.DepthBias = -1;
+            // Lies on the base mesh: tiny bias only. Decals on the face overlay meshes (cyberware on
+            // the freckles and lips meshes) are copies of the head surface, not floating above it:
+            // the makeup bias, as before they were decals.
+            sm.DepthBias = ContainsAny(sm.MaterialName, "hx_", "freckle", "frecle", "makeup", "_lips") ? -2 : -1;
             sm.IsTransparent = true;
+
+            // DiffuseAlpha 0: the decal adds no color, only normals (and roughness / metalness) to the
+            // surface under it (vehicle stitches and panel lines). Drawn as a mesh of its own it showed
+            // its white placeholder texture; what it adds comes from the bake into the surface, if any.
+            // "Set" counts in the material or in a .mi it is based on (face cyberware keeps its
+            // parameters in a .mi; the mesh's own instance has none), not the template's default.
+            if (TryGetRawMaterial(sm.MaterialName, out var decalMat) && decalMat != null &&
+                IsPlainMeshDecalTemplate(GetTemplateFileName(decalMat)) &&
+                (FindMaterialValue(decalMat, "DiffuseAlpha", templateDefault: false) is { } diffuseAlpha
+                    // set to 0
+                    ? ReadFloat(diffuseAlpha) <= 0f
+                    // left out: hidden only with no DiffuseTexture either (normal-only decals such as
+                    // the seams along cyberware); decals with a texture of their own keep being drawn
+                    : FindMaterialValue(decalMat, "DiffuseTexture", templateDefault: false) == null))
+            {
+                sm.IsRendering = false;
+            }
         }
         else if (Has(kind, MaterialKind.Hair))
         {
@@ -3140,6 +3182,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             maskRef.DepotPath == ResourcePath.Empty)
             return;
 
+        // DiffuseTextureAsMaskTexture: the diffuse alpha is the mask; MaskTexture is not applied.
+        if (dictionary.TryGetValue("DiffuseTextureAsMaskTexture", out var asMask) && ReadFloat(asMask) >= 0.5f)
+            return;
+
         var maskXbm = GetProjectOrDepotFile(maskRef.DepotPath);
         if (maskXbm?.RootChunk is not ITexture maskIt)
             return;
@@ -3407,8 +3453,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     //   D|P|<path>|<len>|<ticks> dependency found in the project (size + write time)
     //   D|A|<path>               dependency from the game archive / mods (never changes)
     // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
-    // v4: see-through glass, makeup roughness / metalness, glowing tattoos).
-    private const string DepsFormat = "v4";
+    // v4: see-through glass, makeup roughness / metalness, glowing tattoos;
+    // v5: mesh_decal UV transform, flipbook frame, coverage; v6: mesh_decal_parallax too;
+    // v7: mesh_decal_gradientmap_recolor color from its gradient map).
+    private const string DepsFormat = "v7";
 
     private readonly object _depLock = new();
     private readonly System.Runtime.CompilerServices.ConditionalWeakTable<Material, Dictionary<string, object>> _originalValues = new();
@@ -8231,6 +8279,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             #endregion
 
+            // mesh_decal UV transform, flipbook frame and coverage (contrast, secondary mask).
+            if (material != null && IsUvTransformedDecal(material))
+            {
+                await PostProcessMeshDecalMaps(material, dictionary, filename_bd, filename_bn, filename_rm);
+            }
+
             // Record what this bake read, so the next pass can skip it if nothing changed.
             WriteBakeDependencies(depsPath, valuesStamp, bakeResolution, filename_bd, filename_bn, filename_rm, emissivePng);
         }
@@ -8413,9 +8467,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     /// <summary>
     /// A parameter of a material: its own values, then up its instance chain, then the default
-    /// the chain's template (.mt / .remt) declares for it.
+    /// the chain's template (.mt / .remt) declares for it (unless templateDefault is false: only
+    /// what the material or a .mi it is based on sets).
     /// </summary>
-    private object? FindMaterialValue(Material material, string key)
+    private object? FindMaterialValue(Material material, string key, bool templateDefault = true)
     {
         if (material.Values.TryGetValue(key, out var own) && own != null)
         {
@@ -8444,7 +8499,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     current = next;
                     break;
                 case CMaterialTemplate template:
-                    return TemplateDefault(template, key);
+                    return templateDefault ? TemplateDefault(template, key) : null;
                 default:
                     return null;
             }
