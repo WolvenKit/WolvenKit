@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector preview places entities, cooked and instanced meshes (as hardware instances), roads and cables, foliage, terrain, destruction and area nodes, with a variant list, area colors by type and show / hide switches; destructible and cloth components and files embedded in the sector are shown; sectors open much faster, read in the background with progress in the viewport."

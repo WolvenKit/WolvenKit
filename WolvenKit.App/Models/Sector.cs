@@ -1,4 +1,5 @@
-﻿using HelixToolkit.Wpf.SharpDX;
+﻿using System.Collections.Generic;
+using HelixToolkit.Wpf.SharpDX;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
@@ -18,6 +19,9 @@ public class Sector
     public Element3D Text { get; set; }
     public SectorGroup? Element { get; set; }
     public uint NumberOfHandles { get; set; }
+
+    /// <summary>The sector's variants as the block describes them.</summary>
+    public IList<worldStreamingSectorVariant> Variants { get; set; } = [];
 
     private bool _showElements;
     public bool ShowElements

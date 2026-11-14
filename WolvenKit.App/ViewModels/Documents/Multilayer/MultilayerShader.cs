@@ -174,6 +174,27 @@ public static class MultilayerShader
 
     public static bool IsAvailable => GetBytecode() != null;
 
+    /// <summary>Compiles the shaders on a background thread (no-op once done); GetBytecode waits for it.</summary>
+    public static void WarmUp()
+    {
+        if (s_compiled)
+        {
+            return;
+        }
+
+        _ = System.Threading.Tasks.Task.Run(() =>
+        {
+            try
+            {
+                GetBytecode();
+            }
+            catch
+            {
+                // reported by GetBytecode on the next call
+            }
+        });
+    }
+
     /// <summary>Pixel shader of <see cref="SmoothPbrPassName"/>, or null.</summary>
     public static byte[]? GetPbrBytecode()
     {
@@ -196,6 +217,51 @@ public static class MultilayerShader
     }
 
     private static byte[]? Compile(string source, string entry, out string? error)
+    {
+        // Compiled shaders are kept on disk, keyed by their source: compiling takes seconds per
+        // start of the program, reading the cache milliseconds.
+        string? cachePath = null;
+        try
+        {
+            var key = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
+                Encoding.UTF8.GetBytes("ps_5_0|O3|" + entry + "|" + source)))[..32];
+            var dir = System.IO.Path.Combine(WolvenKit.App.Services.ISettingsManager.GetTemp_OBJPath(), "ShaderCache");
+            System.IO.Directory.CreateDirectory(dir);
+            cachePath = System.IO.Path.Combine(dir, $"{entry}_{key}.cso");
+            if (System.IO.File.Exists(cachePath))
+            {
+                var cached = System.IO.File.ReadAllBytes(cachePath);
+                if (cached.Length > 0)
+                {
+                    error = null;
+                    return cached;
+                }
+            }
+        }
+        catch
+        {
+            cachePath = null; // no cache: compile
+        }
+
+        var bytecode = CompileNow(source, entry, out error);
+        if (bytecode != null && cachePath != null)
+        {
+            try
+            {
+                var tmp = cachePath + "." + Environment.ProcessId + ".tmp";
+                System.IO.File.WriteAllBytes(tmp, bytecode);
+                System.IO.File.Move(tmp, cachePath, overwrite: true);
+            }
+            catch
+            {
+                // another WolvenKit wrote it meanwhile, or the folder is read-only: fine
+            }
+        }
+
+        return bytecode;
+    }
+
+    private static byte[]? CompileNow(string source, string entry, out string? error)
     {
         var result = D3DC.ShaderBytecode.Compile(
             source,
