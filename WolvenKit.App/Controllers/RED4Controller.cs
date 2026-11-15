@@ -159,13 +159,25 @@ public partial class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
-    private static bool IsSpecialExtension(string fileName)
+    private static bool IsSpecialExtension(string fileName, string? relativePath = null)
     {
-        return Path.GetExtension(fileName) switch
+        var ext = Path.GetExtension(fileName);
+
+        if (ext is ".xl" or ".script" or ".ws")
+            return true;
+
+        // .tweak is special only for REDmod (resources/tweaks).
+        // Files under resources/r6/tweaks should be packed normally (TweakXL supports both .yaml and .tweak).
+        if (ext == ".tweak")
         {
-            ".xl" or ".script" or ".ws" or ".tweak" => true,
-            _ => false,
-        };
+            if (string.IsNullOrEmpty(relativePath))
+                return true;
+
+            var normalized = relativePath.Replace('\\', '/').ToLowerInvariant();
+            return !normalized.Contains("r6/tweaks");
+        }
+
+        return false;
     }
     private static bool IsCDPRScript(string fileName)
     {
@@ -180,9 +192,13 @@ public partial class RED4Controller : ObservableObject, IGameController
         Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories).ToList();
 
     private static List<string> GetResourceFiles(Cp77Project cp77Proj) => Directory
-        .EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
-        .Where(name => !IsSpecialExtension(name))
-        .Where(x => Path.GetFileName(x) != "info.json").ToList();
+    .EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+    .Where(name =>
+    {
+        var relative = Path.GetRelativePath(cp77Proj.ResourcesDirectory, name);
+        return !IsSpecialExtension(name, relative);
+    })
+    .Where(x => Path.GetFileName(x) != "info.json").ToList();
 
     private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj)
     {

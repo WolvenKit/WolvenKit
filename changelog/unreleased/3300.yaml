@@ -1,0 +1,6 @@
+changes:
+  - type: "fixed"
+    packages: ["App"]
+    pr-number: 3300
+    author: "Ametis81"
+    description: "Pack .tweak files from resources/r6/tweaks when creating zip / packing project."
