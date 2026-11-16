@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3302
+      author: "Ametis81"
+      description: "Sector Objects tab in .streamingsector files: every object (nodeData entry) on its own row, grouped by variant and kind, with search and filters, linked with the data tab and the sector preview; copy ArchiveXL removals (.xl) for objects, single instances or collision actors, and check an existing .xl file against the sector."
