@@ -165,6 +165,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     public string? SelectedNodeIndex;
 
+    /// <summary>The nodeData entry to select within the node (a cooked node has a row per inner node); null for any.</summary>
+    public int? SelectedNodeDataIndex;
+
+    /// <summary>nodeData entries of the sector node last picked in the viewport ("12, 13").</summary>
+    public string? LastSelectedNodeDataIndices { get; private set; }
+
 
 
     public override void Load()
@@ -1552,6 +1558,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if ((args.Position - down).Length < 4)
         {
             ClearSelection();
+            ClearSectorPick();
         }
     }
 
@@ -1561,6 +1568,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         RetoreSelectedMeshMaterial();
         CurrentSelection.Unselect();
         SelectedItem = null;
+    }
+
+    /// <summary>
+    /// Nothing picked in the sector any more: the data tab and the Sector Objects tab drop the object too.
+    /// </summary>
+    private void ClearSectorPick()
+    {
+        if (LastSelectedNodeDataIndices is null && SelectedNodeIndex is null)
+        {
+            return;
+        }
+
+        SelectedNodeIndex = null;
+        SelectedNodeDataIndex = null;
+        LastSelectedNodeDataIndices = null;
+        OnSectorNodeSelected?.Invoke(this, null);
     }
 
 
@@ -1603,36 +1626,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             if (ShiftKeyPressed)
             {
-                if (Camera != null)
-                {
-                    // Zoom to the selected submesh
-                    var v = submesh.BoundsWithTransform;
-
-                    // Calculate the center of the bbox
-                    SharpDX.Vector3 bboxCenter = new SharpDX.Vector3(v.Center.X, v.Center.Y, v.Center.Z);
-
-                    // Calculate the extent of the bbox along each axis
-                    SharpDX.Vector3 bboxExtent = v.Maximum - v.Minimum;
-
-                    // Calculate the maximum extent of the bbox
-                    float maxExtent = Math.Max(bboxExtent.X, Math.Max(bboxExtent.Y, bboxExtent.Z));
-
-                    // Calculate the distance from the camera to ensure the entire bbox is visible
-                    float distance = maxExtent / (float)Math.Tan(SharpDX.MathUtil.DegreesToRadians(45.0f) / 2); // Assuming 45 degree field of view
-
-                    SharpDX.Vector3 CameraPos = new SharpDX.Vector3((float)Camera.Position.X, (float)Camera.Position.Y, (float)Camera.Position.Z);
-
-                    // Calculate the new camera position and target
-                    SharpDX.Vector3 newPosition = bboxCenter + SharpDX.Vector3.Normalize(CameraPos - bboxCenter) * distance;
-                    SharpDX.Vector3 newDirection = SharpDX.Vector3.Normalize(bboxCenter - newPosition);
-
-
-                    Camera?.AnimateTo(
-                    new System.Windows.Media.Media3D.Point3D(newPosition.X, newPosition.Y, newPosition.Z),
-                    new Vector3D(newDirection.X, newDirection.Y, newDirection.Z),
-                    new Vector3D(0, 1, 0),
-                    s_cameraAnimationTime);
-                }
+                // Zoom to the selected submesh
+                ZoomToBounds(submesh.BoundsWithTransform);
             }
         }
 
@@ -1646,6 +1641,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         Parent?.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
 
+        LastSelectedNodeDataIndices = mesh.WorldNodeDataIndices;
         OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
     }
 
@@ -11100,7 +11096,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             case LoadableModel loadableModel:
                 return loadableModel;
             case MeshComponent comp:
-                if (comp.WorldNodeIndex == SelectedNodeIndex)
+                if (comp.WorldNodeIndex == SelectedNodeIndex &&
+                    (_matchNodeDataIndex is not { } entry || HasNodeDataIndex(comp.WorldNodeDataIndices, entry)))
                 {
                     return comp;
                 }
@@ -11114,12 +11111,209 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 // }
 
                 break;
+            // the type folders of a sector (Meshes, Entities, ...) hold the node rows
+            case GroupModel3DExt folder when IsSectorTypeFolder(folder):
+                foreach (var folderChild in folder.Children)
+                {
+                    if (findMeshChild(folderChild) is { } result)
+                    {
+                        return result;
+                    }
+                }
+
+                break;
             default:
                 break;
         }
 
         return null;
     }
+    // nodeData entry findMeshChild looks for, if any
+    private int? _matchNodeDataIndex;
+
+    private static bool HasNodeDataIndex(string? indices, int entry) =>
+        !string.IsNullOrEmpty(indices) &&
+        indices.Split(',').Any(i => int.TryParse(i.Trim(), System.Globalization.NumberStyles.None,
+            System.Globalization.CultureInfo.InvariantCulture, out var value) && value == entry);
+
+    /// <summary>
+    /// Flies the camera so the whole box is in view, from the side it's looked at now (as Shift+click on a mesh).
+    /// </summary>
+    public void ZoomToBounds(SharpDX.BoundingBox v)
+    {
+        if (Camera == null)
+        {
+            return;
+        }
+
+        // Calculate the center of the bbox
+        var bboxCenter = new SharpDX.Vector3(v.Center.X, v.Center.Y, v.Center.Z);
+
+        // Calculate the maximum extent of the bbox
+        var bboxExtent = v.Maximum - v.Minimum;
+        var maxExtent = Math.Max(bboxExtent.X, Math.Max(bboxExtent.Y, bboxExtent.Z));
+
+        // Calculate the distance from the camera to ensure the entire bbox is visible (45 degree field of view)
+        var distance = maxExtent / (float)Math.Tan(SharpDX.MathUtil.DegreesToRadians(45.0f) / 2);
+
+        var cameraPos = new SharpDX.Vector3((float)Camera.Position.X, (float)Camera.Position.Y, (float)Camera.Position.Z);
+
+        // from the current side; a camera already at the center keeps its look direction
+        var away = cameraPos - bboxCenter;
+        if (away.LengthSquared() < 1e-6f)
+        {
+            away = -new SharpDX.Vector3((float)Camera.LookDirection.X, (float)Camera.LookDirection.Y, (float)Camera.LookDirection.Z);
+        }
+
+        // Calculate the new camera position and target
+        var newPosition = bboxCenter + SharpDX.Vector3.Normalize(away) * distance;
+        var newDirection = bboxCenter - newPosition;
+
+        Camera.AnimateTo(
+            new System.Windows.Media.Media3D.Point3D(newPosition.X, newPosition.Y, newPosition.Z),
+            new Vector3D(newDirection.X, newDirection.Y, newDirection.Z),
+            new Vector3D(0, 1, 0),
+            s_cameraAnimationTime);
+    }
+
+    /// <summary>
+    /// Sector objects (node index, nodeData index) to fly the camera to once they're found in the preview: set by
+    /// "Show in Sector Preview" of the Sector Objects tab. The view takes them after a frame is drawn (see
+    /// <see cref="TryTakePendingZoom"/>), so its own framing of a freshly loaded sector doesn't override the flight.
+    /// </summary>
+    public IReadOnlyList<(int NodeIndex, int NodeDataIndex)>? PendingZoom
+    {
+        get => _pendingZoom;
+        set
+        {
+            _pendingZoom = value;
+            _pendingZoomFrames = 0;
+        }
+    }
+
+    private IReadOnlyList<(int NodeIndex, int NodeDataIndex)>? _pendingZoom;
+
+    // frames drawn while the objects of PendingZoom weren't found (the sector still loading)
+    private int _pendingZoomFrames;
+
+    // about ten seconds of frames: a sector that loads slower than that is not waited for
+    private const int PendingZoomMaxFrames = 600;
+
+    /// <summary>
+    /// The box of all objects of <see cref="PendingZoom"/> once they're rendered; then PendingZoom is cleared. Called
+    /// by the view after each frame until it succeeds or gives up.
+    /// </summary>
+    public bool TryTakePendingZoom(out SharpDX.BoundingBox bounds)
+    {
+        bounds = default;
+        if (PendingZoom is not { Count: > 0 } targets)
+        {
+            return false;
+        }
+
+        if (TryGetObjectsBounds(targets, out bounds))
+        {
+            PendingZoom = null;
+            ZoomExtentsRequested = false;
+            return true;
+        }
+
+        if (++_pendingZoomFrames > PendingZoomMaxFrames)
+        {
+            PreviewTrace($"[Zoom] none of the {targets.Count} object(s) found in the preview (node {targets[0].NodeIndex}, nodeData #{targets[0].NodeDataIndex})");
+            PendingZoom = null;
+        }
+
+        return false;
+    }
+
+    // The world box of the objects found in the preview (node index, nodeData index); false while none is rendered
+    // yet. Computed from the geometry and the transforms down the tree, not from Helix's BoundsWithTransform: that
+    // one is only right once the node has been drawn, and parts never drawn (hidden appearance parts, collision)
+    // kept their local box near the origin, which put the camera far away.
+    private bool TryGetObjectsBounds(IReadOnlyList<(int NodeIndex, int NodeDataIndex)> targets, out SharpDX.BoundingBox bounds)
+    {
+        SharpDX.BoundingBox? box = null;
+        foreach (var (nodeIndex, nodeDataIndex) in targets)
+        {
+            var index = nodeIndex.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            if (!AddNodeBounds(index, nodeDataIndex))
+            {
+                // the node's first row, as SelectWorldNode
+                AddNodeBounds(index, null);
+            }
+        }
+
+        bounds = box ?? default;
+        return box is not null;
+
+        bool AddNodeBounds(string index, int? entry)
+        {
+            var found = false;
+            foreach (var appearance in Appearances)
+            {
+                foreach (var model in appearance.ModelGroup.AsList())
+                {
+                    found |= Visit(model, SharpDX.Matrix.Identity, false);
+                }
+            }
+
+            return found;
+
+            // inside: within the matching node row, every drawn submesh counts
+            bool Visit(object element, SharpDX.Matrix parent, bool inside)
+            {
+                var world = element is HelixToolkit.Wpf.SharpDX.Element3D { Transform: { } transform } &&
+                            !transform.Value.IsIdentity
+                    ? ToSharpDxMatrix(transform.Value) * parent
+                    : parent;
+
+                switch (element)
+                {
+                    case SubmeshComponent submesh when inside:
+                        if (submesh.IsRendering && submesh.Geometry is { } geometry &&
+                            geometry.Bound.Maximum != geometry.Bound.Minimum)
+                        {
+                            var corners = geometry.Bound.GetCorners();
+                            for (var c = 0; c < corners.Length; c++)
+                            {
+                                corners[c] = SharpDX.Vector3.TransformCoordinate(corners[c], world);
+                            }
+
+                            var part = SharpDX.BoundingBox.FromPoints(corners);
+                            box = box is { } merged ? SharpDX.BoundingBox.Merge(merged, part) : part;
+                        }
+
+                        return true;
+                    case MeshComponent row when !inside && row.WorldNodeIndex == index &&
+                                                 (entry is not { } e || HasNodeDataIndex(row.WorldNodeDataIndices, e)):
+                        foreach (var child in row.Children)
+                        {
+                            Visit(child, world, true);
+                        }
+
+                        return true;
+                    case HelixToolkit.Wpf.SharpDX.GroupModel3D group when inside || group is SectorGroup || IsSectorTypeFolder(group):
+                        var any = false;
+                        foreach (var child in group.Children)
+                        {
+                            any |= Visit(child, world, inside);
+                        }
+
+                        return any;
+                    default:
+                        return false;
+                }
+            }
+        }
+    }
+
+    private static SharpDX.Matrix ToSharpDxMatrix(System.Windows.Media.Media3D.Matrix3D m) => new(
+        (float)m.M11, (float)m.M12, (float)m.M13, (float)m.M14,
+        (float)m.M21, (float)m.M22, (float)m.M23, (float)m.M24,
+        (float)m.M31, (float)m.M32, (float)m.M33, (float)m.M34,
+        (float)m.OffsetX, (float)m.OffsetY, (float)m.OffsetZ, (float)m.M44);
+
     public void SelectWorldNode()
     {
         if (SelectedNodeIndex is null)
@@ -11127,6 +11321,27 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
         }
 
+        // the row of the nodeData entry first (cooked nodes have one per inner node), else the node's first row
+        _matchNodeDataIndex = SelectedNodeDataIndex;
+        try
+        {
+            var found = FindSelectedWorldNode();
+            if (found is null && SelectedNodeDataIndex is not null)
+            {
+                _matchNodeDataIndex = null;
+                found = FindSelectedWorldNode();
+            }
+
+            SelectedItem = found;
+        }
+        finally
+        {
+            _matchNodeDataIndex = null;
+        }
+    }
+
+    private object? FindSelectedWorldNode()
+    {
         object? selectedMesh = null;
         foreach (var loadableModel in Models)
         {
@@ -11151,7 +11366,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             });
         }
 
-        SelectedItem = selectedMesh;
+        return selectedMesh;
     }
 
     // Hair Gradient
