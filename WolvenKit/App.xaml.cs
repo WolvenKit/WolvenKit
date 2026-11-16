@@ -132,6 +132,12 @@ namespace WolvenKit
             _themeService.CurrentThemeChanging += (_, _) => OnThemeChanging();
             _themeService.CurrentThemeChanged += (_, _) => OnThemeChanged();
 
+            // The main window is already shown (InitializeShell) and usually active: its first activation came
+            // before this subscription, so the library colors were only bridged after the next one (Alt+Tab),
+            // and until then the AdonisUI controls (the settings page, message boxes) kept their own gray colors.
+            // Bridge them now; the first activation still re-does it.
+            ApplyThemeOverridesOnTop();
+
             // SfSkinManager may merge its own brush dictionaries when the main window gets its theme;
             // keep the WolvenKit theme overrides on top of them.
             Activated += OnFirstActivated;
@@ -239,6 +245,12 @@ namespace WolvenKit
         private void OnFirstActivated(object sender, EventArgs e)
         {
             Activated -= OnFirstActivated;
+            ApplyThemeOverridesOnTop();
+        }
+
+        /// <summary>The theme dictionary back on top, and the theme colors copied to the AdonisUI / MahApps keys.</summary>
+        private void ApplyThemeOverridesOnTop()
+        {
             _themeService.EnsureResourcesOnTop();
             WolvenKit.Helpers.AdonisThemeBridge.Apply();
         }
