@@ -71,6 +71,8 @@ public interface ISettingsDto
 
     public bool ShowFilePreview { get; set; }
     public bool ShowAdvancedOptions { get; set; }
+    public bool MultilayerPaletteGrid { get; set; }
+    public bool ShowColorScaleDropdown { get; set; }
     public bool RefactoringCheckboxDefaultValue { get; set; }
     // public bool ShowRedmodInRibbon { get; set; }
     // public bool UseValidatingEditor { get; set; }
