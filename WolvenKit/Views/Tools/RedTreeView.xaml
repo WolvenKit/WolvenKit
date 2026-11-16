@@ -333,6 +333,37 @@
                         Grid.Column="2"
                         Margin="{DynamicResource WolvenKitMarginTinyRight}"
                         Orientation="Horizontal">
+                        <!-- color of a multilayer colorScale override, left of its name: mltemplate entries (the name is the descriptor) and their v -->
+                        <Border
+                            Width="{DynamicResource WolvenKitIconMicro}"
+                            Height="{DynamicResource WolvenKitIconMicro}"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            VerticalAlignment="Center"
+                            BorderBrush="{DynamicResource BorderAlt}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="True"
+                            ToolTip="{Binding PreviewColor, Mode=OneWay}">
+                            <Border.Background>
+                                <SolidColorBrush Color="{Binding PreviewColor, Mode=OneWay, TargetNullValue=Transparent}" />
+                            </Border.Background>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Value, Mode=OneWay}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Value, Mode=OneWay}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PreviewColor, Mode=OneWay}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
                         <TextBlock
                             Name="PropertyDescriptor"
                             Margin="{DynamicResource WolvenKitMarginTinyRight}"
@@ -341,6 +372,59 @@
                                            Mode=OneWay,
                                            UpdateSourceTrigger=PropertyChanged}"
                             TextTrimming="CharacterEllipsis" />
+
+                        <!-- the same, left of the value: mlsetup layers and their colorScale (the color's name is the value) -->
+                        <Border
+                            Width="{DynamicResource WolvenKitIconMicro}"
+                            Height="{DynamicResource WolvenKitIconMicro}"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            VerticalAlignment="Center"
+                            BorderBrush="{DynamicResource BorderAlt}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="True"
+                            ToolTip="{Binding PreviewColor, Mode=OneWay}">
+                            <Border.Background>
+                                <SolidColorBrush Color="{Binding PreviewColor, Mode=OneWay, TargetNullValue=Transparent}" />
+                            </Border.Background>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Value, Mode=OneWay}" Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Value, Mode=OneWay}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PreviewColor, Mode=OneWay}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <!-- gradient arrays (hair profiles, .gradient files): their stops as a strip -->
+                        <Border
+                            Width="96"
+                            Height="{DynamicResource WolvenKitIconMicro}"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            VerticalAlignment="Center"
+                            Background="{Binding PreviewGradient, Mode=OneWay}"
+                            BorderBrush="{DynamicResource BorderAlt}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="True">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PreviewGradient, Mode=OneWay}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
 
                         <TextBlock
                             Name="PropertyValue"
@@ -809,6 +893,43 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Plus"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Multilayer setup: copy a layer's template into the project under a path of its own -->
+                <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Copy template to project..."
+                    Command="{Binding Path=PlacementTarget.Tag.CopyMultilayerTemplateToProjectCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Multilayer template: add a colorScale override (disabled for templates on paths the game uses) -->
+                <MenuItem
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMultilayerColorsNode,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    ToolTipService.ShowOnDisabled="True"
+                    ToolTip="Only for templates of this project under a path of their own. Copy the template first: 'Copy template to project...' on a layer of a multilayer setup."
+                    Header="Add color..."
+                    Command="{Binding Path=PlacementTarget.Tag.AddMultilayerColorCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Palette"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
