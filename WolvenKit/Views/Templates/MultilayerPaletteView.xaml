@@ -26,6 +26,14 @@
             </ScrollViewer>
         </Expander>
 
+        <!-- the layer's template path leads nowhere (mistyped, or the file was renamed or moved) -->
+        <TextBlock
+            x:Name="NotFoundText"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Foreground="{DynamicResource WolvenKitOrange}"
+            TextWrapping="Wrap"
+            Visibility="Collapsed" />
+
         <!-- only for templates that aren't the project's own yet -->
         <Button
             x:Name="CopyTemplateButton"

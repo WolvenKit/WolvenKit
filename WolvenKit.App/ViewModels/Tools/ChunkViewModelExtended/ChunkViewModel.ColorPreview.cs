@@ -82,6 +82,7 @@ public partial class ChunkViewModel
         !IsReadOnly &&
         GetTemplatePath(MultilayerLayerNode) is { } path &&
         Locator.Current.GetService<DocumentTools>() is { } tools &&
+        tools.MultilayerTemplateExists(path) &&
         !tools.IsCustomMultilayerTemplate(path);
 
     /// <summary>

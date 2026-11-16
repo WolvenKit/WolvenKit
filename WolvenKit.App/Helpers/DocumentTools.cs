@@ -1701,6 +1701,11 @@ public class DocumentTools
             ? File.GetLastWriteTimeUtc(path)
             : null;
 
+    /// <summary>Whether a template file is there at all: in the project, the game or an installed mod.</summary>
+    public bool MultilayerTemplateExists(string templatePath) =>
+        !string.IsNullOrEmpty(templatePath) &&
+        (GetProjectFileStamp(templatePath) is not null || _archiveManager.Lookup(templatePath).HasValue);
+
     /// <summary>
     /// Whether a multilayer template is the project's own: a file of the project under a path the game doesn't use.
     /// Changing such a template doesn't change the game's template, which every material using it would pick up.
