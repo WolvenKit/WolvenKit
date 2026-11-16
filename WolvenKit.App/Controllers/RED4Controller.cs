@@ -182,7 +182,9 @@ public partial class RED4Controller : ObservableObject, IGameController
     private static List<string> GetResourceFiles(Cp77Project cp77Proj) => Directory
         .EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
         .Where(name => !IsSpecialExtension(name))
-        .Where(x => Path.GetFileName(x) != "info.json").ToList();
+        .Where(x => Path.GetFileName(x) != "info.json")
+        .Concat(GetTweakFiles(cp77Proj, false))
+        .ToList();
 
     private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj)
     {
@@ -197,9 +199,15 @@ public partial class RED4Controller : ObservableObject, IGameController
             .Where(IsCDPRScript).ToList();
     }
 
-    private static List<string> GetREDmodTweakFiles(Cp77Project cp77Proj)
+    /// <summary>
+    /// .tweak files are excluded from the generic resources (see <see cref="IsSpecialExtension"/>).
+    /// REDmod reads them from resources/tweaks, TweakXL from resources/r6/tweaks.
+    /// </summary>
+    private static List<string> GetTweakFiles(Cp77Project cp77Proj, bool isRedmod)
     {
-        var absolutePath = Path.Combine(cp77Proj.ResourcesDirectory, "tweaks");
+        var absolutePath = isRedmod
+            ? Path.Combine(cp77Proj.ResourcesDirectory, "tweaks")
+            : Path.Combine(cp77Proj.ResourcesDirectory, "r6", "tweaks");
         if (!Directory.Exists(absolutePath))
         {
             return [];
@@ -444,7 +452,7 @@ public partial class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
-        // pack generic resources excluding script and tweak files
+        // pack generic resources; .tweak files are skipped here, except TweakXL ones under r6/tweaks
         files = GetResourceFiles(cp77Proj);
         if (files.Count != 0)
         {
@@ -606,7 +614,7 @@ public partial class RED4Controller : ObservableObject, IGameController
         }
 
         // tweaks
-        var files = GetREDmodTweakFiles(cp77Proj);
+        var files = GetTweakFiles(cp77Proj, true);
         if (files.Count != 0)
         {
             foreach (var file in files)
