@@ -1831,6 +1831,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         sm.IsTransparent = false;
         sm.DepthBias = 0;
+        SetAlphaClip(sm.MaterialName, 0f);
 
         // Multilayer in the shader is always opaque (the shader has no alpha). Transparent
         // draws go through Helix's OIT passes, which would show it without its layers.
@@ -1922,27 +1923,59 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             MakeTwoSided(sm);
         }
 
-        // Cutout / masked materials (chains, fences). The bake makes their alpha binary,
-        // so blending it shows exactly the cut-out shape. Rendered opaque, the transparent
-        // parts of the strip would show as a solid band around the chain.
-        var isCutout = alphaMat.Name.Contains("chain", StringComparison.OrdinalIgnoreCase);
+        // Cutout / masked materials (chains, fences, foliage). The bake makes their alpha binary;
+        // they're drawn opaque with an alpha test, as in the game: blended, they needed the
+        // depth-peeling passes to be sorted (slow in sectors), and without them the holes of
+        // near cards hid what is behind.
+        var isCutout = IsSpeedTreeMaterial(alphaMat) ||
+                       alphaMat.Name.Contains("chain", StringComparison.OrdinalIgnoreCase);
+        var clipThreshold = 0.5f;
         if (!isCutout && alphaMat.Instance is CMaterialInstance alphaInst && alphaInst.EnableMask)
             isCutout = true;
         if (!isCutout && alphaMat.Values.TryGetValue("AlphaThreshold", out var atObj))
         {
             var at = ReadFloat(atObj);
             isCutout = at > 0.001f && at < 0.99f;
+            if (isCutout)
+            {
+                clipThreshold = at;
+            }
         }
 
         if (isCutout || alphaMat.Values.ContainsKey("MaskTexture"))
         {
-            sm.IsTransparent = true;
+            // the shader's alpha test needs the plain PBR material; others stay blended
+            if (!SetAlphaClip(sm.MaterialName, clipThreshold))
+            {
+                sm.IsTransparent = true;
+            }
+
             return;
         }
 
         var png = Path.Combine(ISettingsManager.GetTemp_OBJPath(), sm.MaterialName + "_d.png");
         if (PngHasAlphaVariationCached(png))
             sm.IsTransparent = true;
+    }
+
+    /// <summary>
+    /// Alpha test of a material in the plain PBR pass (0 = off). Materials are shared by name, so this is per
+    /// material, like the cut-out decision. False if the material isn't one the pass draws.
+    /// </summary>
+    private bool SetAlphaClip(string materialName, float threshold)
+    {
+        if (!Materials.TryGetValue(materialName, out var material) || material is not MultilayerPBRMaterial plain)
+        {
+            return false;
+        }
+
+        var extras = plain.Extras ?? new SurfaceExtras();
+        if (extras.AlphaClip != threshold)
+        {
+            plain.Extras = extras with { AlphaClip = threshold };
+        }
+
+        return true;
     }
 
     // original geometry -> its two-sided version; and the set of two-sided results
