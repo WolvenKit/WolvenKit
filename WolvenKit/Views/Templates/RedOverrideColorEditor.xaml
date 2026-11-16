@@ -1,0 +1,37 @@
+<UserControl
+    x:Class="WolvenKit.Views.Editors.RedOverrideColorEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
+    d:DesignWidth="240"
+    d:DesignHeight="48">
+    <!-- DataContext: the ChunkViewModel of v (three floats) of a colorScale override -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <syncfusion:ColorPickerPalette
+            Grid.Column="0"
+            GenerateThemeVariants="False"
+            SelectedCommand="{Binding SelectedColorCommand, RelativeSource={RelativeSource AncestorType={x:Type local:RedOverrideColorEditor}}}"
+            Color="{Binding PreviewColor, Mode=OneWay, TargetNullValue=Black}" />
+
+        <!-- the stored values: picking a colour rounds them to 1/255 -->
+        <TextBlock
+            x:Name="ChannelsText"
+            Grid.Column="1"
+            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+            VerticalAlignment="Center"
+            Opacity="0.7"
+            ToolTip="v as stored (red, green, blue). Expand v to type exact values." />
+    </Grid>
+</UserControl>
