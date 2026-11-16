@@ -452,7 +452,7 @@ public partial class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
-        // pack generic resources (scripts and REDmod tweaks are excluded, TweakXL .tweak files under r6/tweaks are included)
+        // pack generic resources; .tweak files are skipped here, except TweakXL ones under r6/tweaks
         files = GetResourceFiles(cp77Proj);
         if (files.Count != 0)
         {
