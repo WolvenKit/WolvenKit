@@ -48,14 +48,19 @@ namespace WolvenKit.Helpers
             return luminance > 0.5;
         }
 
+        /// <summary>Colors of a theme's swatch: its background, and its accent for the strip at the bottom.</summary>
+        public static (Brush Background, Brush Accent) GetSwatchBrushes(IThemeService service, ThemeDto theme) =>
+            (Frozen(GetBackground(service, theme)), Frozen(service.ResolveAccent(theme)));
+
         /// <summary>A small square in the theme's background color with a strip of its accent.</summary>
         public static FrameworkElement CreateSwatch(IThemeService service, ThemeDto theme)
         {
+            var (background, accentBrush) = GetSwatchBrushes(service, theme);
             var accent = new Border
             {
                 Height = 4,
                 VerticalAlignment = VerticalAlignment.Bottom,
-                Background = Frozen(service.ResolveAccent(theme))
+                Background = accentBrush
             };
 
             var swatch = new Border
@@ -63,7 +68,7 @@ namespace WolvenKit.Helpers
                 Width = 16,
                 Height = 16,
                 BorderThickness = new Thickness(1),
-                Background = Frozen(GetBackground(service, theme)),
+                Background = background,
                 Child = accent,
                 SnapsToDevicePixels = true
             };

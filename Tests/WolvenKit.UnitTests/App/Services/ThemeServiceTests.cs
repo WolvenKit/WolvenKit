@@ -161,6 +161,20 @@ public class ThemeServiceTests
     }
 
     [Fact]
+    public void TextOnAccentShadow_BlackOnPaleAccents_WhiteWhereReadable()
+    {
+        using var f = new Fixture();
+
+        // beige accent: its dark variant is still light, white text on it is about 2.5:1
+        var pale = f.Service.ResolveEffectiveColors(new ThemeDto { Name = "Pale", Accent = "#F5F5DC" });
+        // cyan accent: white text on its dark variant is about 4:1, as in the built-in themes; it stays white
+        var cyan = f.Service.ResolveEffectiveColors(new ThemeDto { Name = "Cyan", Accent = "#00D0E0" });
+
+        Assert.Equal(Colors.Black, pale["WolvenKitAccentShadowForeground"]);
+        Assert.Equal(Colors.White, cyan["WolvenKitAccentShadowForeground"]);
+    }
+
+    [Fact]
     public void Overrides_FlattenTranslucentSurfaces()
     {
         using var f = new Fixture();
