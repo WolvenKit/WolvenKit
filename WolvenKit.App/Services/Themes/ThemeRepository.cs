@@ -28,8 +28,12 @@ public interface IThemeRepository
     /// <exception cref="InvalidDataException">The file is empty or uses a newer format.</exception>
     ThemeDto Read(string path);
 
-    /// <summary>Writes a user theme to <see cref="UserThemesDirectory"/>, named after the theme. Returns the path.</summary>
-    string Save(ThemeDto theme);
+    /// <summary>
+    /// Writes a user theme to <see cref="UserThemesDirectory"/>, named after the theme, and returns the path.
+    /// <paramref name="currentPath"/> is the theme's own file (when updating or renaming it): that file may be
+    /// overwritten. Any other existing file is not: the name gets a number instead ("Name (2).json").
+    /// </summary>
+    string Save(ThemeDto theme, string? currentPath = null);
 
     /// <summary>Writes a theme to the given path (export, or updating an existing user theme file).</summary>
     void Write(ThemeDto theme, string path);
@@ -130,12 +134,34 @@ public sealed class ThemeRepository : IThemeRepository
         return theme;
     }
 
-    public string Save(ThemeDto theme)
+    public string Save(ThemeDto theme, string? currentPath = null)
     {
-        var path = Path.Combine(UserThemesDirectory, ToFileName(theme.Name));
+        var path = GetFreePath(theme.Name, currentPath);
         theme.FormatVersion = ThemeDto.CurrentFormatVersion;
         Write(theme, path);
         return path;
+    }
+
+    /// <summary>
+    /// The file for a theme name. Names that differ only in characters not allowed in file names ("a:b", "a?b",
+    /// "a_b") or in case map to the same file; one theme must not overwrite the file of another (or a file that
+    /// was skipped when loading), so a taken file name gets a number.
+    /// </summary>
+    private string GetFreePath(string name, string? currentPath)
+    {
+        var baseName = ToBaseFileName(name);
+        for (var i = 1; ; i++)
+        {
+            var path = Path.Combine(UserThemesDirectory, (i == 1 ? baseName : $"{baseName} ({i})") + ".json");
+            if (currentPath is not null && string.Equals(Path.GetFullPath(path), Path.GetFullPath(currentPath), StringComparison.OrdinalIgnoreCase))
+            {
+                return currentPath; // the theme's own file, also after a rename that only changes the case
+            }
+            if (!File.Exists(path))
+            {
+                return path;
+            }
+        }
     }
 
     public void Write(ThemeDto theme, string path) =>
@@ -149,10 +175,18 @@ public sealed class ThemeRepository : IThemeRepository
         }
     }
 
-    private static string ToFileName(string name)
+    /// <summary>Windows device names: "CON.json" etc. can't be created as files.</summary>
+    private static readonly HashSet<string> s_reservedNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "CON", "PRN", "AUX", "NUL",
+        "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+        "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+    };
+
+    private static string ToBaseFileName(string name)
     {
         var invalid = Path.GetInvalidFileNameChars();
         var safe = new string(name.Select(c => invalid.Contains(c) ? '_' : c).ToArray());
-        return safe + ".json";
+        return s_reservedNames.Contains(safe) ? "_" + safe : safe;
     }
 }

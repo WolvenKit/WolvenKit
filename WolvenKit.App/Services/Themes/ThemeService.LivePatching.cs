@@ -357,7 +357,8 @@ public sealed partial class ThemeService
             map.TryAdd("DarkPrimaryBrush", shadow);
         }
 
-        if (ResolveAccentForeground(theme) is { } accentForeground)
+        // set by the theme, or black on a light accent the theme gives no text color for
+        if (ResolveReadableAccentForeground(theme) is { } accentForeground)
         {
             map.TryAdd("WolvenKitAccentForeground", accentForeground);
         }

@@ -246,7 +246,9 @@ namespace WolvenKit
         private static IThemeSetting BuildTheme(ISettingsManager settingsManager, IThemeService themeService)
         {
             var theme = themeService.Current;
-            var accentForeground = themeService.ResolveAccentForeground(theme);
+            // text on Syncfusion's primary (accent) color; stays Syncfusion's default unless the theme sets one
+            // or the accent is too light for white text
+            var accentForeground = themeService.ResolveReadableAccentForeground(theme);
 
             var settings = new MaterialDarkThemeSettings
             {
@@ -409,11 +411,22 @@ namespace WolvenKit
             {
                 showTimer.Stop();
 
-                // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
-                themeService.Refresh();
-                window.InvalidateVisual();
-                window.UpdateLayout();
-                window.Visibility = Visibility.Visible;
+                try
+                {
+                    // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
+                    themeService.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    logger?.Error($"Themes: could not patch the dictionaries loaded while switching: {ex.Message}");
+                }
+                finally
+                {
+                    // Always shown again: an exception above used to leave WolvenKit running without its window.
+                    window.InvalidateVisual();
+                    window.UpdateLayout();
+                    window.Visibility = Visibility.Visible;
+                }
 
                 if (dockState is not null)
                 {

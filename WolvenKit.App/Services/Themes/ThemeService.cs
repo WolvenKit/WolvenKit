@@ -314,25 +314,26 @@ public sealed partial class ThemeService : IThemeService
     /// <summary>Time for the "applying theme" notification to appear before the UI thread gets busy.</summary>
     private static readonly TimeSpan s_notificationDelay = TimeSpan.FromMilliseconds(250);
 
+    /// <summary>Pending application of the current theme (see <see cref="ApplyCurrentDeferred"/>).</summary>
+    private System.Windows.Threading.DispatcherTimer? _applyTimer;
+
     /// <summary>
     /// Announces the change, then applies the current theme after a short delay, so that a notification
     /// raised in <see cref="CurrentThemeChanging"/> is visible before the UI thread is busy.
-    /// Without a running application (tests) everything happens right away.
+    /// Requests that come while one is pending restart the wait and are applied once, with the theme current
+    /// by then: going through the theme list with the arrow keys switched the whole UI (seconds each) for
+    /// every theme passed. Without a running application (tests) everything happens right away.
     /// </summary>
     private void ApplyCurrentDeferred()
     {
-        CurrentThemeChanging?.Invoke(this, EventArgs.Empty);
-
-        void Apply()
+        if (Application.Current?.Dispatcher is not { } dispatcher)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            ApplyResources(Current);
-            _loggerService.Debug($"Themes: resources of \"{Current.Name}\" written in {watch.ElapsedMilliseconds} ms.");
-            CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
-            NotifyListeners(); // already on the UI thread here
+            CurrentThemeChanging?.Invoke(this, EventArgs.Empty);
+            ApplyCurrentNow();
+            return;
         }
 
-        if (Application.Current?.Dispatcher is { } dispatcher)
+        if (_applyTimer is null)
         {
             // The notification slides in with an animation; give it time to show before the UI thread is busy.
             var timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Background, dispatcher)
@@ -342,14 +343,28 @@ public sealed partial class ThemeService : IThemeService
             timer.Tick += (_, _) =>
             {
                 timer.Stop();
-                Apply();
+                ApplyCurrentNow();
             };
-            timer.Start();
+            _applyTimer = timer;
         }
-        else
+
+        // one notification per switch, not one per theme passed on the way
+        if (!_applyTimer.IsEnabled)
         {
-            Apply();
+            CurrentThemeChanging?.Invoke(this, EventArgs.Empty);
         }
+
+        _applyTimer.Stop();
+        _applyTimer.Start();
+    }
+
+    private void ApplyCurrentNow()
+    {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        ApplyResources(Current);
+        _loggerService.Debug($"Themes: resources of \"{Current.Name}\" written in {watch.ElapsedMilliseconds} ms.");
+        CurrentThemeChanged?.Invoke(this, EventArgs.Empty);
+        NotifyListeners(); // already on the UI thread here
     }
 
     #endregion
@@ -428,6 +443,30 @@ public sealed partial class ThemeService : IThemeService
 
     public Color? ResolveAccentForeground(ThemeDto theme) =>
         GetChain(theme).Select(t => TryParseColor(t.AccentForeground)).LastOrDefault(c => c is not null);
+
+    public Color? ResolveReadableAccentForeground(ThemeDto theme)
+    {
+        if (ResolveAccentForeground(theme) is { } explicitColor)
+        {
+            return explicitColor;
+        }
+
+        var text = ReadableTextOn(ResolveAccent(theme));
+        return text == Colors.White ? null : text;
+    }
+
+    /// <summary>Minimum contrast of text on the accent (WCAG for large text and UI parts); the theme editor warns below it.</summary>
+    public const double MinAccentTextContrast = 3.0;
+
+    /// <summary>
+    /// Text color for a colored surface when the theme sets none: white (WolvenKit's text on the accent), or
+    /// black when white is hard to read on it (light accents such as yellow or light blue).
+    /// </summary>
+    public static Color ReadableTextOn(Color background)
+    {
+        var white = ContrastRatio(Colors.White, background);
+        return white >= MinAccentTextContrast || white >= ContrastRatio(Colors.Black, background) ? Colors.White : Colors.Black;
+    }
 
     #endregion
 
@@ -615,7 +654,7 @@ public sealed partial class ThemeService : IThemeService
             theme.BasedOn = null;
         }
 
-        var path = _repository.Save(theme);
+        var path = _repository.Save(theme, previous?.FilePath);
 
         if (previous is not null)
         {
@@ -719,6 +758,7 @@ public sealed partial class ThemeService : IThemeService
         theme.Name = GetUniqueName(theme.Name);
         theme.IsBuiltIn = false;
         theme.FilePath = null;
+        DropInvalidColors(theme);
         if (theme.BasedOn is not null && Find(theme.BasedOn) is null)
         {
             _loggerService.Warning($"Imported theme \"{theme.Name}\" is based on unknown theme \"{theme.BasedOn}\"; using the defaults instead.");
@@ -730,6 +770,34 @@ public sealed partial class ThemeService : IThemeService
     public void Export(ThemeDto theme, string path, bool flatten)
     {
         _repository.Write(flatten ? Flatten(theme) : theme.Clone(), path);
+    }
+
+    /// <summary>
+    /// Removes values that are not colors from an imported theme, with one warning, so the saved copy is clean
+    /// and they are not reported again every time the theme is used.
+    /// </summary>
+    private void DropInvalidColors(ThemeDto theme)
+    {
+        var invalid = theme.Colors.Where(kv => TryParseColor(kv.Value) is null).Select(kv => kv.Key).ToList();
+        foreach (var key in invalid)
+        {
+            theme.Colors.Remove(key);
+        }
+        if (!string.IsNullOrWhiteSpace(theme.Accent) && TryParseColor(theme.Accent) is null)
+        {
+            invalid.Add("accent");
+            theme.Accent = null;
+        }
+        if (!string.IsNullOrWhiteSpace(theme.AccentForeground) && TryParseColor(theme.AccentForeground) is null)
+        {
+            invalid.Add("accentForeground");
+            theme.AccentForeground = null;
+        }
+
+        if (invalid.Count > 0)
+        {
+            _loggerService.Warning($"Imported theme \"{theme.Name}\": {invalid.Count} values are not colors and were left out: {string.Join(", ", invalid.Take(10))}{(invalid.Count > 10 ? ", …" : "")}.");
+        }
     }
 
     /// <summary>A copy that contains all inherited overrides and no BasedOn.</summary>
@@ -764,8 +832,10 @@ public sealed partial class ThemeService : IThemeService
         {
             return ColorConverter.ConvertFromString(value.Trim()) is Color color ? color : null;
         }
-        catch (FormatException)
+        catch (Exception ex) when (ex is FormatException or InvalidOperationException or ArgumentException or NotSupportedException or OverflowException)
         {
+            // FormatException for most bad values; an incomplete "sc#1" throws InvalidOperationException from
+            // WPF's tokenizer, which used to escape from a theme switch and from the theme editor.
             return null;
         }
     }
