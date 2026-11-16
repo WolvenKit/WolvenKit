@@ -87,6 +87,12 @@ namespace WolvenKit.Views.Editors
             }
 
             SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+            // no colours because there's no template: say so, instead of an empty palette
+            var exists = documentTools.MultilayerTemplateExists(template);
+            NotFoundText.SetCurrentValue(TextBlock.TextProperty, exists ? "" : $"Template not found in the project or the game: {template}");
+            NotFoundText.SetCurrentValue(VisibilityProperty, exists ? Visibility.Collapsed : Visibility.Visible);
+
             CopyTemplateButton.SetCurrentValue(VisibilityProperty,
                 cvm.CanCopyMultilayerTemplate() ? Visibility.Visible : Visibility.Collapsed);
 
