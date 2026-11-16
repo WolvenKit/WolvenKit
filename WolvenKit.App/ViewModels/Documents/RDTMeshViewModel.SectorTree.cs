@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HelixToolkit.Wpf.SharpDX;
@@ -20,6 +21,16 @@ public partial class RDTMeshViewModel
         "Meshes", "Instanced meshes", "Foliage", "Proxy meshes", "Decals", "Entities",
         "Lights", "Effects & sound", "Areas", "Collision", "Other",
     ];
+
+    private const string SectorTypeFolderPrefix = "folder_";
+
+    /// <summary>
+    /// A sector's type folder ("Meshes (60)"): only a container in the tree, not a node. The
+    /// sector's nodes sit in these, not in the sector group itself.
+    /// </summary>
+    public static bool IsSectorTypeFolder(object? element) =>
+        element is GroupModel3DExt { Name: { } name } and not MeshComponent &&
+        name.StartsWith(SectorTypeFolderPrefix, StringComparison.Ordinal);
 
     /// <summary>The folder a node type goes in.</summary>
     public static string SectorNodeCategory(string? type)
@@ -122,7 +133,7 @@ public partial class RDTMeshViewModel
 
             var folder = new GroupModel3DExt
             {
-                Name = "folder_" + new string(category.Where(char.IsLetter).ToArray()),
+                Name = SectorTypeFolderPrefix + new string(category.Where(char.IsLetter).ToArray()),
                 Text = $"{category} ({nodes.Count})",
             };
 

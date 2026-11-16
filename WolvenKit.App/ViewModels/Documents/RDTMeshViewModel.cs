@@ -10166,7 +10166,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
 
     /// <summary>
-    /// The node row (a direct child of the sector group) an object hit in the viewport belongs to:
+    /// The node row (in a type folder of the sector group) an object hit in the viewport belongs to:
     /// meshes and their instances, entities (any depth of components, rigs and bones), area volumes.
     /// </summary>
     private static MeshComponent? SectorNodeRowOf(object? hit)
@@ -10174,7 +10174,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var current = hit as DependencyObject;
         for (var depth = 0; current != null && depth < 64; depth++)
         {
-            if (current is MeshComponent { WorldNodeIndex.Length: > 0 } row && row.Parent is SectorGroup)
+            if (current is MeshComponent { WorldNodeIndex.Length: > 0 } row &&
+                (row.Parent is SectorGroup || (IsSectorTypeFolder(row.Parent) && row.Parent is GroupModel3D { Parent: SectorGroup })))
             {
                 return row;
             }
