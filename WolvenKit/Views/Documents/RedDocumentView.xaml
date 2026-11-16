@@ -37,6 +37,10 @@
                 <docV:RDTMeshView ViewModel="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:RDTSectorObjectsViewModel}">
+                <docV:RDTSectorObjectsView DataContext="{Binding}" />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type docVM:RDTWidgetViewModel}">
                 <docV:RDTWidgetView ViewModel="{Binding}" />
             </DataTemplate>

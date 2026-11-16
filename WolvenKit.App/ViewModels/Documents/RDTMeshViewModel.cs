@@ -165,6 +165,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     public string? SelectedNodeIndex;
 
+    /// <summary>The nodeData entry to select within the node (a cooked node has a row per inner node); null for any.</summary>
+    public int? SelectedNodeDataIndex;
+
+    /// <summary>nodeData entries of the sector node last picked in the viewport ("12, 13").</summary>
+    public string? LastSelectedNodeDataIndices { get; private set; }
+
 
 
     public override void Load()
@@ -1592,6 +1598,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         Parent?.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
 
+        LastSelectedNodeDataIndices = mesh.WorldNodeDataIndices;
         OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
     }
 
@@ -11039,7 +11046,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             case LoadableModel loadableModel:
                 return loadableModel;
             case MeshComponent comp:
-                if (comp.WorldNodeIndex == SelectedNodeIndex)
+                if (comp.WorldNodeIndex == SelectedNodeIndex &&
+                    (_matchNodeDataIndex is not { } entry || HasNodeDataIndex(comp.WorldNodeDataIndices, entry)))
                 {
                     return comp;
                 }
@@ -11059,6 +11067,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         return null;
     }
+    // nodeData entry findMeshChild looks for, if any
+    private int? _matchNodeDataIndex;
+
+    private static bool HasNodeDataIndex(string? indices, int entry) =>
+        !string.IsNullOrEmpty(indices) &&
+        indices.Split(',').Any(i => int.TryParse(i.Trim(), System.Globalization.NumberStyles.None,
+            System.Globalization.CultureInfo.InvariantCulture, out var value) && value == entry);
+
     public void SelectWorldNode()
     {
         if (SelectedNodeIndex is null)
@@ -11066,6 +11082,27 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
         }
 
+        // the row of the nodeData entry first (cooked nodes have one per inner node), else the node's first row
+        _matchNodeDataIndex = SelectedNodeDataIndex;
+        try
+        {
+            var found = FindSelectedWorldNode();
+            if (found is null && SelectedNodeDataIndex is not null)
+            {
+                _matchNodeDataIndex = null;
+                found = FindSelectedWorldNode();
+            }
+
+            SelectedItem = found;
+        }
+        finally
+        {
+            _matchNodeDataIndex = null;
+        }
+    }
+
+    private object? FindSelectedWorldNode()
+    {
         object? selectedMesh = null;
         foreach (var loadableModel in Models)
         {
@@ -11090,7 +11127,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             });
         }
 
-        SelectedItem = selectedMesh;
+        return selectedMesh;
     }
 
     // Hair Gradient
