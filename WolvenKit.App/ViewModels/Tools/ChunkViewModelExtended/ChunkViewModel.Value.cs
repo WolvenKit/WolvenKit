@@ -22,6 +22,7 @@ public partial class ChunkViewModel
     public void CalculateValue()
     {
         Value = "";
+        CalculatePreviewColor();
 
         // nothing to calculate - resolved data is dummy, or isDefault calculated from parent
         if (ResolvedData is RedDummy)

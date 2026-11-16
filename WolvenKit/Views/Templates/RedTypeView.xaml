@@ -426,6 +426,64 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.FilterableDropdownCNameEditor>
 
+                <!-- v of a colorScale override (mltemplate): colour palette for the three channels -->
+                <converters:RedEditorTemplateSelector.RedOverrideColorEditor>
+                    <DataTemplate>
+                        <editors:RedOverrideColorEditor DataContext="{Binding}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedOverrideColorEditor>
+
+                <!-- colorScale of a layer (mlsetup): the dropdown, then the template's colours -->
+                <converters:RedEditorTemplateSelector.MultilayerColorScaleEditor>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- the current colour, next to the value row of the dropdown (like the swatch in the tree) -->
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Width="14"
+                                    Height="14"
+                                    Margin="4,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="{DynamicResource BorderAlt}"
+                                    BorderThickness="1"
+                                    SnapsToDevicePixels="True"
+                                    ToolTip="{Binding PreviewColor, Mode=OneWay}">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{Binding PreviewColor, Mode=OneWay, TargetNullValue=Transparent}" />
+                                    </Border.Background>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PreviewColor, Mode=OneWay}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+
+                                <editors:FilterableDropdownCNameMenu
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    DataContext="{Binding}" />
+                            </Grid>
+                            <editors:MultilayerPaletteView DataContext="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.MultilayerColorScaleEditor>
+
                 <converters:RedEditorTemplateSelector.FilterableDropdownRedstringEditor>
                     <DataTemplate>
                         <editors:FilterableDropdownRedstringMenu DataContext="{Binding}" />

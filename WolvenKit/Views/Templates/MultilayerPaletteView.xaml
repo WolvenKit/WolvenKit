@@ -1,0 +1,38 @@
+<UserControl
+    x:Class="WolvenKit.Views.Editors.MultilayerPaletteView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignWidth="320"
+    d:DesignHeight="160">
+    <!-- DataContext: the ChunkViewModel of a layer's colorScale in a multilayer setup -->
+    <StackPanel>
+        <Expander
+            x:Name="PaletteExpander"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Header="Palette"
+            IsExpanded="True">
+            <ScrollViewer
+                MaxHeight="320"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+                <!--
+                    one block per group of the template's colours, the group's base colour first; the blocks are
+                    as wide as the largest group and flow left to right, then down, in palette order
+                -->
+                <WrapPanel x:Name="RowsPanel" Orientation="Horizontal" />
+            </ScrollViewer>
+        </Expander>
+
+        <!-- only for templates that aren't the project's own yet -->
+        <Button
+            x:Name="CopyTemplateButton"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            HorizontalAlignment="Left"
+            Content="Copy template to project..."
+            ToolTip="Copy the layer's template into the project under a path of its own and point the layer to the copy, to add or change colours without changing the game's template"
+            Click="CopyTemplateButton_OnClick" />
+    </StackPanel>
+</UserControl>

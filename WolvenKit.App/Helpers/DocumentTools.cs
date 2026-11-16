@@ -1536,6 +1536,14 @@ public class DocumentTools
 
     public string[] GetMultilayerProperties(string materialPath, string propertyKey, bool forceCacheRefresh)
     {
+        if (forceCacheRefresh)
+        {
+            lock (s_multilayerColorCache)
+            {
+                s_multilayerColorCache.Remove(materialPath);
+            }
+        }
+
         if (!s_multilayerPropertiesCache.TryGetValue(materialPath, out var mlProperties))
         {
             if (!forceCacheRefresh)
@@ -1602,6 +1610,221 @@ public class DocumentTools
 
 
         return ret.Where(s => !string.IsNullOrEmpty(s)).Select(s => s!).ToArray();
+    }
+
+    /// <summary>colorScale overrides of a multilayer template, in file order and by name.</summary>
+    private sealed record MultilayerTemplateColors(
+        DateTime? Stamp,
+        IReadOnlyList<MultilayerPaletteColor> Colors,
+        Dictionary<string, MultilayerPaletteColor> ByName);
+
+    /// <summary>
+    /// colorScale overrides of each multilayer template read so far, with the write time of the template's project
+    /// file when it was read (null for a template from the game archives).
+    /// </summary>
+    private static readonly Dictionary<string, MultilayerTemplateColors> s_multilayerColorCache = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// The colour of a colorScale override of a multilayer template ("00cf56_69039f" → its v), for the swatches
+    /// of the file editor.
+    /// </summary>
+    public bool TryGetMultilayerColor(string materialPath, string colorName, out (float R, float G, float B) color)
+    {
+        color = default;
+        if (string.IsNullOrEmpty(colorName) || GetMultilayerTemplateColors(materialPath) is not { } colors ||
+            !colors.ByName.TryGetValue(colorName, out var found))
+        {
+            return false;
+        }
+
+        color = (found.R, found.G, found.B);
+        return true;
+    }
+
+    /// <summary>All colorScale overrides of a multilayer template in file order (empty if it can't be read).</summary>
+    public IReadOnlyList<MultilayerPaletteColor> GetMultilayerPalette(string materialPath) =>
+        GetMultilayerTemplateColors(materialPath)?.Colors ?? [];
+
+    /// <summary>
+    /// A template's overrides, read once (project file first, then the game archives) and again when its file in
+    /// the project changed. A template that can't be read is not remembered, so it is tried again.
+    /// </summary>
+    private MultilayerTemplateColors? GetMultilayerTemplateColors(string materialPath)
+    {
+        if (string.IsNullOrEmpty(materialPath))
+        {
+            return null;
+        }
+
+        var stamp = GetProjectFileStamp(materialPath);
+        MultilayerTemplateColors? cached;
+        lock (s_multilayerColorCache)
+        {
+            // trees of documents being opened can be built on other threads
+            s_multilayerColorCache.TryGetValue(materialPath, out cached);
+        }
+
+        if (cached is not null && cached.Stamp == stamp)
+        {
+            return cached;
+        }
+
+        if (ReadCr2WFromRelativePath(materialPath) is not { RootChunk: Multilayer_LayerTemplate template })
+        {
+            return null;
+        }
+
+        var colors = new List<MultilayerPaletteColor>();
+        var byName = new Dictionary<string, MultilayerPaletteColor>(StringComparer.Ordinal);
+        foreach (var entry in template.Overrides.ColorScale)
+        {
+            if (entry?.N.GetResolvedText() is { Length: > 0 } name && entry.V.Count >= 3 && !byName.ContainsKey(name))
+            {
+                var color = new MultilayerPaletteColor(name, entry.V[0], entry.V[1], entry.V[2]);
+                colors.Add(color);
+                byName[name] = color;
+            }
+        }
+
+        cached = new MultilayerTemplateColors(stamp, colors, byName);
+        lock (s_multilayerColorCache)
+        {
+            s_multilayerColorCache[materialPath] = cached;
+        }
+
+        return cached;
+    }
+
+    /// <summary>Last write time of a file in the active project, or null if the project has no such file.</summary>
+    private DateTime? GetProjectFileStamp(string relativePath) =>
+        _projectManager.ActiveProject is { } project && project.GetAbsolutePath(relativePath) is string path && File.Exists(path)
+            ? File.GetLastWriteTimeUtc(path)
+            : null;
+
+    /// <summary>
+    /// Whether a multilayer template is the project's own: a file of the project under a path the game doesn't use.
+    /// Changing such a template doesn't change the game's template, which every material using it would pick up.
+    /// </summary>
+    public bool IsCustomMultilayerTemplate(string templatePath) =>
+        !string.IsNullOrEmpty(templatePath) &&
+        GetProjectFileStamp(templatePath) is not null &&
+        !_archiveManager.Lookup(templatePath, ArchiveManagerScope.Basegame).HasValue;
+
+    /// <summary>
+    /// A free path for a copy of a multilayer template in the project:
+    /// <c>author\project\mltemplates\name.mltemplate</c>, numbered if the name is taken.
+    /// </summary>
+    public string GetCustomMultilayerTemplatePath(string templatePath)
+    {
+        var project = _projectManager.ActiveProject;
+        var author = project?.Author is { Length: > 0 } a ? a : _settingsManager.ModderName is { Length: > 0 } m ? m : "modded";
+        var directory = Path.Join(author.ToArchiveFileName(), (project?.Name ?? "project").ToArchiveFileName(), "mltemplates");
+        var name = Path.GetFileNameWithoutExtension(templatePath.Replace('\\', Path.DirectorySeparatorChar));
+        if (string.IsNullOrEmpty(name))
+        {
+            name = "template";
+        }
+
+        var candidate = Path.Join(directory, name + ".mltemplate");
+        for (var i = 1; IsMultilayerTemplatePathTaken(candidate); i++)
+        {
+            candidate = Path.Join(directory, $"{name}_{i:00}.mltemplate");
+        }
+
+        return candidate;
+    }
+
+    /// <summary>A path as typed, as a depot path of a template: backslashes, no quotes, .mltemplate at the end.</summary>
+    public static string NormalizeMultilayerTemplatePath(string targetPath)
+    {
+        var target = targetPath.Trim().Trim('"').Replace('/', '\\').TrimStart('\\');
+        return target.EndsWith(".mltemplate", StringComparison.OrdinalIgnoreCase) ? target : target + ".mltemplate";
+    }
+
+    /// <summary>
+    /// The name of an installed mod's archive that has a file at this path, or null. A project file at that path
+    /// would override the mod's file, or the other way round, depending on the load order.
+    /// </summary>
+    public string? GetInstalledModArchiveName(string relativePath)
+    {
+        try
+        {
+            return _archiveManager.Lookup(relativePath, ArchiveManagerScope.Mods) is { HasValue: true } modFile
+                ? modFile.Value.GetArchive().Name
+                : null;
+        }
+        catch (Exception e)
+        {
+            _loggerService.Warning($"Could not look up {relativePath} in installed mods: {e.Message}");
+            return null;
+        }
+    }
+
+    private bool IsMultilayerTemplatePathTaken(string relativePath) =>
+        GetProjectFileStamp(relativePath) is not null ||
+        _archiveManager.Lookup(relativePath, ArchiveManagerScope.BasegameAndMods).HasValue;
+
+    /// <summary>
+    /// Copies a multilayer template (a file of the project or of the game) into the project under a path of its
+    /// own. Refuses paths the game uses, so the copy never replaces the game's template, and doesn't overwrite.
+    /// </summary>
+    /// <returns>the depot path of the copy, or null with the reason in <paramref name="error"/></returns>
+    public string? CopyMultilayerTemplateToProject(string templatePath, string targetPath, out string error)
+    {
+        error = "";
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            error = "No project is open.";
+            return null;
+        }
+
+        var target = NormalizeMultilayerTemplatePath(targetPath);
+        if (Path.IsPathRooted(target) || target.Split('\\').Any(part => part is "" or "." or ".."))
+        {
+            error = $"\"{target}\" is not a relative depot path.";
+            return null;
+        }
+
+        if (string.Equals(target, templatePath, StringComparison.OrdinalIgnoreCase) ||
+            _archiveManager.Lookup(target, ArchiveManagerScope.Basegame).HasValue)
+        {
+            error = $"\"{target}\" is a path of the game. Pick a path of your own, so the game's template stays as it is.";
+            return null;
+        }
+
+        var targetFile = project.GetAbsolutePath(target);
+        if (File.Exists(targetFile))
+        {
+            error = $"\"{target}\" already exists in the project.";
+            return null;
+        }
+
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(targetFile)!);
+            if (project.GetAbsolutePath(templatePath) is string sourceFile && File.Exists(sourceFile))
+            {
+                File.Copy(sourceFile, targetFile);
+            }
+            else if (_archiveManager.Lookup(templatePath) is { HasValue: true } gameFile)
+            {
+                using var stream = new FileStream(targetFile, FileMode.CreateNew);
+                gameFile.Value.Extract(stream);
+            }
+            else
+            {
+                error = $"\"{templatePath}\" was found neither in the project nor in the game.";
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            error = e.Message;
+            return null;
+        }
+
+        _loggerService.Info($"Copied multilayer template {templatePath} to {target}");
+        return target;
     }
 
     public List<IRedRef> CollectDependencies(IRedRef redRef)

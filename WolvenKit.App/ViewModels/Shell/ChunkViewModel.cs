@@ -403,6 +403,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Parent.CalculateValue();
                 }
 
+                // a channel of a multilayer colorScale override (v[0..2]): the swatches of v and its entry follow
+                if (Parent.Parent?.ResolvedData is Multilayer_LayerTemplateOverridesColor)
+                {
+                    Parent.CalculatePreviewColor();
+                    Parent.Parent.CalculatePreviewColor();
+                }
+
                 if (Data is CName &&
                     Parent.Parent?.ResolvedData is meshMeshAppearance or redTagList or entVisualTagsSchema)
                 {
