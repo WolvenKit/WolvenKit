@@ -101,9 +101,23 @@
             Loaded="Viewport3DX_Loaded"
             CameraChanged="HxViewport_OnCameraChanged"
             ZoomExtentsWhenLoaded="True"
-            
-            OITRenderMode="DepthPeeling"
             OITDepthPeelingIteration="8">
+
+            <!--
+                Transparency: depth peeling sorts glass, hair and decals well, but draws every transparent
+                object up to 8 times; sectors and blocks (thousands of objects) use the one-pass weighted
+                blend. Cut-out materials (foliage, fences) are opaque with an alpha test either way.
+            -->
+            <hx:Viewport3DX.Style>
+                <Style TargetType="hx:Viewport3DX">
+                    <Setter Property="OITRenderMode" Value="DepthPeeling" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsObjectPreview}" Value="False">
+                            <Setter Property="OITRenderMode" Value="SinglePassWeighted" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </hx:Viewport3DX.Style>
 
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding

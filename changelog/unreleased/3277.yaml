@@ -9,3 +9,8 @@ changes:
       pr-number: 3277
       author: "Ametis81"
       description: "Generated materials are shown in sector previews."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3277
+      author: "Ametis81"
+      description: "Cut-out materials (foliage, fences, chains, masked) are drawn with an alpha test as in the game; sector previews use one-pass transparency and turn much faster."
