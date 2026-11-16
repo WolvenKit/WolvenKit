@@ -1038,13 +1038,16 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            // A newer search (or clearing) drops what an older one left queued.
+            var generation = ++_nodeSearchGeneration;
+
             if (string.IsNullOrEmpty(text))
             {
                 _nodeSearchMatches = null;
                 view.Filter = null;
                 view.RefreshFilter();
                 SetNodeSearchCount(null);
-                ScrollNodeTreeToTop();
+                AfterNodeTreeRefresh(generation, ScrollNodeTreeToTop);
                 return;
             }
 
@@ -1064,28 +1067,67 @@ namespace WolvenKit.Views.Documents
             view.Filter = item => _nodeSearchMatches?.Contains(item) != false;
             view.RefreshFilter();
             SetNodeSearchCount(found.Count);
-            ScrollNodeTreeToTop();
 
-            // With a few hundred rows the tree stays usable; beyond that only the count is shown.
-            if (found.Count <= NodeSearchExpandLimit)
+            AfterNodeTreeRefresh(generation, () =>
             {
-                foreach (var element in found.OfType<DependencyObject>())
-                {
-                    ExpandTreePathTo(element);
-                }
-            }
+                ScrollNodeTreeToTop();
 
-            // A node number that is exactly one node's index: select it and scroll to it (also
-            // past the limit: "1" finds hundreds of nodes, but means node #0001).
-            if (numbered is [var exact])
-            {
-                if (ViewModel is { } vm && !ReferenceEquals(vm.SelectedItem, exact))
+                // With a few hundred rows the tree stays usable; beyond that only the count is shown.
+                if (found.Count <= NodeSearchExpandLimit)
                 {
-                    vm.SelectedItem = exact; // the view model's change reveals it in the tree
+                    ExpandFoundRows(found);
                 }
-                else
+
+                // A node number that is exactly one node's index: select it and scroll to it (also
+                // past the limit: "1" finds hundreds of nodes, but means node #0001).
+                if (numbered is [var exact])
                 {
-                    RevealSelectedItem();
+                    if (ViewModel is { } vm && !ReferenceEquals(vm.SelectedItem, exact))
+                    {
+                        vm.SelectedItem = exact; // the view model's change reveals it in the tree
+                    }
+                    else
+                    {
+                        RevealSelectedItem();
+                    }
+                }
+            });
+        }
+
+        private int _nodeSearchGeneration;
+
+        /// <summary>
+        /// Runs <paramref name="action"/> once the grid has rebuilt its rows for the new filter,
+        /// unless another search came first. With expanding, scrolling and selecting in the same
+        /// pass as RefreshFilter, a one-digit search hung WolvenKit: the grid showed the root
+        /// collapsed over the old rows and threw ArgumentOutOfRangeException ("-1 out of range
+        /// 0 to 0") over and over.
+        /// </summary>
+        private void AfterNodeTreeRefresh(int generation, Action action) =>
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (generation == _nodeSearchGeneration && NodeTreeGrid.View != null)
+                {
+                    action();
+                }
+            }), DispatcherPriority.Background);
+
+        /// <summary>Opens the parents of the found rows; each parent once (hundreds of rows share a few folders and nodes).</summary>
+        private void ExpandFoundRows(List<object> found)
+        {
+            var opened = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            foreach (var element in found.OfType<DependencyObject>())
+            {
+                if (LogicalTreeHelper.GetParent(element) is not { } parent || opened.Contains(parent))
+                {
+                    continue;
+                }
+
+                ExpandTreePathTo(element);
+                var current = parent;
+                while (current != null && opened.Add(current))
+                {
+                    current = LogicalTreeHelper.GetParent(current);
                 }
             }
         }
