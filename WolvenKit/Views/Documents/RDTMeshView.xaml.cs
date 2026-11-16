@@ -34,8 +34,14 @@ namespace WolvenKit.Views.Documents
             NodeTreeGrid.NodeExpanded += NodeTreeGrid_OnNodeToggled;
             NodeTreeGrid.NodeCollapsed += NodeTreeGrid_OnNodeToggled;
             // a new scene (appearance, sector) gets the search that is typed in
+            // and opens on the selection: back from another tab of the document the tree is new and
+            // closed, while the object stays selected in the viewport
             NodeTreeGrid.ItemsSourceChanged += (_, _) =>
-                Dispatcher.InvokeAsync(() => ApplyNodeSearch(NodeSearchBox.Text?.Trim()), DispatcherPriority.Background);
+                Dispatcher.InvokeAsync(() =>
+                {
+                    ApplyNodeSearch(NodeSearchBox.Text?.Trim());
+                    RevealSelectedItem();
+                }, DispatcherPriority.Background);
 
             this.WhenActivated(disposables =>
             {
@@ -100,8 +106,10 @@ namespace WolvenKit.Views.Documents
                         .DisposeWith(disposables);
 
                     // Viewport → tree: when the selection changes (e.g. a click in the viewport),
-                    // expand the branch that holds it and scroll it into view.
+                    // expand the branch that holds it and scroll it into view; also for the
+                    // selection the view model already holds when the tab is shown again.
                     vm.PropertyChanged += OnViewModelPropertyChanged;
+                    _ = Dispatcher.BeginInvoke(new Action(RevealSelectedItem), DispatcherPriority.ApplicationIdle);
                     Disposable
                         .Create(() => vm.PropertyChanged -= OnViewModelPropertyChanged)
                         .DisposeWith(disposables);

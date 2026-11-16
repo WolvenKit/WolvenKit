@@ -142,21 +142,29 @@ public partial class RDTMeshViewModel
             var node = inner.InnerNodes[index];
             var range = inner.TransformRanges[index];
 
-            var placements = new List<SectorMeshPlacement>();
+            // hardware instances: one draw per submesh for the whole range, not one scene node per
+            // transform (a dense interior has over a thousand, which made turning the camera slow)
+            var instances = new List<SharpDX.Matrix>();
             var start = (int)(ushort)range.TransformIndex;
             var end = Math.Min(start + (ushort)range.TransformCount, world.Transforms.Count);
             for (var j = start; j < end; j++)
             {
                 if (world.Transforms[j] is { } transform)
                 {
-                    placements.Add(new SectorMeshPlacement(entries[0], SectorInstanceMatrix(transform)));
+                    instances.Add(ToSharpDXMatrix(SectorInstanceMatrix(transform)));
                 }
             }
 
+            if (instances.Count == 0)
+            {
+                continue;
+            }
+
             var rowName = dataIndices.Count > 1 ? $"{name}_{index}" : name;
-            // the transforms are shared by the entries: the group shows with any of them
-            AddSectorMeshGroup(groups, app, rowName, typeStr, handleIndex, node.Mesh.DepotPath, node.MeshAppearance, placements,
-                groupDataIndices: entries.ToArray());
+            // the transforms are world space and shared by the entries: the group shows with any of them
+            AddSectorMeshGroup(groups, app, rowName, typeStr, handleIndex, node.Mesh.DepotPath, node.MeshAppearance,
+                [new SectorMeshPlacement(entries[0], new Matrix3D())],
+                groupDataIndices: entries.ToArray(), instances: instances);
         }
     }
 
@@ -354,29 +362,34 @@ public partial class RDTMeshViewModel
     private void AddDestructibleSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
         worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldInstancedDestructibleMeshNode node)
     {
-        var placements = new List<SectorMeshPlacement>();
-        foreach (var info in transforms)
+        // the instance transforms (relative to the node) as hardware instances of each entry's placement
+        var instances = new List<SharpDX.Matrix>();
+        foreach (var transform in node.InstanceTransforms)
         {
-            var nodeMatrix = SectorNodeMatrix(info);
-            foreach (var transform in node.InstanceTransforms)
+            if (transform is null)
             {
-                if (transform is null)
-                {
-                    continue;
-                }
-
-                var matrix = new Matrix3D();
-                matrix.Rotate(ToQuaternion(transform.Orientation));
-                matrix.Translate(ToVector3D(transform.Position));
-                matrix.Append(nodeMatrix);
-                placements.Add(new SectorMeshPlacement(buffer.IndexOf(info), matrix));
+                continue;
             }
+
+            var matrix = new Matrix3D();
+            matrix.Rotate(ToQuaternion(transform.Orientation));
+            matrix.Translate(ToVector3D(transform.Position));
+            instances.Add(ToSharpDXMatrix(matrix));
         }
+
+        if (instances.Count == 0)
+        {
+            return;
+        }
+
+        var placements = transforms
+            .Select(info => new SectorMeshPlacement(buffer.IndexOf(info), SectorNodeMatrix(info)))
+            .ToList();
 
         // The node may name its mesh in staticMesh only.
         var mesh = node.Mesh.DepotPath != ResourcePath.Empty ? node.Mesh.DepotPath : node.StaticMesh.DepotPath;
         var appearance = node.Mesh.DepotPath != ResourcePath.Empty ? node.MeshAppearance : node.StaticMeshAppearance;
-        AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, mesh, appearance, placements);
+        AddSectorMeshGroup(groups, app, name, typeStr, handleIndex, mesh, appearance, placements, instances: instances);
     }
 
     /// <summary>

@@ -574,6 +574,13 @@ float4 pbrMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
     }
     albedo = lerp(albedo, input.c, vertColorBlending);
 
+    // Cut-out materials (foliage, fences, chains), sxGlassBack.w = threshold, are drawn opaque with an alpha test: no
+    // blending, so no sorting, and the holes show what is behind them.
+    if (sxGlassBack.w > 0)
+    {
+        clip(albedo.a * input.cDiffuse.a - sxGlassBack.w);
+    }
+
     // Glass (Blender add-on glass.py): TintFromVertexPaint multiplies the tint by the vertex
     // colour; towards grazing angles the tint deepens to tint^1.5 * 0.75, with the Fresnel
     // exponent FresnelBias picks (0.5 / 1.5 / 4).
