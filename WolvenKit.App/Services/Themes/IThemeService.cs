@@ -113,7 +113,14 @@ public interface IThemeService
 
     Color ResolveAccent(ThemeDto theme);
 
+    /// <summary>Text color on the accent set by the theme or a theme it is based on; null if none sets one.</summary>
     Color? ResolveAccentForeground(ThemeDto theme);
+
+    /// <summary>
+    /// Text color to use on the accent: <see cref="ResolveAccentForeground"/>, else black when white text would be
+    /// hard to read on the accent (light accents). Null keeps the default (white).
+    /// </summary>
+    Color? ResolveReadableAccentForeground(ThemeDto theme);
 
     string GetUniqueName(string baseName);
 

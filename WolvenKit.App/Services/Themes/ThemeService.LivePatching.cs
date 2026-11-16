@@ -357,7 +357,8 @@ public sealed partial class ThemeService
             map.TryAdd("DarkPrimaryBrush", shadow);
         }
 
-        if (ResolveAccentForeground(theme) is { } accentForeground)
+        // set by the theme, or black on a light accent the theme gives no text color for
+        if (ResolveReadableAccentForeground(theme) is { } accentForeground)
         {
             map.TryAdd("WolvenKitAccentForeground", accentForeground);
         }
@@ -369,6 +370,13 @@ public sealed partial class ThemeService
             {
                 var text = map.TryGetValue("ContentForeground", out var fg) ? fg : GetDefaultColor("ContentForeground") ?? Colors.White;
                 var readable = ContrastRatio(Colors.White, background) >= ContrastRatio(text, background) ? Colors.White : text;
+                // a light surface (e.g. the dark variant of a pale accent) where white and the light text of a
+                // dark theme are both hard to read: black. Same limit as text on the accent, so the built-in
+                // themes, whose white text on these surfaces stays above it, keep their look.
+                if (ContrastRatio(readable, background) < MinAccentTextContrast && ContrastRatio(Colors.Black, background) > ContrastRatio(readable, background))
+                {
+                    readable = Colors.Black;
+                }
                 map[target] = readable;
                 foreach (var derived in Catalog.Find(target)?.DerivedBrushes ?? [])
                 {

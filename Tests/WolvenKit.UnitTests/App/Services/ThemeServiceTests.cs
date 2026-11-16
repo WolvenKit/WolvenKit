@@ -161,6 +161,20 @@ public class ThemeServiceTests
     }
 
     [Fact]
+    public void TextOnAccentShadow_BlackOnPaleAccents_WhiteWhereReadable()
+    {
+        using var f = new Fixture();
+
+        // beige accent: its dark variant is still light, white text on it is about 2.5:1
+        var pale = f.Service.ResolveEffectiveColors(new ThemeDto { Name = "Pale", Accent = "#F5F5DC" });
+        // cyan accent: white text on its dark variant is about 4:1, as in the built-in themes; it stays white
+        var cyan = f.Service.ResolveEffectiveColors(new ThemeDto { Name = "Cyan", Accent = "#00D0E0" });
+
+        Assert.Equal(Colors.Black, pale["WolvenKitAccentShadowForeground"]);
+        Assert.Equal(Colors.White, cyan["WolvenKitAccentShadowForeground"]);
+    }
+
+    [Fact]
     public void Overrides_FlattenTranslucentSurfaces()
     {
         using var f = new Fixture();
@@ -578,8 +592,93 @@ public class ThemeServiceTests
     [InlineData("")]
     [InlineData("#ZZZZZZ")]
     [InlineData("not a color")]
+    [InlineData("sc#1")]
+    [InlineData("sc#1,2,3,4,5")]
     public void TryParseColor_RejectsInvalid(string? value) =>
         Assert.Null(ThemeService.TryParseColor(value));
+
+    [Fact]
+    public void ReadableAccentForeground_BlackOnLightAccents_ThemeValueWins()
+    {
+        using var f = new Fixture();
+
+        // white stays (null = default) where it is readable, the stock red included
+        Assert.Null(f.Service.ResolveReadableAccentForeground(new ThemeDto { Name = "Stock" }));
+        Assert.Null(f.Service.ResolveReadableAccentForeground(new ThemeDto { Name = "Blue", Accent = "#1E5AA8" }));
+
+        Assert.Equal(Colors.Black, f.Service.ResolveReadableAccentForeground(new ThemeDto { Name = "Yellow", Accent = "#FFE000" }));
+        Assert.Equal(Hex("#102030"),
+            f.Service.ResolveReadableAccentForeground(new ThemeDto { Name = "Set", Accent = "#FFE000", AccentForeground = "#102030" }));
+    }
+
+    #endregion
+
+    #region file names
+
+    [Fact]
+    public void Save_NamesWithTheSameFileName_KeepBothFiles()
+    {
+        using var f = new Fixture();
+
+        // '/' is not allowed in file names: both names map to a_b.json
+        var first = f.SaveNew("a/b", null, ("ContentBackground", "#101010"));
+        var second = f.SaveNew("a_b", null, ("ContentBackground", "#202020"));
+
+        Assert.Equal("a_b.json", Path.GetFileName(first.FilePath));
+        Assert.Equal("a_b (2).json", Path.GetFileName(second.FilePath));
+        var repository = new ThemeRepository(new Mock<ILoggerService>().Object, f.Directory);
+        Assert.Equal("#101010", repository.Read(first.FilePath!).Colors["ContentBackground"]);
+        Assert.Equal("#202020", repository.Read(second.FilePath!).Colors["ContentBackground"]);
+    }
+
+    [Fact]
+    public void Save_DoesNotOverwriteAFileSkippedWhenLoading()
+    {
+        const string broken = "{ this is not json";
+        using var f = new Fixture(seed: dir => WriteTheme(dir, "broken.json", broken));
+
+        var saved = f.SaveNew("broken", null, ("ContentBackground", "#101010"));
+
+        Assert.Equal("broken (2).json", Path.GetFileName(saved.FilePath));
+        Assert.Equal(broken, File.ReadAllText(Path.Combine(f.Directory, "broken.json")));
+    }
+
+    [Fact]
+    public void Save_RenameThatOnlyChangesCase_KeepsTheFile()
+    {
+        using var f = new Fixture();
+        var saved = f.SaveNew("Mytheme", null, ("ContentBackground", "#101010"));
+
+        var renamed = saved.Clone();
+        renamed.Name = "MyTheme";
+        var result = f.Service.Save(renamed, "Mytheme");
+
+        Assert.Equal(saved.FilePath, result.FilePath);
+        Assert.Equal("MyTheme", f.Get("MyTheme").Name);
+        Assert.Single(System.IO.Directory.GetFiles(f.Directory, "*.json"));
+    }
+
+    [Fact]
+    public void Import_LeavesOutValuesThatAreNotColors()
+    {
+        using var f = new Fixture();
+        var path = Path.Combine(f.Directory, "import.out");
+        File.WriteAllText(path, """
+            {
+              "formatVersion": 1,
+              "name": "Imported",
+              "accent": "not a color",
+              "colors": { "ContentBackground": "#123456", "BorderAlt": "sc#1" }
+            }
+            """);
+
+        var imported = f.Service.Import(path);
+        var stored = new ThemeRepository(new Mock<ILoggerService>().Object, f.Directory).Read(imported.FilePath!);
+
+        Assert.Equal(new[] { "ContentBackground" }, stored.Colors.Keys);
+        Assert.Null(stored.Accent);
+        Assert.Equal(Hex("#123456"), f.Service.ResolveOverrides(imported)["ContentBackground"]);
+    }
 
     #endregion
 }

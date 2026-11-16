@@ -132,6 +132,12 @@ namespace WolvenKit
             _themeService.CurrentThemeChanging += (_, _) => OnThemeChanging();
             _themeService.CurrentThemeChanged += (_, _) => OnThemeChanged();
 
+            // The main window is already shown (InitializeShell) and usually active: its first activation came
+            // before this subscription, so the library colors were only bridged after the next one (Alt+Tab),
+            // and until then the AdonisUI controls (the settings page, message boxes) kept their own gray colors.
+            // Bridge them now; the first activation still re-does it.
+            ApplyThemeOverridesOnTop();
+
             // SfSkinManager may merge its own brush dictionaries when the main window gets its theme;
             // keep the WolvenKit theme overrides on top of them.
             Activated += OnFirstActivated;
@@ -239,6 +245,12 @@ namespace WolvenKit
         private void OnFirstActivated(object sender, EventArgs e)
         {
             Activated -= OnFirstActivated;
+            ApplyThemeOverridesOnTop();
+        }
+
+        /// <summary>The theme dictionary back on top, and the theme colors copied to the AdonisUI / MahApps keys.</summary>
+        private void ApplyThemeOverridesOnTop()
+        {
             _themeService.EnsureResourcesOnTop();
             WolvenKit.Helpers.AdonisThemeBridge.Apply();
         }
@@ -246,7 +258,9 @@ namespace WolvenKit
         private static IThemeSetting BuildTheme(ISettingsManager settingsManager, IThemeService themeService)
         {
             var theme = themeService.Current;
-            var accentForeground = themeService.ResolveAccentForeground(theme);
+            // text on Syncfusion's primary (accent) color; stays Syncfusion's default unless the theme sets one
+            // or the accent is too light for white text
+            var accentForeground = themeService.ResolveReadableAccentForeground(theme);
 
             var settings = new MaterialDarkThemeSettings
             {
@@ -409,11 +423,22 @@ namespace WolvenKit
             {
                 showTimer.Stop();
 
-                // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
-                themeService.Refresh();
-                window.InvalidateVisual();
-                window.UpdateLayout();
-                window.Visibility = Visibility.Visible;
+                try
+                {
+                    // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
+                    themeService.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    logger?.Error($"Themes: could not patch the dictionaries loaded while switching: {ex.Message}");
+                }
+                finally
+                {
+                    // Always shown again: an exception above used to leave WolvenKit running without its window.
+                    window.InvalidateVisual();
+                    window.UpdateLayout();
+                    window.Visibility = Visibility.Visible;
+                }
 
                 if (dockState is not null)
                 {

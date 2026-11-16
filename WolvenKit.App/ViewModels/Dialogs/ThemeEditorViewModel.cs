@@ -97,8 +97,6 @@ public partial class ThemeColorEntryViewModel : ObservableObject
 /// </summary>
 public partial class ThemeEditorViewModel : ObservableObject
 {
-    private static readonly Color s_defaultAccentForeground = Colors.White;
-
     public const string BasicGroup = "Main colors";
 
     /// <summary>
@@ -171,11 +169,11 @@ public partial class ThemeEditorViewModel : ObservableObject
 
         var baseTheme = GetBaseTheme();
         _inheritedAccent = baseTheme is null ? IThemeService.DefaultAccent : themeService.ResolveAccent(baseTheme);
-        _inheritedAccentForeground = (baseTheme is null ? null : themeService.ResolveAccentForeground(baseTheme)) ?? s_defaultAccentForeground;
 
         var ownAccent = source.IsBuiltIn ? null : ThemeService.TryParseColor(source.Accent);
         var ownAccentForeground = source.IsBuiltIn ? null : ThemeService.TryParseColor(source.AccentForeground);
         Accent = ownAccent ?? _inheritedAccent;
+        _inheritedAccentForeground = InheritedAccentForegroundFor(baseTheme, Accent);
         AccentForeground = ownAccentForeground ?? _inheritedAccentForeground;
 
         var basicOrder = s_basicColors.Select((b, i) => (b.Key, b.Name, i)).ToDictionary(b => b.Key, b => (b.Name, Index: b.i), StringComparer.Ordinal);
@@ -424,18 +422,17 @@ public partial class ThemeEditorViewModel : ObservableObject
         var baseTheme = GetBaseTheme();
 
         var newAccent = baseTheme is null ? IThemeService.DefaultAccent : _themeService.ResolveAccent(baseTheme);
-        var newAccentForeground = (baseTheme is null ? null : _themeService.ResolveAccentForeground(baseTheme)) ?? s_defaultAccentForeground;
         var accentWasOverridden = IsAccentOverridden;
         var accentForegroundWasOverridden = IsAccentForegroundOverridden;
         _inheritedAccent = newAccent;
-        _inheritedAccentForeground = newAccentForeground;
+        _inheritedAccentForeground = InheritedAccentForegroundFor(baseTheme, accentWasOverridden ? Accent : newAccent);
         if (!accentWasOverridden)
         {
             Accent = newAccent;
         }
         if (!accentForegroundWasOverridden)
         {
-            AccentForeground = newAccentForeground;
+            AccentForeground = _inheritedAccentForeground;
         }
         OnPropertyChanged(nameof(IsAccentOverridden));
         OnPropertyChanged(nameof(IsAccentForegroundOverridden));
@@ -484,10 +481,26 @@ public partial class ThemeEditorViewModel : ObservableObject
     {
         if (!_isInitializing)
         {
+            // A text color this theme does not set follows the accent, as when the theme is applied:
+            // white, or black on a light accent.
+            var followsAccent = !IsAccentForegroundOverridden;
+            _inheritedAccentForeground = InheritedAccentForegroundFor(GetBaseTheme(), value);
+            if (followsAccent)
+            {
+                AccentForeground = _inheritedAccentForeground;
+            }
+            OnPropertyChanged(nameof(IsAccentForegroundOverridden));
             RefreshInheritedColors();
         }
         RaisePaletteChanged();
     }
+
+    /// <summary>
+    /// Text on the accent when this theme sets none: the one of the base theme, else readable on
+    /// <paramref name="accent"/> (see <see cref="ThemeService.ReadableTextOn"/>).
+    /// </summary>
+    private Color InheritedAccentForegroundFor(ThemeDto? baseTheme, Color accent) =>
+        (baseTheme is null ? null : _themeService.ResolveAccentForeground(baseTheme)) ?? ThemeService.ReadableTextOn(accent);
 
     partial void OnAccentForegroundChanged(Color value) => RaisePaletteChanged();
 
