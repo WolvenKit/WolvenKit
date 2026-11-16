@@ -1163,7 +1163,7 @@
                     VerticalAlignment="Center"
                     Opacity="0.7"
                     Visibility="Collapsed"
-                    ToolTip="Rows found by themselves. Up to 200 get their parents opened" />
+                    ToolTip="Rows found, not counting those inside another found row. Up to 200 get their parents opened" />
                 <Grid>
                     <!-- right padding: room for the clear button over the text -->
                     <TextBox

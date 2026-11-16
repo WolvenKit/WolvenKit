@@ -1044,17 +1044,19 @@ namespace WolvenKit.Views.Documents
                 view.Filter = null;
                 view.RefreshFilter();
                 SetNodeSearchCount(null);
+                ScrollNodeTreeToTop();
                 return;
             }
 
             var query = new NodeSearchQuery(text, NormalizeNodeNumber(text));
             var matches = new HashSet<object>(ReferenceEqualityComparer.Instance);
             var found = new List<object>();
+            var numbered = new List<WolvenKit.App.Models.MeshComponent>();
             if (ViewModel?.SelectedModelGroup is { } roots)
             {
                 foreach (var root in roots)
                 {
-                    CollectNodeSearchMatches(root, query, false, matches, found);
+                    CollectNodeSearchMatches(root, query, false, matches, found, numbered);
                 }
             }
 
@@ -1062,6 +1064,7 @@ namespace WolvenKit.Views.Documents
             view.Filter = item => _nodeSearchMatches?.Contains(item) != false;
             view.RefreshFilter();
             SetNodeSearchCount(found.Count);
+            ScrollNodeTreeToTop();
 
             // With a few hundred rows the tree stays usable; beyond that only the count is shown.
             if (found.Count <= NodeSearchExpandLimit)
@@ -1074,11 +1077,7 @@ namespace WolvenKit.Views.Documents
 
             // A node number that is exactly one node's index: select it and scroll to it (also
             // past the limit: "1" finds hundreds of nodes, but means node #0001).
-            if (query.Number != null &&
-                found.OfType<WolvenKit.App.Models.MeshComponent>()
-                    .Where(m => NormalizeNodeNumber(m.WorldNodeIndex) == query.Number)
-                    .Take(2)
-                    .ToList() is [var exact])
+            if (numbered is [var exact])
             {
                 if (ViewModel is { } vm && !ReferenceEquals(vm.SelectedItem, exact))
                 {
@@ -1104,6 +1103,19 @@ namespace WolvenKit.Views.Documents
 
             NodeSearchCount.SetCurrentValue(TextBlock.TextProperty, text);
             NodeSearchCount.SetCurrentValue(VisibilityProperty, count == null ? Visibility.Collapsed : Visibility.Visible);
+        }
+
+        /// <summary>
+        /// Back to the first row: a new filter left the old scroll offset, and when it was past
+        /// the end of the shorter list the tree showed no rows at all.
+        /// </summary>
+        private void ScrollNodeTreeToTop()
+        {
+            if (NodeTreeGrid.View is { } view && ((IEnumerable<TreeNode>)view.Nodes).FirstOrDefault() is { } first &&
+                NodeTreeGrid.ResolveToRowIndex(first) is var rowIndex and >= 0)
+            {
+                NodeTreeGrid.ScrollInView(new RowColumnIndex(rowIndex, 0));
+            }
         }
 
         private void ShowHiddenBySearchHint(bool show) =>
@@ -1139,13 +1151,21 @@ namespace WolvenKit.Views.Documents
             return number.Length == 0 ? "0" : number;
         }
 
-        // found: the rows that match by themselves, in tree order (not those only under a match).
-        private static void CollectNodeSearchMatches(object element, NodeSearchQuery query, bool underMatch, HashSet<object> matches, List<object> found)
+        // found: the rows that match by themselves and are not inside another found row, in tree
+        // order (what the count shows and whose parents are opened). numbered: the nodes whose
+        // index is the typed number, wherever they are (the sector's own name may match too).
+        private static void CollectNodeSearchMatches(object element, NodeSearchQuery query, bool underMatch,
+            HashSet<object> matches, List<object> found, List<WolvenKit.App.Models.MeshComponent> numbered)
         {
             var self = NodeMatches(element, query);
-            if (self)
+            if (self && !underMatch)
             {
                 found.Add(element);
+            }
+
+            if (element is WolvenKit.App.Models.MeshComponent mesh && IsNumber(mesh.WorldNodeIndex, query.Number))
+            {
+                numbered.Add(mesh);
             }
 
             var match = underMatch || self;
@@ -1158,10 +1178,15 @@ namespace WolvenKit.Views.Documents
             {
                 foreach (var child in group.Children)
                 {
-                    CollectNodeSearchMatches(child, query, match, matches, found);
+                    CollectNodeSearchMatches(child, query, match, matches, found, numbered);
                 }
             }
         }
+
+        // "#264" and "0264" find "#0264": the index compared without '#' and leading zeros
+        // (a part of a number still finds it through the "#0264" label)
+        private static bool IsNumber(string index, string number) =>
+            number != null && NormalizeNodeNumber(index) == number;
 
         private static bool NodeMatches(object element, NodeSearchQuery query)
         {
@@ -1170,11 +1195,6 @@ namespace WolvenKit.Views.Documents
             static bool Has(string value, string text) =>
                 !string.IsNullOrEmpty(value) && value.Contains(text, StringComparison.OrdinalIgnoreCase);
 
-            // "#264" and "0264" find "#0264": the index compared without '#' and leading zeros
-            // (a part of a number still finds it through the "#0264" label)
-            static bool IsNumber(string index, string number) =>
-                number != null && NormalizeNodeNumber(index) == number;
-
             return element switch
             {
                 WolvenKit.App.Models.MeshComponent mesh =>
@@ -1182,7 +1202,7 @@ namespace WolvenKit.Views.Documents
                     Has(mesh.DepotPath.GetResolvedText(), text) || Has(mesh.WorldNodeType, text),
                 // A sector's type folder ("Meshes (264)") is only a container: its name and count
                 // would bring in all of its nodes.
-                WolvenKit.App.Models.GroupModel3DExt folder when folder.Name?.StartsWith("folder_", StringComparison.Ordinal) == true => false,
+                WolvenKit.App.Models.GroupModel3DExt folder when RDTMeshViewModel.IsSectorTypeFolder(folder) => false,
                 WolvenKit.App.Models.GroupModel3DExt group => Has(group.Text, text) || Has(group.Name, text),
                 WolvenKit.App.Models.SubmeshComponent submesh => Has(submesh.Text, text) || Has(submesh.Name, text),
                 HelixToolkit.Wpf.SharpDX.Element3D other => Has(other.Name, text),
