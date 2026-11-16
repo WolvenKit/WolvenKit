@@ -49,6 +49,7 @@ public class SectorObjectListTests
         var xl = SectorObjectList.BuildXlRemoval("base/worlds/x/interior_-25_30_0_0.streamingsector", 3112, [poster, hedge]);
 
         Assert.Equal(
+            "# Game version: 2.5\n" +
             "streaming:\n" +
             "  sectors:\n" +
             "    - path: base\\worlds\\x\\interior_-25_30_0_0.streamingsector\n" +
@@ -87,6 +88,14 @@ public class SectorObjectListTests
         hedge.Elements[1].IsChecked = true;
         Assert.DoesNotContain("instanceDeletions", SectorObjectList.BuildXlRemoval("x.streamingsector", 10, [hedge]));
     }
+
+    [Theory]
+    [InlineData(2500, "2.5")]
+    [InlineData(2310, "2.31")]
+    [InlineData(2120, "2.12")]
+    [InlineData(2599, "2.5")]
+    public void GameVersionText_AsModdingToolsWriteIt(int version, string expected) =>
+        Assert.Equal(expected, SectorObjectList.GameVersionText(version));
 
     [Fact]
     public void Categories_OnlyTellingFlags_InOrder()

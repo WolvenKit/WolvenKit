@@ -389,6 +389,8 @@ public static class SectorObjectList
     public static string BuildXlRemoval(string sectorPath, int expectedNodes, IEnumerable<SectorObject> objects)
     {
         var text = new StringBuilder();
+        // ArchiveXL Sector Updater and Removal Editor read the game version a file was made for from this line
+        text.AppendLine(CultureInfo.InvariantCulture, $"# Game version: {GameVersionText((int)gameGameVersion.Current)}");
         text.AppendLine("streaming:");
         text.AppendLine("  sectors:");
         text.AppendLine(CultureInfo.InvariantCulture, $"    - path: {sectorPath.Replace('/', '\\')}");
@@ -413,6 +415,17 @@ public static class SectorObjectList
         }
 
         return text.ToString();
+    }
+
+    /// <summary>"2.5" for 2500, "2.31" for 2310 (patch 2.3, hotfix 1), as the game and modding tools name versions.</summary>
+    internal static string GameVersionText(int version)
+    {
+        var major = version / 1000;
+        var minor = version % 1000 / 100;
+        var hotfix = version % 100 / 10;
+        return hotfix is > 0 and < 9
+            ? string.Create(CultureInfo.InvariantCulture, $"{major}.{minor}{hotfix}")
+            : string.Create(CultureInfo.InvariantCulture, $"{major}.{minor}");
     }
 
     /// <summary>The node range an entry is in: the last range starting at or before it.</summary>
