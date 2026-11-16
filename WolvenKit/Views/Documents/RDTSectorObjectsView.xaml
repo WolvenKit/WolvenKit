@@ -1,0 +1,322 @@
+<UserControl
+    x:Class="WolvenKit.Views.Documents.RDTSectorObjectsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type={x:Type documents:RDTSectorObjectsViewModel}}"
+    d:DesignWidth="900"
+    d:DesignHeight="500">
+    <!-- every object of a sector on its own row, grouped by node range (variant) and kind; filtered in code-behind -->
+    <DockPanel Background="{DynamicResource ContentBackground}">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Margin="{DynamicResource WolvenKitMarginSmall}">
+            <DockPanel LastChildFill="True">
+                <Button
+                    DockPanel.Dock="Right"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    Padding="8,2"
+                    Content="Clear .xl"
+                    Visibility="{Binding HasXl, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding ClearXlCommand}" />
+                <Button
+                    DockPanel.Dock="Right"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    Padding="8,2"
+                    Content="Check .xl..."
+                    ToolTip="Check an ArchiveXL removal against this sector, as ArchiveXL does: marks what it removes, flags what no longer matches (after a game patch the indices point at other objects)"
+                    Command="{Binding CheckXlCommand}" />
+                <CheckBox
+                    DockPanel.Dock="Right"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    VerticalAlignment="Center"
+                    Content="Only in .xl"
+                    Visibility="{Binding HasXl, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    IsChecked="{Binding OnlyInXl}" />
+                <Button
+                    DockPanel.Dock="Right"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    Padding="8,2"
+                    Content="Refresh"
+                    ToolTip="Read the sector again (edits made in the data tab)"
+                    Command="{Binding RefreshCommand}" />
+                <CheckBox
+                    DockPanel.Dock="Right"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    VerticalAlignment="Center"
+                    Content="Only hidden"
+                    ToolTip="Objects of nodes with isVisibleInGame off"
+                    IsChecked="{Binding OnlyHidden}" />
+                <CheckBox
+                    DockPanel.Dock="Right"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    VerticalAlignment="Center"
+                    Content="Only cooked"
+                    ToolTip="Objects inside cooked nodes (game 2.5), picked by their instanceIndex"
+                    IsChecked="{Binding OnlyCooked}" />
+                <ComboBox
+                    DockPanel.Dock="Right"
+                    MinWidth="130"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    ToolTip="Objects with this node flag"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}" />
+                <ComboBox
+                    DockPanel.Dock="Right"
+                    MinWidth="110"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    ToolTip="Objects of this target group, as RedHotTools' world inspector groups them"
+                    ItemsSource="{Binding TargetGroups}"
+                    SelectedItem="{Binding SelectedTargetGroup}" />
+                <TextBox
+                    x:Name="SearchBox"
+                    VerticalContentAlignment="Center"
+                    ToolTip="Words anywhere in a row: name, resource, class, variant, flags or index (hedge 1057, decal variant 7)"
+                    Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged, Delay=200}" />
+            </DockPanel>
+            <TextBlock
+                Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                Foreground="{DynamicResource ContentForegroundAlt}"
+                Text="{Binding Summary}" />
+            <TextBlock
+                Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                Foreground="{DynamicResource WolvenKitOrange}"
+                Text="{Binding XlSummary}"
+                Visibility="{Binding HasXl, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        </StackPanel>
+
+        <DataGrid
+            x:Name="ObjectsGrid"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            IsReadOnly="True"
+            SelectionMode="Extended"
+            HeadersVisibility="Column"
+            CanUserResizeColumns="True"
+            HorizontalScrollBarVisibility="Auto"
+            GridLinesVisibility="None"
+            Background="Transparent"
+            RowBackground="Transparent"
+            AlternatingRowBackground="Transparent"
+            Foreground="{DynamicResource ContentForeground}"
+            BorderThickness="0"
+            EnableRowVirtualization="True"
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+            VirtualizingPanel.VirtualizationMode="Recycling"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.CacheLength="1,1"
+            VirtualizingPanel.CacheLengthUnit="Page"
+            SelectedItem="{Binding SelectedObject}"
+            RowDetailsVisibilityMode="VisibleWhenSelected"
+            MouseDoubleClick="ObjectsGrid_OnMouseDoubleClick">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Header="Show in Sector Preview"
+                        Command="{Binding ShowInPreviewCommand}" />
+                    <MenuItem
+                        Header="Show node in the data tab"
+                        Command="{Binding OpenInDataCommand}" />
+                    <Separator />
+                    <MenuItem
+                        Header="Copy ArchiveXL removal (.xl)"
+                        ToolTip="streaming / sectors / nodeDeletions for the selected rows: index (nodeData), type, expectedNodes"
+                        Click="CopyXlRemoval_OnClick" />
+                    <MenuItem
+                        Header="Copy class, indices and position"
+                        Command="{Binding CopySummaryCommand}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.GroupStyle>
+                <!-- level 1: node range (Persistent, Variant 3...), level 2: kind (Static mesh, Decal...) -->
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="GroupItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GroupItem">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <TextBlock FontWeight="SemiBold">
+                                                    <Run Text="{Binding Name, Mode=OneWay}" />
+                                                    <Run
+                                                        Foreground="{DynamicResource ContentForegroundAlt}"
+                                                        Text="{Binding ItemCount, Mode=OneWay, StringFormat=({0})}" />
+                                                </TextBlock>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="GroupItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GroupItem">
+                                        <!-- closed, but open while searching -->
+                                        <Expander
+                                            Margin="16,0,0,0"
+                                            IsExpanded="{Binding DataContext.IsFiltering, Mode=OneWay, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <Expander.Header>
+                                                <TextBlock>
+                                                    <Run Text="{Binding Name, Mode=OneWay}" />
+                                                    <Run
+                                                        Foreground="{DynamicResource ContentForegroundAlt}"
+                                                        Text="{Binding ItemCount, Mode=OneWay, StringFormat=({0})}" />
+                                                </TextBlock>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+                    <Setter Property="BorderThickness" Value="0,0,1,1" />
+                    <Setter Property="Padding" Value="6,2" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Padding" Value="4,0" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=DataGridRow}}" />
+                    <Style.Triggers>
+                        <!-- the row shows the selection, not the system highlight of the cell -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=DataGridRow}}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="ToolTip" Value="{Binding Summary}" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                    <!-- the selected row is outlined in the accent colour with a bar on the left, like the
+                         selected row of the file editor's tree, also when the grid has no focus -->
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="4,1,1,1" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding XlProblem}" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitOrange}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                            <Setter Property="FontStyle" Value="Italic" />
+                            <Setter Property="Foreground" Value="{DynamicResource ContentForegroundAlt}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <!-- instances / collision actors of the selected row: ticked ones are removed on their own by Copy ArchiveXL removal -->
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Margin="24,2,4,6"
+                        Visibility="{Binding HasElements, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock
+                            Foreground="{DynamicResource ContentForegroundAlt}"
+                            Text="Tick the ones to remove on their own with Copy ArchiveXL removal (all or none: the whole object)" />
+                        <ItemsControl ItemsSource="{Binding Elements}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Margin="0,2,16,2"
+                                        Content="{Binding Text}"
+                                        IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="280"
+                    Header="Object"
+                    Binding="{Binding Name}" />
+                <DataGridTextColumn
+                    Width="200"
+                    Header=".xl"
+                    Binding="{Binding XlMark}" />
+                <DataGridTextColumn
+                    Width="110"
+                    Header="Appearance"
+                    Binding="{Binding Appearance}" />
+                <DataGridTextColumn
+                    Width="40"
+                    Header=""
+                    Binding="{Binding SharedText}" />
+                <DataGridTextColumn
+                    Width="100"
+                    Header="Detail"
+                    Binding="{Binding Detail}" />
+                <DataGridTextColumn
+                    Width="160"
+                    Binding="{Binding Where}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock
+                            Text="Where"
+                            ToolTip="#Node Instance (nodeData entry, the index of an .xl removal) · node Node Definition (nodes) [Cooked Instance], as RedHotTools names them" />
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="230"
+                    Header="Class"
+                    Binding="{Binding ClassName}" />
+                <DataGridTextColumn
+                    Width="190"
+                    Header="Flags"
+                    Binding="{Binding Categories}" />
+                <DataGridTextColumn
+                    Width="60"
+                    Header="Hidden"
+                    Binding="{Binding HiddenText}" />
+                <DataGridTextColumn
+                    Width="180"
+                    Header="Position"
+                    Binding="{Binding Position}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>
