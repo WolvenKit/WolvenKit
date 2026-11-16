@@ -24,3 +24,8 @@ changes:
       pr-number: 3279
       author: "Ametis81"
       description: "Sector preview: materials find files embedded in the sector and the inplace resources of its meshes."
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3279
+      author: "Ametis81"
+      description: "Sector preview: instanced and destructible instanced meshes are drawn as hardware instances, one draw per submesh; the camera turns smoothly in dense interiors."
