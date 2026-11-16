@@ -138,51 +138,25 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// The tree only expands root nodes, so a deeper item has no row yet.
         /// Walk from the tree root to the item, expanding each ancestor, then select and scroll.
+        /// An item the search hides gets a hint next to the search box instead.
         /// </summary>
         private void RevealSelectedItem()
         {
             if (ViewModel?.SelectedItem is not DependencyObject target || NodeTreeGrid.View == null)
             {
+                ShowHiddenBySearchHint(false);
                 return;
             }
 
-            var chain = new List<DependencyObject>();
-            for (var current = target; current != null; current = LogicalTreeHelper.GetParent(current))
+            if (!IsShownBySearch(target))
             {
-                chain.Insert(0, current);
+                ShowHiddenBySearchHint(true);
+                return;
             }
 
-            // View.Nodes is a TreeNodeCollection, ChildNodes is TreeNodes: walk both as TreeNode sequences.
-            IEnumerable<TreeNode> nodes = NodeTreeGrid.View.Nodes;
-            TreeNode found = null;
-            foreach (var item in chain)
-            {
-                var node = nodes.FirstOrDefault(n => ReferenceEquals(n.Item, item));
-                if (node == null)
-                {
-                    if (found == null)
-                    {
-                        continue; // still above the tree's root items
-                    }
+            ShowHiddenBySearchHint(false);
 
-                    return; // branch not in the tree (e.g. filtered out)
-                }
-
-                found = node;
-                if (ReferenceEquals(item, target))
-                {
-                    break;
-                }
-
-                if (!node.IsExpanded)
-                {
-                    NodeTreeGrid.ExpandNode(node);
-                }
-
-                nodes = node.ChildNodes;
-            }
-
-            if (found == null || !ReferenceEquals(found.Item, target))
+            if (ExpandTreePathTo(target) is not { } found)
             {
                 return;
             }
@@ -197,6 +171,60 @@ namespace WolvenKit.Views.Documents
             if (rowIndex >= 0)
             {
                 NodeTreeGrid.ScrollInView(new RowColumnIndex(rowIndex, 0));
+            }
+        }
+
+        /// <summary>
+        /// Expands the ancestors of <paramref name="target"/> from the tree root down (the item
+        /// itself stays as it is); its row, or null when its branch is not in the tree.
+        /// </summary>
+        private TreeNode ExpandTreePathTo(DependencyObject target)
+        {
+            var chain = new List<DependencyObject>();
+            for (var current = target; current != null; current = LogicalTreeHelper.GetParent(current))
+            {
+                chain.Insert(0, current);
+            }
+
+            // Not the user's own toggles: no branch-wide expanding with a held modifier.
+            _togglingNodes = true;
+            try
+            {
+                // View.Nodes is a TreeNodeCollection, ChildNodes is TreeNodes: walk both as TreeNode sequences.
+                IEnumerable<TreeNode> nodes = NodeTreeGrid.View.Nodes;
+                TreeNode found = null;
+                foreach (var item in chain)
+                {
+                    var node = nodes.FirstOrDefault(n => ReferenceEquals(n.Item, item));
+                    if (node == null)
+                    {
+                        if (found == null)
+                        {
+                            continue; // still above the tree's root items
+                        }
+
+                        return null; // branch not in the tree (e.g. filtered out)
+                    }
+
+                    found = node;
+                    if (ReferenceEquals(item, target))
+                    {
+                        return node;
+                    }
+
+                    if (!node.IsExpanded)
+                    {
+                        NodeTreeGrid.ExpandNode(node);
+                    }
+
+                    nodes = node.ChildNodes;
+                }
+
+                return null;
+            }
+            finally
+            {
+                _togglingNodes = false;
             }
         }
 
@@ -374,6 +402,11 @@ namespace WolvenKit.Views.Documents
 
             _savingIcons = true;
             var original = vm.SelectedAppearance;
+            // The batch frames every appearance and may switch to a preset's projection and
+            // lighting: all of it is put back afterwards, as it was before the batch.
+            var originalProjection = vm.PreviewCamera;
+            var originalLighting = vm.PreviewLighting;
+            var originalView = GetCameraView();
             var saved = 0;
             var failed = new List<string>();
             var cancelled = false;
@@ -446,6 +479,23 @@ namespace WolvenKit.Views.Documents
                     vm.SelectedAppearance = original;
                 }
 
+                try
+                {
+                    vm.PreviewLighting = originalLighting;
+                    // A new projection swaps the camera and frames the object (at Background,
+                    // from the combo box); the old view is placed after that, under the cover.
+                    vm.PreviewCamera = originalProjection;
+                    await WaitFramesAsync(2);
+                    if (originalView is { } view)
+                    {
+                        SetCameraView(view);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    vm.ReportPreviewImageError($"the view could not be restored: {ex.Message}");
+                }
+
                 vm.IsSavingImage = false;
                 vm.IsSavingImageBatch = false;
                 _savingIcons = false;
@@ -500,20 +550,15 @@ namespace WolvenKit.Views.Documents
             nameRow.Children.Add(prefix);
 
             var example = new TextBlock { Margin = new Thickness(4, 2, 4, 8), Opacity = 0.7, TextTrimming = TextTrimming.CharacterEllipsis };
-            void UpdateExample()
+            // Ticked appearances that would get the same file name (one icon would overwrite the other).
+            var clashWarning = new TextBlock
             {
-                var shown = boxes.FirstOrDefault(b => b.IsChecked == true)?.Tag as string ?? names.FirstOrDefault() ?? "";
-                example.SetCurrentValue(TextBlock.TextProperty, "→ " + RDTMeshViewModel.BuildIconFileName(prefix.Text, shown, suffix.Text));
-            }
-
-            prefix.TextChanged += (_, _) => UpdateExample();
-            suffix.TextChanged += (_, _) => UpdateExample();
-            boxes.ForEach(b =>
-            {
-                b.Checked += (_, _) => UpdateExample();
-                b.Unchecked += (_, _) => UpdateExample();
-            });
-            UpdateExample();
+                Margin = new Thickness(4, 0, 4, 8),
+                TextWrapping = TextWrapping.Wrap,
+                Foreground = (System.Windows.Media.Brush)FindResource("WolvenKitYellow"),
+                Visibility = Visibility.Collapsed,
+            };
+            var selectedCount = new TextBlock { Margin = new Thickness(4, 2, 4, 6), Opacity = 0.7, HorizontalAlignment = HorizontalAlignment.Right };
 
             var several = names.Count > 1;
             var window = new System.Windows.Window
@@ -534,9 +579,37 @@ namespace WolvenKit.Views.Documents
                 return b;
             }
 
-            var buttons = new DockPanel { LastChildFill = false, Margin = new Thickness(4) };
             var cancel = MakeButton("Cancel", () => window.DialogResult = false, isCancel: true);
             var ok = MakeButton("Save", () => window.DialogResult = true, isDefault: true);
+
+            // Example name, "N of M selected", the name clash warning, and Save only with something ticked.
+            void UpdateState()
+            {
+                var ticked = boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToList();
+                var shown = ticked.FirstOrDefault() ?? names.FirstOrDefault() ?? "";
+                example.SetCurrentValue(TextBlock.TextProperty, "→ " + RDTMeshViewModel.BuildIconFileName(prefix.Text, shown, suffix.Text));
+                selectedCount.SetCurrentValue(TextBlock.TextProperty, $"{ticked.Count} of {names.Count} selected");
+                ok.SetCurrentValue(IsEnabledProperty, ticked.Count > 0);
+
+                var clashes = RDTMeshViewModel.FindIconFileNameClashes(prefix.Text, ticked, suffix.Text);
+                clashWarning.SetCurrentValue(TextBlock.TextProperty, clashes.Count == 0
+                    ? ""
+                    : "Same file name, only the last one would be kept: " +
+                      string.Join("; ", clashes.Select(group =>
+                          string.Join(", ", group) + " → " + RDTMeshViewModel.BuildIconFileName(prefix.Text, group[0], suffix.Text))));
+                clashWarning.SetCurrentValue(VisibilityProperty, clashes.Count == 0 ? Visibility.Collapsed : Visibility.Visible);
+            }
+
+            prefix.TextChanged += (_, _) => UpdateState();
+            suffix.TextChanged += (_, _) => UpdateState();
+            boxes.ForEach(b =>
+            {
+                b.Checked += (_, _) => UpdateState();
+                b.Unchecked += (_, _) => UpdateState();
+            });
+            UpdateState();
+
+            var buttons = new DockPanel { LastChildFill = false, Margin = new Thickness(4) };
             if (several)
             {
                 var all = MakeButton("All", () => boxes.ForEach(b => b.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, true)));
@@ -555,9 +628,14 @@ namespace WolvenKit.Views.Documents
             var top = new StackPanel();
             top.Children.Add(nameRow);
             top.Children.Add(example);
+            top.Children.Add(clashWarning);
             if (several)
             {
-                top.Children.Add(new TextBlock { Text = "Appearances to save:", Margin = new Thickness(4, 2, 4, 6) });
+                var listHeader = new DockPanel();
+                DockPanel.SetDock(selectedCount, Dock.Right);
+                listHeader.Children.Add(selectedCount);
+                listHeader.Children.Add(new TextBlock { Text = "Appearances to save:", Margin = new Thickness(4, 2, 4, 6) });
+                top.Children.Add(listHeader);
             }
 
             var root = new DockPanel { Margin = new Thickness(6) };
@@ -813,7 +891,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>Puts the camera where the preset says, scaled to the object shown now.</summary>
         private void PlaceCameraPreset(WolvenKit.App.ViewModels.Documents.RDTMeshViewModel.CameraPreset preset)
         {
-            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera || SceneSphere() is not { } sphere)
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera || SceneSphere() is not { } sphere)
             {
                 return;
             }
@@ -830,13 +908,47 @@ namespace WolvenKit.Views.Documents
             up.Normalize();
             var target = sphere.Center + new System.Windows.Media.Media3D.Vector3D(preset.TargetX, preset.TargetY, preset.TargetZ) * r;
             var lookVector = look * (Math.Max(preset.Distance, 1e-3) * r);
-            var position = target - lookVector;
+            SetCameraView(new CameraView(target - lookVector, lookVector, up, preset.OrthoWidth * r));
+        }
 
-            if (camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera orthographic && preset.OrthoWidth > 0)
+        /// <summary>Where the camera is and looks; OrthoWidth is 0 for a perspective camera.</summary>
+        private sealed record CameraView(
+            System.Windows.Media.Media3D.Point3D Position,
+            System.Windows.Media.Media3D.Vector3D LookVector,
+            System.Windows.Media.Media3D.Vector3D Up,
+            double OrthoWidth);
+
+        /// <summary>The current view, from the render camera (mouse navigation changes only that one); null without a camera.</summary>
+        private CameraView GetCameraView()
+        {
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera)
             {
-                orthographic.AnimateWidth(preset.OrthoWidth * r, 0);
+                return null;
             }
 
+            var core = camera.CameraInternal;
+            return new CameraView(
+                new(core.Position.X, core.Position.Y, core.Position.Z),
+                new(core.LookDirection.X, core.LookDirection.Y, core.LookDirection.Z),
+                new(core.UpDirection.X, core.UpDirection.Y, core.UpDirection.Z),
+                camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera ortho ? ortho.Width : 0);
+        }
+
+        /// <summary>Puts the view on both the WPF camera and the render camera, so neither keeps an old value.</summary>
+        private void SetCameraView(CameraView view)
+        {
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera ||
+                view.LookVector.LengthSquared < 1e-12 || view.Up.LengthSquared < 1e-12)
+            {
+                return;
+            }
+
+            if (camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera orthographic && view.OrthoWidth > 0)
+            {
+                orthographic.AnimateWidth(view.OrthoWidth, 0);
+            }
+
+            var (position, lookVector, up) = (view.Position, view.LookVector, view.Up);
             camera.AnimateTo(position, lookVector, up, 0);
             camera.CameraInternal.AnimateTo(
                 new((float)position.X, (float)position.Y, (float)position.Z),
@@ -848,13 +960,22 @@ namespace WolvenKit.Views.Documents
 
         // ---- Node tree: search ----
         // Keeps the rows whose name, node index or path contains the text, with their parents
-        // (the tree's FilterLevel) and everything under them.
+        // (the tree's FilterLevel) and everything under them. Up to NodeSearchExpandLimit found
+        // rows get their parents opened; a node number that matches exactly one node selects it.
+
+        private const int NodeSearchExpandLimit = 200;
 
         private DispatcherTimer _nodeSearchTimer;
         private HashSet<object> _nodeSearchMatches;
 
+        /// <summary>The typed text and, when it is a node number ("#0264", "0264", "264"), that number without '#' and leading zeros.</summary>
+        private sealed record NodeSearchQuery(string Text, string Number);
+
         private void NodeSearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            var empty = string.IsNullOrEmpty(NodeSearchBox.Text);
+            NodeSearchClearButton.SetCurrentValue(VisibilityProperty, empty ? Visibility.Collapsed : Visibility.Visible);
+
             _nodeSearchTimer ??= new DispatcherTimer(TimeSpan.FromMilliseconds(250), DispatcherPriority.Background,
                 (_, _) =>
                 {
@@ -862,41 +983,234 @@ namespace WolvenKit.Views.Documents
                     ApplyNodeSearch(NodeSearchBox.Text?.Trim());
                 }, Dispatcher);
             _nodeSearchTimer.Stop();
+
+            // clearing shows the whole tree at once
+            if (empty)
+            {
+                ApplyNodeSearch(null);
+                return;
+            }
+
             _nodeSearchTimer.Start();
+        }
+
+        private void NodeSearchBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && !string.IsNullOrEmpty(NodeSearchBox.Text))
+            {
+                NodeSearchBox.Clear();
+                e.Handled = true;
+            }
+        }
+
+        private void ClearNodeSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            NodeSearchBox.Clear();
+            NodeSearchBox.Focus();
+        }
+
+        /// <summary>Hint link: clears the search, then opens the tree to the selected object.</summary>
+        private void ClearNodeSearchAndReveal_OnClick(object sender, RoutedEventArgs e)
+        {
+            NodeSearchBox.Clear();
+            Dispatcher.BeginInvoke(new Action(RevealSelectedItem), DispatcherPriority.Background);
+        }
+
+        // Ctrl+F anywhere in the preview: to the search box. Preview: the viewport would take the key first.
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+
+            if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control && NodeSearchBox.IsVisible)
+            {
+                NodeSearchBox.Focus();
+                NodeSearchBox.SelectAll();
+                e.Handled = true;
+            }
         }
 
         private void ApplyNodeSearch(string text)
         {
+            ShowHiddenBySearchHint(false);
+
             if (NodeTreeGrid.View is not { } view)
             {
                 return;
             }
+
+            // A newer search (or clearing) drops what an older one left queued.
+            var generation = ++_nodeSearchGeneration;
 
             if (string.IsNullOrEmpty(text))
             {
                 _nodeSearchMatches = null;
                 view.Filter = null;
                 view.RefreshFilter();
+                SetNodeSearchCount(null);
+                AfterNodeTreeRefresh(generation, ScrollNodeTreeToTop);
                 return;
             }
 
+            var query = new NodeSearchQuery(text, NormalizeNodeNumber(text));
             var matches = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            var found = new List<object>();
+            var numbered = new List<WolvenKit.App.Models.MeshComponent>();
             if (ViewModel?.SelectedModelGroup is { } roots)
             {
                 foreach (var root in roots)
                 {
-                    CollectNodeSearchMatches(root, text, false, matches);
+                    CollectNodeSearchMatches(root, query, false, matches, found, numbered);
                 }
             }
 
             _nodeSearchMatches = matches;
             view.Filter = item => _nodeSearchMatches?.Contains(item) != false;
             view.RefreshFilter();
+            SetNodeSearchCount(found.Count);
+
+            AfterNodeTreeRefresh(generation, () =>
+            {
+                ScrollNodeTreeToTop();
+
+                // With a few hundred rows the tree stays usable; beyond that only the count is shown.
+                if (found.Count <= NodeSearchExpandLimit)
+                {
+                    ExpandFoundRows(found);
+                }
+
+                // A node number that is exactly one node's index: select it and scroll to it (also
+                // past the limit: "1" finds hundreds of nodes, but means node #0001).
+                if (numbered is [var exact])
+                {
+                    if (ViewModel is { } vm && !ReferenceEquals(vm.SelectedItem, exact))
+                    {
+                        vm.SelectedItem = exact; // the view model's change reveals it in the tree
+                    }
+                    else
+                    {
+                        RevealSelectedItem();
+                    }
+                }
+            });
         }
 
-        private static void CollectNodeSearchMatches(object element, string text, bool underMatch, HashSet<object> matches)
+        private int _nodeSearchGeneration;
+
+        /// <summary>
+        /// Runs <paramref name="action"/> once the grid has rebuilt its rows for the new filter,
+        /// unless another search came first. With expanding, scrolling and selecting in the same
+        /// pass as RefreshFilter, a one-digit search hung WolvenKit: the grid showed the root
+        /// collapsed over the old rows and threw ArgumentOutOfRangeException ("-1 out of range
+        /// 0 to 0") over and over.
+        /// </summary>
+        private void AfterNodeTreeRefresh(int generation, Action action) =>
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (generation == _nodeSearchGeneration && NodeTreeGrid.View != null)
+                {
+                    action();
+                }
+            }), DispatcherPriority.Background);
+
+        /// <summary>Opens the parents of the found rows; each parent once (hundreds of rows share a few folders and nodes).</summary>
+        private void ExpandFoundRows(List<object> found)
         {
-            var match = underMatch || NodeMatches(element, text);
+            var opened = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            foreach (var element in found.OfType<DependencyObject>())
+            {
+                if (LogicalTreeHelper.GetParent(element) is not { } parent || opened.Contains(parent))
+                {
+                    continue;
+                }
+
+                ExpandTreePathTo(element);
+                var current = parent;
+                while (current != null && opened.Add(current))
+                {
+                    current = LogicalTreeHelper.GetParent(current);
+                }
+            }
+        }
+
+        /// <summary>Count next to the search box: "12 found", "Nothing found", hidden without a search.</summary>
+        private void SetNodeSearchCount(int? count)
+        {
+            var text = count switch
+            {
+                null => "",
+                0 => "Nothing found",
+                > NodeSearchExpandLimit => $"{count} found, not expanded",
+                _ => $"{count} found",
+            };
+
+            NodeSearchCount.SetCurrentValue(TextBlock.TextProperty, text);
+            NodeSearchCount.SetCurrentValue(VisibilityProperty, count == null ? Visibility.Collapsed : Visibility.Visible);
+        }
+
+        /// <summary>
+        /// Back to the first row: a new filter left the old scroll offset, and when it was past
+        /// the end of the shorter list the tree showed no rows at all.
+        /// </summary>
+        private void ScrollNodeTreeToTop()
+        {
+            if (NodeTreeGrid.View is { } view && ((IEnumerable<TreeNode>)view.Nodes).FirstOrDefault() is { } first &&
+                NodeTreeGrid.ResolveToRowIndex(first) is var rowIndex and >= 0)
+            {
+                NodeTreeGrid.ScrollInView(new RowColumnIndex(rowIndex, 0));
+            }
+        }
+
+        private void ShowHiddenBySearchHint(bool show) =>
+            NodeSearchHint.SetCurrentValue(VisibilityProperty, show ? Visibility.Visible : Visibility.Collapsed);
+
+        /// <summary>
+        /// Whether the search keeps the element's row: it or something under it was found
+        /// (FilterLevel Extended keeps the parents of found rows). True without a search.
+        /// </summary>
+        private bool IsShownBySearch(object element)
+        {
+            if (_nodeSearchMatches is not { } matches || matches.Contains(element))
+            {
+                return true;
+            }
+
+            return element is HelixToolkit.Wpf.SharpDX.GroupModel3D group && group.Children.Any(IsShownBySearch);
+        }
+
+        /// <summary>
+        /// "#0264", "0264" and "264" → "264"; "#0" and "000" → "0". Null when the text is not a
+        /// node number (after an optional '#', digits only).
+        /// </summary>
+        private static string NormalizeNodeNumber(string text)
+        {
+            var digits = text?.Trim().TrimStart('#');
+            if (string.IsNullOrEmpty(digits) || !digits.All(char.IsAsciiDigit))
+            {
+                return null;
+            }
+
+            var number = digits.TrimStart('0');
+            return number.Length == 0 ? "0" : number;
+        }
+
+        // found: the rows that match by themselves and are not inside another found row, in tree
+        // order (what the count shows and whose parents are opened). numbered: the nodes whose
+        // index is the typed number, wherever they are (the sector's own name may match too).
+        private static void CollectNodeSearchMatches(object element, NodeSearchQuery query, bool underMatch,
+            HashSet<object> matches, List<object> found, List<WolvenKit.App.Models.MeshComponent> numbered)
+        {
+            var self = NodeMatches(element, query);
+            if (self && !underMatch)
+            {
+                found.Add(element);
+            }
+
+            if (element is WolvenKit.App.Models.MeshComponent mesh && IsNumber(mesh.WorldNodeIndex, query.Number))
+            {
+                numbered.Add(mesh);
+            }
+
+            var match = underMatch || self;
             if (match)
             {
                 matches.Add(element);
@@ -906,21 +1220,31 @@ namespace WolvenKit.Views.Documents
             {
                 foreach (var child in group.Children)
                 {
-                    CollectNodeSearchMatches(child, text, match, matches);
+                    CollectNodeSearchMatches(child, query, match, matches, found, numbered);
                 }
             }
         }
 
-        private static bool NodeMatches(object element, string text)
+        // "#264" and "0264" find "#0264": the index compared without '#' and leading zeros
+        // (a part of a number still finds it through the "#0264" label)
+        private static bool IsNumber(string index, string number) =>
+            number != null && NormalizeNodeNumber(index) == number;
+
+        private static bool NodeMatches(object element, NodeSearchQuery query)
         {
+            var text = query.Text;
+
             static bool Has(string value, string text) =>
                 !string.IsNullOrEmpty(value) && value.Contains(text, StringComparison.OrdinalIgnoreCase);
 
             return element switch
             {
                 WolvenKit.App.Models.MeshComponent mesh =>
-                    Has(mesh.Text, text) || Has(mesh.Name, text) || mesh.WorldNodeIndex == text ||
+                    Has(mesh.Text, text) || Has(mesh.Name, text) || IsNumber(mesh.WorldNodeIndex, query.Number) ||
                     Has(mesh.DepotPath.GetResolvedText(), text) || Has(mesh.WorldNodeType, text),
+                // A sector's type folder ("Meshes (264)") is only a container: its name and count
+                // would bring in all of its nodes.
+                WolvenKit.App.Models.GroupModel3DExt folder when RDTMeshViewModel.IsSectorTypeFolder(folder) => false,
                 WolvenKit.App.Models.GroupModel3DExt group => Has(group.Text, text) || Has(group.Name, text),
                 WolvenKit.App.Models.SubmeshComponent submesh => Has(submesh.Text, text) || Has(submesh.Name, text),
                 HelixToolkit.Wpf.SharpDX.Element3D other => Has(other.Name, text),

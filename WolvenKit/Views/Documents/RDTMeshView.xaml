@@ -1162,11 +1162,55 @@
                     Margin="0,0,6,0"
                     VerticalAlignment="Center"
                     Text="Search" />
-                <TextBox
-                    x:Name="NodeSearchBox"
-                    TextChanged="NodeSearchBox_OnTextChanged"
-                    ToolTip="Keeps the rows whose name, node index (e.g. 264) or path contains this text, with their parents and what is under them" />
+                <TextBlock
+                    x:Name="NodeSearchCount"
+                    DockPanel.Dock="Right"
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Center"
+                    Opacity="0.7"
+                    Visibility="Collapsed"
+                    ToolTip="Rows found, not counting those inside another found row. Up to 200 get their parents opened" />
+                <Grid>
+                    <!-- right padding: room for the clear button over the text -->
+                    <TextBox
+                        x:Name="NodeSearchBox"
+                        Padding="0,0,20,0"
+                        PreviewKeyDown="NodeSearchBox_OnPreviewKeyDown"
+                        TextChanged="NodeSearchBox_OnTextChanged"
+                        ToolTip="Keeps the rows whose name, node index (264, 0264 or #264) or path contains this text, with their parents and what is under them. Ctrl+F: here; Esc: clear" />
+                    <Button
+                        x:Name="NodeSearchClearButton"
+                        Margin="0,0,2,0"
+                        Padding="4,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Focusable="False"
+                        Visibility="Collapsed"
+                        Click="ClearNodeSearch_OnClick"
+                        ToolTip="Clear the search (Esc)">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Close"
+                            Margin="0"
+                            Size="{DynamicResource WolvenKitIconMicro}"
+                            Foreground="White" />
+                    </Button>
+                </Grid>
             </DockPanel>
+            <!-- shown when a click in the viewport selects an object the search hides -->
+            <TextBlock
+                x:Name="NodeSearchHint"
+                DockPanel.Dock="Top"
+                Margin="{DynamicResource WolvenKitMarginTiny}"
+                Foreground="{StaticResource WolvenKitYellow}"
+                TextWrapping="Wrap"
+                Visibility="Collapsed">
+                <Run Text="The selected object is hidden by the search." />
+                <Hyperlink Click="ClearNodeSearchAndReveal_OnClick">Clear search</Hyperlink>
+            </TextBlock>
             <syncfusion:SfTreeGrid
                 x:Name="NodeTreeGrid"
                 Margin="-1,0,-1,-1"
