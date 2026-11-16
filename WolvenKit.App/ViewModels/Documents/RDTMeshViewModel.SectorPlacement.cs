@@ -286,8 +286,8 @@ public partial class RDTMeshViewModel
             RegisterSectorProxy(group);
         }
 
-        // foliage nodes ("Show foliage")
-        if (instances != null)
+        // foliage nodes ("Show foliage"); instanced meshes have hardware instances too, but aren't foliage
+        if (typeStr == nameof(worldFoliageNode))
         {
             RegisterSectorFoliage(group);
         }
