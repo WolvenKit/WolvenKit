@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -646,6 +647,18 @@ public partial class RDTMeshViewModel
 
         return name + ".png";
     }
+
+    /// <summary>
+    /// Appearances whose icons would get the same file name, so one would overwrite the other:
+    /// names that differ only in characters not allowed in file names ("a:b" and "a?b" both
+    /// give "a_b"), or only in case (Windows file names ignore it). Groups in the given order.
+    /// </summary>
+    public static IReadOnlyList<IReadOnlyList<string>> FindIconFileNameClashes(string prefix, IEnumerable<string> appearanceNames, string suffix) =>
+        appearanceNames
+            .GroupBy(name => BuildIconFileName(prefix, name, suffix), StringComparer.OrdinalIgnoreCase)
+            .Where(group => group.Skip(1).Any())
+            .Select(group => (IReadOnlyList<string>)group.ToList())
+            .ToList();
 
     /// <summary>The icon file of an appearance in the folder, with this file's prefix and suffix.</summary>
     public string GetPreviewIconFileName(string folder, string appearanceName)
