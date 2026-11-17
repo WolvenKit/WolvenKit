@@ -55,7 +55,7 @@ public sealed class FNV1A64HashAlgorithm : HashAlgorithm
     public static ulong HashReadOnlySpan(ReadOnlySpan<byte> source)
     {
         var hash = FnvHashInitial;
-            
+
         foreach (var b in source)
         {
             unchecked
@@ -70,7 +70,7 @@ public sealed class FNV1A64HashAlgorithm : HashAlgorithm
     public static ulong HashReadOnlySpan(ReadOnlySpan<sbyte> source)
     {
         var hash = FnvHashInitial;
-            
+
         foreach (var b in source)
         {
             unchecked
@@ -84,7 +84,7 @@ public sealed class FNV1A64HashAlgorithm : HashAlgorithm
 
     public static ulong HashString(string value) => HashString(value, Encoding.ASCII);
 
-    public static ulong HashString(string value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false) => 
+    public static ulong HashString(string value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false) =>
         HashString(value.AsSpan(), encoding, nullEnded, useSignedBuffer);
 
     public static ulong HashString(ReadOnlySpan<char> value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false)
@@ -132,7 +132,7 @@ public sealed class FNV1A64HashAlgorithm : HashAlgorithm
             if (value[i] == ';')
             {
                 var nextSlash = value[i..].IndexOf('/');
-                
+
                 if (nextSlash == -1) // '/' not found after ";"
                 {
                     i = value.Length; // moveTo the end of the string
@@ -143,18 +143,60 @@ public sealed class FNV1A64HashAlgorithm : HashAlgorithm
                 }
             }
 
-            // to avoid the index out of range error in case we moved to the end at previous steps 
+            // to avoid the index out of range error in case we moved to the end at previous steps
             if(i < value.Length)
             {
-                unchecked { 
-                    hash = (hash ^ value[i]) * FnvHashPrime; 
+                unchecked {
+                    hash = (hash ^ value[i]) * FnvHashPrime;
                 }
             }
         }
 
         return hash;
     }
-    
+
+    /// <summary>
+    /// ASCII/UTF-8 byte equivalent of <see cref="HashStringWithoutAliases(ReadOnlySpan{char})"/>
+    /// but without allocating any new memory.
+    /// </summary>
+    public static ulong HashStringWithoutAliasesAscii(ReadOnlySpan<byte> value)
+    {
+        if (value.Length == 0)
+            return 0;
+
+        var hash = FnvHashInitial;
+
+        for (var i = 0; i < value.Length; i++)
+        {
+            if (value[i] == (byte)'#')
+                ++i;
+
+            if (i < value.Length && value[i] == (byte)';')
+            {
+                var nextSlash = value[i..].IndexOf((byte)'/');
+
+                if (nextSlash == -1) // '/' not found after ";"
+                {
+                    i = value.Length; // moveTo the end of the string
+                }
+                else
+                {
+                    i += nextSlash; // move to the position of the next "/"
+                }
+            }
+
+            if (i < value.Length)
+            {
+                unchecked
+                {
+                    hash = (hash ^ value[i]) * FnvHashPrime;
+                }
+            }
+        }
+
+        return hash;
+    }
+
     public void AppendString(string value) => AppendString(value, false);
 
     public void AppendString(string value, bool nullEnded)

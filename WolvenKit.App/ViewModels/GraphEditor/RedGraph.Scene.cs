@@ -8,6 +8,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Model;
@@ -23,13 +24,7 @@ public partial class RedGraph
 
     public List<Type> GetSceneNodeTypes()
     {
-        if (s_sceneNodeTypes == null)
-        {
-            s_sceneNodeTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => typeof(scnSceneGraphNode).IsAssignableFrom(x) && !x.IsAbstract)
-                .ToList();
-        }
+        s_sceneNodeTypes ??= AssemblyTypeIndex.GetConcreteTypesAssignableTo(typeof(scnSceneGraphNode)).ToList();
 
         return s_sceneNodeTypes;
     }
@@ -139,13 +134,7 @@ public partial class RedGraph
             var random = new Random();
             var cruid = (CRUID)random.NextCRUID();
 
-            // first id is always 2, don't know why
-            var id = (CUInt32)2;
-            if (sceneResource.ScreenplayStore.Options.Count > 0)
-            {
-                // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
-                id = sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
-            }
+            var id = (CUInt32)SceneEditingHelper.GetNextChoiceOptionItemId(sceneResource.ScreenplayStore.Options);
 
             sceneResource.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
             {
@@ -169,6 +158,9 @@ public partial class RedGraph
                 VpeIndex = (uint)(sceneResource.LocStore.VpEntries.Count - 1),
                 Signature = new scnlocSignature
                 {
+                    // Gender mask, same 1 = male / 2 = female / 3 = both as scnGenderMask. Vanilla
+                    // writes a second descriptor under 1 and 2 where the wording differs by player
+                    // gender; one text authored here is the same for everyone, so it goes under 3.
                     Val = 3
                 }
             });

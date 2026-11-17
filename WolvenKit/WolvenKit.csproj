@@ -18,6 +18,7 @@
     <Product>WolvenKit</Product>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Nullable>Disable</Nullable>
+    <CetCompat>false</CetCompat>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,9 +27,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>8.20.1</VersionPrefix>
+      <ServerGarbageCollection>true</ServerGarbageCollection>
+      <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>9.1.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>8.20.1</InformationalVersion>
+    <InformationalVersion>9.1.1</InformationalVersion>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
@@ -102,6 +108,9 @@
     <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" />
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" />
+    <PackageReference Include="Syncfusion.SfMarkdownViewer.WPF"/>
+    <PackageReference Include="Syncfusion.Markdown" />
+    <PackageReference Include="Syncfusion.Shared.WPF"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -1812,10 +1821,6 @@
   <ItemGroup>
     <Page Update="PathIcon.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Views\HomePage\Pages\ModsView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Dialogs\SoundModdingView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

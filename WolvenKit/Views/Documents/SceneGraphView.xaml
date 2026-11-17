@@ -325,6 +325,15 @@
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
                                             Style="{StaticResource SceneEditorButtonStyle}"
+                                            Visibility="{Binding DataContext.IsDialogueImportVisible,
+                                                                 RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
+                                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Content="Import Dialogue"
+                                            ToolTip="Import dialogue lines exported by another tool, e.g. the Dialogue Browser's conversation panel"
+                                            Command="{Binding DataContext.ImportDialogueCommand,
+                                                              RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
+                                        <Button
+                                            Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsAnimationCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
                                                                  Converter={StaticResource BooleanToVisibilityConverter}}"

@@ -25,8 +25,6 @@ namespace WolvenKit.Modkit.RED4
             // ReSharper disable JoinDeclarationAndInitializer
             Dictionary<string, string> errors = new();
             IEnumerable<string> files;
-            DirectoryInfo packedDir;
-            DirectoryInfo archiveDir;
             string modName;
 
             #region Find project
@@ -46,7 +44,7 @@ namespace WolvenKit.Modkit.RED4
 
             #region Clean
 
-            packedDir = new DirectoryInfo(Path.Combine(path.FullName, "packed"));
+            var packedDir = new DirectoryInfo(Path.Combine(path.FullName, "packed"));
             try
             {
                 packedDir.Delete(true);
@@ -66,11 +64,9 @@ namespace WolvenKit.Modkit.RED4
 
             #region Create packed/ directories
 
-            packedDir = new DirectoryInfo(Path.Combine(path.FullName, "packed"));
-            archiveDir = new DirectoryInfo(Path.Combine(path.FullName, "packed", "archive", "pc", "mod"));
+            var archiveDir = new DirectoryInfo(Path.Combine(path.FullName, "packed", "archive", "pc", "mod"));
             try
             {
-                packedDir.Create();
                 archiveDir.Create();
             }
             catch (IOException e)
@@ -82,7 +78,8 @@ namespace WolvenKit.Modkit.RED4
 
             #endregion
 
-            if (!Pack(path, archiveDir, modName))
+            var sourceDir = new DirectoryInfo(Path.Combine(path.FullName, "source", "archive"));
+            if (!Pack(sourceDir, archiveDir, modName))
             {
                 _loggerService.Error("Build failed. Could not create archive file.");
                 return false;
@@ -126,7 +123,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     Directory.CreateDirectory(relativeDir);
                 }
-                
+
                 try
                 {
                     var outputPath = Path.Combine(packedDir.FullName, relativeFile);

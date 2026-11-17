@@ -4,8 +4,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using WolvenKit.Common;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
@@ -14,14 +18,11 @@ public class FileSystemModel : INotifyPropertyChanged
 {
     public const string ProjectDirName = "<ProjectDir>";
 
+    private readonly string _projectDirectory;
     private string _name;
-    private string _gameRelativePath = null!;
-    private long _fileSize;
-    private string _fileSizeStr = null!;
-    private string _extension = "default";
 
     [Browsable(false)] public FileSystemModel? Parent { get; }
-    
+
     public string Name
     {
         get => _name;
@@ -33,45 +34,81 @@ public class FileSystemModel : INotifyPropertyChanged
     [Display(Name = "Relative Path")]
     public string GameRelativePath
     {
-        get => _gameRelativePath;
-        private set => SetField(ref _gameRelativePath, value);
-    }
+        get;
+        private set => SetField(ref field, value);
+    } = "";
 
     [Display(Name = "System Path")] public string FullName { get; private set; } = null!;
 
-    [Browsable(false)] public ulong Hash { get; private set; }
-    [Display(Name = "Hash")] public string HashStr { get; private set; } = "0";
+    [Browsable(false)]
+    public ulong Hash
+    {
+        get
+        {
+            if (Parent?.Extension == Constants.ModDirectoryTop)
+            {
+                if (Parent.RawRelativePath == "archive" && ulong.TryParse(Path.GetFileNameWithoutExtension(Name), out var hash))
+                {
+                    return hash;
+                }
+                else
+                {
+                    return ResourcePath.CalculateHash(GameRelativePath);
+                }
+            }
+
+            return 0;
+        }
+    }
+
+    [Display(Name = "Hash")] public string HashStr => Hash.ToString();
 
     [Browsable(false)]
     public long FileSize
     {
-        get => _fileSize;
-        private set => SetField(ref _fileSize, value);
+        get;
+        private set => SetField(ref field, value);
     }
 
     [Display(Name = "File Size")]
     public string FileSizeStr
     {
-        get => _fileSizeStr;
-        private set => SetField(ref _fileSizeStr, value);
-    }
+        get;
+        private set => SetField(ref field, value);
+    } = null!;
 
     public string Extension
     {
-        get => _extension;
-        private set => SetField(ref _extension, value);
-    }
+        get;
+        private set => SetField(ref field, value);
+    } = "default";
 
     [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
     [Browsable(false)] public bool IsDirectory { get; }
 
-    public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory)
+    /// <summary>
+    /// FileSystemModel represents a file or directory on-disk.
+    /// </summary>
+    /// <param name="parent"></param><remark>FileSystemModel of the parent.</remark>
+    /// <param name="name"></param><remark>Name of the file with extension but no paths.</remark>
+    /// <param name="rawRelativePath"></param><remark>Path above 'source' to the file. E.g. archive/worlds/myfile.ent</remark>
+    /// <param name="isDirectory"></param>
+    public FileSystemModel(FileSystemModel? parent, string name, string rawRelativePath, bool isDirectory)
     {
         Parent = parent;
-        _name = name;
-        RawRelativePath = relativePath;
-        IsDirectory = isDirectory;
 
+        if (Parent == null)
+        {
+            _projectDirectory = rawRelativePath;
+        }
+        else
+        {
+            _projectDirectory = Parent._projectDirectory;
+        }
+
+        _name = name;
+        RawRelativePath = rawRelativePath;
+        IsDirectory = isDirectory;
         GetMetadata();
     }
 
@@ -110,62 +147,42 @@ public class FileSystemModel : INotifyPropertyChanged
 
     private void GetMetadata()
     {
-        var hashParts = new List<string>();
-
-        var root = this;
-        var current = this;
-        while (current != null)
-        {
-            if (current.Parent?.Name != ProjectDirName && current.Name != ProjectDirName)
-            {
-                hashParts.Add(current.Name);
-            }
-
-            root = current;
-            current = current.Parent;
-        }
-        hashParts.Reverse();
-
-        GameRelativePath = string.Join(ResourcePath.DirectorySeparatorChar, hashParts);
-        FullName = Path.Combine(root.RawRelativePath, RawRelativePath);
-
-        if (Parent?.Extension == Constants.ModDirectoryTop)
-        {
-            if (Parent.RawRelativePath == "archive" && ulong.TryParse(Path.GetFileNameWithoutExtension(Name), out var hash))
-            {
-                Hash = hash;
-            }
-            else
-            {
-                Hash = ResourcePath.CalculateHash(GameRelativePath);
-            }
-
-            HashStr = Hash.ToString();
-        }
+        FullName = Path.Combine(_projectDirectory, RawRelativePath);
 
         if (IsDirectory)
         {
-            Extension = ECustomImageKeys.OpenDirImageKey.ToString();
+            Extension = nameof(ECustomImageKeys.OpenDirImageKey);
+
             if (RawRelativePath.Equals("archive", StringComparison.CurrentCultureIgnoreCase))
             {
                 Extension = Constants.ModDirectoryTop;
+                GameRelativePath = "";
             }
             else if (RawRelativePath.Equals("raw", StringComparison.CurrentCultureIgnoreCase))
             {
                 Extension = Constants.RawDirectoryTop;
+                GameRelativePath = "";
             }
             else if (RawRelativePath.Equals("resources", StringComparison.CurrentCultureIgnoreCase))
             {
                 Extension = Constants.ResourceDirectoryTop;
+                GameRelativePath = "";
             }
             else if (Parent != null)
             {
                 Extension = Parent.Extension;
+                var split = RawRelativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[1..];
+                GameRelativePath = string.Join(ResourcePath.DirectorySeparatorChar, split);
             }
         }
         else
         {
             Extension = Path.GetExtension(Name).TrimStart('.');
+
+            if (Parent != null)
+            {
+                GameRelativePath = Parent.GameRelativePath + ResourcePath.DirectorySeparatorChar + Name;
+            }
 
             UpdateFileInfo();
         }
@@ -184,6 +201,50 @@ public class FileSystemModel : INotifyPropertyChanged
         return string.Format(CultureInfo.InvariantCulture, "{0:0.##} {1}", len, sizes[order]);
     }
 
+    /// <summary>
+    /// Returns true if the supplied model is an ancestor of this model.
+    /// </summary>
+    /// <param name="ancestorDir"></param>
+    /// <returns></returns>
+    public bool HasAncestorDir(FileSystemModel ancestorDir)
+    {
+        if (Parent == null)
+        {
+            return false;
+        }
+
+        if (Parent.FullName == ancestorDir.FullName)
+        {
+            return true;
+        }
+
+        return Parent.HasAncestorDir(ancestorDir);
+    }
+
+    /// <summary>
+    /// Returns its parent if it's a file, otherwise returns itself.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="WolvenKitException"></exception>
+    public FileSystemModel TargetDir
+    {
+        get
+        {
+            if (IsDirectory)
+            {
+                return this;
+            }
+
+            if (Parent is { } parent)
+            {
+                return parent;
+            }
+
+            throw new WolvenKitException(0x4025a73,
+                $"No directory model exists for drag and drop operation. Target file path: ${FullName}.");
+        }
+    }
+
     #region INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -191,7 +252,7 @@ public class FileSystemModel : INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (EqualityComparer<T>.Default.Equals(field, value))
         {
@@ -199,8 +260,25 @@ public class FileSystemModel : INotifyPropertyChanged
         }
 
         field = value;
-        OnPropertyChanged(propertyName);
+
+        if (ShouldPublish(propertyName))
+        {
+            OnPropertyChanged(propertyName);
+        }
+
         return true;
+    }
+
+    private bool ShouldPublish(string? propertyName)
+    {
+        var isBlacklisted =
+            propertyName == null
+            || propertyName == nameof(RawRelativePath)
+            || propertyName == nameof(IsDirectory)
+            || propertyName == nameof(FullName)
+            || propertyName == nameof(Extension);
+
+        return !isBlacklisted;
     }
 
     #endregion

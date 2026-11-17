@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,6 +34,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
@@ -800,6 +801,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Defined with the DisplayAsEnum attribute
     public Type? DisplayAsEnumType => _displayAsEnumType;
 
+    // Display CUInt64 values marked with DisplayAsResourcePath as depot paths.
+    public bool DisplayAsResourcePath =>
+        Data is CUInt64 &&
+        (Parent is { Data: IRedArray } array ? array : this).GetDeclaringPropertyInfo()?.DisplayAsResourcePath == true;
+
+    /// <summary>Gets the metadata for the property represented by this node.</summary>
+    private ExtendedPropertyInfo? GetDeclaringPropertyInfo()
+    {
+        if (Parent is null)
+        {
+            return null;
+        }
+
+        var parentType = Parent.ResolvedPropertyType;
+        return GetPropertyByRedName(parentType, PropertyName);
+    }
+
+    /// <summary>Formats a depot path for display.</summary>
+    private string GetDepotPathValue(ResourcePath depotPath)
+    {
+        if (depotPath.IsResolvable)
+        {
+            return depotPath.GetResolvedText().NotNull();
+        }
+
+        return depotPath == ResourcePath.Empty
+            ? "null"
+            : $"{(ulong)depotPath}{_hashService.GetGuessedExtension(depotPath)}";
+    }
+
     public string Type
     {
         get
@@ -1081,6 +1112,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
+            if (DisplayAsResourcePath)
+            {
+                return "FileSymlinkFile";
+            }
+
             if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 return "SymbolNumeric";
@@ -1288,9 +1324,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+        var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(handle.InnerType)
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
         var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
@@ -1360,9 +1394,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = innerType.GetGenericTypeDefinition();
         }
 
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+        var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(innerType)
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
 
@@ -1599,9 +1631,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             //    .DistinctBy(x => x.Name)
             //    .ToList();
 
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+            var types = AssemblyTypeIndex.GetConcreteClassesAssignableTo(typeof(inkWidgetReference))
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
 

@@ -24,12 +24,13 @@ namespace WolvenKit.Modkit.RED4.Opus
 
         public static IEnumerable<double> ExportAllOpus(OpusInfo info, IArchiveManager archiveManager, bool useMod, bool useProject, DirectoryInfo rawOutDir)
         {
-            var maxPak = info.PackIndices.Last();
+            var maxPak = info.PackIndices.Max();
+            var pakCount = maxPak + 1;
             double progress;
 
-            for (var i = 0; i < maxPak; i++) // This could be parallel but it eats into RAM
+            for (var i = 0; i < pakCount; i++) // This could be parallel but it eats into RAM
             {
-                progress = (i + 1) / (double)maxPak;
+                progress = (i + 1) / (double)pakCount;
 
                 var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{i}.opuspak", useMod, useProject);
                 if (opusPak != null)
@@ -102,10 +103,11 @@ namespace WolvenKit.Modkit.RED4.Opus
             foreach (var id in validIds)
             {
                 var name = Path.Combine(rawInDir.FullName, Convert.ToString(id) + ".opus");
+                var wavName = Path.ChangeExtension(name, ".wav");
                 var proc = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusenc.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                    Arguments = $" \"{name.Replace("opus", "wav")}\" \"{name}\" --serial 42 --quiet --padding 0 --vbr --comp 10 --framesize 20 ",
+                    Arguments = $" \"{wavName}\" \"{name}\" --serial 42 --quiet --padding 0 --vbr --comp 10 --framesize 20 ",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
@@ -118,7 +120,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 var procNew = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusdec.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                    Arguments = $" \"{name}\" \"{name.Replace("opus", "wav")}\"",
+                    Arguments = $" \"{name}\" \"{wavName}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
@@ -131,7 +133,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 var procN = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusenc.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                    Arguments = $" \"{name.Replace("opus", "wav")}\" \"{name}\" --serial 42 --quiet --padding 0 --vbr --comp 10 --framesize 20 ",
+                    Arguments = $" \"{wavName}\" \"{name}\" --serial 42 --quiet --padding 0 --vbr --comp 10 --framesize 20 ",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
@@ -169,7 +171,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         modDictionary.Add(pakIdx, modStream);
                     }
 
-                    modDictionary[pakIdx] = info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), modDictionary[pakIdx], id, new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
+                    modDictionary[pakIdx] = info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), modDictionary[pakIdx], id, new MemoryStream(File.ReadAllBytes(wavName)));
                 }
             }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WolvenKit.App.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
@@ -270,7 +271,7 @@ public sealed class HashServiceExtGlobalCacheTests : IDisposable
     }
 
     [Fact]
-    public void LoadGlobalCache_RegistersEntriesWithTheResourcePathPool()
+    public async Task LoadGlobalCache_RegistersEntriesWithTheResourcePathPool()
     {
         // deliberately unsanitized: the pool must key off the sanitized form
         const string raw = @"GLOBALCACHETEST/POOL//REGISTERED.MESH";
@@ -279,6 +280,8 @@ public sealed class HashServiceExtGlobalCacheTests : IDisposable
         var service = NewService();
         service.LoadGlobalCache();
 
+        await service.GlobalCacheLoaded;
+
         var sanitized = ResourcePath.SanitizePath(raw);
         var hash = ResourcePath.CalculateHash(sanitized, false);
 
@@ -286,13 +289,14 @@ public sealed class HashServiceExtGlobalCacheTests : IDisposable
     }
 
     [Fact]
-    public void LoadGlobalCache_RegistersEntriesWithTheTweakDbIdPool()
+    public async Task LoadGlobalCache_RegistersEntriesWithTheTweakDbIdPool()
     {
         const string name = "GlobalCacheTest.PoolRegistered";
         File.WriteAllLines(TweaksPath, new[] { name });
 
         var service = NewService();
         service.LoadGlobalCache();
+        await service.GlobalCacheLoaded;
 
         Assert.Equal(name, TweakDBIDPool.ResolveHash(TweakDBID.CalculateHash(name)));
     }

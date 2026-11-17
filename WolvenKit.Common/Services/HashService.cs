@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using WolvenKit.Common.FNV1A;
@@ -66,20 +67,9 @@ namespace WolvenKit.Common.Services
 
             try
             {
-                var hashesMemory = DecompressEmbeddedFile(s_used);
-                ReadHashes(hashesMemory.GetStream());
-
-                hashesMemory.Dispose();
-
-                var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
-                ReadNodeRefs(nodeRefsMemory.GetStream());
-
-                nodeRefsMemory.Dispose();
-
-                var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
-                ReadTweakNames(tweakNamesMemory.GetStream());
-
-                tweakNamesMemory.Dispose();
+                ReadHashes(DecompressEmbeddedFile(s_used));
+                ReadNodeRefs(DecompressEmbeddedFile(s_nodeRefs));
+                ReadTweakNames(DecompressEmbeddedFile(s_tweakDbStr));
 
                 LoadMissingHashes();
 
@@ -136,7 +126,10 @@ namespace WolvenKit.Common.Services
             return null;
         }
 
-        private static unsafe UnmanagedMemory DecompressEmbeddedFile(string resourceName)
+        /// <summary>
+        /// Decompresses an embedded KARK resource straight into an unmanaged <see cref="StringBlob"/>.
+        /// </summary>
+        private static unsafe StringBlob DecompressEmbeddedFile(string resourceName)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName).NotNull();
 
@@ -152,13 +145,14 @@ namespace WolvenKit.Common.Services
 
             var compressedBufferLength = (int)(stream.Length - (sizeof(uint) * 2));
             using var compressedBuffer = UnmanagedMemory.Allocate(compressedBufferLength);
-            var decompressedBuffer = UnmanagedMemory.Allocate((int) outputSize);
+            var decompressedBuffer = StringBlob.Allocate((int)outputSize);
 
             // read the rest of the stream
             var read = stream.Read(compressedBuffer.GetSpan());
 
             if (read != compressedBufferLength)
             {
+                decompressedBuffer.Dispose();
                 throw new InvalidOperationException("Read less bytes than expected!");
             }
 
@@ -167,6 +161,107 @@ namespace WolvenKit.Common.Services
                 decompressedBuffer.Pointer, decompressedBuffer.Size);
 
             return decompressedBuffer;
+        }
+
+        /// <summary>
+        /// Splits a newline-delimited blob into exactly-sized <see cref="StringRef"/> entries that
+        /// point back into the blob. No strings and no intermediate list are created.
+        /// </summary>
+        private static StringRef[] SplitLines(StringBlob blob)
+        {
+            var span = blob.AsSpan();
+
+            var bodyStart = span.Length >= 3
+                            && span[0] == 0xEF
+                            && span[1] == 0xBB
+                            && span[2] == 0xBF ? 3 : 0;
+
+            var body = span[bodyStart..];
+            var count = body.Count((byte)'\n');
+
+            if (body.Length > 0 && body[^1] != (byte)'\n')
+            {
+                count++;
+            }
+
+            var references = new StringRef[count];
+            var written = 0;
+            var position = 0;
+
+            while (position < body.Length && written < count)
+            {
+                var newline = body[position..].IndexOf((byte)'\n');
+                var end = newline < 0 ? body.Length : position + newline;
+                var lineEnd = end;
+
+                if (lineEnd > position && body[lineEnd - 1] == (byte)'\r')
+                {
+                    lineEnd--;
+                }
+
+                references[written++] =
+                    new StringRef(bodyStart + position, lineEnd - position);
+
+                if (newline < 0)
+                {
+                    break;
+                }
+
+                position = end + 1;
+            }
+
+            if (written != references.Length)
+            {
+                Array.Resize(ref references, written);
+            }
+
+            return references;
+        }
+
+        /// <summary>
+        /// Span-based equivalent of <c>BinaryReaderExtensions.ReadVLQInt32</c>,
+        /// so the tweak name table can be parsed without a <see cref="BinaryReader"/>
+        /// or per-entry buffers.
+        /// </summary>
+        private static int ReadVlqInt32(ReadOnlySpan<byte> span, ref int position)
+        {
+            const byte continuation = 0b10000000;
+            const byte valueMask = 0b01111111;
+
+            var b = span[position++];
+            var isNegative = (b & 0b10000000) != 0;
+            var value = b & 0b00111111;
+
+            if ((b & 0b01000000) != 0)
+            {
+                b = span[position++];
+                value |= (b & valueMask) << 6;
+
+                if ((b & continuation) != 0)
+                {
+                    b = span[position++];
+                    value |= (b & valueMask) << 13;
+
+                    if ((b & continuation) != 0)
+                    {
+                        b = span[position++];
+                        value |= (b & valueMask) << 20;
+
+                        if ((b & continuation) != 0)
+                        {
+                            b = span[position++];
+                            value |= (b & valueMask) << 27;
+
+                            if ((b & continuation) != 0)
+                            {
+                                throw new InvalidDataException("Continuation bit set on 5th byte");
+                            }
+                        }
+                    }
+                }
+            }
+
+            return isNegative ? -value : value;
         }
 
         private void ProcessLinesConcurrently(Stream memoryStream, Action<string> lineAction)
@@ -206,63 +301,78 @@ namespace WolvenKit.Common.Services
             _missing = JsonSerializer.Deserialize<Dictionary<ulong, string>>(stream).NotNull();
         }
 
-        private void ReadHashes(Stream memoryStream)
+        private void ReadHashes(StringBlob blob)
         {
-            var collection = new List<string>();
+            ResourcePathPool.SetNative(
+                new LookupTable(blob, SplitLines(blob), _maxDoP, ResourcePath.CalculateHashUtf8));
+        }
 
-            using var sr = new StreamReader(memoryStream);
-            while (true)
+        private void ReadNodeRefs(StringBlob blob)
+        {
+            NodeRefPool.SetNative(
+                new LookupTable(blob, SplitLines(blob), _maxDoP, NodeRef.CalculateHashUtf8));
+        }
+
+        /// <summary>
+        /// Parses the length-prefixed tweak name table.
+        /// </summary>
+        private void ReadTweakNames(StringBlob blob)
+        {
+            const int headerSize = 20;
+
+            var span = blob.AsSpan();
+
+            // Pass one: count entries, so the reference array is sized exactly.
+            var count = 0;
+            var position = headerSize;
+            while (position < span.Length)
             {
-                var nextLine = sr.ReadLine();
-                if (nextLine == null)
+                var prefix = ReadVlqInt32(span, ref position);
+                var byteCount = prefix > 0 ? Math.Abs(prefix) * 2 : Math.Abs(prefix);
+
+                if (position + byteCount > span.Length)
                 {
                     break;
                 }
-                collection.Add(nextLine);
+
+                position += byteCount;
+                count++;
             }
 
-            var lookupTable = new LookupTable(collection, _maxDoP, (s) => ResourcePath.CalculateHash(s, false));
+            // Pass two: compact into a UTF-8 blob.
+            var references = new StringRef[count];
+            using var builder = new StringBlobBuilder(Math.Max(span.Length - headerSize, 64));
 
-            ResourcePathPool.SetNative(lookupTable);
-        }
-
-        private void ReadNodeRefs(Stream memoryStream)
-        {
-            var collection = new List<string>();
-
-            using var sr = new StreamReader(memoryStream);
-            while (true)
+            position = headerSize;
+            for (var i = 0; i < count; i++)
             {
-                var nextLine = sr.ReadLine();
-                if (nextLine == null)
+                var prefix = ReadVlqInt32(span, ref position);
+                var length = Math.Abs(prefix);
+
+                if (length == 0)
                 {
-                    break;
+                    references[i] = new StringRef(builder.Length, 0);
+                    continue;
                 }
-                collection.Add(nextLine);
+
+                if (prefix > 0)
+                {
+                    // UTF-16 payload, transcoded without ever creating a string
+                    references[i] = builder.AddUtf16(MemoryMarshal.Cast<byte, char>(span.Slice(position, length * 2)));
+                    position += length * 2;
+                }
+                else
+                {
+                    references[i] = builder.AddUtf8(span.Slice(position, length));
+                    position += length;
+                }
             }
 
-            var lookupTable = new LookupTable(collection, _maxDoP, NodeRef.CalculateHash);
+            var compacted = builder.Build();
+            blob.Dispose();
 
-            NodeRefPool.SetNative(lookupTable);
-        }
-
-        private void ReadTweakNames(Stream memoryStream)
-        {
-            var collection = new List<string>();
-
-            using var br = new BinaryReader(memoryStream);
-
-            // skip header
-            br.BaseStream.Position = 20;
-
-            while (br.BaseStream.Position < br.BaseStream.Length)
-            {
-                collection.Add(br.ReadLengthPrefixedString());
-            }
-
-            var lookupTable = new LookupTable(collection, _maxDoP, TweakDBID.CalculateHash);
-
-            TweakDBIDPool.SetNative(lookupTable);
+            TweakDBIDPool.SetNative(
+                new LookupTable(compacted, references, _maxDoP, TweakDBID.CalculateHashUtf8));
         }
 
         #endregion Methods

@@ -1,0 +1,59 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.MarkdownInfoDialog"
+    x:TypeArguments="dialogs:MarkdownInfoViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:markdown="clr-namespace:Syncfusion.UI.Xaml.Markdown;assembly=Syncfusion.SfMarkdownViewer.WPF"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:MarkdownInfoViewModel}"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MaxWidth="{DynamicResource WolvenKitDialogWidth}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    MaxHeight="{DynamicResource WolvenKitDialogHeightLarge}"
+    Padding="{DynamicResource WolvenKitMargin}"
+    Background="{StaticResource ContentBackgroundAlt3}">
+ <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock
+            Grid.Row="0"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
+            FontSize="{DynamicResource WolvenKitFontHeader}"
+            FontWeight="Bold"
+            Text="{Binding Title}" />
+
+        <!-- Body -->
+        <markdown:SfMarkdownViewer
+            Grid.Row="1"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
+            Padding="0"
+            Source="{Binding Markdown}"
+            FontSize="{DynamicResource WolvenKitFontBody}"
+            Background="{StaticResource ContentBackgroundAlt3}">
+        </markdown:SfMarkdownViewer>
+
+        <!-- Actions -->
+        <Button
+            Grid.Row="2"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
+            HorizontalAlignment="Right"
+            Style="{StaticResource DialogPrimaryButtonStyle}"
+            Click="Ok_OnClick">
+            Ok
+        </Button>
+    </Grid>
+</reactiveUi:ReactiveUserControl>
+

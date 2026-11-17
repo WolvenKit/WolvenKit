@@ -105,6 +105,9 @@ public partial class ScriptService : ObservableObject
 
         engine.AddHostType(typeof(OpenAs));
 
+        engine.AddHostType(typeof(TemplateDestination));
+        engine.AddHostType(typeof(TemplateSource));
+
         engine.AddHostObject("logger", _loggerService);
         if (hostObjects != null)
         {
