@@ -103,7 +103,7 @@
       "group": "Surfaces",
       "displayName": "Border Alt",
       "kind": "Brush",
-      "description": "Borders of fields and frames in property editors, documents and dialogs"
+      "description": "Borders of fields and frames in property editors, documents and dialogs; grid lines in the LocKey Browser"
     },
     {
       "key": "WolvenKitPanelHeaderSelected",
@@ -675,7 +675,7 @@
       "group": "Palette",
       "displayName": "Cyan Shadow50",
       "kind": "Color",
-      "description": "Translucent cyan backgrounds (LocKey browser rows, cyan highlights)",
+      "description": "Translucent cyan backgrounds (cyan highlights)",
       "derivedBrushes": [
         "WolvenKitCyanShadow50",
         "BackgroundColor_Cyan"

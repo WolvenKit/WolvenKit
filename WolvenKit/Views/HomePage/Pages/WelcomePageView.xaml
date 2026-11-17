@@ -364,14 +364,26 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- WK Text Logo -->
-            <Image
+            <!--
+                WK Text Logo, in the theme text color (the image is white, invisible on light themes).
+                The transparent image sizes the cell; the rectangle paints the logo shape.
+            -->
+            <Grid
                 Grid.ColumnSpan="2"
                 MaxHeight="{DynamicResource WolvenKitWelcomeLogoMaxHeight}"
                 Margin="{DynamicResource WolvenKitMarginVertical}"
-                HorizontalAlignment="Center"
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
+                HorizontalAlignment="Center">
+                <Image
+                    Opacity="0"
+                    Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
+                <Rectangle Fill="{DynamicResource ContentForeground}" RenderOptions.BitmapScalingMode="HighQuality">
+                    <Rectangle.OpacityMask>
+                        <ImageBrush
+                            ImageSource="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png"
+                            Stretch="Uniform" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Grid>
 
             <!-- Left Column \ Projects (own scroll) -->
             <Grid Style="{StaticResource ProjectsResponsiveStyle}">
@@ -556,7 +568,7 @@
                                             Width="{DynamicResource WolvenKitIconSmall}"
                                             Height="{DynamicResource WolvenKitIconSmall}"
                                             VerticalAlignment="Center"
-                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                            Foreground="{DynamicResource ContentForeground}"
                                             Spin="False"
                                             SpinAutoReverse="False" />
 
@@ -755,7 +767,7 @@
                                         Width="{DynamicResource WolvenKitIconSmall}"
                                         Height="{DynamicResource WolvenKitIconSmall}"
                                         VerticalAlignment="Center"
-                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                        Foreground="{DynamicResource ContentForeground}"
                                         Spin="False"
                                         SpinAutoReverse="False" />
 
@@ -838,7 +850,7 @@
                                     Width="{DynamicResource WolvenKitIconSmall}"
                                     Height="{DynamicResource WolvenKitIconSmall}"
                                     VerticalAlignment="Center"
-                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                                    Foreground="{DynamicResource ContentForeground}" />
 
                                 <TextBlock
                                     Margin="10,0,0,0"
