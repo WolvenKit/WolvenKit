@@ -34,7 +34,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
     private static ImportArgs DecideImportOptions(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
     {
         var extension = Path.GetExtension(fileName).TrimStart('.');
-        if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
+        if (!RawFileFormatParser.TryParse(extension, out var rawFileFormat))
         {
             throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
         }
@@ -86,7 +86,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
     public static XbmImportArgs LoadXbmDefaultSettings(string fileName)
     {
         var extension = Path.GetExtension(fileName).TrimStart('.');
-        if (!Enum.TryParse(extension, out ERawFileFormat _))
+        if (!RawFileFormatParser.TryParse(extension, out _))
         {
             throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
         }
@@ -132,7 +132,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         }
 
         var extension = Path.GetExtension(fileName).TrimStart('.');
-        if (!Enum.TryParse(extension, out ERawFileFormat _))
+        if (!RawFileFormatParser.TryParse(extension, out _))
         {
             throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
         }

@@ -39,9 +39,9 @@ namespace WolvenKit.RED4.Types
 		public gameinfluenceObstacleComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			CustomBoundingBox = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
-			ObstacleAgent = new gameinfluenceObstacleAgent { UseMeshes = true };
+			ObstacleAgent = new gameinfluenceObstacleAgent();
 			IsEnabled = true;
 
 			PostConstruct();

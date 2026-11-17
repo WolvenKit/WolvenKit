@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.Types
 			EffectReference = new gameEffectRef();
 			InitialPosition = new Vector4();
 			ColliderBox = new Vector4();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			ExplodeAfterRangeTravelled = true;
 
 			PostConstruct();

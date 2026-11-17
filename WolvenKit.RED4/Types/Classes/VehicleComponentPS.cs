@@ -304,7 +304,7 @@ namespace WolvenKit.RED4.Types
 		{
 			NpcOccupiedSlots = new();
 			PreviousInteractionState = new();
-			VehicleVisualCustomizationTemplate = new SavedVehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData() };
+			VehicleVisualCustomizationTemplate = new SavedVehicleVisualCustomizationTemplate();
 			VehicleApperanceDefinition = new vehicleVisualModdingDefinition();
 			CustomMappin = Enums.gamedataMappinVariant.Invalid;
 			HornEnabled = true;

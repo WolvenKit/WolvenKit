@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimVariableInt : animAnimVariable
 	{
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("default")] 
 		public CInt32 Default
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("min")] 
 		public CInt32 Min
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("max")] 
 		public CInt32 Max
 		{

@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Alpha over life";
 			EditorGroup = "Material";
 			IsEnabled = true;
+			Alpha = new CEvaluatorFloatConst();
 			Modulate = true;
 
 			PostConstruct();

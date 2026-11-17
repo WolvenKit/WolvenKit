@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDyngConstraintMulti : animIDyngConstraint
 	{
-		[Ordinal(1)] 
+		[Ordinal(0)] 
 		[RED("innerConstraints")] 
 		public CArray<CHandle<animIDyngConstraint>> InnerConstraints
 		{

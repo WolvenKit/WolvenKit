@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnRandomizerNode()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			OutputSockets = new();
 			Weights = new(32);
 

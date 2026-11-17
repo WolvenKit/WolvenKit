@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public questFollowObject_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
-			FollowObjectRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
+			FollowObjectRef = new gameEntityReference();
 			Offset = new Vector3();
 			PositionLerpSpeed = 1.000000F;
 			RotationLerpSpeed = 1.000000F;

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_ForegroundSegmentEnd : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("isAlwaysEnabledForHighEndHardware")] 
 		public CBool IsAlwaysEnabledForHighEndHardware
 		{

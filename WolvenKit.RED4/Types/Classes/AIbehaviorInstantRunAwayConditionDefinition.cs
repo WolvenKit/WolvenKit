@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorInstantRunAwayConditionDefinition()
 		{
+			Destination = new AIArgumentMapping { Type = Enums.AIArgumentType.Vector, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Vector3" };
+			RunOnNavmesh = new AIArgumentMapping { ParameterizationType = Enums.AIParameterizationType.CustomValue, CustomTypeName = "Bool" };
+
 			PostConstruct();
 		}
 

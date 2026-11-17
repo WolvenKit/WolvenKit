@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questShowHighlight_NodeSubType()
 		{
-			EntityReference = new gameEntityReference { Names = new() };
+			EntityReference = new gameEntityReference();
 			Enable = true;
 
 			PostConstruct();

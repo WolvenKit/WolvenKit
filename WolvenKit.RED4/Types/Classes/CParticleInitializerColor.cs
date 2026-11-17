@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Initial color";
 			EditorGroup = "Material";
 			IsEnabled = true;
+			Color = new CEvaluatorColorConst { Value = new CColor { Red = 255, Alpha = 255 } };
 
 			PostConstruct();
 		}

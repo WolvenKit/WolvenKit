@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class entMorphTargetSkinnedMeshComponent : entISkinTargetComponent
 	{
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("morphResource")] 
 		public CResourceAsyncReference<MorphTargetMesh> MorphResource
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<MorphTargetMesh>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("castShadows")] 
 		public CEnum<shadowsShadowCastingMode> CastShadows
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("castLocalShadows")] 
 		public CEnum<shadowsShadowCastingMode> CastLocalShadows
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("acceptDismemberment")] 
 		public CBool AcceptDismemberment
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("renderingPlaneAnimationParam")] 
 		public CName RenderingPlaneAnimationParam
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("visibilityAnimationParam")] 
 		public CName VisibilityAnimationParam
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("version")] 
 		public CUInt8 Version
 		{
@@ -95,14 +95,15 @@ namespace WolvenKit.RED4.Types
 		public entMorphTargetSkinnedMeshComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
+			BoundingBoxLocalBoundsOverride = -1.000000F;
 			MeshAppearance = "default";
 			AcceptDismemberment = true;
-			ChunkMask = long.MaxValue;
+			ChunkMask = ulong.MaxValue;
 			IsEnabled = true;
-			Tags = new redTagList { Tags = new() };
+			Tags = new redTagList();
 
 			PostConstruct();
 		}

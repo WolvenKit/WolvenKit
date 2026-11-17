@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnRidTag()
 		{
-			SerialNumber = new scnRidSerialNumber { SerialNumber = uint.MaxValue };
+			SerialNumber = new scnRidSerialNumber();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldStaticOccluderMeshNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("occluderType")] 
 		public CEnum<visWorldOccluderType> OccluderType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<visWorldOccluderType>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("color")] 
 		public CColor Color
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("autohideDistanceScale")] 
 		public CUInt8 AutohideDistanceScale
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldStaticOccluderMeshNode()
 		{
-			Color = new CColor();
+			Color = new CColor { Red = 96, Green = 96, Blue = 128, Alpha = 64 };
 			AutohideDistanceScale = 255;
 			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box_occluder.w2mesh");
 

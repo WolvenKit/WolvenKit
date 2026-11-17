@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIScanTargetCommand()
 		{
-			TargetPuppetRef = new gameEntityReference { Names = new() };
+			TargetPuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

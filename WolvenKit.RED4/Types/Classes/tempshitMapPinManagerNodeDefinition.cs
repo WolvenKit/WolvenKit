@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			NodeRef = new gameEntityReference { Names = new() };
+			NodeRef = new gameEntityReference();
 			Position = new Vector3();
 			ForceCaption = new() { Unk1 = 0, Value = "" };
 

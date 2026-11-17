@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnEffectInstance()
 		{
-			EffectInstanceId = new scnEffectInstanceId { EffectId = new scnEffectId { Id = uint.MaxValue }, Id = uint.MaxValue };
-			CompiledEffect = new worldCompiledEffectInfo { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
+			EffectInstanceId = new scnEffectInstanceId();
+			CompiledEffect = new worldCompiledEffectInfo();
 
 			PostConstruct();
 		}

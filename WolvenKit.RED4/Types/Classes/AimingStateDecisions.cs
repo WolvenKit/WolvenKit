@@ -93,14 +93,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
-		[RED("weaponState")] 
-		public CInt32 WeaponState
+		[RED("rightWeaponState")] 
+		public CInt32 RightWeaponState
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(12)] 
+		[RED("leftWeaponState")] 
+		public CInt32 LeftWeaponState
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("sceneAimForced")] 
 		public CBool SceneAimForced
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("shouldAim")] 
 		public CBool ShouldAim
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("hasRightHandItemEquipped")] 
 		public CBool HasRightHandItemEquipped
 		{
@@ -124,7 +132,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
+		[RED("hasLeftHandItemEquipped")] 
+		public CBool HasLeftHandItemEquipped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("isWeaponBlockingAiming")] 
 		public CBool IsWeaponBlockingAiming
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("visionModeActive")] 
 		public CBool VisionModeActive
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("isDodging")] 
 		public CBool IsDodging
 		{
@@ -156,7 +172,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
+		[RED("isDualWielding")] 
+		public CBool IsDualWielding
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("hasThrowableMeleeWeapon")] 
 		public CBool HasThrowableMeleeWeapon
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("canAimWhileDodging")] 
 		public CBool CanAimWhileDodging
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("canThrowWeapon")] 
 		public CBool CanThrowWeapon
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("aimForced")] 
 		public CBool AimForced
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("beingCreated")] 
 		public CBool BeingCreated
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("mouseZoomLevel")] 
 		public CFloat MouseZoomLevel
 		{

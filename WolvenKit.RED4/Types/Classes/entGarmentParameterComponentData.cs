@@ -172,6 +172,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("meshPathHash")] 
+		public CUInt64 MeshPathHash
+		{
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
+		}
+
 		public entGarmentParameterComponentData()
 		{
 			Chunks = new();

@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public HoloDeviceControllerPS()
 		{
 			TweakDBRecord = "Devices.HoloDevice";
-			TweakDBDescriptionRecord = 130097364595;
+			TweakDBDescriptionRecord = "device_descriptions.HoloDevice";
 
 			PostConstruct();
 		}

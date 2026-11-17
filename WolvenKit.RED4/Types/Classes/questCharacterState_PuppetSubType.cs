@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterState_PuppetSubType()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 			UpperBodyState = 1;
 			HighLevelState = 1;
 

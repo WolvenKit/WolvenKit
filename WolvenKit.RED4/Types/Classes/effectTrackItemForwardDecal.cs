@@ -112,6 +112,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TimeDuration = 1.000000F;
 			Appearance = "default";
+			Scale = new CEvaluatorVectorConst { Value = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 			SizeThreshold = 0.050000F;
 			SubUVx = 1;
 			SubUVy = 1;

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldOffMeshConnectionNode : worldSplineNode
 	{
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("isBidirectional")] 
 		public CBool IsBidirectional
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("type")] 
 		public CEnum<worldOffMeshConnectionType> Type
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldOffMeshConnectionType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{

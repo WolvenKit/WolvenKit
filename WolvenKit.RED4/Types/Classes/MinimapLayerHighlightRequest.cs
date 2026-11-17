@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public MinimapLayerHighlightRequest()
 		{
-			Data = new minimapLayerHighlightRequestData { HighlightColor = new HDRColor() };
+			Data = new minimapLayerHighlightRequestData();
 
 			PostConstruct();
 		}

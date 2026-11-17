@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldOffMeshSmartObjectNode : worldOffMeshConnectionNode
 	{
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("object")] 
 		public CHandle<gameSmartObjectDefinition> Object
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class GenericHotkeyController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("hotkeyBackground")] 
 		public inkImageWidgetReference HotkeyBackground
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("buttonHint")] 
 		public inkWidgetReference ButtonHint
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("hotkey")] 
 		public CEnum<gameEHotkey> Hotkey
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("pressStarted")] 
 		public CBool PressStarted
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("buttonHintController")] 
 		public CWeakHandle<inkInputDisplayController> ButtonHintController
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkInputDisplayController>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("questActivatingFact")] 
 		public CName QuestActivatingFact
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("restrictions")] 
 		public CArray<CName> Restrictions
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("statusEffectsListener")] 
 		public CHandle<HotkeyWidgetStatsListener> StatusEffectsListener
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HotkeyWidgetStatsListener>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("debugCommands")] 
 		public CArray<CUInt32> DebugCommands
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("factListenerId")] 
 		public CUInt32 FactListenerId
 		{
@@ -86,8 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public GenericHotkeyController()
 		{
-			IsNewPhoneEnabled = true;
-
 			PostConstruct();
 		}
 

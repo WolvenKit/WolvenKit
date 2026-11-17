@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterBodyType_CondtionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			Gender = "Female";
 
 			PostConstruct();

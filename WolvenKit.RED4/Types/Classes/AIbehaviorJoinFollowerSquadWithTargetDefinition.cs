@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorJoinFollowerSquadWithTargetDefinition()
 		{
+			Follower = new AIArgumentMapping { Type = Enums.AIArgumentType.Object, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "whandle:gameObject" };
+
 			PostConstruct();
 		}
 

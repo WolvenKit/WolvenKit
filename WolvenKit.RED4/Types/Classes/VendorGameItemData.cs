@@ -5,8 +5,8 @@ namespace WolvenKit.RED4.Types
 	public partial class VendorGameItemData : IScriptable
 	{
 		[Ordinal(0)] 
-		[RED("gameItemData")] 
-		public CHandle<gameItemData> GameItemData
+		[RED("itemData")] 
+		public CHandle<gameItemData> ItemData
 		{
 			get => GetPropertyValue<CHandle<gameItemData>>();
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public VendorGameItemData()
 		{
-			ItemStack = new gameSItemStack { ItemID = new gameItemID(), Quantity = 1, IsAvailable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, DynamicTags = new() };
+			ItemStack = new gameSItemStack();
 
 			PostConstruct();
 		}

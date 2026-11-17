@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.Types
 			Restitution = 0.200000F;
 			Density = 1000.000000F;
 			Tags = new physicsMaterialTags();
-			Color = new CColor();
+			Color = new CColor { Red = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

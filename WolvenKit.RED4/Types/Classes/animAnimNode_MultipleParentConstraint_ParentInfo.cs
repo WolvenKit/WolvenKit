@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
 			ParentTransform = new animTransformIndex();
 			ParentStaticWeight = 1.000000F;
 			ParentTrackWeight = new animNamedTrackIndex();
-			Offset = new QsTransform { Translation = new Vector4 { W = 1.000000F }, Rotation = new Quaternion { R = 1.000000F }, Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			Offset = new QsTransform { Translation = new Vector4 { W = 1.000000F } };
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldStaticStickerNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("labels")] 
 		public CArray<CString> Labels
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("showBackground")] 
 		public CBool ShowBackground
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("textColor")] 
 		public CColor TextColor
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("backgroundColor")] 
 		public CColor BackgroundColor
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("sprites")] 
 		public CArray<CResourceAsyncReference<CBitmapTexture>> Sprites
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CResourceAsyncReference<CBitmapTexture>>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("spriteSize")] 
 		public CInt32 SpriteSize
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("alignSpritesHorizontally")] 
 		public CBool AlignSpritesHorizontally
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("visibilityDistance")] 
 		public CFloat VisibilityDistance
 		{
@@ -80,8 +80,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Labels = new();
 			ShowBackground = true;
-			TextColor = new CColor();
-			BackgroundColor = new CColor();
+			TextColor = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
+			BackgroundColor = new CColor { Alpha = 100 };
 			Sprites = new();
 			SpriteSize = 40;
 			AlignSpritesHorizontally = true;

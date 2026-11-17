@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkPhaseAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(30)] 
+		[Ordinal(18)] 
 		[RED("phase")] 
 		public CName Phase
 		{

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public workCoverTypeCondition()
 		{
-			Equals_ = true;
+			Equals = true;
 
 			PostConstruct();
 		}

@@ -78,14 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public scnAnimTargetBasicData()
 		{
-			PerformerId = new scnPerformerId { Id = 4294967040 };
+			PerformerId = new scnPerformerId();
 			IsStart = true;
-			TargetPerformerId = new scnPerformerId { Id = 4294967040 };
+			TargetPerformerId = new scnPerformerId();
 			TargetSlot = "pla_default_tgt";
 			TargetOffsetEntitySpace = new Vector4();
 			StaticTarget = new Vector4 { W = 1.000000F };
-			TargetActorId = new scnActorId { Id = uint.MaxValue };
-			TargetPropId = new scnPropId { Id = uint.MaxValue };
+			TargetActorId = new scnActorId();
+			TargetPropId = new scnPropId();
 
 			PostConstruct();
 		}

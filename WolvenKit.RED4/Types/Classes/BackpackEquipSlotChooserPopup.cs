@@ -151,7 +151,7 @@ namespace WolvenKit.RED4.Types
 			TooltipsManagerRef = new inkWidgetReference();
 			ButtonOk = new inkWidgetReference();
 			ButtonCancel = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			LibraryPath = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

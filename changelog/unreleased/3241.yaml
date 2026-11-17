@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3241
+      author: "manavortex"
+      description: "CVM descriptors: 2.5's worldsector compiledstuff"

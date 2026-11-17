@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTransformAnimation_Rotation_LocalRotation()
 		{
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 
 			PostConstruct();
 		}

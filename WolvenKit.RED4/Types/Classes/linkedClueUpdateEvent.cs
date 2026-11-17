@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public linkedClueUpdateEvent()
 		{
-			LinkedCluekData = new LinkedFocusClueData { OwnerID = new entEntityID(), ExtendedClueRecords = new(), PsData = new PSOwnerData { Id = new gamePersistentID() } };
+			LinkedCluekData = new LinkedFocusClueData();
 			RequesterID = new entEntityID();
 			UpdatePS = true;
 

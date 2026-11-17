@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.Types
 			CompletedMarker = new inkWidgetReference();
 			ImageRef = new inkImageWidgetReference();
 			SlotList = new();
-			Data = new ProgramData { CommandLists = new(), Effects = new() };
+			Data = new ProgramData();
 
 			PostConstruct();
 		}

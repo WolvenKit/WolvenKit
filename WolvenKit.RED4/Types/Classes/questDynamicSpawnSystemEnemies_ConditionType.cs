@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public questDynamicSpawnSystemEnemies_ConditionType()
 		{
+			DistanceDefinition1 = new questDynamicSpawnSystemEnemyDistance();
+			DistanceDefinition2 = new questValueDistance();
+
 			PostConstruct();
 		}
 

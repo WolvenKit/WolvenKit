@@ -119,13 +119,13 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemColorGradeV2()
 		{
 			TimeDuration = 1.000000F;
-			Contrast = new effectEffectParameterEvaluatorFloat();
-			ContrastPivot = new effectEffectParameterEvaluatorFloat();
-			Saturation = new effectEffectParameterEvaluatorFloat();
-			Hue = new effectEffectParameterEvaluatorFloat();
-			Brightness = new effectEffectParameterEvaluatorFloat();
-			LowRange = new effectEffectParameterEvaluatorFloat();
-			HighRange = new effectEffectParameterEvaluatorFloat();
+			Contrast = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			ContrastPivot = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			Saturation = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			Hue = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			Brightness = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			LowRange = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			HighRange = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
 			Lift = new effectEffectParameterEvaluatorVector();
 			Gamma = new effectEffectParameterEvaluatorVector();
 			Gain = new effectEffectParameterEvaluatorVector();

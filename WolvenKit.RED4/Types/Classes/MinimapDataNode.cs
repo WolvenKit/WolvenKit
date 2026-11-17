@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MinimapDataNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("encodedShapesRef")] 
 		public CResourceAsyncReference<minimapEncodedShapes> EncodedShapesRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<minimapEncodedShapes>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("localBounds")] 
 		public Box LocalBounds
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("allInteriorShapes")] 
 		public CBool AllInteriorShapes
 		{

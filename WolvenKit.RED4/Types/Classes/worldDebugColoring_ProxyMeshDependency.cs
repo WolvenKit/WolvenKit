@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_ProxyMeshDependency()
 		{
-			NoneColor = new CColor();
-			HasProxyColor = new CColor();
-			DiscardColor = new CColor();
+			NoneColor = new CColor { Red = 127, Green = 127, Blue = 127, Alpha = 255 };
+			HasProxyColor = new CColor { Green = 255, Alpha = 255 };
+			DiscardColor = new CColor { Red = 255, Blue = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

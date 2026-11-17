@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkGridItemTemplate()
 		{
-			Widget = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			Widget = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.Types
 			DesiredSizeWrapper = new inkWidgetReference();
 			Border = new inkBorderWidgetReference();
 			Line = new inkWidgetReference();
-			Data = new MenuData { Identifier = -1, SubMenus = new() };
+			Data = new MenuData();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CGradient()
 		{
-			GradientEntries = new() { new rendGradientEntry(), new rendGradientEntry() };
+			GradientEntries = new() { new rendGradientEntry { Color = new CColor { Alpha = 255 } }, new rendGradientEntry { Value = 1.000000F, Color = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 } } };
 
 			PostConstruct();
 		}

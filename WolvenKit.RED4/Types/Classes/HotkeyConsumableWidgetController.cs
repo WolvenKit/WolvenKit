@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HotkeyConsumableWidgetController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("radioSlot")] 
 		public inkCompoundWidgetReference RadioSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("vehicleCustomizationSlot")] 
 		public inkCompoundWidgetReference VehicleCustomizationSlot
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("autodriveSlot")] 
 		public inkCompoundWidgetReference AutodriveSlot
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("container")] 
 		public inkCompoundWidgetReference Container
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("DpadHintLibraryPath")] 
 		public inkWidgetLibraryReference DpadHintLibraryPath
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("autodriveLibraryPath")] 
 		public inkWidgetLibraryReference AutodriveLibraryPath
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("IsInDriverCombat")] 
 		public CBool IsInDriverCombat
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("IsPoliceVehicle")] 
 		public CBool IsPoliceVehicle
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("isRadioBlocked")] 
 		public CBool IsRadioBlocked
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("isInVehicleScene")] 
 		public CBool IsInVehicleScene
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("isQuestBlocked")] 
 		public CBool IsQuestBlocked
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("carHudListenerId")] 
 		public CUInt32 CarHudListenerId
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("statusListener")] 
 		public CHandle<HotkeyRadioStatusListener> StatusListener
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HotkeyRadioStatusListener>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("PlayerEnteredVehicleListener")] 
 		public CHandle<redCallbackObject> PlayerEnteredVehicleListener
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("autodriveToggledListener")] 
 		public CHandle<redCallbackObject> AutodriveToggledListener
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("containerAnimProxy")] 
 		public CHandle<inkanimProxy> ContainerAnimProxy
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("containerVisibility")] 
 		public CBool ContainerVisibility
 		{
@@ -146,8 +146,8 @@ namespace WolvenKit.RED4.Types
 			VehicleCustomizationSlot = new inkCompoundWidgetReference();
 			AutodriveSlot = new inkCompoundWidgetReference();
 			Container = new inkCompoundWidgetReference();
-			DpadHintLibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-			AutodriveLibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			DpadHintLibraryPath = new inkWidgetLibraryReference();
+			AutodriveLibraryPath = new inkWidgetLibraryReference();
 			ContainerVisibility = true;
 
 			PostConstruct();

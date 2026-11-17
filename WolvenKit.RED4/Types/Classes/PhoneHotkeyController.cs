@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PhoneHotkeyController : GenericHotkeyController
 	{
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("mainIcon")] 
 		public inkImageWidgetReference MainIcon
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("questIcon")] 
 		public inkImageWidgetReference QuestIcon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("callIcon")] 
 		public inkImageWidgetReference CallIcon
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("messageCounterLabel")] 
 		public inkWidgetReference MessageCounterLabel
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("messageCounterLabelCircle")] 
 		public inkWidgetReference MessageCounterLabelCircle
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("messageCounter")] 
 		public inkTextWidgetReference MessageCounter
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("messageCounterCircle")] 
 		public inkTextWidgetReference MessageCounterCircle
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("phoneIconAtlas")] 
 		public CString PhoneIconAtlas
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("phoneIconName")] 
 		public CName PhoneIconName
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("proxy")] 
 		public CHandle<inkanimProxy> Proxy
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("questImportantAnimProxy")] 
 		public CHandle<inkanimProxy> QuestImportantAnimProxy
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("comDeviceBB")] 
 		public CWeakHandle<gameIBlackboard> ComDeviceBB
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("quickSlotBB")] 
 		public CWeakHandle<gameIBlackboard> QuickSlotBB
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("phoneEnabledBBId")] 
 		public CHandle<redCallbackObject> PhoneEnabledBBId
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("isVehiclesPopupVisibleBBId")] 
 		public CHandle<redCallbackObject> IsVehiclesPopupVisibleBBId
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("isRadioPopupVisibleBBId")] 
 		public CHandle<redCallbackObject> IsRadioPopupVisibleBBId
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("isRadialMenuVisibleBBId")] 
 		public CHandle<redCallbackObject> IsRadialMenuVisibleBBId
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("cinematicCameraBBId")] 
 		public CHandle<redCallbackObject> CinematicCameraBBId
 		{
@@ -169,7 +169,7 @@ namespace WolvenKit.RED4.Types
 			MessageCounterLabelCircle = new inkWidgetReference();
 			MessageCounter = new inkTextWidgetReference();
 			MessageCounterCircle = new inkTextWidgetReference();
-			PhoneIconAtlas = "base\\gameplay\\gui\\common\\icons\\atlas_common.inkatlas";
+			PhoneIconAtlas = @"base\gameplay\gui\common\icons\atlas_common.inkatlas";
 			PhoneIconName = "ico_phone";
 
 			PostConstruct();

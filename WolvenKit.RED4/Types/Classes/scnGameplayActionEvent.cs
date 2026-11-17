@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnGameplayActionEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			Performer = new scnPerformerId { Id = 4294967040 };
+			Id = new scnSceneEventId();
+			Performer = new scnPerformerId();
 
 			PostConstruct();
 		}

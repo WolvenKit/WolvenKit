@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerCombat_AssignSquad()
 		{
-			PresetID = 130861404206;
-			PuppetRef = new gameEntityReference { Names = new() };
-			SquadType = Enums.AISquadType.Combat;
-
 			PostConstruct();
 		}
 

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questGiveReward_NodeType()
 		{
-			Rewards = new() { 0 };
+			Rewards = new();
 
 			PostConstruct();
 		}

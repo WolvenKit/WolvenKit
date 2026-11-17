@@ -22,7 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterSpawned_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
+			ComparisonParams = new questComparisonParam { ComparisonType = Enums.EComparisonType.Greater };
 
 			PostConstruct();
 		}

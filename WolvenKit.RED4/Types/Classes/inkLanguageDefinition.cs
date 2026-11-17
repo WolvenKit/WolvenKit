@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			LanguageCode = "en-us";
 			IsoScriptCode = "Latn";
-			Fonts = new() { new inkLanguageFont() };
+			Fonts = new() { new inkLanguageFont { Font = new CResourceAsyncReference<inkFontFamilyResource>(@"engine\ink\fonts\arial.inkfontfamily") } };
 
 			PostConstruct();
 		}

@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.Types
 			RawVertices = new();
 			SimplifiedVertices = new();
 			InnerPoints = new();
-			Box = new Box { Min = new Vector4(), Max = new Vector4() };
+			Box = new Box();
 
 			PostConstruct();
 		}

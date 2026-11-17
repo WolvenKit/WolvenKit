@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.Types
 			InitialPopupDelay = 1.000000F;
 			PopupList = new();
 			ListOfAddedInventoryItems = new();
-			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

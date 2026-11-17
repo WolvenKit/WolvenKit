@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			EffectsContainerRef = new inkCompoundWidgetReference();
 			PoolHolderRef = new inkCompoundWidgetReference();
-			EffectTemplateRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			EffectTemplateRef = new inkWidgetLibraryReference();
 			MaxSize = 8;
 			Effects = new();
 

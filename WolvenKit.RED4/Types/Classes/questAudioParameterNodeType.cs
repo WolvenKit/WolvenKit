@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public questAudioParameterNodeType()
 		{
-			Param = new audioAudParameter { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 1.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 1.000000F };
-			ObjectRef = new gameEntityReference { Names = new() };
+			Param = new audioAudParameter();
+			ObjectRef = new gameEntityReference();
 
 			PostConstruct();
 		}

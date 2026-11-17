@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public CycleTriggerModeDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

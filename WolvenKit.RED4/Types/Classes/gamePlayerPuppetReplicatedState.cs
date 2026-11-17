@@ -11,8 +11,8 @@ namespace WolvenKit.RED4.Types
 			Health = -1.000000F;
 			Armor = -1.000000F;
 			CPOMissionVotedHistory = new();
-			AnimEventsState = new gameReplicatedAnimControllerEventsState { Items = new(), LastAppliedActionsTime = new netTime() };
-			EntityEventsState = new gameReplicatedEntityEventsState { Items = new(), LastAppliedActionsTime = new netTime() };
+			AnimEventsState = new gameReplicatedAnimControllerEventsState();
+			EntityEventsState = new gameReplicatedEntityEventsState();
 
 			PostConstruct();
 		}

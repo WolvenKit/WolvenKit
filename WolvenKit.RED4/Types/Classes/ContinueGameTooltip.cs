@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ContinueGameTooltip : inkWidgetLogicController
+	public partial class ContinueGameTooltip : TrophyTooltipController
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("mainContainer")] 
 		public inkWidgetReference MainContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("imageReplacement")] 
 		public inkImageWidgetReference ImageReplacement
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("networkStatusError")] 
 		public inkWidgetReference NetworkStatusError
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("networkSyncingIndicator")] 
 		public inkWidgetReference NetworkSyncingIndicator
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("labelDate")] 
 		public inkTextWidgetReference LabelDate
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("location")] 
 		public inkTextWidgetReference Location
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("quest")] 
 		public inkTextWidgetReference Quest
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("level")] 
 		public inkTextWidgetReference Level
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("lifepath")] 
 		public inkImageWidgetReference Lifepath
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("cloudStatus")] 
 		public inkImageWidgetReference CloudStatus
 		{
@@ -92,7 +92,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
+		[RED("moddedStatus")] 
+		public inkImageWidgetReference ModdedStatus
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("trophyStatus")] 
+		public inkImageWidgetReference TrophyStatus
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("saveMetaDataBlock")] 
+		public inkWidgetReference SaveMetaDataBlock
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("dividerModVerification")] 
+		public inkWidgetReference DividerModVerification
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("modVerificationContent")] 
+		public inkWidgetReference ModVerificationContent
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("playTime")] 
 		public inkTextWidgetReference PlayTime
 		{
@@ -100,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(19)] 
 		[RED("saveFileStatus")] 
 		public CEnum<inkSaveStatus> SaveFileStatus
 		{
@@ -108,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<inkSaveStatus>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(20)] 
 		[RED("cloudSaveStatus")] 
 		public CEnum<servicesCloudSavesQueryStatus> CloudSaveStatus
 		{
@@ -116,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<servicesCloudSavesQueryStatus>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(21)] 
 		[RED("metaDataLoaded")] 
 		public CBool MetaDataLoaded
 		{
@@ -124,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(22)] 
 		[RED("isOffline")] 
 		public CBool IsOffline
 		{
@@ -132,12 +172,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(23)] 
 		[RED("defaultAtlasPath")] 
 		public redResourceReferenceScriptToken DefaultAtlasPath
 		{
 			get => GetPropertyValue<redResourceReferenceScriptToken>();
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("isModded")] 
+		public CBool IsModded
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ContinueGameTooltip()
@@ -153,6 +201,11 @@ namespace WolvenKit.RED4.Types
 			Level = new inkTextWidgetReference();
 			Lifepath = new inkImageWidgetReference();
 			CloudStatus = new inkImageWidgetReference();
+			ModdedStatus = new inkImageWidgetReference();
+			TrophyStatus = new inkImageWidgetReference();
+			SaveMetaDataBlock = new inkWidgetReference();
+			DividerModVerification = new inkWidgetReference();
+			ModVerificationContent = new inkWidgetReference();
 			PlayTime = new inkTextWidgetReference();
 			DefaultAtlasPath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\fullscreen\load_game\save_game.inkatlas") };
 

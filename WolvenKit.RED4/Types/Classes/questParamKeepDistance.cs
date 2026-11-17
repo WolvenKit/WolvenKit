@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questParamKeepDistance()
 		{
+			CompanionTargetRef = new questUniversalRef { RefLocalPlayer = false };
+
 			PostConstruct();
 		}
 

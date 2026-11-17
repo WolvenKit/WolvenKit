@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnInputSocketId()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
-			IsockStamp = new scnInputSocketStamp { Name = ushort.MaxValue, Ordinal = ushort.MaxValue };
+			NodeId = new scnNodeId();
+			IsockStamp = new scnInputSocketStamp();
 
 			PostConstruct();
 		}

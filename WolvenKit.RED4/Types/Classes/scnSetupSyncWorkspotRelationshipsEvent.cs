@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnSetupSyncWorkspotRelationshipsEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			SyncedWorkspotIds = new(0);
+			Id = new scnSceneEventId();
+			SyncedWorkspotIds = new(4);
 
 			PostConstruct();
 		}

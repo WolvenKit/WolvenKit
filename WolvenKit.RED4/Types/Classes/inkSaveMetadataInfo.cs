@@ -148,6 +148,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
+		[Ordinal(18)] 
+		[RED("playthroughID")] 
+		public CString PlaythroughID
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("fileSize")] 
+		public CUInt64 FileSize
+		{
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
+		}
+
 		public inkSaveMetadataInfo()
 		{
 			PlayTime = 0.000000;

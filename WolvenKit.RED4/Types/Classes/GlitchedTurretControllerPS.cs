@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#121";
 			TweakDBRecord = "Devices.SecurityTurret";
-			TweakDBDescriptionRecord = 147741407213;
+			TweakDBDescriptionRecord = "device_descriptions.SecurityTurret";
 
 			PostConstruct();
 		}

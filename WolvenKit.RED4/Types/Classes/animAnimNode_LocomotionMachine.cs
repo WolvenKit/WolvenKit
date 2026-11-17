@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_LocomotionMachine : animAnimNode_StateMachine
 	{
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("usePlanner")] 
 		public CBool UsePlanner
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("group")] 
 		public CName Group
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("logic")] 
 		public CName Logic
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(12)] 
 		[RED("requestId")] 
 		public CName RequestId
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(13)] 
 		[RED("distance")] 
 		public CName Distance
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(14)] 
 		[RED("duration")] 
 		public CName Duration
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(15)] 
 		[RED("motion")] 
 		public CName Motion
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(16)] 
 		[RED("state")] 
 		public CName State
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(17)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(18)] 
 		[RED("numVariants")] 
 		public CUInt32 NumVariants
 		{

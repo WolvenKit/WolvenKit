@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckFactReturnCondition()
 		{
-			Params = new scnCheckFactReturnConditionParams();
+			Params = new scnCheckFactReturnConditionParams { FactCondition = new scnVarComparison_FactConditionType() };
 
 			PostConstruct();
 		}

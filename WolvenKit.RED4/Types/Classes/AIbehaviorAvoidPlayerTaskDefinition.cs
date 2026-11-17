@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorAvoidPlayerTaskDefinition()
 		{
+			ThreatRadius = new AIArgumentMapping { Type = Enums.AIArgumentType.Float, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Float" };
+
 			PostConstruct();
 		}
 

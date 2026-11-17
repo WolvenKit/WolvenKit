@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorMovementPolicyTaskDefinition()
 		{
 			WaitForPolicy = true;
+			StopWhenDestinationReached = new AIArgumentMapping { ParameterizationType = Enums.AIParameterizationType.CustomValue, CustomTypeName = "Bool" };
 			Policies = new();
 
 			PostConstruct();

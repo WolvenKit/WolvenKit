@@ -71,9 +71,9 @@ namespace WolvenKit.RED4.Types
 		public worldExtractedNodeSocket()
 		{
 			Position = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			Direction = new Vector3();
-			Color = new CColor();
+			Color = new CColor { Blue = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

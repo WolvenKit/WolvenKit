@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsMultipleSetEnableEvent()
 		{
-			Enable = new(0);
-			Layer = new(0);
-			LinkedLayers = new(0);
+			Enable = new(4);
+			Layer = new(4);
+			LinkedLayers = new(4);
 
 			PostConstruct();
 		}

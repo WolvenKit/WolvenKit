@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.Types
 		{
 			HealthControllerRef = new inkWidgetReference();
 			HealthPercentageRef = new inkTextWidgetReference();
-			TargetEntityRef = new gameEntityReference { Names = new() };
+			TargetEntityRef = new gameEntityReference();
 			GameInstance = new ScriptGameInstance();
 			TargetEntityID = new entEntityID();
 

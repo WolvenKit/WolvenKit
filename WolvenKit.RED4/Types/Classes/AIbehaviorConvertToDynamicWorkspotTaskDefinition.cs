@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorConvertToDynamicWorkspotTaskDefinition()
 		{
+			WorkspotData = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "handle:ISerializable" };
+			SpotInstance = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "handle:ISerializable" };
+			JumpToEntry = new AIArgumentMapping { ParameterizationType = Enums.AIParameterizationType.CustomValue, CustomTypeName = "Bool" };
+			EntryId = new AIArgumentMapping { Type = Enums.AIArgumentType.Uint64, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "Uint64" };
+
 			PostConstruct();
 		}
 

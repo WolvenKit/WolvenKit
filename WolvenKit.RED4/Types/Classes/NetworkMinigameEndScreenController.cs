@@ -89,7 +89,7 @@ namespace WolvenKit.RED4.Types
 			OutcomeText = new inkTextWidgetReference();
 			ProgramsListContainer = new inkWidgetReference();
 			SlotList = new();
-			EndData = new EndScreenData { UnlockedPrograms = new() };
+			EndData = new EndScreenData();
 			CloseButton = new inkWidgetReference();
 			Header_bg = new inkWidgetReference();
 			CompletionColor = new CColor();

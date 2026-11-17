@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public rendSingleScreenShotData()
 		{
-			OutputPath = new();
+			OutputPath = new AbsolutePathSerializable { Path = @"C:\\Users\\gpasquereau\\Documents\\CD Projekt Red\\Cyberpunk 2077\\screenshots\\" };
 			Resolution = Enums.renddimEPreset._1920x1080;
 			ResolutionMultiplier = Enums.rendResolutionMultiplier.X2;
 			EmmModes = new();

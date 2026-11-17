@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public questAssignConvoy_NodeType()
 		{
 			Followers = new();
-			VehicleLeaderRef = new gameEntityReference { Names = new() };
+			VehicleLeaderRef = new gameEntityReference();
 
 			PostConstruct();
 		}

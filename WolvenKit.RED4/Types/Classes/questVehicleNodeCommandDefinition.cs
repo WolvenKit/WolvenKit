@@ -24,7 +24,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			Vehicle = new gameEntityReference { Names = new() };
+			Vehicle = new gameEntityReference();
+			CommandParams = new questVehicleCommandParams { AdditionalParamsOnSpline = new questvehicleOnSplineParams { KeepDistanceParam = new questParamKeepDistance { CompanionTargetRef = new questUniversalRef { RefLocalPlayer = false } }, RubberBandingParam = new questParamRubberbanding { TargetRef = new questUniversalRef { RefLocalPlayer = false } } }, AdditionalParamsFollow = new questvehicleFollowParams(), AdditionalParamsToNode = new questvehicleToNodeParams { Portals = new vehiclePortalsList() }, AdditionalParamsRacing = new questvehicleRacingParams { RubberBandingParam = new questParamRubberbanding { TargetRef = new questUniversalRef { RefLocalPlayer = false } } }, AdditionalParamsJoinTraffic = new questvehicleJoinTrafficParams(), AdditionalParamsPanic = new questvehiclePanicParams(), AdditionalParamsChase = new questvehicleChaseParams() };
 
 			PostConstruct();
 		}

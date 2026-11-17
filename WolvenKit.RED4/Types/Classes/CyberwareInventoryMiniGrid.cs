@@ -172,6 +172,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
+		[Ordinal(22)] 
+		[RED("iconData")] 
+		public CHandle<UIInventoryItem> IconData
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CHandle<UIInventoryItem>>(value);
+		}
+
 		public CyberwareInventoryMiniGrid()
 		{
 			GridContainer = new inkUniformGridWidgetReference();

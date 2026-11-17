@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public questMappinGPSComparison_ConditionType()
 		{
+			DistanceDefinition1 = new questMappinGPSDistance { MappinPath = new gameJournalPath() };
+			DistanceDefinition2 = new questValueDistance();
+
 			PostConstruct();
 		}
 

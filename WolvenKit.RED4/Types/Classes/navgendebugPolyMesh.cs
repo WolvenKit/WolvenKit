@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Vertices = new();
 			Polygons = new();
-			Bounds = new Box { Min = new Vector4(), Max = new Vector4() };
+			Bounds = new Box();
 
 			PostConstruct();
 		}

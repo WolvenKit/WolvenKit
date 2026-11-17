@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_DampVector : animAnimNode_VectorValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("defaultIncreaseSpeed")] 
 		public Vector4 DefaultIncreaseSpeed
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("defaultDecreaseSpeed")] 
 		public Vector4 DefaultDecreaseSpeed
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("startFromDefaultValue")] 
 		public CBool StartFromDefaultValue
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("defaultInitialValue")] 
 		public Vector4 DefaultInitialValue
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("inputNode")] 
 		public animVectorLink InputNode
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("increaseSpeedNode")] 
 		public animVectorLink IncreaseSpeedNode
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("decreaseSpeedNode")] 
 		public animVectorLink DecreaseSpeedNode
 		{

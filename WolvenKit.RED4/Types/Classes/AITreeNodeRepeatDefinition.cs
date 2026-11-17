@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AITreeNodeRepeatDefinition()
 		{
-			Limit = new LibTreeDefInt32 { VariableId = ushort.MaxValue };
+			Limit = new LibTreeDefInt32();
 
 			PostConstruct();
 		}

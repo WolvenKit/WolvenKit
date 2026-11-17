@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("blockSkipByLine")] 
+		public CBool BlockSkipByLine
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("isRejectable")] 
 		public CBool IsRejectable
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("showAvatar")] 
 		public CBool ShowAvatar
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("visuals")] 
 		public CEnum<questPhoneCallVisuals> Visuals
 		{
@@ -81,6 +89,7 @@ namespace WolvenKit.RED4.Types
 			Phase = Enums.questPhoneCallPhase.IncomingCall;
 			Mode = Enums.questPhoneCallMode.Audio;
 			ApplyPhoneRestriction = true;
+			BlockSkipByLine = true;
 
 			PostConstruct();
 		}

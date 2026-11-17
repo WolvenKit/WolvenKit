@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class ItemChooserItemChanged : redEvent
 	{
 		[Ordinal(0)] 
+		[RED("itemChooser")] 
+		public CWeakHandle<InventoryGenericItemChooser> ItemChooser
+		{
+			get => GetPropertyValue<CWeakHandle<InventoryGenericItemChooser>>();
+			set => SetPropertyValue<CWeakHandle<InventoryGenericItemChooser>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("itemData")] 
 		public gameInventoryItemData ItemData
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("itemEquipmentArea")] 
 		public CEnum<gamedataEquipmentArea> ItemEquipmentArea
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
@@ -38,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemChooserItemChanged()
 		{
-			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			ItemData = new gameInventoryItemData();
 
 			PostConstruct();
 		}

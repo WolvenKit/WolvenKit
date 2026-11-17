@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("increaseLocalShadowmapUpdates")] 
+		public CBool IncreaseLocalShadowmapUpdates
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameRenderGameplayEffectsManagerSaveData()
 		{
 			CyberspacePixelsortParams = new gameCyberspacePixelsortEffectParams();

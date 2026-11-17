@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamedataFileNode()
 		{
-			PackageDependencies = new(0);
+			PackageDependencies = new(16);
 			Variables = new();
 			Groups = new();
 

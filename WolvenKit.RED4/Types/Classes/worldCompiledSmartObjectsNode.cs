@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldCompiledSmartObjectsNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("resource")] 
 		public CResourceAsyncReference<gameSmartObjectsCompiledResource> Resource
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimVariableQuaternion : animAnimVariable
 	{
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("roll")] 
 		public CFloat Roll
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("pitch")] 
 		public CFloat Pitch
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("yaw")] 
 		public CFloat Yaw
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("default")] 
 		public Quaternion Default
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimVariableQuaternion()
 		{
-			Default = new Quaternion { R = 1.000000F };
+			Default = new Quaternion();
 
 			PostConstruct();
 		}

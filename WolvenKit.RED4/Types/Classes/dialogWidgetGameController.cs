@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.Types
 		{
 			HubsContainer = new inkBasePanelWidgetReference();
 			HubControllers = new();
-			Data = new gameinteractionsvisDialogChoiceHubs { ChoiceHubs = new() };
+			Data = new gameinteractionsvisDialogChoiceHubs();
 			ActiveHubID = -1;
 			FadeAnimTime = 0.500000F;
 			FadeDelay = 1.000000F;

@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIArgumentMapping()
 		{
+			DefaultValue = new CVariant();
+
 			PostConstruct();
 		}
 

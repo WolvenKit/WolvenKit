@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public entAnimationControllerComponent()
 		{
 			Name = "Component";
-			AnimDatabaseCollection = new animAnimDatabaseCollection { AnimDatabases = new() };
+			AnimDatabaseCollection = new animAnimDatabaseCollection();
 
 			PostConstruct();
 		}

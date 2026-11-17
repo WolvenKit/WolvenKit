@@ -120,9 +120,9 @@ namespace WolvenKit.RED4.Types
 		{
 			Nodes = new();
 			SubGroups = new();
-			Transform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
-			CustomPivotOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
-			ProxyMeshGroupBuildParams = new worldProxyMeshGroupBuildParams { BuildParams = new worldGroupProxyMeshBuildParams() };
+			Transform = new Transform();
+			CustomPivotOffset = new Transform();
+			ProxyMeshGroupBuildParams = new worldProxyMeshGroupBuildParams();
 			ProxyDistanceFactor = 1.000000F;
 			MetadataArray = new();
 

@@ -46,8 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorCommandConditionDefinition()
 		{
+			CommandName = new AIArgumentMapping { Type = Enums.AIArgumentType.CName, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "CName" };
 			IsWaiting = true;
 			IsExecuting = true;
+			CommandOut = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, DefaultValue = new CVariant(), CustomTypeName = "handle:ISerializable" };
 
 			PostConstruct();
 		}

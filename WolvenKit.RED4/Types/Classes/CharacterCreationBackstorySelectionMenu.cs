@@ -68,6 +68,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("nomadHovered")] 
+		public CBool NomadHovered
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("streetHovered")] 
+		public CBool StreetHovered
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("corpoHovered")] 
+		public CBool CorpoHovered
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CharacterCreationBackstorySelectionMenu()
 		{
 			Nomad = new inkWidgetReference();

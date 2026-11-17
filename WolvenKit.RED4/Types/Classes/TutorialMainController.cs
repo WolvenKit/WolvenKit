@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
 			InstructionPanel = new inkWidgetReference();
 			InstructionDesc = new inkTextWidgetReference();
 			Pointer = new inkWidgetReference();
-			CurrentTutorialStep = new TutorialStep { AllowedActions = new() };
+			CurrentTutorialStep = new TutorialStep();
 
 			PostConstruct();
 		}

@@ -251,11 +251,13 @@ namespace WolvenKit.RED4.Types
 			RoughnessScale = 1.000000F;
 			NormalThreshold = 1.000000F;
 			AdditiveNormals = true;
-			DiffuseRandomColor0 = new CColor();
-			DiffuseRandomColor1 = new CColor();
+			DiffuseRandomColor0 = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
+			DiffuseRandomColor1 = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
 			Specularity = -1.000000F;
 			FarZ = 1.000000F;
+			Size = new CEvaluatorFloatConst();
 			NormalFadeScale = 1.000000F;
+			DecalLifetime = new CEvaluatorFloatConst();
 			DecalFadeTime = 0.100000F;
 			DecalFadeInTime = 0.100000F;
 			ProjectOnStatic = true;

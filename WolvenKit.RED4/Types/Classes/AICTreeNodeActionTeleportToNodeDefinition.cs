@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public AICTreeNodeActionTeleportToNodeDefinition()
 		{
-			NodeRef = new LibTreeDefNodeRef { VariableId = ushort.MaxValue };
-			Offset = new LibTreeDefVector { VariableId = ushort.MaxValue, V = new Vector3() };
+			NodeRef = new LibTreeDefNodeRef();
+			Offset = new LibTreeDefVector();
 
 			PostConstruct();
 		}

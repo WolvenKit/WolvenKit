@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldGeometryShapeNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("color")] 
 		public CColor Color
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("shape")] 
 		public CHandle<GeometryShape> Shape
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldGeometryShapeNode()
 		{
-			Color = new CColor();
+			Color = new CColor { Red = 128, Green = 128, Blue = 96, Alpha = 128 };
 
 			PostConstruct();
 		}

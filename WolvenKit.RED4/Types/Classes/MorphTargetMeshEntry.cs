@@ -46,7 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public MorphTargetMeshEntry()
 		{
-			FaceRegion = Enums.MorphTargetsFaceRegion.FACE_REGION_NONE;
 			BoneNames = new();
 			BoneRigMatrices = new();
 

@@ -55,6 +55,7 @@ namespace WolvenKit.RED4.Types
 		public worldFoliageBakedDestructionMapping()
 		{
 			FrameRate = 24.000000F;
+			FilterData = new physicsFilterData();
 
 			PostConstruct();
 		}

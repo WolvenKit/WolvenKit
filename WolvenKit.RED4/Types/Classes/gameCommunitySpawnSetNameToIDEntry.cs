@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameCommunitySpawnSetNameToIDEntry()
 		{
-			CommunityId = new gameCommunityID { EntityId = new entEntityID() };
+			CommunityId = new gameCommunityID();
 
 			PostConstruct();
 		}

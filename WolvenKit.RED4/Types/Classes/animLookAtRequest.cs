@@ -97,8 +97,8 @@ namespace WolvenKit.RED4.Types
 			TransitionSpeed = 60.000000F;
 			OutTransitionSpeed = 60.000000F;
 			FollowingSpeedFactorOverride = -1.000000F;
-			Limits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
-			AdditionalParts = new(0);
+			Limits = new animLookAtLimits();
+			AdditionalParts = new(2);
 
 			PostConstruct();
 		}

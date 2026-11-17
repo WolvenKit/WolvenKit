@@ -192,11 +192,11 @@ namespace WolvenKit.RED4.Types
 		{
 			Teleport = true;
 			FinishAnimation = true;
-			EntryId = new workWorkEntryId { Id = uint.MaxValue };
+			EntryId = new workWorkEntryId();
 			ChangeWorkspot = true;
-			ExitEntryId = new workWorkEntryId { Id = uint.MaxValue };
+			ExitEntryId = new workWorkEntryId();
 			IsWorkspotInfinite = true;
-			PlayerParams = new questUseWorkspotPlayerParams { CameraSettings = new gameTier3CameraSettings { YawLeftLimit = 60.000000F, YawRightLimit = 60.000000F, PitchTopLimit = 60.000000F, PitchBottomLimit = 45.000000F, PitchSpeedMultiplier = 1.000000F, YawSpeedMultiplier = 1.000000F }, CameraUseTrajectorySpace = true, VehicleProceduralCameraWeight = 1.000000F, ParallaxWeight = 1.000000F };
+			PlayerParams = new questUseWorkspotPlayerParams();
 			RepeatCommandOnInterrupt = true;
 			WorkExcludedGestures = new();
 			MeshDissolvingEnabled = true;

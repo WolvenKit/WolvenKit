@@ -32,8 +32,8 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#1653";
 			TweakDBRecord = "Devices.NcartTimetable";
-			TweakDBDescriptionRecord = 147694950908;
-			NcartTimetableSetup = new NcartTimetableSetup { DepartFrequency = 5, UiUpdateFrequency = 1, TrainLines = new() };
+			TweakDBDescriptionRecord = "device_descriptions.NcartTimetable";
+			NcartTimetableSetup = new NcartTimetableSetup();
 
 			PostConstruct();
 		}

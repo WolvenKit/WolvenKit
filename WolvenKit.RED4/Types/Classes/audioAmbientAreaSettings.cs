@@ -220,8 +220,8 @@ namespace WolvenKit.RED4.Types
 			SoundBanks = new();
 			Switches = new();
 			Parameters = new();
-			GroupingSettings = new audioAmbientAreaGroupingSettings { MaxDistance = 100.000000F, GroupingVerticallimit = 3.000000F };
-			QuadSettings = new audioQuadEmitterSettings { Offset = new Vector3(), Events = new(4) };
+			GroupingSettings = new audioAmbientAreaGroupingSettings();
+			QuadSettings = new audioQuadEmitterSettings();
 			AmbientPaletteEntries = new();
 
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HotkeyCustomRadioWidgetController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("radioSlot")] 
 		public inkCompoundWidgetReference RadioSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("DpadHintLibraryPath")] 
 		public inkWidgetLibraryReference DpadHintLibraryPath
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public HotkeyCustomRadioWidgetController()
 		{
 			RadioSlot = new inkCompoundWidgetReference();
-			DpadHintLibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			DpadHintLibraryPath = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

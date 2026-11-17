@@ -91,6 +91,7 @@ namespace WolvenKit.RED4.Types
 			StopAtEnd = true;
 			UseTraffic = true;
 			ForceGreenLights = true;
+			Portals = new vehiclePortalsList();
 
 			PostConstruct();
 		}

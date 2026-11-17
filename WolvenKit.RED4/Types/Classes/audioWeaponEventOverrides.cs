@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioWeaponEventOverrides()
 		{
 			Entries = new();
+			EntryType = new audioWeaponEventOverride();
 
 			PostConstruct();
 		}

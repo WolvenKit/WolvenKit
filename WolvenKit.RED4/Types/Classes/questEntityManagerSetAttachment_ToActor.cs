@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerSetAttachment_ToActor()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			IsPlayer = true;
 			CustomOffsetPos = new Vector3();
-			CustomOffsetRot = new Quaternion { R = 1.000000F };
+			CustomOffsetRot = new Quaternion();
 
 			PostConstruct();
 		}

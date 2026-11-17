@@ -71,12 +71,12 @@ namespace WolvenKit.RED4.Types
 		public gameAudioEmitterComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			OnAttach = new gameAudioSyncs { SwitchEvents = new(), PlayEvents = new(), StopEvents = new(), ParameterEvents = new() };
-			OnDetach = new gameAudioSyncs { SwitchEvents = new(), PlayEvents = new(), StopEvents = new(), ParameterEvents = new() };
+			LocalTransform = new WorldTransform();
+			OnAttach = new gameAudioSyncs();
+			OnDetach = new gameAudioSyncs();
 			UpdateDistance = 100.000000F;
 			Tags = new();
-			TagList = new redTagList { Tags = new() };
+			TagList = new redTagList();
 
 			PostConstruct();
 		}

@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public gameEffectObjectProvider_TargetingObjectsInCone()
 		{
 			QueryPreset = new physicsQueryPreset();
-			SearchQuery = new gameTargetSearchQuery { SearchFilter = new gameTargetSearchFilter(), IncludeSecondaryTargets = true, QueryTarget = new entEntityID() };
+			SearchQuery = new gameTargetSearchQuery();
 
 			PostConstruct();
 		}

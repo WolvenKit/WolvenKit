@@ -349,6 +349,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(46)] 
+		[RED("nintendoSwitchInputLibraryId")] 
+		public CName NintendoSwitchInputLibraryId
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(47)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
@@ -356,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("ps4InputWidget")] 
 		public CWeakHandle<inkWidget> Ps4InputWidget
 		{
@@ -364,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("xboxInputWidget")] 
 		public CWeakHandle<inkWidget> XboxInputWidget
 		{
@@ -372,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("stadiaInputWidget")] 
 		public CWeakHandle<inkWidget> StadiaInputWidget
 		{
@@ -380,7 +388,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
+		[RED("nintendoSwitchInputWidget")] 
+		public CWeakHandle<inkWidget> NintendoSwitchInputWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(52)] 
 		[RED("menuPages")] 
 		public CArray<CWeakHandle<inkWidget>> MenuPages
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("topButtonsController")] 
 		public CWeakHandle<PhotoModeTopBarController> TopButtonsController
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhotoModeTopBarController>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("cameraLocationController")] 
 		public CWeakHandle<PhotoModeCameraLocation> CameraLocationController
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhotoModeCameraLocation>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("currentPage")] 
 		public CUInt32 CurrentPage
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("IsHoverOver")] 
 		public CBool IsHoverOver
 		{
@@ -420,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("holdSafeguard")] 
 		public CBool HoldSafeguard
 		{
@@ -428,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("notificationUserData")] 
 		public CHandle<inkGameNotificationData> NotificationUserData
 		{
@@ -436,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationData>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("notificationToken")] 
 		public CHandle<inkGameNotificationToken> NotificationToken
 		{
@@ -444,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("loopAnimproxy")] 
 		public CHandle<inkanimProxy> LoopAnimproxy
 		{
@@ -452,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("uiVisiblityFadeAnim")] 
 		public CHandle<inkanimProxy> UiVisiblityFadeAnim
 		{
@@ -460,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("currentNpc")] 
 		public CInt32 CurrentNpc
 		{
@@ -468,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("exitConfirmationToken")] 
 		public CHandle<inkGameNotificationToken> ExitConfirmationToken
 		{
@@ -476,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(64)] 
 		[RED("horizontalLineUp")] 
 		public inkWidgetReference HorizontalLineUp
 		{
@@ -484,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(65)] 
 		[RED("horizontalLineDown")] 
 		public inkWidgetReference HorizontalLineDown
 		{
@@ -492,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(66)] 
 		[RED("verticalLineLeft")] 
 		public inkWidgetReference VerticalLineLeft
 		{
@@ -500,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(67)] 
 		[RED("verticalLineRight")] 
 		public inkWidgetReference VerticalLineRight
 		{
@@ -508,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(68)] 
 		[RED("fakePlayer")] 
 		public CWeakHandle<PlayerPuppet> FakePlayer
 		{
@@ -516,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(69)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -524,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(70)] 
 		[RED("anyOptionChanged")] 
 		public CBool AnyOptionChanged
 		{
@@ -534,10 +550,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPhotoModeMenuController()
 		{
-			SetAttributeOptionEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
-			SetCategoryEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
-			SetStickerImage = new gameuiStickerImageCallback();
-			SetNpcImage = new gameuiNpcImageCallback();
+			SetAttributeOptionEnabled = new gameuiSetPhotoModeKeyEnabledCallback { CallbackName = "OnSetAttributeOptionEnabled" };
+			SetCategoryEnabled = new gameuiSetPhotoModeKeyEnabledCallback { CallbackName = "OnSetCategoryEnabled" };
+			SetStickerImage = new gameuiStickerImageCallback { CallbackName = "OnSetStickerImage" };
+			SetNpcImage = new gameuiNpcImageCallback { CallbackName = "OnSetNpcImage" };
 			ChangeAspectRatio = new gameuiChangeAspectRatioCallback();
 			MenuListRoot = new inkWidgetReference();
 			AdditionalListRoot = new inkWidgetReference();

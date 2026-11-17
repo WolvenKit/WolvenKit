@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_BoolLatch : animAnimNode_BoolValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("input")] 
 		public animBoolLink Input
 		{

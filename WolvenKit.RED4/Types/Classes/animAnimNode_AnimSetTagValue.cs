@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_AnimSetTagValue : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_AnimSetTagValue()
 		{
 			Id = uint.MaxValue;
-			Tags = new redTagList { Tags = new() };
+			Tags = new redTagList();
 
 			PostConstruct();
 		}

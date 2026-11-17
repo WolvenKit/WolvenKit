@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RadioVolumeSettingsController : inkSettingsSelectorController
 	{
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("value")] 
 		public inkTextWidgetReference Value
 		{

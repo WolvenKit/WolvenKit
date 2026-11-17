@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public hudSniperNestController()
 		{
-			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CycleRoundEvents : WeaponEventsTransition
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("hasBlockedAiming")] 
 		public CBool HasBlockedAiming
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("blockAimStart")] 
 		public CFloat BlockAimStart
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("blockAimDuration")] 
 		public CFloat BlockAimDuration
 		{
@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public CycleRoundEvents()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

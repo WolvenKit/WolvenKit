@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPlayEnv_OverrideGlobalLight()
 		{
-			Params = new worldWorldGlobalLightOverrideWithColorParameters { LightDirOverride = new GlobalLightingTrajectoryOverride { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer }, LightColorOverride = new HDRColor() };
+			Params = new worldWorldGlobalLightOverrideWithColorParameters();
 
 			PostConstruct();
 		}

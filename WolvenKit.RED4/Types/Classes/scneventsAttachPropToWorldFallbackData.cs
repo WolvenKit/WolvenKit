@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsAttachPropToWorldFallbackData()
 		{
-			Owner = new scnPerformerId { Id = 4294967040 };
-			FallbackCachedBones = new(0);
+			Owner = new scnPerformerId();
+			FallbackCachedBones = new(2);
 
 			PostConstruct();
 		}

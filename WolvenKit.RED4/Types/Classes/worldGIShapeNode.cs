@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldGIShapeNode : worldGeometryShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("group")] 
 		public CEnum<rendGIGroup> Group
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<rendGIGroup>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("interior")] 
 		public CBool Interior
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("runtime")] 
 		public CBool Runtime
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("updated")] 
 		public CBool Updated
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldGIShapeNode()
 		{
+			Color = new CColor { Red = 133, Green = 191, Blue = 255, Alpha = 64 };
 			Priority = 1;
 
 			PostConstruct();

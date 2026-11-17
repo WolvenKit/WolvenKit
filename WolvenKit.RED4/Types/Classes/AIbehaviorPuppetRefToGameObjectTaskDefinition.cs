@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorPuppetRefToGameObjectTaskDefinition()
 		{
+			PuppetRef = new AIArgumentMapping { Type = Enums.AIArgumentType.PuppetRef, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "gameEntityReference" };
+			Result = new AIArgumentMapping { Type = Enums.AIArgumentType.Object, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "whandle:gameObject" };
+
 			PostConstruct();
 		}
 

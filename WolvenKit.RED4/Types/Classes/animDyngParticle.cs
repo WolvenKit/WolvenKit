@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDyngParticle : RedBaseClass
 	{
-		[Ordinal(1)] 
+		[Ordinal(0)] 
 		[RED("mass")] 
 		public CFloat Mass
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("damping")] 
 		public CFloat Damping
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("pullForceFactor")] 
 		public CFloat PullForceFactor
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("isFree")] 
 		public CBool IsFree
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("collisionCapsuleRadius")] 
 		public CFloat CollisionCapsuleRadius
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("collisionCapsuleHeightExtent")] 
 		public CFloat CollisionCapsuleHeightExtent
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("collisionCapsuleAxisLS")] 
 		public Vector3 CollisionCapsuleAxisLS
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("projectionType")] 
 		public CEnum<animDyngParticleProjectionType> ProjectionType
 		{

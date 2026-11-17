@@ -159,13 +159,13 @@ namespace WolvenKit.RED4.Types
 		public entMeshComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			MeshAppearance = "default";
 			MotionBlurScale = 1.000000F;
 			VisualScale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			ChunkMask = long.MaxValue;
+			ChunkMask = ulong.MaxValue;
 			IsEnabled = true;
 			OverrideMeshNavigationImpact = true;
 			NavigationImpact = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Ignored };

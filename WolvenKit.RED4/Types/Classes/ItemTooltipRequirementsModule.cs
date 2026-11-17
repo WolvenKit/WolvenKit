@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("armCyberwareStyleWrapper")] 
+		public inkWidgetReference ArmCyberwareStyleWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("line")] 
 		public inkWidgetReference Line
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("levelRequirementsText")] 
 		public inkTextWidgetReference LevelRequirementsText
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("strenghtOrReflexText")] 
 		public inkTextWidgetReference StrenghtOrReflexText
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("perkText")] 
 		public inkTextWidgetReference PerkText
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("perkDot")] 
 		public inkImageWidgetReference PerkDot
 		{
@@ -82,6 +90,7 @@ namespace WolvenKit.RED4.Types
 			StrenghtOrReflexWrapper = new inkWidgetReference();
 			SmartlinkGunWrapper = new inkWidgetReference();
 			AnyAttributeWrapper = new inkCompoundWidgetReference();
+			ArmCyberwareStyleWrapper = new inkWidgetReference();
 			Line = new inkWidgetReference();
 			LevelRequirementsText = new inkTextWidgetReference();
 			StrenghtOrReflexText = new inkTextWidgetReference();

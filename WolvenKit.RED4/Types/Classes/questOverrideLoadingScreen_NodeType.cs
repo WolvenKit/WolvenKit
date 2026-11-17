@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public questOverrideLoadingScreen_NodeType()
 		{
-			Videos = new() { new CResourceAsyncReference<Bink>() };
+			Videos = new() { null };
 			MinimumPlayCount = 3;
 			Tooltips = new();
 			TooltipDuration = 1.500000F;

@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public questMappinGPSDistance()
 		{
+			MappinPath = new gameJournalPath();
+
 			PostConstruct();
 		}
 

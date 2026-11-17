@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorConstantExpressionDefinition()
 		{
 			Type = new AIbehaviorTypeRef { IsSet = true };
+			Value = new CVariant();
 
 			PostConstruct();
 		}

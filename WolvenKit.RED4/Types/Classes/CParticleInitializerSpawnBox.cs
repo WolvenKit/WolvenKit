@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Spawn box";
 			EditorGroup = "Location";
 			IsEnabled = true;
+			Extents = new CEvaluatorVectorConst { Value = new Vector4 { X = 0.100000F, Y = 0.100000F, Z = 0.100000F, W = 1.000000F } };
 			WorldSpace = true;
 
 			PostConstruct();

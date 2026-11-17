@@ -45,8 +45,7 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("vertexFactory")]
-		[DisplayAsEnum<EMaterialVertexFactory>]
+		[RED("vertexFactory")] 
 		public CUInt8 VertexFactory
 		{
 			get => GetPropertyValue<CUInt8>();
@@ -89,8 +88,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendChunk()
 		{
-			ChunkVertices = new rendVertexBufferChunk { VertexLayout = new GpuWrapApiVertexLayoutDesc { Elements = new(0), SlotStrides = new(0), Hash = uint.MaxValue }, ByteOffsets = new(0) };
-			ChunkIndices = new rendIndexBufferChunk { Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_Max };
+			ChunkVertices = new rendVertexBufferChunk();
+			ChunkIndices = new rendIndexBufferChunk();
 			MaterialId = new();
 
 			PostConstruct();

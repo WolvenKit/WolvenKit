@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("dualWieldWeaponSlotText")] 
+		public inkTextWidgetReference DualWieldWeaponSlotText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("comparisionArrow")] 
 		public inkWidgetReference ComparisionArrow
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("itemEvolutionIcon")] 
 		public inkImageWidgetReference ItemEvolutionIcon
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("itemPerkIcon")] 
 		public inkImageWidgetReference ItemPerkIcon
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("itemWeaponIcon")] 
 		public inkImageWidgetReference ItemWeaponIcon
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("separatorTop")] 
 		public inkWidgetReference SeparatorTop
 		{
@@ -68,7 +76,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
+		[RED("dualWieldWrapper")] 
+		public inkWidgetReference DualWieldWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("dualWieldPrimaryIcons")] 
+		public inkWidgetReference DualWieldPrimaryIcons
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("dualWieldSecondaryIcons")] 
+		public inkWidgetReference DualWieldSecondaryIcons
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("localizedIconicText")] 
 		public CString LocalizedIconicText
 		{
@@ -81,11 +113,15 @@ namespace WolvenKit.RED4.Types
 			ItemNameText = new inkTextWidgetReference();
 			ItemRarityText = new inkTextWidgetReference();
 			ItemTypeText = new inkTextWidgetReference();
+			DualWieldWeaponSlotText = new inkTextWidgetReference();
 			ComparisionArrow = new inkWidgetReference();
 			ItemEvolutionIcon = new inkImageWidgetReference();
 			ItemPerkIcon = new inkImageWidgetReference();
 			ItemWeaponIcon = new inkImageWidgetReference();
 			SeparatorTop = new inkWidgetReference();
+			DualWieldWrapper = new inkWidgetReference();
+			DualWieldPrimaryIcons = new inkWidgetReference();
+			DualWieldSecondaryIcons = new inkWidgetReference();
 
 			PostConstruct();
 		}

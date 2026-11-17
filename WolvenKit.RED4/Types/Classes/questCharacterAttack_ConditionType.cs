@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterAttack_ConditionType()
 		{
-			AttackerRef = new gameEntityReference { Names = new() };
-			TargetRef = new gameEntityReference { Names = new() };
+			AttackerRef = new gameEntityReference();
+			TargetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_AdditionalFloatTrack : animAnimNode_Base
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("poseInputNode")] 
 		public animPoseLink PoseInputNode
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animPoseLink>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("additionalTracks")] 
 		public animAdditionalFloatTrackContainer AdditionalTracks
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = uint.MaxValue;
 			PoseInputNode = new animPoseLink();
-			AdditionalTracks = new animAdditionalFloatTrackContainer { Entries = new(), OverwriteExistingValues = true };
+			AdditionalTracks = new animAdditionalFloatTrackContainer();
 
 			PostConstruct();
 		}

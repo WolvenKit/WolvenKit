@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public entReplicatedInputSetterBase()
 		{
-			ApplyServerTime = new netTime { MilliSecs = long.MaxValue };
+			ApplyServerTime = new netTime { MilliSecs = ulong.MaxValue };
 
 			PostConstruct();
 		}

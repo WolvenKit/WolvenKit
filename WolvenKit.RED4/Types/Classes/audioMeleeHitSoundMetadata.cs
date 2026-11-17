@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioMeleeHitSoundMetadata()
 		{
+			MeleeSoundsByMaterial = new audioMaterialMeleeSoundDictionary { EntryType = new audioMaterialMeleeSoundDictionaryItem() };
+
 			PostConstruct();
 		}
 

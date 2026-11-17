@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAIDirectorSpawnNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldAIDirectorSpawnNode()
 		{
-			Tags = new redTagList { Tags = new() };
+			Tags = new redTagList();
 
 			PostConstruct();
 		}

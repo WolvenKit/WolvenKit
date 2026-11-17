@@ -13,8 +13,16 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("weapon")] 
-		public gameSlotWeaponData Weapon
+		[RED("rightWeapon")] 
+		public gameSlotWeaponData RightWeapon
+		{
+			get => GetPropertyValue<gameSlotWeaponData>();
+			set => SetPropertyValue<gameSlotWeaponData>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("leftWeapon")] 
+		public gameSlotWeaponData LeftWeapon
 		{
 			get => GetPropertyValue<gameSlotWeaponData>();
 			set => SetPropertyValue<gameSlotWeaponData>(value);
@@ -23,7 +31,8 @@ namespace WolvenKit.RED4.Types
 		public gameSlotDataHolder()
 		{
 			AmmoData = new();
-			Weapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			RightWeapon = new gameSlotWeaponData();
+			LeftWeapon = new gameSlotWeaponData();
 
 			PostConstruct();
 		}

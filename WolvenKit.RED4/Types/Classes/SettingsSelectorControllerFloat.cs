@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SettingsSelectorControllerFloat : SettingsSelectorControllerRange
 	{
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("newValue")] 
 		public CFloat NewValue
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("sliderWidget")] 
 		public inkWidgetReference SliderWidget
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("sliderController")] 
 		public CWeakHandle<inkSliderController> SliderController
 		{

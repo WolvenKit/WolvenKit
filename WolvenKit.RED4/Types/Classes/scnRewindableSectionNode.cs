@@ -38,12 +38,12 @@ namespace WolvenKit.RED4.Types
 
 		public scnRewindableSectionNode()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			OutputSockets = new();
 			Events = new();
 			SectionDuration = new scnSceneTime();
 			ActorBehaviors = new();
-			PlaySpeedModifiers = new scnRewindableSectionPlaySpeedModifiers { ForwardVeryFast = 6.000000F, ForwardFast = 3.000000F, ForwardSlow = 0.500000F, BackwardVeryFast = 6.000000F, BackwardFast = 3.000000F, BackwardSlow = 0.500000F };
+			PlaySpeedModifiers = new scnRewindableSectionPlaySpeedModifiers();
 
 			PostConstruct();
 		}

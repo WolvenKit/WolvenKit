@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldCollisionNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("compiledData")] 
 		public DataBuffer CompiledData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DataBuffer>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("numActors")] 
 		public CUInt16 NumActors
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("numShapeInfos")] 
 		public CUInt16 NumShapeInfos
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("numShapePositions")] 
 		public CUInt16 NumShapePositions
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("numShapeRotations")] 
 		public CUInt16 NumShapeRotations
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("numScales")] 
 		public CUInt16 NumScales
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("numMaterials")] 
 		public CUInt16 NumMaterials
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("numPresets")] 
 		public CUInt16 NumPresets
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("numMaterialIndices")] 
 		public CUInt16 NumMaterialIndices
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("numShapeIndices")] 
 		public CUInt16 NumShapeIndices
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("sectorHash")] 
 		public CUInt64 SectorHash
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("extents")] 
 		public Vector4 Extents
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("lod")] 
 		public CUInt8 Lod
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("resourceVersion")] 
 		public CUInt8 ResourceVersion
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameDynamicEventNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("mappinRef")] 
 		public NodeRef MappinRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("condition")] 
 		public CHandle<questIBaseCondition> Condition
 		{
@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameDynamicEventNode()
 		{
+			Color = new CColor { Red = 255, Green = 237, Alpha = 170 };
+
 			PostConstruct();
 		}
 

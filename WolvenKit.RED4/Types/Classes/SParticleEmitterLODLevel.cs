@@ -62,9 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public SParticleEmitterLODLevel()
 		{
-			EmitterDurationSettings = new EmitterDurationSettings { EmitterDuration = 1.000000F };
+			EmitterDurationSettings = new EmitterDurationSettings();
 			EmitterDelaySettings = new EmitterDelaySettings();
 			BurstList = new();
+			BirthRate = new CEvaluatorFloatConst();
 			LodSwitchDistance = 100.000000F;
 			IsEnabled = true;
 

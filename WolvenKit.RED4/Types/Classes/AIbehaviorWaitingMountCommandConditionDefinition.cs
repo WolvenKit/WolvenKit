@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorWaitingMountCommandConditionDefinition()
 		{
+			RequestArgument = new AIArgumentMapping { Type = Enums.AIArgumentType.Serializable, DefaultValue = new CVariant() };
 			CallbackName = "OnMountRequest";
 
 			PostConstruct();

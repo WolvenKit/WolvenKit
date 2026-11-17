@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldEnvironmentAreaParameters()
 		{
-			RenderAreaSettings = new WorldRenderAreaSettings { AreaParameters = new() };
+			RenderAreaSettings = new WorldRenderAreaSettings();
 
 			PostConstruct();
 		}

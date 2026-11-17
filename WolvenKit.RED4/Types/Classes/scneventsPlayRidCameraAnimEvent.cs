@@ -70,10 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsPlayRidCameraAnimEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			AnimData = new scneventsPlayAnimEventData { Stretch = 1.000000F, BlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, BlendOutCurve = Enums.scnEasingType.SinusoidalEaseInOut };
-			AnimSRRefId = new scnRidCameraAnimationSRRefId { Id = uint.MaxValue };
-			AnimOriginMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
+			Id = new scnSceneEventId();
+			AnimData = new scneventsPlayAnimEventData();
+			AnimSRRefId = new scnRidCameraAnimationSRRefId();
+			AnimOriginMarker = new scnMarker();
 			ActivateAsGameCamera = true;
 			MarkCamerCut = true;
 

@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public BaseButtonView()
 		{
-			IsNavigalbe = true;
-			SupportsHoldInput = true;
-
 			PostConstruct();
 		}
 

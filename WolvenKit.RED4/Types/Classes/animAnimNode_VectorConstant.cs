@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_VectorConstant : animAnimNode_VectorValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("value")] 
 		public Vector4 Value
 		{

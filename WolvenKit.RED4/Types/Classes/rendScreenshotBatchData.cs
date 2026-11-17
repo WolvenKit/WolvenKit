@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public rendScreenshotBatchData()
 		{
-			BatchPositionsPath = new();
+			BatchPositionsPath = new AbsolutePathSerializable { Path = @"D:\Reza\R6Root\r6\depot\non_production\test\batch_of_camera_coords.json" };
 			DelayTime = 1.000000F;
 			StreamingObserverMode = Enums.rendEStreamingObserverMode.Box;
 

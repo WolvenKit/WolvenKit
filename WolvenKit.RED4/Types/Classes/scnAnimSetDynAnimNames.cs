@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnAnimSetDynAnimNames()
 		{
-			AnimVariable = new(0);
+			AnimVariable = new(1);
 			AnimNames = new();
 
 			PostConstruct();

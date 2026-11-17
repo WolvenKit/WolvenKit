@@ -29,14 +29,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("playerWeaponStateCallbackHandle")] 
-		public CHandle<redCallbackObject> PlayerWeaponStateCallbackHandle
+		[RED("playerRightWeaponStateCallbackHandle")] 
+		public CHandle<redCallbackObject> PlayerRightWeaponStateCallbackHandle
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(4)] 
+		[RED("playerLeftWeaponStateCallbackHandle")] 
+		public CHandle<redCallbackObject> PlayerLeftWeaponStateCallbackHandle
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("playerMeleeWeaponStateCallbackHandle")] 
 		public CHandle<redCallbackObject> PlayerMeleeWeaponStateCallbackHandle
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("playerAttachedCallbackID")] 
 		public CUInt32 PlayerAttachedCallbackID
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("playerDetachedCallbackID")] 
 		public CUInt32 PlayerDetachedCallbackID
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("vehicleHealthListener")] 
 		public CHandle<AutodriveHealthChangeListener> VehicleHealthListener
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AutodriveHealthChangeListener>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("autodriveQuestContentLockListener")] 
 		public CHandle<AutodriveQuestContentLockListener> AutodriveQuestContentLockListener
 		{

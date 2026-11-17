@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsCameraPlacementEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			CameraTransformLS = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			Id = new scnSceneEventId();
+			CameraTransformLS = new Transform();
 
 			PostConstruct();
 		}

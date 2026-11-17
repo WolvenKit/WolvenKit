@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Initial velocity";
 			EditorGroup = "Velocity";
 			IsEnabled = true;
+			Velocity = new CEvaluatorVectorConst { Value = new Vector4 { Z = 1.000000F } };
 			Scale = 1.000000F;
 			WorldSpace = true;
 

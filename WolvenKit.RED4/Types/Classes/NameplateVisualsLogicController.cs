@@ -385,7 +385,7 @@ namespace WolvenKit.RED4.Types
 			DamagePreviewArrow = new inkWidgetReference();
 			RarityHolder = new inkWidgetReference();
 			Rarities = new();
-			CachedIncomingData = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
+			CachedIncomingData = new gameuiNPCNextToTheCrosshair();
 			BossColor = new CColor();
 			AnimatingObject = new inkWidgetReference();
 

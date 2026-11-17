@@ -41,6 +41,9 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Orbit";
 			EditorGroup = "Orbit";
 			IsEnabled = true;
+			Offset = new CEvaluatorVectorConst();
+			Frequency = new CEvaluatorVectorConst();
+			Phase = new CEvaluatorVectorConst();
 
 			PostConstruct();
 		}

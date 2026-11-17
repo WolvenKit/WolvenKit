@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiMainMenuGameController : gameuiMenuItemListGameController
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("backgroundContainer")] 
 		public inkCompoundWidgetReference BackgroundContainer
 		{
@@ -12,9 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("NeedToDisplayStartupUpdateModsPopup")] 
+		public gameuiSendModInfoToUpdateCallback NeedToDisplayStartupUpdateModsPopup
+		{
+			get => GetPropertyValue<gameuiSendModInfoToUpdateCallback>();
+			set => SetPropertyValue<gameuiSendModInfoToUpdateCallback>(value);
+		}
+
 		public gameuiMainMenuGameController()
 		{
 			BackgroundContainer = new inkCompoundWidgetReference();
+			NeedToDisplayStartupUpdateModsPopup = new gameuiSendModInfoToUpdateCallback { CallbackName = "OnNeedToDisplayStartupUpdateModsPopup" };
 
 			PostConstruct();
 		}

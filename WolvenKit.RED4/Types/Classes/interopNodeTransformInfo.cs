@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public interopNodeTransformInfo()
 		{
 			Id = new interopStringWithID();
-			TransformInfo = new interopTransformInfo { Translation = new Vector3(), Rotation = new EulerAngles() };
+			TransformInfo = new interopTransformInfo();
 
 			PostConstruct();
 		}

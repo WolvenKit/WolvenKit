@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Time = new netTime();
 			SessionLength = new netTime();
-			PlayersInfo = new(0);
+			PlayersInfo = new(7);
 
 			PostConstruct();
 		}

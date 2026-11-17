@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_QuaternionInterpolation : animAnimNode_QuaternionValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("interpolationType")] 
 		public CEnum<animQuaternionInterpolationType> InterpolationType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animQuaternionInterpolationType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("firstInput")] 
 		public animQuaternionLink FirstInput
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("secondInput")] 
 		public animQuaternionLink SecondInput
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("weight")] 
 		public animFloatLink Weight
 		{

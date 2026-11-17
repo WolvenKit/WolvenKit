@@ -55,8 +55,8 @@ namespace WolvenKit.RED4.Types
 		public DiodeControlComponent()
 		{
 			AffectedLights = new();
-			PrimaryLightPreset = new DiodeLightPreset { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
-			SecondaryLightPreset = new DiodeLightPreset { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
+			PrimaryLightPreset = new DiodeLightPreset();
+			SecondaryLightPreset = new DiodeLightPreset();
 			SecondaryPresetRemovalID = new gameDelayID();
 
 			PostConstruct();

@@ -143,7 +143,7 @@ namespace WolvenKit.RED4.Types
 			ImportColorMaps = true;
 			ImportControlMaps = true;
 			OverwriteTransformsOfExistingNodes = true;
-			DstPrefabNodePath = new toolsEditorObjectIDPath { Elements = new() };
+			DstPrefabNodePath = new toolsEditorObjectIDPath();
 
 			PostConstruct();
 		}

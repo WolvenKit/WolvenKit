@@ -174,7 +174,7 @@ namespace WolvenKit.RED4.Types
 
 		public RadialMenuItemController()
 		{
-			MenuData = new MenuData { Identifier = -1, SubMenus = new() };
+			MenuData = new MenuData();
 			Label = new inkTextWidgetReference();
 			Icon = new inkImageWidgetReference();
 			FrameHovered = new inkWidgetReference();

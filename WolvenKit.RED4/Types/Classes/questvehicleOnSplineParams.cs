@@ -99,6 +99,8 @@ namespace WolvenKit.RED4.Types
 			Closest = true;
 			ForcedStartSpeed = -1.000000F;
 			StopAtEnd = true;
+			KeepDistanceParam = new questParamKeepDistance { CompanionTargetRef = new questUniversalRef { RefLocalPlayer = false } };
+			RubberBandingParam = new questParamRubberbanding { TargetRef = new questUniversalRef { RefLocalPlayer = false } };
 
 			PostConstruct();
 		}

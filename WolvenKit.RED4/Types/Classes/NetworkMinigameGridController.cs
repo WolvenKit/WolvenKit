@@ -141,9 +141,9 @@ namespace WolvenKit.RED4.Types
 			VerticalCurrentHighlight = new inkWidgetReference();
 			GridVisualOffset = new Vector2();
 			GridData = new();
-			LastSelected = new CellData { Position = new Vector2(), Element = new ElementData(), Properties = new SpecialProperties { Traps = new() } };
+			LastSelected = new CellData();
 			CurrentActivePosition = new Vector2();
-			LastHighlighted = new CellData { Position = new Vector2(), Element = new ElementData(), Properties = new SpecialProperties { Traps = new() } };
+			LastHighlighted = new CellData();
 
 			PostConstruct();
 		}

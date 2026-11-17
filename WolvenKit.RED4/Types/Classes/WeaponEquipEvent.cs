@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameItemObject>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("isLeftWeapon")] 
+		public CBool IsLeftWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public WeaponEquipEvent()
 		{
 			PostConstruct();

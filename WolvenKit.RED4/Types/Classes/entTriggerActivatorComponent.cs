@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public entTriggerActivatorComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			Radius = 0.400000F;
 			Height = 1.800000F;
 			Channels = Enums.TriggerChannel.TC_Default;

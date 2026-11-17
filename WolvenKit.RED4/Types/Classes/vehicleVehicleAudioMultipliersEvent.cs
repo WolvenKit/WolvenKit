@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleVehicleAudioMultipliersEvent()
 		{
-			Multipliers = new audioVehicleMultipliers { ThrottleInputMultiplier = 1.000000F, RpmMultiplier = 1.000000F };
+			Multipliers = new audioVehicleMultipliers();
 
 			PostConstruct();
 		}

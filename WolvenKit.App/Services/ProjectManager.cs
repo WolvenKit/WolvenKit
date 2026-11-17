@@ -163,6 +163,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                     Email = obj.Email,
                     Description = obj.Description,
                     Version = obj.Version,
+                    ModIoId = obj.ModIoId,
+                    ModIoLogo = obj.ModIoLogo
                 };
 
                 if (_hashService is HashServiceExt hashService)

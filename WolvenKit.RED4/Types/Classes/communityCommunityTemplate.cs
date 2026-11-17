@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public communityCommunityTemplate()
 		{
+			CommunityTemplate = new communityCommunityTemplateData { Entries = new() { new communitySpawnEntry { Phases = new() { new communitySpawnPhase() } } } };
+
 			PostConstruct();
 		}
 

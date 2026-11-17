@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 		public TrafficIntersectionManagerControllerPS()
 		{
 			DeviceName = "Traffic Intersection Manager";
-			TweakDBRecord = 147361436664;
-			TweakDBDescriptionRecord = 201737502228;
+			TweakDBRecord = "Devices.TrafficIntersectionManager";
+			TweakDBDescriptionRecord = "device_descriptions.TrafficIntersectionManager";
 
 			PostConstruct();
 		}

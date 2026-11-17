@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Size over life";
 			EditorGroup = "Size";
 			IsEnabled = true;
+			Size = new CEvaluatorVectorConst { Value = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 			Scale = 1.000000F;
 			Modulate = true;
 

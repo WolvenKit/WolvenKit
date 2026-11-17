@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDyngConstraintCone : animIDyngConstraint
 	{
-		[Ordinal(1)] 
+		[Ordinal(0)] 
 		[RED("constrainedBone")] 
 		public animTransformIndex ConstrainedBone
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("coneAttachmentBone")] 
 		public animTransformIndex ConeAttachmentBone
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("coneTransformLS")] 
 		public QsTransform ConeTransformLS
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<QsTransform>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("constraintType")] 
 		public CEnum<animPendulumConstraintType> ConstraintType
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animPendulumConstraintType>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("halfOfMaxApertureAngle")] 
 		public CFloat HalfOfMaxApertureAngle
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("projectionType")] 
 		public CEnum<animPendulumProjectionType> ProjectionType
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animPendulumProjectionType>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("collisionCapsuleRadius")] 
 		public CFloat CollisionCapsuleRadius
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("collisionCapsuleHeightExtent")] 
 		public CFloat CollisionCapsuleHeightExtent
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ConstrainedBone = new animTransformIndex();
 			ConeAttachmentBone = new animTransformIndex();
-			ConeTransformLS = new QsTransform { Translation = new Vector4 { W = 1.000000F }, Rotation = new Quaternion { R = 1.000000F }, Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			ConeTransformLS = new QsTransform { Translation = new Vector4 { W = 1.000000F } };
 			HalfOfMaxApertureAngle = 45.000000F;
 			ProjectionType = Enums.animPendulumProjectionType.ShortestPathRotational;
 

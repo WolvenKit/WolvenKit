@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questDifficulty_ConditionType()
 		{
+			EntityRef = new questUniversalRef();
 			Difficulty = Enums.gameDifficulty.Story;
 
 			PostConstruct();

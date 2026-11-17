@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -24,6 +24,8 @@ public partial class ProjectManager
             Email = project.Email;
             Description = project.Description;
             Version = project.Version;
+            ModIoId = project.ModIoId;
+            ModIoLogo = project.ModIoLogo;
 
             OpenProjectFiles = project.OpenProjectFiles.OrderBy(x => x.Key)
                 .Select(x => x.Value)
@@ -42,6 +44,10 @@ public partial class ProjectManager
         public string? Description { get; set; }
 
         public string? Version { get; set; }
+
+        public int ModIoId { get; set; } = -1;
+
+        public string? ModIoLogo { get; set; }
 
         [XmlElement(IsNullable = true)] public List<string>? OpenProjectFiles { get; set; }
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.Types
 			IsScanned = true;
 			ExposeQuickHacks = true;
 			TweakDBRecord = "Devices.C4";
-			TweakDBDescriptionRecord = 97999174197;
+			TweakDBDescriptionRecord = "device_descriptions.C4";
 			ItemTweakDBString = "C4";
 
 			PostConstruct();

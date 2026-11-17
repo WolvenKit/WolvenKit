@@ -68,6 +68,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("motionBlur")] 
+		public CEnum<entRenderToTextureFeaturesPlatform> MotionBlur
+		{
+			get => GetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>();
+			set => SetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("depthOfField")] 
+		public CEnum<entRenderToTextureFeaturesPlatform> DepthOfField
+		{
+			get => GetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>();
+			set => SetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("stereo")] 
+		public CBool Stereo
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public entRenderToTextureFeatures()
 		{
 			RenderDecals = true;

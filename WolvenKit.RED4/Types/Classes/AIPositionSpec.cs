@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIPositionSpec()
 		{
-			WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			WorldPosition = new WorldPosition();
 
 			PostConstruct();
 		}

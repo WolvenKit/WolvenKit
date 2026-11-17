@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnDialogLineDuplicationParams()
 		{
-			AdditionalSpeakerId = new scnActorId { Id = uint.MaxValue };
+			AdditionalSpeakerId = new scnActorId();
 
 			PostConstruct();
 		}

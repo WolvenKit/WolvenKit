@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorMappingConditionDefinition()
 		{
+			Value = new AIArgumentMapping { ParameterizationType = Enums.AIParameterizationType.CustomValue, CustomTypeName = "Bool" };
+
 			PostConstruct();
 		}
 

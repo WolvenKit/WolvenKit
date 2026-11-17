@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AICTreeNodeIncludedTreeDefinition()
 		{
-			Tree = new LibTreeDefTree { VariableId = ushort.MaxValue };
+			Tree = new LibTreeDefTree();
 
 			PostConstruct();
 		}

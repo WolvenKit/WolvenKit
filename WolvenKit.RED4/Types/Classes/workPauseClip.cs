@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public workPauseClip()
 		{
-			Id = new workWorkEntryId { Id = uint.MaxValue };
+			Id = new workWorkEntryId();
 			Flags = 32;
 			TimeMin = 2.000000F;
 			TimeMax = 5.000000F;

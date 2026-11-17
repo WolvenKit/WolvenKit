@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public SItemTransaction()
 		{
-			ItemStack = new gameSItemStack { ItemID = new gameItemID(), Quantity = 1, IsAvailable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, DynamicTags = new() };
+			ItemStack = new gameSItemStack();
 
 			PostConstruct();
 		}

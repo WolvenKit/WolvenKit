@@ -49,6 +49,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Spawn circle";
 			EditorGroup = "Deprecated";
 			IsEnabled = true;
+			InnerRadius = new CEvaluatorFloatConst { Value = 0.000000F };
+			OuterRadius = new CEvaluatorFloatConst { Value = 0.200000F };
 			WorldSpace = true;
 			SpawnToLocal = new CMatrix();
 

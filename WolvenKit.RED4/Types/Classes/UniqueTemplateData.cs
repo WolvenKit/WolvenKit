@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.Types
 		{
 			CustomMultilayers = new();
 			CustomDecals = new();
-			GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F };
+			GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides();
 			PartsClearCoatOverrides = new();
 
 			PostConstruct();

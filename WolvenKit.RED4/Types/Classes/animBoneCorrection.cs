@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animBoneCorrection()
 		{
-			AdditiveCorrection = new Quaternion { R = 1.000000F };
+			AdditiveCorrection = new Quaternion();
 
 			PostConstruct();
 		}

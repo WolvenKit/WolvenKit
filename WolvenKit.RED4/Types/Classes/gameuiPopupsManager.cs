@@ -277,14 +277,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(36)] 
-		[RED("marketingConsentToken")] 
-		public CHandle<inkGameNotificationToken> MarketingConsentToken
+		[RED("updateModsToken")] 
+		public CHandle<inkGameNotificationToken> UpdateModsToken
 		{
 			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(37)] 
+		[RED("modioGalleryToken")] 
+		public CHandle<inkGameNotificationToken> ModioGalleryToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("modioUninstallConfirmToken")] 
+		public CHandle<inkGameNotificationToken> ModioUninstallConfirmToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("modioHiddenModsToken")] 
+		public CHandle<inkGameNotificationToken> ModioHiddenModsToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("signInToken")] 
 		public CHandle<inkGameNotificationToken> SignInToken
 		{
@@ -292,7 +316,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
+		[RED("emporiumPopupToken")] 
+		public CHandle<inkGameNotificationToken> EmporiumPopupToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("expansionStateToken")] 
 		public CHandle<inkGameNotificationToken> ExpansionStateToken
 		{
@@ -300,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(43)] 
 		[RED("vehicleVisualCustomizationSelectorToken")] 
 		public CHandle<inkGameNotificationToken> VehicleVisualCustomizationSelectorToken
 		{
@@ -308,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(44)] 
 		[RED("frameSwitcherToken")] 
 		public CHandle<inkGameNotificationToken> FrameSwitcherToken
 		{
@@ -316,7 +348,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(45)] 
+		[RED("modioTermsPopupToken")] 
+		public CHandle<inkGameNotificationToken> ModioTermsPopupToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("modReloadingToken")] 
+		public CHandle<inkGameNotificationToken> ModReloadingToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("pitchSignInToken")] 
+		public CHandle<inkGameNotificationToken> PitchSignInToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("telemetryTakeoutToken")] 
+		public CHandle<inkGameNotificationToken> TelemetryTakeoutToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(49)] 
 		[RED("isInMenu")] 
 		public CBool IsInMenu
 		{
@@ -324,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(50)] 
 		[RED("isInPhotoMode")] 
 		public CBool IsInPhotoMode
 		{
@@ -332,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(51)] 
 		[RED("isOnPhone")] 
 		public CBool IsOnPhone
 		{
@@ -340,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(52)] 
 		[RED("isBlockingPopupOpened")] 
 		public CBool IsBlockingPopupOpened
 		{
@@ -348,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(53)] 
 		[RED("popUpQueue")] 
 		public CArray<CHandle<inkGameNotificationData>> PopUpQueue
 		{
@@ -356,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<inkGameNotificationData>>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(54)] 
 		[RED("activePopUp")] 
 		public CBool ActivePopUp
 		{
@@ -368,8 +432,8 @@ namespace WolvenKit.RED4.Types
 		{
 			BracketsContainer = new inkCompoundWidgetReference();
 			TutorialOverlayContainer = new inkCompoundWidgetReference();
-			TutorialData = new gamePopupData { MessageOverrideDataList = new(), VideoType = Enums.gameVideoType.Unknown };
-			TutorialSettings = new gamePopupSettings { CloseAtInput = true, Position = Enums.gamePopupPosition.Center, Margin = new inkMargin() };
+			TutorialData = new gamePopupData();
+			TutorialSettings = new gamePopupSettings();
 			PopUpQueue = new();
 
 			PostConstruct();

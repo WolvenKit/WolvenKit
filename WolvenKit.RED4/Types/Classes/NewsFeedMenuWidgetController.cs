@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
 			BannersListWidgetPath = "banners";
 			BannersListWidget = new inkWidgetReference();
 			BannerWidgetsData = new();
-			FullBannerWidgetData = new SBannerWidgetPackage { Content = new redResourceReferenceScriptToken() };
+			FullBannerWidgetData = new SBannerWidgetPackage();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class worldPrefabProxyMeshNode : worldMeshNode
 	{
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("nearAutoHideDistance")] 
 		public CFloat NearAutoHideDistance
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("nbNodesUnderProxy")] 
 		public CUInt32 NbNodesUnderProxy
 		{
@@ -22,13 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public worldPrefabProxyMeshNode()
 		{
-			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box.w2mesh");
-			MeshAppearance = "default";
-			OccluderAutohideDistanceScale = 255;
-			WindImpulseEnabled = true;
-			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
-			LodLevelScales = uint.MaxValue;
-
 			PostConstruct();
 		}
 

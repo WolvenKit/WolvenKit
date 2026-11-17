@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(3)] 
 		[RED("setValue")] 
-		public CBool SetValue_
+		public CBool SetValue
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

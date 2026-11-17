@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CyclableRadialSlot : WeaponRadialSlot
 	{
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("leftArrowEmpty")] 
 		public inkWidgetReference LeftArrowEmpty
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("leftArrowFull")] 
 		public inkWidgetReference LeftArrowFull
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("rightArrowEmpty")] 
 		public inkWidgetReference RightArrowEmpty
 		{
@@ -28,20 +28,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("rightArrowFull")] 
 		public inkWidgetReference RightArrowFull
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("canCycle")] 
-		public CBool CanCycle
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 

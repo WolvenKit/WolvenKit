@@ -183,7 +183,7 @@ namespace WolvenKit.RED4.Types
 			Tele_scale = 0.750000F;
 			Max_zoom_level = 4.000000F;
 			Background = new inkCanvasWidgetReference();
-			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public entVertexAnimationComponent()
 		{
 			Name = "Component";
-			VertexAnimationMapper = new entVertexAnimationMapper { Entries = new() };
+			VertexAnimationMapper = new entVertexAnimationMapper();
 
 			PostConstruct();
 		}

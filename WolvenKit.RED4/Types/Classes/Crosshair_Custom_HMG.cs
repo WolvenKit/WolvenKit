@@ -208,7 +208,7 @@ namespace WolvenKit.RED4.Types
 			OffsetLeftRightExtra = 1.200000F;
 			LatchVertical = 40.000000F;
 			TargetColorChange = new inkWidgetReference();
-			ForcedCooldownOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			ForcedCooldownOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_QuaternionInput : animAnimNode_QuaternionValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("group")] 
 		public CName Group
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("name")] 
 		public CName Name
 		{

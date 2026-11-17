@@ -13,6 +13,8 @@ public partial class CR2WReader
     private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
     private bool _parseBuffer;
 
+    private List<IRedAppendix> _appendices = new();
+
     public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo? info, ILoggerService? logger = null)
     {
         var id = BaseStream.ReadStruct<uint>();
@@ -176,6 +178,15 @@ public partial class CR2WReader
         foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
         {
             _cr2wFile.EmbeddedFiles.Add(ReadEmbedded(embeddedInfo));
+        }
+
+        foreach (var appendix in _appendices)
+        {
+            if (appendix.GetProcessTime() != ProcessTime.OnFileProcessing)
+            {
+                throw new TodoException();
+            }
+            appendix.LoadData(_cr2wFile.RootChunk);
         }
 
         #endregion Read Data

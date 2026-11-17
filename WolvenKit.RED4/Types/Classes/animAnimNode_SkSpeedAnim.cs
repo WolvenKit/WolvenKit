@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkSpeedAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(30)] 
+		[Ordinal(18)] 
 		[RED("Speed")] 
 		public animFloatLink Speed
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public WrappedGOGRewardPack()
 		{
-			Data = new gameRewardPack { Rewards = new() };
+			Data = new gameRewardPack();
 
 			PostConstruct();
 		}

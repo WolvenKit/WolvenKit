@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public CEvaluatorColorRandom()
 		{
 			Min = new CColor();
-			Max = new CColor();
+			Max = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
 			RandomPerChannel = true;
 
 			PostConstruct();

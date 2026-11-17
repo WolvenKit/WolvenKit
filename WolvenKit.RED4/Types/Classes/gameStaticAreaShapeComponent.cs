@@ -31,8 +31,9 @@ namespace WolvenKit.RED4.Types
 		public gameStaticAreaShapeComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			Color = new CColor();
+			LocalTransform = new WorldTransform();
+			Outline = new AreaShapeOutline();
+			Color = new CColor { Red = 128, Green = 128, Blue = 96, Alpha = 128 };
 			IsEnabled = true;
 
 			PostConstruct();

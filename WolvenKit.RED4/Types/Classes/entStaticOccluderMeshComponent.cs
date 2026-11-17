@@ -47,10 +47,10 @@ namespace WolvenKit.RED4.Types
 		public entStaticOccluderMeshComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			Mesh = new CResourceReference<CMesh>(@"engine\meshes\editor\box_occluder.w2mesh");
 			Scale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			Color = new CColor();
+			Color = new CColor { Red = 96, Green = 96, Blue = 128, Alpha = 64 };
 			OccluderAutohideDistanceScale = 255;
 
 			PostConstruct();

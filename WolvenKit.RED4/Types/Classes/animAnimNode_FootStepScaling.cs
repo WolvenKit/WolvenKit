@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_FootStepScaling : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("hipsIndex")] 
 		public animTransformIndex HipsIndex
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("leftFootIKIndex")] 
 		public animTransformIndex LeftFootIKIndex
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("rightFootIKIndex")] 
 		public animTransformIndex RightFootIKIndex
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("inputSpeed")] 
 		public animFloatLink InputSpeed
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("weight")] 
 		public animFloatLink Weight
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatLink>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("Params")] 
 		public animfssBodyOfflineParams Params
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			RightFootIKIndex = new animTransformIndex();
 			InputSpeed = new animFloatLink();
 			Weight = new animFloatLink();
-			Params = new animfssBodyOfflineParams { HipsTilt = 25.000000F, HipsShift = 0.100000F, LegsPullFactorMin = 0.050000F, LegsPullFactorMax = 0.165000F, LegLengthAdjustment = 0.005000F, LegMaxStretchOffset = 0.050000F, LegMaxStretchAdjustment = 0.015000F };
+			Params = new animfssBodyOfflineParams();
 
 			PostConstruct();
 		}

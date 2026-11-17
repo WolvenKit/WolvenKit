@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.Types
 		{
 			StarsWidget = new();
 			BountyStarAnimProxy = new();
-			AnimOptionsLoop = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptionsLoop = new inkanimPlaybackOptions();
 			WANTED_TIER_1 = 1.000000F;
 			WANTED_MIN = 0.100000F;
 

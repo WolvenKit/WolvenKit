@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ShootDecisions : WeaponTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("stateBodyDone")] 
 		public CBool StateBodyDone
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public ShootDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

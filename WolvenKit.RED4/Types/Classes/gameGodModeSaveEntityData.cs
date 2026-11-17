@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public gameGodModeSaveEntityData()
 		{
 			EntityId = new entEntityID();
-			Data = new gameGodModeEntityData { Overrides = new(), Base = new() };
+			Data = new gameGodModeEntityData();
 
 			PostConstruct();
 		}

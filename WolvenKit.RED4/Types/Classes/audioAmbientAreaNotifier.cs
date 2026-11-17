@@ -72,6 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			IncludeChannels = Enums.TriggerChannel.TC_Default | Enums.TriggerChannel.TC_SoundAmbientArea;
+			Settings = new audioAmbientAreaSettings();
 			ObstructionChangeTime = 0.200000F;
 			RolloffOverride = 1.000000F;
 

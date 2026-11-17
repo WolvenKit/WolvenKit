@@ -40,7 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
+			EntityReference = new questUniversalRef();
+			Params = new questTeleportPuppetParamsV1 { DestinationRef = new questUniversalRef { RefLocalPlayer = false } };
 			LookAtAction = Enums.questLookAtAction.Reset;
+			PlayerLookAt = new questPlayerLookAtParams();
 
 			PostConstruct();
 		}

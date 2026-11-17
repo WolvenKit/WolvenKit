@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Types
 			StartPoint = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue };
 			StartVelocity = new Vector4();
 			WeaponVelocity = new Vector4();
-			Params = new gameprojectileWeaponParams { TargetPosition = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, SmartGunSpreadOnHitPlane = new Vector3(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new Vector4(), IgnoreWeaponOwnerCollision = true, RicochetData = new gameRicochetData(), Range = -1.000000F };
+			Params = new gameprojectileWeaponParams();
 
 			PostConstruct();
 		}

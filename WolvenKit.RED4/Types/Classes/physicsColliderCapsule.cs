@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public physicsColliderCapsule()
 		{
-			LocalToBody = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			LocalToBody = new Transform();
 			MaterialApperanceOverrides = new();
 			VolumeModifier = 1.000000F;
 

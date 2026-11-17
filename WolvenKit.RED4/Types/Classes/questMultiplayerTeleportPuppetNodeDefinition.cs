@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			Params = new questMultiplayerTeleportPuppetParams { DestinationRef = new gameEntityReference { Names = new() }, DestinationOffset = new Vector3(), AreaNodeTriggerRef = new gameEntityReference { Names = new() } };
+			Params = new questMultiplayerTeleportPuppetParams();
 
 			PostConstruct();
 		}

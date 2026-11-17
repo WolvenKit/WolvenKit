@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Rotation rate over life";
 			EditorGroup = "Rotation";
 			IsEnabled = true;
+			RotationRate = new CEvaluatorFloatConst();
 			Modulate = true;
 
 			PostConstruct();

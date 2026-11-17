@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_LocomotionSwitch : animAnimNode_Switch
 	{
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("audioTagsPerInput")] 
 		public CArray<CName> AudioTagsPerInput
 		{

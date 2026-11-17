@@ -141,6 +141,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(59)] 
+		[RED("enabledModioInfo")] 
+		public CArray<saveModioModSavedInfo> EnabledModioInfo
+		{
+			get => GetPropertyValue<CArray<saveModioModSavedInfo>>();
+			set => SetPropertyValue<CArray<saveModioModSavedInfo>>(value);
+		}
+
+		[Ordinal(60)] 
 		[RED("additionalContentIds")] 
 		public CArray<CName> AdditionalContentIds
 		{
@@ -150,8 +158,9 @@ namespace WolvenKit.RED4.Types
 
 		public saveMetadata()
 		{
-			SaveVersion = 269;
-			GameVersion = 2310;
+			SaveVersion = 277;
+			GameVersion = 2500;
+			EnabledModioInfo = new();
 			AdditionalContentIds = new();
 
 			PostConstruct();

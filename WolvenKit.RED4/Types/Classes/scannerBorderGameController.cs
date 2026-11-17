@@ -431,7 +431,7 @@ namespace WolvenKit.RED4.Types
 			DeviceFluffs = new();
 			CurrentTarget = new entEntityID();
 			CurrentTargetBuffered = new entEntityID();
-			ScannerData = new scannerDataStructure { QuestEntries = new() };
+			ScannerData = new scannerDataStructure();
 			OriginalScannerBarFillSize = new Vector2();
 			Squares = new();
 			SquaresFilled = new();

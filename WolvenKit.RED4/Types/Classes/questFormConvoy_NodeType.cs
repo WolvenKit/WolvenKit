@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questFormConvoy_NodeType()
 		{
-			LeaderRef = new gameEntityReference { Names = new() };
+			LeaderRef = new gameEntityReference();
 
 			PostConstruct();
 		}

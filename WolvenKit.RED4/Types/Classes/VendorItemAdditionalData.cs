@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public VendorItemAdditionalData()
 		{
-			Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid };
+			Requirement = new gameSItemStackRequirementData();
 
 			PostConstruct();
 		}

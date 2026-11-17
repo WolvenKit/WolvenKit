@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkGalleryDataContainer()
 		{
-			Data = new inkGalleryData { Favorites = new() };
+			Data = new inkGalleryData();
 
 			PostConstruct();
 		}

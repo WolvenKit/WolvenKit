@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_AnimDatabase : animAnimNode_SkPhaseWithDurationAnim
 	{
-		[Ordinal(32)] 
+		[Ordinal(20)] 
 		[RED("animDataBase")] 
 		public animAnimDatabaseCollectionEntry AnimDataBase
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animAnimDatabaseCollectionEntry>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(21)] 
 		[RED("inputLinks")] 
 		public CArray<animIntLink> InputLinks
 		{

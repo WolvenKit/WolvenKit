@@ -145,6 +145,7 @@ namespace WolvenKit.RED4.Types
 			UseStart = true;
 			UseStop = true;
 			SplineRecalculation = true;
+			AdditionalParams = new questMoveOnSplineAdditionalParams { SimpleParams = new questSimpleMoveOnSplineParams { FacingTargetRef = new questUniversalRef { RefLocalPlayer = false } } };
 			ExecuteWhileDespawned = true;
 			RepeatCommandOnInterrupt = true;
 			NoWaitToEndDistance = 10.000000F;

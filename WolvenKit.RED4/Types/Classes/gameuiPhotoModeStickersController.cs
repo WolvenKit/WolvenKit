@@ -246,11 +246,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPhotoModeStickersController()
 		{
-			ResetStickers = new inkEmptyCallback();
-			SetStickerImage = new gameuiStickerImageCallback();
-			SetFrameImage = new gameuiStickerFrameCallback();
-			SetBackground = new gameuiStickerBackgroundCallback();
-			SetSetSelectedSticker = new gameuiStickerCallback();
+			ResetStickers = new inkEmptyCallback { CallbackName = "OnResetStickers" };
+			SetStickerImage = new gameuiStickerImageCallback { CallbackName = "OnSetStickerImage" };
+			SetFrameImage = new gameuiStickerFrameCallback { CallbackName = "OnSetFrameImage" };
+			SetBackground = new gameuiStickerBackgroundCallback { CallbackName = "OnSetBackground" };
+			SetSetSelectedSticker = new gameuiStickerCallback { CallbackName = "OnSetSetSelectedSticker" };
 			StickersRoot = new inkWidgetReference();
 			FrameRoot = new inkWidgetReference();
 			BackgroundViewRoot = new inkWidgetReference();

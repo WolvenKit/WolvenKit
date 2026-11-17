@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			OffscreenLayer = new inkOffscreenLayerDefinition();
 			GameNotificationsLayer = new inkGameNotificationsLayerDefinition();
 			PhotoModeLayer = new inkPhotoModeLayerDefinition();
-			DebugLayer = new inkDebugLayerDefinition { Entries = new() };
+			DebugLayer = new inkDebugLayerDefinition();
 
 			PostConstruct();
 		}

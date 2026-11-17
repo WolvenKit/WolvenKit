@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectExecutor_PhysicalFractureField()
 		{
-			FieldParams = new physicsFractureFieldParams { Origin = new Vector3(), FractureFieldValue = 50.000000F, FractureFieldTypeMask = Enums.physicsFractureFieldType.FF_FractureFieldGameEffect };
+			FieldParams = new physicsFractureFieldParams { FractureFieldValue = 50.000000F, FractureFieldTypeMask = Enums.physicsFractureFieldType.FF_FractureFieldGameEffect };
 			FieldShape = Enums.physicsShapeType.Invalid;
 			FieldDimensions = new Vector3();
 

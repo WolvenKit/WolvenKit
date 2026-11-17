@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class OverheatDecisions : WeaponTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("callbackID")] 
 		public CHandle<redCallbackObject> CallbackID
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public OverheatDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

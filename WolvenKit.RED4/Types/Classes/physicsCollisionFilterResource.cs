@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public physicsCollisionFilterResource()
 		{
-			CollisionGroups = new(0);
-			QueryGroups = new(0);
+			CollisionGroups = new(64);
+			QueryGroups = new(64);
 
 			PostConstruct();
 		}

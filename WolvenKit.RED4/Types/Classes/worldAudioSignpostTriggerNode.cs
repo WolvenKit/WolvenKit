@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAudioSignpostTriggerNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("enterSignpost")] 
 		public CName EnterSignpost
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("exitSignpost")] 
 		public CName ExitSignpost
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("reEnterSignpost")] 
 		public CName ReEnterSignpost
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("preExitSignpost")] 
 		public CName PreExitSignpost
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("exitCooldown")] 
 		public CFloat ExitCooldown
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldAudioSignpostTriggerNode()
 		{
+			Color = new CColor { Green = 255, Blue = 255, Alpha = 255 };
 			ExitCooldown = 5.000000F;
 
 			PostConstruct();

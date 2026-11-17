@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public inkVirtualCompoundController()
 		{
-			IsNavigalbe = true;
-			SupportsHoldInput = true;
-
 			PostConstruct();
 		}
 

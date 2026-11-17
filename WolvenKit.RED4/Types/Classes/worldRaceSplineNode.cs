@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldRaceSplineNode : worldSpeedSplineNode
 	{
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("offsets")] 
 		public CArray<worldRaceSplineNodeOffset> Offsets
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldRaceSplineNodeOffset>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("offsetDefault")] 
 		public CFloat OffsetDefault
 		{

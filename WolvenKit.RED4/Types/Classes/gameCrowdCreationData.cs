@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameCrowdCreationData()
 		{
-			TimePeriods = new(0);
+			TimePeriods = new(4);
 
 			PostConstruct();
 		}

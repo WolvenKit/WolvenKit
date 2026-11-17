@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			TopPart = new inkWidgetReference();
 			BotPart = new inkWidgetReference();
 			WeaponID = new entEntityID();
-			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

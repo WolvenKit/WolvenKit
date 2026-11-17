@@ -65,6 +65,7 @@ namespace WolvenKit.RED4.Types
 			TimeDuration = 1.000000F;
 			Switches = new();
 			Params = new();
+			RtpcValue = new CEvaluatorFloatConst { Value = 0.000000F };
 
 			PostConstruct();
 		}

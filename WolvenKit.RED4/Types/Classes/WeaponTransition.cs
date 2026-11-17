@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public abstract partial class WeaponTransition : DefaultTransition
 	{
 		[Ordinal(0)] 
+		[RED("stateMachineInstanceData")] 
+		public gamestateMachineStateMachineInstanceData StateMachineInstanceData
+		{
+			get => GetPropertyValue<gamestateMachineStateMachineInstanceData>();
+			set => SetPropertyValue<gamestateMachineStateMachineInstanceData>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("magazineID")] 
 		public TweakDBID MagazineID
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("magazineAttack")] 
 		public TweakDBID MagazineAttack
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("rangedAttackPackage")] 
 		public CHandle<gamedataRangedAttackPackage_Record> RangedAttackPackage
 		{

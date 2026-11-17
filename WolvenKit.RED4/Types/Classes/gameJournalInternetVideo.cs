@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalInternetVideo()
 		{
-			TintColor = new CColor();
-			HoverTintColor = new CColor();
+			TintColor = new CColor { Red = 255, Green = 255, Blue = 255 };
+			HoverTintColor = new CColor { Red = 255, Green = 255, Blue = 255 };
 
 			PostConstruct();
 		}

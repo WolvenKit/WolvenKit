@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public workTagNode()
 		{
-			Id = new workWorkEntryId { Id = uint.MaxValue };
+			Id = new workWorkEntryId();
 			Flags = 128;
 
 			PostConstruct();

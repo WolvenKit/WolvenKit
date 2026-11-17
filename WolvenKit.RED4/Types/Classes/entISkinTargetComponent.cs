@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("boundingBoxLocalBoundsOverride")] 
+		public CFloat BoundingBoxLocalBoundsOverride
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public entISkinTargetComponent()
 		{
 			PostConstruct();

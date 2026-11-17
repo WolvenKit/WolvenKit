@@ -126,10 +126,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameSceneAnimationMotionActionParams()
 		{
-			PlacementTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			PlacementTransform = new WorldTransform();
 			BlendInCurve = Enums.gameSceneAnimationMotionActionParamsEasingType.SinusoidalEaseInOut;
 			GlobalTimeToAnimTime = 1.000000F;
-			MountDescriptor = new gameMountDescriptor { ParentId = new entEntityID(), InitialTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } }, MountType = Enums.gameMountDescriptorMountType.KeepState };
+			MountDescriptor = new gameMountDescriptor();
 			PlayerParams = new gameScenePlayerAnimationParams();
 			TrajectoryLOD = new();
 

@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public workRandomList()
 		{
-			Id = new workWorkEntryId { Id = uint.MaxValue };
+			Id = new workWorkEntryId();
 			List = new();
 			MinClips = 3;
 			MaxClips = 5;

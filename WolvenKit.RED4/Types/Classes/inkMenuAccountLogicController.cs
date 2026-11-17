@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("changeAccountLabelTextRef")] 
-		public inkTextWidgetReference ChangeAccountLabelTextRef
+		[RED("changeAccountButtonRef")] 
+		public inkWidgetReference ChangeAccountButtonRef
 		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public inkMenuAccountLogicController()
 		{
 			PlayerId = new inkTextWidgetReference();
-			ChangeAccountLabelTextRef = new inkTextWidgetReference();
+			ChangeAccountButtonRef = new inkWidgetReference();
 			InputDisplayControllerRef = new inkWidgetReference();
 
 			PostConstruct();

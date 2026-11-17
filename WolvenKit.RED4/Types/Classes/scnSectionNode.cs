@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnSectionNode()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			OutputSockets = new();
 			Events = new();
 			SectionDuration = new scnSceneTime();

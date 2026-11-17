@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Color over life";
 			EditorGroup = "Material";
 			IsEnabled = true;
+			Color = new CEvaluatorColorConst();
 			Modulate = true;
 
 			PostConstruct();

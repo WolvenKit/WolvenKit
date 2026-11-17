@@ -91,9 +91,9 @@ namespace WolvenKit.RED4.Types
 			ShouldReceiveDecal = true;
 			WoundType = Enums.entdismembermentWoundTypeE.CLEAN | Enums.entdismembermentWoundTypeE.COARSE;
 			CullMesh = Enums.entdismembermentWoundTypeE.CLEAN;
-			Offset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			Offset = new Transform();
 			Scale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			Physics = new entdismembermentPhysicsInfo { DensityScale = 1.000000F };
+			Physics = new entdismembermentPhysicsInfo();
 
 			PostConstruct();
 		}

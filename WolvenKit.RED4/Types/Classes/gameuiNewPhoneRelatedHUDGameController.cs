@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("visibilityFact3ListenerId")] 
+		public CUInt32 VisibilityFact3ListenerId
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("remoteControlledVehicleDataCallback")] 
 		public CHandle<redCallbackObject> RemoteControlledVehicleDataCallback
 		{

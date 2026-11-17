@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("patch25TitleContainerRef")] 
+		public inkWidgetReference Patch25TitleContainerRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("itemLibraryName")] 
 		public CName ItemLibraryName
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("introAnimationName")] 
 		public CName IntroAnimationName
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("outroAnimationName")] 
 		public CName OutroAnimationName
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("closeButtonRef")] 
 		public inkWidgetReference CloseButtonRef
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isInputBlocked")] 
 		public CBool IsInputBlocked
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("data")] 
 		public CHandle<PatchNotesPopupData> Data
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PatchNotesPopupData>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -123,6 +131,7 @@ namespace WolvenKit.RED4.Types
 			Patch21TitleContainerRef = new inkWidgetReference();
 			Patch22TitleContainerRef = new inkWidgetReference();
 			Patch23TitleContainerRef = new inkWidgetReference();
+			Patch25TitleContainerRef = new inkWidgetReference();
 			ItemLibraryName = "item";
 			IntroAnimationName = "intro";
 			CloseButtonRef = new inkWidgetReference();

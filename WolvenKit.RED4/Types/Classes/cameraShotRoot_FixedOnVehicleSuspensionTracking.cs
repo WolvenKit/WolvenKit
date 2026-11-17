@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public cameraShotRoot_FixedOnVehicleSuspensionTracking()
 		{
-			OffsetFromChassis = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			OffsetFromChassis = new Transform();
 
 			PostConstruct();
 		}

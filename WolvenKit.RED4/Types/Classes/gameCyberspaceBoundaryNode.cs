@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameCyberspaceBoundaryNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("marker1Ref")] 
 		public NodeRef Marker1Ref
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("marker2Ref")] 
 		public NodeRef Marker2Ref
 		{

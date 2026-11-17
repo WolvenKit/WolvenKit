@@ -54,6 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSimpleMoveOnSplineParams()
 		{
+			FacingTargetRef = new questUniversalRef { RefLocalPlayer = false };
 			SnapToTerrain = true;
 
 			PostConstruct();

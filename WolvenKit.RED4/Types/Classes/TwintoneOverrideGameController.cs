@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("deletionPopup")] 
+		public CHandle<inkGameNotificationToken> DeletionPopup
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("game")] 
 		public ScriptGameInstance Game
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("templateToDelete")] 
 		public VehicleVisualCustomizationTemplate TemplateToDelete
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VehicleVisualCustomizationTemplate>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("outroAnimProxy")] 
 		public CHandle<inkanimProxy> OutroAnimProxy
 		{
@@ -89,9 +97,9 @@ namespace WolvenKit.RED4.Types
 			OverrideButtonHit = new inkWidgetReference();
 			BackButtonHit = new inkWidgetReference();
 			TemplatePreviewContainer = new inkWidgetReference();
-			TemplatePreviewLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			TemplatePreviewLibraryRef = new inkWidgetLibraryReference();
 			Game = new ScriptGameInstance();
-			TemplateToDelete = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
+			TemplateToDelete = new VehicleVisualCustomizationTemplate();
 
 			PostConstruct();
 		}

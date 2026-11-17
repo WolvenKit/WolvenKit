@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_RotationLimit : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("constrainedTransform")] 
 		public animTransformIndex ConstrainedTransform
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("limitOnX")] 
 		public animSmoothFloatClamp LimitOnX
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animSmoothFloatClamp>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("limitOnY")] 
 		public animSmoothFloatClamp LimitOnY
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animSmoothFloatClamp>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("limitOnZ")] 
 		public animSmoothFloatClamp LimitOnZ
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animSmoothFloatClamp>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("useEyesLookAtBlendWeight")] 
 		public CBool UseEyesLookAtBlendWeight
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(7)] 
 		[RED("weightLink")] 
 		public animFloatLink WeightLink
 		{
@@ -57,9 +57,9 @@ namespace WolvenKit.RED4.Types
 			Id = uint.MaxValue;
 			InputLink = new animPoseLink();
 			ConstrainedTransform = new animTransformIndex();
-			LimitOnX = new animSmoothFloatClamp { Min = -1.000000F, Max = 1.000000F };
-			LimitOnY = new animSmoothFloatClamp { Min = -1.000000F, Max = 1.000000F };
-			LimitOnZ = new animSmoothFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnX = new animSmoothFloatClamp();
+			LimitOnY = new animSmoothFloatClamp();
+			LimitOnZ = new animSmoothFloatClamp();
 			WeightLink = new animFloatLink();
 
 			PostConstruct();

@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public gameprojectileSpawnerLaunchEvent()
 		{
 			LaunchParams = new gameprojectileLaunchParams();
-			ProjectileParams = new gameprojectileWeaponParams { TargetPosition = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, SmartGunSpreadOnHitPlane = new Vector3(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new Vector4(), IgnoreWeaponOwnerCollision = true, RicochetData = new gameRicochetData(), Range = -1.000000F };
+			ProjectileParams = new gameprojectileWeaponParams();
 
 			PostConstruct();
 		}

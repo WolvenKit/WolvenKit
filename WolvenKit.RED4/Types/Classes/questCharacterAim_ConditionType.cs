@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public questCharacterAim_ConditionType()
 		{
 			IsPlayer = true;
-			TargetRef = new gameEntityReference { Names = new() };
+			TargetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

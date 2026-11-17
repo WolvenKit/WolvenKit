@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animCurvePathBakerAdvancedUserInput()
 		{
-			PartsInputs = new(0);
+			PartsInputs = new(3);
 
 			PostConstruct();
 		}

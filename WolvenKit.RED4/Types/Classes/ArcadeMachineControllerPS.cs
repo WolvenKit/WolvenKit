@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#1635";
 			TweakDBRecord = "Devices.ArcadeMachine";
-			TweakDBDescriptionRecord = 143953089827;
+			TweakDBDescriptionRecord = "device_descriptions.ArcadeMachine";
 			GameVideosPaths = new();
 			DEBUG_enableArcadeMinigames = true;
 			Minigame = Enums.ArcadeMinigame.INVALID;

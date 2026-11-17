@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public SWidgetAnimationData()
 		{
-			PlaybackOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			PlaybackOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMovingPlatformMovementDynamic()
 		{
-			InitData = new gameIMovingPlatformMovementInitData();
+			InitData = new gameIMovingPlatformMovementInitData { InitType = (Enums.gameMovingPlatformMovementInitializationType)0 };
 
 			PostConstruct();
 		}

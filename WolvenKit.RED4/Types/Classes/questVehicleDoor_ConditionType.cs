@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questVehicleDoor_ConditionType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 			State = Enums.vehicleVehicleDoorState.Open;
 
 			PostConstruct();

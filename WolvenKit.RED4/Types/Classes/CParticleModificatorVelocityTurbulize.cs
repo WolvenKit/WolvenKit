@@ -49,6 +49,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Velocity turbulize";
 			EditorGroup = "Velocity";
 			IsEnabled = true;
+			Scale = new CEvaluatorVectorConst { Value = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			TimelifeLimit = new CEvaluatorFloatConst();
 			NoiseInterval = 1.000000F;
 			Duration = 1.000000F;
 			WorldSpace = true;

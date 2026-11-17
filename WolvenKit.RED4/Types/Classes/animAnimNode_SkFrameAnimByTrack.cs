@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkFrameAnimByTrack : animAnimNode_SkFrameAnim
 	{
-		[Ordinal(34)] 
+		[Ordinal(22)] 
 		[RED("progressFloatTrack")] 
 		public animNamedTrackIndex ProgressFloatTrack
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(23)] 
 		[RED("timeFloatTrack")] 
 		public animNamedTrackIndex TimeFloatTrack
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(24)] 
 		[RED("frameFloatTrack")] 
 		public animNamedTrackIndex FrameFloatTrack
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(25)] 
 		[RED("inputWithTracks")] 
 		public animPoseLink InputWithTracks
 		{

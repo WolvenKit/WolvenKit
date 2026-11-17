@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnEffectInstanceId()
 		{
-			EffectId = new scnEffectId { Id = uint.MaxValue };
+			EffectId = new scnEffectId();
 			Id = uint.MaxValue;
 
 			PostConstruct();

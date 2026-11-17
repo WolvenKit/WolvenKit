@@ -5,22 +5,46 @@ namespace WolvenKit.RED4.Types
 	public partial class gameuiCreditsController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
-		[RED("creditsResourcePS4")] 
-		public CResourceReference<inkCreditsResource> CreditsResourcePS4
+		[RED("creditsResourceXBOX")] 
+		public CResourceReference<inkCreditsResource> CreditsResourceXBOX
 		{
 			get => GetPropertyValue<CResourceReference<inkCreditsResource>>();
 			set => SetPropertyValue<CResourceReference<inkCreditsResource>>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("creditsResourceXBOXPC")] 
-		public CResourceReference<inkCreditsResource> CreditsResourceXBOXPC
+		[RED("creditsResourcePC")] 
+		public CResourceReference<inkCreditsResource> CreditsResourcePC
 		{
 			get => GetPropertyValue<CResourceReference<inkCreditsResource>>();
 			set => SetPropertyValue<CResourceReference<inkCreditsResource>>(value);
 		}
 
 		[Ordinal(4)] 
+		[RED("creditsResourceEmporium")] 
+		public CResourceReference<inkCreditsResource> CreditsResourceEmporium
+		{
+			get => GetPropertyValue<CResourceReference<inkCreditsResource>>();
+			set => SetPropertyValue<CResourceReference<inkCreditsResource>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("creditsResourceMac")] 
+		public CResourceReference<inkCreditsResource> CreditsResourceMac
+		{
+			get => GetPropertyValue<CResourceReference<inkCreditsResource>>();
+			set => SetPropertyValue<CResourceReference<inkCreditsResource>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("creditsResourcePS5")] 
+		public CResourceReference<inkCreditsResource> CreditsResourcePS5
+		{
+			get => GetPropertyValue<CResourceReference<inkCreditsResource>>();
+			set => SetPropertyValue<CResourceReference<inkCreditsResource>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("scrollingSpeed")] 
 		public CFloat ScrollingSpeed
 		{
@@ -28,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("fastforwardScrollingSpeed")] 
 		public CFloat FastforwardScrollingSpeed
 		{
@@ -36,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("sectionsContainer")] 
 		public inkCompoundWidgetReference SectionsContainer
 		{
@@ -44,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("singleTextWidget")] 
 		public inkTextWidgetReference SingleTextWidget
 		{
@@ -52,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("speakerNameTextWidget")] 
 		public inkTextWidgetReference SpeakerNameTextWidget
 		{
@@ -60,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("exitTooltipContainer")] 
 		public inkCompoundWidgetReference ExitTooltipContainer
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("swapBackgroundVideoAnimName")] 
 		public CName SwapBackgroundVideoAnimName
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("singleAnimName")] 
 		public CName SingleAnimName
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("openVideoScreenAnimName")] 
 		public CName OpenVideoScreenAnimName
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("closeVideoScreenAnimName")] 
 		public CName CloseVideoScreenAnimName
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("headerLibraryID")] 
 		public CName HeaderLibraryID
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("boldLibraryID")] 
 		public CName BoldLibraryID
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("basicLibraryID")] 
 		public CName BasicLibraryID
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("basicTranslatableLibraryID")] 
 		public CName BasicTranslatableLibraryID
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("topCreditsMargin")] 
 		public CFloat TopCreditsMargin
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("bottomCreditsMargin")] 
 		public CFloat BottomCreditsMargin
 		{
@@ -148,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("startPosition")] 
 		public CFloat StartPosition
 		{
@@ -156,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("subtitlesContainer")] 
 		public inkCompoundWidgetReference SubtitlesContainer
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("subtitlesLibraryPath")] 
 		public CResourceAsyncReference<CResource> SubtitlesLibraryPath
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("shouldShowRewardPrompt")] 
 		public CBool ShouldShowRewardPrompt
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("isInFinalBoardsMode")] 
 		public CBool IsInFinalBoardsMode
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("isPreVideoFinished")] 
 		public CBool IsPreVideoFinished
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("isEp1CreditsImplementation")] 
 		public CBool IsEp1CreditsImplementation
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("exitNotificationDisplayTime")] 
 		public CFloat ExitNotificationDisplayTime
 		{

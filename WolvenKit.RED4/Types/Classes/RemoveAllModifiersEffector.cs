@@ -21,16 +21,16 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("target")] 
-		public gameStatsObjectID Target
+		[RED("targets")] 
+		public CArray<gameStatsObjectID> Targets
 		{
-			get => GetPropertyValue<gameStatsObjectID>();
-			set => SetPropertyValue<gameStatsObjectID>(value);
+			get => GetPropertyValue<CArray<gameStatsObjectID>>();
+			set => SetPropertyValue<CArray<gameStatsObjectID>>(value);
 		}
 
 		public RemoveAllModifiersEffector()
 		{
-			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+			Targets = new();
 
 			PostConstruct();
 		}

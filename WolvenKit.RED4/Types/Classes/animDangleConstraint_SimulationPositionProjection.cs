@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDangleConstraint_SimulationPositionProjection : animDangleConstraint_SimulationSingleBone
 	{
-		[Ordinal(14)] 
+		[Ordinal(9)] 
 		[RED("collisionCapsuleRadius")] 
 		public CFloat CollisionCapsuleRadius
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(10)] 
 		[RED("collisionCapsuleHeightExtent")] 
 		public CFloat CollisionCapsuleHeightExtent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(11)] 
 		[RED("collisionCapsuleAxisLS")] 
 		public Vector3 CollisionCapsuleAxisLS
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(12)] 
 		[RED("directionReferenceBone")] 
 		public animTransformIndex DirectionReferenceBone
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(13)] 
 		[RED("projectionType")] 
 		public CEnum<animPositionProjectionType> ProjectionType
 		{

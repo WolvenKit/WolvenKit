@@ -210,7 +210,7 @@ namespace WolvenKit.RED4.Types
 			InputHint = new inkWidgetReference();
 			RarityLabel = new inkTextWidgetReference();
 			ReqNotMetAnimName = "reqNotMet";
-			UpgradeIconAnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			UpgradeIconAnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

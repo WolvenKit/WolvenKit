@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIBackgroundCombatStep()
 		{
-			Argument = new gameEntityReference { Names = new() };
+			Argument = new gameEntityReference();
 			ExposureMethod = Enums.AICoverExposureMethod.Stand_Up;
 
 			PostConstruct();

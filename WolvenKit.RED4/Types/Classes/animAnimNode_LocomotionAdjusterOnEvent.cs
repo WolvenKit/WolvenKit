@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_LocomotionAdjusterOnEvent : animAnimNode_LocomotionAdjuster
 	{
-		[Ordinal(19)] 
+		[Ordinal(9)] 
 		[RED("locomotionFeatureName")] 
 		public CName LocomotionFeatureName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(10)] 
 		[RED("targetAnimationName")] 
 		public CName TargetAnimationName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(11)] 
 		[RED("startAdjustmentAfterAnimEvent")] 
 		public CName StartAdjustmentAfterAnimEvent
 		{

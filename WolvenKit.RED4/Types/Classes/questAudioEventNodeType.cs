@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			Params = new();
 			DynamicParams = new();
 			Event = new audioAudEventStruct();
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 
 			PostConstruct();
 		}

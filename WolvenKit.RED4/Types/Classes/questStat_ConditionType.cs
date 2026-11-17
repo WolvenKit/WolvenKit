@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public questStat_ConditionType()
 		{
-			StatType = Enums.gamedataStatType.Invalid;
-
 			PostConstruct();
 		}
 

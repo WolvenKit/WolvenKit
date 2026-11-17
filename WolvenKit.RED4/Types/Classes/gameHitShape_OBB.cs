@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public gameHitShape_OBB()
 		{
 			Translation = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			LocalTransform = new CMatrix();
 			Dimensions = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 

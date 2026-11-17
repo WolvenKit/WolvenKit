@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleWindow_NodeType()
 		{
-			VehicleRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference();
 
 			PostConstruct();
 		}

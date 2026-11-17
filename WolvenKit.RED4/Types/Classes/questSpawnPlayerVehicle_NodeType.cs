@@ -70,6 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSpawnPlayerVehicle_NodeType()
 		{
+			PositionRef = new questUniversalRef { RefLocalPlayer = false };
 			Offset = new Vector3();
 
 			PostConstruct();

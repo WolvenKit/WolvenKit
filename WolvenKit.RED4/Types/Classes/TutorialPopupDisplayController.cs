@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("video_1500x847")] 
+		public inkVideoWidgetReference Video_1500x847
+		{
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("inputHint")] 
 		public inkWidgetReference InputHint
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("data")] 
 		public CHandle<TutorialPopupData> Data
 		{
@@ -85,6 +93,7 @@ namespace WolvenKit.RED4.Types
 			Video_1024x576 = new inkVideoWidgetReference();
 			Video_1280x720 = new inkVideoWidgetReference();
 			Video_720x405 = new inkVideoWidgetReference();
+			Video_1500x847 = new inkVideoWidgetReference();
 			InputHint = new inkWidgetReference();
 
 			PostConstruct();

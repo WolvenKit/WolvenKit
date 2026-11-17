@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("tempEquipOverWeapon")] 
+		public CBool TempEquipOverWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public animAnimFeature_EquipUnequipItem()
 		{
 			ItemType = -1;

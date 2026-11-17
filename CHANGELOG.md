@@ -1,3 +1,21 @@
+## 10.0.0-beta.1 — 2026-10-24
+
+**App, CLI & Nuget Packages**
+
+* *Removed*: Removed two facial animsets from the dropdown that only worked because AMM patched them by @manavortex
+* *Added*: Early support for game version 2.5 by @seberoth, @notaspirit
+* *Changed*: Improved many game type and property names by @seberoth
+
+---
+
+## 9.1.1 — 2026-11-08
+
+**App**
+
+* *Added*: Add game version compatibility check with popup to ensure WKit >= 10.x with 2.5 by @manavortex
+
+---
+
 ## 9.1.0 — 2026-10-10
 
 **App**

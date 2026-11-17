@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioUiGenericControlSettingsMapItem()
 		{
+			UiEventToAudioEventDictionary = new audioKeySoundEventDictionary { EntryType = new audioKeySoundEventPairDictionaryItem() };
+
 			PostConstruct();
 		}
 

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorResource()
 		{
-			Arguments = new AITreeArgumentsDefinition { Args = new() };
+			Arguments = new AITreeArgumentsDefinition();
 			InitializationEvents = new();
 
 			PostConstruct();

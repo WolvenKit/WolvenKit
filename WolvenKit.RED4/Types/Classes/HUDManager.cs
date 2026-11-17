@@ -390,7 +390,7 @@ namespace WolvenKit.RED4.Types
 			NameplateTarget = new entEntityID();
 			QuickHackTarget = new entEntityID();
 			LootedTarget = new entEntityID();
-			LookatRequest = new gameaimAssistAimRequest { CheckRange = true, LookAtTarget = new Vector4(), ProcessAsInput = true, BptMaxSwitches = -1.000000F };
+			LookatRequest = new gameaimAssistAimRequest();
 			PulseDelayID = new gameDelayID();
 			PreviousStickInput = new Vector4();
 

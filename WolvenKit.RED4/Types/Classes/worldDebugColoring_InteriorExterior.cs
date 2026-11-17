@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_InteriorExterior()
 		{
-			InteriorColor = new CColor();
-			OpenInteriorColor = new CColor();
-			ExteriorColor = new CColor();
+			InteriorColor = new CColor { Red = 255, Alpha = 255 };
+			OpenInteriorColor = new CColor { Red = 255, Green = 165, Alpha = 255 };
+			ExteriorColor = new CColor { Green = 255, Alpha = 255 };
 
 			PostConstruct();
 		}

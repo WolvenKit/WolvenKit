@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryWeaponDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(120)] 
+		[Ordinal(122)] 
 		[RED("weaponSpecyficModsRoot")] 
 		public inkCompoundWidgetReference WeaponSpecyficModsRoot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(123)] 
 		[RED("silencerIcon")] 
 		public inkWidgetReference SilencerIcon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(124)] 
 		[RED("scopeIcon")] 
 		public inkWidgetReference ScopeIcon
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(125)] 
 		[RED("ammoIcon")] 
 		public inkImageWidgetReference AmmoIcon
 		{
@@ -36,12 +36,108 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(124)] 
-		[RED("weaponAttachmentsDisplay")] 
-		public CArray<CWeakHandle<InventoryItemPartDisplay>> WeaponAttachmentsDisplay
+		[Ordinal(126)] 
+		[RED("inactiveDualWieldIcon")] 
+		public inkWidgetReference InactiveDualWieldIcon
 		{
-			get => GetPropertyValue<CArray<CWeakHandle<InventoryItemPartDisplay>>>();
-			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemPartDisplay>>>(value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(127)] 
+		[RED("primaryWeaponOnlyEquippedIcon")] 
+		public inkWidgetReference PrimaryWeaponOnlyEquippedIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(128)] 
+		[RED("dualWieldPrimaryWeaponIcon")] 
+		public inkWidgetReference DualWieldPrimaryWeaponIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(129)] 
+		[RED("dualWieldSecondaryWeaponIcon")] 
+		public inkWidgetReference DualWieldSecondaryWeaponIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(130)] 
+		[RED("switchToPrimaryArrow")] 
+		public inkWidgetReference SwitchToPrimaryArrow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(131)] 
+		[RED("switchToSecondaryArrow")] 
+		public inkWidgetReference SwitchToSecondaryArrow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(132)] 
+		[RED("switchToPrimaryArrowController")] 
+		public CWeakHandle<inkButtonController> SwitchToPrimaryArrowController
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(133)] 
+		[RED("switchToSecondaryArrowController")] 
+		public CWeakHandle<inkButtonController> SwitchToSecondaryArrowController
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(134)] 
+		[RED("toggleToPrimary")] 
+		public CBool ToggleToPrimary
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(135)] 
+		[RED("toggleToSecondary")] 
+		public CBool ToggleToSecondary
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(136)] 
+		[RED("showArrows")] 
+		public CBool ShowArrows
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(137)] 
+		[RED("canCycleWeapons")] 
+		public CBool CanCycleWeapons
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(138)] 
+		[RED("isHoveringArrow")] 
+		public CBool IsHoveringArrow
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public InventoryWeaponDisplayController()
@@ -50,7 +146,12 @@ namespace WolvenKit.RED4.Types
 			SilencerIcon = new inkWidgetReference();
 			ScopeIcon = new inkWidgetReference();
 			AmmoIcon = new inkImageWidgetReference();
-			WeaponAttachmentsDisplay = new();
+			InactiveDualWieldIcon = new inkWidgetReference();
+			PrimaryWeaponOnlyEquippedIcon = new inkWidgetReference();
+			DualWieldPrimaryWeaponIcon = new inkWidgetReference();
+			DualWieldSecondaryWeaponIcon = new inkWidgetReference();
+			SwitchToPrimaryArrow = new inkWidgetReference();
+			SwitchToSecondaryArrow = new inkWidgetReference();
 
 			PostConstruct();
 		}

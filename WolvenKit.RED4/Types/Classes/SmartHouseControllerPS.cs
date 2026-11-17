@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#15648";
 			TweakDBRecord = "Devices.SmartHouse";
-			TweakDBDescriptionRecord = 130612213885;
+			TweakDBDescriptionRecord = "device_descriptions.SmartHouse";
 			Timetable = new();
 			AvailablePresets = new();
 			SmartHouseCustomization = new SmartHouseConfiguration();

@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3220
+      author: "MORTEM3845"
+      description: "Prevent labels in the Add Prop Files dialog from being clipped at larger UI scales."

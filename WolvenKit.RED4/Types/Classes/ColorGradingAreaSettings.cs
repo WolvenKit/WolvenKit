@@ -156,8 +156,8 @@ namespace WolvenKit.RED4.Types
 			MidtoneOffset = new ColorBalance();
 			HighRange = 0.450000F;
 			HighlightOffset = new ColorBalance();
-			LdrLut = new ColorGradingLutParams { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
-			HdrLut = new ColorGradingLutParams { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
+			LdrLut = new ColorGradingLutParams();
+			HdrLut = new ColorGradingLutParams();
 
 			PostConstruct();
 		}

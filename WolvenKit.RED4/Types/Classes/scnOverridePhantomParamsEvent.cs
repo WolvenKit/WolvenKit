@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnOverridePhantomParamsEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			Params = new scnOverridePhantomParamsEventParams { Performer = new scnPerformerId { Id = 4294967040 } };
+			Id = new scnSceneEventId();
+			Params = new scnOverridePhantomParamsEventParams();
 
 			PostConstruct();
 		}

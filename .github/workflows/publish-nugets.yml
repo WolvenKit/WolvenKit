@@ -1,6 +1,11 @@
 name: publish-nuget
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to publish from (defaults to the branch selected when starting the workflow)"
+        required: false
+        type: string
 
 jobs:
 
@@ -10,6 +15,8 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.branch || github.ref_name }}
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:

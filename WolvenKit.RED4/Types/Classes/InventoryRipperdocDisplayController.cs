@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryRipperdocDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(120)] 
+		[Ordinal(122)] 
 		[RED("ownedBackground")] 
 		public inkWidgetReference OwnedBackground
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(123)] 
 		[RED("ownedSign")] 
 		public inkWidgetReference OwnedSign
 		{

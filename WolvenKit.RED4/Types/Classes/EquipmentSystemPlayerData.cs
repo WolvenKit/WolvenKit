@@ -143,9 +143,9 @@ namespace WolvenKit.RED4.Types
 		public EquipmentSystemPlayerData()
 		{
 			OwnerID = new entEntityID();
-			Equipment = new gameSLoadout { EquipAreas = new(), EquipmentSets = new() };
-			LastUsedStruct = new gameSLastUsedWeapon { LastUsedWeapon = new gameItemID(), LastUsedRanged = new gameItemID(), LastUsedMelee = new gameItemID(), LastUsedHeavy = new gameItemID() };
-			SlotActiveItemsInHands = new gameSSlotActiveItems { RightHandItem = new gameItemID(), LeftHandItem = new gameItemID() };
+			Equipment = new gameSLoadout();
+			LastUsedStruct = new gameSLastUsedWeapon();
+			SlotActiveItemsInHands = new gameSSlotActiveItems();
 			ClothingSlotsInfo = new();
 			ClothingVisualsInfo = new();
 			LastActiveWardrobeSet = Enums.gameWardrobeClothingSetIndex.INVALID;

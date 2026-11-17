@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DetachToVehicleTime = -1.000000F;
 			DetachedDirection = new Vector4();
-			DetachedTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			DetachedTransform = new WorldTransform();
 
 			PostConstruct();
 		}

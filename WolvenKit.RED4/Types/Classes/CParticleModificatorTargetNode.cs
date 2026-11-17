@@ -33,6 +33,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Target node";
 			EditorGroup = "Velocity";
 			IsEnabled = true;
+			ForceScale = new CEvaluatorFloatConst();
+			KillRadius = new CEvaluatorFloatConst { Value = 0.000000F };
 			MaxForce = 100.000000F;
 
 			PostConstruct();

@@ -33,6 +33,7 @@
             Grid.Column="0"
             SelectedIndex="0">
             <ListBoxItem>General</ListBoxItem>
+            <ListBoxItem>mod.io</ListBoxItem>
         </ListBox>
 
         <Grid
@@ -77,6 +78,18 @@
                         <ColumnDefinition Width="8*" />
                     </Grid.ColumnDefinitions>
 
+                    <Label Grid.Column="0">Description</Label>
+                    <hc:TextBox
+                        x:Name="DescriptionTextBox"
+                        Grid.Column="1" />
+                </Grid>
+
+                <Grid Margin="{DynamicResource WolvenKitMarginTinyBottom}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="8*" />
+                    </Grid.ColumnDefinitions>
+
                     <Label Grid.Column="0">Author</Label>
                     <hc:TextBox
                         x:Name="AuthorTextBox"
@@ -104,6 +117,32 @@
                     <Label Grid.Column="0">Version</Label>
                     <hc:TextBox
                         x:Name="VersionTextBox"
+                        Grid.Column="1" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel x:Name="ModIoPanel">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="8*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0">Id</Label>
+                    <hc:TextBox
+                        x:Name="ModIoIdTextBox"
+                        Grid.Column="1" />
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="8*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0">Logo</Label>
+                    <hc:TextBox
+                        x:Name="ModIoLogoTextBox"
                         Grid.Column="1" />
                 </Grid>
             </StackPanel>

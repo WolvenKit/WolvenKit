@@ -62,6 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public questParamRubberbanding()
 		{
+			TargetRef = new questUniversalRef { RefLocalPlayer = false };
+
 			PostConstruct();
 		}
 

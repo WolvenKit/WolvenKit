@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldFoliageNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("foliageResource")] 
 		public CResourceAsyncReference<worldFoliageCompiledResource> FoliageResource
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldFoliageCompiledResource>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("foliageLocalBounds")] 
 		public Box FoliageLocalBounds
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("autoHideDistanceScale")] 
 		public CFloat AutoHideDistanceScale
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("lodDistanceScale")] 
 		public CFloat LodDistanceScale
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("populationSpanInfo")] 
 		public worldFoliagePopulationSpanInfo PopulationSpanInfo
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<worldFoliagePopulationSpanInfo>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("destructionHash")] 
 		public CUInt64 DestructionHash
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("meshHeight")] 
 		public CFloat MeshHeight
 		{
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldFoliageNode()
 		{
-			FoliageLocalBounds = new Box { Min = new Vector4(), Max = new Vector4() };
+			FoliageLocalBounds = new Box();
 			AutoHideDistanceScale = 1.000000F;
 			LodDistanceScale = 1.000000F;
 			StreamingDistance = -1.000000F;

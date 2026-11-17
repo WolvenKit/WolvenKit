@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#110";
 			TweakDBRecord = "Devices.SmartWindow";
-			TweakDBDescriptionRecord = 133880141476;
+			TweakDBDescriptionRecord = "device_descriptions.SmartWindow";
 
 			PostConstruct();
 		}

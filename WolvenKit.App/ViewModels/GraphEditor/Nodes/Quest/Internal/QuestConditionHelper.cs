@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
@@ -829,6 +829,10 @@ public class QuestConditionHelper
         if (playerState.UpperBodyState != gamePSMUpperBodyStates.Any)
         {
             states.Add($"upperBodyState {playerState.UpperBodyState}");
+        }
+        if (playerState.WeaponComparisonType != questEComparisonTypeEquality.Equal)
+        {
+            states.Add($"weaponComparisonType {playerState.WeaponComparisonType}");
         }
         if (playerState.WeaponState != gamePSMRangedWeaponStates.Any)
         {

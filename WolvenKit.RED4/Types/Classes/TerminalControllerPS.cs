@@ -80,8 +80,8 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#112";
 			TweakDBRecord = "Devices.Terminal";
-			TweakDBDescriptionRecord = 123011726280;
-			TerminalSetup = new TerminalSetup { MinClearance = 1, MaxClearance = 10, ShouldForceVirtualSystem = true };
+			TweakDBDescriptionRecord = "device_descriptions.Terminal";
+			TerminalSetup = new TerminalSetup();
 			SpawnedSystems = new();
 			DefaultGlitchVideoPath = new redResourceReferenceScriptToken();
 			BroadcastGlitchVideoPath = new redResourceReferenceScriptToken();

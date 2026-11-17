@@ -22,7 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public PSODescRenderTargetSetup()
 		{
-			RtFormats = new(0);
+			RtFormats = new(8);
+			DsFormat = Enums.GpuWrapApieTextureFormat.TEXFMT_NULL;
 
 			PostConstruct();
 		}

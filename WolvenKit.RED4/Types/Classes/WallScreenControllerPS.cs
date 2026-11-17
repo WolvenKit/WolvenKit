@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public WallScreenControllerPS()
 		{
 			TweakDBRecord = "Devices.WallScreen";
-			TweakDBDescriptionRecord = 131860853415;
+			TweakDBDescriptionRecord = "device_descriptions.WallScreen";
 
 			PostConstruct();
 		}

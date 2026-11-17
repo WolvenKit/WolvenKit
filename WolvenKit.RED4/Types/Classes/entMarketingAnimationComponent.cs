@@ -71,9 +71,10 @@ namespace WolvenKit.RED4.Types
 		public entMarketingAnimationComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			FreezeAnimations = true;
 			Animations = new();
+			LookAtSettings = new animLookAtPreset_FullControl();
 			LookAtOrbitDistance = 3.000000F;
 
 			PostConstruct();

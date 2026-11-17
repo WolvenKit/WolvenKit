@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectInputParameter_Float()
 		{
+			Evaluator = new gameEffectParameter_FloatEvaluator_Blackboard();
+
 			PostConstruct();
 		}
 

@@ -1,9 +1,16 @@
 name: stage changelog
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to stage the changelog for (defaults to the branch selected when starting the workflow)"
+        required: false
+        type: string
 
 env:
   PROJ: ./WolvenKit/WolvenKit.csproj
+  BASE_BRANCH: "${{ inputs.branch || github.ref_name }}"
+  STAGING_BRANCH: "changelog-staging-${{ inputs.branch || github.ref_name }}"
   GH_TOKEN: ${{ github.token }}
 
 jobs:
@@ -15,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BASE_BRANCH }}
 
       - name: Configure git
         run: |
@@ -23,8 +32,8 @@ jobs:
 
       - name: Cleanup branch
         run: |
-          git push origin --delete changelog-staging || true
-          git checkout -b changelog-staging
+          git push origin --delete "$STAGING_BRANCH" || true
+          git checkout -b "$STAGING_BRANCH"
 
       - name: Precompile Changelog
         run: |
@@ -70,12 +79,12 @@ jobs:
           git add CHANGELOG.md
           git add changelog/
           git commit -m "Generate changelog for version ${{env.VERSION_APP}} and update source yaml files" || echo "No changes to commit"
-          git push origin changelog-staging
+          git push origin "$STAGING_BRANCH"
 
       - name: Create Pull Request
         run: |
           gh pr create \
-            --base main \
-            --head "changelog-staging" \
+            --base "$BASE_BRANCH" \
+            --head "$STAGING_BRANCH" \
             --title "Generate changelog for ${{env.VERSION_APP}}" \
             --body "Generates user facing changelog entries and updates source yaml files. beep boop."

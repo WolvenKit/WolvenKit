@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#2226";
 			TweakDBRecord = "Devices.Ladder";
-			TweakDBDescriptionRecord = 112612393928;
+			TweakDBDescriptionRecord = "device_descriptions.Ladder";
 			ShouldScannerShowStatus = false;
 
 			PostConstruct();

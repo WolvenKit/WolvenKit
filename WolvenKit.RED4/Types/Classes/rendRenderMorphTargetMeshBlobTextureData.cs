@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public rendRenderMorphTargetMeshBlobTextureData()
 		{
-			TargetDiffScale = new(3);
-			TargetDiffOffset = new(3);
-			TargetDiffsDataOffset = new(3);
-			TargetDiffsDataSize = new(3);
-			TargetDiffsWidth = new(3);
-			TargetDiffsMipLevelCounts = new(3);
+			TargetDiffScale = new(3) { new Vector4(), new Vector4(), new Vector4() };
+			TargetDiffOffset = new(3) { new Vector4(), new Vector4(), new Vector4() };
+			TargetDiffsDataOffset = new(3) { 0, 0, 0 };
+			TargetDiffsDataSize = new(3) { 0, 0, 0 };
+			TargetDiffsWidth = new(3) { 0, 0, 0 };
+			TargetDiffsMipLevelCounts = new(3) { 0, 0, 0 };
 
 			PostConstruct();
 		}

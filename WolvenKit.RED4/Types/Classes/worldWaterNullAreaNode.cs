@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public worldWaterNullAreaNode()
 		{
+			Color = new CColor { Red = 64, Green = 64, Blue = 128, Alpha = 128 };
+
 			PostConstruct();
 		}
 

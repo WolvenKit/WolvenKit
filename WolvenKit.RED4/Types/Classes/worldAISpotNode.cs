@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAISpotNode : worldSocketNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("spot")] 
 		public CHandle<AISpot> Spot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AISpot>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("isWorkspotInfinite")] 
 		public CBool IsWorkspotInfinite
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("isWorkspotStatic")] 
 		public CBool IsWorkspotStatic
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("markings")] 
 		public CArray<CName> Markings
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("spotDef")] 
 		public CHandle<worldTrafficSpotDefinition> SpotDef
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldTrafficSpotDefinition>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("disableBumps")] 
 		public CBool DisableBumps
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("lookAtTarget")] 
 		public NodeRef LookAtTarget
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("useCrowdWhitelist")] 
 		public CBool UseCrowdWhitelist
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("useCrowdBlacklist")] 
 		public CBool UseCrowdBlacklist
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("crowdWhitelist")] 
 		public redTagList CrowdWhitelist
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("crowdBlacklist")] 
 		public redTagList CrowdBlacklist
 		{
@@ -97,8 +97,8 @@ namespace WolvenKit.RED4.Types
 			Markings = new();
 			UseCrowdWhitelist = true;
 			UseCrowdBlacklist = true;
-			CrowdWhitelist = new redTagList { Tags = new() };
-			CrowdBlacklist = new redTagList { Tags = new() };
+			CrowdWhitelist = new redTagList();
+			CrowdBlacklist = new redTagList();
 
 			PostConstruct();
 		}

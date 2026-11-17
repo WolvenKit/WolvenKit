@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterReaction_ConditionType()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 
 			PostConstruct();
 		}

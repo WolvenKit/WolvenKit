@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldDecorationMeshNode : worldMeshNode
 	{
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("startAsleep")] 
 		public CBool StartAsleep
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(18)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -31,6 +31,7 @@ namespace WolvenKit.RED4.Types
 		public worldDecorationMeshNode()
 		{
 			FilterDataSource = Enums.physicsFilterDataSource.Collider;
+			FilterData = new physicsFilterData { SimulationFilter = new physicsSimulationFilter { Mask1 = 114696, Mask2 = 9223372036854780879 }, QueryFilter = new physicsQueryFilter { Mask2 = 143753224 }, Preset = "World Dynamic" };
 
 			PostConstruct();
 		}

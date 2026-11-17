@@ -45,6 +45,86 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("inputSettingsListener")] 
+		public CHandle<InputSettingsVarListener> InputSettingsListener
+		{
+			get => GetPropertyValue<CHandle<InputSettingsVarListener>>();
+			set => SetPropertyValue<CHandle<InputSettingsVarListener>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("inputSettingGroupName")] 
+		public CName InputSettingGroupName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("inputSettingGroup")] 
+		public CHandle<userSettingsGroup> InputSettingGroup
+		{
+			get => GetPropertyValue<CHandle<userSettingsGroup>>();
+			set => SetPropertyValue<CHandle<userSettingsGroup>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("inputSettingVarName")] 
+		public CName InputSettingVarName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("inputSettingVar")] 
+		public CHandle<userSettingsVarListString> InputSettingVar
+		{
+			get => GetPropertyValue<CHandle<userSettingsVarListString>>();
+			set => SetPropertyValue<CHandle<userSettingsVarListString>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("displayInputSettingVarName")] 
+		public CName DisplayInputSettingVarName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("displayInputSettingVar")] 
+		public CHandle<userSettingsVarListString> DisplayInputSettingVar
+		{
+			get => GetPropertyValue<CHandle<userSettingsVarListString>>();
+			set => SetPropertyValue<CHandle<userSettingsVarListString>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("initScheme")] 
+		public CInt32 InitScheme
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("saveMessageToken")] 
+		public CHandle<inkGameNotificationToken> SaveMessageToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("showDeathScreenBBID")] 
 		public CHandle<redCallbackObject> ShowDeathScreenBBID
 		{
@@ -52,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(19)] 
 		[RED("breachingNetworkBBID")] 
 		public CHandle<redCallbackObject> BreachingNetworkBBID
 		{
@@ -60,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(20)] 
 		[RED("triggerMenuEventBBID")] 
 		public CHandle<redCallbackObject> TriggerMenuEventBBID
 		{
@@ -68,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(21)] 
 		[RED("openStorageBBID")] 
 		public CHandle<redCallbackObject> OpenStorageBBID
 		{
@@ -76,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(22)] 
 		[RED("controllerDisconnectedBBID")] 
 		public CHandle<redCallbackObject> ControllerDisconnectedBBID
 		{
@@ -84,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(23)] 
 		[RED("bbOnEquipmentChangedID")] 
 		public CHandle<redCallbackObject> BbOnEquipmentChangedID
 		{
@@ -92,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(24)] 
 		[RED("inputSchemesBBID")] 
 		public CHandle<redCallbackObject> InputSchemesBBID
 		{
@@ -100,7 +180,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(25)] 
+		[RED("inputMouserLayoutBBID")] 
+		public CHandle<redCallbackObject> InputMouserLayoutBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> InventoryListener
 		{
@@ -108,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(27)] 
 		[RED("animContainer")] 
 		public CHandle<inGameMenuAnimContainer> AnimContainer
 		{
@@ -116,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inGameMenuAnimContainer>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(28)] 
 		[RED("lastInGameNotificationType")] 
 		public CEnum<UIInGameNotificationType> LastInGameNotificationType
 		{
@@ -124,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<UIInGameNotificationType>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(29)] 
 		[RED("loadSaveDelayID")] 
 		public gameDelayID LoadSaveDelayID
 		{
@@ -132,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(30)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{

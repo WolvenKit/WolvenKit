@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameWeaponReplicationHistory()
 		{
-			Shots = new(0);
+			Shots = new(8);
 			LatestShotId = 8;
-			ContinuousAttack = new gameReplicatedContinuousAttack { StartTimeStamp = new netTime { MilliSecs = long.MaxValue }, StopTimeStamp = new netTime { MilliSecs = long.MaxValue } };
+			ContinuousAttack = new gameReplicatedContinuousAttack();
 
 			PostConstruct();
 		}

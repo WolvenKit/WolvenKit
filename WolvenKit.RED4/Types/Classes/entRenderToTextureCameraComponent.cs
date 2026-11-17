@@ -109,6 +109,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(23)] 
+		[RED("renderingQuality")] 
+		public CEnum<ECameraRenderingQuality> RenderingQuality
+		{
+			get => GetPropertyValue<CEnum<ECameraRenderingQuality>>();
+			set => SetPropertyValue<CEnum<ECameraRenderingQuality>>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("depthCutDistance")] 
 		public CFloat DepthCutDistance
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("backgroundColor")] 
 		public CColor BackgroundColor
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("overrideBackgroundColor")] 
 		public CBool OverrideBackgroundColor
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("renderSceneLayer")] 
 		public CEnum<RenderSceneLayer> RenderSceneLayer
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<RenderSceneLayer>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("features")] 
 		public entRenderToTextureFeatures Features
 		{
@@ -148,7 +156,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entRenderToTextureFeatures>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
+		[RED("renderFrequency")] 
+		public CUInt32 RenderFrequency
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("renderPhase")] 
+		public CUInt32 RenderPhase
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
@@ -163,9 +187,10 @@ namespace WolvenKit.RED4.Types
 			VirtualCameraName = "Component";
 			ResolutionWidth = 100;
 			ResolutionHeight = 100;
-			Params = new WorldRenderAreaSettings { AreaParameters = new() };
+			Params = new WorldRenderAreaSettings();
 			BackgroundColor = new CColor();
-			Features = new entRenderToTextureFeatures { RenderDecals = true, RenderParticles = true, LocalShadows = true };
+			Features = new entRenderToTextureFeatures();
+			RenderFrequency = 1;
 			StreamingDistance = 1.000000F;
 
 			PostConstruct();

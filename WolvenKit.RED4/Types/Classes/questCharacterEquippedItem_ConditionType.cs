@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterEquippedItem_ConditionType()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 			ExcludedTweakDBIDs = new();
 			ExcludedTags = new();
 

@@ -28,6 +28,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameEquipAnimationType>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("tempEquipOverWeapon")] 
+		public CBool TempEquipOverWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("dualWieldLoadoutEdit")] 
+		public CBool DualWieldLoadoutEdit
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public EquipmentManipulationRequest()
 		{
 			PostConstruct();

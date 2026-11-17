@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public navgendebugInputGeometry()
 		{
 			Triangles = new();
-			TileBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
-			ExtrudedBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
+			TileBoundingBox = new Box();
+			ExtrudedBoundingBox = new Box();
 
 			PostConstruct();
 		}

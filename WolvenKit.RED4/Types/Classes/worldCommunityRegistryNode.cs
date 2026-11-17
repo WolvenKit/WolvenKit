@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldCommunityRegistryNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("spawnSetNameToCommunityID")] 
 		public gameCommunitySpawnSetNameToID SpawnSetNameToCommunityID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameCommunitySpawnSetNameToID>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("crowdCreationRegistry")] 
 		public CHandle<gameCrowdCreationDataRegistry> CrowdCreationRegistry
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameCrowdCreationDataRegistry>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("communitiesData")] 
 		public CArray<worldCommunityRegistryItem> CommunitiesData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldCommunityRegistryItem>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("workspotsPersistentData")] 
 		public CArray<AISpotPersistentData> WorkspotsPersistentData
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<AISpotPersistentData>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("representsCrowd")] 
 		public CBool RepresentsCrowd
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldCommunityRegistryNode()
 		{
-			SpawnSetNameToCommunityID = new gameCommunitySpawnSetNameToID { Entries = new() };
+			SpawnSetNameToCommunityID = new gameCommunitySpawnSetNameToID();
 			CommunitiesData = new();
 			WorkspotsPersistentData = new();
 

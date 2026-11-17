@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ImmediateExitWithForceEvents()
 		{
-			ExitForce = new gamestateMachineResultVector { Value = new Vector4() };
-			BikeForce = new gamestateMachineResultVector { Value = new Vector4() };
+			ExitForce = new gamestateMachineResultVector();
+			BikeForce = new gamestateMachineResultVector();
 
 			PostConstruct();
 		}

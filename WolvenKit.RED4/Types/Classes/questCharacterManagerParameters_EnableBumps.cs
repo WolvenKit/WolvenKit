@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_EnableBumps()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 			Enable = true;
 			Policy = Enums.AIinfluenceEBumpPolicy.Lean;
 

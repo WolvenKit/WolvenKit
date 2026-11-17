@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public CHairProfile()
 		{
 			SampleCount = 64;
-			GradientEntriesID = new() { new rendGradientEntry(), new rendGradientEntry() };
-			GradientEntriesRootToTip = new() { new rendGradientEntry(), new rendGradientEntry() };
+			GradientEntriesID = new() { new rendGradientEntry { Color = new CColor { Red = 245, Green = 222, Blue = 179, Alpha = 255 } }, new rendGradientEntry { Value = 1.000000F, Color = new CColor { Red = 139, Green = 69, Blue = 19, Alpha = 255 } } };
+			GradientEntriesRootToTip = new() { new rendGradientEntry { Color = new CColor { Red = 51, Green = 51, Blue = 51, Alpha = 255 } }, new rendGradientEntry { Value = 1.000000F, Color = new CColor { Red = 99, Green = 99, Blue = 99, Alpha = 255 } } };
 
 			PostConstruct();
 		}

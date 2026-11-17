@@ -30,7 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorComparisonExpressionDefinition()
 		{
+			LeftHandSide = new AIbehaviorExpressionSocket { TypeHint = new AIbehaviorTypeRef { IsSet = true, EnumeratedType = Enums.AIArgumentType.Float } };
 			Operator = Enums.EComparisonType.Equal;
+			RightHandSide = new AIbehaviorExpressionSocket { TypeHint = new AIbehaviorTypeRef { IsSet = true, EnumeratedType = Enums.AIArgumentType.Float } };
 
 			PostConstruct();
 		}

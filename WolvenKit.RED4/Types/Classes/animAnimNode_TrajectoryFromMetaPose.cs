@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_TrajectoryFromMetaPose : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("metaPoseTrajectoryLs")] 
 		public animTransformIndex MetaPoseTrajectoryLs
 		{

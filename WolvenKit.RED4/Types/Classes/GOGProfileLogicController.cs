@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EGOGMenuState>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("gogContainer")] 
+		public CWeakHandle<inkCompoundWidget> GogContainer
+		{
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
+		}
+
 		public GOGProfileLogicController()
 		{
 			PostConstruct();

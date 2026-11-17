@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEnableScanning_NodeType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 
 			PostConstruct();
 		}

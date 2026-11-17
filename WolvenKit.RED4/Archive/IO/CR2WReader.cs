@@ -67,6 +67,18 @@ public partial class CR2WReader : Red4Reader
         if (cls is IRedAppendix app)
         {
             app.Read(this, (uint)(size - bytesread));
+
+            switch (app.GetProcessTime())
+            {
+                case ProcessTime.OnAccess:
+                    app.LoadData(cls);
+                    break;
+                case ProcessTime.OnFileProcessing:
+                    _appendices.Add(app);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         if (bytesread != size)

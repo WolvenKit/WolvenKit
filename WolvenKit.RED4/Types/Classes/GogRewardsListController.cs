@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("cyberpunkShopUrl")] 
+		public inkWidgetReference CyberpunkShopUrl
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("scrollBarRequiredHeight")] 
 		public CInt32 ScrollBarRequiredHeight
 		{
@@ -36,9 +44,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
+		[RED("disconnectBtn")] 
+		public inkWidgetReference DisconnectBtn
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("shouldUpdateLayout")] 
 		public CBool ShouldUpdateLayout
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("signOutEnabled")] 
+		public CBool SignOutEnabled
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -49,6 +73,8 @@ namespace WolvenKit.RED4.Types
 			ContainerWidget = new inkWidgetReference();
 			ScrollArea = new inkWidgetReference();
 			SizeRefWrapper = new inkWidgetReference();
+			CyberpunkShopUrl = new inkWidgetReference();
+			DisconnectBtn = new inkWidgetReference();
 
 			PostConstruct();
 		}

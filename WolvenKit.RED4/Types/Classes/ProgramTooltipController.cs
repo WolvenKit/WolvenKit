@@ -360,7 +360,7 @@ namespace WolvenKit.RED4.Types
 			TypeSegment = new inkWidgetReference();
 			DEBUG_iconErrorWrapper = new inkWidgetReference();
 			DEBUG_iconErrorText = new inkTextWidgetReference();
-			QuickHackData = new InventoryTooltipData_QuickhackData { AttackEffects = new() };
+			QuickHackData = new InventoryTooltipData_QuickhackData();
 
 			PostConstruct();
 		}

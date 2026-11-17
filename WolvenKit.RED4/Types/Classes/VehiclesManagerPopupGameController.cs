@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(21)] 
+		[RED("favoriteInputHintContainer")] 
+		public inkWidgetReference FavoriteInputHintContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("favoriteInputHint")] 
 		public inkTextWidgetReference FavoriteInputHint
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("dataView")] 
 		public CHandle<VehiclesManagerDataView> DataView
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehiclesManagerDataView>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("quickSlotsManager")] 
 		public CWeakHandle<QuickSlotsManager> QuickSlotsManager
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<QuickSlotsManager>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("selectAnimProxy")] 
 		public CHandle<inkanimProxy> SelectAnimProxy
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("initialIndex")] 
 		public CUInt32 InitialIndex
 		{
@@ -116,6 +124,7 @@ namespace WolvenKit.RED4.Types
 			ScrollArea = new inkScrollAreaWidgetReference();
 			ScrollControllerWidget = new inkWidgetReference();
 			ConfirmButton = new inkWidgetReference();
+			FavoriteInputHintContainer = new inkWidgetReference();
 			FavoriteInputHint = new inkTextWidgetReference();
 
 			PostConstruct();

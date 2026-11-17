@@ -37,30 +37,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("s_paperWhiteGroup")] 
-		public CName S_paperWhiteGroup
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(8)] 
-		[RED("s_toneMappingeGroup")] 
-		public CName S_toneMappingeGroup
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(9)] 
-		[RED("s_saturationGroup")] 
-		public CName S_saturationGroup
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(10)] 
 		[RED("s_calibrationImageDay")] 
 		public CName S_calibrationImageDay
 		{
@@ -68,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(8)] 
 		[RED("s_calibrationImageNight")] 
 		public CName S_calibrationImageNight
 		{
@@ -76,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(9)] 
 		[RED("s_currentCalibrationImage")] 
 		public CName S_currentCalibrationImage
 		{
@@ -84,39 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
-		[RED("paperWhiteOptionSelector")] 
-		public inkCompoundWidgetReference PaperWhiteOptionSelector
+		[Ordinal(10)] 
+		[RED("settingsOptionsList")] 
+		public inkCompoundWidgetReference SettingsOptionsList
 		{
 			get => GetPropertyValue<inkCompoundWidgetReference>();
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("maxBrightnessOptionSelector")] 
-		public inkCompoundWidgetReference MaxBrightnessOptionSelector
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("toneMappingOptionSelector")] 
-		public inkCompoundWidgetReference ToneMappingOptionSelector
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("saturationOptionSelector")] 
-		public inkCompoundWidgetReference SaturationOptionSelector
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(17)] 
+		[Ordinal(11)] 
 		[RED("targetImageWidget")] 
 		public inkWidgetReference TargetImageWidget
 		{
@@ -124,7 +76,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(12)] 
+		[RED("descriptionText")] 
+		public inkTextWidgetReference DescriptionText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("defaultButton")] 
+		public inkWidgetReference DefaultButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -132,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(15)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
@@ -140,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(16)] 
 		[RED("settingsListener")] 
 		public CHandle<HDRSettingsVarListener> SettingsListener
 		{
@@ -148,7 +116,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HDRSettingsVarListener>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(17)] 
+		[RED("settingsNotificationListener")] 
+		public CHandle<HDRSettingsNotificationListener> SettingsNotificationListener
+		{
+			get => GetPropertyValue<CHandle<HDRSettingsNotificationListener>>();
+			set => SetPropertyValue<CHandle<HDRSettingsNotificationListener>>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("SettingsElements")] 
 		public CArray<CWeakHandle<inkSettingsSelectorController>> SettingsElements
 		{
@@ -156,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkSettingsSelectorController>>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(19)] 
 		[RED("isPreGame")] 
 		public CBool IsPreGame
 		{
@@ -164,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(20)] 
 		[RED("calibrationImagesCycleAnimDef")] 
 		public CHandle<inkanimDefinition> CalibrationImagesCycleAnimDef
 		{
@@ -172,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(21)] 
 		[RED("calibrationImagesCycleProxy")] 
 		public CHandle<inkanimProxy> CalibrationImagesCycleProxy
 		{
@@ -180,15 +156,41 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(22)] 
+		[RED("c_minMonitorBrightness")] 
+		public CName C_minMonitorBrightness
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("c_maxMonitorBrightness")] 
+		public CName C_maxMonitorBrightness
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("c_paperWhiteLevel")] 
+		public CName C_paperWhiteLevel
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public gameuiHDRSettingsGameController()
 		{
 			CallibrationScreenTarget = new inkWidgetReference();
-			PaperWhiteOptionSelector = new inkCompoundWidgetReference();
-			MaxBrightnessOptionSelector = new inkCompoundWidgetReference();
-			ToneMappingOptionSelector = new inkCompoundWidgetReference();
-			SaturationOptionSelector = new inkCompoundWidgetReference();
+			SettingsOptionsList = new inkCompoundWidgetReference();
 			TargetImageWidget = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			DefaultButton = new inkWidgetReference();
 			SettingsElements = new();
+			C_minMonitorBrightness = "MinMonitorBrightness";
+			C_maxMonitorBrightness = "MaxMonitorBrightness";
+			C_paperWhiteLevel = "PaperWhiteLevel";
 
 			PostConstruct();
 		}

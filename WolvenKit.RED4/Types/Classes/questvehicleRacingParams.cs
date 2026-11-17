@@ -66,6 +66,7 @@ namespace WolvenKit.RED4.Types
 			SecureTimeOut = 60.000000F;
 			PreciseLevel = 1.000000F;
 			Closest = true;
+			RubberBandingParam = new questParamRubberbanding { TargetRef = new questUniversalRef { RefLocalPlayer = false } };
 
 			PostConstruct();
 		}

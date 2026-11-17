@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class entPhysicalSkinnedMeshComponent : entSkinnedMeshComponent
 	{
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("useResourceSimulationType")] 
 		public CBool UseResourceSimulationType
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -47,6 +47,7 @@ namespace WolvenKit.RED4.Types
 		public entPhysicalSkinnedMeshComponent()
 		{
 			SimulationType = Enums.physicsSimulationType.Kinematic;
+			FilterData = new physicsFilterData();
 
 			PostConstruct();
 		}

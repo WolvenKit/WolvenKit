@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldPerformanceAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("qualitySettingsArray")] 
 		public CArray<worldQualitySetting> QualitySettingsArray
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldQualitySetting>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("disableCrowdUniqueName")] 
 		public CName DisableCrowdUniqueName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("globalStreamingDistanceScale")] 
 		public CFloat GlobalStreamingDistanceScale
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("globalEntityLODDistanceScale")] 
 		public CFloat GlobalEntityLODDistanceScale
 		{
@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldPerformanceAreaNode()
 		{
+			Color = new CColor { Blue = 255, Alpha = 128 };
 			QualitySettingsArray = new();
 			GlobalStreamingDistanceScale = 1.000000F;
 			GlobalEntityLODDistanceScale = 1.000000F;

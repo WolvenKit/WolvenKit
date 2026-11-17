@@ -71,12 +71,12 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemColorGrade()
 		{
 			TimeDuration = 1.000000F;
-			Contrast = new effectEffectParameterEvaluatorFloat();
-			Saturate = new effectEffectParameterEvaluatorFloat();
-			Brightness = new effectEffectParameterEvaluatorFloat();
+			Contrast = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			Saturate = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
+			Brightness = new effectEffectParameterEvaluatorFloat { Evaluator = new CEvaluatorFloatConst { Value = 0.000000F } };
 			LutWeight = new effectEffectParameterEvaluatorFloat();
-			LutParams = new ColorGradingLutParams { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
-			LutParamsHdr = new ColorGradingLutParams { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
+			LutParams = new ColorGradingLutParams();
+			LutParamsHdr = new ColorGradingLutParams();
 			BlendWithBaseLut = true;
 			Mask = new();
 

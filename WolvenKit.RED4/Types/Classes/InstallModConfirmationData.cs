@@ -48,8 +48,8 @@ namespace WolvenKit.RED4.Types
 		{
 			ItemId = new gameItemID();
 			PartId = new gameItemID();
-			TelemetryItemData = new gameTelemetryInventoryItem { ItemID = new gameItemID(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
-			TelemetryPartData = new gameTelemetryInventoryItem { ItemID = new gameItemID(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			TelemetryItemData = new gameTelemetryInventoryItem();
+			TelemetryPartData = new gameTelemetryInventoryItem();
 
 			PostConstruct();
 		}

@@ -30,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkCompoundWidget()
 		{
+			Children = new inkMultiChildren();
 			ChildMargin = new inkMargin();
 
 			PostConstruct();

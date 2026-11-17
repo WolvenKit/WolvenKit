@@ -32,6 +32,7 @@ namespace WolvenKit.RED4.Types
 		{
 			CollisionFilters = new();
 			Offset = new Vector3();
+			Target = new AIArgumentMapping { Type = Enums.AIArgumentType.Object, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "whandle:gameObject" };
 
 			PostConstruct();
 		}

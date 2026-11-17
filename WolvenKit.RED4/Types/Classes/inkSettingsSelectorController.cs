@@ -109,6 +109,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("interactionBlocked")] 
+		public CBool InteractionBlocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("hoverInAnim")] 
 		public CHandle<inkanimProxy> HoverInAnim
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("hoverOutAnim")] 
 		public CHandle<inkanimProxy> HoverOutAnim
 		{

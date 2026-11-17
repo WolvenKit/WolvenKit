@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnsimActionsScenariosNodeScenarios()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			Scenarios = new();
 
 			PostConstruct();

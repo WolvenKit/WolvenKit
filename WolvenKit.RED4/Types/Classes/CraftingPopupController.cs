@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Types
 			HeaderText = new inkTextWidgetReference();
 			CloseButton = new inkWidgetReference();
 			ButtonHintsRoot = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			LibraryPath = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

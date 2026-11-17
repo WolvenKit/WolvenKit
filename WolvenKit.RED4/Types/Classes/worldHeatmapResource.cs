@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldHeatmapResource()
 		{
-			Setup = new worldHeatmapSetup { VolumeBox = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } } };
+			Setup = new worldHeatmapSetup();
 			LayerNames = new();
 			Layers = new();
 

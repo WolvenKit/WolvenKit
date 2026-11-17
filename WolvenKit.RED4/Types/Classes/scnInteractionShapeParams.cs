@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Preset = Enums.scnChoiceNodeNsSizePreset.normal;
 			Offset = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			ActivationBaseLength = 1.000000F;
 			ActivationHeight = 3.000000F;
 

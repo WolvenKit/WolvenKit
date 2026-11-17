@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questRumble_NodeType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 
 			PostConstruct();
 		}

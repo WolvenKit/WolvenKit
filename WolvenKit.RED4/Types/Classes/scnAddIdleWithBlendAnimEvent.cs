@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnAddIdleWithBlendAnimEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			PerformerId = new scnPerformerId { Id = 4294967040 };
+			Id = new scnSceneEventId();
+			PerformerId = new scnPerformerId();
 			ActorComponent = "body";
 			TargetWeight = 1.000000F;
 

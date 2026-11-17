@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public cameraShotEffect_Translation()
 		{
-			TargetTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
-			AffectedAxisPosition = new cameraShotEffect_TranslationAffectedAxis { X = true, Y = true, Z = true };
-			StartTransformShotSpace = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			TargetTransform = new Transform();
+			AffectedAxisPosition = new cameraShotEffect_TranslationAffectedAxis();
+			StartTransformShotSpace = new Transform();
 
 			PostConstruct();
 		}

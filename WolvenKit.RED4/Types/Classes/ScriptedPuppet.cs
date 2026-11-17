@@ -527,7 +527,7 @@ namespace WolvenKit.RED4.Types
 		public ScriptedPuppet()
 		{
 			TargetingComponentsArray = new();
-			LinkedStatusEffect = new LinkedStatusEffect { NetrunnerIDs = new(), TargetID = new entEntityID(), StatusEffectList = new() };
+			LinkedStatusEffect = new LinkedStatusEffect();
 			CustomAIComponents = new();
 			Listeners = new();
 			ShouldSpawnBloodPuddle = true;

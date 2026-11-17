@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EMeshParticleOrientationMode>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("useBatchedRender")] 
+		public CBool UseBatchedRender
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CParticleDrawerMesh()
 		{
 			Meshes = new();

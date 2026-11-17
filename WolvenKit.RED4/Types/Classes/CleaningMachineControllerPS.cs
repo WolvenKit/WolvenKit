@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 		public CleaningMachineControllerPS()
 		{
 			DeviceName = "LocKey#2033";
-			TweakDBRecord = 99989064598;
-			TweakDBDescriptionRecord = 151161254181;
+			TweakDBRecord = "Devices.CleaningMachine";
+			TweakDBDescriptionRecord = "device_descriptions.CleaningMachine";
 
 			PostConstruct();
 		}

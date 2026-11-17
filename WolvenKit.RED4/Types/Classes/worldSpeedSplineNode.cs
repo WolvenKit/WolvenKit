@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldSpeedSplineNode : worldSplineNode
 	{
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("speedChangeSections")] 
 		public CArray<worldSpeedSplineNodeSpeedChangeSection> SpeedChangeSections
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldSpeedSplineNodeSpeedChangeSection>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("useDeprecated")] 
 		public CBool UseDeprecated
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("deprecatedSpeedRestrictions")] 
 		public CArray<worldSpeedSplineNodeSpeedRestriction> DeprecatedSpeedRestrictions
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldSpeedSplineNodeSpeedRestriction>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("deprecatedDefaultSpeed")] 
 		public CFloat DeprecatedDefaultSpeed
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("deprecatedDefaultAdjustTime")] 
 		public CFloat DeprecatedDefaultAdjustTime
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("orientationChangeSections")] 
 		public CArray<worldSpeedSplineNodeOrientationChangeSection> OrientationChangeSections
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldSpeedSplineNodeOrientationChangeSection>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("roadAdjustmentFactorChangeSections")] 
 		public CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection> RoadAdjustmentFactorChangeSections
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("ignoreTerrain")] 
 		public CBool IgnoreTerrain
 		{

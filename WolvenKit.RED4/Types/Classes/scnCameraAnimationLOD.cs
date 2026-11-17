@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnCameraAnimationLOD()
 		{
-			Trajectory = new(0);
-			Tracks = new(0);
+			Trajectory = new(3);
+			Tracks = new(3);
 
 			PostConstruct();
 		}

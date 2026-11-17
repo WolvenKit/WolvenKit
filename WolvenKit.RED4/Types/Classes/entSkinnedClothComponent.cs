@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class entSkinnedClothComponent : entISkinTargetComponent
 	{
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("graphicsMesh")] 
 		public CResourceAsyncReference<CMesh> GraphicsMesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("physicalMesh")] 
 		public CResourceAsyncReference<CMesh> PhysicalMesh
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<entMeshComponentLODMode>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("compiledTopologyData")] 
 		public meshCookedClothMeshTopologyData CompiledTopologyData
 		{
@@ -63,13 +63,14 @@ namespace WolvenKit.RED4.Types
 		public entSkinnedClothComponent()
 		{
 			Name = "Component";
-			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			LocalTransform = new WorldTransform();
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
+			BoundingBoxLocalBoundsOverride = -1.000000F;
 			IsEnabled = true;
 			MeshAppearance = "default";
-			ChunkMask = long.MaxValue;
-			CompiledTopologyData = new meshCookedClothMeshTopologyData { GfxIndexToTriangles = new(), PhxIndexToTriangles = new(), GfxBarycentrics = new(), PhxBarycentrics = new(), PhxLodSwitchData = new(), PhxSimulated = new() };
+			ChunkMask = ulong.MaxValue;
+			CompiledTopologyData = new meshCookedClothMeshTopologyData();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkAnimAdjuster : animAnimNode_SkAnim
 	{
-		[Ordinal(30)] 
+		[Ordinal(18)] 
 		[RED("targetPositionWs")] 
 		public animVectorLink TargetPositionWs
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(19)] 
 		[RED("targetDirectionWs")] 
 		public animVectorLink TargetDirectionWs
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animVectorLink>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(20)] 
 		[RED("initialForwardVector")] 
 		public Vector4 InitialForwardVector
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(21)] 
 		[RED("startAdjustmentEventName")] 
 		public CName StartAdjustmentEventName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(22)] 
 		[RED("endAdjustmentEventName")] 
 		public CName EndAdjustmentEventName
 		{

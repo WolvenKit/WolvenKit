@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamestateMachineStateMachineInstanceData>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("stateMachineInitData")] 
+		public CWeakHandle<EquipmentInitData> StateMachineInitData
+		{
+			get => GetPropertyValue<CWeakHandle<EquipmentInitData>>();
+			set => SetPropertyValue<CWeakHandle<EquipmentInitData>>(value);
+		}
+
 		public EquipCycleEvents()
 		{
 			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();

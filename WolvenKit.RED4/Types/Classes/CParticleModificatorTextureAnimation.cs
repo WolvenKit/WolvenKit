@@ -33,6 +33,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Texture animation";
 			EditorGroup = "Material";
 			IsEnabled = true;
+			InitialFrame = new CEvaluatorFloatConst { Value = 0.000000F };
+			AnimationSpeed = new CEvaluatorFloatConst { Value = 30.000000F };
 
 			PostConstruct();
 		}

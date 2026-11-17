@@ -149,7 +149,17 @@ namespace WolvenKit.Modkit.RED4
                 return ReadPath<Multilayer_Mask>();
             }
 
+            if (materialParameterType == typeof(CMaterialParameterMultilayerMaskOverride))
+            {
+                return ReadPath<Multilayer_Mask>();
+            }
+
             if (materialParameterType == typeof(CMaterialParameterMultilayerSetup))
+            {
+                return ReadPath<Multilayer_Setup>();
+            }
+
+            if (materialParameterType == typeof(CMaterialParameterMultilayerSetupOverride))
             {
                 return ReadPath<Multilayer_Setup>();
             }
@@ -283,7 +293,9 @@ namespace WolvenKit.Modkit.RED4
                 CMaterialParameterGradient gra => GetSerializableValue(gra.Gradient),
                 CMaterialParameterHairParameters hai => GetSerializableValue(hai.HairProfile),
                 CMaterialParameterMultilayerMask mulm => GetSerializableValue(mulm.Mask),
+                CMaterialParameterMultilayerMaskOverride mulmo => GetSerializableValue(mulmo.Mask),
                 CMaterialParameterMultilayerSetup muls => GetSerializableValue(muls.Setup),
+                CMaterialParameterMultilayerSetupOverride mulso => GetSerializableValue(mulso.Setup),
                 CMaterialParameterScalar sca => GetSerializableValue(sca.Scalar),
                 CMaterialParameterSkinParameters ski => GetSerializableValue(ski.SkinProfile),
                 CMaterialParameterStructBuffer str => null,
@@ -305,7 +317,9 @@ namespace WolvenKit.Modkit.RED4
                 CMaterialParameterGradient gra => gra.Gradient,
                 CMaterialParameterHairParameters hai => hai.HairProfile,
                 CMaterialParameterMultilayerMask mulm => mulm.Mask,
+                CMaterialParameterMultilayerMaskOverride mulmo => mulmo.Mask,
                 CMaterialParameterMultilayerSetup muls => muls.Setup,
+                CMaterialParameterMultilayerSetupOverride mulso => mulso.Setup,
                 CMaterialParameterScalar sca => sca.Scalar,
                 CMaterialParameterSkinParameters ski => ski.SkinProfile,
                 CMaterialParameterStructBuffer str => null,

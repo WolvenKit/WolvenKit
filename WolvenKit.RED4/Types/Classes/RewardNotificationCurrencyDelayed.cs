@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RewardNotificationCurrencyDelayed()
 		{
-			NotificationData = new gameuiGenericNotificationData { WidgetLibraryResource = new redResourceReferenceScriptToken() };
+			NotificationData = new gameuiGenericNotificationData();
 
 			PostConstruct();
 		}

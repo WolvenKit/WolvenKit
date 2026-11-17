@@ -917,6 +917,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(119)] 
+		[RED("tapCount")] 
+		public CInt32 TapCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(120)] 
+		[RED("dropQueue")] 
+		public CArray<gameItemModParams> DropQueue
+		{
+			get => GetPropertyValue<CArray<gameItemModParams>>();
+			set => SetPropertyValue<CArray<gameItemModParams>>(value);
+		}
+
+		[Ordinal(121)] 
 		[RED("parrentWrappedDataObject")] 
 		public CWeakHandle<WrappedInventoryItemData> ParrentWrappedDataObject
 		{
@@ -979,18 +995,19 @@ namespace WolvenKit.RED4.Types
 			PerkIcon = new inkImageWidgetReference();
 			PlayerFavouriteWidget = new inkWidgetReference();
 			ItemID = new gameItemID();
-			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			ItemData = new gameInventoryItemData();
 			EquipmentArea = Enums.gamedataEquipmentArea.Invalid;
 			ItemType = Enums.gamedataItemType.Invalid;
 			AttachmentsDisplay = new();
 			TransmogItem = new gameItemID();
 			DefaultFallbackImage = "undefined";
 			DefaultEmptyImage = "icon_add";
-			DefaultEmptyImageAtlas = "base\\gameplay\\gui\\fullscreen\\inventory\\inventory4_atlas.inkatlas";
+			DefaultEmptyImageAtlas = @"base\gameplay\gui\fullscreen\inventory\inventory4_atlas.inkatlas";
 			NewItemsIDs = new();
 			VisibleWhenLocked = true;
 			HasAvailableItems = true;
 			WardrobeOutfitIndex = -1;
+			DropQueue = new();
 
 			PostConstruct();
 		}

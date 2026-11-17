@@ -363,11 +363,11 @@ namespace WolvenKit.RED4.Types
 			DpadItemsList = new();
 			CommandsList = new();
 			SelectedIndicator = new inkWidgetReference();
-			Data = new QuickWheelStartUIStructure { WheelItems = new() };
+			Data = new QuickWheelStartUIStructure();
 			MasterListOfAllCyberware = new();
 			ListOfUnassignedCyberware = new();
 			NeutralChoiceDelayId = new gameDelayID();
-			PreviouslySelectedData = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, UiFavoriteIndex = -1, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			PreviouslySelectedData = new QuickSlotCommand();
 
 			PostConstruct();
 		}

@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioAmbientPaletteBrushDictionary()
 		{
 			Entries = new();
+			EntryType = new audioAmbientPaletteBrushDictionaryItem();
 
 			PostConstruct();
 		}

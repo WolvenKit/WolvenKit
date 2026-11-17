@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleControllerPS()
 		{
-			VehicleDoors = new(6);
+			VehicleDoors = new(6) { new vehicleVehicleSlotsState(), new vehicleVehicleSlotsState(), new vehicleVehicleSlotsState(), new vehicleVehicleSlotsState(), new vehicleVehicleSlotsState(), new vehicleVehicleSlotsState() };
 			State = Enums.vehicleEState.Default;
 			LightTypeMask = -1;
 

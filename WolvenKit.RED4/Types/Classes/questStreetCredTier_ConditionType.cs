@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questStreetCredTier_ConditionType()
 		{
+			EntityRef = new questUniversalRef();
+
 			PostConstruct();
 		}
 

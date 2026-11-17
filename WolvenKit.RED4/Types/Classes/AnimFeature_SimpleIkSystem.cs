@@ -73,8 +73,8 @@ namespace WolvenKit.RED4.Types
 			Weight = 1.000000F;
 			Position = new Vector4();
 			PositionOffset = new Vector4();
-			Rotation = new Quaternion { R = 1.000000F };
-			RotationOffset = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
+			RotationOffset = new Quaternion();
 
 			PostConstruct();
 		}

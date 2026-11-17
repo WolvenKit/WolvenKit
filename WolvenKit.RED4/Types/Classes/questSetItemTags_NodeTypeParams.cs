@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSetItemTags_NodeTypeParams()
 		{
+			ObjectRef = new questUniversalRef();
 			AddTags = true;
 			Tags = Enums.gameEItemDynamicTags.Quest;
 

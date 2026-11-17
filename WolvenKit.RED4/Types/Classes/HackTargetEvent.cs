@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			NetrunnerID = new entEntityID();
 			TargetID = new entEntityID();
-			Settings = new HackTargetSettings { ShowDirectionalIndicator = true, HUDData = new HUDProgressBarData { BottomText = "LocKey#22169", CompletedText = "LocKey#15455", FailedText = "LocKey#15353" } };
+			Settings = new HackTargetSettings();
 
 			PostConstruct();
 		}

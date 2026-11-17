@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public questVision_ConditionType()
 		{
-			ObserverPuppetRef = new gameEntityReference { Names = new() };
-			ObservedTargetRef = new gameEntityReference { Names = new() };
+			ObserverPuppetRef = new gameEntityReference();
+			ObservedTargetRef = new gameEntityReference();
 			IsObservedTargetPlayer = true;
 			IsInstant = true;
 

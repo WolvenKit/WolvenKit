@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.Types
 			Root = new inkWidgetReference();
 			Background = new inkWidgetReference();
 			ButtonHintsRoot = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			LibraryPath = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldDeviceNode : worldEntityNode
 	{
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("deviceClassName")] 
 		public CName DeviceClassName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("alphaHackStreamingDistanceOverride")] 
 		public CFloat AlphaHackStreamingDistanceOverride
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("deviceConnections")] 
 		public CArray<worldDeviceConnections> DeviceConnections
 		{

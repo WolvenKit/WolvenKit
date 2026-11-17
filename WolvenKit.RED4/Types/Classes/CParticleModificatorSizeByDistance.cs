@@ -57,6 +57,12 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Size by distance";
 			EditorGroup = "Size";
 			IsEnabled = true;
+			NearDistanceRangeStart = new CEvaluatorFloatConst { Value = 2.000000F };
+			NearDistanceRangeEnd = new CEvaluatorFloatConst { Value = 4.000000F };
+			NearDistanceSizeMultiplier = new CEvaluatorFloatConst { Value = 0.500000F };
+			FarDistanceRangeStart = new CEvaluatorFloatConst { Value = 6.000000F };
+			FarDistanceRangeEnd = new CEvaluatorFloatConst { Value = 8.000000F };
+			FarDistanceSizeMultiplier = new CEvaluatorFloatConst { Value = 2.000000F };
 
 			PostConstruct();
 		}

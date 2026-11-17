@@ -32,8 +32,9 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			EntityReference = new gameEntityReference { Names = new() };
+			EntityReference = new gameEntityReference();
 			Function = "AIClearRoleCommandParams";
+			Params = new AIClearRoleCommandParams();
 
 			PostConstruct();
 		}

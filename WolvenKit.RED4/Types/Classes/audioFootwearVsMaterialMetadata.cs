@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public audioFootwearVsMaterialMetadata()
 		{
+			LocomotionStates = new audioLocomotionStateEventDictionary { EntryType = new audioLocomotionStateEventDictionaryItem() };
+			CustomActionEvents = new audioLocomotionCustomActionEventDictionary { EntryType = new audioLocomotionCustomActionEventDictionaryItem() };
+
 			PostConstruct();
 		}
 

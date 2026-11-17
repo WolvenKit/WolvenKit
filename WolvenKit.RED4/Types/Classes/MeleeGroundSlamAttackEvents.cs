@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("leftHandWeapon")] 
+		public CString LeftHandWeapon
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("rightHandWeapon")] 
+		public CString RightHandWeapon
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		public MeleeGroundSlamAttackEvents()
 		{
 			PostConstruct();

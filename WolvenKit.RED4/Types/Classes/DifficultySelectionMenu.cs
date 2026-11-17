@@ -132,6 +132,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(22)] 
+		[RED("difficulty0Tapped")] 
+		public CBool Difficulty0Tapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("difficulty1Tapped")] 
+		public CBool Difficulty1Tapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("difficulty2Tapped")] 
+		public CBool Difficulty2Tapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("difficulty3Tapped")] 
+		public CBool Difficulty3Tapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public DifficultySelectionMenu()
 		{
 			DifficultyTitle = new inkTextWidgetReference();

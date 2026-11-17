@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public scnPlacementEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			ActorId = new scnActorId { Id = uint.MaxValue };
-			TargetWaypoint = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
+			Id = new scnSceneEventId();
+			ActorId = new scnActorId();
+			TargetWaypoint = new scnMarker();
 
 			PostConstruct();
 		}

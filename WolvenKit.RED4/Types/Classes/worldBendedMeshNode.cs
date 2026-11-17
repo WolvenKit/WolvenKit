@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldBendedMeshNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("deformationData")] 
 		public CArray<CMatrix> DeformationData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CMatrix>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("deformedBox")] 
 		public Box DeformedBox
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("isBendedRoad")] 
 		public CBool IsBendedRoad
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("castShadows")] 
 		public CEnum<shadowsShadowCastingMode> CastShadows
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("castLocalShadows")] 
 		public CEnum<shadowsShadowCastingMode> CastLocalShadows
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("removeFromRainMap")] 
 		public CBool RemoveFromRainMap
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("version")] 
 		public CUInt8 Version
 		{
@@ -88,8 +88,8 @@ namespace WolvenKit.RED4.Types
 		{
 			MeshAppearance = "default";
 			DeformationData = new();
-			DeformedBox = new Box { Min = new Vector4(), Max = new Vector4() };
-			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			DeformedBox = new Box();
+			NavigationSetting = new NavGenNavigationSetting();
 
 			PostConstruct();
 		}

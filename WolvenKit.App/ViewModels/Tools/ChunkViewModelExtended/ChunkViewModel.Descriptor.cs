@@ -190,8 +190,8 @@ public partial class ChunkViewModel
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
-            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
-                Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
+            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && (int)(ulong)sst.NodeIdx < wss.Nodes.Count:
+                Descriptor = $"[{(int)(ulong)sst.NodeIdx}] {StringHelper.Stringify(wss.Nodes[(int)(ulong)sst.NodeIdx].Chunk)}";
                 return;
             case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != string.Empty:
                 Descriptor = s;

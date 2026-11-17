@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CarHotkeyController : GenericHotkeyController
 	{
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("carIconSlot")] 
 		public inkImageWidgetReference CarIconSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("psmBB")] 
 		public CWeakHandle<gameIBlackboard> PsmBB
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("qsdBB")] 
 		public CWeakHandle<gameIBlackboard> QsdBB
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("bbListener")] 
 		public CHandle<redCallbackObject> BbListener
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("radialListener")] 
 		public CHandle<redCallbackObject> RadialListener
 		{

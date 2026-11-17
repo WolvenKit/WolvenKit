@@ -1045,7 +1045,7 @@ namespace WolvenKit.RED4.Types
 			StaggerDamageDurationMelee = 1.500000F;
 			KnockdownDamageDuration = 2.500000F;
 			PreviousAnimHitReactionArray = new();
-			HitShapeData = new gameShapeData { Result = new gameHitResult { HitPositionEnter = new Vector4 { W = 1.000000F }, HitPositionExit = new Vector4 { W = 1.000000F } } };
+			HitShapeData = new gameShapeData();
 			DismembermentBodyPartDamageThreshold = new();
 			WoundedBodyPartDamageThreshold = new();
 			DefeatedBodyPartDamageThreshold = new();

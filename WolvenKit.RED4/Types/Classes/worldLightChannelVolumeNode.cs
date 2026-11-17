@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldLightChannelVolumeNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("channels")] 
 		public CBitField<rendLightChannel> Channels
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("streamingDistanceFactor")] 
 		public CFloat StreamingDistanceFactor
 		{
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldLightChannelVolumeNode()
 		{
+			Color = new CColor { Red = 133, Green = 191, Blue = 255, Alpha = 64 };
 			Channels = Enums.rendLightChannel.LC_Channel1;
 			StreamingDistanceFactor = 5.000000F;
 

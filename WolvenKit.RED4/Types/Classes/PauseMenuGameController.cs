@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PauseMenuGameController : gameuiMenuItemListGameController
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("baseLogoContainer")] 
 		public inkCompoundWidgetReference BaseLogoContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("ep1LogoContainer")] 
 		public inkCompoundWidgetReference Ep1LogoContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("expansionNotyficationRef")] 
 		public inkWidgetReference ExpansionNotyficationRef
 		{
@@ -36,7 +36,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
+		[RED("emporiumFeaturesBtn")] 
+		public inkCompoundWidgetReference EmporiumFeaturesBtn
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("gogButtonWidgetRef")] 
+		public inkWidgetReference GogButtonWidgetRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("gogContainerRef")] 
+		public inkCompoundWidgetReference GogContainerRef
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("gogUserDisplayContainerRef")] 
+		public inkWidgetReference GogUserDisplayContainerRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("requestHandler")] 
+		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
+		{
+			get => GetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>();
+			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("onlineSystem")] 
+		public CWeakHandle<gameIOnlineSystem> OnlineSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameIOnlineSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameIOnlineSystem>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -44,7 +92,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(18)] 
+		[RED("gogContainerController")] 
+		public CWeakHandle<GogContainerController> GogContainerController
+		{
+			get => GetPropertyValue<CWeakHandle<GogContainerController>>();
+			set => SetPropertyValue<CWeakHandle<GogContainerController>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("gogUserDisplayController")] 
+		public CWeakHandle<GogUserDisplayController> GogUserDisplayController
+		{
+			get => GetPropertyValue<CWeakHandle<GogUserDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<GogUserDisplayController>>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -52,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(21)] 
 		[RED("savesCount")] 
 		public CInt32 SavesCount
 		{
@@ -60,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(22)] 
 		[RED("quickSaveInProgress")] 
 		public CBool QuickSaveInProgress
 		{
@@ -68,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(23)] 
 		[RED("setCursorOnInit")] 
 		public CBool SetCursorOnInit
 		{
@@ -76,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(24)] 
 		[RED("axisInputReceived")] 
 		public CBool AxisInputReceived
 		{
@@ -84,12 +148,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(25)] 
 		[RED("dpadInputReceived")] 
 		public CBool DpadInputReceived
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("modChangedNotificationToken")] 
+		public CHandle<inkGameNotificationToken> ModChangedNotificationToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		public PauseMenuGameController()
@@ -98,6 +170,10 @@ namespace WolvenKit.RED4.Types
 			Ep1LogoContainer = new inkCompoundWidgetReference();
 			ButtonHintsManagerRef = new inkWidgetReference();
 			ExpansionNotyficationRef = new inkWidgetReference();
+			EmporiumFeaturesBtn = new inkCompoundWidgetReference();
+			GogButtonWidgetRef = new inkWidgetReference();
+			GogContainerRef = new inkCompoundWidgetReference();
+			GogUserDisplayContainerRef = new inkWidgetReference();
 			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();

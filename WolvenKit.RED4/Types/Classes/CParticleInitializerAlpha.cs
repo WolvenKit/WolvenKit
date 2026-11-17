@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Initial alpha";
 			EditorGroup = "Material";
 			IsEnabled = true;
+			Alpha = new CEvaluatorFloatConst();
 
 			PostConstruct();
 		}

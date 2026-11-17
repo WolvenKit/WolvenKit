@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnQuestNode()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
+			NodeId = new scnNodeId();
 			OutputSockets = new();
 			IsockMappings = new();
 			OsockMappings = new();

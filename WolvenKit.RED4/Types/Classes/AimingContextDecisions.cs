@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("vehicleCombatCallbackID")] 
+		public CHandle<redCallbackObject> VehicleCombatCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("leftHandCharge")] 
 		public CBool LeftHandCharge
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("isAiming")] 
 		public CBool IsAiming
 		{
@@ -44,12 +52,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("meleeBlockActive")] 
 		public CBool MeleeBlockActive
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("isVehicleCombat")] 
+		public CBool IsVehicleCombat
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("StateGameScriptInterfaceHACK")] 
+		public CHandle<gamestateMachineGameScriptInterface> StateGameScriptInterfaceHACK
+		{
+			get => GetPropertyValue<CHandle<gamestateMachineGameScriptInterface>>();
+			set => SetPropertyValue<CHandle<gamestateMachineGameScriptInterface>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("context")] 
+		public CHandle<gamestateMachineStateContextScript> Context
+		{
+			get => GetPropertyValue<CHandle<gamestateMachineStateContextScript>>();
+			set => SetPropertyValue<CHandle<gamestateMachineStateContextScript>>(value);
 		}
 
 		public AimingContextDecisions()

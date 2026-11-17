@@ -85,6 +85,13 @@ public class LaunchProfile
     [Display(Name = "Game Commandline Arguments")]
     public string? GameArguments { get; set; }
 
+    /// <summary>
+    /// Install as REDMod
+    /// </summary>
+    [Category("Publish")]
+    [Display(Name = "Publish on mod.io")]
+    public bool PublishOnModIo { get; set; }
+
     [property: Browsable(false)] public int? Order { get; set; }
 
     internal LaunchProfile Copy() => (LaunchProfile)MemberwiseClone();

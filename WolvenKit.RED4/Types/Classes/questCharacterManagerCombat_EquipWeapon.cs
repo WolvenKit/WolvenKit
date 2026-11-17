@@ -62,10 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerCombat_EquipWeapon()
 		{
-			Equip = true;
-			WeaponID = 71614763877;
-			SlotID = "AttachmentSlots.WeaponRight";
-
 			PostConstruct();
 		}
 

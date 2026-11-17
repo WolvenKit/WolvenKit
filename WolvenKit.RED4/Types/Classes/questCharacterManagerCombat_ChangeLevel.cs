@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerCombat_ChangeLevel()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
-			Level = new questInt32ValueWrapper();
-
 			PostConstruct();
 		}
 

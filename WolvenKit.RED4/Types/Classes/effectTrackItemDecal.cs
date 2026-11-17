@@ -159,6 +159,7 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemDecal()
 		{
 			TimeDuration = 1.000000F;
+			Scale = new CEvaluatorVectorConst { Value = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 			AtlasFrameStart = -1;
 			AtlasFrameEnd = -1;
 			OrderPriority = Enums.RenderDecalOrderPriority.Priority3;

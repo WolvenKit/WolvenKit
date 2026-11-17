@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeNsAttachToActorParams()
 		{
-			ActorId = new scnActorId { Id = uint.MaxValue };
+			ActorId = new scnActorId();
 
 			PostConstruct();
 		}

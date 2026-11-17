@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public animImportFacialSetupCombinedDesc()
 		{
-			Face = new animImportFacialSetupDesc { InitialPose = new(), InitialControls = new animImportFacialInitialControlsDesc { TransformIds = new(), TransformNames = new(), TransformRegions = new() }, MainPoses = new(), MainPosesInfo = new(), JawAreaTrackIndices = new(), LipsAreaTrackIndices = new(), EyesAreaTrackIndices = new(), CorrectivePoses = new(), GlobalPoseLimits = new(), WrinkleMapping = new() };
-			Eyes = new animImportFacialSetupDesc { InitialPose = new(), InitialControls = new animImportFacialInitialControlsDesc { TransformIds = new(), TransformNames = new(), TransformRegions = new() }, MainPoses = new(), MainPosesInfo = new(), JawAreaTrackIndices = new(), LipsAreaTrackIndices = new(), EyesAreaTrackIndices = new(), CorrectivePoses = new(), GlobalPoseLimits = new(), WrinkleMapping = new() };
-			Tongue = new animImportFacialSetupDesc { InitialPose = new(), InitialControls = new animImportFacialInitialControlsDesc { TransformIds = new(), TransformNames = new(), TransformRegions = new() }, MainPoses = new(), MainPosesInfo = new(), JawAreaTrackIndices = new(), LipsAreaTrackIndices = new(), EyesAreaTrackIndices = new(), CorrectivePoses = new(), GlobalPoseLimits = new(), WrinkleMapping = new() };
+			Face = new animImportFacialSetupDesc();
+			Eyes = new animImportFacialSetupDesc();
+			Tongue = new animImportFacialSetupDesc();
 			UsedTransformIndices = new();
 			LipsyncOverrideToMainPosesTracksMapping = new();
 			FirstLipsyncOverrideTrackIndex = -1;

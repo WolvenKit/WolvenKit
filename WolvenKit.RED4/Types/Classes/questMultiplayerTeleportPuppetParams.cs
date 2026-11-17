@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public questMultiplayerTeleportPuppetParams()
 		{
-			DestinationRef = new gameEntityReference { Names = new() };
+			DestinationRef = new gameEntityReference();
 			DestinationOffset = new Vector3();
-			AreaNodeTriggerRef = new gameEntityReference { Names = new() };
+			AreaNodeTriggerRef = new gameEntityReference();
 
 			PostConstruct();
 		}

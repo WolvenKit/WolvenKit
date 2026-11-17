@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_SkDurationAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(30)] 
+		[Ordinal(18)] 
 		[RED("Duration")] 
 		public animFloatLink Duration
 		{

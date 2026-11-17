@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipWidgetStyledReference()
 		{
-			WidgetLibraryReference = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			WidgetLibraryReference = new inkWidgetLibraryReference();
 			MenuTooltipStylePath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltip_menu.inkstyle") };
 			HudTooltipStylePath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltip_hud.inkstyle") };
 

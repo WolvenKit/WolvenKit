@@ -12,8 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<DefaultTransition>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("ownerID")] 
+		public entEntityID OwnerID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
 		public DefaultTransitionStatListener()
 		{
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

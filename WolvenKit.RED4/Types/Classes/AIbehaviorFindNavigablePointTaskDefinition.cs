@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorFindNavigablePointTaskDefinition()
 		{
+			Destination = new AIArgumentMapping { Type = Enums.AIArgumentType.NodeRef, DefaultValue = new CVariant(), CustomTypeName = "NodeRef" };
+			OutAdjustedDestination = new AIArgumentMapping { Type = Enums.AIArgumentType.Vector, DefaultValue = new CVariant(), CustomTypeName = "Vector3" };
+			OutWasAdjusted = new AIArgumentMapping { DefaultValue = new CVariant(), CustomTypeName = "Bool" };
+
 			PostConstruct();
 		}
 

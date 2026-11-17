@@ -92,11 +92,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
+		[Ordinal(18)] 
+		[RED("gyroTutorialProgress")] 
+		public CInt32 GyroTutorialProgress
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("hasGyroTutorialCounter")] 
+		public CBool HasGyroTutorialCounter
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("gyroTutorialProgressMax")] 
+		public CInt32 GyroTutorialProgressMax
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("gyroCounterStr")] 
+		public CString GyroCounterStr
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("gyroCounterParamStr")] 
+		public CString GyroCounterParamStr
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		public TutorialPopupData()
 		{
 			Margin = new inkMargin();
 			MessageOverrideDataList = new();
 			Video = new redResourceReferenceScriptToken();
+			GyroTutorialProgressMax = 3;
+			GyroCounterStr = "{gyro_tutorial_progress0}";
+			GyroCounterParamStr = "gyro_tutorial_progress0";
 
 			PostConstruct();
 		}

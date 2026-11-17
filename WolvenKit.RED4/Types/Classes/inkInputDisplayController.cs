@@ -91,8 +91,8 @@ namespace WolvenKit.RED4.Types
 			NameRef = new inkWidgetReference();
 			CanvasRef = new inkWidgetReference();
 			HoldIndicatorContainerRef = new inkCompoundWidgetReference();
-			GamepadHoldIndicatorLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-			KeyboardHoldIndicatorLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			GamepadHoldIndicatorLibraryRef = new inkWidgetLibraryReference();
+			KeyboardHoldIndicatorLibraryRef = new inkWidgetLibraryReference();
 			HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press;
 
 			PostConstruct();

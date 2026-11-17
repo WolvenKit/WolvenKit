@@ -71,14 +71,14 @@ namespace WolvenKit.RED4.Types
 		public gameAINetStateComponentReplicatedState()
 		{
 			Enabled = true;
-			ReplHighLevelState = new gameNetAIState { Time = -1.000000F };
-			ReplUpperBodyState = new gameNetAIState { Time = -1.000000F };
-			ReplStanceState = new gameNetAIState { Time = -1.000000F };
-			ReplHitReactionModeState = new gameNetAIState { Time = -1.000000F };
-			ReplBehaviorState = new gameNetAIState { Time = -1.000000F };
-			ReplPhaseState = new gameNetAIState { Time = -1.000000F };
-			ReplDefenseMode = new gameNetAIState { Time = -1.000000F };
-			ReplLocomotionMode = new gameNetAIState { Time = -1.000000F };
+			ReplHighLevelState = new gameNetAIState();
+			ReplUpperBodyState = new gameNetAIState();
+			ReplStanceState = new gameNetAIState();
+			ReplHitReactionModeState = new gameNetAIState();
+			ReplBehaviorState = new gameNetAIState();
+			ReplPhaseState = new gameNetAIState();
+			ReplDefenseMode = new gameNetAIState();
+			ReplLocomotionMode = new gameNetAIState();
 
 			PostConstruct();
 		}

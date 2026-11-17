@@ -250,7 +250,7 @@ namespace WolvenKit.RED4.Types
 			SelectionSizeProviderRef = new inkWidgetReference();
 			SelectionRoot = new inkWidgetReference();
 			MoveAnimTime = 0.090000F;
-			Data = new gameinteractionsvisListChoiceHubData { Id = -1, Choices = new() };
+			Data = new gameinteractionsvisListChoiceHubData();
 			ItemControllers = new();
 			InActiveTransparency = 0.100000F;
 			DialogHubData = new DialogHubData();

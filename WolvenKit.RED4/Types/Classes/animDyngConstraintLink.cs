@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animDyngConstraintLink : animIDyngConstraint
 	{
-		[Ordinal(1)] 
+		[Ordinal(0)] 
 		[RED("bone1")] 
 		public animTransformIndex Bone1
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("bone2")] 
 		public animTransformIndex Bone2
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("linkType")] 
 		public CEnum<animDyngConstraintLinkType> LinkType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animDyngConstraintLinkType>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("lengthLowerBoundRatioPercentage")] 
 		public CFloat LengthLowerBoundRatioPercentage
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("lengthUpperBoundRatioPercentage")] 
 		public CFloat LengthUpperBoundRatioPercentage
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("lookAtAxis")] 
 		public Vector3 LookAtAxis
 		{

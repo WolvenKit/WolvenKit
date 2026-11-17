@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldPhysicalTriggerAreaNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("shape")] 
 		public physicsTriggerShape Shape
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<physicsTriggerShape>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -31,7 +31,8 @@ namespace WolvenKit.RED4.Types
 		public worldPhysicalTriggerAreaNode()
 		{
 			SimulationType = Enums.physicsSimulationType.Dynamic;
-			Shape = new physicsTriggerShape { ShapeSize = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } } };
+			Shape = new physicsTriggerShape();
+			FilterData = new physicsFilterData();
 
 			PostConstruct();
 		}

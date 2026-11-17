@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_TranslationLimit : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("constrainedTransform")] 
 		public animTransformIndex ConstrainedTransform
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("parentTransform")] 
 		public animTransformIndex ParentTransform
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("limitOnXAxis")] 
 		public animFloatClamp LimitOnXAxis
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatClamp>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(5)] 
 		[RED("limitOnYAxis")] 
 		public animFloatClamp LimitOnYAxis
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<animFloatClamp>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(6)] 
 		[RED("limitOnZAxis")] 
 		public animFloatClamp LimitOnZAxis
 		{
@@ -50,9 +50,9 @@ namespace WolvenKit.RED4.Types
 			InputLink = new animPoseLink();
 			ConstrainedTransform = new animTransformIndex();
 			ParentTransform = new animTransformIndex();
-			LimitOnXAxis = new animFloatClamp { Min = -1.000000F, Max = 1.000000F };
-			LimitOnYAxis = new animFloatClamp { Min = -1.000000F, Max = 1.000000F };
-			LimitOnZAxis = new animFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnXAxis = new animFloatClamp();
+			LimitOnYAxis = new animFloatClamp();
+			LimitOnZAxis = new animFloatClamp();
 
 			PostConstruct();
 		}

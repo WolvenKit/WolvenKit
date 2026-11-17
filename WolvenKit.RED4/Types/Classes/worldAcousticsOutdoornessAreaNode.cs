@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAcousticsOutdoornessAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("outdoor")] 
 		public CFloat Outdoor
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldAcousticsOutdoornessAreaNode()
 		{
+			Color = new CColor { Red = 139, Green = 69, Blue = 19, Alpha = 128 };
+
 			PostConstruct();
 		}
 

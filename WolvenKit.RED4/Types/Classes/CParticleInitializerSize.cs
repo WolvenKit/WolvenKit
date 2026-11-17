@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Initial size";
 			EditorGroup = "Size";
 			IsEnabled = true;
+			Size = new CEvaluatorVectorConst { Value = new Vector4 { X = 0.100000F, Y = 0.100000F, Z = 0.100000F, W = 1.000000F } };
 			Scale = 1.000000F;
 
 			PostConstruct();

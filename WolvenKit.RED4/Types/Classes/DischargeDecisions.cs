@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public DischargeDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

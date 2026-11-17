@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
+			Params = new questMultiplayerAIDirectorParams();
 
 			PostConstruct();
 		}

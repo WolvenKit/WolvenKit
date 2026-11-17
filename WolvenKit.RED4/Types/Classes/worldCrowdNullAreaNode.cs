@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldCrowdNullAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("IsForBlockade")] 
 		public CBool IsForBlockade
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("permanentlyEnabledByDefault")] 
 		public CBool PermanentlyEnabledByDefault
 		{
@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldCrowdNullAreaNode()
 		{
+			Color = new CColor { Red = 32, Green = 32, Blue = 32, Alpha = 128 };
+
 			PostConstruct();
 		}
 

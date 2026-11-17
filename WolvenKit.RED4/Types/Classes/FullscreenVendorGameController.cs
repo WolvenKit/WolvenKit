@@ -573,6 +573,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(74)] 
+		[RED("isComparisonSwapped")] 
+		public CBool IsComparisonSwapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(75)] 
 		[RED("lastRequestId")] 
 		public CInt32 LastRequestId
 		{
@@ -580,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("sellQueue")] 
 		public CArray<CHandle<VenodrRequestQueueEntry>> SellQueue
 		{
@@ -588,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<VenodrRequestQueueEntry>>>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("buyQueue")] 
 		public CArray<CHandle<VenodrRequestQueueEntry>> BuyQueue
 		{
@@ -596,7 +604,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<VenodrRequestQueueEntry>>>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("boughtQuestItems")] 
 		public CArray<CHandle<gameItemData>> BoughtQuestItems
 		{
@@ -604,7 +612,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameItemData>>>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("vendorSoldItems")] 
 		public CHandle<SoldItemsCache> VendorSoldItems
 		{
@@ -612,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SoldItemsCache>>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("vendorUIInventoryItems")] 
 		public CArray<CHandle<UIInventoryItem>> VendorUIInventoryItems
 		{
@@ -620,7 +628,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<UIInventoryItem>>>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("playerItemDisplayContext")] 
 		public CHandle<ItemDisplayContextData> PlayerItemDisplayContext
 		{
@@ -628,7 +636,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("vendorItemDisplayContext")] 
 		public CHandle<ItemDisplayContextData> VendorItemDisplayContext
 		{
@@ -636,7 +644,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(83)] 
 		[RED("transactionPending")] 
 		public CBool TransactionPending
 		{
@@ -644,7 +652,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(84)] 
 		[RED("screenDisplayContext")] 
 		public CEnum<ScreenDisplayContext> ScreenDisplayContext
 		{
@@ -652,7 +660,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ScreenDisplayContext>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(85)] 
 		[RED("globalSellInputPending")] 
 		public CBool GlobalSellInputPending
 		{
@@ -660,7 +668,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(86)] 
 		[RED("isPopupPending")] 
 		public CBool IsPopupPending
 		{
@@ -668,7 +676,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("cursorData")] 
 		public CHandle<MenuCursorUserData> CursorData
 		{
@@ -676,7 +684,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MenuCursorUserData>>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("pressedItemDisplay")] 
 		public CWeakHandle<InventoryItemDisplayController> PressedItemDisplay
 		{

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsAttachPropToNode()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			PropId = new scnPropId { Id = uint.MaxValue };
+			Id = new scnSceneEventId();
+			PropId = new scnPropId();
 			CustomOffsetPos = new Vector3();
-			CustomOffsetRot = new Quaternion { R = 1.000000F };
+			CustomOffsetRot = new Quaternion();
 
 			PostConstruct();
 		}

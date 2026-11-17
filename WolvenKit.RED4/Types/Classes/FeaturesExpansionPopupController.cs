@@ -171,7 +171,7 @@ namespace WolvenKit.RED4.Types
 			VideoCarouselRef = new inkWidgetReference();
 			VideoContainerRef = new inkWidgetReference();
 			VideoCarouselData = new();
-			HoverAnimationOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			HoverAnimationOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

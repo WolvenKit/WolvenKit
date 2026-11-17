@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public scnEventBlendWorkspotSetupParameters()
 		{
-			WorkspotId = new scnSceneWorkspotInstanceId { Id = uint.MaxValue };
-			SequenceEntryId = new workWorkEntryId { Id = uint.MaxValue };
+			WorkspotId = new scnSceneWorkspotInstanceId();
+			SequenceEntryId = new workWorkEntryId();
 			IdleOnlyMode = true;
 			WorkExcludedGestures = new();
-			ItemOverride = new workWorkspotItemOverride { PropOverrides = new(), ItemOverrides = new() };
+			ItemOverride = new workWorkspotItemOverride();
 
 			PostConstruct();
 		}

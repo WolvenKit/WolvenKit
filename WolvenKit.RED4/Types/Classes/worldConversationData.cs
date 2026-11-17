@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldConversationData()
 		{
-			InterruptionOperations = new() { null, null };
+			InterruptionOperations = new() { new scnToggleInterruption_InterruptionOperation(), new scnOverrideInterruptionScenario_InterruptionOperation { ScenarioId = new scnInterruptionScenarioId { Id = 0 }, ScenarioOperations = new() { new scnOverrideTalkOnReturn_InterruptionScenarioOperation { TalkOnReturn = false }, new scnOverrideInterruptConditions_InterruptionScenarioOperation { InterruptConditions = new() { new scnCheckAnyoneDistractedInterruptCondition() } }, new scnOverrideReturnConditions_InterruptionScenarioOperation { ReturnConditions = new() { new scnCheckDistractedReturnCondition() } } } } };
 
 			PostConstruct();
 		}

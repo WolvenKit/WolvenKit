@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PublicSafeEvents : WeaponEventsTransition
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("weaponUnequipRequestSent")] 
 		public CBool WeaponUnequipRequestSent
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public PublicSafeEvents()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt64>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("sceneEntries")] 
 		public CArray<animLipsyncMappingSceneEntry> SceneEntries
 		{

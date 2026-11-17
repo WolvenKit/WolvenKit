@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_TransformConstant : animAnimNode_TransformValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("pos")] 
 		public Vector4 Pos
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Quaternion>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("scale")] 
 		public Vector4 Scale
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = uint.MaxValue;
 			Pos = new Vector4 { W = 1.000000F };
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
 
 			PostConstruct();

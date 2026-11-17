@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			Puppet = new gameEntityReference { Names = new() };
+			Puppet = new gameEntityReference();
 
 			PostConstruct();
 		}

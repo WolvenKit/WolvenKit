@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_QuaternionConstant : animAnimNode_QuaternionValue
 	{
-		[Ordinal(11)] 
+		[Ordinal(1)] 
 		[RED("value")] 
 		public Quaternion Value
 		{
@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_QuaternionConstant()
 		{
 			Id = uint.MaxValue;
-			Value = new Quaternion { R = 1.000000F };
+			Value = new Quaternion();
 
 			PostConstruct();
 		}

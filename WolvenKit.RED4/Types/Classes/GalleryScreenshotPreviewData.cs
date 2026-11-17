@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class GalleryScreenshotPreviewData : inkGameNotificationData
+	public partial class GalleryScreenshotPreviewData : GalleryPreviewData
 	{
 		[Ordinal(7)] 
 		[RED("screenshotIndex")] 

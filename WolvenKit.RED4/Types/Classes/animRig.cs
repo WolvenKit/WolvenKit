@@ -152,7 +152,7 @@ namespace WolvenKit.RED4.Types
 			ReferencePoseMS = new();
 			APoseLS = new();
 			APoseMS = new();
-			Tags = new redTagList { Tags = new() };
+			Tags = new redTagList();
 			Parts = new();
 			Retargets = new();
 			IkSetups = new();

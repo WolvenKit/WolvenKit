@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questConditionItem()
 		{
+			SocketId = 142650156;
+
 			PostConstruct();
 		}
 

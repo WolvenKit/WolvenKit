@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#91723";
 			TweakDBRecord = "Devices.SniperNest";
-			TweakDBDescriptionRecord = 147741407213;
+			TweakDBDescriptionRecord = "device_descriptions.SecurityTurret";
 			CanBeInDeviceChain = true;
 			DisableQuickHacks = true;
 			LookAtPresetVert = "LookatPreset.TurretVertical";

@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public AIQuickHackAction()
 		{
 			ScaleUploadTime = true;
-			HUDData = new HUDProgressBarData { BottomText = "LocKey#22169", CompletedText = "LocKey#15455", FailedText = "LocKey#15353" };
+			HUDData = new HUDProgressBarData();
 
 			PostConstruct();
 		}

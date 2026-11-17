@@ -5,14 +5,22 @@ namespace WolvenKit.RED4.Types
 	public partial class UI_ActiveWeaponDataDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
-		[RED("WeaponRecordID")] 
-		public gamebbScriptID_Variant WeaponRecordID
+		[RED("RightWeaponRecordID")] 
+		public gamebbScriptID_Variant RightWeaponRecordID
 		{
 			get => GetPropertyValue<gamebbScriptID_Variant>();
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(1)] 
+		[RED("LeftWeaponRecordID")] 
+		public gamebbScriptID_Variant LeftWeaponRecordID
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("BulletSpread")] 
 		public gamebbScriptID_Vector2 BulletSpread
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Vector2>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("SmartGunParams")] 
 		public gamebbScriptID_Variant SmartGunParams
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("TargetHitEvent")] 
 		public gamebbScriptID_Variant TargetHitEvent
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("ShootEvent")] 
 		public gamebbScriptID_Variant ShootEvent
 		{
@@ -46,7 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ActiveWeaponDataDef()
 		{
-			WeaponRecordID = new gamebbScriptID_Variant();
+			RightWeaponRecordID = new gamebbScriptID_Variant();
+			LeftWeaponRecordID = new gamebbScriptID_Variant();
 			BulletSpread = new gamebbScriptID_Vector2();
 			SmartGunParams = new gamebbScriptID_Variant();
 			TargetHitEvent = new gamebbScriptID_Variant();

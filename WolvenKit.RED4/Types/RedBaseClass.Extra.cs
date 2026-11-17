@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.RED4.Types;
@@ -163,6 +165,8 @@ public partial class RedBaseClass
                 {
                     continue;
                 }
+
+                yield return (path, cls1);
 
                 foreach (var entry in cls1._properties)
                 {

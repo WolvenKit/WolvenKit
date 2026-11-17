@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public questBuild_ConditionType()
 		{
+			EntityRef = new questUniversalRef();
+			ScriptCondition = new Build_ScriptConditionType();
+
 			PostConstruct();
 		}
 

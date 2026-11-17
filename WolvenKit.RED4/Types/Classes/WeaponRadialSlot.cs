@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("canCycle")] 
+		public CBool CanCycle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public WeaponRadialSlot()
 		{
 			PostConstruct();

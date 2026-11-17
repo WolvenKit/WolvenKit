@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
 		public QsTransform()
 		{
 			Translation = new Vector4();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
 
 			PostConstruct();

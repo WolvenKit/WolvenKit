@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Spread velocity";
 			EditorGroup = "Velocity";
 			IsEnabled = true;
+			Scale = new CEvaluatorFloatConst { Value = 0.100000F };
 			ConserveMomentum = true;
 
 			PostConstruct();

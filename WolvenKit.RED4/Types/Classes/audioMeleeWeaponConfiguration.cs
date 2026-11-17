@@ -118,19 +118,20 @@ namespace WolvenKit.RED4.Types
 
 		public audioMeleeWeaponConfiguration()
 		{
-			FastWhoosh = new audioMeleeSound { Events = new() };
-			NormalWhoosh = new audioMeleeSound { Events = new() };
-			SlowWhoosh = new audioMeleeSound { Events = new() };
-			DetailSound = new audioMeleeSound { Events = new() };
-			HandlingSound = new audioMeleeSound { Events = new() };
-			EquipSound = new audioMeleeSound { Events = new() };
-			UnequipSound = new audioMeleeSound { Events = new() };
-			BlockSound = new audioMeleeSound { Events = new() };
-			ParrySound = new audioMeleeSound { Events = new() };
+			FastWhoosh = new audioMeleeSound();
+			NormalWhoosh = new audioMeleeSound();
+			SlowWhoosh = new audioMeleeSound();
+			DetailSound = new audioMeleeSound();
+			HandlingSound = new audioMeleeSound();
+			EquipSound = new audioMeleeSound();
+			UnequipSound = new audioMeleeSound();
+			BlockSound = new audioMeleeSound();
+			ParrySound = new audioMeleeSound();
 			AttackChargedThreshold = 90.000000F;
-			AttackChargedSound = new audioMeleeSound { Events = new() };
-			AttackDischargedSound = new audioMeleeSound { Events = new() };
-			MeleeWeaponConfigurationsByRigTypeMap = new audioMeleeRigTypeMeleeWeaponConfigurationMap { MapItems = new() };
+			AttackChargedSound = new audioMeleeSound();
+			AttackDischargedSound = new audioMeleeSound();
+			MeleeSoundsByHitPerMaterialType = new audioMeleeHitTypeMeleeSoundDictionary { EntryType = new audioMeleeHitTypeMeleeSoundDictionaryItem() };
+			MeleeWeaponConfigurationsByRigTypeMap = new audioMeleeRigTypeMeleeWeaponConfigurationMap();
 
 			PostConstruct();
 		}

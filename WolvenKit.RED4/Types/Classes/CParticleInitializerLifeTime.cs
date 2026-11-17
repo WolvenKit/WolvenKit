@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Life time";
 			EditorGroup = "Default";
 			IsEnabled = true;
+			LifeTime = new CEvaluatorFloatConst();
 
 			PostConstruct();
 		}

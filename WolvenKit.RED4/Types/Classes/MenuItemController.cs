@@ -149,6 +149,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("isTapped")] 
+		public CBool IsTapped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("isHyperlink")] 
 		public CBool IsHyperlink
 		{
@@ -158,7 +166,7 @@ namespace WolvenKit.RED4.Types
 
 		public MenuItemController()
 		{
-			MenuData = new MenuData { Identifier = -1, SubMenus = new() };
+			MenuData = new MenuData();
 			Label = new inkTextWidgetReference();
 			Icon = new inkImageWidgetReference();
 			FrameHovered = new inkWidgetReference();

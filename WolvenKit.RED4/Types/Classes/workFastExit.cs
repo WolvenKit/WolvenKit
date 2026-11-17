@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public workFastExit()
 		{
-			Id = new workWorkEntryId { Id = uint.MaxValue };
+			Id = new workWorkEntryId();
 			Flags = 32772;
 			ForcedBlendIn = 0.200000F;
 			MovementType = Enums.moveMovementType.Stand;

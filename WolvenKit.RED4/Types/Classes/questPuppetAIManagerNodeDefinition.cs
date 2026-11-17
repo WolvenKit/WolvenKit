@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
-			Entries = new() { new questPuppetAIManagerNodeDefinitionEntry() };
+			Entries = new() { new questPuppetAIManagerNodeDefinitionEntry { AiTier = Enums.gameStoryTier.Cinematic } };
 
 			PostConstruct();
 		}

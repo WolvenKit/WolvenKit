@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsMountEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			Parent = new scnPerformerId { Id = 4294967040 };
-			Child = new scnPerformerId { Id = 4294967040 };
+			Id = new scnSceneEventId();
+			Parent = new scnPerformerId();
+			Child = new scnPerformerId();
 			IsInstant = true;
 			SwitchRenderPlane = true;
 

@@ -40,8 +40,8 @@ namespace WolvenKit.RED4.Types
 		{
 			RbfCoefficient = 3.500000F;
 			RbfPowValue = 20.000000F;
-			CompareBones = new(0);
-			BoneCorrections = new(0);
+			CompareBones = new(4);
+			BoneCorrections = new(4);
 
 			PostConstruct();
 		}

@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public scnChoiceNodeNsAttachToWorldParams()
 		{
 			EntityPosition = new Vector3();
-			EntityOrientation = new Quaternion { R = 1.000000F };
+			EntityOrientation = new Quaternion();
 
 			PostConstruct();
 		}

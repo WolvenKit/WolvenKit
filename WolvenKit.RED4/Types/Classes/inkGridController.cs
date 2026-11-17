@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkGridController()
 		{
-			ItemSelected = new inkVirtualCompoundControllerCallback();
-			ItemActivated = new inkVirtualCompoundControllerCallback();
-			AllElementsSpawned = new inkEmptyCallback();
+			ItemSelected = new inkVirtualCompoundControllerCallback { CallbackName = "OnItemSelected" };
+			ItemActivated = new inkVirtualCompoundControllerCallback { CallbackName = "OnItemActivated" };
+			AllElementsSpawned = new inkEmptyCallback { CallbackName = "OnAllElementsSpawned" };
 			Items = new();
 			SlotSize = new Vector2();
 			ItemTemplates = new();

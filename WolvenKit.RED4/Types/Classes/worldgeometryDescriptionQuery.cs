@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.Types
 			RefDirection = new Vector4();
 			RefUp = new Vector4 { Z = 1.000000F };
 			PrimitiveDimension = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
-			PrimitiveRotation = new Quaternion { R = 1.000000F };
+			PrimitiveRotation = new Quaternion();
 			MaxDistance = 2.000000F;
 			MaxExtent = 1.000000F;
 			RaycastStartDistance = 0.500000F;

@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public scnNodeSymbol()
 		{
-			NodeId = new scnNodeId { Id = uint.MaxValue };
-			EditorNodeId = new scnNodeId { Id = uint.MaxValue };
-			EditorEventId = long.MaxValue;
+			NodeId = new scnNodeId();
+			EditorNodeId = new scnNodeId();
+			EditorEventId = ulong.MaxValue;
 
 			PostConstruct();
 		}

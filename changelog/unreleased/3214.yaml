@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App","CLI","Nuget Packages"]
+      pr-number: 3214
+      author: "MORTEM3845"
+      description: "Support .jpeg, .jpe and .tif image extensions, including uppercase variants, across raw file imports."

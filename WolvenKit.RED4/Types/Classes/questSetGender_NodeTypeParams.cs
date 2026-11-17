@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSetGender_NodeTypeParams()
 		{
-			PuppetRef = new gameEntityReference { Names = new() };
+			PuppetRef = new gameEntityReference();
 			Gender = "Female";
 
 			PostConstruct();

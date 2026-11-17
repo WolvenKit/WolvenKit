@@ -147,14 +147,14 @@ namespace WolvenKit.RED4.Types
 			Intensity = new effectEffectParameterEvaluatorFloat();
 			Radius = new effectEffectParameterEvaluatorFloat();
 			Offset = new Vector3();
-			Color = new CColor();
+			Color = new CColor { Red = 255, Green = 255, Blue = 255, Alpha = 255 };
 			ColorGroupSaturation = 100;
 			UseInGI = true;
 			UseInTransparents = true;
 			UseInParticles = true;
 			SceneDiffuse = true;
 			SceneSpecular = true;
-			Flicker = new rendSLightFlickering { FlickerPeriod = 0.200000F };
+			Flicker = new rendSLightFlickering();
 
 			PostConstruct();
 		}

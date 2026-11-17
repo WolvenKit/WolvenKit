@@ -102,7 +102,9 @@ public partial class NewFileViewModel : DialogViewModel
     {
         if (SelectedFile is not null && value is not null)
         {
-            FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), value);
+            var extension = $".{SelectedFile.Extension}";
+            var fileName = string.IsNullOrEmpty(value) || value.EndsWith(extension, StringComparison.OrdinalIgnoreCase) ? value : value + extension;
+            FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), fileName);
             WhyNotCreate = File.Exists(FullPath) ? "Filename already in use" : "";
         }
         else

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnWorkspotData_ExternalWorkspotResource()
 		{
-			DataId = new scnSceneWorkspotDataId { Id = uint.MaxValue };
+			DataId = new scnSceneWorkspotDataId();
 
 			PostConstruct();
 		}

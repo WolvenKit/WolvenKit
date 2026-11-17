@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCombatNodeParams_LookAtTarget()
 		{
-			TargetPuppet = new gameEntityReference { Names = new() };
+			TargetPuppet = new gameEntityReference();
 			Duration = -1.000000F;
 
 			PostConstruct();

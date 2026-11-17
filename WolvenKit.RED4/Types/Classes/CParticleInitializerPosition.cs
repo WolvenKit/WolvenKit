@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Initial position";
 			EditorGroup = "Location";
 			IsEnabled = true;
+			Position = new CEvaluatorVectorConst();
 
 			PostConstruct();
 		}

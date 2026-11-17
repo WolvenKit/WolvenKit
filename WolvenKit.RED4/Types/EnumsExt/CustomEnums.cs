@@ -199,4 +199,49 @@ public static partial class Enums
         PrefabProxy         = 1 << 11,
         Cascades            = 1 << 12
     }
+
+    [Flags]
+    public enum ENodeFlags : ulong
+    {
+        FLAG_None = 0,
+        FLAG_BoostedToPrefabDistance = 1U << 0,
+        FLAG_AllowForceStreamIn = 1U << 1,
+        FLAG_IsInterior = 1U << 2,
+        FLAG_NoCollision = 1U << 3,
+
+        FLAG_Quest = 1U << 4,
+        FLAG_PrefabProxyMesh = 1U << 5,
+        FLAG_Building = 1U << 6,
+        FLAG_Decoration = 1U << 7,
+        FLAG_Road = 1U << 8,
+        FLAG_Terrain = 1U << 9,
+        FLAG_VisualFluff = 1U << 10,
+        FLAG_IsExludedOnConsole = 1U << 11,
+        FLAG_2DCheck = 1U << 12,
+
+        FLAG_Culling_IsCullable = 1U << 13,
+        FLAG_Culling_IsForceCulledAlways = 1U << 14,
+        FLAG_Culling_IsForceCulledNearPeripheral = 1U << 15,
+        FLAG_Culling_IsAdvertisementBillboardEntity = 1U << 16,
+
+        FLAG_GlobalIllumination = 1U << 17,
+
+        FLAG_FallbackDrop = 1U << 18,
+
+        FLAG_AllowDistanceBoosting = 1U << 19,
+        FLAG_IsExludedOnNextGenConsoles = 1U << 20
+    }
+
+    [Flags]
+    public enum CookedStaticDecalNodeEntryData_EMiscFlags : byte
+    {
+        None = 0,
+        IsStretchingEnabled = 1 << 0,
+        VerticalFlip = 1 << 1,
+        HorizontalFlip = 1 << 2,
+        EnableNormalTreshold = 1 << 3,
+        ShouldCollectWithRayTracing = 1 << 4,
+
+        BROKENDATA_InvalidMaterialPath = 1 << 7,
+    }
 }

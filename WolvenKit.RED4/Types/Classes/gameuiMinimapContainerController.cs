@@ -390,6 +390,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapContainerController()
 		{
+			Settings = new gameMinimapSettings();
 			ClampedMappinContainer = new inkCompoundWidgetReference();
 			UnclampedMappinContainer = new inkCompoundWidgetReference();
 			MaskWidget = new inkMaskWidgetReference();
@@ -407,7 +408,7 @@ namespace WolvenKit.RED4.Types
 			CourierTimerText = new inkTextWidgetReference();
 			AlternativeIconContainer = new inkWidgetReference();
 			AutoDriveModeHighlight = new inkWidgetReference();
-			AutoDriveIconRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			AutoDriveIconRef = new inkWidgetLibraryReference();
 
 			PostConstruct();
 		}

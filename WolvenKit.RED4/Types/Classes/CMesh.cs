@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CMesh : resStreamedResource
 	{
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("parameters")] 
 		public CArray<CHandle<meshMeshParameter>> Parameters
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<meshMeshParameter>>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("boundingBox")] 
 		public Box BoundingBox
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("surfaceAreaPerAxis")] 
 		public Vector3 SurfaceAreaPerAxis
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("materialEntries")] 
 		public CArray<CMeshMaterialEntry> MaterialEntries
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CMeshMaterialEntry>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("externalMaterials")] 
 		public CArray<CResourceAsyncReference<IMaterial>> ExternalMaterials
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CResourceAsyncReference<IMaterial>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("localMaterialInstances")] 
 		public CArray<CHandle<CMaterialInstance>> LocalMaterialInstances
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<CMaterialInstance>>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("localMaterialBuffer")] 
 		public meshMeshMaterialBuffer LocalMaterialBuffer
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<meshMeshMaterialBuffer>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("preloadExternalMaterials")] 
 		public CArray<CResourceReference<IMaterial>> PreloadExternalMaterials
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CResourceReference<IMaterial>>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("preloadLocalMaterialInstances")] 
 		public CArray<CHandle<IMaterial>> PreloadLocalMaterialInstances
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<IMaterial>>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("inplaceResources")] 
 		public CArray<CResourceReference<CResource>> InplaceResources
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CResourceReference<CResource>>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("appearances")] 
 		public CArray<CHandle<meshMeshAppearance>> Appearances
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<meshMeshAppearance>>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("objectType")] 
 		public CEnum<ERenderObjectType> ObjectType
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERenderObjectType>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("renderResourceBlob")] 
 		public CHandle<IRenderResourceBlob> RenderResourceBlob
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IRenderResourceBlob>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("lodLevelInfo")] 
 		public CArray<CFloat> LodLevelInfo
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("floatTrackNames")] 
 		public CArray<CName> FloatTrackNames
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("boneNames")] 
 		public CArray<CName> BoneNames
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("boneRigMatrices")] 
 		public CArray<CMatrix> BoneRigMatrices
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CMatrix>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(18)] 
 		[RED("boneVertexEpsilons")] 
 		public CArray<CFloat> BoneVertexEpsilons
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(19)] 
 		[RED("lodBoneMask")] 
 		public CArray<CUInt8> LodBoneMask
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(20)] 
 		[RED("constrainAutoHideDistanceToTerrainHeightMap")] 
 		public CBool ConstrainAutoHideDistanceToTerrainHeightMap
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(21)] 
 		[RED("forceLoadAllAppearances")] 
 		public CBool ForceLoadAllAppearances
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(22)] 
 		[RED("castGlobalShadowsCachedInCook")] 
 		public CBool CastGlobalShadowsCachedInCook
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(23)] 
 		[RED("castLocalShadowsCachedInCook")] 
 		public CBool CastLocalShadowsCachedInCook
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(24)] 
 		[RED("useRayTracingShadowLODBias")] 
 		public CBool UseRayTracingShadowLODBias
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(25)] 
 		[RED("castsRayTracedShadowsFromOriginalGeometry")] 
 		public CBool CastsRayTracedShadowsFromOriginalGeometry
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(26)] 
 		[RED("isShadowMesh")] 
 		public CBool IsShadowMesh
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(27)] 
 		[RED("isPlayerShadowMesh")] 
 		public CBool IsPlayerShadowMesh
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			MaterialEntries = new();
 			ExternalMaterials = new();
 			LocalMaterialInstances = new();
-			LocalMaterialBuffer = new meshMeshMaterialBuffer { RawDataHeaders = new() };
+			LocalMaterialBuffer = new meshMeshMaterialBuffer();
 			PreloadExternalMaterials = new();
 			PreloadLocalMaterialInstances = new();
 			InplaceResources = new();

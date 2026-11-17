@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public questLifePath_ConditionType()
 		{
+			EntityRef = new questUniversalRef();
+			ScriptCondition = new LifePath_ScriptConditionType();
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public questMovePuppetNodeParams()
 		{
+			MoveOnSplineParams = new questMoveOnSplineParams { AdditionalParams = new questMoveOnSplineAdditionalParams { SimpleParams = new questSimpleMoveOnSplineParams { FacingTargetRef = new questUniversalRef { RefLocalPlayer = false } } } };
+			MoveToParams = new questMoveToParams { MovementTargetRef = new questUniversalRef { RefLocalPlayer = false }, FacingTargetRef = new questUniversalRef { RefLocalPlayer = false } };
 			RepeatCommandOnInterrupt = true;
 
 			PostConstruct();

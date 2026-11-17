@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#79";
 			TweakDBRecord = "Devices.Fridge";
-			TweakDBDescriptionRecord = 115920876132;
+			TweakDBDescriptionRecord = "device_descriptions.Fridge";
 
 			PostConstruct();
 		}

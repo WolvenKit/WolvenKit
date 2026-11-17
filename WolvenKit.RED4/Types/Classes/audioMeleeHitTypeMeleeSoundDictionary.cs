@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
 		public audioMeleeHitTypeMeleeSoundDictionary()
 		{
 			Entries = new();
+			EntryType = new audioMeleeHitTypeMeleeSoundDictionaryItem();
 
 			PostConstruct();
 		}

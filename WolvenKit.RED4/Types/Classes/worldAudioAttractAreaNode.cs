@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAudioAttractAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("interestingConversationsNodeRef")] 
 		public NodeRef InterestingConversationsNodeRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("audioAttractSoundSettings")] 
 		public CArray<worldAudioAttractAreaNodeSettings> AudioAttractSoundSettings
 		{
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldAudioAttractAreaNode()
 		{
+			Color = new CColor { Red = 127, Green = 255, Blue = 127, Alpha = 255 };
 			AudioAttractSoundSettings = new();
 
 			PostConstruct();

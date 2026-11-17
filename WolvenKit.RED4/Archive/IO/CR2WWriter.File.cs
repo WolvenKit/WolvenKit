@@ -371,19 +371,7 @@ public partial class CR2WWriter
             buffer.SetBytes(newData);
         }
 
-        if (buffer.Data is CookedInstanceTransformsBuffer citb)
-        {
-            using var ms = new MemoryStream();
-            using var cookedInstanceTransformsWriter = new CookedInstanceTransformsWriter(ms);
-
-            cookedInstanceTransformsWriter.WriteBuffer(citb);
-
-            var newData = ms.ToArray();
-
-            buffer.SetBytes(newData);
-        }
-
-        if (buffer is RedBuffer wsb && buffer.Data is WorldTransformsBuffer wtb)
+        if (buffer.Data is WorldTransformsBuffer wtb)
         {
             using var ms = new MemoryStream();
             using var transformWriter = new WorldTransformsWriter(ms);
@@ -634,6 +622,14 @@ public partial class CR2WWriter
         var chunkClassNames = new List<string>();
 
         var bufferInfoList = new List<CR2WBufferInfo>();
+
+        foreach (var findResult in _file!.FindType(typeof(IRedAppendix)))
+        {
+            if (findResult.Value is IRedAppendix app && app.GetProcessTime() == ProcessTime.OnFileProcessing)
+            {
+                app.StoreData();
+            }
+        }
 
         InternalWriteChunks(_file!.RootChunk);
         foreach (var embeddedFile in _file!.EmbeddedFiles)

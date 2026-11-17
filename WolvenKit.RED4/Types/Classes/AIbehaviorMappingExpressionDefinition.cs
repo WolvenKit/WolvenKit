@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorMappingExpressionDefinition()
 		{
+			Mapping = new AIArgumentMapping();
 			BehaviorCallbackNames = new();
 
 			PostConstruct();

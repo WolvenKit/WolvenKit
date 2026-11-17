@@ -652,6 +652,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(99)] 
+		[RED("inputMouserLayoutBBID")] 
+		public CHandle<redCallbackObject> InputMouserLayoutBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(100)] 
+		[RED("isMouserActive")] 
+		public CBool IsMouserActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameuiWorldMapMenuGameController()
 		{
 			EntityPreviewSpawnContainer = new inkCompoundWidgetReference();

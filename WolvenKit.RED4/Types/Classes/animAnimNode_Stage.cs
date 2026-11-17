@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_Stage : animAnimNode_Container
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("inputPoses")] 
 		public CArray<animPoseLink> InputPoses
 		{

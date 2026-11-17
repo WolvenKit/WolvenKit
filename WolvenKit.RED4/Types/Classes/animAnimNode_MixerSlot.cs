@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class animAnimNode_MixerSlot : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] 
+		[Ordinal(2)] 
 		[RED("maxNormalAnimEntriesCount")] 
 		public CUInt16 MaxNormalAnimEntriesCount
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(3)] 
 		[RED("maxAdditiveAnimEntriesCount")] 
 		public CUInt16 MaxAdditiveAnimEntriesCount
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(4)] 
 		[RED("maxOverrideAnimEntriesCount")] 
 		public CUInt16 MaxOverrideAnimEntriesCount
 		{

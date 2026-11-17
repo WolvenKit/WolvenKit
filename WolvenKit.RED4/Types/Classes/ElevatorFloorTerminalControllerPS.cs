@@ -32,8 +32,8 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#88";
 			TweakDBRecord = "Devices.ElevatorFloorTerminal";
-			TweakDBDescriptionRecord = 179291460156;
-			ElevatorFloorSetup = new ElevatorFloorSetup { DoorShouldOpenFrontLeftRight = new() };
+			TweakDBDescriptionRecord = "device_descriptions.ElevatorFloorTerminal";
+			ElevatorFloorSetup = new ElevatorFloorSetup();
 
 			PostConstruct();
 		}

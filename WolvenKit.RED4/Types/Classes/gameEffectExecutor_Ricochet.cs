@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectExecutor_Ricochet()
 		{
-			OutputRicochetVector = new gameEffectOutputParameter_Vector { BlackboardProperty = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() } };
+			OutputRicochetVector = new gameEffectOutputParameter_Vector();
 
 			PostConstruct();
 		}

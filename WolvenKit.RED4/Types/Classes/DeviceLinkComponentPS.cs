@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceLinkComponentPS()
 		{
-			ParentDevice = new DeviceLink { PSID = new gamePersistentID() };
+			ParentDevice = new DeviceLink();
 			OwnerEntityID = new entEntityID();
 
 			PostConstruct();

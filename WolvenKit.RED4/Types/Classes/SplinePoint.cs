@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public SplinePoint()
 		{
 			Position = new Vector3();
-			Rotation = new Quaternion { R = 1.000000F };
+			Rotation = new Quaternion();
 			Tangents = new(2);
 			ContinuousTangents = true;
 			AutomaticTangents = true;

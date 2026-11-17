@@ -240,8 +240,8 @@ namespace WolvenKit.RED4.Types
 			LineBarsContainer = new inkCompoundWidgetReference();
 			LineWidget = new inkCompoundWidgetReference();
 			MenusList = new();
-			CurMenuData = new MenuData { Identifier = -1, SubMenus = new() };
-			CurSubMenuData = new MenuData { Identifier = -1, SubMenus = new() };
+			CurMenuData = new MenuData();
+			CurSubMenuData = new MenuData();
 
 			PostConstruct();
 		}

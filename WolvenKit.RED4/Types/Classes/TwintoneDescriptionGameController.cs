@@ -344,8 +344,8 @@ namespace WolvenKit.RED4.Types
 			C_progressBarDuration = 2;
 			C_progressBarUpdateRate = 60;
 			ProgressBarDelayID = new gameDelayID();
-			ScannedVehicleTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
-			CachedVehicleTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
+			ScannedVehicleTemplate = new VehicleVisualCustomizationTemplate();
+			CachedVehicleTemplate = new VehicleVisualCustomizationTemplate();
 			Game = new ScriptGameInstance();
 
 			PostConstruct();

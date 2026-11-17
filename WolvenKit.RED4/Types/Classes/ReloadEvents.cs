@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ReloadEvents : WeaponEventsTransition
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("statListener")] 
 		public CHandle<DefaultTransitionStatListener> StatListener
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DefaultTransitionStatListener>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("randomSync")] 
 		public CHandle<AnimFeature_SelectRandomAnimSync> RandomSync
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SelectRandomAnimSync>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("animReloadData")] 
 		public CHandle<AnimFeature_WeaponReload> AnimReloadData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_WeaponReload>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("animReloadSpeed")] 
 		public CHandle<AnimFeature_WeaponReloadSpeedData> AnimReloadSpeed
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_WeaponReloadSpeedData>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("weaponRecord")] 
 		public CHandle<gamedataWeaponItem_Record> WeaponRecord
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataWeaponItem_Record>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("animReloadDataDirty")] 
 		public CBool AnimReloadDataDirty
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("animReloadSpeedDirty")] 
 		public CBool AnimReloadSpeedDirty
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("uninteruptibleSet")] 
 		public CBool UninteruptibleSet
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("weaponHasAutoLoader")] 
 		public CBool WeaponHasAutoLoader
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("canReloadWhileSprinting")] 
 		public CBool CanReloadWhileSprinting
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lastReloadWasEmpty")] 
 		public CBool LastReloadWasEmpty
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("isCoolPerkReload")] 
 		public CBool IsCoolPerkReload
 		{
@@ -102,6 +102,8 @@ namespace WolvenKit.RED4.Types
 
 		public ReloadEvents()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

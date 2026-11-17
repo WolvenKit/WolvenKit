@@ -33,6 +33,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Acceleration";
 			EditorGroup = "Velocity";
 			IsEnabled = true;
+			Direction = new CEvaluatorVectorConst { Value = new Vector4 { Z = -1.000000F } };
+			Scale = new CEvaluatorFloatConst();
 			WorldSpace = true;
 
 			PostConstruct();

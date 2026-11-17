@@ -80,8 +80,8 @@ namespace WolvenKit.RED4.Types
 		{
 			TileIndex = uint.MaxValue;
 			BufferIndex = uint.MaxValue;
-			OffMeshConnections = new worldOffMeshConnectionsData { Verts = new(), Radii = new(), Flags = new(), Areas = new(), Directions = new(), Ids = new(), TagIntervals = new(), TagsX = new(), GlobalNodeIDs = new(), UserData = new() };
-			TileRef = long.MaxValue;
+			OffMeshConnections = new worldOffMeshConnectionsData();
+			TileRef = ulong.MaxValue;
 			ActiveVariantIDs = new();
 			AllVariantIDs = new();
 

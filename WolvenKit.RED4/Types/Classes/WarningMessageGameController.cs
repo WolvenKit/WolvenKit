@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("reaperIcon")] 
+		public inkWidgetReference ReaperIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("blackboardDef")] 
 		public CHandle<UI_NotificationsDef> BlackboardDef
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_NotificationsDef>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("warningMessageCallbackId")] 
 		public CHandle<redCallbackObject> WarningMessageCallbackId
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("simpleMessage")] 
 		public gameSimpleScreenMessage SimpleMessage
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSimpleScreenMessage>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("blinkingAnim")] 
 		public CHandle<inkanimDefinition> BlinkingAnim
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("showAnim")] 
 		public CHandle<inkanimDefinition> ShowAnim
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("hideAnim")] 
 		public CHandle<inkanimDefinition> HideAnim
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("animProxyShow")] 
 		public CHandle<inkanimProxy> AnimProxyShow
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("animProxyHide")] 
 		public CHandle<inkanimProxy> AnimProxyHide
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("animProxyTimeout")] 
 		public CHandle<inkanimProxy> AnimProxyTimeout
 		{
@@ -184,6 +192,7 @@ namespace WolvenKit.RED4.Types
 			TwintoneIcon = new inkWidgetReference();
 			AutodriveIcon = new inkWidgetReference();
 			DelamainIcon = new inkWidgetReference();
+			ReaperIcon = new inkWidgetReference();
 			SimpleMessage = new gameSimpleScreenMessage();
 
 			PostConstruct();

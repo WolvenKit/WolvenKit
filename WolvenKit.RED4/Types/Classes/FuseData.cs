@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public FuseData()
 		{
-			PsOwnerData = new PSOwnerData { Id = new gamePersistentID() };
+			PsOwnerData = new PSOwnerData();
 			TimeTable = new();
 
 			PostConstruct();

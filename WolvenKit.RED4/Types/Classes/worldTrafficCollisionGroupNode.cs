@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldTrafficCollisionGroupNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("collisionEntries")] 
 		public CArray<worldCollisionGroupEntry> CollisionEntries
 		{

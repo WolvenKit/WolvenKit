@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.Types
 			LockingAnimationLength = 1.000000F;
 			UnlockingAnimationLength = 1.000000F;
 			DeadEyeWidget = new inkWidgetReference();
-			Data = new gamesmartGunUITargetParameters { Pos = new Vector2(), EntityID = new entEntityID() };
+			Data = new gamesmartGunUITargetParameters();
 			ActiveCallbacks = new();
 
 			PostConstruct();

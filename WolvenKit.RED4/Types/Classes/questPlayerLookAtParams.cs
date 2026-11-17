@@ -127,7 +127,7 @@ namespace WolvenKit.RED4.Types
 		public questPlayerLookAtParams()
 		{
 			UseOffsetToPlayer = true;
-			LookAtTarget = new gameEntityReference { Names = new() };
+			LookAtTarget = new gameEntityReference();
 			Offset = new Vector3();
 			Duration = 0.250000F;
 			AdjustPitch = true;

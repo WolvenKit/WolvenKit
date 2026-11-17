@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldAmbientAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("useCustomColor")] 
 		public CBool UseCustomColor
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldAmbientAreaNode()
 		{
+			Color = new CColor { Red = 236, Green = 255, Alpha = 128 };
+
 			PostConstruct();
 		}
 

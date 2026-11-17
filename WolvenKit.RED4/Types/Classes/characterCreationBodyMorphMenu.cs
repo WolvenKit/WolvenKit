@@ -516,6 +516,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(70)] 
+		[RED("delayRandomizeProxy")] 
+		public CHandle<inkanimProxy> DelayRandomizeProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(71)] 
+		[RED("delayRandomizeAnimation")] 
+		public CHandle<inkanimDefinition> DelayRandomizeAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
+		}
+
 		public characterCreationBodyMorphMenu()
 		{
 			DefaultPreviewSlot = "UI_Skin";

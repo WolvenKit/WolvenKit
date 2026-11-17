@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ChargeDecisions : WeaponTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("callbackID")] 
 		public CHandle<redCallbackObject> CallbackID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("triggerModeCorrect")] 
 		public CBool TriggerModeCorrect
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("inputPressed")] 
 		public CBool InputPressed
 		{
@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ChargeDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public scnPlayDefaultMountedSlotWorkspotEvent()
 		{
-			Id = new scnSceneEventId { Id = long.MaxValue };
-			Performer = new scnPerformerId { Id = 4294967040 };
-			ParentRef = new gameEntityReference { Names = new() };
+			Id = new scnSceneEventId();
+			Performer = new scnPerformerId();
+			ParentRef = new gameEntityReference();
 
 			PostConstruct();
 		}

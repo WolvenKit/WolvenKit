@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public BaseBunkerComputerGameController()
 		{
-			FactsSet = new BunkerSystemsFactsSet { ALPHA_FACT = "q305_server_01_offline", BRAVO_FACT = "q305_server_02_offline", SIERRA_FACT = "q305_server_backup_01_offline", VICTOR_FACT = "q305_server_backup_02_offline" };
+			FactsSet = new BunkerSystemsFactsSet();
 			GateClosedFact = "q305_gate_closed";
 
 			PostConstruct();

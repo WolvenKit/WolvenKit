@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#42163";
 			TweakDBRecord = "Devices.ExplosiveDevice";
-			TweakDBDescriptionRecord = 151932573733;
+			TweakDBDescriptionRecord = "device_descriptions.ExplosiveDevice";
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowHealth = true;

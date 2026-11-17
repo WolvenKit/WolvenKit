@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorDebugFailsafeConditionDefinition()
 		{
+			LogMessage = new AIArgumentMapping { Type = Enums.AIArgumentType.CName, ParameterizationType = Enums.AIParameterizationType.CustomValue, DefaultValue = new CVariant(), CustomTypeName = "CName" };
+
 			PostConstruct();
 		}
 

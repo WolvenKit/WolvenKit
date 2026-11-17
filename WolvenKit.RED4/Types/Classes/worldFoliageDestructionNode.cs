@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldFoliageDestructionNode : worldCollisionNode
 	{
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("populationIndex")] 
 		public CArray<CUInt32> PopulationIndex
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("foliageResourceHash")] 
 		public CUInt64 FoliageResourceHash
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(18)] 
 		[RED("dataVersion")] 
 		public CUInt32 DataVersion
 		{

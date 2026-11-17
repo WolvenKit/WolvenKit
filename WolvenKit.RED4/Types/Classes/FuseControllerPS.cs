@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.Types
 			RevealDevicesGrid = false;
 			DeviceName = "LocKey#116";
 			TweakDBRecord = "Devices.Fuse";
-			TweakDBDescriptionRecord = 106150556616;
+			TweakDBDescriptionRecord = "device_descriptions.Fuse";
 			MaxLightsSwitchedAtOnce = 5;
 			TimeToNextSwitch = 1.000000F;
 			LightSwitchRandomizerType = Enums.ELightSwitchRandomizerType.RANDOM_PROGRESSIVE;

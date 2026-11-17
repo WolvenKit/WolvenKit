@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Xml.Linq;
@@ -30,7 +31,7 @@ using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.App.Controllers;
 
-public class RED4Controller : ObservableObject, IGameController
+public partial class RED4Controller : ObservableObject, IGameController
 {
     #region fields
 
@@ -272,6 +273,14 @@ public class RED4Controller : ObservableObject, IGameController
         {
             return false;
         }
+
+        /*if (options.PublishOnModIo && !await PublishOnModIo(cp77Proj))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Publishing on mod.io failed, aborting.");
+            _notificationService.Error("Publishing on mod.io failed, aborting.");
+            return false;
+        }*/
 
         // backup
         if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
@@ -694,6 +703,130 @@ public class RED4Controller : ObservableObject, IGameController
         {
             _loggerService.Error(e);
             return false;
+        }
+
+        return true;
+    }
+
+    private async Task<bool> CheckModIoStatus(string executablePath)
+    {
+        var result = await ProcessUtil.RunProcess2Async(executablePath, "publish /check-account");
+
+        if (result.Output.Contains("No account is logged in."))
+        {
+            _loggerService.Error("No mod.io account is logged in.");
+            _loggerService.Error("Login via WolvenKit is currently not possible.");
+            return false;
+        }
+
+        return true;
+    }
+
+    [GeneratedRegex("Uploading Mod to Mod\\.IO modID:'([0-9]+)' \\.")]
+    private static partial Regex ModIdRegex();
+
+    private async Task<bool> PublishOnModIo(Cp77Project cp77Proj)
+    {
+        if (!_pluginService.IsInstalled(EPlugin.redmod))
+        {
+            return false;
+        }
+
+        var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod");
+        var executablePath = Path.Combine(redmodPath, "bin", "redMod.exe");
+        if (!File.Exists(executablePath))
+        {
+            return false;
+        }
+
+        if (!await CheckModIoStatus(executablePath))
+        {
+            return false;
+        }
+
+        if (cp77Proj.ModIoId == -2)
+        {
+            _loggerService.Error("The mod was published before, but the Mod Id is not set. Aborting!");
+            return false;
+        }
+
+        string args;
+        if (cp77Proj.ModIoId == -1)
+        {
+            if (string.IsNullOrEmpty(cp77Proj.ModName))
+            {
+                _loggerService.Error("A mod name needs to be set to publish the mod to mod.io. Aborting!");
+                return false;
+            }
+
+            if (!File.Exists(cp77Proj.ModIoLogo))
+            {
+                _loggerService.Error("A mod logo needs to be set to publish the mod to mod.io. Aborting!");
+                return false;
+            }
+
+            args = $"publish /mod /create -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
+        }
+        else
+        {
+            args = $"publish /mod -root=\"{_settingsManager.GetRED4GameRootDir()}\" -modid=\"{cp77Proj.ModIoId}\" /edit";
+        }
+
+        if (!string.IsNullOrEmpty(cp77Proj.ModName))
+        {
+            args += $" -name=\"{cp77Proj.ModName}\"";
+        }
+
+        if (cp77Proj.Description != null)
+        {
+            args += $" -summary=\"{cp77Proj.Description}\"";
+        }
+
+        if (File.Exists(cp77Proj.ModIoLogo))
+        {
+            args += $" -logo=\"{cp77Proj.ModIoLogo}\"";
+        }
+
+        if (!string.IsNullOrEmpty(cp77Proj.Version))
+        {
+            args += $" -version=\"{cp77Proj.Version}\"";
+        }
+
+        // TODO: Make this configurable in the project settings
+        args += $" -platforms \"windows\" \"mac\" \"ps5\" \"xsx\" \"ns2\"";
+
+        args += $" -directory=\"{cp77Proj.PackedRootDirectory}\"";
+
+        var workingDir = Path.Combine(redmodPath, "bin");
+        _loggerService.Info($"WorkDir: {workingDir}");
+        _loggerService.Info($"Running commandlet: {args}");
+
+        var result = await ProcessUtil.RunProcess2Async(executablePath, args, workingDir);
+
+        var success = result.Output.Contains("Commandlet publish has succeeded.");
+        if (!success)
+        {
+            return false;
+        }
+
+        if (cp77Proj.ModIoId == -1)
+        {
+            var modIdRegex = ModIdRegex();
+
+            var modId = -2;
+
+            foreach (var line in result.Output)
+            {
+                if (modIdRegex.Match(line) is not { Success: true } match)
+                {
+                    continue;
+                }
+
+                modId = int.Parse(match.Groups[1].Value);
+                break;
+            }
+
+            cp77Proj.ModIoId = modId;
         }
 
         return true;

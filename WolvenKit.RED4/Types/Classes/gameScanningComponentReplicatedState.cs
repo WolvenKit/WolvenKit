@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public gameScanningComponentReplicatedState()
 		{
 			Enabled = true;
-			ControllingPeerIDs = new(0);
+			ControllingPeerIDs = new(8);
 
 			PostConstruct();
 		}

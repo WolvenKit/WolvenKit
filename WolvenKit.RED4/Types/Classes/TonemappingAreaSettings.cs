@@ -23,6 +23,8 @@ namespace WolvenKit.RED4.Types
 		public TonemappingAreaSettings()
 		{
 			Enable = true;
+			Mode = new TonemappingModeACES();
+			HdrMode = new TonemappingModeACES();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questDestruction_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference();
 			Threshold = 50.000000F;
 
 			PostConstruct();

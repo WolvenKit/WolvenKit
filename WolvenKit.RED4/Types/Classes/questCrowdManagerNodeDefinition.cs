@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
+			Type = new questCrowdManagerNodeType_EnableNullArea();
 
 			PostConstruct();
 		}

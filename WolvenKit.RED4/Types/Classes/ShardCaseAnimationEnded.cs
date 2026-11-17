@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(2)] 
 		[RED("read")] 
-		public CBool Read_
+		public CBool Read
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldDistantLightsNode : worldNode
 	{
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("data")] 
 		public CResourceAsyncReference<CDistantLightsResource> Data
 		{

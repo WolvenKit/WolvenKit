@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class gameAttachmentSlotEventsPartRemovedFromSlotEvent : redEvent
 	{
 		[Ordinal(0)] 
-		[RED("itemID")] 
-		public gameItemID ItemID
+		[RED("item")] 
+		public CWeakHandle<gameItemObject> Item
 		{
-			get => GetPropertyValue<gameItemID>();
-			set => SetPropertyValue<gameItemID>(value);
+			get => GetPropertyValue<CWeakHandle<gameItemObject>>();
+			set => SetPropertyValue<CWeakHandle<gameItemObject>>(value);
 		}
 
 		[Ordinal(1)] 
@@ -20,9 +20,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("slotID")] 
+		public TweakDBID SlotID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
 		public gameAttachmentSlotEventsPartRemovedFromSlotEvent()
 		{
-			ItemID = new gameItemID();
 			RemovedPartID = new gameItemID();
 
 			PostConstruct();
