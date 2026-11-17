@@ -111,6 +111,6 @@
   "WolvenKitProjectIconPurple": "Welcome page: icon background of projects with the purple project color",
   "WolvenKitProjectIconTan": "Welcome page: icon background of projects with the tan project color",
   "WolvenKitListSelection": "Selected row in the Project Explorer, Asset Browser and other trees / lists",
-  "WolvenKitGridLine": "Grid lines and frame of tables (LocKey Browser)",
+  "WolvenKitGridLine": "Grid lines and frame of tables (LocKey Browser, Import / Export Tool)",
   "WolvenKitActionText": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
 }

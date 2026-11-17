@@ -187,6 +187,8 @@
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
                 Grid.Column="0"
+                BorderBrush="{DynamicResource WolvenKitGridLine}"
+                RowSelectionBrush="{DynamicResource WolvenKitListSelection}"
                 Height="Auto"
                 BorderThickness="0,1,0,0"
                 Visibility="{Binding Path=HasItems,
@@ -203,6 +205,13 @@
                 SelectionChanged="ExportGrid_SelectionChanged"
                 SelectionMode="Extended">
                 <syncfusion:SfDataGrid.Resources>
+                    <!--  grid lines: faint text color of the theme, as in the LocKey Browser  -->
+                    <Style TargetType="syncfusion:GridCell">
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
+                    </Style>
+                    <Style TargetType="syncfusion:GridHeaderCellControl">
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
+                    </Style>
                     <DataTemplate x:Key="TemplateToolTip">
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
