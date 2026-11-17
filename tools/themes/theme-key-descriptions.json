@@ -118,6 +118,6 @@
   "WolvenKitGraphOverlayBackground": "Quest phase graph: breadcrumb bar over the graph",
   "WolvenKitTimelineTrack": "Section timeline: track background",
   "WolvenKitTimelineGridLine": "Section timeline: vertical grid lines",
-  "WolvenKitGridLine": "Grid lines and frame of tables (LocKey Browser)",
+  "WolvenKitGridLine": "Grid lines and frame of tables (LocKey Browser, Import / Export Tool)",
   "WolvenKitActionText": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
 }

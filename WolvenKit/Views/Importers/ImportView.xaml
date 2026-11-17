@@ -168,6 +168,8 @@
             <syncfusion:SfDataGrid
                 x:Name="ImportGrid"
                 Grid.Column="0"
+                BorderBrush="{DynamicResource WolvenKitGridLine}"
+                RowSelectionBrush="{DynamicResource WolvenKitListSelection}"
                 BorderThickness="0,1,0,0"
                 HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
                 RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
@@ -181,6 +183,13 @@
                 SelectionChanged="ImportGrid_SelectionChanged"
                 SelectionMode="Extended">
                 <syncfusion:SfDataGrid.Resources>
+                    <!--  grid lines: faint text color of the theme, as in the LocKey Browser  -->
+                    <Style TargetType="syncfusion:GridCell">
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
+                    </Style>
+                    <Style TargetType="syncfusion:GridHeaderCellControl">
+                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
+                    </Style>
                     <DataTemplate x:Key="TemplateToolTip">
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"

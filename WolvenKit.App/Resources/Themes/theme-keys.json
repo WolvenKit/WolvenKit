@@ -855,7 +855,7 @@
       "group": "Palette",
       "displayName": "Grid Lines",
       "kind": "Brush",
-      "description": "Grid lines and frame of tables (LocKey Browser)"
+      "description": "Grid lines and frame of tables (LocKey Browser, Import / Export Tool)"
     },
     {
       "key": "WolvenKitActionText",
