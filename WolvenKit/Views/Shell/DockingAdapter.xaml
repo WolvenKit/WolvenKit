@@ -24,21 +24,6 @@
                     color comes only from the triggers below. Syncfusion sets the Foreground of some header buttons
                     itself (the close button of the active panel), which a template trigger can't override.
                 -->
-                <ControlTemplate.Triggers>
-                    <!--  icon color follows the panel title: header text color, or the active panel's title color  -->
-                    <DataTrigger Binding="{Binding Path=IsTemplateParenKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockHeaderPresenter}}}" Value="True">
-                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
-                    </DataTrigger>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitRed}" />
-                    </Trigger>
-                    <Trigger Property="IsPressed" Value="True">
-                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitRedShadow}" />
-                    </Trigger>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource BorderAlt}" />
-                    </Trigger>
-                </ControlTemplate.Triggers>
 
                 <StackPanel>
                     <!--
@@ -84,6 +69,22 @@
                         </Grid>
                     </Border>
                 </StackPanel>
+
+                <ControlTemplate.Triggers>
+                    <!--  icon color follows the panel title: header text color, or the active panel's title color  -->
+                    <DataTrigger Binding="{Binding Path=IsTemplateParenKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockHeaderPresenter}}}" Value="True">
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
+                    </DataTrigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitRed}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitRedShadow}" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource BorderAlt}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
             </ControlTemplate>
         </Grid.Resources>
 
