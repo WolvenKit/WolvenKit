@@ -49,18 +49,18 @@
             EnableDataVirtualization="True"
             FilterRowPosition="FixedTop"
             IsReadOnly="True"
-            BorderBrush="{DynamicResource BorderAlt}"
+            BorderBrush="{DynamicResource WolvenKitGridLine}"
             ItemsSource="{Binding LocKeys}"
             RowSelectionBrush="{DynamicResource WolvenKitListSelection}"
             SelectedItem="{Binding SelectedLocKey}"
             SelectionMode="Extended">
-            <!-- grid lines and frame in the theme border color (readable on light themes too) -->
+            <!-- grid lines and frame: faint text color, readable on light and dark themes -->
             <syncfusion:SfDataGrid.Resources>
                 <Style TargetType="syncfusion:GridCell">
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
                 </Style>
                 <Style TargetType="syncfusion:GridHeaderCellControl">
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
                 </Style>
             </syncfusion:SfDataGrid.Resources>
             <syncfusion:SfDataGrid.Columns>
@@ -118,7 +118,7 @@
                         Grid.Column="1"
                         Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
                         VerticalAlignment="Center"
-                        Foreground="Gold"
+                        Foreground="{DynamicResource WolvenKitYellow}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedPrimaryKey,
                                        Mode=OneWay}" />

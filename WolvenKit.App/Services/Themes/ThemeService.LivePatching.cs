@@ -425,6 +425,8 @@ public sealed partial class ThemeService
         ("WolvenKitYellowShadow50Color", "WolvenKitYellowShadowColor", c => WithAlpha(c, 0x7F)),
         ("WolvenKitYellowShadow25Color", "WolvenKitYellowShadowColor", c => WithAlpha(Darken(c, 0.55), 0x7F)),
         ("WolvenKitCyan50", "WolvenKitCyanColor", c => WithAlpha(c, 0x7F)),
+        // text color, faint: visible on light and dark backgrounds alike
+        ("WolvenKitGridLine", "ContentForeground", c => WithAlpha(c, 0x33)),
         ("WolvenKitTan50", "WolvenKitTanColor", c => WithAlpha(c, 0x7F)),
     ];
 

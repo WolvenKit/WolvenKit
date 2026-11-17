@@ -103,7 +103,7 @@
       "group": "Surfaces",
       "displayName": "Border Alt",
       "kind": "Brush",
-      "description": "Borders of fields and frames in property editors, documents and dialogs; grid lines in the LocKey Browser"
+      "description": "Borders of fields and frames in property editors, documents and dialogs"
     },
     {
       "key": "WolvenKitPanelHeaderSelected",
@@ -849,6 +849,13 @@
       "displayName": "List Selection",
       "kind": "Brush",
       "description": "Selected row in the Project Explorer, Asset Browser and other trees / lists"
+    },
+    {
+      "key": "WolvenKitGridLine",
+      "group": "Palette",
+      "displayName": "Grid Lines",
+      "kind": "Brush",
+      "description": "Grid lines and frame of tables (LocKey Browser)"
     },
     {
       "key": "WolvenKitActionText",

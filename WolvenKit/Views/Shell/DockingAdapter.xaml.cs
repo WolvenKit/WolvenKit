@@ -64,6 +64,17 @@ namespace WolvenKit.Views.Shell
             {
                 themeService.Register(this);
             }
+
+            if (!s_headerHandlerRegistered)
+            {
+                s_headerHandlerRegistered = true;
+                EventManager.RegisterClassHandler(typeof(DockHeaderPresenter), LoadedEvent,
+                    new RoutedEventHandler((sender, _) => G_Dock?.UseOwnCloseButtonTemplate(sender as DependencyObject)));
+                // a panel that is closed and opened again keeps its header, but its close button is loaded again
+                // with the Syncfusion template
+                EventManager.RegisterClassHandler(typeof(System.Windows.Controls.Primitives.ToggleButton), LoadedEvent,
+                    new RoutedEventHandler((sender, _) => G_Dock?.OnToggleButtonLoaded(sender as System.Windows.Controls.Primitives.ToggleButton)));
+            }
         }
 
         /// <summary>
@@ -81,6 +92,130 @@ namespace WolvenKit.Views.Shell
 
             // after the skin was re-applied (it runs synchronously on the same switch)
             Dispatcher.BeginInvoke(RenewHeaderButtonTemplates, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+        }
+
+        private static bool s_headerHandlerRegistered;
+        private bool _headerButtonsLogged;
+
+        /// <summary>
+        /// The close button in a panel header doesn't use CloseButtonTemplate: the Syncfusion header template gives
+        /// it its own template (accent square on hover, its own colors, the active panel's one differs from the
+        /// buttons next to it). Give it ours, like the menu and pin buttons. A local value, so the header's
+        /// triggers don't swap it back.
+        /// </summary>
+        private void UseOwnCloseButtonTemplate(DependencyObject header)
+        {
+            if (header is null || PART_DockingManager.TryFindResource("WolvenKitButtonsTemplate") is not ControlTemplate template)
+            {
+                return;
+            }
+
+            var buttons = new List<System.Windows.Controls.Primitives.ToggleButton>();
+            CollectToggleButtons(header, buttons);
+
+            if (!_headerButtonsLogged && buttons.Count > 0)
+            {
+                _headerButtonsLogged = true;
+                _logger.Debug($"Themes: panel header buttons: {string.Join(", ", buttons.Select(b => string.IsNullOrEmpty(b.Name) ? "(unnamed)" : b.Name))}");
+            }
+
+            foreach (var button in buttons)
+            {
+                if (!button.Name.Contains("Close", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                SetOwnTemplate(button, template);
+
+                // Syncfusion sets the template again when the panel is shown again (closed and opened, docked
+                // back): put ours back whenever it changes
+                if (!s_watchedCloseButtons.TryGetValue(button, out _))
+                {
+                    s_watchedCloseButtons.Add(button, new object());
+                    s_templateDescriptor?.AddValueChanged(button, OnCloseButtonTemplateChanged);
+                }
+            }
+        }
+
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<System.Windows.Controls.Primitives.ToggleButton, object> s_watchedCloseButtons = new();
+
+        private static readonly DependencyPropertyDescriptor s_templateDescriptor =
+            DependencyPropertyDescriptor.FromProperty(System.Windows.Controls.Control.TemplateProperty, typeof(System.Windows.Controls.Primitives.ToggleButton));
+
+        private static void OnCloseButtonTemplateChanged(object sender, EventArgs e)
+        {
+            if (sender is System.Windows.Controls.Primitives.ToggleButton button
+                && G_Dock?.PART_DockingManager.TryFindResource("WolvenKitButtonsTemplate") is ControlTemplate template
+                && !ReferenceEquals(button.Template, template))
+            {
+                // after the current change is done
+                button.Dispatcher.BeginInvoke(() => SetOwnTemplate(button, template), System.Windows.Threading.DispatcherPriority.Loaded);
+            }
+        }
+
+        private static void SetOwnTemplate(System.Windows.Controls.Primitives.ToggleButton button, ControlTemplate template)
+        {
+            if (!ReferenceEquals(button.Template, template))
+            {
+#pragma warning disable WPF0041 // a local value on purpose: the header template's own setters must not win
+                button.SetValue(System.Windows.Controls.Control.TemplateProperty, template);
+#pragma warning restore WPF0041
+            }
+        }
+
+        private void OnToggleButtonLoaded(System.Windows.Controls.Primitives.ToggleButton button)
+        {
+            if (button is null || !button.Name.Contains("Close", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            // only the close buttons of panel headers
+            DependencyObject parent = button;
+            for (var depth = 0; depth < 12 && parent is not null; depth++)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+                if (parent is DockHeaderPresenter header)
+                {
+                    UseOwnCloseButtonTemplate(header);
+                    return;
+                }
+            }
+        }
+
+        private static void ForEachDockHeader(DependencyObject element, Action<DependencyObject> action)
+        {
+            var count = VisualTreeHelper.GetChildrenCount(element);
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i);
+                if (child is DockHeaderPresenter)
+                {
+                    action(child);
+                }
+                else
+                {
+                    ForEachDockHeader(child, action);
+                }
+            }
+        }
+
+        private static void CollectToggleButtons(DependencyObject element, List<System.Windows.Controls.Primitives.ToggleButton> buttons)
+        {
+            var count = VisualTreeHelper.GetChildrenCount(element);
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i);
+                if (child is System.Windows.Controls.Primitives.ToggleButton button)
+                {
+                    buttons.Add(button);
+                }
+                else
+                {
+                    CollectToggleButtons(child, buttons);
+                }
+            }
         }
 
         private static readonly string[] s_headerButtonTemplates =
@@ -109,6 +244,9 @@ namespace WolvenKit.Views.Shell
                 PART_DockingManager.SetCurrentValue(descriptor.DependencyProperty, template);
                 renewed++;
             }
+
+            // headers that were not rebuilt keep the close button template set on them
+            ForEachDockHeader(PART_DockingManager, UseOwnCloseButtonTemplate);
             _logger.Debug($"Themes: {renewed} panel header button templates renewed.");
         }
 
@@ -568,6 +706,10 @@ namespace WolvenKit.Views.Shell
             {
                 _stateChanged = true;
             }
+
+            // a panel shown again (opened from the menu, docked back) can get new header buttons
+            Dispatcher.BeginInvoke(() => ForEachDockHeader(PART_DockingManager, UseOwnCloseButtonTemplate),
+                System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
