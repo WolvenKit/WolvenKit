@@ -3,9 +3,4 @@ changes:
       packages: ["App"]
       pr-number: 3302
       author: "Ametis81"
-      description: "Sector Objects tab in .streamingsector files: every object (nodeData entry) on its own row, grouped by variant and kind, with search, category / RedHotTools target-group filters, link with the data tab and the sector preview."
-    - type: "added"
-      packages: ["App"]
-      pr-number: 3302
-      author: "Ametis81"
-      description: "Sector Objects tab: copy an ArchiveXL removal (.xl) for the selected objects, single instances or collision actors, and check an existing .xl file against the sector (expected counts, node classes)."
+      description: "Sector Objects tab in .streamingsector files: every object (nodeData entry) on its own row, grouped by variant and kind, with search and filters, linked with the data tab and the sector preview; copy ArchiveXL removals (.xl) for objects, single instances or collision actors, and check an existing .xl file against the sector."
