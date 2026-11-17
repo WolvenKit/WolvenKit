@@ -23,6 +23,7 @@ namespace WolvenKit.Views.Dialogs
     public partial class CreateCCXLHairFilesDialog : IViewFor<CreateCCXLHairFilesDialogViewModel>
     {
 
+        private string s_hairModName = "";
         private string s_selectedInkCCFile = "";
 
         private string s_selectedMainAppFile = "";
@@ -36,10 +37,7 @@ namespace WolvenKit.Views.Dialogs
 
         private string s_selectedShadowMeshFile = "";
 
-        private string s_selectedMiFile = "";
-        private string s_selectedMiType = "";
-        private bool s_isCap = false;
-        private string s_selectedCapMiFile = "";
+
 
 
         public CreateCCXLHairFilesDialog(Cp77Project activeProject, ISettingsManager settingsManager,
@@ -49,24 +47,22 @@ namespace WolvenKit.Views.Dialogs
 
             ViewModel = new CreateCCXLHairFilesDialogViewModel(activeProject, settingsManager, projectResourceTools)
             {
-                    SelectedInkCCFile= s_selectedInkCCFile,
-                    SelectedMainAppFile= s_selectedMainAppFile,
-                    SelectedCybAppFile= s_selectedCybAppFile,
-                    SelectedShadowAppFile= s_selectedShadowAppFile,
-                    SelectedMainMeshFile= s_selectedMainMeshFile,
-                    SelectedCybMeshFile= s_selectedCybMeshFile,
-                    SelectedShadowMeshFile= s_selectedShadowMeshFile,
-                    SelectedMiFile= s_selectedMiFile,
-                    SelectedMiType= s_selectedMiType,
-                    SelectedCapMiFile= s_selectedCapMiFile,
-                    IsCap= s_isCap,
+                HairmodName = s_hairModName,
+                
+                SelectedInkCCFile = s_selectedInkCCFile,
+                SelectedMainAppFile = s_selectedMainAppFile,
+                SelectedCybAppFile = s_selectedCybAppFile,
+                SelectedShadowAppFile = s_selectedShadowAppFile,
+                SelectedMainMeshFile = s_selectedMainMeshFile,
+                SelectedCybMeshFile = s_selectedCybMeshFile,
+                SelectedShadowMeshFile = s_selectedShadowMeshFile
             };
             DataContext = ViewModel;
 
-            //this.WhenActivated(_ =>
-            //{
-            //    ViewModel?.AutoSetValues();
-            //});
+            this.WhenActivated(_ =>
+            {
+                ViewModel?.SetFiles();
+            });
         }
 
         public CreateCCXLHairFilesDialogViewModel ViewModel { get; set; }

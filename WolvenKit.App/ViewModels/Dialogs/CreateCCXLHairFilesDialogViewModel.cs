@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
@@ -11,6 +12,8 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 {
+
+    [ObservableProperty] private string _hairmodName = "";
 
     [ObservableProperty] private string _selectedInkCCFile = "";
 
@@ -25,13 +28,10 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 
     [ObservableProperty] private string _selectedShadowMeshFile = "";
 
-    [ObservableProperty] private string _selectedMiFile = "";
+    [ObservableProperty] private string _selectedRigFile = "";
 
-    [ObservableProperty] private string _selectedMiType = "";
 
-    [ObservableProperty] private bool _isCap = false;
 
-    [ObservableProperty] private string _selectedCapMiFile = "";
 
     private readonly Cp77Project _activeProject;
     private readonly ISettingsManager _settingsManager;
@@ -42,6 +42,8 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
         _activeProject = activeProject;
         _settingsManager = settingsManager;
         _projectResourceTools = projectResourceTools;
+
+
 
         InkCCFileOption.AddRange<string>(
             activeProject.ModFiles
@@ -56,10 +58,10 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
                 .Where(fp => fp.EndsWith(".app"))
 
         );
-        SelectedMainAppFile = AppFileOption.First() ?? "";
-        SelectedCybAppFile = AppFileOption.LastOrDefault() ?? "";
-        SelectedShadowAppFile = AppFileOption.LastOrDefault() ?? "";
 
+        SelectedMainAppFile = AppFileOption.FirstOrDefault() ?? "";
+        SelectedCybAppFile = AppFileOption.FirstOrDefault() ?? "";
+        SelectedShadowAppFile = AppFileOption.FirstOrDefault() ?? "";
 
         MeshFileOption.AddRange<string>(
             activeProject.ModFiles
@@ -67,21 +69,9 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 
         );
         SelectedMainMeshFile = MeshFileOption.First() ?? "";
-        SelectedCybMeshFile = MeshFileOption.LastOrDefault() ?? "";
-        SelectedShadowMeshFile = MeshFileOption.LastOrDefault() ?? "";
-
-
-        MiFileOption.AddRange<string>(
-            activeProject.ModFiles
-                .Where(fp => fp.EndsWith(".mi"))
-
-        );
-        SelectedMiFile = MiFileOption.LastOrDefault() ?? "";
-
-        MainMiMaterialTypeList = new List<string> { "Braid", "Cap", "Cap01", "Curls", "Dread", "Long", "Short", "Brows", "Lashes" };
-        SelectedMiType = "Long";
-
-        SelectedCapMiFile = MiFileOption.FirstOrDefault() ?? "";
+        
+        SelectedCybMeshFile = MeshFileOption.FirstOrDefault() ?? "";
+        SelectedShadowMeshFile = MeshFileOption.FirstOrDefault() ?? "";
     }
 
     [ObservableProperty]
@@ -93,9 +83,15 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
     [ObservableProperty]
     private List<string> _meshFileOption = [];
 
-    [ObservableProperty]
-    private List<string> _miFileOption = [];
+     public void SetFiles() {
 
-    [ObservableProperty]
-    private List<string> _mainMiMaterialTypeList = [];
+        SelectedInkCCFile = InkCCFileOption.FirstOrDefault()!;
+        SelectedMainAppFile = AppFileOption.FirstOrDefault()!;
+        SelectedCybAppFile = AppFileOption.FirstOrDefault(fp => fp.Contains("_cyberware"))!;
+        SelectedShadowAppFile = AppFileOption.FirstOrDefault(fp => fp.Contains("_fpp"))!;
+
+        SelectedMainMeshFile = MeshFileOption.FirstOrDefault()!;
+        SelectedCybMeshFile = MeshFileOption.FirstOrDefault(fp => fp.Contains("_cyberware"))!;
+        SelectedShadowMeshFile = MeshFileOption.FirstOrDefault(fp => fp.Contains("_shadow"))!;
+    }
 }

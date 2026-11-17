@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -1606,6 +1606,32 @@ public partial class TemplateFileTools
 
                                                  """;
 
+    public void ccxlfile(string file, string name) {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+        //var absolutepath = Path.Join(activeProject.ModDirectory, file);
+        //var app = _cr2WTools.ReadCr2W(absolutepath);
+        //var comp = ((appearanceAppearanceResource)app.RootChunk).Appearances.First().Chunk!;
+        
+        //var i = 0;
+        //((entAnimatedComponent)comp.Components[i]).Graph = new CResourceReference<animAnimGraph>($"file\\test\\.animgraph");
+        //((entAnimatedComponent)comp.Components[i++]).Rig = new CResourceReference<animRig>($"file\\test\\.rig");
+
+        //((entSkinnedMeshComponent)comp.Components[i]).Name = name;
+        //((entSkinnedMeshComponent)comp.Components[i++]).Mesh = new CResourceAsyncReference<CMesh>($"file\\test\\.mesh");
+
+
+        //((entSkinnedMeshComponent)comp.Components[i]).Name = name+"_shadow";
+        //((entSkinnedMeshComponent)comp.Components[i++]).Mesh = new CResourceAsyncReference<CMesh>($"file\\test\\.mesh");
+
+        //comp.ResolvedDependencies[3] = new CResourceAsyncReference<CResource>("ccxl\\xl\\file.mesh");
+        //comp.ResolvedDependencies[4] = new CResourceAsyncReference<CResource>("ccxl\\xl\\file_shadow.mesh");
+
+        //_cr2WTools.WriteCr2W(app,absolutepath);
+        //_loggerService.Warning(app + "");
+    }
 }
 
 public class PhotomodeYamlOptions
