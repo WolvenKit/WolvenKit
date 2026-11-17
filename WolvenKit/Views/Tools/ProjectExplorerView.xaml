@@ -842,7 +842,7 @@
             EnableLabelEdit="False"
             SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
-            TabListContextMenuOptions="Default">
+            ShowTabListContextMenu="False">
             <syncfusion:TabItemExt Header="SOURCE">
                 <syncfusion:TabItemExt.Style>
                     <Style

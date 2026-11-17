@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3303
+      author: "Ametis81"
+      description: "Project Explorer: no tab list button next to its four tabs (all of them are always visible)."
