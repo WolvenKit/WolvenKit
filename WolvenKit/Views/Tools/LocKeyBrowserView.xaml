@@ -83,7 +83,8 @@
 
         <syncfusion:SfGridSplitter
             Grid.Row="2"
-            HorizontalAlignment="Stretch" />
+            HorizontalAlignment="Stretch"
+            Background="{DynamicResource ContentBackgroundAlt3}" />
 
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>

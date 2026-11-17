@@ -423,6 +423,7 @@
                 BorderThickness="1"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
                 Click="ScrollToBottom_OnClick"
+                Foreground="{DynamicResource ContentForeground}"
                 ToolTip="Scroll to bottom">
                 <templates:IconBox
                     IconPack="MaterialDesign"
@@ -446,6 +447,7 @@
                 BorderThickness="1"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
                 Click="ClearAll_Click"
+                Foreground="{DynamicResource ContentForeground}"
                 ToolTip="Clear log">
                 <templates:IconBox
                     IconPack="Codicons"

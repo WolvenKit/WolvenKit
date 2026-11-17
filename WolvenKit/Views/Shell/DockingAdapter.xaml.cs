@@ -74,6 +74,11 @@ namespace WolvenKit.Views.Shell
                 // with the Syncfusion template
                 EventManager.RegisterClassHandler(typeof(System.Windows.Controls.Primitives.ToggleButton), LoadedEvent,
                     new RoutedEventHandler((sender, _) => G_Dock?.OnToggleButtonLoaded(sender as System.Windows.Controls.Primitives.ToggleButton)));
+                // the same tab brushes as after a switch, from the start (Syncfusion's own values otherwise)
+                EventManager.RegisterClassHandler(typeof(TabControlExt), LoadedEvent,
+                    new RoutedEventHandler((sender, _) => UseThemeTabBrushes(sender as TabControlExt)));
+                EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ContextMenu), System.Windows.Controls.ContextMenu.OpenedEvent,
+                    new RoutedEventHandler((sender, _) => G_Dock?.OnContextMenuOpened(sender as System.Windows.Controls.ContextMenu)));
             }
         }
 
@@ -182,6 +187,95 @@ namespace WolvenKit.Views.Shell
                     return;
                 }
             }
+        }
+
+        private bool _tabListMenuLogged;
+
+        /// <summary>
+        /// The items of a tab list menu (arrow next to the Project Explorer tabs) get a style from Syncfusion that
+        /// keeps the colors of the theme the menu was created with. Put ours on them whenever the menu opens.
+        /// </summary>
+        private void OnContextMenuOpened(System.Windows.Controls.ContextMenu menu)
+        {
+            if (menu?.PlacementTarget is not DependencyObject target
+                || !IsInsideTabControlExt(target)
+                || Application.Current?.TryFindResource("WolvenKitTabListMenuItemStyle") is not Style style)
+            {
+                return;
+            }
+
+            var count = 0;
+            for (var i = 0; i < menu.Items.Count; i++)
+            {
+                if ((menu.Items[i] as System.Windows.Controls.MenuItem ?? menu.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.MenuItem) is { } item
+                    && !ReferenceEquals(item.Style, style))
+                {
+                    item.Style = style;
+                    count++;
+                }
+            }
+
+            if (!_tabListMenuLogged)
+            {
+                _tabListMenuLogged = true;
+                _logger.Debug($"Themes: tab list menu restyled ({count} of {menu.Items.Count} items).");
+            }
+        }
+
+        private static bool IsInsideTabControlExt(DependencyObject element)
+        {
+            for (var depth = 0; depth < 12 && element is not null; depth++)
+            {
+                if (element is TabControlExt)
+                {
+                    return true;
+                }
+                element = element is Visual or System.Windows.Media.Media3D.Visual3D
+                    ? VisualTreeHelper.GetParent(element)
+                    : LogicalTreeHelper.GetParent(element);
+            }
+            return false;
+        }
+
+        private static readonly (DependencyProperty Property, string Key)[] s_tabControlBrushes =
+        [
+            (TabControlExt.TabItemHoverBackgroundProperty, "WolvenKitAccentShadow"),
+            (TabControlExt.TabItemHoverBorderBrushProperty, "WolvenKitAccentShadow"),
+            (TabControlExt.TabItemHoverForegroundProperty, "WolvenKitAccentShadowForeground"),
+            (TabControlExt.TabItemSelectedBackgroundProperty, "WolvenKitAccent"),
+            (TabControlExt.TabItemSelectedBorderBrushProperty, "WolvenKitAccentShadow"),
+            (TabControlExt.TabItemSelectedForegroundProperty, "WolvenKitAccentForeground"),
+        ];
+
+        /// <summary>
+        /// Syncfusion sets some tab brushes itself and keeps the value of the theme WolvenKit started with (seen:
+        /// TabItemSelectedBorderBrush, which also colors the hovered tab list button). References to the theme keys
+        /// replace them and follow every switch.
+        /// </summary>
+        private static void UseThemeTabBrushes(TabControlExt tabControl)
+        {
+            if (tabControl is null || tabControl is DocumentTabControl || !HasWolvenKitTabStyle(tabControl))
+            {
+                return;
+            }
+
+            foreach (var (property, key) in s_tabControlBrushes)
+            {
+                tabControl.SetResourceReference(property, key);
+            }
+        }
+
+        /// <summary>Uses WolvenKitTabControl (or a style based on it): the only one setting a tab list menu template.</summary>
+        private static bool HasWolvenKitTabStyle(TabControlExt tabControl)
+        {
+            for (var style = tabControl.Style; style is not null; style = style.BasedOn)
+            {
+                if (style.Setters.OfType<Setter>().Any(s => s.Property == TabControlExt.TabListContextMenuTemplateProperty))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private static void ForEachDockHeader(DependencyObject element, Action<DependencyObject> action)
