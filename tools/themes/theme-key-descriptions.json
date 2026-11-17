@@ -13,7 +13,7 @@
   "ContentBackgroundAlt5": "Strongest raised surface: ribbon, import/export headers",
   "ContentForeground": "Main text color",
   "ContentForegroundAlt1": "Secondary text inside Syncfusion controls (grids, docking, menus)",
-  "BorderAlt": "Borders of fields and frames in property editors, documents and dialogs; grid lines in the LocKey Browser",
+  "BorderAlt": "Borders of fields and frames in property editors, documents and dialogs",
   "WolvenKitPanelHeaderSelected": "Header of the active docked panel; hovered panel headers",
   "WolvenKitPanelHeaderSelectedForeground": "Text on the active panel header",
   "WolvenKitPanelTabSelected": "Selected tab in docked panel tab groups",
@@ -111,5 +111,6 @@
   "WolvenKitProjectIconPurple": "Welcome page: icon background of projects with the purple project color",
   "WolvenKitProjectIconTan": "Welcome page: icon background of projects with the tan project color",
   "WolvenKitListSelection": "Selected row in the Project Explorer, Asset Browser and other trees / lists",
+  "WolvenKitGridLine": "Grid lines and frame of tables (LocKey Browser)",
   "WolvenKitActionText": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
 }
