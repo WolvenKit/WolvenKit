@@ -569,6 +569,16 @@ public sealed partial class ThemeService : IThemeService
         return found;
     }
 
+    public int Patch(ResourceDictionary dictionary)
+    {
+        var found = ScanDictionary(dictionary, null, null, false);
+        if (found > 0)
+        {
+            PatchSources(Current);
+        }
+        return found;
+    }
+
     public void EnsureResourcesOnTop()
     {
         var merged = Application.Current?.Resources.MergedDictionaries;
