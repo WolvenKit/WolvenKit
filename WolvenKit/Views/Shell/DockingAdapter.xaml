@@ -20,6 +20,16 @@
                 x:Key="WolvenKitButtonsTemplate"
                 TargetType="{x:Type ToggleButton}">
                 <ControlTemplate.Triggers>
+                    <!--
+                        Icon color follows the panel title: the header text color, or the active panel's title color
+                        (on its highlighted header). Hover, pressed and disabled below win over these.
+                    -->
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                    </Trigger>
+                    <DataTrigger Binding="{Binding Path=IsTemplateParenKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockHeaderPresenter}}}" Value="True">
+                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
+                    </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
                     </Trigger>

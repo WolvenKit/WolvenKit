@@ -415,6 +415,11 @@ namespace WolvenKit
                 window.UpdateLayout();
                 window.Visibility = Visibility.Visible;
 
+                // Property grids keep the colors they were templated with (e.g. the Export/Import tool settings)
+                window.Dispatcher.BeginInvoke(
+                    () => WolvenKit.Helpers.SyncfusionFreshStyles.RefreshPropertyGrids(logger),
+                    System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+
                 if (dockState is not null)
                 {
                     window.Dispatcher.BeginInvoke(

@@ -80,6 +80,13 @@ public interface IThemeService
     int Refresh();
 
     /// <summary>
+    /// Writes the current theme into <paramref name="dictionary"/>, a dictionary that is not part of the
+    /// application resources (e.g. a fresh copy of Syncfusion styles kept in a control's resources).
+    /// Returns the number of theme colors found in it.
+    /// </summary>
+    int Patch(ResourceDictionary dictionary);
+
+    /// <summary>
     /// Temporarily makes the read-only theme dictionaries (Syncfusion's shared Brushes.xaml) writable, so
     /// SfSkinManager can re-register its theme settings. Dispose to seal them again.
     /// </summary>

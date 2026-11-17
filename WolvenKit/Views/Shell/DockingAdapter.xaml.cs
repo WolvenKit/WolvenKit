@@ -73,75 +73,11 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         void WolvenKit.App.Services.Themes.IThemeAware.OnThemeChanged()
         {
-            var fresh = LoadFreshDockingStyles();
+            var fresh = WolvenKit.Helpers.SyncfusionFreshStyles.Load(WolvenKit.Helpers.SyncfusionFreshStyles.DockingManagerStyles, _logger);
             PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabItemStyleProperty,
                 Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabItemStyleProperty), fresh, "SyncfusionDocumentTabItemExtStyle"));
             PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabControlStyleProperty,
                 Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabControlStyleProperty), fresh, "SyncfusionDocumentTabControlExtStyle"));
-        }
-
-        private const string SyncfusionDockingStylesUri =
-            "pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml";
-
-        /// <summary>
-        /// A new instance of Syncfusion's DockingManager styles. Its styles are created on first access, so after
-        /// its Brushes.xaml is swapped for the application's (recolored) one they pick up the current theme colors.
-        /// The styles already in the application resources keep the colors from when they were first used.
-        /// </summary>
-        private ResourceDictionary LoadFreshDockingStyles()
-        {
-            try
-            {
-                if (FindSyncfusionBrushes(Application.Current.Resources) is not { } brushes)
-                {
-                    _logger.Debug("Themes: Syncfusion Brushes.xaml not found in the application resources.");
-                    return null;
-                }
-
-                var fresh = new ResourceDictionary { Source = new Uri(SyncfusionDockingStylesUri, UriKind.Absolute) };
-                ReplaceSyncfusionBrushes(fresh, brushes);
-                return fresh;
-            }
-            catch (Exception e)
-            {
-                _logger.Warning($"Themes: could not load the Syncfusion docking styles: {e.Message}");
-                return null;
-            }
-        }
-
-        private static bool IsSyncfusionBrushes(ResourceDictionary dictionary) =>
-            dictionary.Source?.OriginalString.EndsWith("/Common/Brushes.xaml", StringComparison.OrdinalIgnoreCase) == true;
-
-        private static ResourceDictionary FindSyncfusionBrushes(ResourceDictionary dictionary)
-        {
-            foreach (var merged in dictionary.MergedDictionaries)
-            {
-                if (IsSyncfusionBrushes(merged))
-                {
-                    return merged;
-                }
-                if (FindSyncfusionBrushes(merged) is { } found)
-                {
-                    return found;
-                }
-            }
-            return null;
-        }
-
-        private static void ReplaceSyncfusionBrushes(ResourceDictionary dictionary, ResourceDictionary brushes)
-        {
-            for (var i = 0; i < dictionary.MergedDictionaries.Count; i++)
-            {
-                var merged = dictionary.MergedDictionaries[i];
-                if (IsSyncfusionBrushes(merged))
-                {
-                    dictionary.MergedDictionaries[i] = brushes;
-                }
-                else
-                {
-                    ReplaceSyncfusionBrushes(merged, brushes);
-                }
-            }
         }
 
         /// <summary>A copy of <paramref name="style"/> based on <paramref name="baseKey"/> from <paramref name="fresh"/>.</summary>
