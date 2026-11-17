@@ -410,6 +410,57 @@
         <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
     </Style>
 
+    <!--
+        Items of the tab list menu (arrow next to the tabs). Syncfusion gives them their own style, which keeps the
+        colors of the theme the menu was created with; DockingAdapter puts this one on them when the menu opens.
+    -->
+    <Style x:Key="WolvenKitTabListMenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border
+                        x:Name="ItemBorder"
+                        Padding="6,3,16,3"
+                        Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="22" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Path
+                                x:Name="CheckMark"
+                                Width="10"
+                                Height="8"
+                                VerticalAlignment="Center"
+                                Data="M0,4 L3.5,7.5 L10,0"
+                                Stroke="{TemplateBinding Foreground}"
+                                StrokeThickness="1.5"
+                                Stretch="Uniform"
+                                Visibility="Collapsed" />
+                            <ContentPresenter
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource WolvenKitListSelection}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
@@ -424,6 +475,28 @@
         <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
         <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />
         <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+        <!--  the base style captures its foreground on load (stayed on the previous theme after a switch)  -->
+        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+        <!--
+            Tab list menu (arrow next to the tabs): the Syncfusion template keeps the background of the theme it was
+            created with. Ours takes the current theme.
+        -->
+        <Setter Property="TabListContextMenuTemplate">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border
+                        Padding="0,4"
+                        Background="{DynamicResource ContentBackgroundAlt3}"
+                        BorderBrush="{DynamicResource BorderAlt}"
+                        BorderThickness="1"
+                        SnapsToDevicePixels="True">
+                        <ItemsPresenter
+                            KeyboardNavigation.DirectionalNavigation="Cycle"
+                            TextElement.Foreground="{DynamicResource ContentForeground}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
 
         <!-- Setter Property="TabPanelBackground" Value="#313131" / -->
     </Style>

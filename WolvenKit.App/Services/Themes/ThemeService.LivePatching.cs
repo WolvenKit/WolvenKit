@@ -490,7 +490,7 @@ public sealed partial class ThemeService
         var anchors = new SortedList<double, (Color From, Color To)>();
         foreach (var (key, to) in ResolveOverrides(theme))
         {
-            if (!_defaults.TryGetValue(key, out var resource))
+            if (s_notNeutralAnchors.Contains(key) || !_defaults.TryGetValue(key, out var resource))
             {
                 continue;
             }
@@ -539,6 +539,19 @@ public sealed partial class ThemeService
             return Color.FromArgb(color.A, mapped.R, mapped.G, mapped.B);
         };
     }
+
+    /// <summary>
+    /// Text drawn on colored surfaces (accent, active panel header). Its default is white like the main text, but a
+    /// light theme often keeps it white: as an anchor it would map white to white, and the light icons of the
+    /// Syncfusion controls (filter, expander and dropdown arrows, menu check marks) would stay white on a light
+    /// background.
+    /// </summary>
+    private static readonly HashSet<string> s_notNeutralAnchors =
+    [
+        "WolvenKitAccentForeground",
+        "WolvenKitAccentShadowForeground",
+        "WolvenKitPanelHeaderSelectedForeground",
+    ];
 
     private static bool IsNeutral(Color c) => Math.Max(c.R, Math.Max(c.G, c.B)) - Math.Min(c.R, Math.Min(c.G, c.B)) <= 12;
 

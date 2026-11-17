@@ -165,7 +165,7 @@
                             Margin="{DynamicResource WolvenKitMargin}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Foreground="#7EFFFFFF"
+                            Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                             FontSize="{DynamicResource WolvenKitFontHuge}"
                             TextWrapping="Wrap"
                             Text="No files to export" />
@@ -175,7 +175,7 @@
                             Margin="{DynamicResource WolvenKitMargin}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Foreground="#7EFFFFFF"
+                            Foreground="{DynamicResource ForegroundColor_Grey_Dark}"
                             FontSize="{DynamicResource WolvenKitFontMedium}"
                             TextWrapping="Wrap"
                             Text="Add files to your project to export them" />

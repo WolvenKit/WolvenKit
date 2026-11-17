@@ -551,6 +551,31 @@ public class ThemeServiceTests
     }
 
     [Fact]
+    public void NeutralMapper_TextOnColoredSurfaces_IsNoAnchor()
+    {
+        using var f = new Fixture();
+        f.Service.SetDefaultColor("ContentBackground", Hex("#202020"));
+        f.Service.SetDefaultColor("ContentForeground", Hex("#FFFFFF"));
+        f.Service.SetDefaultColor("WolvenKitAccentForeground", Hex("#FFFFFF"));
+        var light = new ThemeDto
+        {
+            Name = "Light",
+            Colors =
+            {
+                ["WolvenKitAccentForeground"] = "#FFFFFF",
+                ["ContentBackground"] = "#F0F0F0",
+                ["ContentForeground"] = "#1A1A1A"
+            }
+        };
+
+        var map = f.Service.BuildNeutralMapper(light);
+
+        Assert.NotNull(map);
+        // white icons follow the main text color, not the (still white) text on the accent
+        Assert.Equal(Hex("#1A1A1A"), map(Hex("#FFFFFF")));
+    }
+
+    [Fact]
     public void NeutralMapper_NullWithoutTwoAnchors_OrWhenDisabled()
     {
         using var f = new Fixture();

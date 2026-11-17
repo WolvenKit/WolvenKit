@@ -45,8 +45,7 @@ namespace WolvenKit.Helpers
         }
 
         /// <summary>
-        /// Gives every Syncfusion PropertyGrid on screen (windows and popups) freshly built styles: its own and
-        /// those of its parts (category headers, rows), which it finds in its own resources first. Grids that
+        /// Gives every Syncfusion PropertyGrid on screen (windows and popups) a freshly built style. Grids that
         /// are not loaded right now (hidden panels) keep the old colors until restart.
         /// </summary>
         public static void RefreshPropertyGrids(ILoggerService logger)
@@ -77,17 +76,9 @@ namespace WolvenKit.Helpers
             {
                 try
                 {
-                    var merged = grid.Resources.MergedDictionaries;
-                    for (var i = merged.Count - 1; i >= 0; i--)
-                    {
-                        // the copy merged by an earlier switch
-                        if (merged[i].Source?.OriginalString == PropertyGridStyles)
-                        {
-                            merged.RemoveAt(i);
-                        }
-                    }
-                    merged.Add(fresh);
-
+                    // Only the grid's own style. Merging the fresh dictionary into the grid's resources (for the
+                    // styles of its parts) throws inside WPF (NullReferenceException): the copy shares the
+                    // application's Brushes.xaml with the application resources.
                     if (fresh[typeof(PropertyGrid)] is Style style)
                     {
                         grid.Style = style;
