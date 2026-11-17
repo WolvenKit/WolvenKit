@@ -111,7 +111,7 @@ public partial class RDTMeshViewModel
 
         return new MeshComponent()
         {
-            Name = model.Name,
+            Name = ElementName(model.Name),
             Text = model.Name,
             WorldNodeIndex = string.Empty,
             WorldNodeDataIndices = string.Empty,
@@ -119,6 +119,22 @@ public partial class RDTMeshViewModel
             IsRendering = model.IsEnabled, // shadow / proxy meshes stay hidden, as in entities with appearances
             Transform = new MatrixTransform3D(ModelMatrixInEntity(model, byName, 0))
         };
+    }
+
+    /// <summary>
+    /// A WPF element name made from a model name: element names must be identifiers, and component names can
+    /// start with a digit ("01stars") or hold other characters. The real name stays in Text.
+    /// </summary>
+    private static string ElementName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            return "_";
+        }
+
+        var chars = name.Select(c => char.IsLetterOrDigit(c) || c == '_' ? c : '_').ToArray();
+        var safe = new string(chars);
+        return char.IsDigit(safe[0]) ? "_" + safe : safe;
     }
 
     private Matrix3D ModelMatrixInEntity(LoadableModel model, Dictionary<string, LoadableModel> byName, int depth)
