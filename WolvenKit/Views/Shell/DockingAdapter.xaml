@@ -19,28 +19,24 @@
             <ControlTemplate
                 x:Key="WolvenKitButtonsTemplate"
                 TargetType="{x:Type ToggleButton}">
+                <!--
+                    The icon is painted by IconColor through the shape of the button content (OpacityMask), so its
+                    color comes only from the triggers below. Syncfusion sets the Foreground of some header buttons
+                    itself (the close button of the active panel), which a template trigger can't override.
+                -->
                 <ControlTemplate.Triggers>
-                    <!--
-                        Icon color follows the panel title: the header text color, or the active panel's title color
-                        (on its highlighted header). Hover, pressed and disabled below win over these.
-                    -->
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
-                    </Trigger>
+                    <!--  icon color follows the panel title: header text color, or the active panel's title color  -->
                     <DataTrigger Binding="{Binding Path=IsTemplateParenKeyboardFocusWithin, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockHeaderPresenter}}}" Value="True">
-                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitPanelHeaderSelectedForeground}" />
                     </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
-                    </Trigger>
-                    <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitRed}" />
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitRedShadow}" />
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource WolvenKitRedShadow}" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="{DynamicResource BorderAlt}" />
+                        <Setter TargetName="IconColor" Property="Fill" Value="{DynamicResource BorderAlt}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
 
@@ -57,18 +53,35 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="0"
                         CornerRadius="{StaticResource MaterialDark.ThemeCornerRadiusVariant1}">
-                        <ContentPresenter
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            RecognizesAccessKey="True"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <ContentPresenter.Resources>
-                                <Style
-                                    BasedOn="{x:Null}"
-                                    TargetType="{x:Type TextBlock}" />
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
+                        <Grid>
+                            <!--  the content itself is invisible; it only gives the icon its shape  -->
+                            <Grid Opacity="0">
+                                <Border x:Name="IconShape" Background="Transparent">
+                                    <ContentPresenter
+                                        Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        RecognizesAccessKey="True"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                        <ContentPresenter.Resources>
+                                            <Style
+                                                BasedOn="{x:Null}"
+                                                TargetType="{x:Type TextBlock}" />
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
+                                </Border>
+                            </Grid>
+                            <Rectangle
+                                x:Name="IconColor"
+                                Fill="{DynamicResource ContentForeground}"
+                                IsHitTestVisible="False">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush
+                                        Stretch="Fill"
+                                        Visual="{Binding ElementName=IconShape}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Grid>
                     </Border>
                 </StackPanel>
             </ControlTemplate>

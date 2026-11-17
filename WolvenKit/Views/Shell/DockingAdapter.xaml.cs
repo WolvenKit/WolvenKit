@@ -78,6 +78,38 @@ namespace WolvenKit.Views.Shell
                 Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabItemStyleProperty), fresh, "SyncfusionDocumentTabItemExtStyle"));
             PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabControlStyleProperty,
                 Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabControlStyleProperty), fresh, "SyncfusionDocumentTabControlExtStyle"));
+
+            // after the skin was re-applied (it runs synchronously on the same switch)
+            Dispatcher.BeginInvoke(RenewHeaderButtonTemplates, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+        }
+
+        private static readonly string[] s_headerButtonTemplates =
+        [
+            "AwlButtonTemplate", "CloseButtonTemplate", "MenuButtonTemplate",
+            "MaximizeButtonTemplate", "MinimizeButtonTemplate", "RestoreButtonTemplate"
+        ];
+
+        /// <summary>
+        /// The panel header buttons (menu, pin, close) kept the icon color of the theme they were built with: the
+        /// theme colors in their template triggers were not re-read after a switch. Handing the DockingManager
+        /// its button templates again makes it rebuild the buttons with the current colors.
+        /// </summary>
+        private void RenewHeaderButtonTemplates()
+        {
+            var renewed = 0;
+            foreach (var name in s_headerButtonTemplates)
+            {
+                if (DependencyPropertyDescriptor.FromName(name, typeof(DockingManager), typeof(DockingManager)) is not { } descriptor
+                    || PART_DockingManager.GetValue(descriptor.DependencyProperty) is not ControlTemplate template)
+                {
+                    continue;
+                }
+
+                PART_DockingManager.SetCurrentValue(descriptor.DependencyProperty, null);
+                PART_DockingManager.SetCurrentValue(descriptor.DependencyProperty, template);
+                renewed++;
+            }
+            _logger.Debug($"Themes: {renewed} panel header button templates renewed.");
         }
 
         /// <summary>A copy of <paramref name="style"/> based on <paramref name="baseKey"/> from <paramref name="fresh"/>.</summary>
