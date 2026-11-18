@@ -1905,7 +1905,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // its white placeholder texture; what it adds comes from the bake into the surface, if any.
             if (TryGetRawMaterial(sm.MaterialName, out var decalMat) && decalMat != null &&
                 IsPlainMeshDecalTemplate(GetTemplateFileName(decalMat)) &&
-                DecalAlpha(decalMat, "DiffuseAlpha") <= 0f)
+                // set to 0 in the material itself; decals that leave it out keep being drawn
+                decalMat.Values != null && decalMat.Values.TryGetValue("DiffuseAlpha", out var diffuseAlpha) &&
+                ReadFloat(diffuseAlpha) <= 0f)
             {
                 sm.IsRendering = false;
             }
