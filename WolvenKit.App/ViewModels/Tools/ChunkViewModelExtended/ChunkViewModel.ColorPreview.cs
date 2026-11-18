@@ -56,6 +56,10 @@ public partial class ChunkViewModel
         CColor color => ColorPreviewHelper.FromCColor(color),
         HDRColor color => ColorPreviewHelper.FromChannels(color.Red, color.Green, color.Blue),
         CKeyValuePair pair => GetMaterialParameterColor(pair),
+        // parameters of material templates (.mt)
+        CMaterialParameterColor parameter => ColorPreviewHelper.FromCColor(parameter.Color),
+        CMaterialParameterVector parameter when ColorPreviewHelper.IsRgbColorParameter(parameter.ParameterName.GetResolvedText()) =>
+            ColorPreviewHelper.FromChannels(parameter.Vector.X, parameter.Vector.Y, parameter.Vector.Z),
         Vector4 vector when Parent?.ResolvedData is CKeyValuePair pair &&
                             ColorPreviewHelper.IsRgbColorParameter(pair.Key.GetResolvedText()) =>
             ColorPreviewHelper.FromChannels(vector.X, vector.Y, vector.Z),
@@ -84,7 +88,8 @@ public partial class ChunkViewModel
         var node = Parent;
         for (var depth = 0; depth < 4 && node is not null; depth++, node = node.Parent)
         {
-            if (node.ResolvedData is CColor or HDRColor or Vector4 or CKeyValuePair or rendGradientEntry
+            if (node.ResolvedData is CColor or HDRColor or Vector4 or CKeyValuePair or CMaterialParameterColor
+                or CMaterialParameterVector or rendGradientEntry
                 or rendHairProfileGradientEntry or CArray<rendGradientEntry> or CArray<rendHairProfileGradientEntry>)
             {
                 node.CalculatePreviewColor();
