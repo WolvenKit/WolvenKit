@@ -803,11 +803,14 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// mesh_decal and the variants with the same parameters: emissive (glow skipped elsewhere),
-    /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are).
+    /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are),
+    /// and vehicle_mesh_decal (vehicles: stitches and decals, often DiffuseAlpha 0 = normal only;
+    /// its damage and dirt are not shown).
     /// </summary>
     private static bool IsPlainMeshDecalTemplate(string template) =>
         IsGradientDecalTemplate(template) ||
         template.Equals("mesh_decal", StringComparison.OrdinalIgnoreCase) ||
+        template.Equals("vehicle_mesh_decal", StringComparison.OrdinalIgnoreCase) ||
         template.Equals("mesh_decal_emissive", StringComparison.OrdinalIgnoreCase) ||
         template.Equals("mesh_decal_parallax", StringComparison.OrdinalIgnoreCase);
 
