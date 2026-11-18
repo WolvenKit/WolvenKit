@@ -803,11 +803,14 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// mesh_decal and the variants with the same parameters: emissive (glow skipped elsewhere),
-    /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are).
+    /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are),
+    /// and vehicle_mesh_decal (vehicles: stitches and decals, often DiffuseAlpha 0 = normal only;
+    /// its damage and dirt are not shown).
     /// </summary>
     private static bool IsPlainMeshDecalTemplate(string template) =>
         IsGradientDecalTemplate(template) ||
         template.Equals("mesh_decal", StringComparison.OrdinalIgnoreCase) ||
+        template.Equals("vehicle_mesh_decal", StringComparison.OrdinalIgnoreCase) ||
         template.Equals("mesh_decal_emissive", StringComparison.OrdinalIgnoreCase) ||
         template.Equals("mesh_decal_parallax", StringComparison.OrdinalIgnoreCase);
 
@@ -895,10 +898,13 @@ public partial class RDTMeshViewModel
         }
     }
 
-    private static float DecalAlpha(Material raw, string key) =>
-        // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS). Values above
-        // 1 occur (DiffuseAlpha 2): coverage x alpha is saturated where it is used.
-        raw.Values != null && raw.Values.TryGetValue(key, out var v) ? Math.Clamp(ReadFloat(v), 0f, 16f) : 0f;
+    private float DecalAlpha(Material raw, string key) =>
+        // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS), vehicle_mesh_decal.mt's
+        // are 1 (VEHICLE_MESH_DEFAULTS). Values above 1 occur (DiffuseAlpha 2): coverage x alpha is saturated
+        // where it is used.
+        raw.Values != null && raw.Values.TryGetValue(key, out var v)
+            ? Math.Clamp(ReadFloat(v), 0f, 16f)
+            : GetTemplateFileName(raw).StartsWith("vehicle_mesh_decal", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
 
     /// <summary>World-space box of a submesh (empty when it has no geometry).</summary>
     private static Rect3D WorldBounds(LoadableModel model, SubmeshComponent sm)
