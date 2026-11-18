@@ -317,6 +317,24 @@
             </StackPanel>
         </Border>
 
+        <!-- Generating materials: at the bottom, the preview stays usable meanwhile -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0,0,0,16"
+            Padding="12,6"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Background="#C0121212"
+            CornerRadius="4"
+            IsHitTestVisible="False"
+            Visibility="{Binding IsMaterialsProgressVisible, Converter={StaticResource VisibilityConverter}}">
+            <TextBlock
+                Foreground="White"
+                FontSize="13"
+                Text="{Binding MaterialsProgressText}" />
+        </Border>
+
         <others:LoadingTextControl
             Grid.Row="0"
             Grid.Column="0"

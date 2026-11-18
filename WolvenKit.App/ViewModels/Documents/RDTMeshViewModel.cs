@@ -4001,6 +4001,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     public bool IsLoadingMaterials { get; set; }
 
+    /// <summary>Shown over the preview while materials are generated ("Generating materials 3 / 12: name").</summary>
+    [ObservableProperty] private string? _materialsProgressText;
+
+    [ObservableProperty] private bool _isMaterialsProgressVisible;
+
     private void DeleteMaterialCache()
     {
         var dir = ISettingsManager.GetTemp_OBJPath();
@@ -4092,14 +4097,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             var ordered = batch.OrderBy(x => x.Key).ToList();
+            var logger = Parent?.GetLoggerService();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            if (refreshFromDisk || clearCache)
+            {
+                logger?.Info($"Generating materials of '{SelectedAppearance.Name}' ({ordered.Count})...");
+            }
+
+            IsMaterialsProgressVisible = ordered.Count > 0;
             await Task.Run(async () =>
             {
-                foreach (var (_, m) in ordered)
+                for (var i = 0; i < ordered.Count; i++)
+                {
+                    var (name, m) = ordered[i];
+                    MaterialsProgressText = $"Generating materials {i + 1} / {ordered.Count}: {name}";
+                    var materialWatch = System.Diagnostics.Stopwatch.StartNew();
                     await LoadMaterial(m, bakeMax, forceBake);
+                    logger?.Debug($"[Preview] material {i + 1} / {ordered.Count} '{name}': {materialWatch.ElapsedMilliseconds} ms");
+                }
             });
 
             if (refreshFromDisk || clearCache)
-                Parent?.GetLoggerService()?.Info("All materials loaded!");
+                Parent?.GetLoggerService()?.Info($"All materials loaded in {watch.Elapsed.TotalSeconds:0.0} s.");
             else
                 PreviewTrace("Materials updated");
             _materialsGenerated = true;
@@ -4112,6 +4131,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         finally
         {
             IsLoadingMaterials = false;
+            IsMaterialsProgressVisible = false;
+            MaterialsProgressText = null;
         }
 
         // No cache clear here: texture keys include the PNG write time, so a rebaked PNG gets
