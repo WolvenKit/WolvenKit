@@ -36,6 +36,9 @@ namespace WolvenKit.Views.Dialogs
         private string s_selectedCybMeshFile = "";
 
         private string s_selectedShadowMeshFile = "";
+        private string s__selectedRigFile = "";
+        private string s_selectedAnimGraphFile = "";
+        private string s_selectedJsonFile = "";
 
 
 
@@ -55,7 +58,10 @@ namespace WolvenKit.Views.Dialogs
                 SelectedShadowAppFile = s_selectedShadowAppFile,
                 SelectedMainMeshFile = s_selectedMainMeshFile,
                 SelectedCybMeshFile = s_selectedCybMeshFile,
-                SelectedShadowMeshFile = s_selectedShadowMeshFile
+                SelectedShadowMeshFile = s_selectedShadowMeshFile,
+                SelectedRigFile = s__selectedRigFile,
+                SelectedAnimGraphFile = s_selectedAnimGraphFile,
+                SelectedJsonFile = s_selectedJsonFile
             };
             DataContext = ViewModel;
 

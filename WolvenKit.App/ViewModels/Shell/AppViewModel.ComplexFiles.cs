@@ -495,7 +495,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
        
         _loggerService.Warning(dialogModel.HairmodName);
-        TemplateFileTools.ccxlfile(dialogModel.SelectedMainAppFile,dialogModel.HairmodName);
+        TemplateFileTools.ConnectHairCCXL(dialogModel);
     }
     
 

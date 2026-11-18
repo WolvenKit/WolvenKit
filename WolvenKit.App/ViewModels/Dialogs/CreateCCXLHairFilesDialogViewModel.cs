@@ -29,6 +29,9 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
     [ObservableProperty] private string _selectedShadowMeshFile = "";
 
     [ObservableProperty] private string _selectedRigFile = "";
+    [ObservableProperty] private string _selectedAnimGraphFile = "";
+
+    [ObservableProperty] private string _selectedJsonFile = "";
 
 
 
@@ -72,6 +75,36 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
         
         SelectedCybMeshFile = MeshFileOption.FirstOrDefault() ?? "";
         SelectedShadowMeshFile = MeshFileOption.FirstOrDefault() ?? "";
+
+
+
+        RigFileOption.AddRange<string>(
+            activeProject.ModFiles
+                .Where(fp => fp.EndsWith(".rig"))
+
+        );
+        SelectedRigFile = RigFileOption.LastOrDefault() ?? "";
+
+
+
+        AnimGraphFileOption.AddRange<string>(
+            activeProject.ModFiles
+                .Where(fp => fp.EndsWith(".animgraph"))
+
+        );
+
+
+        SelectedAnimGraphFile = AnimGraphFileOption.LastOrDefault() ?? "";
+
+        JsonFileOption.AddRange<string>(
+           activeProject.ModFiles
+               .Where(fp => fp.EndsWith(".json"))
+
+
+       );
+        SelectedJsonFile = JsonFileOption.LastOrDefault() ?? "";
+
+
     }
 
     [ObservableProperty]
@@ -83,9 +116,22 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
     [ObservableProperty]
     private List<string> _meshFileOption = [];
 
-     public void SetFiles() {
+    [ObservableProperty]
+    private List<string> _rigFileOption = [];
+
+    [ObservableProperty]
+    private List<string> _animGraphFileOption = [];
+
+    [ObservableProperty]
+    private List<string> _jsonFileOption = [];
+
+
+
+    public void SetFiles() {
+        HairmodName = _activeProject.ModName;
 
         SelectedInkCCFile = InkCCFileOption.FirstOrDefault()!;
+
         SelectedMainAppFile = AppFileOption.FirstOrDefault()!;
         SelectedCybAppFile = AppFileOption.FirstOrDefault(fp => fp.Contains("_cyberware"))!;
         SelectedShadowAppFile = AppFileOption.FirstOrDefault(fp => fp.Contains("_fpp"))!;
@@ -93,5 +139,11 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
         SelectedMainMeshFile = MeshFileOption.FirstOrDefault()!;
         SelectedCybMeshFile = MeshFileOption.FirstOrDefault(fp => fp.Contains("_cyberware"))!;
         SelectedShadowMeshFile = MeshFileOption.FirstOrDefault(fp => fp.Contains("_shadow"))!;
+
+        SelectedRigFile = RigFileOption.FirstOrDefault()!;
+        SelectedAnimGraphFile = AnimGraphFileOption.FirstOrDefault()!;
+
+        SelectedJsonFile = JsonFileOption.FirstOrDefault()!;
+
     }
 }
