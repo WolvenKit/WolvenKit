@@ -5660,6 +5660,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
             }
 
+            // Plastic / chrome skins of some NPCs are multilayered (their .mi still lives with the skins):
+            // the multilayer bake above is their look, the skin bake would replace it.
+            if (isSkin && dictionary.ContainsKey("MultilayerSetup"))
+            {
+                isSkin = false;
+            }
+
             if (isSkin && !Has(kind, MaterialKind.Makeup) && !Has(kind, MaterialKind.Eye))
             {
 
@@ -11814,8 +11821,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // The template could not be resolved (e.g. a mod .mi whose chain is incomplete):
         // a skin is still a skin when its base chain goes through the character skin
         // instances, whatever its name says ("..._tattoo" skins are not overlays).
-        if (!Has(kind, MaterialKind.Skin) && instance != null && IsSkinByBaseChain(instance))
+        // ... unless it is multilayered (plastic / chrome skins of some NPCs).
+        if (!Has(kind, MaterialKind.Skin) && instance != null && !IsMultilayered(material) && IsSkinByBaseChain(instance))
             return MaterialKind.Skin;
+        if (Has(kind, MaterialKind.Skin) && IsMultilayered(material))
+            return kind & ~MaterialKind.Skin;
 
         return kind;
     }
@@ -11850,6 +11860,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         return false;
     }
+
+    /// <summary>A multilayered material (its own values or the chain's give a multilayer setup).</summary>
+    private bool IsMultilayered(Material? material) =>
+        material != null &&
+        (material.Values.ContainsKey("MultilayerSetup") || FindMaterialValue(material, "MultilayerSetup") != null);
 
     private static bool IsSkinPath(string path) =>
         path.EndsWith("skin.mt", StringComparison.Ordinal) ||
