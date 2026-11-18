@@ -3807,6 +3807,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     public bool IsLoadingMaterials { get; set; }
 
+    /// <summary>Shown over the preview while materials are generated ("Generating materials 3 / 12: name").</summary>
+    [ObservableProperty] private string? _materialsProgressText;
+
+    [ObservableProperty] private bool _isMaterialsProgressVisible;
+
     private void DeleteMaterialCache()
     {
         var dir = ISettingsManager.GetTemp_OBJPath();
@@ -3898,14 +3903,28 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             var ordered = batch.OrderBy(x => x.Key).ToList();
+            var logger = Parent?.GetLoggerService();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            if (refreshFromDisk || clearCache)
+            {
+                logger?.Info($"Generating materials of '{SelectedAppearance.Name}' ({ordered.Count})...");
+            }
+
+            IsMaterialsProgressVisible = ordered.Count > 0;
             await Task.Run(async () =>
             {
-                foreach (var (_, m) in ordered)
+                for (var i = 0; i < ordered.Count; i++)
+                {
+                    var (name, m) = ordered[i];
+                    MaterialsProgressText = $"Generating materials {i + 1} / {ordered.Count}: {name}";
+                    var materialWatch = System.Diagnostics.Stopwatch.StartNew();
                     await LoadMaterial(m, bakeMax, forceBake);
+                    logger?.Debug($"[Preview] material {i + 1} / {ordered.Count} '{name}': {materialWatch.ElapsedMilliseconds} ms");
+                }
             });
 
             if (refreshFromDisk || clearCache)
-                Parent?.GetLoggerService()?.Info("All materials loaded!");
+                Parent?.GetLoggerService()?.Info($"All materials loaded in {watch.Elapsed.TotalSeconds:0.0} s.");
             else
                 Parent?.GetLoggerService()?.Debug("Materials updated");
             _materialsGenerated = true;
@@ -3918,6 +3937,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         finally
         {
             IsLoadingMaterials = false;
+            IsMaterialsProgressVisible = false;
+            MaterialsProgressText = null;
         }
 
         // No cache clear here: texture keys include the PNG write time, so a rebaked PNG gets
@@ -5470,6 +5491,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 }
             }
 
+            // Plastic / chrome skins of some NPCs are multilayered (their .mi still lives with the skins):
+            // the multilayer bake above is their look, the skin bake would replace it.
+            if (isSkin && dictionary.ContainsKey("MultilayerSetup"))
+            {
+                isSkin = false;
+            }
+
             if (isSkin && !Has(kind, MaterialKind.Makeup) && !Has(kind, MaterialKind.Eye))
             {
 
@@ -5920,34 +5948,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             bmpSource.Freeze();
                                         using var bmp = BitmapSourceToBitmap(bmpSource);
 
-                                        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                                        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                        try
-                                        {
-                                            unsafe
-                                            {
-                                                byte* ptr = (byte*)data.Scan0;
-                                                int stride = data.Stride;
-                                                for (int y = 0; y < bmp.Height; y++)
-                                                {
-                                                    for (int x = 0; x < bmp.Width; x++)
-                                                    {
-                                                        int off = y * stride + x * 4;
-                                                        float nx = (ptr[off + 2] / 255f) * 2f - 1f;
-                                                        float ny = (ptr[off + 1] / 255f) * 2f - 1f;
-                                                        float nz = MathF.Sqrt(Math.Max(0f, 1f - nx * nx - ny * ny));
-                                                        ny = -ny;
-
-                                                        ptr[off + 2] = (byte)((nx * 0.5f + 0.5f) * 255f);
-                                                        ptr[off + 1] = (byte)((ny * 0.5f + 0.5f) * 255f);
-                                                        ptr[off + 0] = (byte)((nz * 0.5f + 0.5f) * 255f);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        finally { bmp.UnlockBits(data); }
-
-                                        SavePngAtomic(bmp, filename_bn);
+                                        // Normal with DetailNormal and MicroDetail, as skin.mt (SkinNormals)
+                                        await BakeSkinNormal(material, dictionary, bmp, filename_bn);
                                     }
                                 }
                             }
@@ -11230,8 +11232,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // The template could not be resolved (e.g. a mod .mi whose chain is incomplete):
         // a skin is still a skin when its base chain goes through the character skin
         // instances, whatever its name says ("..._tattoo" skins are not overlays).
-        if (!Has(kind, MaterialKind.Skin) && instance != null && IsSkinByBaseChain(instance))
+        // ... unless it is multilayered (plastic / chrome skins of some NPCs).
+        if (!Has(kind, MaterialKind.Skin) && instance != null && IsSkinByBaseChain(instance) && !IsMultilayered(material))
             return MaterialKind.Skin;
+        if (Has(kind, MaterialKind.Skin) && IsMultilayered(material))
+            return kind & ~MaterialKind.Skin;
 
         return kind;
     }
@@ -11266,6 +11271,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         return false;
     }
+
+    /// <summary>A multilayered material (its own values or the chain's give a multilayer setup).</summary>
+    private bool IsMultilayered(Material? material) =>
+        material != null &&
+        (material.Values.ContainsKey("MultilayerSetup") || FindMaterialValue(material, "MultilayerSetup") != null);
 
     private static bool IsSkinPath(string path) =>
         path.EndsWith("skin.mt", StringComparison.Ordinal) ||
