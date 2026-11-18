@@ -21,10 +21,15 @@ public partial class RDTMeshViewModel
     // MicroDetail is tiled finely: baked into a map twice the skin's size (at most this), so the tiles keep some detail.
     private const int SkinMicroDetailMaxSize = 4096;
 
-    /// <summary>A texture's BGRA bytes, sampled bilinearly in image coordinates (0..1, V down).</summary>
+    /// <summary>
+    /// A texture's BGRA bytes, sampled bilinearly in image coordinates (0..1, V down). Its smaller levels
+    /// (<see cref="WithMips"/>) are for textures tiled finer than the map they are baked into: sampled at
+    /// full size they alias into coarse grain.
+    /// </summary>
     private sealed class SkinSampler
     {
         private readonly byte[] _bgra;
+        private List<SkinSampler>? _mips;
         public int Width { get; }
         public int Height { get; }
 
@@ -33,6 +38,59 @@ public partial class RDTMeshViewModel
             _bgra = bgra;
             Width = width;
             Height = height;
+        }
+
+        /// <summary>Builds the halved levels (2x2 box filter) down to 4 px; an atlas split at an even column keeps its halves apart.</summary>
+        public SkinSampler WithMips()
+        {
+            _mips = [this];
+            var level = this;
+            while (level.Width >= 8 && level.Height >= 8)
+            {
+                int w = level.Width / 2, h = level.Height / 2;
+                var bytes = new byte[w * h * 4];
+                for (var y = 0; y < h; y++)
+                {
+                    for (var x = 0; x < w; x++)
+                    {
+                        for (var c = 0; c < 4; c++)
+                        {
+                            int a = ((2 * y) * level.Width + 2 * x) * 4 + c, b = a + 4;
+                            int d = a + level.Width * 4, e = d + 4;
+                            bytes[(y * w + x) * 4 + c] = (byte)((level._bgra[a] + level._bgra[b] + level._bgra[d] + level._bgra[e] + 2) / 4);
+                        }
+                    }
+                }
+
+                level = new SkinSampler(bytes, w, h);
+                _mips.Add(level);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Like <see cref="Sample"/>, from the level whose texels are about <paramref name="texelsPerSample"/>
+        /// texels of this one apart (trilinear between two levels).
+        /// </summary>
+        public (float R, float G, float B) SampleFiltered(float u, float v, float texelsPerSample, (float X0, float Width)? wrapColumns = null)
+        {
+            if (_mips is not { Count: > 1 } mips || texelsPerSample <= 1f)
+            {
+                return Sample(u, v, wrapColumns);
+            }
+
+            var lod = Math.Min(MathF.Log2(texelsPerSample), mips.Count - 1);
+            var lower = (int)MathF.Floor(lod);
+            var t = lod - lower;
+            var a = mips[lower].Sample(u, v, wrapColumns);
+            if (t <= 0f || lower + 1 >= mips.Count)
+            {
+                return a;
+            }
+
+            var b = mips[lower + 1].Sample(u, v, wrapColumns);
+            return (a.R + (b.R - a.R) * t, a.G + (b.G - a.G) * t, a.B + (b.B - a.B) * t);
         }
 
         public static SkinSampler From(Bitmap bitmap)
@@ -159,7 +217,7 @@ public partial class RDTMeshViewModel
         var detailInfluence = Math.Clamp(SkinFloat(material, dictionary, "DetailNormalInfluence", 1f), 0f, 1f);
 
         var microInfluence = Math.Clamp(SkinFloat(material, dictionary, "MicroDetailInfluence", 0f), 0f, 1f);
-        var micro = microInfluence > 0f ? await LoadSkinSampler(material, dictionary, "MicroDetail") : null;
+        var micro = microInfluence > 0f ? (await LoadSkinSampler(material, dictionary, "MicroDetail"))?.WithMips() : null;
         var microScale1 = MathF.Max(0f, SkinFloat(material, dictionary, "MicroDetailUVScale01", 1f));
         var microScale2 = MathF.Max(0f, SkinFloat(material, dictionary, "MicroDetailUVScale02", 1f));
         var regions = micro != null ? await LoadSkinSampler(material, dictionary, "TintColorMask") : null;
@@ -214,8 +272,11 @@ public partial class RDTMeshViewModel
                         // atlas: MicroDetail 01 in the left half, 02 in the right one
                         var s1 = microScale1 * (regionScale + 1.4f);
                         var s2 = microScale2 * (regionScale + 1f);
-                        var m1 = DecodeSkinNormal(micro.Sample(Frac(u * s1) * 0.5f, 1f - Frac(vUp * s1), (0f, 0.5f)));
-                        var m2 = DecodeSkinNormal(micro.Sample(Frac(u * s2) * 0.5f + 0.5f, 1f - Frac(vUp * s2), (0.5f, 0.5f)));
+                        // texels of a half the tiled detail moves per baked pixel: filtered to that, no grain
+                        var step1 = MathF.Max(s1 * micro.Width * 0.5f / width, s1 * micro.Height / height);
+                        var step2 = MathF.Max(s2 * micro.Width * 0.5f / width, s2 * micro.Height / height);
+                        var m1 = DecodeSkinNormal(micro.SampleFiltered(Frac(u * s1) * 0.5f, 1f - Frac(vUp * s1), step1, (0f, 0.5f)));
+                        var m2 = DecodeSkinNormal(micro.SampleFiltered(Frac(u * s2) * 0.5f + 0.5f, 1f - Frac(vUp * s2), step2, (0.5f, 0.5f)));
                         var mix = (m2.X + (m1.X - m2.X) * region, m2.Y + (m1.Y - m2.Y) * region, m2.Z + (m1.Z - m2.Z) * region);
                         n = BlendSkinNormal(n, mix, influence);
                     }
