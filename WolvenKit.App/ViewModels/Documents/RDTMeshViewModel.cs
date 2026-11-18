@@ -6089,34 +6089,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             bmpSource.Freeze();
                                         using var bmp = BitmapSourceToBitmap(bmpSource);
 
-                                        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                                        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                        try
-                                        {
-                                            unsafe
-                                            {
-                                                byte* ptr = (byte*)data.Scan0;
-                                                int stride = data.Stride;
-                                                for (int y = 0; y < bmp.Height; y++)
-                                                {
-                                                    for (int x = 0; x < bmp.Width; x++)
-                                                    {
-                                                        int off = y * stride + x * 4;
-                                                        float nx = (ptr[off + 2] / 255f) * 2f - 1f;
-                                                        float ny = (ptr[off + 1] / 255f) * 2f - 1f;
-                                                        float nz = MathF.Sqrt(Math.Max(0f, 1f - nx * nx - ny * ny));
-                                                        ny = -ny;
-
-                                                        ptr[off + 2] = (byte)((nx * 0.5f + 0.5f) * 255f);
-                                                        ptr[off + 1] = (byte)((ny * 0.5f + 0.5f) * 255f);
-                                                        ptr[off + 0] = (byte)((nz * 0.5f + 0.5f) * 255f);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        finally { bmp.UnlockBits(data); }
-
-                                        SavePngAtomic(bmp, filename_bn);
+                                        // Normal with DetailNormal and MicroDetail, as skin.mt (SkinNormals)
+                                        await BakeSkinNormal(material, dictionary, bmp, filename_bn);
                                     }
                                 }
                             }
