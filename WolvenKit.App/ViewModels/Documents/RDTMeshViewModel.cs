@@ -1899,6 +1899,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Lies on the base mesh: tiny bias only.
             sm.DepthBias = -1;
             sm.IsTransparent = true;
+
+            // DiffuseAlpha 0: the decal adds no colour, only normals (and roughness / metalness) to the
+            // surface under it (vehicle stitches and panel lines). Drawn as a mesh of its own it showed
+            // its white placeholder texture; what it adds comes from the bake into the surface, if any.
+            if (TryGetRawMaterial(sm.MaterialName, out var decalMat) && decalMat != null &&
+                IsPlainMeshDecalTemplate(GetTemplateFileName(decalMat)) &&
+                DecalAlpha(decalMat, "DiffuseAlpha") <= 0f)
+            {
+                sm.IsRendering = false;
+            }
         }
         else if (Has(kind, MaterialKind.Hair))
         {
