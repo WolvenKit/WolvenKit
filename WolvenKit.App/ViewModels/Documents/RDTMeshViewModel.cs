@@ -11822,7 +11822,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // a skin is still a skin when its base chain goes through the character skin
         // instances, whatever its name says ("..._tattoo" skins are not overlays).
         // ... unless it is multilayered (plastic / chrome skins of some NPCs).
-        if (!Has(kind, MaterialKind.Skin) && instance != null && !IsMultilayered(material) && IsSkinByBaseChain(instance))
+        if (!Has(kind, MaterialKind.Skin) && instance != null && IsSkinByBaseChain(instance) && !IsMultilayered(material))
             return MaterialKind.Skin;
         if (Has(kind, MaterialKind.Skin) && IsMultilayered(material))
             return kind & ~MaterialKind.Skin;
