@@ -410,6 +410,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Parent.Parent.CalculatePreviewColor();
                 }
 
+                // colours stored as numbers: the swatches and gradient strips above follow
+                RecalculateColorPreviewsAbove();
+
                 if (Data is CName &&
                     Parent.Parent?.ResolvedData is meshMeshAppearance or redTagList or entVisualTagsSchema)
                 {

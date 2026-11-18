@@ -55,9 +55,6 @@ namespace WolvenKit.Converters
         public DataTemplate RedTypeViewer { get; set; }
         public DataTemplate NullTemplate { get; set; }
 
-        // Some vectors are actually colours
-        private static readonly string[] s_vectorsAsColors = ["BaseColorScale", "HSV_Mod", "TintColor"];
-
         // Some uints are actually chunkMasks
         private static readonly string[] s_chunkMaskProperties = ["chunkMask", "componentIndexMask"];
 
@@ -166,7 +163,7 @@ namespace WolvenKit.Converters
             {
                 // Some vectors are actually colours
                 if (vm.Parent?.ResolvedData is CKeyValuePair pair &&
-                    s_vectorsAsColors.Contains(pair.Key.GetResolvedText() ?? ""))
+                    WolvenKit.App.Helpers.ColorPreviewHelper.IsColorParameter(pair.Key.GetResolvedText()))
                 {
                     return RedVectorColorEditor;
                 }

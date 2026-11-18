@@ -413,6 +413,28 @@
                             </Border.Style>
                         </Border>
 
+                        <!-- gradient arrays (hair profiles, .gradient files): their stops as a strip -->
+                        <Border
+                            Width="96"
+                            Height="{DynamicResource WolvenKitIconMicro}"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            VerticalAlignment="Center"
+                            Background="{Binding PreviewGradient, Mode=OneWay}"
+                            BorderBrush="{DynamicResource BorderAlt}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="True">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PreviewGradient, Mode=OneWay}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
                         <TextBlock
                             Name="PropertyValue"
                             Style="{StaticResource PropertyValueStyle}"

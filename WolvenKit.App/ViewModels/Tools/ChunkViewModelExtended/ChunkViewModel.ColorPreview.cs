@@ -24,10 +24,16 @@ public partial class ChunkViewModel
     /// <summary>Colour shown as a swatch next to the value; null for rows that don't stand for one.</summary>
     [ObservableProperty] private Color? _previewColor;
 
+    /// <summary>A gradient array (hair profile, .gradient file) shown as a strip next to the value; null otherwise.</summary>
+    [ObservableProperty] private Brush? _previewGradient;
+
     /// <summary>Called from <see cref="CalculateValue"/> and when a channel of an override colour changes.</summary>
     public void CalculatePreviewColor()
     {
         PreviewColor = GetPreviewColor();
+        PreviewGradient = ColorPreviewHelper.GetGradientStops(ResolvedData) is { } stops
+            ? ColorPreviewHelper.ToGradientBrush(stops)
+            : null;
 
         // the layer's colorScale row shows the same colour; it also depends on the layer's material
         if (ResolvedData is Multilayer_Layer && _propertiesLoaded &&
@@ -43,8 +49,53 @@ public partial class ChunkViewModel
         IRedArray when Name == "v" && ParentData is Multilayer_LayerTemplateOverridesColor entry => FromChannels(entry.V),
         Multilayer_Layer layer => GetLayerColor(layer),
         CName when Name == "colorScale" && ParentData is Multilayer_Layer layer => GetLayerColor(layer),
+
+        // colours stored as numbers
+        rendGradientEntry entry => ColorPreviewHelper.FromCColor(entry.Color),
+        rendHairProfileGradientEntry entry => ColorPreviewHelper.FromCColor(entry.Color),
+        CColor color => ColorPreviewHelper.FromCColor(color),
+        HDRColor color => ColorPreviewHelper.FromChannels(color.Red, color.Green, color.Blue),
+        CKeyValuePair pair => GetMaterialParameterColor(pair),
+        // parameters of material templates (.mt)
+        CMaterialParameterColor parameter => ColorPreviewHelper.FromCColor(parameter.Color),
+        CMaterialParameterVector parameter when ColorPreviewHelper.IsRgbColorParameter(parameter.ParameterName.GetResolvedText()) =>
+            ColorPreviewHelper.FromChannels(parameter.Vector.X, parameter.Vector.Y, parameter.Vector.Z),
+        Vector4 vector when Parent?.ResolvedData is CKeyValuePair pair &&
+                            ColorPreviewHelper.IsRgbColorParameter(pair.Key.GetResolvedText()) =>
+            ColorPreviewHelper.FromChannels(vector.X, vector.Y, vector.Z),
+        CFloat kelvin when Name == "temperature" &&
+                           ParentData is entLightComponent or worldStaticLightNode or worldAdvertisementLightData =>
+            ColorPreviewHelper.FromKelvin(kelvin),
         _ => null,
     };
+
+    /// <summary>The colour of a material parameter row (the key-value pair): colour types, and colour Vector4s.</summary>
+    private static Color? GetMaterialParameterColor(CKeyValuePair pair) => pair.Value switch
+    {
+        CColor color => ColorPreviewHelper.FromCColor(color),
+        HDRColor color => ColorPreviewHelper.FromChannels(color.Red, color.Green, color.Blue),
+        Vector4 vector when ColorPreviewHelper.IsRgbColorParameter(pair.Key.GetResolvedText()) =>
+            ColorPreviewHelper.FromChannels(vector.X, vector.Y, vector.Z),
+        _ => null,
+    };
+
+    /// <summary>
+    /// After a value changed: rows above it that show its colour (a colour's channels, a gradient entry's colour
+    /// or position, a material parameter's vector) follow.
+    /// </summary>
+    public void RecalculateColorPreviewsAbove()
+    {
+        var node = Parent;
+        for (var depth = 0; depth < 4 && node is not null; depth++, node = node.Parent)
+        {
+            if (node.ResolvedData is CColor or HDRColor or Vector4 or CKeyValuePair or CMaterialParameterColor
+                or CMaterialParameterVector or rendGradientEntry
+                or rendHairProfileGradientEntry or CArray<rendGradientEntry> or CArray<rendHairProfileGradientEntry>)
+            {
+                node.CalculatePreviewColor();
+            }
+        }
+    }
 
     /// <summary>The colour of the layer's colorScale in the layer's template; null if it isn't found there.</summary>
     private static Color? GetLayerColor(Multilayer_Layer layer)
