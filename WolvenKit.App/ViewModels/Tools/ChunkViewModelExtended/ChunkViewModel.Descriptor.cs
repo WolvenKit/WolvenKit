@@ -199,6 +199,9 @@ public partial class ChunkViewModel
             case worldNode:
                 // TODO find fallback properties for other node types
                 break;
+            case communityCommunityEntryPhaseSpotsData phaseSpots:
+                Descriptor = StringHelper.Stringify(phaseSpots) ?? "";
+                break;
             case CHandle<animAnimNode_Base> { Chunk: animAnimNode_Switch } handle
                 when handle.Chunk.GetProperty("InputNodes") is CArray<animPoseLink> animAry:
 
