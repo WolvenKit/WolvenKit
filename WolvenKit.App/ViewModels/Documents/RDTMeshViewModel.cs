@@ -1271,6 +1271,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var appIndex = ResolveAppearanceIndex(apps, meshApp);
 
         var appMaterials = new List<Material>();
+        var chunkMaterialNames = new List<string>();
 
         if (appIndex >= 0 && appIndex < mesh.Appearances.Count)
         {
@@ -1279,6 +1280,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 foreach (var m in mmApp.ChunkMaterials)
                 {
+                    chunkMaterialNames.Add(m.ToString() ?? string.Empty);
                     var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh, meshPath);
                     if (materials.TryGetValue(name, out var material))
                     {
@@ -1313,7 +1315,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             AppearanceName = meshApp,
             Matrix = matrix,
             Materials = appMaterials,
-            IsEnabled = enabled,
+            IsEnabled = enabled && !IsProxyMesh(depotPath, chunkMaterialNames),
             BindName = bindName,
             SlotName = slotName,
             SkinName = skinName,
@@ -1324,6 +1326,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         };
 
         appModels.Add(modelName, model);
+    }
+
+    private static readonly HashSet<string> s_proxyMaterialNames = new(StringComparer.OrdinalIgnoreCase) { "Body", "Hair", "Glass", "Lights" };
+
+    /// <summary>
+    /// A simplified stand-in of the whole character or vehicle (distance / appearance proxy):
+    /// a "proxy" mesh file, or a mesh whose materials are only the proxy's generic Body, Hair,
+    /// Glass, Lights. Hidden like AppearanceProxyMesh: drawn, it doubles the real meshes.
+    /// </summary>
+    private static bool IsProxyMesh(ResourcePath depotPath, List<string> chunkMaterialNames)
+    {
+        var file = Path.GetFileNameWithoutExtension(depotPath.GetResolvedText() ?? string.Empty);
+        if (file.Contains("proxy", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return chunkMaterialNames.Count > 0 &&
+               chunkMaterialNames.Contains("Body", StringComparer.OrdinalIgnoreCase) &&
+               chunkMaterialNames.All(s_proxyMaterialNames.Contains);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
@@ -1896,8 +1918,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         else if (Has(kind, MaterialKind.Decal))
         {
-            // Lies on the base mesh: tiny bias only.
-            sm.DepthBias = -1;
+            // Lies on the base mesh: tiny bias only. Decals on the face overlay meshes (cyberware on
+            // the freckles and lips meshes) are copies of the head surface, not floating above it:
+            // the makeup bias, as before they were decals.
+            sm.DepthBias = ContainsAny(sm.MaterialName, "hx_", "freckle", "frecle", "makeup", "_lips") ? -2 : -1;
             sm.IsTransparent = true;
 
             // DiffuseAlpha 0: the decal adds no colour, only normals (and roughness / metalness) to the
@@ -2551,6 +2575,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 material.MetallicFactor = metal;
                 material.RenderEnvironmentMap = false;
 
+                Parent?.GetLoggerService()?.Debug($"[Decals] '{name}' as its own mesh: {Path.GetFileName(filename_bd)}" +
+                                                  (File.Exists(filename_bd) ? "" : " (missing)"));
                 if (File.Exists(filename_bd))
                 {
                     material.AlbedoMap = GetOrCreateTexture(filename_bd);
