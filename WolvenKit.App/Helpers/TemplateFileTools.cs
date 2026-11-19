@@ -1645,11 +1645,11 @@ public partial class TemplateFileTools
         var first = onScreen.Entries[0];
         var second = onScreen.Entries[1];
 
-        first.FemaleVariant = hairName;
-        second.FemaleVariant = hairName;
+        first.FemaleVariant = paths.CcDisplayName;
+        second.FemaleVariant = paths.CcDisplayName;
 
-        first.SecondaryKey = $"Ui-{hairName}";
-        second.SecondaryKey = $"Ui-{hairName}_cyberware";
+        first.SecondaryKey = $"UI-Customization-{hairName}";
+        second.SecondaryKey = $"UI-Customization-{hairName}_cyberware";
 
         _cr2WTools.WriteCr2W(cr2W, absolutepath);
         return true;
@@ -1682,13 +1682,13 @@ public partial class TemplateFileTools
             {
                 case "None":
                     option.Names = [$"{hairName}_cyberware", $"{hairName}_fpp"];
-                    option.LocalizedName = $"Ui-{hairName}_cyberware";
+                    option.LocalizedName = $"UI-Customization-{hairName}";
 
                     break;
 
                 case "hairstyle":
                     option.Names = [$"{hairName}", $"{hairName}_fpp"];
-                    option.LocalizedName = $"Ui-{hairName}";
+                    option.LocalizedName = $"UI-Customization-{hairName}";
                     break;
             }
 
@@ -1702,17 +1702,18 @@ public partial class TemplateFileTools
             switch (type)
             {
                 case var t when t!.Contains("_cyberware"):
-                    hairApp.Name= $"Ui-{hairName}_cyberware";
+                    hairApp.Name= $"{hairName}_cyberware";
                     hairApp.Resource = new CResourceAsyncReference<appearanceAppearanceResource>(paths.SelectedCybAppFile);
+                    
                     break;
 
                 case var t when t!.Contains("_fpp"):
-                    hairApp.Name = $"Ui-{hairName}_fpp";
+                    hairApp.Name = $"{hairName}_fpp";
                     hairApp.Resource = new CResourceAsyncReference<appearanceAppearanceResource>(paths.SelectedShadowAppFile);
                     break;
 
                 default:
-                    hairApp.Name = $"Ui-{hairName}";
+                    hairApp.Name = $"{hairName}";
                     hairApp.Resource =  new CResourceAsyncReference<appearanceAppearanceResource>(paths.SelectedMainAppFile);
                     break;
 
@@ -1744,10 +1745,9 @@ public partial class TemplateFileTools
             return false;
         }
 
-        var rootComponent = app.Appearances.First().Chunk!.Components;
+        var rootComponent = app.Appearances.First().Chunk!;
 
-
-        foreach (var item in rootComponent)
+        foreach (var item in rootComponent.Components)
         {
             switch (item)
             {
@@ -1762,7 +1762,7 @@ public partial class TemplateFileTools
 
                     break;
 
-                case entSkinnedMeshComponent mesh when mesh.Name.ToString()?.Contains("_cyberware")==true:
+                case entSkinnedMeshComponent mesh when mesh.Name.ToString()?.Contains("_cyberware") == true:
                     mesh.Name = paths.HairmodName+"_cyberware";
                     mesh.Mesh = new CResourceAsyncReference<CMesh>(paths.SelectedCybMeshFile);
 
@@ -1773,8 +1773,38 @@ public partial class TemplateFileTools
                     mesh.Mesh = new CResourceAsyncReference<CMesh>(paths.SelectedMainMeshFile);
 
                     break;
-
             }
+            
+        }
+
+        switch (Path.GetFileNameWithoutExtension(appPath))
+        {
+            case var r when r.Contains("_fpp"):
+                rootComponent.ResolvedDependencies[0] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedCybMeshFile);
+
+                break;
+
+            case var r when r.Contains("_cyberware"):
+
+                rootComponent.ResolvedDependencies[2] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedCybMeshFile);
+
+                rootComponent.ResolvedDependencies[3] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedShadowMeshFile);
+
+                break;
+
+            default:
+
+                rootComponent.ResolvedDependencies[3] =
+                   new CResourceAsyncReference<CResource>(paths.SelectedMainMeshFile);
+
+                rootComponent.ResolvedDependencies[4] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedShadowMeshFile);
+
+
+                break;
         }
 
         _cr2WTools.WriteCr2W(cr2W, absolutepath);

@@ -24,6 +24,7 @@ namespace WolvenKit.Views.Dialogs
     {
 
         private string s_hairModName = "";
+        private string s_ccCDisplayName = "";
         private string s_selectedInkCCFile = "";
 
         private string s_selectedMainAppFile = "";
@@ -51,7 +52,7 @@ namespace WolvenKit.Views.Dialogs
             ViewModel = new CreateCCXLHairFilesDialogViewModel(activeProject, settingsManager, projectResourceTools)
             {
                 HairmodName = s_hairModName,
-                
+                CcDisplayName = s_ccCDisplayName,
                 SelectedInkCCFile = s_selectedInkCCFile,
                 SelectedMainAppFile = s_selectedMainAppFile,
                 SelectedCybAppFile = s_selectedCybAppFile,

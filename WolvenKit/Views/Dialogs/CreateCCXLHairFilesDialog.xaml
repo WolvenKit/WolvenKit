@@ -48,23 +48,25 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="15" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label
@@ -73,7 +75,7 @@
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Content="Hair Name:" />
+                        Content="Hair Mod Name:" />
                     <TextBox
                         x:Name="FileHairModName"
                         Grid.Row="0"
@@ -90,10 +92,27 @@
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
+                        Content="Name Displayed in CC" />
+                    <TextBox
+                        x:Name="CCDisplayName"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        Text="{Binding CcDisplayName,
+                                       UpdateSourceTrigger=PropertyChanged}"
+                        KeyboardNavigation.TabIndex="6" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0"
                         Content="Ink CC file:" />
                     <ComboBox
                         x:Name="InkCCDropdown"
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding InkCCFileOption,
@@ -102,7 +121,7 @@
                         KeyboardNavigation.TabIndex="1" />
 
                     <Label
-                        Grid.Row="4"
+                        Grid.Row="6"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -110,7 +129,7 @@
                         Content="Json file:" />
                     <ComboBox
                         x:Name="JsonDropdown"
-                        Grid.Row="4"
+                        Grid.Row="6"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding JsonFileOption,
@@ -119,7 +138,7 @@
                         KeyboardNavigation.TabIndex="1" />
 
                     <Label
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -127,7 +146,7 @@
                         Content="Main hair App File:" />
                     <ComboBox
                         x:Name="MainAppDropdown"
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding AppFileOption,
@@ -135,7 +154,7 @@
                         SelectedItem="{Binding SelectedMainAppFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -143,7 +162,7 @@
                         Content="Cyberware hair App File:" />
                     <ComboBox
                         x:Name="CybAppDropdown"
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding AppFileOption,
@@ -151,7 +170,7 @@
                         SelectedItem="{Binding SelectedCybAppFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="10"
+                        Grid.Row="12"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -159,7 +178,7 @@
                         Content="Shadow hair App File:" />
                     <ComboBox
                         x:Name="ShadowAppDropdown"
-                        Grid.Row="10"
+                        Grid.Row="12"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding AppFileOption,
@@ -168,7 +187,7 @@
                         KeyboardNavigation.TabIndex="1" />
 
                     <Label
-                        Grid.Row="12"
+                        Grid.Row="14"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -176,7 +195,7 @@
                         Content="Main hair Mesh File:" />
                     <ComboBox
                         x:Name="MainMeshDropdown"
-                        Grid.Row="12"
+                        Grid.Row="14"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding MeshFileOption,
@@ -184,7 +203,7 @@
                         SelectedItem="{Binding SelectedMainMeshFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="14"
+                        Grid.Row="16"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -192,7 +211,7 @@
                         Content="Cyberware hair Mesh File:" />
                     <ComboBox
                         x:Name="CybMeshDropdown"
-                        Grid.Row="14"
+                        Grid.Row="16"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding MeshFileOption,
@@ -200,7 +219,7 @@
                         SelectedItem="{Binding SelectedCybMeshFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="16"
+                        Grid.Row="18"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -208,7 +227,7 @@
                         Content="Shadow hair Mesh File:" />
                     <ComboBox
                         x:Name="ShadowMeshDropdown"
-                        Grid.Row="16"
+                        Grid.Row="18"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding MeshFileOption,
@@ -216,7 +235,7 @@
                         SelectedItem="{Binding SelectedShadowMeshFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="18"
+                        Grid.Row="20"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -224,7 +243,7 @@
                         Content="Rig File:" />
                     <ComboBox
                         x:Name="RigDropdown"
-                        Grid.Row="18"
+                        Grid.Row="20"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding RigFileOption,
@@ -232,7 +251,7 @@
                         SelectedItem="{Binding SelectedRigFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="20"
+                        Grid.Row="22"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -240,7 +259,7 @@
                         Content="Animgraph File:" />
                     <ComboBox
                         x:Name="AnimGraphDropdown"
-                        Grid.Row="20"
+                        Grid.Row="22"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding AnimGraphFileOption,

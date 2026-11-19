@@ -14,6 +14,7 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 {
 
     [ObservableProperty] private string _hairmodName = "";
+    [ObservableProperty] private string _ccDisplayName = "";
 
     [ObservableProperty] private string _selectedInkCCFile = "";
 
