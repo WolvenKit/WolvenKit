@@ -289,6 +289,33 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
 
+            case communityCommunityEntryPhaseSpotsData
+            {
+                TimePeriodsData: CArray<communityCommunityEntryPhaseTimePeriodData> timePeriods
+            }:
+                Value = StringHelper.Stringify(timePeriods);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case communityCommunityEntrySpotsData
+            {
+                PhasesData: CArray<communityCommunityEntryPhaseSpotsData> phaseSpots
+            }:
+                Value = "[" + string.Join(", ",
+                    phaseSpots.Select(phase => StringHelper.Stringify(phase.EntryPhaseName))) + "]";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case communityCommunityEntryPhaseTimePeriodData comTimePeriod:
+                Value = StringHelper.Stringify(comTimePeriod.PeriodName) ?? "";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case CArray<communityCommunityEntryPhaseTimePeriodData> phaseSpotsAry:
+                Value = StringHelper.Stringify(phaseSpotsAry);
+                IsValueExtrapolated = true;
+                break;
+            case communityArea when Parent?.ResolvedData is worldNode parentWorldNode:
+                Value = StringHelper.Stringify(parentWorldNode.DebugName) ?? "";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case gameJournalFolderEntry folderEntry:
                 Value = $"[{folderEntry.Entries.Count}]";
                 IsValueExtrapolated = true;

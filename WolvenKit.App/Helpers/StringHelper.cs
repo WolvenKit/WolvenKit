@@ -577,4 +577,17 @@ public abstract partial class StringHelper
         var waitText = workspot.WaitForAnimEnd ? " (wait for end)" : "";
         return $"{subject} at {spotRef} with animation: {workspot.AnimationName}{waitText}";
     }
+
+    public static string? Stringify(communityCommunityEntryPhaseSpotsData entryPhaseSpot) =>
+        Stringify(entryPhaseSpot.EntryPhaseName);
+
+    public static string Stringify(CArray<communityCommunityEntryPhaseTimePeriodData> phaseSpotsAry)
+    {
+        var paths = phaseSpotsAry
+            .Select(timeData => Stringify(timeData.PeriodName))
+            .Where(text => text != "")
+            .ToList();
+
+        return "[" + paths.Aggregate((a, b) => $"{a}, {b}") + "]";
+    }
 }
