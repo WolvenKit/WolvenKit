@@ -1277,6 +1277,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         var appIndex = ResolveAppearanceIndex(apps, meshApp);
 
         var appMaterials = new List<Material>();
+        var chunkMaterialNames = new List<string>();
 
         if (appIndex >= 0 && appIndex < mesh.Appearances.Count)
         {
@@ -1285,6 +1286,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             {
                 foreach (var m in mmApp.ChunkMaterials)
                 {
+                    chunkMaterialNames.Add(m.ToString() ?? string.Empty);
                     var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh, meshPath);
                     if (materials.TryGetValue(name, out var material))
                     {
@@ -1319,7 +1321,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             AppearanceName = meshApp,
             Matrix = matrix,
             Materials = appMaterials,
-            IsEnabled = enabled,
+            IsEnabled = enabled && !IsProxyMesh(depotPath, chunkMaterialNames),
             BindName = bindName,
             SlotName = slotName,
             SkinName = skinName,
@@ -1330,6 +1332,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         };
 
         appModels.Add(modelName, model);
+    }
+
+    private static readonly HashSet<string> s_proxyMaterialNames = new(StringComparer.OrdinalIgnoreCase) { "Body", "Hair", "Glass", "Lights" };
+
+    /// <summary>
+    /// A simplified stand-in of the whole character or vehicle (distance / appearance proxy):
+    /// a "proxy" mesh file, or a mesh whose materials are only the proxy's generic Body, Hair,
+    /// Glass, Lights. Hidden like AppearanceProxyMesh: drawn, it doubles the real meshes.
+    /// </summary>
+    private static bool IsProxyMesh(ResourcePath depotPath, List<string> chunkMaterialNames)
+    {
+        var file = Path.GetFileNameWithoutExtension(depotPath.GetResolvedText() ?? string.Empty);
+        if (file.Contains("proxy", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return chunkMaterialNames.Count > 0 &&
+               chunkMaterialNames.Contains("Body", StringComparer.OrdinalIgnoreCase) &&
+               chunkMaterialNames.All(s_proxyMaterialNames.Contains);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
@@ -1903,18 +1925,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
         else if (Has(kind, MaterialKind.Decal))
         {
-            // Lies on the base mesh: tiny bias only.
-            sm.DepthBias = -1;
+            // Lies on the base mesh: tiny bias only. Decals on the face overlay meshes (cyberware on
+            // the freckles and lips meshes) are copies of the head surface, not floating above it:
+            // the makeup bias, as before they were decals.
+            sm.DepthBias = ContainsAny(sm.MaterialName, "hx_", "freckle", "frecle", "makeup", "_lips") ? -2 : -1;
             sm.IsTransparent = true;
 
             // DiffuseAlpha 0: the decal adds no colour, only normals (and roughness / metalness) to the
             // surface under it (vehicle stitches and panel lines). Drawn as a mesh of its own it showed
             // its white placeholder texture; what it adds comes from the bake into the surface, if any.
+            // "Set" counts in the material or in a .mi it is based on (face cyberware keeps its
+            // parameters in a .mi; the mesh's own instance has none), not the template's default.
             if (TryGetRawMaterial(sm.MaterialName, out var decalMat) && decalMat != null &&
                 IsPlainMeshDecalTemplate(GetTemplateFileName(decalMat)) &&
-                // set to 0 in the material itself; decals that leave it out keep being drawn
-                decalMat.Values != null && decalMat.Values.TryGetValue("DiffuseAlpha", out var diffuseAlpha) &&
-                ReadFloat(diffuseAlpha) <= 0f)
+                (FindMaterialValue(decalMat, "DiffuseAlpha", templateDefault: false) is { } diffuseAlpha
+                    // set to 0
+                    ? ReadFloat(diffuseAlpha) <= 0f
+                    // left out: hidden only with no DiffuseTexture either (normal-only decals such as
+                    // the seams along cyberware); decals with a texture of their own keep being drawn
+                    : FindMaterialValue(decalMat, "DiffuseTexture", templateDefault: false) == null))
             {
                 sm.IsRendering = false;
             }
@@ -2553,6 +2582,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 material.MetallicFactor = metal;
                 material.RenderEnvironmentMap = false;
 
+                Parent?.GetLoggerService()?.Debug($"[Decals] '{name}' as its own mesh: {Path.GetFileName(filename_bd)}" +
+                                                  (File.Exists(filename_bd) ? "" : " (missing)"));
                 if (File.Exists(filename_bd))
                 {
                     material.AlbedoMap = GetOrCreateTexture(filename_bd);
@@ -4438,19 +4469,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             // === MULTILAYER SETUP ===            
-            if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) &&
-                dictionary.TryGetValue("MultilayerMask", out var mlmask))
+            if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup))
             {
+                // A material without a MultilayerMask (e.g. the gilded doll skins) shows layer 0 only.
+                dictionary.TryGetValue("MultilayerMask", out var mlmask);
 
                 var albedoExists = File.Exists(filename_bd);
                 var roughMetallicExists = File.Exists(filename_rm);
                 var normalExists = File.Exists(filename_bn);
 
-                if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef ||
-                    mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
+                if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef)
                 {
                     goto DiffuseMaps;
                 }
+
+                CResourceReference<Multilayer_Mask>? maskRef =
+                    mlmask is CResourceReference<Multilayer_Mask> givenMask && givenMask.DepotPath != ResourcePath.Empty ? givenMask : null;
 
                 // Project files must override the archive. Try the project first.
                 var setupFile = GetReferencedFile(mlsRef.DepotPath, mlsRef.Flags);
@@ -4485,16 +4519,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     goto DiffuseMaps;
                 }
 
-                var maskFile = GetReferencedFile(mlmRef.DepotPath, mlmRef.Flags);
-                if (maskFile is not { RootChunk: Multilayer_Mask mlm })
+                var streams = new List<Stream>();
+                if (maskRef is { } mlmRef)
                 {
-                    goto DiffuseMaps;
-                }
+                    var maskFile = GetReferencedFile(mlmRef.DepotPath, mlmRef.Flags);
+                    if (maskFile is not { RootChunk: Multilayer_Mask mlm })
+                    {
+                        goto DiffuseMaps;
+                    }
 
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
-                if (streams == null || streams.Count == 0)
-                {
-                    goto DiffuseMaps;
+                    ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var maskStreams);
+                    if (maskStreams == null || maskStreams.Count == 0)
+                    {
+                        goto DiffuseMaps;
+                    }
+
+                    streams = maskStreams;
                 }
 
                 // ----------------------------------------------------------
@@ -4710,6 +4750,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     layerBitmaps.Add(bmp);
                     nativeMaskW = Math.Max(nativeMaskW, bmp.Width);
                     nativeMaskH = Math.Max(nativeMaskH, bmp.Height);
+                }
+
+                if (maskRef == null)
+                {
+                    // One entry: the layer loop stops after the base layer, which never reads a mask.
+                    layerBitmaps.Add(new Bitmap(1, 1));
                 }
 
                 if (layerBitmaps.Count == 0)
@@ -7629,28 +7675,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             b = v4.Z;
                         }
 
-                        if (r != 1f || g != 1f || b != 1f)
-                        {
-                            var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
-                            var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                            try
-                            {
-                                unsafe
-                                {
-                                    byte* ptr = (byte*)data.Scan0;
-                                    int stride = data.Stride;
-                                    for (int y = 0; y < albedoBmp.Height; y++)
-                                        for (int x = 0; x < albedoBmp.Width; x++)
-                                        {
-                                            int off = y * stride + x * 4;
-                                            ptr[off + 0] = (byte)Math.Min(255, ptr[off + 0] * b);
-                                            ptr[off + 1] = (byte)Math.Min(255, ptr[off + 1] * g);
-                                            ptr[off + 2] = (byte)Math.Min(255, ptr[off + 2] * r);
-                                        }
-                                }
-                            }
-                            finally { albedoBmp.UnlockBits(data); }
-                        }
+                        ApplyBaseColorScale(albedoBmp, r, g, b);
                     }
 
                     if (albedoBmp != null)
@@ -7861,28 +7886,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         // Apply BaseColorScale (e.g. nails use 0,0,0 for black)
                         if (dictionary.TryGetValue("BaseColorScale", out var scaleObj) && scaleObj is Vector4 v4)
                         {
-                            if (v4.X != 1f || v4.Y != 1f || v4.Z != 1f)
-                            {
-                                var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                                var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                try
-                                {
-                                    unsafe
-                                    {
-                                        byte* ptr = (byte*)data.Scan0;
-                                        int stride = data.Stride;
-                                        for (int y = 0; y < bmp.Height; y++)
-                                            for (int x = 0; x < bmp.Width; x++)
-                                            {
-                                                int off = y * stride + x * 4;
-                                                ptr[off + 0] = (byte)Math.Min(255, ptr[off + 0] * v4.Z);
-                                                ptr[off + 1] = (byte)Math.Min(255, ptr[off + 1] * v4.Y);
-                                                ptr[off + 2] = (byte)Math.Min(255, ptr[off + 2] * v4.X);
-                                            }
-                                    }
-                                }
-                                finally { bmp.UnlockBits(data); }
-                            }
+                            ApplyBaseColorScale(bmp, v4.X, v4.Y, v4.Z);
                         }
 
                         // Opaque vegetation (trunks, bark): the diffuse alpha is not coverage.
@@ -8447,9 +8451,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     /// <summary>
     /// A parameter of a material: its own values, then up its instance chain, then the default
-    /// the chain's template (.mt / .remt) declares for it.
+    /// the chain's template (.mt / .remt) declares for it (unless templateDefault is false: only
+    /// what the material or a .mi it is based on sets).
     /// </summary>
-    private object? FindMaterialValue(Material material, string key)
+    private object? FindMaterialValue(Material material, string key, bool templateDefault = true)
     {
         if (material.Values.TryGetValue(key, out var own) && own != null)
         {
@@ -8478,7 +8483,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     current = next;
                     break;
                 case CMaterialTemplate template:
-                    return TemplateDefault(template, key);
+                    return templateDefault ? TemplateDefault(template, key) : null;
                 default:
                     return null;
             }
@@ -11162,6 +11167,54 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private static byte LinearToSrgbByte(float x) => (byte)Math.Clamp((int)MathF.Round(LinearToSrgb01(x) * 255f), 0, 255);
 
     /// <summary>
+    /// Multiplies an sRGB albedo by BaseColorScale the way the shader does: in linear space
+    /// (a scale of 0.67 keeps white at about 84 % on screen, not 67 %). Values above 1 clip.
+    /// </summary>
+    private static unsafe void ApplyBaseColorScale(Bitmap bmp, float r, float g, float b)
+    {
+        if (r == 1f && g == 1f && b == 1f)
+        {
+            return;
+        }
+
+        static byte[] Lut(float scale)
+        {
+            var lut = new byte[256];
+            for (var i = 0; i < 256; i++)
+            {
+                lut[i] = LinearToSrgbByte(SrgbToLinear01(i / 255f) * scale);
+            }
+
+            return lut;
+        }
+
+        var lr = Lut(r);
+        var lg = Lut(g);
+        var lb = Lut(b);
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            var ptr = (byte*)data.Scan0;
+            for (var y = 0; y < bmp.Height; y++)
+            {
+                var row = ptr + (y * data.Stride);
+                for (var x = 0; x < bmp.Width; x++)
+                {
+                    var px = row + (x * 4);
+                    px[0] = lb[px[0]];
+                    px[1] = lg[px[1]];
+                    px[2] = lr[px[2]];
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+    }
+
+    /// <summary>
     /// Blender ColorRamp (linear interpolation, constant past the ends) sampled at the 256
     /// possible factor values. Stop colours are sRGB bytes in the profile and are converted
     /// to linear first, like populate_color_ramp in the addon. Result: linear RGB triplets.
@@ -11959,6 +12012,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Face overlays are plain mesh_decal: only the name separates them from clothing decals.
             if (ContainsAny(name, "heb_", "hb_", "brow"))
                 return MaterialKind.Eyebrow;
+            // Face cyberware from the character creator (implants on the "freckles" and lips meshes,
+            // .mi under ...\makeup\freckles\cyberware\) is metal with its own roughness / metalness
+            // and normal: a decal, not a colour-only makeup overlay.
+            if (name.Contains("cyberware", StringComparison.OrdinalIgnoreCase) ||
+                (directBase != null && directBase.Replace('/', '\\').Contains("\\cyberware\\", StringComparison.OrdinalIgnoreCase)))
+                return MaterialKind.Decal;
             // Tattoo decals stay plain decals: the makeup overlay bake (DiffuseTexture tint) made
             // them, and the skin under them, look washed out.
             if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips"))

@@ -765,12 +765,14 @@ public partial class RDTMeshViewModel
         }
 
         if (!dictionary.TryGetValue("MultilayerSetup", out var mlsetup) ||
-            !dictionary.TryGetValue("MultilayerMask", out var mlmask) ||
-            mlsetup is not CResourceReference<Multilayer_Setup> mlsRef ||
-            mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
+            mlsetup is not CResourceReference<Multilayer_Setup> mlsRef)
         {
             return false;
         }
+
+        // A material without a MultilayerMask (e.g. the gilded doll skins) shows layer 0 only.
+        dictionary.TryGetValue("MultilayerMask", out var mlmask);
+        var maskPath = mlmask is CResourceReference<Multilayer_Mask> mlmRef ? mlmRef.DepotPath : ResourcePath.Empty;
 
         var materialLabel = SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name;
         if (GetReferencedFile(mlsRef.DepotPath, mlsRef.Flags)?.RootChunk is not Multilayer_Setup mls)
@@ -779,11 +781,20 @@ public partial class RDTMeshViewModel
             return false;
         }
 
-        var masks = await GetMultilayerMasks(mlmRef.DepotPath);
-        if (masks == null)
+        TextureEntry[]? masks;
+        if (maskPath == ResourcePath.Empty)
         {
-            WarnMissingFile("mlmask", mlmRef.DepotPath, materialLabel);
-            return false;
+            // One entry: the layer loop stops after the base layer, which never reads a mask.
+            masks = new[] { new TextureEntry { R = 1f, G = 1f, B = 1f, A = 1f } };
+        }
+        else
+        {
+            masks = await GetMultilayerMasks(maskPath);
+            if (masks == null)
+            {
+                WarnMissingFile("mlmask", maskPath, materialLabel);
+                return false;
+            }
         }
 
         var pool = new List<TextureModel>();

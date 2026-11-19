@@ -36,8 +36,12 @@ public partial class RDTMeshViewModel
     private const double DecalLeftoverShare = 0.05;        // left-over edge pieces searched wider
     private const double DecalLeftoverTolerance = 0.03;    // 3 cm
     private const double DecalDropShare = 0.01;            // stray triangles not drawn
+    private const double DecalUnderSlack = 0.0005;         // 0.5 mm below a surface still counts as on it
 
     private readonly ConcurrentDictionary<string, byte> _decalBakesRunning = new();
+
+    /// <summary>Surface material -> composite key of its decals in the last ApplyDecalsToSurfaces.</summary>
+    private readonly Dictionary<string, string> _decalCurrentKeys = new();
 
     private static bool s_blendDecals = true;
 
@@ -125,6 +129,7 @@ public partial class RDTMeshViewModel
         try
         {
             RestoreDecals(app);
+            _decalCurrentKeys.Clear();
             // Sectors: a surface material is shared by many placed meshes, so a decal baked into
             // its texture would show on every copy; and matching every decal against every mesh
             // of a sector takes long on the UI thread. Decals stay as they are there.
@@ -140,12 +145,21 @@ public partial class RDTMeshViewModel
                 return;
             }
 
+            var logger = Parent?.GetLoggerService();
+            foreach (var layer in layers)
+            {
+                logger?.Debug($"[Decals] '{layer.DecalName}' -> '{layer.Surface.MaterialName}' " +
+                              $"({layer.SurfaceModel.Name}, {layer.Surface.Name}, LOD {layer.Surface.LOD}): " +
+                              $"{layer.Triangles.Count} / {layer.DecalGeometry.Indices.Length / 3} triangles");
+            }
+
             foreach (var group in layers.GroupBy(l => l.Surface.MaterialName!))
             {
                 var surfaceName = group.Key;
                 var decals = group.ToList();
                 var overlay = IsOverlaySurface(decals[0].Surface);
                 var key = DecalCompositeKey(surfaceName, decals) + (overlay ? "|ov" : "");
+                _decalCurrentKeys[surfaceName] = key;
                 var (cd, cn, crm) = DecalCompositePaths(surfaceName, key, overlay);
                 var op = OverlayPaths(cd);
 
@@ -209,7 +223,10 @@ public partial class RDTMeshViewModel
                     {
                         context.Post(_ =>
                         {
+                            // A bake started for an older assignment (materials still loading, other
+                            // surfaces then took decal triangles) would hide what is now drawn elsewhere.
                             if (!_disposed && BlendDecalsIntoSurfaces && SelectedAppearance == app &&
+                                _decalCurrentKeys.TryGetValue(surfaceName, out var currentKey) && currentKey == key &&
                                 (overlay ? File.Exists(op.Done) : File.Exists(cd)))
                             {
                                 Use();
@@ -233,7 +250,11 @@ public partial class RDTMeshViewModel
             .Where(x => !string.IsNullOrEmpty(x.Mesh.MaterialName))
             .ToList();
 
-        var surfaces = all.Where(x => IsDecalSurface(x.Mesh)).ToList();
+        // Only surfaces that are drawn: the body of the hidden AppearanceProxyMesh (and shadow /
+        // cutout meshes) lies right at the skin and took tattoos, which then vanished from view.
+        // Chunks the appearance masks out (a body part under clothes, the other variant of a
+        // chunk pair) are not drawn at any LOD either.
+        var surfaces = all.Where(x => x.Model.IsEnabled && x.Mesh.EnabledWithMask && IsDecalSurface(x.Mesh)).ToList();
         var result = new List<DecalLayer>();
         if (surfaces.Count == 0)
         {
@@ -902,7 +923,8 @@ public partial class RDTMeshViewModel
         // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS), vehicle_mesh_decal.mt's
         // are 1 (VEHICLE_MESH_DEFAULTS). Values above 1 occur (DiffuseAlpha 2): coverage x alpha is saturated
         // where it is used.
-        raw.Values != null && raw.Values.TryGetValue(key, out var v)
+        // set in the material or a .mi it is based on (face cyberware keeps them in its .mi)
+        FindMaterialValue(raw, key, templateDefault: false) is { } v
             ? Math.Clamp(ReadFloat(v), 0f, 16f)
             : GetTemplateFileName(raw).StartsWith("vehicle_mesh_decal", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
 
@@ -1193,6 +1215,27 @@ public partial class RDTMeshViewModel
         return best;
     }
 
+    /// <summary>
+    /// Whether p lies below the surface at the given point (against its normal, past a small
+    /// slack): the vertex normals when the mesh has them, else the triangle's own.
+    /// </summary>
+    private static bool IsUnderSurface(SurfaceGeometry s, int t, double u, double v, double w, Point3D p)
+    {
+        int ia = s.Indices[t * 3], ib = s.Indices[t * 3 + 1], ic = s.Indices[t * 3 + 2];
+        Point3D a = s.Positions[ia], b = s.Positions[ib], c = s.Positions[ic];
+        var q = new Point3D(a.X * u + b.X * v + c.X * w, a.Y * u + b.Y * v + c.Y * w, a.Z * u + b.Z * v + c.Z * w);
+        var n = s.Normals != null
+            ? (s.Normals[ia] * u) + (s.Normals[ib] * v) + (s.Normals[ic] * w)
+            : Vector3D.CrossProduct(b - a, c - a);
+        if (n.LengthSquared < 1e-18)
+        {
+            return false;
+        }
+
+        n.Normalize();
+        return Vector3D.DotProduct(p - q, n) < -DecalUnderSlack;
+    }
+
     private static (double U, double V) SurfaceUvAt(SurfaceGeometry s, int t, double u, double v, double w)
     {
         int a = s.Indices[t * 3], b = s.Indices[t * 3 + 1], c = s.Indices[t * 3 + 2];
@@ -1254,6 +1297,17 @@ public partial class RDTMeshViewModel
             var uc = SurfaceUvAt(surface, pc.Value.Triangle, pc.Value.U, pc.Value.V, pc.Value.W);
             double[] uv = { ua.U, ua.V, ub.U, ub.V, uc.U, uc.V };
             var distance = (pa.Value.Distance + pb.Value.Distance + pc.Value.Distance) / 3;
+
+            // A decal lies on top of its surface. One that lies under this surface (a tattoo
+            // under a tight shirt) belongs to the skin below and is never baked into this one:
+            // while the skin is not baked yet, the triangle stays in the decal, which draws it.
+            var underCorners = (IsUnderSurface(surface, pa.Value.Triangle, pa.Value.U, pa.Value.V, pa.Value.W, A) ? 1 : 0) +
+                        (IsUnderSurface(surface, pb.Value.Triangle, pb.Value.U, pb.Value.V, pb.Value.W, B) ? 1 : 0) +
+                        (IsUnderSurface(surface, pc.Value.Triangle, pc.Value.U, pc.Value.V, pc.Value.W, C) ? 1 : 0);
+            if (underCorners >= 2)
+            {
+                continue;
+            }
 
             // A decal triangle reaching over a bend or a seam of the surface (decals that follow
             // a gun's shape have long ones): its corners alone do not place its inside. Then it
@@ -1470,8 +1524,9 @@ public partial class RDTMeshViewModel
     private string DecalCompositeKey(string surfaceName, List<DecalLayer> decals)
     {
         // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay; v4: alpha above 1, NormalAlphaTex;
-        // v5: each texel takes a layer once, no triangle lines; v6: triangles over bends and seams in pieces).
-        var sb = new System.Text.StringBuilder("v6;");
+        // v5: each texel takes a layer once, no triangle lines; v6: triangles over bends and seams in pieces;
+        // v7: only covered texels are taken, transparent atlas parts no longer cut other pieces).
+        var sb = new System.Text.StringBuilder("v7;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
@@ -1992,7 +2047,7 @@ public partial class RDTMeshViewModel
                                 color.Data[o] = (byte)Math.Clamp(color.Data[o] + (s[c] * 255f - color.Data[o]) * a, 0f, 255f);
                             }
                         }
-                    });
+                    }, uv => Coverage(dC, uv) * layer.DiffuseAlpha > 0f);
                 }
 
                 if (normal is { } nTarget && dNormal is { } dN && (layer.NormalAlpha > 0f || layer.UseNormalAlphaTex))
@@ -2044,7 +2099,7 @@ public partial class RDTMeshViewModel
                         nTarget.Data[px + 2] = (byte)((ox / len * 0.5f + 0.5f) * 255f);
                         nTarget.Data[px + 1] = (byte)((oy / len * 0.5f + 0.5f) * 255f);
                         nTarget.Data[px] = (byte)((oz / len * 0.5f + 0.5f) * 255f);
-                    });
+                    }, uv => NormalCoverage(layer, dColor, uv) > 0f);
                 }
 
                 if (rm is { } rmTarget && layer.RmAlpha > 0f)
@@ -2068,7 +2123,7 @@ public partial class RDTMeshViewModel
 
                         rmTarget.Data[px + 1] = (byte)Math.Clamp(rmTarget.Data[px + 1] + (r * 255f - rmTarget.Data[px + 1]) * a, 0f, 255f);
                         rmTarget.Data[px] = (byte)Math.Clamp(rmTarget.Data[px] + (m * 255f - rmTarget.Data[px]) * a, 0f, 255f);
-                    });
+                    }, uv => Coverage(dColor, uv) * layer.RmAlpha > 0f);
                 }
             }
         }
@@ -2289,6 +2344,11 @@ public partial class RDTMeshViewModel
 
                         Over(rmT.Data, px, 1f, r, m, aRm);
                     }
+                }, uv =>
+                {
+                    var cov = Coverage(dColor, uv);
+                    return (dColor != null && cov * layer.DiffuseAlpha > 0f) || cov * layer.RmAlpha > 0f ||
+                           NormalCoverage(layer, dColor, uv) > 0f;
                 });
             }
         }
@@ -2553,7 +2613,7 @@ public partial class RDTMeshViewModel
     /// the first triangle), the rim pass the still free ones within about half a pixel of it.
     /// </summary>
     private static void RasterizeInto(Pixels target, double[] suv, double[] duv, bool[] claimed, bool rim,
-        Action<int, (double U, double V)> pixel)
+        Action<int, (double U, double V)> pixel, Func<(double U, double V), bool>? covers = null)
     {
         double x0 = suv[0] * target.W, y0 = suv[1] * target.H;
         double x1 = suv[2] * target.W, y1 = suv[3] * target.H;
@@ -2599,9 +2659,16 @@ public partial class RDTMeshViewModel
                     continue;
                 }
 
-                claimed[index] = true;
                 var u = w0 * duv[0] + w1 * duv[2] + w2 * duv[4];
                 var v = w0 * duv[1] + w1 * duv[3] + w2 * duv[5];
+                // A texel the decal leaves uncovered here (the transparent part of an atlas
+                // piece) is not claimed: another piece of the same decal may cover it.
+                if (covers != null && !covers((u, v)))
+                {
+                    continue;
+                }
+
+                claimed[index] = true;
                 pixel(index * 4, (u, v));
             }
         }
