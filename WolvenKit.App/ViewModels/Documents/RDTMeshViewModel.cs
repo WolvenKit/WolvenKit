@@ -1903,11 +1903,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // DiffuseAlpha 0: the decal adds no colour, only normals (and roughness / metalness) to the
             // surface under it (vehicle stitches and panel lines). Drawn as a mesh of its own it showed
             // its white placeholder texture; what it adds comes from the bake into the surface, if any.
+            // "Set" counts in the material or in a .mi it is based on (face cyberware keeps its
+            // parameters in a .mi; the mesh's own instance has none), not the template's default.
             if (TryGetRawMaterial(sm.MaterialName, out var decalMat) && decalMat != null &&
                 IsPlainMeshDecalTemplate(GetTemplateFileName(decalMat)) &&
-                // set to 0 in the material itself; decals that leave it out keep being drawn
-                decalMat.Values != null && decalMat.Values.TryGetValue("DiffuseAlpha", out var diffuseAlpha) &&
-                ReadFloat(diffuseAlpha) <= 0f)
+                (FindMaterialValue(decalMat, "DiffuseAlpha", templateDefault: false) is { } diffuseAlpha
+                    // set to 0
+                    ? ReadFloat(diffuseAlpha) <= 0f
+                    // left out: hidden only with no DiffuseTexture either (normal-only decals such as
+                    // the seams along cyberware); decals with a texture of their own keep being drawn
+                    : FindMaterialValue(decalMat, "DiffuseTexture", templateDefault: false) == null))
             {
                 sm.IsRendering = false;
             }
@@ -8413,9 +8418,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     /// <summary>
     /// A parameter of a material: its own values, then up its instance chain, then the default
-    /// the chain's template (.mt / .remt) declares for it.
+    /// the chain's template (.mt / .remt) declares for it (unless templateDefault is false: only
+    /// what the material or a .mi it is based on sets).
     /// </summary>
-    private object? FindMaterialValue(Material material, string key)
+    private object? FindMaterialValue(Material material, string key, bool templateDefault = true)
     {
         if (material.Values.TryGetValue(key, out var own) && own != null)
         {
@@ -8444,7 +8450,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     current = next;
                     break;
                 case CMaterialTemplate template:
-                    return TemplateDefault(template, key);
+                    return templateDefault ? TemplateDefault(template, key) : null;
                 default:
                     return null;
             }

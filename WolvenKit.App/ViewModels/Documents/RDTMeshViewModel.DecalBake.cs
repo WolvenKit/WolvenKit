@@ -902,7 +902,8 @@ public partial class RDTMeshViewModel
         // mesh_decal.mt defaults are 0 for all three (Blender add-on MESH_DEFAULTS), vehicle_mesh_decal.mt's
         // are 1 (VEHICLE_MESH_DEFAULTS). Values above 1 occur (DiffuseAlpha 2): coverage x alpha is saturated
         // where it is used.
-        raw.Values != null && raw.Values.TryGetValue(key, out var v)
+        // set in the material or a .mi it is based on (face cyberware keeps them in its .mi)
+        FindMaterialValue(raw, key, templateDefault: false) is { } v
             ? Math.Clamp(ReadFloat(v), 0f, 16f)
             : GetTemplateFileName(raw).StartsWith("vehicle_mesh_decal", StringComparison.OrdinalIgnoreCase) ? 1f : 0f;
 
