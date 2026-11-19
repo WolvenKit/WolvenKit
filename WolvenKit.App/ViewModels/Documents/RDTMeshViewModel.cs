@@ -4431,19 +4431,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             // === MULTILAYER SETUP ===            
-            if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) &&
-                dictionary.TryGetValue("MultilayerMask", out var mlmask))
+            if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup))
             {
+                // A material without a MultilayerMask (e.g. the gilded doll skins) shows layer 0 only.
+                dictionary.TryGetValue("MultilayerMask", out var mlmask);
 
                 var albedoExists = File.Exists(filename_bd);
                 var roughMetallicExists = File.Exists(filename_rm);
                 var normalExists = File.Exists(filename_bn);
 
-                if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef ||
-                    mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
+                if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef)
                 {
                     goto DiffuseMaps;
                 }
+
+                CResourceReference<Multilayer_Mask>? maskRef =
+                    mlmask is CResourceReference<Multilayer_Mask> givenMask && givenMask.DepotPath != ResourcePath.Empty ? givenMask : null;
 
                 // Project files must override the archive. Try the project first.
                 var setupFile = GetReferencedFile(mlsRef.DepotPath, mlsRef.Flags);
@@ -4478,16 +4481,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     goto DiffuseMaps;
                 }
 
-                var maskFile = GetReferencedFile(mlmRef.DepotPath, mlmRef.Flags);
-                if (maskFile is not { RootChunk: Multilayer_Mask mlm })
+                var streams = new List<Stream>();
+                if (maskRef is { } mlmRef)
                 {
-                    goto DiffuseMaps;
-                }
+                    var maskFile = GetReferencedFile(mlmRef.DepotPath, mlmRef.Flags);
+                    if (maskFile is not { RootChunk: Multilayer_Mask mlm })
+                    {
+                        goto DiffuseMaps;
+                    }
 
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
-                if (streams == null || streams.Count == 0)
-                {
-                    goto DiffuseMaps;
+                    ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var maskStreams);
+                    if (maskStreams == null || maskStreams.Count == 0)
+                    {
+                        goto DiffuseMaps;
+                    }
+
+                    streams = maskStreams;
                 }
 
                 // ----------------------------------------------------------
@@ -4703,6 +4712,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     layerBitmaps.Add(bmp);
                     nativeMaskW = Math.Max(nativeMaskW, bmp.Width);
                     nativeMaskH = Math.Max(nativeMaskH, bmp.Height);
+                }
+
+                if (maskRef == null)
+                {
+                    // One entry: the layer loop stops after the base layer, which never reads a mask.
+                    layerBitmaps.Add(new Bitmap(1, 1));
                 }
 
                 if (layerBitmaps.Count == 0)
