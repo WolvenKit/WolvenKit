@@ -7622,28 +7622,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             b = v4.Z;
                         }
 
-                        if (r != 1f || g != 1f || b != 1f)
-                        {
-                            var rect = new Rectangle(0, 0, albedoBmp.Width, albedoBmp.Height);
-                            var data = albedoBmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                            try
-                            {
-                                unsafe
-                                {
-                                    byte* ptr = (byte*)data.Scan0;
-                                    int stride = data.Stride;
-                                    for (int y = 0; y < albedoBmp.Height; y++)
-                                        for (int x = 0; x < albedoBmp.Width; x++)
-                                        {
-                                            int off = y * stride + x * 4;
-                                            ptr[off + 0] = (byte)Math.Min(255, ptr[off + 0] * b);
-                                            ptr[off + 1] = (byte)Math.Min(255, ptr[off + 1] * g);
-                                            ptr[off + 2] = (byte)Math.Min(255, ptr[off + 2] * r);
-                                        }
-                                }
-                            }
-                            finally { albedoBmp.UnlockBits(data); }
-                        }
+                        ApplyBaseColorScale(albedoBmp, r, g, b);
                     }
 
                     if (albedoBmp != null)
@@ -7854,28 +7833,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         // Apply BaseColorScale (e.g. nails use 0,0,0 for black)
                         if (dictionary.TryGetValue("BaseColorScale", out var scaleObj) && scaleObj is Vector4 v4)
                         {
-                            if (v4.X != 1f || v4.Y != 1f || v4.Z != 1f)
-                            {
-                                var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                                var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                                try
-                                {
-                                    unsafe
-                                    {
-                                        byte* ptr = (byte*)data.Scan0;
-                                        int stride = data.Stride;
-                                        for (int y = 0; y < bmp.Height; y++)
-                                            for (int x = 0; x < bmp.Width; x++)
-                                            {
-                                                int off = y * stride + x * 4;
-                                                ptr[off + 0] = (byte)Math.Min(255, ptr[off + 0] * v4.Z);
-                                                ptr[off + 1] = (byte)Math.Min(255, ptr[off + 1] * v4.Y);
-                                                ptr[off + 2] = (byte)Math.Min(255, ptr[off + 2] * v4.X);
-                                            }
-                                    }
-                                }
-                                finally { bmp.UnlockBits(data); }
-                            }
+                            ApplyBaseColorScale(bmp, v4.X, v4.Y, v4.Z);
                         }
 
                         // Opaque vegetation (trunks, bark): the diffuse alpha is not coverage.
@@ -11125,6 +11083,54 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     private static byte LinearToSrgbByte(float x) => (byte)Math.Clamp((int)MathF.Round(LinearToSrgb01(x) * 255f), 0, 255);
 
     /// <summary>
+    /// Multiplies an sRGB albedo by BaseColorScale the way the shader does: in linear space
+    /// (a scale of 0.67 keeps white at about 84 % on screen, not 67 %). Values above 1 clip.
+    /// </summary>
+    private static unsafe void ApplyBaseColorScale(Bitmap bmp, float r, float g, float b)
+    {
+        if (r == 1f && g == 1f && b == 1f)
+        {
+            return;
+        }
+
+        static byte[] Lut(float scale)
+        {
+            var lut = new byte[256];
+            for (var i = 0; i < 256; i++)
+            {
+                lut[i] = LinearToSrgbByte(SrgbToLinear01(i / 255f) * scale);
+            }
+
+            return lut;
+        }
+
+        var lr = Lut(r);
+        var lg = Lut(g);
+        var lb = Lut(b);
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            var ptr = (byte*)data.Scan0;
+            for (var y = 0; y < bmp.Height; y++)
+            {
+                var row = ptr + (y * data.Stride);
+                for (var x = 0; x < bmp.Width; x++)
+                {
+                    var px = row + (x * 4);
+                    px[0] = lb[px[0]];
+                    px[1] = lg[px[1]];
+                    px[2] = lr[px[2]];
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+    }
+
+    /// <summary>
     /// Blender ColorRamp (linear interpolation, constant past the ends) sampled at the 256
     /// possible factor values. Stop colours are sRGB bytes in the profile and are converted
     /// to linear first, like populate_color_ramp in the addon. Result: linear RGB triplets.
@@ -11922,6 +11928,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             // Face overlays are plain mesh_decal: only the name separates them from clothing decals.
             if (ContainsAny(name, "heb_", "hb_", "brow"))
                 return MaterialKind.Eyebrow;
+            // Face cyberware from the character creator (implants on the "freckles" and lips meshes,
+            // .mi under ...\makeup\freckles\cyberware\) is metal with its own roughness / metalness
+            // and normal: a decal, not a colour-only makeup overlay.
+            if (name.Contains("cyberware", StringComparison.OrdinalIgnoreCase) ||
+                (directBase != null && directBase.Replace('/', '\\').Contains("\\cyberware\\", StringComparison.OrdinalIgnoreCase)))
+                return MaterialKind.Decal;
             // Tattoo decals stay plain decals: the makeup overlay bake (DiffuseTexture tint) made
             // them, and the skin under them, look washed out.
             if (ContainsAny(name, "hx_", "freckle", "frecle", "makeup", "lipstick", "_lips"))
