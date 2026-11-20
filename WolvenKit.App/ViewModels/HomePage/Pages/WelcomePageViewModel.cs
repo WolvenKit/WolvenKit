@@ -249,6 +249,9 @@ public partial class WelcomePageViewModel : PageViewModel
         return "";
     }
 
+    /// <summary>Fills the pinned and recent project lists again (e.g. after the color theme was re-applied).</summary>
+    public void RefreshProjectLists() => ConvertRecentProjects();
+
     private void ConvertRecentProjects() // Converts Recent projects for the homepage.
     {
         RefreshPinnedProjects();
@@ -260,8 +263,9 @@ public partial class WelcomePageViewModel : PageViewModel
         {
             _settingsManager.PinnedOrder = SelectedPinnedOrder;
 
-            FancyPinnedProjects.Clear();
-            FancyPinnedProjects.AddRange(GetSortedItems(true, SelectedPinnedOrder, PinnedFilter));
+            // a new collection, not the old one refilled: the CardView then builds its cards from scratch, also
+            // when the skin re-templated it (refilling the same collection left it empty)
+            FancyPinnedProjects = new ObservableCollection<FancyProjectObject>(GetSortedItems(true, SelectedPinnedOrder, PinnedFilter));
 
             ShowPinned = _recentlyUsedItems.Count(x => x.IsPinned) > 0;
         });
@@ -271,8 +275,7 @@ public partial class WelcomePageViewModel : PageViewModel
         {
             _settingsManager.RecentOrder = SelectedRecentOrder;
 
-            FancyProjects.Clear();
-            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
+            FancyProjects = new ObservableCollection<FancyProjectObject>(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
         });
 
     private List<FancyProjectObject> GetSortedItems(bool isPinned, int order, string filter)

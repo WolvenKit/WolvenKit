@@ -12,7 +12,7 @@
     VerticalAlignment="Stretch">
     <Border
         x:Name="ImagePreviewCanvas"
-        Background="{StaticResource ContentBackground}"
+        Background="{DynamicResource ContentBackground}"
         BorderThickness="1"
         ClipToBounds="True">
         <Canvas

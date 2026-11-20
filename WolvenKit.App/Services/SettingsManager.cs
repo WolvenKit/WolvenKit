@@ -76,6 +76,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(AlwaysAskBeforeUpdating),
             nameof(ShowGuidedTour),
             nameof(ThemeAccentString),
+            nameof(ActiveTheme),
             nameof(DefaultProjectPath),
             nameof(ModderName),
             nameof(ModderEmail),
@@ -303,9 +304,17 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _showGuidedTour = true;
 
+    /// <summary>
+    /// Legacy accent setting. Migrated into a user theme on first start, kept for older configs.
+    /// </summary>
     [Display(Name = "Theme Accent", GroupName = "General")]
     [ObservableProperty]
+    [property: System.ComponentModel.Browsable(false)]
     private string? _themeAccentString;
+
+    [Display(Name = "Theme", Description = "Color theme of the interface. Applied immediately.", GroupName = "General")]
+    [ObservableProperty]
+    private string? _activeTheme;
 
     [Display(Name = "Default project path", Description = "Path to the directory where you store your mods", GroupName = "General")]
     [ObservableProperty]
