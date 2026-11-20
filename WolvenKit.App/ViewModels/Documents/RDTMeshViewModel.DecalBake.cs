@@ -280,9 +280,11 @@ public partial class RDTMeshViewModel
         }
 
         // One submesh per decal material (the lowest LOD): every LOD would blend it again.
+        // Only decals that are drawn: a component's chunkMask can hide a whole decal mesh
+        // (a garment's unused gang decals), and the game shows none of it.
         // Each triangle goes to the nearest baked surface under it (a decal may cross from
         // skin onto metal); triangles on none stay in the decal, which still draws them.
-        foreach (var decalGroup in all.Where(x => IsBakeableDecal(x.Mesh.MaterialName!))
+        foreach (var decalGroup in all.Where(x => x.Model.IsEnabled && x.Mesh.EnabledWithMask && IsBakeableDecal(x.Mesh.MaterialName!))
                      .GroupBy(x => x.Mesh.MaterialName!))
         {
             var (decalModel, decal) = decalGroup.OrderBy(x => x.Mesh.LOD).First();

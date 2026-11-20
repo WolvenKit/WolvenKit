@@ -810,6 +810,13 @@
                                         <ContextMenu>
                                             <MenuItem Header="Generate Materials" Command="{Binding LoadMaterialsCommand}" />
                                             <MenuItem Header="Clear Cache and Regenerate" Command="{Binding RegenerateMaterialsCommand}" />
+                                            <Separator />
+                                            <MenuItem
+                                                Header="Generate on Appearance Switch"
+                                                IsCheckable="True"
+                                                IsChecked="{Binding GenerateOnAppearanceSwitch}"
+                                                StaysOpenOnClick="True"
+                                                ToolTip="After Generate Materials, also generate the materials of each appearance you switch to. Off: a newly selected appearance stays as it is until Generate is pressed; appearances already generated keep their materials." />
                                         </ContextMenu>
                                     </Button.ContextMenu>
                                 </Button>
