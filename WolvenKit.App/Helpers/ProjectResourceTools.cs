@@ -1035,6 +1035,12 @@ public partial class ProjectResourceTools
                                 questNode.PhaseResource =
                                     new CResourceAsyncReference<questQuestPhaseResource>(newValue.DepotPath);
                                 break;
+                            case entEffectDesc entEffect:
+                                entEffect.Effect = new CResourceAsyncReference<worldEffect>(newValue.DepotPath);
+                                break;
+                            case effectTrackItemParticles effectTrack:
+                                effectTrack.ParticleSystem = new CResourceReference<CParticleSystem>(newValue.DepotPath);
+                                break;
                             default:
                                 throw new WolvenKitException(-1,
                                     $"Can't replace in IRedHandle property type {handle.RedType}");
