@@ -2582,8 +2582,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 material.MetallicFactor = metal;
                 material.RenderEnvironmentMap = false;
 
-                Parent?.GetLoggerService()?.Debug($"[Decals] '{name}' as its own mesh: {Path.GetFileName(filename_bd)}" +
-                                                  (File.Exists(filename_bd) ? "" : " (missing)"));
                 if (File.Exists(filename_bd))
                 {
                     material.AlbedoMap = GetOrCreateTexture(filename_bd);

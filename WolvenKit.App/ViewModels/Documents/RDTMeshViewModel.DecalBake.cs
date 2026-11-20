@@ -145,14 +145,6 @@ public partial class RDTMeshViewModel
                 return;
             }
 
-            var logger = Parent?.GetLoggerService();
-            foreach (var layer in layers)
-            {
-                logger?.Debug($"[Decals] '{layer.DecalName}' -> '{layer.Surface.MaterialName}' " +
-                              $"({layer.SurfaceModel.Name}, {layer.Surface.Name}, LOD {layer.Surface.LOD}): " +
-                              $"{layer.Triangles.Count} / {layer.DecalGeometry.Indices.Length / 3} triangles");
-            }
-
             foreach (var group in layers.GroupBy(l => l.Surface.MaterialName!))
             {
                 var surfaceName = group.Key;
