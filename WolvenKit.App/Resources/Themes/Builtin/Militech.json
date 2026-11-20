@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "name": "Militech",
   "author": "WolvenKit",
-  "description": "Militech: signal yellow on matte black, neutral greys, olive military panels, a touch of HUD cyan.",
+  "description": "Militech: signal yellow on matte black, neutral grays, olive military panels, a touch of HUD cyan.",
   "basedOn": "WolvenKit Dark",
   "accent": "#F2E205",
   "accentForeground": "#0A0A0A",

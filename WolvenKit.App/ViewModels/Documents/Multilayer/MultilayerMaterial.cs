@@ -41,7 +41,7 @@ public struct SurfaceExtraConstants
     /// <summary>rgb: specular tint, w: 1 = use it.</summary>
     public SharpDX.Vector4 SpecularTint;
 
-    /// <summary>x: edge tint exponent (0 = off), y: vertex colour tint amount, zw: unused.</summary>
+    /// <summary>x: edge tint exponent (0 = off), y: vertex color tint amount, zw: unused.</summary>
     public SharpDX.Vector4 Glass;
 
     /// <summary>x: 1 = back faces shaded as glass backs, y: back reflection power, z: back opacity, w: alpha clip threshold (0 = off).</summary>

@@ -609,7 +609,7 @@
                                     ToolTip="Generate the material previews. Hold Ctrl to clear the cache and regenerate everything (or use the arrow menu).">
                                     <!--
                                         The label is the content, not a Button.Style: a button with its own style loses the skin
-                                        (grey background) and the app-wide TextBlock style would override its yellow text.
+                                        (gray background) and the app-wide TextBlock style would override its yellow text.
                                     -->
                                     <TextBlock>
                                         <TextBlock.Style>
@@ -777,7 +777,7 @@
                             <ComboBox Grid.Row="1" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewBackgrounds}" SelectedItem="{Binding PreviewBackground}"
                                       DisplayMemberPath="Label"
-                                      ToolTip="Transparent, or a solid colour (e.g. white to mask the icon in an image editor)" />
+                                      ToolTip="Transparent, or a solid color (e.g. white to mask the icon in an image editor)" />
                             <TextBlock Grid.Row="1" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Quality ×" />
                             <ComboBox Grid.Row="1" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewSupersampleFactors}" SelectedItem="{Binding PreviewSupersample}"

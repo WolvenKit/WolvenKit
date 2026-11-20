@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "name": "Trauma Team",
   "author": "WolvenKit",
-  "description": "Trauma Team: clinical silver and white on armor grey, emergency red, medical green.",
+  "description": "Trauma Team: clinical silver and white on armor gray, emergency red, medical green.",
   "basedOn": "WolvenKit Dark",
   "accent": "#E10600",
   "accentForeground": "#FFFFFF",
