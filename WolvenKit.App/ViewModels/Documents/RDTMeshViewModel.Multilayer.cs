@@ -41,7 +41,7 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// The material and layer pickers only matter in the debug views: Shaded draws every
-    /// material whole, so they are greyed out there.
+    /// material whole, so they are grayed out there.
     /// </summary>
     public bool IsMultilayerDebugPickerEnabled => MultilayerShader.DebugMode != 0;
 
@@ -172,7 +172,7 @@ public partial class RDTMeshViewModel
     /// The debug view and the solo layer apply to the selected material only; every other mesh
     /// keeps its normal shaded look (debugging the pants does not turn the jacket into a mask).
     /// Sector / block previews also offer "All materials": the view and the solo layer number
-    /// then apply to every multilayer material, so neighbouring pieces (terrain cells sharing
+    /// then apply to every multilayer material, so neighboring pieces (terrain cells sharing
     /// one mlsetup) can be compared.
     /// </summary>
     private void ApplyMultilayerDebugView()
@@ -480,13 +480,13 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// A texture for the pool, or a constant when the source is a solid placeholder
-    /// (engine black/white/grey/flat-normal and lookalikes in other folders).
+    /// (engine black/white/gray/flat-normal and lookalikes in other folders).
     /// </summary>
     private sealed class TextureEntry
     {
         public TextureModel? Texture { get; init; }
 
-        /// <summary>BGRA 0..1 of the solid colour when <see cref="Texture"/> is null.</summary>
+        /// <summary>BGRA 0..1 of the solid color when <see cref="Texture"/> is null.</summary>
         public float B { get; init; }
         public float G { get; init; }
         public float R { get; init; }
@@ -601,7 +601,7 @@ public partial class RDTMeshViewModel
     /// Logs a referenced file the preview could not use, once per Generate: not found anywhere
     /// (document, project, mods, archive), found but of the wrong kind (a texture path where an
     /// mlsetup is expected, or the other way round, which File Validation does not catch),
-    /// or found but unreadable. Without it such a slot just stays empty or grey.
+    /// or found but unreadable. Without it such a slot just stays empty or gray.
     /// </summary>
     private void WarnMissingFile(string kind, ResourcePath path, string? context = null)
     {
@@ -905,7 +905,7 @@ public partial class RDTMeshViewModel
                 }
             }
 
-            // ---- colour ----
+            // ---- color ----
             float cr = 1f, cg = 1f, cb = 1f;
             var colorOv = FindOverride(mllt.Overrides.ColorScale, layer.ColorScale, mllt.DefaultOverrides?.ColorScale, x => x.N);
             var colorVec = colorOv?.V;
@@ -1242,7 +1242,7 @@ public partial class RDTMeshViewModel
     /// <summary>
     /// Small textures: decoded, solid ones become constants (unless allowConstant is false),
     /// the rest a small uncompressed texture. Large ones: the DDS itself, sRGB tag removed
-    /// (the shader linearizes colour itself, like the addon), uploaded by Helix with its mips.
+    /// (the shader linearizes color itself, like the addon), uploaded by Helix with its mips.
     /// </summary>
     private async Task<TextureEntry> ToTextureEntry(
         byte[] dds, Enums.ETextureRawFormat? rawFormat, WolvenKit.Common.DDS.DXGI_FORMAT? decodeFormat,

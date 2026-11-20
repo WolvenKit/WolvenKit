@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "name": "Netrunner Daylight",
   "author": "WolvenKit",
-  "description": "Netrunner daylight: cool light grey with cyan and violet accents.",
+  "description": "Netrunner daylight: cool light gray with cyan and violet accents.",
   "basedOn": "WolvenKit Dark",
   "accent": "#00B4D8",
   "accentForeground": "#001A20",

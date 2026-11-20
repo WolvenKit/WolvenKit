@@ -8,17 +8,17 @@ namespace WolvenKit.App.Helpers;
 /// <summary>One colorScale override of a multilayer template: its name and v (0..1 per channel, as stored).</summary>
 public sealed record MultilayerPaletteColor(string Name, float R, float G, float B);
 
-/// <summary>A colour group as a column of the grid: its hue step and one cell per row (null where it has no colour).</summary>
+/// <summary>A color group as a column of the grid: its hue step and one cell per row (null where it has no color).</summary>
 public sealed record MultilayerPaletteColumn(int HueStep, IReadOnlyList<MultilayerPaletteColor?> Cells);
 
-/// <summary>The palette as a grid: the variant suffix of each row and the colour groups as columns.</summary>
+/// <summary>The palette as a grid: the variant suffix of each row and the color groups as columns.</summary>
 public sealed record MultilayerPaletteGrid(IReadOnlyList<string> RowSuffixes, IReadOnlyList<MultilayerPaletteColumn> Columns);
 
 /// <summary>
 /// Layout of a multilayer template's colorScale overrides as a palette, after the palette of the Cyberpunk
 /// Blender add-on (materials/blender/multilayer.py): the overrides are grouped by the part of their name before
-/// the first '_' ("00cf56_69039f" → "00cf56"), each group is one row that starts with its base colour
-/// ("00cf56_null"), and the rows are ordered by that base colour. The add-on's hand-tuned in-row offsets for
+/// the first '_' ("00cf56_69039f" → "00cf56"), each group is one row that starts with its base color
+/// ("00cf56_null"), and the rows are ordered by that base color. The add-on's hand-tuned in-row offsets for
 /// some kinds of templates are not copied.
 /// </summary>
 public static class MultilayerPalette
@@ -27,7 +27,7 @@ public static class MultilayerPalette
     private const int Repetitions = 8;
 
     /// <summary>
-    /// The colour of stored channels, shown as they are (0..1 → 0..255), like the colorScale dropdown and the
+    /// The color of stored channels, shown as they are (0..1 → 0..255), like the colorScale dropdown and the
     /// add-on's palette; values outside 0..1 are clamped.
     /// </summary>
     public static Color ToColor(float r, float g, float b) => Color.FromRgb(ToByte(r), ToByte(g), ToByte(b));
@@ -55,7 +55,7 @@ public static class MultilayerPalette
 
         return groups
             .Select((group, index) => (Row: BaseFirst(group, out var baseColor), Base: baseColor, Index: index))
-            // rows with a base colour by that colour, the others after them in file order
+            // rows with a base color by that color, the others after them in file order
             .OrderBy(g => g.Base is null ? 1 : 0)
             .ThenBy(g => g.Base is null ? default : StepSortKey(g.Base.R, g.Base.G, g.Base.B))
             .ThenBy(g => g.Index)
@@ -65,12 +65,12 @@ public static class MultilayerPalette
 
     /// <summary>
     /// The palette as a strip of columns, like CDPR's material browser: the groups as columns in blocks by the hue
-    /// step of their base colour (greys first, then the add-on's 8 hue steps), light to dark inside every block,
+    /// step of their base color (grays first, then the add-on's 8 hue steps), light to dark inside every block,
     /// and one row per variant suffix ("00cf56_69039f" → "69039f"), so a row is the same saturation / value step
-    /// for every hue. The base colour ("_null") is the top row, the other suffixes follow from the most saturated
-    /// on average to the greyest. Rows are only for suffixes more than one group has: colours of their own
+    /// for every hue. The base color ("_null") is the top row, the other suffixes follow from the most saturated
+    /// on average to the grayest. Rows are only for suffixes more than one group has: colors of their own
     /// (a custom variant) follow below the rows, in the group's order. A template whose groups share no suffix
-    /// besides the base colour keeps each group's own order, top-aligned (no rows: RowSuffixes is empty).
+    /// besides the base color keeps each group's own order, top-aligned (no rows: RowSuffixes is empty).
     /// </summary>
     public static MultilayerPaletteGrid GroupIntoGrid(IEnumerable<MultilayerPaletteColor> colors)
     {
@@ -100,7 +100,7 @@ public static class MultilayerPalette
             order++;
         }
 
-        // a row only for suffixes more than one group has; one-off colours (a custom "00cf56_my red") would
+        // a row only for suffixes more than one group has; one-off colors (a custom "00cf56_my red") would
         // each open a row that is empty everywhere else, so they go below the rows, in the group's own order
         var suffixes = stats
             .Where(p => p.Value.Count > 1)
@@ -111,7 +111,7 @@ public static class MultilayerPalette
             .ToList();
         if (suffixes.Count < 2)
         {
-            // nothing shared besides the base colour: each group in its own order, top-aligned
+            // nothing shared besides the base color: each group in its own order, top-aligned
             suffixes = [];
         }
 
@@ -138,7 +138,7 @@ public static class MultilayerPalette
     }
 
     /// <summary>
-    /// Greys (0), colours (1), groups without a base colour (2, in palette order); then the hue step (the add-on's
+    /// Grays (0), colors (1), groups without a base color (2, in palette order); then the hue step (the add-on's
     /// 8 steps), the perceived brightness (the add-on's formula) and the hue. Unlike the add-on's step sort the
     /// brightness runs the same way in every step: the grid's gaps already separate the steps.
     /// </summary>
@@ -165,7 +165,7 @@ public static class MultilayerPalette
 
     /// <summary>
     /// The add-on's cp77_step_sort: hue in steps (grays before all hues), then brightness, with the direction
-    /// alternating from one hue step to the next, so neighbouring rows change smoothly.
+    /// alternating from one hue step to the next, so neighboring rows change smoothly.
     /// </summary>
     internal static (int Hue, double Luminance, int Value) StepSortKey(float r, float g, float b)
     {

@@ -7,19 +7,19 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.App.Helpers;
 
 /// <summary>
-/// Colours shown next to values in the file editor where the file only stores numbers: CColor / HDRColor values,
-/// colour parameters of materials, gradients (hair profiles, .gradient files) and light temperatures.
+/// Colors shown next to values in the file editor where the file only stores numbers: CColor / HDRColor values,
+/// color parameters of materials, gradients (hair profiles, .gradient files) and light temperatures.
 /// </summary>
 public static class ColorPreviewHelper
 {
-    // Vector4 material parameters that hold colours under names that don't say so
+    // Vector4 material parameters that hold colors under names that don't say so
     private static readonly string[] s_vectorColorParameters = ["BaseColorScale", "HSV_Mod", "TintColor"];
 
-    // ... and those that aren't RGB (HSV): edited with the colour editor, but no swatch
+    // ... and those that aren't RGB (HSV): edited with the color editor, but no swatch
     private static readonly string[] s_notRgbParameters = ["HSV_Mod"];
 
     /// <summary>
-    /// Whether a Vector4 material parameter is a colour: the known names, and names ending in Color / Colour /
+    /// Whether a Vector4 material parameter is a color: the known names, and names ending in Color / Colour /
     /// Tint (also with a number or underscore after it, e.g. TintColor_2, LayerColor1).
     /// </summary>
     public static bool IsColorParameter(string? name)
@@ -40,13 +40,13 @@ public static class ColorPreviewHelper
                stem.EndsWith("Tint", StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>A colour parameter whose X, Y, Z are red, green, blue.</summary>
+    /// <summary>A color parameter whose X, Y, Z are red, green, blue.</summary>
     public static bool IsRgbColorParameter(string? name) => IsColorParameter(name) && !s_notRgbParameters.Contains(name);
 
     public static Color FromCColor(CColor color) => Color.FromRgb(color.Red, color.Green, color.Blue);
 
     /// <summary>
-    /// Channels as stored (0..1). HDR colours brighter than 1 are scaled down to their brightest channel, so the
+    /// Channels as stored (0..1). HDR colors brighter than 1 are scaled down to their brightest channel, so the
     /// swatch shows their hue instead of white.
     /// </summary>
     public static Color FromChannels(float r, float g, float b)
@@ -63,7 +63,7 @@ public static class ColorPreviewHelper
     }
 
     /// <summary>
-    /// The colour of a light temperature in kelvin (Tanner Helland's approximation of the black body colour,
+    /// The color of a light temperature in kelvin (Tanner Helland's approximation of the black body color,
     /// 1000 K .. 40000 K); null for temperatures that aren't set (the game uses -1).
     /// </summary>
     public static Color? FromKelvin(float kelvin)
@@ -84,7 +84,7 @@ public static class ColorPreviewHelper
         static byte ToByte(double value) => (byte)Math.Clamp(Math.Round(value), 0, 255);
     }
 
-    /// <summary>A left-to-right brush of gradient stops (position 0..1, colour); null without stops.</summary>
+    /// <summary>A left-to-right brush of gradient stops (position 0..1, color); null without stops.</summary>
     public static Brush? ToGradientBrush(IEnumerable<(float Position, Color Color)> stops)
     {
         var ordered = stops

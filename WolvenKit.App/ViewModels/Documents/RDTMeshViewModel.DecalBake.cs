@@ -18,14 +18,14 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 /// <summary>
 /// Mesh decals the way the game draws them: a mesh_decal does not shade on its own, it is
-/// blended into the surface under it (colour by DiffuseAlpha, normal by NormalAlpha,
+/// blended into the surface under it (color by DiffuseAlpha, normal by NormalAlpha,
 /// roughness / metalness by RoughnessMetalnessAlpha, each times the decal's coverage) and
 /// the surface is then lit as usual. Drawing the decal as its own mesh lights it differently
 /// (patches of another brightness, halos at soft edges, normal-only decals invisible).
 ///
 /// The preview finds the surface a decal lies on (decal vertices on surface vertices), draws
 /// the decal's triangles into the surface's texture space (decal UV -> surface UV per
-/// triangle), writes composite colour / normal / roughness-metalness maps for the surface
+/// triangle), writes composite color / normal / roughness-metalness maps for the surface
 /// and hides the decal. Decals that do not lie on a baked surface (multilayer clothes,
 /// another mesh) are drawn as before.
 /// </summary>
@@ -365,12 +365,12 @@ public partial class RDTMeshViewModel
             }
 
             // Edge pieces that float a little higher (a decal's rim over a collarbone): when only a
-            // few triangles are left, give each the surface of its neighbours, searched wider.
+            // few triangles are left, give each the surface of its neighbors, searched wider.
             var leftover = Enumerable.Range(0, total).Where(t => !bestFor.ContainsKey(t) && !sharedUv.Contains(t)).ToList();
             if (leftover.Count > 0 && leftover.Count <= total * DecalLeftoverShare && bestFor.Count > 0)
             {
-                // Centres of the triangles that found a surface (decal meshes often split their
-                // vertices, so neighbours are found by distance, not by shared indices).
+                // Centers of the triangles that found a surface (decal meshes often split their
+                // vertices, so neighbors are found by distance, not by shared indices).
                 Point3D Centre(int t)
                 {
                     var a = dg.Positions[dg.Indices[t * 3]];
@@ -482,7 +482,7 @@ public partial class RDTMeshViewModel
     /// </summary>
     private async Task PostProcessMeshDecalMaps(Material material, Dictionary<string, object> dictionary, string bd, string bn, string rm)
     {
-        // Gradient-map decals (road markings, signs): colour and alpha come from the gradient.
+        // Gradient-map decals (road markings, signs): color and alpha come from the gradient.
         var gradient = IsGradientDecalTemplate(GetTemplateFileName(material));
         if (gradient)
         {
@@ -824,7 +824,7 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// mesh_decal and the variants with the same parameters: emissive (glow skipped elsewhere),
-    /// parallax (height not shown in the preview; its normal, colour, roughness / metalness are),
+    /// parallax (height not shown in the preview; its normal, color, roughness / metalness are),
     /// and vehicle_mesh_decal (vehicles: stitches and decals, often DiffuseAlpha 0 = normal only;
     /// its damage and dirt are not shown).
     /// </summary>
@@ -840,7 +840,7 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// mesh_decal_gradientmap_recolor (add-on decal_nodes.py _gradient_color): DiffuseTexture.r
-    /// picks the colour along GradientMap (its middle row, clamped); colour x DiffuseColor,
+    /// picks the color along GradientMap (its middle row, clamped); color x DiffuseColor,
     /// alpha = GradientMap.a x MaskTexture.r x DiffuseAlpha (the composite then takes it as is).
     /// Hair caps on this template are hair, not decals, and never get here.
     /// </summary>
@@ -896,7 +896,7 @@ public partial class RDTMeshViewModel
                 float r = position, g = position, b = position, a = 1f;
                 if (gradient != null)
                 {
-                    // Clamped along the ramp: sample texel centres only.
+                    // Clamped along the ramp: sample texel centers only.
                     var gx = Math.Clamp(position * gradient.W, 0.5, gradient.W - 0.5) / gradient.W;
                     gradient.Sample(gx, 0.5, g4);
                     r = g4[2];
@@ -998,7 +998,7 @@ public partial class RDTMeshViewModel
         return new SurfaceGeometry { Positions = positions, Uvs = uvs, Indices = g.Indices.ToArray(), Normals = normals };
     }
 
-    /// <summary>Surface triangles bucketed by position, plus its usual UV-per-metre density.</summary>
+    /// <summary>Surface triangles bucketed by position, plus its usual UV-per-meter density.</summary>
     private sealed class SurfaceTriangleGrid
     {
         public double CellSize;
@@ -1247,7 +1247,7 @@ public partial class RDTMeshViewModel
     /// For each decal triangle on the surface: the surface UVs of its corners and how far it
     /// lies from the surface. Corners are projected on the nearest surface triangle; when the
     /// three land on different UV islands (a seam: far more UV than the surface's usual
-    /// density), they are taken from the plane of the triangle under the decal triangle's centre.
+    /// density), they are taken from the plane of the triangle under the decal triangle's center.
     /// Decal vertices need not be surface vertices (decals are often their own geometry).
     /// </summary>
     private bool MapDecalTriangles(SurfaceGeometry decal, SurfaceGeometry surface, SurfaceTriangleGrid grid,
@@ -1324,7 +1324,7 @@ public partial class RDTMeshViewModel
 
             if (UvPerimeter(uv) / world > maxDensity)
             {
-                // Seam: all three corners from the plane of the triangle under the centre.
+                // Seam: all three corners from the plane of the triangle under the center.
                 var centre = new Point3D((A.X + B.X + C.X) / 3, (A.Y + B.Y + C.Y) / 3, (A.Z + B.Z + C.Z) / 3);
                 if (ProjectOnSurface(centre, surface, grid, tolerance) is not { } under)
                 {
@@ -1392,7 +1392,7 @@ public partial class RDTMeshViewModel
         return r;
     }
 
-    /// <summary>Centre of a piece of decal triangle <paramref name="tri"/>.</summary>
+    /// <summary>Center of a piece of decal triangle <paramref name="tri"/>.</summary>
     private static Point3D DecalPieceCentre(SurfaceGeometry decal, int tri, double[] uv, int k)
     {
         var a = decal.Positions[decal.Indices[tri * 3]];
@@ -1476,7 +1476,7 @@ public partial class RDTMeshViewModel
 
             if (UvPerimeter(suv) / world > maxDensity)
             {
-                // A piece still over a seam: its corners from the plane of the triangle under its centre.
+                // A piece still over a seam: its corners from the plane of the triangle under its center.
                 var centre = new Point3D((P0.X + P1.X + P2.X) / 3, (P0.Y + P1.Y + P2.Y) / 3, (P0.Z + P1.Z + P2.Z) / 3);
                 if (ProjectOnSurface(centre, surface, grid, tolerance) is not { } under)
                 {
@@ -2005,7 +2005,7 @@ public partial class RDTMeshViewModel
 
         foreach (var layer in job.Layers)
         {
-            // No colour PNG (normal-only decal): full coverage, no colour.
+            // No color PNG (normal-only decal): full coverage, no color.
             using var dcb = LoadPng32(layer.ColorPng);
             var dColor = Pixels.From(dcb);
 
@@ -2150,7 +2150,7 @@ public partial class RDTMeshViewModel
     private const int DecalOverlayMinSize = 256;
 
     /// <summary>
-    /// Decals of a multilayer surface drawn into transparent maps in its UV space (colour,
+    /// Decals of a multilayer surface drawn into transparent maps in its UV space (color,
     /// normal, roughness / metalness, each with its coverage in alpha); the shader blends them.
     /// Size: enough for the decals' own texel density (75th percentile), power of two.
     /// </summary>
@@ -2168,7 +2168,7 @@ public partial class RDTMeshViewModel
         var oneSided = job.Layers.Any(l => l.SharedUv);
         if (!anyColor && !anyNormal && !anyRm && !oneSided)
         {
-            return; // nothing to draw (e.g. the decals' colour PNGs are not baked yet)
+            return; // nothing to draw (e.g. the decals' color PNGs are not baked yet)
         }
 
         Pixels Blank(byte b, byte g, byte r)
@@ -2363,7 +2363,7 @@ public partial class RDTMeshViewModel
             using var bmp = p.ToBitmap();
             if (dilate)
             {
-                // Colour of the covered pixels into the uncovered ones: filtering at the edge must
+                // Color of the covered pixels into the uncovered ones: filtering at the edge must
                 // not pull in black (or the flat normal) with the coverage.
                 DilateColorIntoTransparent(bmp);
             }
@@ -2544,7 +2544,7 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// Coverage of the decal's normal: NormalAlphaTex.r with UseNormalAlphaTex (white = everywhere
-    /// on the decal mesh), else the colour coverage x NormalAlpha; saturated.
+    /// on the decal mesh), else the color coverage x NormalAlpha; saturated.
     /// </summary>
     private static float NormalCoverage(DecalJobLayer layer, Pixels? color, (double U, double V) uv)
     {
@@ -2563,7 +2563,7 @@ public partial class RDTMeshViewModel
         return Math.Min(1f, Coverage(color, uv) * layer.NormalAlpha);
     }
 
-    /// <summary>Decal coverage at a decal UV: the colour PNG's alpha (1 without one).</summary>
+    /// <summary>Decal coverage at a decal UV: the color PNG's alpha (1 without one).</summary>
     private static float Coverage(Pixels? color, (double U, double V) uv)
     {
         if (color == null)
@@ -2608,8 +2608,8 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// Pixels of the target inside the triangle given in the target's UV space (wrapped),
-    /// with the decal UV interpolated at each pixel centre. Each pixel is visited once per
-    /// claim mask: the inside pass takes the centres within the triangle (shared edges go to
+    /// with the decal UV interpolated at each pixel center. Each pixel is visited once per
+    /// claim mask: the inside pass takes the centers within the triangle (shared edges go to
     /// the first triangle), the rim pass the still free ones within about half a pixel of it.
     /// </summary>
     private static void RasterizeInto(Pixels target, double[] suv, double[] duv, bool[] claimed, bool rim,

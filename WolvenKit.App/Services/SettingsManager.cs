@@ -389,7 +389,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _showAdvancedOptions;
 
     [Display(Name = "Multilayer palette as a grid",
-        Description = "The colours of a layer's template as a grid (colour groups as columns, like CDPR's material browser); off: as rows (like the Blender add-on). Also the Grid / Rows switch above the palette.",
+        Description = "The colors of a layer's template as a grid (color groups as columns, like CDPR's material browser); off: as rows (like the Blender add-on). Also the Grid / Rows switch above the palette.",
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _multilayerPaletteGrid = true;

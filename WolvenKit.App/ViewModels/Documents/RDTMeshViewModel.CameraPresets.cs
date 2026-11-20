@@ -18,7 +18,7 @@ public partial class RDTMeshViewModel
 {
     /// <summary>
     /// A saved view. Look / Up are directions; Distance, Target and OrthoWidth are in radii of
-    /// the bounding sphere (Target: look-at point minus the sphere's centre).
+    /// the bounding sphere (Target: look-at point minus the sphere's center).
     /// </summary>
     public sealed record CameraPreset
     {

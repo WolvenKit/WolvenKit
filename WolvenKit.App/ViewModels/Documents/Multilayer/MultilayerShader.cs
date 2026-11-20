@@ -55,7 +55,7 @@ public static class MultilayerShader
     public static int DebugMode { get; set; }
 
     /// <summary>
-    /// Clay view chosen on the viewport: every WolvenKit material drawn matte grey with its
+    /// Clay view chosen on the viewport: every WolvenKit material drawn matte gray with its
     /// mesh normals, no textures. Read when a material is bound, like <see cref="DebugMode"/>.
     /// </summary>
     public static bool ClayView { get; set; }

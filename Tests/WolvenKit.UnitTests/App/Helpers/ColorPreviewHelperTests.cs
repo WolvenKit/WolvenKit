@@ -7,7 +7,7 @@ using Xunit;
 namespace Wolvenkit.Test.App.Helpers;
 
 /// <summary>
-/// Colours shown next to values stored as numbers: which material parameters count as colours, HDR colours,
+/// Colors shown next to values stored as numbers: which material parameters count as colors, HDR colors,
 /// light temperatures and gradient strips.
 /// </summary>
 public class ColorPreviewHelperTests

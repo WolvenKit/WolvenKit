@@ -17,7 +17,7 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// The colours a layer of a multilayer setup can take: every colorScale override of the layer's template as a
+    /// The colors a layer of a multilayer setup can take: every colorScale override of the layer's template as a
     /// swatch, grouped and ordered like the palette of the Blender add-on (see <see cref="MultilayerPalette"/>).
     /// Clicking a swatch sets the layer's colorScale; the current one is outlined.
     /// </summary>
@@ -71,7 +71,7 @@ namespace WolvenKit.Views.Editors
 
         private ChunkViewModel _subscribed;
 
-        /// <summary>Text of the search box: colours whose name doesn't contain it are dimmed.</summary>
+        /// <summary>Text of the search box: colors whose name doesn't contain it are dimmed.</summary>
         private string _search = "";
 
         public MultilayerPaletteView()
@@ -154,7 +154,7 @@ namespace WolvenKit.Views.Editors
 
             SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-            // no colours because there's no template: say so, instead of an empty palette
+            // no colors because there's no template: say so, instead of an empty palette
             var exists = documentTools.MultilayerTemplateExists(template);
             NotFoundText.SetCurrentValue(TextBlock.TextProperty, exists ? "" : $"Template not found in the project or the game: {template}");
             NotFoundText.SetCurrentValue(VisibilityProperty, exists ? Visibility.Collapsed : Visibility.Visible);
@@ -163,10 +163,10 @@ namespace WolvenKit.Views.Editors
                 cvm.CanCopyMultilayerTemplate() ? Visibility.Visible : Visibility.Collapsed);
 
             PaletteExpander.SetCurrentValue(VisibilityProperty, exists ? Visibility.Visible : Visibility.Collapsed);
-            // a template without colours still shows the header row: its copy button is how colours get added
+            // a template without colors still shows the header row: its copy button is how colors get added
             if (documentTools.GetMultilayerPalette(template) is not { Count: > 0 } colors)
             {
-                PaletteExpander.SetCurrentValue(HeaderedContentControl.HeaderProperty, "Palette: no colours");
+                PaletteExpander.SetCurrentValue(HeaderedContentControl.HeaderProperty, "Palette: no colors");
                 return;
             }
 
@@ -177,9 +177,9 @@ namespace WolvenKit.Views.Editors
 
             var current = cvm.ResolvedData is CName name ? name.GetResolvedText() : null;
             var rows = MultilayerPalette.GroupIntoRows(colors);
-            // with the dropdown hidden the header names the current colour
+            // with the dropdown hidden the header names the current color
             PaletteExpander.SetCurrentValue(HeaderedContentControl.HeaderProperty,
-                $"Palette: {colors.Count} colours in {rows.Count} groups" + (current is { Length: > 0 } ? $"  ·  {current}" : ""));
+                $"Palette: {colors.Count} colors in {rows.Count} groups" + (current is { Length: > 0 } ? $"  ·  {current}" : ""));
 
             if (gridMode)
             {
@@ -188,7 +188,7 @@ namespace WolvenKit.Views.Editors
             }
 
             // same width for the groups, so the blocks line up in columns: the most common group size, not the
-            // largest, so one group with custom colours doesn't widen every block; its extra colours wrap to a
+            // largest, so one group with custom colors doesn't widen every block; its extra colors wrap to a
             // second line inside its own block instead of pushing the next blocks out of line
             var typical = rows
                 .GroupBy(row => row.Count)
@@ -213,9 +213,9 @@ namespace WolvenKit.Views.Editors
         }
 
         /// <summary>
-        /// One strip of columns, like CDPR's material browser: the colour groups side by side in the palette order,
+        /// One strip of columns, like CDPR's material browser: the color groups side by side in the palette order,
         /// a wider gap between hue steps, and one row per variant suffix, so a row is the same saturation step for
-        /// every hue; an empty cell is a variant the group doesn't have. Scrolled so the current colour is in view.
+        /// every hue; an empty cell is a variant the group doesn't have. Scrolled so the current color is in view.
         /// </summary>
         private void BuildGrid(MultilayerPaletteGrid grid, string current)
         {
@@ -233,7 +233,7 @@ namespace WolvenKit.Views.Editors
                 var cells = grid.Columns[i].Cells;
                 for (var row = 0; row < cells.Count; row++)
                 {
-                    // a gap between the shared rows and the colours of the groups' own below them
+                    // a gap between the shared rows and the colors of the groups' own below them
                     var margin = row == grid.RowSuffixes.Count && row > 0 ? s_extraRowsMargin : s_gridSwatchMargin;
                     var color = cells[row];
                     if (color is null)
@@ -260,7 +260,7 @@ namespace WolvenKit.Views.Editors
                 x += GridSwatchSize + 1 + gap;
             }
 
-            // searching: the first match in view; else the current colour
+            // searching: the first match in view; else the current color
             var offset = Math.Max(0, _search.Length > 0 && matchOffset >= 0 ? matchOffset : currentOffset);
             Dispatcher.InvokeAsync(() =>
                 GridScroll.ScrollToHorizontalOffset(Math.Max(0, offset - (GridScroll.ViewportWidth / 2))),
@@ -280,7 +280,7 @@ namespace WolvenKit.Views.Editors
         /// <summary>1 px between the swatches (both layouts).</summary>
         private static readonly Thickness s_gridSwatchMargin = new(0, 0, 1, 1);
 
-        /// <summary>Above the first colour below the shared rows of the grid (custom variants).</summary>
+        /// <summary>Above the first color below the shared rows of the grid (custom variants).</summary>
         private static readonly Thickness s_extraRowsMargin = new(0, 6, 1, 1);
 
         private bool Matches(MultilayerPaletteColor color) =>
@@ -302,7 +302,7 @@ namespace WolvenKit.Views.Editors
                 BorderThickness = new Thickness(1),
                 Opacity = 0.35,
                 SnapsToDevicePixels = true,
-                ToolTip = "This group has no colour for this row",
+                ToolTip = "This group has no color for this row",
             };
             cell.SetResourceReference(Border.BorderBrushProperty, "BorderAlt");
             return cell;

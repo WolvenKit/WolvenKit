@@ -1664,7 +1664,7 @@ public class DocumentTools
     private static readonly Dictionary<string, MultilayerTemplateColors> s_multilayerColorCache = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
-    /// The colour of a colorScale override of a multilayer template ("00cf56_69039f" → its v), for the swatches
+    /// The color of a colorScale override of a multilayer template ("00cf56_69039f" → its v), for the swatches
     /// of the file editor.
     /// </summary>
     public bool TryGetMultilayerColor(string materialPath, string colorName, out (float R, float G, float B) color)

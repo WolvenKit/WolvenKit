@@ -222,7 +222,7 @@
                     Cursor="Hand"
                     Focusable="False"
                     Command="{Binding ToggleClayShadingCommand}"
-                    ToolTip="Shading: Material (textures) or Clay (matte grey with the mesh normals, no textures: shows the shape). Same in every mesh / entity preview tab.">
+                    ToolTip="Shading: Material (textures) or Clay (matte gray with the mesh normals, no textures: shows the shape). Same in every mesh / entity preview tab.">
                     <TextBlock>
                         <Run Text="Shading:" />
                         <Run Text="{Binding ShadingLabel, Mode=OneWay}" />
@@ -237,7 +237,7 @@
                     Cursor="Hand"
                     Focusable="False"
                     Command="{Binding CycleWireframeModeCommand}"
-                    ToolTip="Wireframe: click to switch Off → Over shaded (edges over the shaded meshes) → Wireframe only (edges in the material's colour)">
+                    ToolTip="Wireframe: click to switch Off → Over shaded (edges over the shaded meshes) → Wireframe only (edges in the material's color)">
                     <TextBlock>
                         <Run Text="Wireframe:" />
                         <Run Text="{Binding WireframeMode, Mode=OneWay}" />
@@ -263,7 +263,7 @@
                     ItemsSource="{Binding WireframeColors, Mode=OneWay}"
                     SelectedItem="{Binding WireframeColor, Mode=TwoWay}"
                     Visibility="{Binding IsWireframeOverlay, Converter={StaticResource VisibilityConverter}}"
-                    ToolTip="Colour of the wireframe edges (Auto: light over the materials, dark over clay)">
+                    ToolTip="Color of the wireframe edges (Auto: light over the materials, dark over clay)">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" ToolTip="{Binding Name}">
@@ -602,7 +602,7 @@
                                 Content="Show areas"
                                 ToolTip="Area volumes: triggers, interiors, ambient (sound), light channel and GI areas, world boundaries... Off: all hidden; single areas can still be switched in the tree." />
 
-                            <!-- Area volumes coloured by kind (trigger, light channel, GI space...) or all plain; shown with the areas -->
+                            <!-- Area volumes colored by kind (trigger, light channel, GI space...) or all plain; shown with the areas -->
                             <CheckBox
                                 Margin="{DynamicResource WolvenKitMarginTiny}"
                                 Visibility="{Binding ShowSectorAreas, Converter={StaticResource VisibilityConverter}}"
@@ -779,7 +779,7 @@
                                     ToolTip="Generate the material previews. Hold Ctrl to clear the cache and regenerate everything (or use the arrow menu).">
                                     <!--
                                         The label is the content, not a Button.Style: a button with its own style loses the skin
-                                        (grey background) and the app-wide TextBlock style would override its yellow text.
+                                        (gray background) and the app-wide TextBlock style would override its yellow text.
                                     -->
                                     <TextBlock>
                                         <TextBlock.Style>
@@ -828,7 +828,7 @@
                                     VerticalAlignment="Center"
                                     Visibility="{Binding IsObjectPreview, Converter={StaticResource VisibilityConverter}}"
                                     IsChecked="{Binding BlendDecalsIntoSurfaces}"
-                                    ToolTip="Blend decals into the surface under them, as the game does: colour, normal and roughness / metalness of mesh decals are baked into the skin or material they lie on, which is then lit as one surface. Off: decals are drawn as their own meshes (faster, but lit differently). Decals on multilayer materials are always drawn on their own for now."
+                                    ToolTip="Blend decals into the surface under them, as the game does: color, normal and roughness / metalness of mesh decals are baked into the skin or material they lie on, which is then lit as one surface. Off: decals are drawn as their own meshes (faster, but lit differently). Decals on multilayer materials are always drawn on their own for now."
                                     Content="Blend decals" />
                             </Grid>
                         </Grid>
@@ -1063,7 +1063,7 @@
                             <ComboBox Grid.Row="3" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewBackgrounds}" SelectedItem="{Binding PreviewBackground}"
                                       DisplayMemberPath="Label"
-                                      ToolTip="Transparent, or a solid colour (e.g. white to mask the icon in an image editor)" />
+                                      ToolTip="Transparent, or a solid color (e.g. white to mask the icon in an image editor)" />
                         </Grid>
 
                         <!-- One image of what is on screen, or one icon per picked appearance -->

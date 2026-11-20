@@ -11,7 +11,7 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// Colour of a colorScale override of a multilayer template (its v: red, green, blue as floats 0..1): a colour
+    /// Color of a colorScale override of a multilayer template (its v: red, green, blue as floats 0..1): a color
     /// palette that writes the three channels, and their stored values. The channels stay editable one by one
     /// under v, for values the palette can't give (finer than 1/255, above 1).
     /// </summary>
@@ -72,12 +72,12 @@ namespace WolvenKit.Views.Editors
         }
 
         /// <summary>
-        /// Writes the picked colour through the channels' own view models, as typing them would: the array, the
+        /// Writes the picked color through the channels' own view models, as typing them would: the array, the
         /// file's dirty state and the swatches of v and of the override are updated the usual way.
         /// </summary>
         private void OnColorPicked(object parameter)
         {
-            // the palette also reports the colour it was given; that is not a change
+            // the palette also reports the color it was given; that is not a change
             if (Cvm is not { } cvm || PickedColor(parameter) is not { } color || cvm.PreviewColor == color)
             {
                 return;
@@ -91,7 +91,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        /// <summary>The palette passes an item with a Brush (as in the other colour editors); a colour or a brush is taken as is.</summary>
+        /// <summary>The palette passes an item with a Brush (as in the other color editors); a color or a brush is taken as is.</summary>
         private static Color? PickedColor(object parameter) => parameter switch
         {
             Color color => color,

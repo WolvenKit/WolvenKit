@@ -428,14 +428,14 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.FilterableDropdownCNameEditor>
 
-                <!-- v of a colorScale override (mltemplate): colour palette for the three channels -->
+                <!-- v of a colorScale override (mltemplate): color palette for the three channels -->
                 <converters:RedEditorTemplateSelector.RedOverrideColorEditor>
                     <DataTemplate>
                         <editors:RedOverrideColorEditor DataContext="{Binding}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedOverrideColorEditor>
 
-                <!-- colorScale of a layer (mlsetup): the dropdown, then the template's colours -->
+                <!-- colorScale of a layer (mlsetup): the dropdown, then the template's colors -->
                 <converters:RedEditorTemplateSelector.MultilayerColorScaleEditor>
                     <DataTemplate>
                         <StackPanel>
@@ -450,7 +450,7 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <!-- the current colour, next to the value row of the dropdown (like the swatch in the tree) -->
+                                <!-- the current color, next to the value row of the dropdown (like the swatch in the tree) -->
                                 <Border
                                     Grid.Row="1"
                                     Grid.Column="0"

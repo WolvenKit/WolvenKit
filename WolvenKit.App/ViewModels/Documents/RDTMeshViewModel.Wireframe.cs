@@ -11,7 +11,7 @@ namespace WolvenKit.App.ViewModels.Documents;
 /// <summary>
 /// Wireframe and clay views of mesh / entity previews (the switches on the viewport): off, edges
 /// drawn over the shaded meshes, or edges only. Shared by all mesh / entity preview tabs; the
-/// edge opacity and colour are also kept between sessions (previewWireframe.json in the app data
+/// edge opacity and color are also kept between sessions (previewWireframe.json in the app data
 /// folder), the mode and clay start off. Sector previews never show them.
 /// </summary>
 public partial class RDTMeshViewModel
@@ -22,7 +22,7 @@ public partial class RDTMeshViewModel
 
     public IReadOnlyList<string> WireframeModes { get; } = [WireframeOff, WireframeOverlay, WireframeOnly];
 
-    // Shared by the tabs; mode for the session, opacity and colour saved.
+    // Shared by the tabs; mode for the session, opacity and color saved.
     private static string s_wireframeMode = WireframeOff;
     private static double s_wireframeOpacity = 0.6;
     private static string s_wireframeColorName = "Auto";
@@ -76,7 +76,7 @@ public partial class RDTMeshViewModel
 
     public bool IsWireframeOverlay => s_wireframeMode == WireframeOverlay;
 
-    /// <summary>An edge colour of the "Over shaded" wireframe; no colour = automatic.</summary>
+    /// <summary>An edge color of the "Over shaded" wireframe; no color = automatic.</summary>
     public sealed record WireframeColorChoice(string Name, System.Windows.Media.Color? Color)
     {
         /// <summary>Swatch in the picker (automatic: half light, half dark).</summary>
@@ -109,7 +109,7 @@ public partial class RDTMeshViewModel
         new("Magenta", Rgb(0xEE, 0x44, 0xEE)),
     ];
 
-    /// <summary>Edge colour of "Over shaded"; Auto = light over the materials, dark over clay.</summary>
+    /// <summary>Edge color of "Over shaded"; Auto = light over the materials, dark over clay.</summary>
     public WireframeColorChoice WireframeColor
     {
         get
@@ -149,7 +149,7 @@ public partial class RDTMeshViewModel
         s_wireframeTabs.Add(new WeakReference<RDTMeshViewModel>(this));
     }
 
-    /// <summary>Every open preview tab shows the new mode / opacity / colour.</summary>
+    /// <summary>Every open preview tab shows the new mode / opacity / color.</summary>
     private void WireframeSettingsChanged()
     {
         RegisterWireframeTab();
@@ -224,14 +224,14 @@ public partial class RDTMeshViewModel
         WireframeMode = WireframeModes[(index + 1) % WireframeModes.Count];
     }
 
-    /// <summary>Edge colour of the "over shaded" mode: light, so it reads on dark and coloured surfaces.</summary>
+    /// <summary>Edge color of the "over shaded" mode: light, so it reads on dark and colored surfaces.</summary>
     private static readonly System.Windows.Media.Color s_wireframeColor = System.Windows.Media.Color.FromRgb(0xC8, 0xC8, 0xC8);
 
-    /// <summary>Edge colour over the clay view: dark, so it reads on the grey.</summary>
+    /// <summary>Edge color over the clay view: dark, so it reads on the gray.</summary>
     private static readonly System.Windows.Media.Color s_wireframeClayColor = System.Windows.Media.Color.FromRgb(0x20, 0x20, 0x20);
 
     /// <summary>
-    /// Clay view (the viewport's Shading button): matte grey, mesh normals, no textures. It is
+    /// Clay view (the viewport's Shading button): matte gray, mesh normals, no textures. It is
     /// a shader switch, so it is the same in every preview tab, like the shader debug view.
     /// </summary>
     public bool IsClayShading

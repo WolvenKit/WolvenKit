@@ -9,7 +9,7 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 /// <summary>
 /// The node tree of a sector: nodes in folders by type (Meshes, Instanced meshes, Foliage,
-/// Entities, Lights...), each labelled with its index in the sector's nodes array, so a row
+/// Entities, Lights...), each labeled with its index in the sector's nodes array, so a row
 /// matches <c>nodes[...]</c> in the JSON and in the log. A sector stores its nodes in blocks by
 /// type already; the folders follow the same split, and their check box hides a whole kind.
 /// </summary>

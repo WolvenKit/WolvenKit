@@ -3,4 +3,4 @@ changes:
       packages: ["App"]
       pr-number: 3301
       author: "Ametis81"
-      description: "File editor: colour swatches and palettes for multilayer colorScale values (mltemplate overrides and mlsetup layers), Copy template to project (a layer's .mltemplate copied to a project path of its own) and Add colour (new colorScale override in the project's own templates)."
+      description: "File editor: color swatches and palettes for multilayer colorScale values (mltemplate overrides and mlsetup layers), Copy template to project (a layer's .mltemplate copied to a project path of its own) and Add color (new colorScale override in the project's own templates)."

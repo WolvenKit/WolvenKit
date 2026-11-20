@@ -815,7 +815,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>A new projection needs a new distance to frame the object.</summary>
         // ---- Camera presets ----
 
-        /// <summary>Centre and radius of the bounding sphere of what is shown; null when empty.</summary>
+        /// <summary>Center and radius of the bounding sphere of what is shown; null when empty.</summary>
         private (System.Windows.Media.Media3D.Point3D Center, double Radius)? SceneSphere()
         {
             var bounds = HelixToolkit.Wpf.SharpDX.ViewportExtensions.FindBounds3D(hxViewport);
@@ -1352,7 +1352,7 @@ namespace WolvenKit.Views.Documents
 
         /// <summary>
         /// Points the camera along <paramref name="direction"/> (default: where it looks now) at the
-        /// centre of everything shown and moves it back until the bounding sphere fits the view.
+        /// center of everything shown and moves it back until the bounding sphere fits the view.
         /// Replaces ZoomExtents for these buttons: Helix's perspective ZoomExtents (box fit)
         /// put the camera on the wrong side for some directions, which looked like front/back,
         /// left/right and top/bottom being swapped, and zoomed in too close. The result is set on

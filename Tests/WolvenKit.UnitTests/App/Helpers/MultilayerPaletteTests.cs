@@ -11,7 +11,7 @@ namespace Wolvenkit.Test.App.Helpers;
 
 /// <summary>
 /// The palette of a multilayer template's colorScale overrides: grouping and order after the Blender add-on
-/// (reference values from its cp77_step_sort and Python's colorsys), and the colour of stored channels.
+/// (reference values from its cp77_step_sort and Python's colorsys), and the color of stored channels.
 /// </summary>
 public class MultilayerPaletteTests
 {
@@ -25,7 +25,7 @@ public class MultilayerPaletteTests
             C("aaa_1", 0.8f, 0.2f, 0.2f), C("aaa_null", 0.9f, 0.1f, 0.1f),
             C("ccc_null", 0.2f, 0.6f, 0.9f), C("ccc_1", 0.1f, 0.5f, 0.8f),
             C("bbb_1", 0.4f, 0.4f, 0.4f), C("bbb_null", 0.5f, 0.5f, 0.5f),
-            C("eee_1", 0.3f, 0.3f, 0.0f), // no base colour
+            C("eee_1", 0.3f, 0.3f, 0.0f), // no base color
             C("ddd_null", 0.1f, 0.8f, 0.2f),
         };
 

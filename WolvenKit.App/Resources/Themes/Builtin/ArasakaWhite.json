@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "name": "Arasaka White",
   "author": "WolvenKit",
-  "description": "Arasaka corporate: clean white and light grey surfaces, signal red accent.",
+  "description": "Arasaka corporate: clean white and light gray surfaces, signal red accent.",
   "basedOn": "WolvenKit Dark",
   "accent": "#C8102E",
   "accentForeground": "#FFFFFF",

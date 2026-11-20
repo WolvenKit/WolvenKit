@@ -14,20 +14,20 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.App.ViewModels.Shell;
 
 /// <summary>
-/// Colour swatches of multilayer colorScale overrides in the file editor: an entry of a template's
-/// overrides.colorScale (and its v), and a layer of a setup and its colorScale, whose colour comes from the
+/// Color swatches of multilayer colorScale overrides in the file editor: an entry of a template's
+/// overrides.colorScale (and its v), and a layer of a setup and its colorScale, whose color comes from the
 /// layer's template. The values are shown as they are stored (0..1 per channel), like the colorScale dropdown
 /// and the palette of the Blender add-on.
 /// </summary>
 public partial class ChunkViewModel
 {
-    /// <summary>Colour shown as a swatch next to the value; null for rows that don't stand for one.</summary>
+    /// <summary>Color shown as a swatch next to the value; null for rows that don't stand for one.</summary>
     [ObservableProperty] private Color? _previewColor;
 
     /// <summary>A gradient array (hair profile, .gradient file) shown as a strip next to the value; null otherwise.</summary>
     [ObservableProperty] private Brush? _previewGradient;
 
-    /// <summary>Called from <see cref="CalculateValue"/> and when a channel of an override colour changes.</summary>
+    /// <summary>Called from <see cref="CalculateValue"/> and when a channel of an override color changes.</summary>
     public void CalculatePreviewColor()
     {
         PreviewColor = GetPreviewColor();
@@ -35,7 +35,7 @@ public partial class ChunkViewModel
             ? ColorPreviewHelper.ToGradientBrush(stops)
             : null;
 
-        // the layer's colorScale row shows the same colour; it also depends on the layer's material
+        // the layer's colorScale row shows the same color; it also depends on the layer's material
         if (ResolvedData is Multilayer_Layer && _propertiesLoaded &&
             Properties.FirstOrDefault(p => p.Name == "colorScale") is { } colorScale)
         {
@@ -50,7 +50,7 @@ public partial class ChunkViewModel
         Multilayer_Layer layer => GetLayerColor(layer),
         CName when Name == "colorScale" && ParentData is Multilayer_Layer layer => GetLayerColor(layer),
 
-        // colours stored as numbers
+        // colors stored as numbers
         rendGradientEntry entry => ColorPreviewHelper.FromCColor(entry.Color),
         rendHairProfileGradientEntry entry => ColorPreviewHelper.FromCColor(entry.Color),
         CColor color => ColorPreviewHelper.FromCColor(color),
@@ -69,7 +69,7 @@ public partial class ChunkViewModel
         _ => null,
     };
 
-    /// <summary>The colour of a material parameter row (the key-value pair): colour types, and colour Vector4s.</summary>
+    /// <summary>The color of a material parameter row (the key-value pair): color types, and color Vector4s.</summary>
     private static Color? GetMaterialParameterColor(CKeyValuePair pair) => pair.Value switch
     {
         CColor color => ColorPreviewHelper.FromCColor(color),
@@ -80,7 +80,7 @@ public partial class ChunkViewModel
     };
 
     /// <summary>
-    /// After a value changed: rows above it that show its colour (a colour's channels, a gradient entry's colour
+    /// After a value changed: rows above it that show its color (a color's channels, a gradient entry's color
     /// or position, a material parameter's vector) follow.
     /// </summary>
     public void RecalculateColorPreviewsAbove()
@@ -97,7 +97,7 @@ public partial class ChunkViewModel
         }
     }
 
-    /// <summary>The colour of the layer's colorScale in the layer's template; null if it isn't found there.</summary>
+    /// <summary>The color of the layer's colorScale in the layer's template; null if it isn't found there.</summary>
     private static Color? GetLayerColor(Multilayer_Layer layer)
     {
         if (layer.Material.DepotPath.GetResolvedText() is not { Length: > 0 } template ||
@@ -138,7 +138,7 @@ public partial class ChunkViewModel
 
     /// <summary>
     /// Copies the layer's template into the project under a path of its own and points the layer to the copy, so its
-    /// colours can be changed without changing the game's template. Other layers of the setup with the same template
+    /// colors can be changed without changing the game's template. Other layers of the setup with the same template
     /// can follow.
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanCopyMultilayerTemplate))]
@@ -215,11 +215,11 @@ public partial class ChunkViewModel
         ResolvedData is Multilayer_LayerTemplateOverridesColor && Parent?.ResolvedData is CArray<Multilayer_LayerTemplateOverridesColor> ? Parent :
         null;
 
-    /// <summary>Whether "Add colour" belongs in this node's context menu (it may still be disabled).</summary>
+    /// <summary>Whether "Add color" belongs in this node's context menu (it may still be disabled).</summary>
     public bool IsMultilayerColorsNode => OverrideColorsNode is not null;
 
     /// <summary>
-    /// Only templates of the project under a path of their own get new colours: changing a template on a path the
+    /// Only templates of the project under a path of their own get new colors: changing a template on a path the
     /// game uses would change every material that uses it. Those have to be copied first.
     /// </summary>
     public bool CanAddMultilayerColor() =>
@@ -230,14 +230,14 @@ public partial class ChunkViewModel
         tools.IsCustomMultilayerTemplate(templatePath);
 
     /// <summary>
-    /// Adds a colour to the template's colorScale overrides, named like the game's (group_variant, 6 hex digits
-    /// each). Run on an entry, the new colour starts as a variant of it (same group, same values); the colour picker
+    /// Adds a color to the template's colorScale overrides, named like the game's (group_variant, 6 hex digits
+    /// each). Run on an entry, the new color starts as a variant of it (same group, same values); the color picker
     /// of its v sets the values.
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanAddMultilayerColor))]
     private async Task AddMultilayerColor()
     {
-        const string title = "Add colour";
+        const string title = "Add color";
         if (OverrideColorsNode is not { ResolvedData: CArray<Multilayer_LayerTemplateOverridesColor> colors } colorsNode)
         {
             return;
@@ -254,7 +254,7 @@ public partial class ChunkViewModel
 
         if (names.Contains(name))
         {
-            Interactions.ShowMessageBox($"The template already has a colour named {name}.", title, WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+            Interactions.ShowMessageBox($"The template already has a color named {name}.", title, WMessageBoxButtons.Ok, WMessageBoxImage.Error);
             return;
         }
 
@@ -278,7 +278,7 @@ public partial class ChunkViewModel
     }
 
     /// <summary>
-    /// A free name in the game's format: a new group starts with its base colour, <c>xxxxxx_null</c>, a variant of an
+    /// A free name in the game's format: a new group starts with its base color, <c>xxxxxx_null</c>, a variant of an
     /// entry is <c>group_xxxxxx</c>; xxxxxx are 6 random hex digits not used by the template yet.
     /// </summary>
     internal static string SuggestColorName(Multilayer_LayerTemplateOverridesColor? basis, ISet<string> taken, Random random)

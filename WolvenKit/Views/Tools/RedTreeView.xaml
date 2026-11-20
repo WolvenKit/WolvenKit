@@ -342,7 +342,7 @@
                         Grid.Column="2"
                         Margin="{DynamicResource WolvenKitMarginTinyRight}"
                         Orientation="Horizontal">
-                        <!-- colour of a multilayer colorScale override, left of its name: mltemplate entries (the name is the descriptor) and their v -->
+                        <!-- color of a multilayer colorScale override, left of its name: mltemplate entries (the name is the descriptor) and their v -->
                         <Border
                             Width="{DynamicResource WolvenKitIconMicro}"
                             Height="{DynamicResource WolvenKitIconMicro}"
@@ -382,7 +382,7 @@
                                            UpdateSourceTrigger=PropertyChanged}"
                             TextTrimming="CharacterEllipsis" />
 
-                        <!-- the same, left of the value: mlsetup layers and their colorScale (the colour's name is the value) -->
+                        <!-- the same, left of the value: mlsetup layers and their colorScale (the color's name is the value) -->
                         <Border
                             Width="{DynamicResource WolvenKitIconMicro}"
                             Height="{DynamicResource WolvenKitIconMicro}"
@@ -932,7 +932,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     ToolTipService.ShowOnDisabled="True"
                     ToolTip="Only for templates of this project under a path of their own. Copy the template first: 'Copy template to project...' on a layer of a multilayer setup."
-                    Header="Add colour..."
+                    Header="Add color..."
                     Command="{Binding Path=PlacementTarget.Tag.AddMultilayerColorCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                     <MenuItem.Icon>

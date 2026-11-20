@@ -394,8 +394,8 @@ public partial class RDTMeshViewModel
 
     /// <summary>
     /// Area nodes (triggers, interiors, ambient / GI / light channel areas, world boundaries...):
-    /// their outline extruded by its height, centred on the outline as in the Blender add-on,
-    /// in the node's colour. They were drawn as a box sized from the first outline point.
+    /// their outline extruded by its height, centered on the outline as in the Blender add-on,
+    /// in the node's color. They were drawn as a box sized from the first outline point.
     /// </summary>
     private void AddAreaShape(List<Element3D> groups, string name, string typeStr, ulong handleIndex, string indexStr,
         worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldAreaShapeNode node)
@@ -473,7 +473,7 @@ public partial class RDTMeshViewModel
     }
 
     /// <summary>
-    /// Area colours by node type (the Blender add-on's palette), so the colour tells the kind of area:
+    /// Area colors by node type (the Blender add-on's palette), so the color tells the kind of area:
     /// the type itself, else its nearest listed base type (other triggers are trigger orange).
     /// </summary>
     private static readonly (Type Type, SharpDX.Color4 Color, string Kind)[] s_areaPalette =
@@ -488,7 +488,7 @@ public partial class RDTMeshViewModel
     ];
 
     /// <summary>
-    /// Colour and label of an area node: by type (see s_areaPalette); for other areas the colour
+    /// Color and label of an area node: by type (see s_areaPalette); for other areas the color
     /// the node carries for the editor, else a faint white.
     /// </summary>
     private static (SharpDX.Color4 Color, string Kind) AreaShapeLook(worldAreaShapeNode node)
@@ -530,7 +530,7 @@ public partial class RDTMeshViewModel
 
     // What the shown sectors and the files read while building them embed besides meshes
     // (material instances, mlsetups, masks, textures - a terrain mesh carries its mask, base
-    // colour and global normal as inplace resources), kept after building: materials are
+    // color and global normal as inplace resources), kept after building: materials are
     // generated later. The first file to embed a path wins.
     private readonly System.Collections.Concurrent.ConcurrentDictionary<ResourcePath, CR2WFile> _keptEmbeddedFiles = new();
 

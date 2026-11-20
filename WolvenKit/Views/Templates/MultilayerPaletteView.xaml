@@ -28,7 +28,7 @@
                             Margin="0,0,6,0"
                             VerticalAlignment="Center"
                             Text="Grid / Rows"
-                            ToolTip="Off, Grid: colour groups as columns, variants below the base colour, scrolling sideways (like CDPR's material browser). On, Rows: colour groups as rows wrapping down (like the Blender add-on)" />
+                            ToolTip="Off, Grid: color groups as columns, variants below the base color, scrolling sideways (like CDPR's material browser). On, Rows: color groups as rows wrapping down (like the Blender add-on)" />
                         <!-- MinWidth 0: the style's minimum width would leave a wide gap after the switch -->
                         <mah:ToggleSwitch
                             x:Name="ModeSwitch"
@@ -50,7 +50,7 @@
                         hc:InfoElement.ShowClearButton="True"
                         DockPanel.Dock="Right"
                         Style="{StaticResource SearchBarPlus}"
-                        ToolTip="Dims the colours whose name doesn't contain the text"
+                        ToolTip="Dims the colors whose name doesn't contain the text"
                         TextChanged="SearchBox_OnTextChanged" />
 
                     <!-- only for templates that aren't the project's own yet -->
@@ -58,11 +58,11 @@
                         x:Name="CopyTemplateButton"
                         Content="Copy template to project..."
                         DockPanel.Dock="Right"
-                        ToolTip="Copy the layer's template into the project under a path of its own and point the layer to the copy, to add or change colours without changing the game's template"
+                        ToolTip="Copy the layer's template into the project under a path of its own and point the layer to the copy, to add or change colors without changing the game's template"
                         Click="CopyTemplateButton_OnClick" />
                 </DockPanel>
 
-                <!-- one column per group, base colour on top; Shift + wheel scrolls sideways -->
+                <!-- one column per group, base color on top; Shift + wheel scrolls sideways -->
                 <ScrollViewer
                     x:Name="GridScroll"
                     HorizontalScrollBarVisibility="Auto"
@@ -81,7 +81,7 @@
                     HorizontalScrollBarVisibility="Disabled"
                     VerticalScrollBarVisibility="Auto">
                     <!--
-                        one block per group of the template's colours, the group's base colour first; the blocks are
+                        one block per group of the template's colors, the group's base color first; the blocks are
                         as wide as the largest group and flow left to right, then down, in palette order
                     -->
                     <WrapPanel x:Name="RowsPanel" Orientation="Horizontal" />

@@ -144,7 +144,7 @@ public partial class RDTMeshViewModel
     /// Default = the usual work lights; Icon (soft) = key from the front upper left, weaker fill,
     /// rim and ambient, fixed in the scene; Icon (follow camera) = the same set turning with
     /// the camera, so back and side views are lit like the front; Flat = ambient only, for
-    /// checking colours and textures without highlights.
+    /// checking colors and textures without highlights.
     /// </summary>
     public IReadOnlyList<string> PreviewLightingPresets { get; } = ["Default", "Icon", "Icon (soft)", "Icon (follow camera)", "Flat"];
 

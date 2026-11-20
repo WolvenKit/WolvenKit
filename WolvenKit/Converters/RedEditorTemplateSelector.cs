@@ -22,10 +22,10 @@ namespace WolvenKit.Converters
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedVectorColorEditor { get; set; }
 
-        /// <summary>v of a colorScale override of a multilayer template: a colour palette for its three channels.</summary>
+        /// <summary>v of a colorScale override of a multilayer template: a color palette for its three channels.</summary>
         public DataTemplate RedOverrideColorEditor { get; set; }
 
-        /// <summary>colorScale of a layer of a multilayer setup: the dropdown, and the template's colours as a palette.</summary>
+        /// <summary>colorScale of a layer of a multilayer setup: the dropdown, and the template's colors as a palette.</summary>
         public DataTemplate MultilayerColorScaleEditor { get; set; }
         public DataTemplate FilterableDropdownCNameEditor { get; set; }
         public DataTemplate FilterableDropdownRedstringEditor { get; set; }
@@ -74,7 +74,7 @@ namespace WolvenKit.Converters
                 return RedNodeRefEditor;
             }
 
-            // multilayer colours: the channels of an override (they stay editable one by one under v),
+            // multilayer colors: the channels of an override (they stay editable one by one under v),
             // and the colorScale a layer picks from its template
             if (vm.Name == "v" && vm.ParentData is Multilayer_LayerTemplateOverridesColor)
             {

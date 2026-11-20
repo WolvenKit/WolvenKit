@@ -25,7 +25,7 @@ public struct MultilayerConstants
     /// <summary>Float index of the debug vector (header vector 2).</summary>
     public const int DebugOffset = 8;
 
-    /// <summary>Float index of the decal overlay slot A (header vector 3): pool indices of colour, normal, roughness-metalness, facing.</summary>
+    /// <summary>Float index of the decal overlay slot A (header vector 3): pool indices of color, normal, roughness-metalness, facing.</summary>
     public const int OverlayOffset = 12;
 
     /// <summary>Float index of the decal overlay slot B (header vector 4): the other side of shared UV.</summary>
@@ -50,7 +50,7 @@ public struct SurfaceExtraConstants
     /// <summary>rgb: specular tint, w: 1 = use it.</summary>
     public SharpDX.Vector4 SpecularTint;
 
-    /// <summary>x: edge tint exponent (0 = off), y: vertex colour tint amount, z: unused, w: 1 = clay view.</summary>
+    /// <summary>x: edge tint exponent (0 = off), y: vertex color tint amount, z: unused, w: 1 = clay view.</summary>
     public SharpDX.Vector4 Glass;
 
     /// <summary>x: 1 = back faces shaded as glass backs, y: back reflection power, z: back opacity, w: alpha clip threshold (0 = off).</summary>
@@ -536,8 +536,8 @@ public class MultilayerEffectsManager : DefaultEffectsManager
                 DefaultBlendStateDescriptions.BSOITBlend, DefaultDepthStencilDescriptions.DSSLessNoWrite));
         }
 
-        // Helix's wireframe pass writes the edge colour without blending; this copy blends it,
-        // so the colour's alpha (the preview's wireframe opacity) shows the surface through.
+        // Helix's wireframe pass writes the edge color without blending; this copy blends it,
+        // so the color's alpha (the preview's wireframe opacity) shows the surface through.
         mesh.AddPass(new ShaderPassDescription(MultilayerShader.WireframeAlphaPassName)
         {
             InputLayoutDescription = new InputLayoutDescription(DefaultVSShaderByteCodes.VSMeshDefault, DefaultInputLayout.VSInput),
@@ -580,7 +580,7 @@ public class MultilayerEffectsManager : DefaultEffectsManager
     };
 }
 
-/// <summary>One decal overlay slot: colour, normal, roughness-metalness and facing maps (each optional).</summary>
+/// <summary>One decal overlay slot: color, normal, roughness-metalness and facing maps (each optional).</summary>
 public sealed record MultilayerOverlaySlot(TextureModel? Color, TextureModel? Normal, TextureModel? RoughMetal, TextureModel? Facing)
 {
     public bool IsEmpty => Color == null && Normal == null && RoughMetal == null;

@@ -25,7 +25,7 @@
             SelectedCommand="{Binding SelectedColorCommand, RelativeSource={RelativeSource AncestorType={x:Type local:RedOverrideColorEditor}}}"
             Color="{Binding PreviewColor, Mode=OneWay, TargetNullValue=Black}" />
 
-        <!-- the stored values: picking a colour rounds them to 1/255 -->
+        <!-- the stored values: picking a color rounds them to 1/255 -->
         <TextBlock
             x:Name="ChannelsText"
             Grid.Column="1"

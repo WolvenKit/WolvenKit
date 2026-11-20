@@ -468,7 +468,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             ApplyAppearancePreviewMaterials(SelectedAppearance);
 
             // Once materials were generated in this tab, other appearances get theirs on
-            // selection: no grey models until Generate is pressed again.
+            // selection: no gray models until Generate is pressed again.
             if (_materialsGenerated)
             {
                 _ = AutoGenerateMaterialsAsync();
@@ -1107,7 +1107,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     /// <summary>
     /// Resolves the appearance index. Exact (case-insensitive) match, otherwise first in list.
-    /// Kept separate to minimise merge conflicts with upstream appearance-selection changes.
+    /// Kept separate to minimize merge conflicts with upstream appearance-selection changes.
     /// </summary>
     private int ResolveAppearanceIndex(List<string> apps, string? meshApp)
     {
@@ -1816,8 +1816,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             sm.MaterialName = GetUniqueMaterialName(chosenMatName, cMesh, meshPath);
             sm.Material = SetupPBRMaterial(sm.MaterialName);
 
-            // Glass tinted by vertex paint (TintFromVertexPaint) reads the vertex colours; loaded
-            // only for it. Without colours the tint stays white rather than black.
+            // Glass tinted by vertex paint (TintFromVertexPaint) reads the vertex colors; loaded
+            // only for it. Without colors the tint stays white rather than black.
             if (sm.Material is MultilayerPBRMaterial { Extras.VertexTint: > 0f } &&
                 sm.Geometry is HelixToolkit.SharpDX.Core.MeshGeometry3D tintGeometry)
             {
@@ -1931,7 +1931,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             sm.DepthBias = ContainsAny(sm.MaterialName, "hx_", "freckle", "frecle", "makeup", "_lips") ? -2 : -1;
             sm.IsTransparent = true;
 
-            // DiffuseAlpha 0: the decal adds no colour, only normals (and roughness / metalness) to the
+            // DiffuseAlpha 0: the decal adds no color, only normals (and roughness / metalness) to the
             // surface under it (vehicle stitches and panel lines). Drawn as a mesh of its own it showed
             // its white placeholder texture; what it adds comes from the bake into the surface, if any.
             // "Set" counts in the material or in a .mi it is based on (face cyberware keeps its
@@ -2208,7 +2208,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     {
                         if (visited[u])
                             continue;
-                        // consistent neighbours traverse a shared edge in opposite directions
+                        // consistent neighbors traverse a shared edge in opposite directions
                         if (HasDirectedEdge(u, a, b))
                             FlipTriangle(u);
                         visited[u] = true;
@@ -2616,7 +2616,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.RenderEnvironmentMap = false;
             material.RoughnessFactor = 0.8f;
 
-            // Glowing tattoos: masked skin colour baked to _emissive.png, strength 2^EV - 1.
+            // Glowing tattoos: masked skin color baked to _emissive.png, strength 2^EV - 1.
             var skinEmissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
             var skinEv = 0f;
             if (TryGetRawMaterial(name, out var skinEm) && skinEm?.Values != null &&
@@ -2654,7 +2654,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             material.RoughnessFactor = 0.75f;
             material.RenderEnvironmentMap = false;
             // Preview-only darkening (on top of the baked ×0.6): the preview has plain PBR
-            // lighting, without the game's hair shading, so the base colour is toned down.
+            // lighting, without the game's hair shading, so the base color is toned down.
             material.AlbedoColor = new SharpDX.Color4(HairPreviewAlbedo, HairPreviewAlbedo, HairPreviewAlbedo, 1f);
             material.EnableFlatShading = false;
             material.RenderAlbedoMap = true;
@@ -2714,7 +2714,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
             else if (part == EyePart.Wet)
             {
-                // Wetness film without its own colour: almost invisible, only the highlight shows.
+                // Wetness film without its own color: almost invisible, only the highlight shows.
                 material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.15f);
             }
 
@@ -2754,7 +2754,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     material.MetallicFactor = ovMetal * rma;
                 }
                 material.RenderEnvironmentMap = material.MetallicFactor > 0.05f || material.RoughnessFactor < 0.4f;
-                // Metals get their colour from the albedo: don't darken it as much.
+                // Metals get their color from the albedo: don't darken it as much.
                 var shade = (float)(0.55 + 0.45 * material.MetallicFactor);
                 material.AlbedoColor = new SharpDX.Color4(shade, shade, shade, 1f);
             }
@@ -2772,7 +2772,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         // Baked PNG already mixes TintColor glass with MaskTexture label.
         if (Has(kind, MaterialKind.Glass) && IsDeferredGlass(name))
         {
-            // glass_deferred: opaque; colour, roughness and metalness come from the bake
+            // glass_deferred: opaque; color, roughness and metalness come from the bake
             // (glass lobe and MaskTexture surface lobe mixed per pixel).
             material.RenderEnvironmentMap = true;
             material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 1f);
@@ -2834,7 +2834,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             // Shader extras (plain PBR pass): GlassSpecularColor tints the reflections; the tint
             // deepens towards the edges with the exponent FresnelBias picks (0.5 / 1.5 / 4);
-            // TintFromVertexPaint multiplies it by the vertex colour (loaded in MakeMesh);
+            // TintFromVertexPaint multiplies it by the vertex color (loaded in MakeMesh);
             // glass.mt draws its back faces with BackFacesReflectionPower / OpacityBackFace.
             if (material is MultilayerPBRMaterial glassShaderMaterial && glassMat != null)
             {
@@ -2982,8 +2982,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 var emissivePng = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_emissive.png");
 
                 // The glow follows the emissive map. While a material that has an emissive texture
-                // has no baked map yet, the colour alone lit the whole mesh (pale, shading washed
-                // out): no glow until the map is there. Without an emissive texture the colour is
+                // has no baked map yet, the color alone lit the whole mesh (pale, shading washed
+                // out): no glow until the map is there. Without an emissive texture the color is
                 // the glow itself (panels lit by EmissiveColor / EV only) and stays.
                 if (File.Exists(emissivePng) || !HasEmissiveTexture(name))
                 {
@@ -3248,7 +3248,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     ///    varies → the mask is single-channel, use R;
     ///  - preferred R is flat but A varies → the mask is in alpha, use A;
     ///  - nothing varies → keep the preferred channel (flat coverage).
-    /// A colour texture without alpha is never read as R: colour is not coverage.
+    /// A color texture without alpha is never read as R: color is not coverage.
     /// </summary>
     private static int PickCoverageChannel(Bitmap bmp, int preferred)
     {
@@ -3372,7 +3372,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return sectorEmbedded;
 
         // Materials find what the shown sectors and the read files embed, also after building
-        // (a terrain mesh's mlmask, base colour and global normal are its inplace resources).
+        // (a terrain mesh's mlmask, base color and global normal are its inplace resources).
         if (KeptEmbeddedFile(depotPath, readEmbedded) is { } keptEmbedded)
             return keptEmbedded;
 
@@ -3477,7 +3477,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     // Bump when a bake changes its output for the same inputs (v3: skin tattoos, glass_deferred;
     // v4: see-through glass, makeup roughness / metalness, glowing tattoos;
     // v5: mesh_decal UV transform, flipbook frame, coverage; v6: mesh_decal_parallax too;
-    // v7: mesh_decal_gradientmap_recolor colour from its gradient map).
+    // v7: mesh_decal_gradientmap_recolor color from its gradient map).
     private const string DepsFormat = "v7";
 
     private readonly object _depLock = new();
@@ -3772,7 +3772,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         return appMaterials;
     }
 
-    private static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
+    private static readonly char[] s_invalidFileNameChars = Path.GetInvalidFileNameChars();
     private const float GlassDefaultOpacity = 1f;
 
     // Transparent glass (glass.mt, glass_onesided.mt …): Opacity 1 (the default) means "full
@@ -3828,7 +3828,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     private static string SanitizeFileName(string name) =>
-        string.Concat(name.Select(c => InvalidFileNameChars.Contains(c) ? '_' : c));
+        string.Concat(name.Select(c => s_invalidFileNameChars.Contains(c) ? '_' : c));
 
     private string GetUniqueMaterialName(string name, CMesh mesh, string? meshPathOverride = null)
     {
@@ -4390,7 +4390,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             // Vegetation (SpeedTree) names its maps DiffuseMap / NormalMap / TransGlossMap:
-            // read as base colour and normal, alpha-clipped at 0.5 like the game's foliage.
+            // read as base color and normal, alpha-clipped at 0.5 like the game's foliage.
             AddSpeedTreeAliases(material, dictionary);
 
             // Set numeric roughness / metalness values from material parameters
@@ -4692,7 +4692,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
 
                 // Two regimes, same contrast:
-                //   mid/low mask (Layer 003 grey + zebra01, c=0.1):
+                //   mid/low mask (Layer 003 gray + zebra01, c=0.1):
                 //     amplify burn so the pattern thresholds into stripes
                 //   high/white mask (Layer 004/005 bezel + damp_stains/spots, c=0.25):
                 //     crossfade only — stains stay a tint, color stays mostly solid
@@ -4956,7 +4956,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     return (Bitmap)hit.Clone();
                 }
 
-                // One mip step: 2×2 box average (odd edges clamp). Works for colour,
+                // One mip step: 2×2 box average (odd edges clamp). Works for color,
                 // packed roughness/metalness, normals (RG average) and the microblend alpha.
                 static unsafe Bitmap HalveBox(Bitmap src)
                 {
@@ -5342,7 +5342,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                         // ---- roughness / metalness ----
                                         {
                                             // Sample roughness (default 0.5 when missing).
-                                            // Placeholders (black/white/grey solid textures) are sampled as constants
+                                            // Placeholders (black/white/gray solid textures) are sampled as constants
                                             // and then remapped by levels — same as Blender.
                                             // Always bilinear for roughness (unified with normal, avoids square artifacts)
                                             var roughValue = 0.5f;
@@ -5357,7 +5357,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                                             // Metalness
                                             // - same path as roughness (foil / packed _r.xbm) → share sample
-                                            // - separate _m or placeholder → sample it (black=0, grey≈0.5, white=1)
+                                            // - separate _m or placeholder → sample it (black=0, gray≈0.5, white=1)
                                             // - missing → 0
                                             var metalValue = 0f;
                                             if (sameRmPath)
@@ -5948,7 +5948,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         // Save albedo
                         SavePngAtomic(albedoBmp, filename_bd);
 
-                        // Glowing tattoos: the final skin colour (tattoo included) glows where
+                        // Glowing tattoos: the final skin color (tattoo included) glows where
                         // EmissiveMask.r is set, with strength 2^EmissiveEV - 1 (Blender add-on).
                         if (dictionary.TryGetValue("EmissiveEV", out var skinEvObj) && ReadFloat(skinEvObj) > 0.01f &&
                             dictionary.TryGetValue("EmissiveMask", out var emMaskObj) &&
@@ -6251,10 +6251,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                         diffuseAlpha = Math.Clamp(diffuseAlpha, 0f, 1f);
 
-                        // mesh_decal_double_diffuse / _morph: a second colour (SecondaryDiffuseColor)
+                        // mesh_decal_double_diffuse / _morph: a second color (SecondaryDiffuseColor)
                         // under the first, where SecondaryDiffuseAlpha * SecondaryDiffuseAlphaIntensity
                         // covers it (lip stripes and the like). As in the Blender add-on:
-                        //   colour = base*a + SecondaryColor * s * (1 - a),  alpha = a + (1 - a) * s
+                        //   color = base*a + SecondaryColor * s * (1 - a),  alpha = a + (1 - a) * s
                         Bitmap? secAlphaBmp = null;
                         float secR = 0f, secG = 0f, secB = 0f, secIntensity = 0f;
                         int secChannel = ChannelA;
@@ -6273,7 +6273,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                 secB = sdc.Blue / 255f;
                             }
 
-                            // The template default (editor grey) means "no secondary colour".
+                            // The template default (editor gray) means "no secondary color".
                             var isDefault = sdaPath.EndsWith("editor\\grey.xbm", StringComparison.OrdinalIgnoreCase);
                             if (!isDefault && secIntensity > 0f)
                             {
@@ -6323,7 +6323,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                             float mergedA = primA + under;
                                             if (mergedA > 0.0001f)
                                             {
-                                                // Straight (non-premultiplied) colour of the merged layers.
+                                                // Straight (non-premultiplied) color of the merged layers.
                                                 cb = (cb * primA + secB * under) / mergedA;
                                                 cg = (cg * primA + secG * under) / mergedA;
                                                 cr = (cr * primA + secR * under) / mergedA;
@@ -6909,7 +6909,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                         }
                                         if (rmp != null)
                                         {
-                                            // glass_deferred: opaque lobe mix, colour + roughness/metalness
+                                            // glass_deferred: opaque lobe mix, color + roughness/metalness
                                             float f = 0f;
                                             byte sr = gr, sg = gg, sb = gb;
                                             if (mp != null && maskOp > 0.001f)
@@ -6918,7 +6918,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                                                 int my = y * mh / h;
                                                 byte* mpx = mp + my * mStride + mx * 4;
                                                 f = (mpx[glassMaskChannel] / 255f) * maskOp;
-                                                // Surface colour: mask * lerp(1, tint, TintColorAttenuation)
+                                                // Surface color: mask * lerp(1, tint, TintColorAttenuation)
                                                 sb = (byte)(mpx[0] * (1f - tintAtten + tintAtten * gb / 255f));
                                                 sg = (byte)(mpx[1] * (1f - tintAtten + tintAtten * gg / 255f));
                                                 sr = (byte)(mpx[2] * (1f - tintAtten + tintAtten * gr / 255f));
@@ -7357,11 +7357,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         PreviewTrace($"[Hair] Cap material '{material?.Name}' has no MaskTexture / Strand_Alpha");
                     }
 
-                    // === Haircard colour (not for cap) ===
+                    // === Haircard color (not for cap) ===
                     // hair.py: Strand_ID.r → profile ID ramp, Strand_Gradient.r → Root-to-Tip ramp,
                     // Overlay (Multiply×2 / inverted path chosen by Root-to-Tip luminance),
-                    // then Hair Global Albedo ×0.6. Blender does all of this in linear colour
-                    // (ramp colours are converted from sRGB), so the bake does too and encodes
+                    // then Hair Global Albedo ×0.6. Blender does all of this in linear color
+                    // (ramp colors are converted from sRGB), so the bake does too and encodes
                     // to sRGB once at the end. Doing it on sRGB bytes flattened the contrast.
                     Bitmap? colorBmp = null;
                     if (idBmp != null && gradBmp != null && !isCapMat)
@@ -7768,7 +7768,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             }
 
             // Hair / cap already baked filename_bd (gradient + mask). Don't overwrite with
-            // a template-default DiffuseTexture placeholder (grey.xbm → solid grey).
+            // a template-default DiffuseTexture placeholder (grey.xbm → solid gray).
             if (!File.Exists(filename_bd) &&
                 dictionary.TryGetValue("DiffuseTexture", out var diffuse) &&
                 diffuse is CResourceReference<ITexture> crrd)
@@ -7943,7 +7943,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             }
                             finally { bmp.UnlockBits(data); }
 
-                            // Give the cut-away pixels the colour of the nearest visible ones,
+                            // Give the cut-away pixels the color of the nearest visible ones,
                             // so texture filtering at the edge does not pull in a dark/light fringe.
                             DilateColorIntoTransparent(bmp);
                         }
@@ -8548,7 +8548,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// <summary>Glass material → mean red of its Roughness texture (filled when materials are generated).</summary>
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, float> _glassRoughnessMean = new();
 
-    /// <summary>The value of a solid placeholder texture (white / grey / black), or null for a real one.</summary>
+    /// <summary>The value of a solid placeholder texture (white / gray / black), or null for a real one.</summary>
     private static float? PlaceholderTextureValue(string? path)
     {
         if (string.IsNullOrEmpty(path))
@@ -8698,9 +8698,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     /// <summary>
-    /// Edge padding: fills the RGB of fully transparent pixels with the average colour of
-    /// their visible neighbours, growing outward a few pixels per pass. Alpha is untouched.
-    /// Bilinear filtering and mipmaps then blend the edge with the object's own colour
+    /// Edge padding: fills the RGB of fully transparent pixels with the average color of
+    /// their visible neighbors, growing outward a few pixels per pass. Alpha is untouched.
+    /// Bilinear filtering and mipmaps then blend the edge with the object's own color
     /// instead of whatever the transparent area held (usually black), which showed as a
     /// fringe or "trail" around cut-out shapes.
     /// </summary>
@@ -8718,7 +8718,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var pixels = new byte[stride * h];
             Marshal.Copy(data.Scan0, pixels, 0, pixels.Length);
 
-            // filled[i]: pixel has a usable colour (visible, or filled in an earlier pass)
+            // filled[i]: pixel has a usable color (visible, or filled in an earlier pass)
             var filled = new bool[w * h];
             var any = false;
             for (int y = 0; y < h; y++)
@@ -8864,7 +8864,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     /// <summary>
-    /// Tiny solid placeholders (4x4 / 16x16 / 32x32 black/white/grey/normal)
+    /// Tiny solid placeholders (4x4 / 16x16 / 32x32 black/white/gray/normal)
     /// get edge artifacts when upscaled. Replace them with a solid 1024x1024
     /// of the same color, matching the Blender workflow.
     /// </summary>
@@ -10126,7 +10126,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             Name = "",
             Text = "",
         };
-        // Nodes in folders by type, labelled with their index (see SectorTree)
+        // Nodes in folders by type, labeled with their index (see SectorTree)
         LabelSectorNodes(groups, data);
         foreach (var group in GroupSectorNodesByType(groups))
         {
@@ -11216,9 +11216,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     /// <summary>
     /// Blender ColorRamp (linear interpolation, constant past the ends) sampled at the 256
-    /// possible factor values. Stop colours are sRGB bytes in the profile and are converted
+    /// possible factor values. Stop colors are sRGB bytes in the profile and are converted
     /// to linear first, like populate_color_ramp in the addon. Result: linear RGB triplets.
-    /// No entries → grey ramp (factor used as the value).
+    /// No entries → gray ramp (factor used as the value).
     /// </summary>
     private static float[] BuildLinearRampLut(List<GradientEntry> entries)
     {
@@ -11305,14 +11305,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     /// <summary>
-    /// Haircard albedo exactly as hair.py builds it, in linear colour:
+    /// Haircard albedo exactly as hair.py builds it, in linear color:
     ///   base  = ID ramp(Strand_ID.r),  blend = RootToTip ramp(Strand_Gradient.r)
     ///   low   = base * blend * 2
     ///   high  = 1 - (1 - base) * (1 - blend) * 2
     ///   color = clamp(lum(blend) > 0.5 ? high : low)        (lum weights 0.3/0.59/0.11)
     ///   color = clamp(color * 0.6)                          (Hair Global Albedo)
     /// Written to <paramref name="idBmp"/> RGB as sRGB; alpha is left for the alpha pass.
-    /// Not included: the vertex-colour hair shadow (ShadowStrength), which is per vertex.
+    /// Not included: the vertex-color hair shadow (ShadowStrength), which is per vertex.
     /// </summary>
     private static void BakeHairCardColor(Bitmap idBmp, Bitmap gradBmp,
         List<GradientEntry> idEntries, List<GradientEntry> rootToTipEntries)
@@ -12014,7 +12014,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 return MaterialKind.Eyebrow;
             // Face cyberware from the character creator (implants on the "freckles" and lips meshes,
             // .mi under ...\makeup\freckles\cyberware\) is metal with its own roughness / metalness
-            // and normal: a decal, not a colour-only makeup overlay.
+            // and normal: a decal, not a color-only makeup overlay.
             if (name.Contains("cyberware", StringComparison.OrdinalIgnoreCase) ||
                 (directBase != null && directBase.Replace('/', '\\').Contains("\\cyberware\\", StringComparison.OrdinalIgnoreCase)))
                 return MaterialKind.Decal;

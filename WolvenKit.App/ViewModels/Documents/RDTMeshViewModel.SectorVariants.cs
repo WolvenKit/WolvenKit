@@ -11,7 +11,7 @@ namespace WolvenKit.App.ViewModels.Documents;
 /// <summary>What the sector variant list offers.</summary>
 public enum SectorVariantMode
 {
-    /// <summary>Every node range: the old behaviour (variants drawn over each other).</summary>
+    /// <summary>Every node range: the old behavior (variants drawn over each other).</summary>
     All,
 
     /// <summary>The always-loaded range and the variants the game enables by default (known in block previews).</summary>
@@ -47,7 +47,7 @@ public partial class RDTMeshViewModel
     [ObservableProperty] private bool _colorSectorAreas = true;
     [ObservableProperty] private bool _showSectorAreas = true;
 
-    /// <summary>Area volumes without the colour by type.</summary>
+    /// <summary>Area volumes without the color by type.</summary>
     private static readonly SharpDX.Color4 s_plainAreaColor = new(1f, 1f, 1f, 0.1f);
 
     // filled while RenderSector runs, then kept on the SectorGroup
@@ -123,7 +123,7 @@ public partial class RDTMeshViewModel
 
     private void RegisterSectorArea(Element3D group) => _sectorAreaGroups?.Add(group);
 
-    /// <summary>An area volume material and its colour by type; returns the colour to start with.</summary>
+    /// <summary>An area volume material and its color by type; returns the color to start with.</summary>
     private SharpDX.Color4 RegisterSectorAreaMaterial(PBRMaterial material, SharpDX.Color4 color)
     {
         _sectorAreaMaterials?.Add((material, color));
