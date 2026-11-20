@@ -254,6 +254,9 @@ public partial class RDTMeshViewModel
         if (filesChanged)
         {
             _templateCache.Clear();
+            // A changed file may embed others (a .mi its mlsetup): forget all embedded copies,
+            // the files still in the cache give theirs again when read.
+            _readEmbeddedFiles.Clear();
         }
 
         var documentChanged = _liveDocumentChanged;
