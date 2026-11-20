@@ -632,6 +632,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     private bool _isCollisionRendered = true;
 
+    /// <summary>Collision nodes shown (the Sector section's "Show collision" box).</summary>
+    public bool ShowCollision
+    {
+        get => _isCollisionRendered;
+        set
+        {
+            if (_isCollisionRendered != value)
+            {
+                ToggleCollision();
+            }
+        }
+    }
+
     [RelayCommand]
     public void ToggleCollision()
     {
@@ -641,6 +654,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         }
 
         _isCollisionRendered = !_isCollisionRendered;
+        OnPropertyChanged(nameof(ShowCollision));
 
         foreach (var element in SelectedAppearance.ModelGroup)
         {
