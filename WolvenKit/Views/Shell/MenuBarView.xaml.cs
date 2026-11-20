@@ -73,7 +73,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.AddPlayerHeadCommand,
                     view => view.MenuItemAddPlayerHead)
                 .DisposeWith(disposables);
-
+             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.CreateCCXLHairFilesCommand,
+                    view => view.MenuItemCreateCCXLHairFiles)
+                .DisposeWith(disposables);
             // Archive
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ImportArchiveCommand,
@@ -83,6 +86,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.AddAXlItemFilesCommand,
                     view => view.MenuItemAddAxlItemFiles)
                 .DisposeWith(disposables);
+           
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.SaveFileCommand,
                     view => view.MenuItemSave)
