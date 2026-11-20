@@ -279,6 +279,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         StopLiveMaterialUpdate();
         RollbackGeneratedData();
         _textureCache.Clear();
+        ReleaseTexturePins();
         ClearMultilayerShaderCache();
         _fileCache.Clear();
 
@@ -541,6 +542,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         ApplySkinNormalsUnderMakeup(app);
         RefreshMultilayerDebugMaterials();
+        PinAppearanceTextures(app);
     }
 
     #endregion
@@ -3216,6 +3218,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         _fileCache.Clear();
         _templateCache.Clear();
         _textureCache.Clear();
+        ReleaseTexturePins();
     }
 
     private IArchiveManager? ResolveArchiveManager()
