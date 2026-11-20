@@ -538,8 +538,22 @@ public partial class ProjectExplorerViewModel
             _fileLookup[newName] = model;
 
             // Name/path changes are bound to the grids (sorting, filtering): apply them on the UI thread.
+            // Rename() reads the file size from disk. By the time this runs the file may already be gone
+            // again (renamed twice in a row, a tool that renames and then deletes...). Don't let that throw
+            // on the UI thread: the name and path are already updated, and the watcher's following
+            // Renamed/Deleted event fixes the node up.
             var fileName = Path.GetFileName(newName);
-            DispatcherHelper.RunOnMainThread(() => model.Rename(fileName, updateChildren: false));
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                try
+                {
+                    model.Rename(fileName, updateChildren: false);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    _loggerService?.Debug($"Project Explorer: {newName} changed again while being renamed: {ex.Message}");
+                }
+            });
 
             return true;
         }
