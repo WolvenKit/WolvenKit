@@ -36,6 +36,9 @@ public partial class RDTMeshViewModel
     private const double DecalLeftoverShare = 0.05;        // left-over edge pieces searched wider
     private const double DecalLeftoverTolerance = 0.03;    // 3 cm
     private const double DecalDropShare = 0.01;            // stray triangles not drawn
+    private const double DecalRaisedHeight = 0.0015;     // 1.5 mm off the surface: relief, not paint
+    private const double DecalRaisedShare = 0.25;        // ... for a quarter of the triangles
+    private const double DecalAgainstFacing = -0.5;      // facing more than 120 degrees apart
     private const double DecalUnderSlack = 0.0005;         // 0.5 mm below a surface still counts as on it
 
     private readonly ConcurrentDictionary<string, byte> _decalBakesRunning = new();
@@ -422,6 +425,20 @@ public partial class RDTMeshViewModel
                     }
 
                     return best;
+                }
+            }
+
+            // A raised decal (Kerry's neck wires: strips standing a few mm off the skin) is real
+            // relief, not paint: part of it baked flat into the skin and the rest drawn as its own
+            // mesh tears it apart. A flat decal hugs its surface; when a good share of this one
+            // stands off it, the decal is drawn whole as its own mesh.
+            if (bestFor.Count > 0)
+            {
+                // the score is distance + whole-number penalties
+                var raised = bestFor.Values.Count(x => x.Score - Math.Floor(x.Score) > DecalRaisedHeight);
+                if (raised > bestFor.Count * DecalRaisedShare)
+                {
+                    continue;
                 }
             }
 
@@ -1303,6 +1320,19 @@ public partial class RDTMeshViewModel
                 continue;
             }
 
+            // The side of a thin piece that lies on the skin (a chain's links, the inside of a
+            // collar) faces the skin: a neck tattoo is outside that side, and often nearer to it
+            // than to the skin it floats over. A decal does not go onto a surface facing against it
+            // (the sides of a raised decal stand across the skin and still go onto it).
+            var decalFacing = decal.Facing(t);
+            var awayCorners = (Vector3D.DotProduct(decalFacing, surface.Facing(pa.Value.Triangle)) < DecalAgainstFacing ? 1 : 0) +
+                              (Vector3D.DotProduct(decalFacing, surface.Facing(pb.Value.Triangle)) < DecalAgainstFacing ? 1 : 0) +
+                              (Vector3D.DotProduct(decalFacing, surface.Facing(pc.Value.Triangle)) < DecalAgainstFacing ? 1 : 0);
+            if (awayCorners >= 2)
+            {
+                continue;
+            }
+
             // A decal triangle reaching over a bend or a seam of the surface (decals that follow
             // a gun's shape have long ones): its corners alone do not place its inside. Then it
             // is drawn in pieces, each placed where it lies on the surface.
@@ -1519,8 +1549,9 @@ public partial class RDTMeshViewModel
     {
         // Composite format: bump when the bake changes (v2: decal detail resolution; v3: one-sided overlay; v4: alpha above 1, NormalAlphaTex;
         // v5: each texel takes a layer once, no triangle lines; v6: triangles over bends and seams in pieces;
-        // v7: only covered texels are taken, transparent atlas parts no longer cut other pieces).
-        var sb = new System.Text.StringBuilder("v7;");
+        // v7: only covered texels are taken, transparent atlas parts no longer cut other pieces;
+        // v8: not baked into surfaces facing away from the decal; v9: only those facing against it).
+        var sb = new System.Text.StringBuilder("v9;");
         void Stamp(string path)
         {
             sb.Append(path).Append('|');
