@@ -364,6 +364,7 @@
             HorizontalAlignment="Stretch" />
 
         <Grid
+            x:Name="SidePanelGrid"
             Grid.Row="0"
             Grid.Column="2">
             <Grid.RowDefinitions>
@@ -371,9 +372,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel
+            <!-- The settings scroll once they need more than 60 % of the height (set in code
+                 behind), so the node tree below always keeps room -->
+            <ScrollViewer
+                x:Name="SidePanelScroll"
                 Grid.Row="0"
                 Grid.Column="0"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+            <StackPanel
                 Width="Auto"
                 IsEnabled="{Binding IsLoaded}"
                 Grid.IsSharedSizeScope="True"
@@ -1141,6 +1148,7 @@
 
                 <!-- Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" / -->
             </StackPanel>
+            </ScrollViewer>
 
             <!--syncfusion:SfTreeGrid
                 Grid.Row="1"
@@ -1179,10 +1187,65 @@
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid-->
 
+            <!-- Node tree with a search box: name, node index or path; matches keep their branch -->
+            <DockPanel Grid.Row="1" Grid.Column="0">
+            <DockPanel DockPanel.Dock="Top" Margin="{DynamicResource WolvenKitMarginTiny}">
+                <TextBlock
+                    DockPanel.Dock="Left"
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Text="Search" />
+                <TextBlock
+                    x:Name="NodeSearchCount"
+                    DockPanel.Dock="Right"
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Center"
+                    Opacity="0.7"
+                    Visibility="Collapsed"
+                    ToolTip="Rows found, not counting those inside another found row. Up to 200 get their parents opened" />
+                <Grid>
+                    <!-- right padding: room for the clear button over the text -->
+                    <TextBox
+                        x:Name="NodeSearchBox"
+                        Padding="0,0,20,0"
+                        PreviewKeyDown="NodeSearchBox_OnPreviewKeyDown"
+                        TextChanged="NodeSearchBox_OnTextChanged"
+                        ToolTip="Keeps the rows whose name, node index (264, 0264 or #264) or path contains this text, with their parents and what is under them. Ctrl+F: here; Esc: clear" />
+                    <Button
+                        x:Name="NodeSearchClearButton"
+                        Margin="0,0,2,0"
+                        Padding="4,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Focusable="False"
+                        Visibility="Collapsed"
+                        Click="ClearNodeSearch_OnClick"
+                        ToolTip="Clear the search (Esc)">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Close"
+                            Margin="0"
+                            Size="{DynamicResource WolvenKitIconMicro}"
+                            Foreground="White" />
+                    </Button>
+                </Grid>
+            </DockPanel>
+            <!-- shown when a click in the viewport selects an object the search hides -->
+            <TextBlock
+                x:Name="NodeSearchHint"
+                DockPanel.Dock="Top"
+                Margin="{DynamicResource WolvenKitMarginTiny}"
+                Foreground="{StaticResource WolvenKitYellow}"
+                TextWrapping="Wrap"
+                Visibility="Collapsed">
+                <Run Text="The selected object is hidden by the search." />
+                <Hyperlink Click="ClearNodeSearchAndReveal_OnClick">Clear search</Hyperlink>
+            </TextBlock>
             <syncfusion:SfTreeGrid
                 x:Name="NodeTreeGrid"
-                Grid.Row="1"
-                Grid.Column="0"
                 Margin="-1,0,-1,-1"
                 FontSize="{DynamicResource WolvenKitFontAltTitle}"
                 ColumnSizer="AutoFillColumn"
@@ -1350,6 +1413,14 @@
                         MappingName="Text"
                         MinimumWidth="100" />
 
+                    <!-- Node type (sectors): the funnel picks the kinds to show -->
+                    <syncfusion:TreeGridTextColumn
+                        x:Name="NodeTypeColumn"
+                        ColumnSizer="Auto"
+                        HeaderText="Type"
+                        IsHidden="True"
+                        MappingName="WorldNodeType" />
+
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="SizeToCells"
                         HeaderText="Appearance"
@@ -1387,6 +1458,7 @@
                         MinimumWidth="80" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
+            </DockPanel>
 
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                     <ItemsControl.ItemsPanel>
