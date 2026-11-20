@@ -440,6 +440,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     private bool _materialsGenerated;
+
+    private static bool s_generateOnAppearanceSwitch = true;
+
+    /// <summary>
+    /// After Generate Materials, generate the materials of each appearance selected later (on),
+    /// or leave a newly selected appearance as it is until Generate is pressed (off; appearances
+    /// already generated keep their materials). Shared by all preview tabs.
+    /// </summary>
+    public bool GenerateOnAppearanceSwitch
+    {
+        get => s_generateOnAppearanceSwitch;
+        set
+        {
+            if (SetProperty(ref s_generateOnAppearanceSwitch, value) && value && _materialsGenerated)
+            {
+                _ = AutoGenerateMaterialsAsync();
+            }
+        }
+    }
     private bool _autoGenerating;
 
     /// <summary>
@@ -449,7 +468,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// </summary>
     private async Task AutoGenerateMaterialsAsync()
     {
-        if (_autoGenerating)
+        if (_autoGenerating || !s_generateOnAppearanceSwitch)
         {
             return;
         }
