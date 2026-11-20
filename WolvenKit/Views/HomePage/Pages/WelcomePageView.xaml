@@ -46,13 +46,13 @@
                 <ResourceDictionary>
                     <Style
                         x:Key="WelcomeButton"
-                        BasedOn="{StaticResource ButtonDefault}"
+                        BasedOn="{StaticResource WKButtonStyle}"
                         TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                        <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt}" />
 
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt3}" />
+                                <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt3}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -80,7 +80,7 @@
                                                     <Setter Property="Background" Value="Transparent" />
                                                     <Style.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="#2D2D30" />
+                                                            <Setter Property="Background" Value="{DynamicResource WolvenKitPanelCardHover}" />
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -110,37 +110,37 @@
                                                             <Style
                                                                 x:Key="ProjectIconBackground"
                                                                 TargetType="Border">
-                                                                <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
+                                                                <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconYellow}" />
                                                                 <Style.Triggers>
                                                                     <DataTrigger
                                                                         Binding="{Binding ProjectColor}"
                                                                         Value="1">
-                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
+                                                                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconYellow}" />
                                                                     </DataTrigger>
                                                                     <DataTrigger
                                                                         Binding="{Binding ProjectColor}"
                                                                         Value="2">
-                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
+                                                                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconCyan}" />
                                                                     </DataTrigger>
                                                                     <DataTrigger
                                                                         Binding="{Binding ProjectColor}"
                                                                         Value="3">
-                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                                                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconRed}" />
                                                                     </DataTrigger>
                                                                     <DataTrigger
                                                                         Binding="{Binding ProjectColor}"
                                                                         Value="4">
-                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                                                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconRed}" />
                                                                     </DataTrigger>
                                                                     <DataTrigger
                                                                         Binding="{Binding ProjectColor}"
                                                                         Value="5">
-                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitPurple}" />
+                                                                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconPurple}" />
                                                                     </DataTrigger>
                                                                     <DataTrigger
                                                                         Binding="{Binding ProjectColor}"
                                                                         Value="6">
-                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitTan}" />
+                                                                        <Setter Property="Background" Value="{DynamicResource WolvenKitProjectIconTan}" />
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -168,7 +168,7 @@
                                                             Margin="10,5,0,8"
                                                             VerticalAlignment="Center">
                                                             <TextBlock
-                                                                Foreground="White"
+                                                                Foreground="{DynamicResource ContentForeground}"
                                                                 FontSize="{DynamicResource WolvenKitFontMedium}"
                                                                 FontWeight="Bold"
                                                                 Text="{Binding Path=SafeName}"
@@ -177,7 +177,7 @@
                                                             <TextBlock
                                                                 Margin="0,1,0,2"
                                                                 HorizontalAlignment="Left"
-                                                                Foreground="#999999"
+                                                                Foreground="{DynamicResource WolvenKitGray99}"
                                                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                                                 Text="{Binding Path=ProjectPath}"
                                                                 TextTrimming="CharacterEllipsis" />
@@ -229,14 +229,14 @@
                                                 ToolTip="Find in Explorer">
                                                 <Button.Resources>
                                                     <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
-                                                        <Setter Property="Foreground" Value="White" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
 
                                                         <Style.Triggers>
                                                             <DataTrigger
                                                                 Binding="{Binding IsMouseOver,
                                                                                   RelativeSource={RelativeSource AncestorType=Button}}"
                                                                 Value="True">
-                                                                <Setter Property="Foreground" Value="#cccccc" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource WolvenKitGrayCC}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -257,14 +257,14 @@
                                                 ToolTip="Remove from Recents">
                                                 <Button.Resources>
                                                     <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
-                                                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
 
                                                         <Style.Triggers>
                                                             <DataTrigger
                                                                 Binding="{Binding IsMouseOver,
                                                                                   RelativeSource={RelativeSource AncestorType=Button}}"
                                                                 Value="True">
-                                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource WolvenKitRedShadow}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -413,7 +413,7 @@
                                 HorizontalAlignment="Stretch"
                                 CornerRadius="3"
                                 Padding="{DynamicResource WolvenKitMarginSmall}"
-                                Background="{StaticResource ContentBackgroundAlt}">
+                                Background="{DynamicResource ContentBackgroundAlt}">
                                 <Border.RenderTransform>
                                     <TranslateTransform x:Name="PinnedHeaderTransform" />
                                 </Border.RenderTransform>
@@ -444,7 +444,7 @@
                                             Width="{DynamicResource WolvenKitIconSmall}"
                                             Height="{DynamicResource WolvenKitIconSmall}"
                                             VerticalAlignment="Center"
-                                            Foreground="{StaticResource ForegroundColor}"
+                                            Foreground="{DynamicResource ForegroundColor}"
                                             Spin="False"
                                             SpinAutoReverse="False" />
 
@@ -525,7 +525,7 @@
                                 HorizontalAlignment="Stretch"
                                 CornerRadius="3"
                                 Padding="{DynamicResource WolvenKitMarginSmall}"
-                                Background="{StaticResource ContentBackgroundAlt}">
+                                Background="{DynamicResource ContentBackgroundAlt}">
                                 <Border.RenderTransform>
                                     <TranslateTransform x:Name="RecentHeaderTransform" />
                                 </Border.RenderTransform>

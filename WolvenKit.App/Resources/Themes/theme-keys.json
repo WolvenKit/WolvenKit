@@ -1,0 +1,1929 @@
+{
+  "entries": [
+    {
+      "key": "WolvenKitAccent",
+      "group": "Accent",
+      "displayName": "Accent",
+      "kind": "Brush",
+      "description": "Main accent: selected tabs, focused fields, primary buttons, checked toggles"
+    },
+    {
+      "key": "WolvenKitAccentShadow",
+      "group": "Accent",
+      "displayName": "Accent Shadow",
+      "kind": "Brush",
+      "description": "Darker accent: hovered tabs and buttons"
+    },
+    {
+      "key": "WolvenKitAccentForeground",
+      "group": "Accent",
+      "displayName": "Accent Foreground",
+      "kind": "Brush",
+      "description": "Text and icons on accent-colored surfaces (selected tabs, primary buttons)"
+    },
+    {
+      "key": "WolvenKitAccentShadowForeground",
+      "group": "Accent",
+      "displayName": "Accent Shadow Foreground",
+      "kind": "Brush",
+      "description": "Text on hovered tabs (on the accent shadow color)"
+    },
+    {
+      "key": "WolvenKitStatusBarReady",
+      "group": "Accent",
+      "displayName": "Status Bar Ready",
+      "kind": "Brush",
+      "description": "Status bar background when WolvenKit is idle"
+    },
+    {
+      "key": "WolvenKitStatusBarBusy",
+      "group": "Accent",
+      "displayName": "Status Bar Busy",
+      "kind": "Brush",
+      "description": "Status bar background while a task is running"
+    },
+    {
+      "key": "ContentBackground",
+      "group": "Surfaces",
+      "displayName": "Content Background",
+      "kind": "Brush",
+      "description": "Base background of panels, documents and dialogs"
+    },
+    {
+      "key": "ContentBackgroundAlt",
+      "group": "Surfaces",
+      "displayName": "Content Background Alt",
+      "kind": "Brush",
+      "description": "Slightly raised surfaces: home page cards, vector editors, import/export lists"
+    },
+    {
+      "key": "ContentBackgroundAlt2",
+      "group": "Surfaces",
+      "displayName": "Content Background Alt2",
+      "kind": "Brush",
+      "description": "Main window frame, panel headers, docking area, input areas"
+    },
+    {
+      "key": "ContentBackgroundAlt3",
+      "group": "Surfaces",
+      "displayName": "Content Background Alt3",
+      "kind": "Brush",
+      "description": "Secondary surfaces: dialogs, docking tabs, LocKey browser, graph palette"
+    },
+    {
+      "key": "ContentBackgroundAlt4",
+      "group": "Surfaces",
+      "displayName": "Content Background Alt4",
+      "kind": "Brush",
+      "description": "Hover/pressed surfaces: docking tabs, ribbon, home page"
+    },
+    {
+      "key": "ContentBackgroundAlt5",
+      "group": "Surfaces",
+      "displayName": "Content Background Alt5",
+      "kind": "Brush",
+      "description": "Strongest raised surface: ribbon, import/export headers"
+    },
+    {
+      "key": "ContentForeground",
+      "group": "Surfaces",
+      "displayName": "Content Foreground",
+      "kind": "Brush",
+      "description": "Main text color"
+    },
+    {
+      "key": "ContentForegroundAlt1",
+      "group": "Surfaces",
+      "displayName": "Content Foreground Alt1",
+      "kind": "Brush",
+      "description": "Secondary text inside Syncfusion controls (grids, docking, menus)"
+    },
+    {
+      "key": "BorderAlt",
+      "group": "Surfaces",
+      "displayName": "Border Alt",
+      "kind": "Brush",
+      "description": "Borders of fields and frames in property editors, documents and dialogs"
+    },
+    {
+      "key": "WolvenKitPanelHeaderSelected",
+      "group": "Panels",
+      "displayName": "Panel Header Selected",
+      "kind": "Brush",
+      "description": "Header of the active docked panel; hovered panel headers"
+    },
+    {
+      "key": "WolvenKitPanelHeaderSelectedForeground",
+      "group": "Panels",
+      "displayName": "Panel Header Selected Foreground",
+      "kind": "Brush",
+      "description": "Text on the active panel header"
+    },
+    {
+      "key": "WolvenKitPanelTabSelected",
+      "group": "Panels",
+      "displayName": "Panel Tab Selected",
+      "kind": "Brush",
+      "description": "Selected tab in docked panel tab groups"
+    },
+    {
+      "key": "WolvenKitPanelLogBackground",
+      "group": "Panels",
+      "displayName": "Panel Log Background",
+      "kind": "Brush",
+      "description": "Log panel background"
+    },
+    {
+      "key": "WolvenKitPanelCardHover",
+      "group": "Panels",
+      "displayName": "Panel Card Hover",
+      "kind": "Brush",
+      "description": "Hovered project card on the welcome page"
+    },
+    {
+      "key": "WolvenKitPanelProgressTrack",
+      "group": "Panels",
+      "displayName": "Panel Progress Track",
+      "kind": "Brush",
+      "description": "Track of the progress bar in the status bar"
+    },
+    {
+      "key": "WolvenKitGray12Color",
+      "group": "Grays",
+      "displayName": "Gray12",
+      "kind": "Color",
+      "description": "Darkest gray: document menu bar, properties panel, tree buttons"
+    },
+    {
+      "key": "WolvenKitGray12",
+      "group": "Grays",
+      "displayName": "Gray12",
+      "kind": "Brush",
+      "description": "Darkest gray: document menu bar, properties panel, tree buttons"
+    },
+    {
+      "key": "WolvenKitGray1E",
+      "group": "Grays",
+      "displayName": "Gray1 E",
+      "kind": "Brush",
+      "description": "Graph view and section timeline backgrounds"
+    },
+    {
+      "key": "WolvenKitGray25",
+      "group": "Grays",
+      "displayName": "Gray25",
+      "kind": "Brush",
+      "description": "Backgrounds in tool dialogs (photo mode app, component properties, materials, checklists)"
+    },
+    {
+      "key": "WolvenKitGray31",
+      "group": "Grays",
+      "displayName": "Gray31",
+      "kind": "Brush",
+      "description": "Document view background and selected document tabs"
+    },
+    {
+      "key": "WolvenKitGray37",
+      "group": "Grays",
+      "displayName": "Gray37",
+      "kind": "Brush",
+      "description": "Borders and surfaces in the type template manager and script manager"
+    },
+    {
+      "key": "WolvenKitGray40",
+      "group": "Grays",
+      "displayName": "Gray40",
+      "kind": "Brush",
+      "description": "Toolbars and panels in quest, scene and behavior graph editors"
+    },
+    {
+      "key": "WolvenKitGray7F",
+      "group": "Grays",
+      "displayName": "Gray7 F",
+      "kind": "Brush",
+      "description": "Connection lines and handles in graph editors"
+    },
+    {
+      "key": "WolvenKitGray99",
+      "group": "Grays",
+      "displayName": "Gray99",
+      "kind": "Brush",
+      "description": "Secondary text in graph views and on the welcome page"
+    },
+    {
+      "key": "WolvenKitGray66",
+      "group": "Grays",
+      "displayName": "Gray66",
+      "kind": "Brush",
+      "description": "Placeholder / empty-value text in reference, CName, tweak and path fields"
+    },
+    {
+      "key": "WolvenKitGray33",
+      "group": "Grays",
+      "displayName": "Gray33",
+      "kind": "Brush",
+      "description": "Not used by WolvenKit views at the moment"
+    },
+    {
+      "key": "WolvenKitGrayCC",
+      "group": "Grays",
+      "displayName": "Gray CC",
+      "kind": "Brush",
+      "description": "Light secondary text on the welcome page and in the Project Explorer"
+    },
+    {
+      "key": "WolvenKitGray2D",
+      "group": "Grays",
+      "displayName": "Gray2 D",
+      "kind": "Brush",
+      "description": "Section timeline background"
+    },
+    {
+      "key": "WolvenKitGray88",
+      "group": "Grays",
+      "displayName": "Gray88",
+      "kind": "Brush",
+      "description": "Node text in the graph editor"
+    },
+    {
+      "key": "WolvenKitGray77",
+      "group": "Grays",
+      "displayName": "Gray77",
+      "kind": "Brush",
+      "description": "Dimmed node text in the graph editor"
+    },
+    {
+      "key": "WolvenKitProjectSource",
+      "group": "Project Explorer",
+      "displayName": "Project Source",
+      "kind": "Brush",
+      "description": "Project Explorer: \"source\" tab and folder highlight"
+    },
+    {
+      "key": "WolvenKitProjectSourceShadow",
+      "group": "Project Explorer",
+      "displayName": "Project Source Shadow",
+      "kind": "Brush",
+      "description": "Project Explorer: hovered / dimmed \"source\" highlight"
+    },
+    {
+      "key": "WolvenKitProjectResources",
+      "group": "Project Explorer",
+      "displayName": "Project Resources",
+      "kind": "Brush",
+      "description": "Project Explorer: \"resources\" tab and folder highlight"
+    },
+    {
+      "key": "WolvenKitProjectResourcesShadow",
+      "group": "Project Explorer",
+      "displayName": "Project Resources Shadow",
+      "kind": "Brush",
+      "description": "Project Explorer: hovered / dimmed \"resources\" highlight"
+    },
+    {
+      "key": "WolvenKitProjectIconYellow",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Yellow",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the yellow project color"
+    },
+    {
+      "key": "WolvenKitProjectIconCyan",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Cyan",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the cyan project color"
+    },
+    {
+      "key": "WolvenKitProjectIconRed",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Red",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the red project color"
+    },
+    {
+      "key": "WolvenKitProjectIconPurple",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Purple",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the purple project color"
+    },
+    {
+      "key": "WolvenKitProjectIconTan",
+      "group": "Project Explorer",
+      "displayName": "Project Icon Tan",
+      "kind": "Brush",
+      "description": "Welcome page: icon background of projects with the tan project color"
+    },
+    {
+      "key": "PrimaryColor",
+      "group": "HandyControl",
+      "displayName": "Primary",
+      "kind": "Color",
+      "derivedBrushes": [
+        "PrimaryBrush"
+      ],
+      "description": "HandyControl accent (search bars, some text boxes); follows the main accent unless set"
+    },
+    {
+      "key": "DarkPrimaryColor",
+      "group": "HandyControl",
+      "displayName": "Dark Primary",
+      "kind": "Color",
+      "derivedBrushes": [
+        "DarkPrimaryBrush"
+      ],
+      "description": "HandyControl darker accent (pressed state)"
+    },
+    {
+      "key": "RegionColor",
+      "group": "HandyControl",
+      "displayName": "Region",
+      "kind": "Color",
+      "derivedBrushes": [
+        "RegionBrush"
+      ],
+      "description": "HandyControl panel background (search bars, side panels)"
+    },
+    {
+      "key": "SecondaryRegionColor",
+      "group": "HandyControl",
+      "displayName": "Secondary Region",
+      "kind": "Color",
+      "derivedBrushes": [
+        "SecondaryRegionBrush"
+      ],
+      "description": "HandyControl secondary panel background"
+    },
+    {
+      "key": "ThirdlyRegionColor",
+      "group": "HandyControl",
+      "displayName": "Thirdly Region",
+      "kind": "Color",
+      "derivedBrushes": [
+        "ThirdlyRegionBrush"
+      ],
+      "description": "HandyControl third-level panel background"
+    },
+    {
+      "key": "BackgroundColor",
+      "group": "HandyControl",
+      "displayName": "Background",
+      "kind": "Color",
+      "derivedBrushes": [
+        "BackgroundBrush"
+      ],
+      "description": "HandyControl window background; also graph comment and mesh preview backgrounds"
+    },
+    {
+      "key": "DefaultColor",
+      "group": "HandyControl",
+      "displayName": "Default",
+      "kind": "Color",
+      "derivedBrushes": [
+        "DefaultBrush"
+      ],
+      "description": "HandyControl default button background"
+    },
+    {
+      "key": "DarkDefaultColor",
+      "group": "HandyControl",
+      "displayName": "Dark Default",
+      "kind": "Color",
+      "derivedBrushes": [
+        "DarkDefaultBrush"
+      ],
+      "description": "HandyControl default button background, hovered"
+    },
+    {
+      "key": "BorderColor",
+      "group": "HandyControl",
+      "displayName": "Border",
+      "kind": "Color",
+      "derivedBrushes": [
+        "BorderBrush"
+      ],
+      "description": "HandyControl borders; also many borders in WolvenKit views"
+    },
+    {
+      "key": "SecondaryBorderColor",
+      "group": "HandyControl",
+      "displayName": "Secondary Border",
+      "kind": "Color",
+      "derivedBrushes": [
+        "SecondaryBorderBrush"
+      ],
+      "description": "HandyControl secondary borders (extended text boxes)"
+    },
+    {
+      "key": "PrimaryTextColor",
+      "group": "HandyControl",
+      "displayName": "Primary Text",
+      "kind": "Color",
+      "derivedBrushes": [
+        "PrimaryTextBrush"
+      ],
+      "description": "HandyControl main text (popups, scene and dialogue dialogs)"
+    },
+    {
+      "key": "SecondaryTextColor",
+      "group": "HandyControl",
+      "displayName": "Secondary Text",
+      "kind": "Color",
+      "derivedBrushes": [
+        "SecondaryTextBrush"
+      ],
+      "description": "HandyControl secondary text"
+    },
+    {
+      "key": "ThirdlyTextColor",
+      "group": "HandyControl",
+      "displayName": "Thirdly Text",
+      "kind": "Color",
+      "derivedBrushes": [
+        "ThirdlyTextBrush"
+      ],
+      "description": "HandyControl hint text"
+    },
+    {
+      "key": "TitleColor",
+      "group": "HandyControl",
+      "displayName": "Title",
+      "kind": "Color",
+      "derivedBrushes": [
+        "TitleBrush"
+      ],
+      "description": "HandyControl titles"
+    },
+    {
+      "key": "SecondaryTitleColor",
+      "group": "HandyControl",
+      "displayName": "Secondary Title",
+      "kind": "Color",
+      "derivedBrushes": [
+        "SecondaryTitleBrush"
+      ],
+      "description": "HandyControl secondary titles"
+    },
+    {
+      "key": "ForegroundColor",
+      "group": "Text",
+      "displayName": "Foreground",
+      "kind": "Brush",
+      "description": "Default text color of WolvenKit's own styles (labels, dialogs)"
+    },
+    {
+      "key": "ForegroundColor_Grey_Light",
+      "group": "Text",
+      "displayName": "Foreground Color Grey Light",
+      "kind": "Brush",
+      "description": "Light secondary text: hovered links and labels"
+    },
+    {
+      "key": "ForegroundColor_Grey1",
+      "group": "Text",
+      "displayName": "Foreground Color Grey1",
+      "kind": "Brush",
+      "description": "Secondary text: property names and hints in the property tree"
+    },
+    {
+      "key": "ForegroundColor_Grey_Dark",
+      "group": "Text",
+      "displayName": "Foreground Color Grey Dark",
+      "kind": "Brush",
+      "description": "Dim text: inactive labels, loading messages, descriptions"
+    },
+    {
+      "key": "ForegroundColor_Grey_Inactive",
+      "group": "Text",
+      "displayName": "Foreground Color Grey Inactive",
+      "kind": "Brush",
+      "description": "Disabled text"
+    },
+    {
+      "key": "ForegroundColor_Control_Secondary",
+      "group": "Text",
+      "displayName": "Foreground Color Control Secondary",
+      "kind": "Brush",
+      "description": "Secondary text in loading indicators"
+    },
+    {
+      "key": "BackgroundColor_InputField_Readonly",
+      "group": "Backgrounds",
+      "displayName": "Background Color Input Field Readonly",
+      "kind": "Color",
+      "description": "Background of read-only input fields"
+    },
+    {
+      "key": "BackgroundColor_Control",
+      "group": "Backgrounds",
+      "displayName": "Background Color Control",
+      "kind": "Brush",
+      "description": "Background of input controls: text boxes, dropdowns, checkboxes, filter fields"
+    },
+    {
+      "key": "BackgroundColor_Frame_Active",
+      "group": "Backgrounds",
+      "displayName": "Background Color Frame Active",
+      "kind": "Brush",
+      "description": "Background of the active / focused frame (editor windows, CName fields)"
+    },
+    {
+      "key": "BackgroundColor_Frame_Background",
+      "group": "Backgrounds",
+      "displayName": "Background Color Frame Background",
+      "kind": "Brush",
+      "description": "Background of dialog frames and the document menu bar"
+    },
+    {
+      "key": "BackgroundColor_Button_Inactive",
+      "group": "Backgrounds",
+      "displayName": "Background Color Button Inactive",
+      "kind": "Brush",
+      "description": "Background of inactive buttons"
+    },
+    {
+      "key": "BackgroundColor_Button_Active",
+      "group": "Backgrounds",
+      "displayName": "Background Color Button Active",
+      "kind": "Brush",
+      "description": "Background of active buttons in WolvenKit dialogs"
+    },
+    {
+      "key": "WolvenKitRedPaleColor",
+      "group": "Palette",
+      "displayName": "Red Pale",
+      "kind": "Color",
+      "description": "Validation error text"
+    },
+    {
+      "key": "WolvenKitRedColor",
+      "group": "Palette",
+      "displayName": "Red",
+      "kind": "Color",
+      "description": "Delete / stop / remove icons, errors, hovered tabs in graph editors",
+      "derivedBrushes": [
+        "WolvenKitRedPale",
+        "WolvenKitRed",
+        "ForegroundColor_Red"
+      ]
+    },
+    {
+      "key": "WolvenKitGreenColor",
+      "group": "Palette",
+      "displayName": "Green",
+      "kind": "Color",
+      "description": "Play / run / add icons, success messages, connections in quest and scene graphs",
+      "derivedBrushes": [
+        "WolvenKitGreen"
+      ]
+    },
+    {
+      "key": "WolvenKitGreenShadowColor",
+      "group": "Palette",
+      "displayName": "Green Shadow",
+      "kind": "Color",
+      "description": "Darker green (not used by WolvenKit views at the moment)",
+      "derivedBrushes": [
+        "WolvenKitGreenShadow"
+      ]
+    },
+    {
+      "key": "WolvenKitCyanColor",
+      "group": "Palette",
+      "displayName": "Cyan",
+      "kind": "Color",
+      "description": "Save / new tab / cache icons, values and links in editors, connections in data graphs",
+      "derivedBrushes": [
+        "WolvenKitCyan",
+        "ForegroundColor_Cyan"
+      ]
+    },
+    {
+      "key": "WolvenKitCyanShadowColor",
+      "group": "Palette",
+      "displayName": "Cyan Shadow",
+      "kind": "Color",
+      "description": "Darker cyan: hovered Project Explorer buttons",
+      "derivedBrushes": [
+        "WolvenKitCyanShadow"
+      ]
+    },
+    {
+      "key": "WolvenKitYellowColor",
+      "group": "Palette",
+      "displayName": "Yellow",
+      "kind": "Color",
+      "description": "New file / add icons, warnings, highlighted fields and hovered items in graph editors",
+      "derivedBrushes": [
+        "WolvenKitYellow",
+        "ForegroundColor_Yellow"
+      ]
+    },
+    {
+      "key": "WolvenKitYellowShadowColor",
+      "group": "Palette",
+      "displayName": "Yellow Shadow",
+      "kind": "Color",
+      "description": "Darker yellow: hovered Project Explorer buttons",
+      "derivedBrushes": [
+        "WolvenKitYellowShadow"
+      ]
+    },
+    {
+      "key": "WolvenKitPurpleColor",
+      "group": "Palette",
+      "displayName": "Purple",
+      "kind": "Color",
+      "description": "Refresh / sync / archive icons in menus, ribbon, settings and plugins",
+      "derivedBrushes": [
+        "WolvenKitPurple"
+      ]
+    },
+    {
+      "key": "WolvenKitTanColor",
+      "group": "Palette",
+      "displayName": "Tan",
+      "kind": "Color",
+      "description": "Folder icons, resource paths and references in the property tree",
+      "derivedBrushes": [
+        "WolvenKitTan"
+      ]
+    },
+    {
+      "key": "WolvenKitOrangeColor",
+      "group": "Palette",
+      "displayName": "Orange",
+      "kind": "Color",
+      "description": "\"Copy path\" button in the Project Explorer",
+      "derivedBrushes": [
+        "WolvenKitOrange"
+      ]
+    },
+    {
+      "key": "WolvenKitOrangeShadowColor",
+      "group": "Palette",
+      "displayName": "Orange Shadow",
+      "kind": "Color",
+      "description": "Hovered \"copy path\" button in the Project Explorer",
+      "derivedBrushes": [
+        "WolvenKitOrangeShadow"
+      ]
+    },
+    {
+      "key": "WolvenKitCyanShadow50Color",
+      "group": "Palette",
+      "displayName": "Cyan Shadow50",
+      "kind": "Color",
+      "description": "Translucent cyan backgrounds (LocKey browser rows, cyan highlights)",
+      "derivedBrushes": [
+        "WolvenKitCyanShadow50",
+        "BackgroundColor_Cyan"
+      ]
+    },
+    {
+      "key": "WolvenKitCyanShadow25Color",
+      "group": "Palette",
+      "displayName": "Cyan Shadow25",
+      "kind": "Color",
+      "description": "Faint translucent cyan (not used by WolvenKit views at the moment)",
+      "derivedBrushes": [
+        "WolvenKitCyanShadow25"
+      ]
+    },
+    {
+      "key": "WolvenKitRedShadowColor",
+      "group": "Palette",
+      "displayName": "Red Shadow",
+      "kind": "Color",
+      "description": "Darker red: hovered tabs in graph editors, welcome page and tree highlights",
+      "derivedBrushes": [
+        "WolvenKitRedShadow"
+      ]
+    },
+    {
+      "key": "WolvenKitRedShadow50Color",
+      "group": "Palette",
+      "displayName": "Red Shadow50",
+      "kind": "Color",
+      "description": "Translucent red background: invalid reference / CName fields",
+      "derivedBrushes": [
+        "WolvenKitRedShadow50",
+        "BackgroundColor_Red"
+      ]
+    },
+    {
+      "key": "WolvenKitRedShadow25Color",
+      "group": "Palette",
+      "displayName": "Red Shadow25",
+      "kind": "Color",
+      "description": "Faint translucent red background: invalid reference / CName fields",
+      "derivedBrushes": [
+        "WolvenKitRedShadow25",
+        "BackgroundColor_Red_Dark"
+      ]
+    },
+    {
+      "key": "WolvenKitYellowShadow50Color",
+      "group": "Palette",
+      "displayName": "Yellow Shadow50",
+      "kind": "Color",
+      "description": "Translucent yellow background: unresolved reference / CName fields",
+      "derivedBrushes": [
+        "WolvenKitYellowShadow50",
+        "BackgroundColor_Yellow"
+      ]
+    },
+    {
+      "key": "WolvenKitYellowShadow25Color",
+      "group": "Palette",
+      "displayName": "Yellow Shadow25",
+      "kind": "Color",
+      "description": "Faint translucent yellow background: unresolved reference / CName fields",
+      "derivedBrushes": [
+        "BackgroundColor_Yellow_Dark"
+      ]
+    },
+    {
+      "key": "WolvenKitViewportBackgroundColor",
+      "group": "Palette",
+      "displayName": "Viewport Background",
+      "kind": "Color",
+      "description": "3D mesh preview background (File Information \u2192 Mesh)"
+    },
+    {
+      "key": "WolvenKitFolderColor",
+      "group": "Palette",
+      "displayName": "Folder",
+      "kind": "Color",
+      "description": "Folder icons in the Project Explorer (raw) and the Asset Browser",
+      "derivedBrushes": [
+        "WolvenKitFolder"
+      ]
+    },
+    {
+      "key": "WolvenKitToggleOffColor",
+      "group": "Palette",
+      "displayName": "Toggle Off",
+      "kind": "Color",
+      "description": "Toggle switches when off (e.g. Mod Browser in the Asset Browser): knob and outline",
+      "derivedBrushes": [
+        "WolvenKitToggleOff"
+      ]
+    },
+    {
+      "key": "WolvenKitLabelColor",
+      "group": "Palette",
+      "displayName": "Label",
+      "kind": "Color",
+      "description": "Label text in WolvenKit dialogs",
+      "derivedBrushes": [
+        "WolvenKitLabelBrush"
+      ]
+    },
+    {
+      "key": "WolvenKitFrameColor",
+      "group": "Palette",
+      "displayName": "Frame",
+      "kind": "Color",
+      "description": "Frame and validation text background in WolvenKit dialogs",
+      "derivedBrushes": [
+        "WolvenKitFrameBrush"
+      ]
+    },
+    {
+      "key": "WolvenKitBorderColor",
+      "group": "Palette",
+      "displayName": "Border",
+      "kind": "Color",
+      "description": "Borders in WolvenKit dialogs",
+      "derivedBrushes": [
+        "WolvenKitBorderBrush"
+      ]
+    },
+    {
+      "key": "WolvenKitCyan50",
+      "group": "Palette",
+      "displayName": "Cyan50",
+      "kind": "Brush",
+      "description": "Translucent cyan: ink atlas part outlines and labels"
+    },
+    {
+      "key": "WolvenKitTan50",
+      "group": "Palette",
+      "displayName": "Tan50",
+      "kind": "Brush",
+      "description": "Dimmed resource paths in the property tree"
+    },
+    {
+      "key": "WolvenKitSeparator",
+      "group": "Palette",
+      "displayName": "Separator",
+      "kind": "Brush",
+      "description": "Separator lines in menus and lists"
+    },
+    {
+      "key": "WolvenKitButtonBackground",
+      "group": "Palette",
+      "displayName": "Button Background",
+      "kind": "Brush",
+      "description": "Regular buttons, e.g. the Project Explorer and Asset Browser toolbars: background"
+    },
+    {
+      "key": "WolvenKitButtonBorder",
+      "group": "Palette",
+      "displayName": "Button Border",
+      "kind": "Brush",
+      "description": "Regular buttons, e.g. the Project Explorer and Asset Browser toolbars: border"
+    },
+    {
+      "key": "WolvenKitSearchBorder",
+      "group": "Palette",
+      "displayName": "Search Border",
+      "kind": "Brush",
+      "description": "Border of the search fields in the Project Explorer and in documents"
+    },
+    {
+      "key": "WolvenKitListSelection",
+      "group": "Palette",
+      "displayName": "List Selection",
+      "kind": "Brush",
+      "description": "Selected row in the Project Explorer, Asset Browser and other trees / lists"
+    },
+    {
+      "key": "WolvenKitActionText",
+      "group": "Palette",
+      "displayName": "Action Button Text",
+      "kind": "Brush",
+      "description": "Text of the main action buttons, e.g. Generate Materials in the mesh preview"
+    },
+    {
+      "key": "WolvenKitLogText",
+      "group": "Palette",
+      "displayName": "Log Text",
+      "kind": "Brush",
+      "description": "Log panel: info / important lines (errors, warnings, debug and success use the palette colors)"
+    },
+    {
+      "key": "WolvenKitGraphGridColor",
+      "group": "Graph",
+      "displayName": "Graph Grid",
+      "kind": "Color",
+      "description": "Curve editor: grid lines",
+      "derivedBrushes": [
+        "WolvenKitGraphGrid"
+      ]
+    },
+    {
+      "key": "WolvenKitGraphAxisColor",
+      "group": "Graph",
+      "displayName": "Graph Axis",
+      "kind": "Color",
+      "description": "Curve editor: axes",
+      "derivedBrushes": [
+        "WolvenKitGraphAxis"
+      ]
+    },
+    {
+      "key": "WolvenKitGraphLabelColor",
+      "group": "Graph",
+      "displayName": "Graph Label",
+      "kind": "Color",
+      "description": "Curve editor: axis labels",
+      "derivedBrushes": [
+        "WolvenKitGraphLabel"
+      ]
+    },
+    {
+      "key": "WolvenKitGraphCurveColor",
+      "group": "Graph",
+      "displayName": "Graph Curve",
+      "kind": "Color",
+      "description": "Curve editor: the curve",
+      "derivedBrushes": [
+        "WolvenKitGraphCurve"
+      ]
+    },
+    {
+      "key": "QuestStartNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Start Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Start\" nodes",
+      "derivedBrushes": [
+        "QuestStartNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestEndNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest End Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"End\" nodes",
+      "derivedBrushes": [
+        "QuestEndNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestInputNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Input Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Input\" nodes",
+      "derivedBrushes": [
+        "QuestInputNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestOutputNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Output Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Output\" nodes",
+      "derivedBrushes": [
+        "QuestOutputNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestConditionNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Condition Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Condition\" nodes",
+      "derivedBrushes": [
+        "QuestConditionNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestPhaseNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Phase Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Phase\" nodes",
+      "derivedBrushes": [
+        "QuestPhaseNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestSceneNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Scene Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Scene\" nodes",
+      "derivedBrushes": [
+        "QuestSceneNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestRandomizerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Randomizer Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Randomizer\" nodes",
+      "derivedBrushes": [
+        "QuestRandomizerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestFlowControlNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Flow Control Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Flow Control\" nodes",
+      "derivedBrushes": [
+        "QuestFlowControlNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestSwitchNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Switch Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Switch\" nodes",
+      "derivedBrushes": [
+        "QuestSwitchNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestLogicalAndNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Logical And Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Logical And\" nodes",
+      "derivedBrushes": [
+        "QuestLogicalAndNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestLogicalXorNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Logical Xor Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Logical Xor\" nodes",
+      "derivedBrushes": [
+        "QuestLogicalXorNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestLogicalHubNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Logical Hub Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Logical Hub\" nodes",
+      "derivedBrushes": [
+        "QuestLogicalHubNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestFactsDBManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Facts DBManager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Facts DB Manager\" nodes",
+      "derivedBrushes": [
+        "QuestFactsDBManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestItemManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Item Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Item Manager\" nodes",
+      "derivedBrushes": [
+        "QuestItemManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestCharacterManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Character Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Character Manager\" nodes",
+      "derivedBrushes": [
+        "QuestCharacterManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestUIManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest UIManager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"UI Manager\" nodes",
+      "derivedBrushes": [
+        "QuestUIManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestAudioNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Audio Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Audio\" nodes",
+      "derivedBrushes": [
+        "QuestAudioNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestJournalNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Journal Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Journal\" nodes",
+      "derivedBrushes": [
+        "QuestJournalNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestPauseConditionNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Pause Condition Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Pause Condition\" nodes",
+      "derivedBrushes": [
+        "QuestPauseConditionNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestSceneManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Scene Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Scene Manager\" nodes",
+      "derivedBrushes": [
+        "QuestSceneManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestRenderFxManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Render Fx Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Render Fx Manager\" nodes",
+      "derivedBrushes": [
+        "QuestRenderFxManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestSpawnManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Spawn Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Spawn Manager\" nodes",
+      "derivedBrushes": [
+        "QuestSpawnManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestTriggerManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Trigger Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Trigger Manager\" nodes",
+      "derivedBrushes": [
+        "QuestTriggerManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestEntityManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Entity Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Entity Manager\" nodes",
+      "derivedBrushes": [
+        "QuestEntityManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestEnvironmentManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Environment Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Environment Manager\" nodes",
+      "derivedBrushes": [
+        "QuestEnvironmentManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestEventManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Event Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Event Manager\" nodes",
+      "derivedBrushes": [
+        "QuestEventManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestMappinManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Mappin Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Mappin Manager\" nodes",
+      "derivedBrushes": [
+        "QuestMappinManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestRewardManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Reward Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Reward Manager\" nodes",
+      "derivedBrushes": [
+        "QuestRewardManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestTimeManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Time Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Time Manager\" nodes",
+      "derivedBrushes": [
+        "QuestTimeManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestVisionModesManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Vision Modes Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Vision Modes Manager\" nodes",
+      "derivedBrushes": [
+        "QuestVisionModesManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestVoicesetManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Voiceset Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Voiceset Manager\" nodes",
+      "derivedBrushes": [
+        "QuestVoicesetManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestFXManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest FXManager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"FX Manager\" nodes",
+      "derivedBrushes": [
+        "QuestFXManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestPuppetAIManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Puppet AIManager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Puppet AI Manager\" nodes",
+      "derivedBrushes": [
+        "QuestPuppetAIManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestCrowdManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Crowd Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Crowd Manager\" nodes",
+      "derivedBrushes": [
+        "QuestCrowdManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestInteractiveObjectManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Interactive Object Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Interactive Object Manager\" nodes",
+      "derivedBrushes": [
+        "QuestInteractiveObjectManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestPhoneManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Phone Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Phone Manager\" nodes",
+      "derivedBrushes": [
+        "QuestPhoneManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestUseWorkspotNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Use Workspot Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"Use Workspot\" nodes",
+      "derivedBrushes": [
+        "QuestUseWorkspotNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestWorldDataManagerNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest World Data Manager Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of \"World Data Manager\" nodes",
+      "derivedBrushes": [
+        "QuestWorldDataManagerNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestDefaultNodeHeaderColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Default Node Header",
+      "kind": "Color",
+      "description": "Quest graph: header of nodes without a specific color",
+      "derivedBrushes": [
+        "QuestDefaultNodeHeader"
+      ]
+    },
+    {
+      "key": "QuestStartNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Start Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Start\" nodes",
+      "derivedBrushes": [
+        "QuestStartNodeContent"
+      ]
+    },
+    {
+      "key": "QuestEndNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest End Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"End\" nodes",
+      "derivedBrushes": [
+        "QuestEndNodeContent"
+      ]
+    },
+    {
+      "key": "QuestInputNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Input Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Input\" nodes",
+      "derivedBrushes": [
+        "QuestInputNodeContent"
+      ]
+    },
+    {
+      "key": "QuestOutputNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Output Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Output\" nodes",
+      "derivedBrushes": [
+        "QuestOutputNodeContent"
+      ]
+    },
+    {
+      "key": "QuestConditionNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Condition Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Condition\" nodes",
+      "derivedBrushes": [
+        "QuestConditionNodeContent"
+      ]
+    },
+    {
+      "key": "QuestPhaseNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Phase Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Phase\" nodes",
+      "derivedBrushes": [
+        "QuestPhaseNodeContent"
+      ]
+    },
+    {
+      "key": "QuestSceneNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Scene Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Scene\" nodes",
+      "derivedBrushes": [
+        "QuestSceneNodeContent"
+      ]
+    },
+    {
+      "key": "QuestRandomizerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Randomizer Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Randomizer\" nodes",
+      "derivedBrushes": [
+        "QuestRandomizerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestFlowControlNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Flow Control Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Flow Control\" nodes",
+      "derivedBrushes": [
+        "QuestFlowControlNodeContent"
+      ]
+    },
+    {
+      "key": "QuestSwitchNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Switch Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Switch\" nodes",
+      "derivedBrushes": [
+        "QuestSwitchNodeContent"
+      ]
+    },
+    {
+      "key": "QuestLogicalAndNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Logical And Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Logical And\" nodes",
+      "derivedBrushes": [
+        "QuestLogicalAndNodeContent"
+      ]
+    },
+    {
+      "key": "QuestLogicalXorNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Logical Xor Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Logical Xor\" nodes",
+      "derivedBrushes": [
+        "QuestLogicalXorNodeContent"
+      ]
+    },
+    {
+      "key": "QuestLogicalHubNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Logical Hub Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Logical Hub\" nodes",
+      "derivedBrushes": [
+        "QuestLogicalHubNodeContent"
+      ]
+    },
+    {
+      "key": "QuestFactsDBManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Facts DBManager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Facts DB Manager\" nodes",
+      "derivedBrushes": [
+        "QuestFactsDBManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestItemManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Item Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Item Manager\" nodes",
+      "derivedBrushes": [
+        "QuestItemManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestCharacterManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Character Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Character Manager\" nodes",
+      "derivedBrushes": [
+        "QuestCharacterManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestUIManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest UIManager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"UI Manager\" nodes",
+      "derivedBrushes": [
+        "QuestUIManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestAudioNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Audio Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Audio\" nodes",
+      "derivedBrushes": [
+        "QuestAudioNodeContent"
+      ]
+    },
+    {
+      "key": "QuestJournalNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Journal Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Journal\" nodes",
+      "derivedBrushes": [
+        "QuestJournalNodeContent"
+      ]
+    },
+    {
+      "key": "QuestPauseConditionNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Pause Condition Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Pause Condition\" nodes",
+      "derivedBrushes": [
+        "QuestPauseConditionNodeContent"
+      ]
+    },
+    {
+      "key": "QuestSceneManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Scene Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Scene Manager\" nodes",
+      "derivedBrushes": [
+        "QuestSceneManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestRenderFxManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Render Fx Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Render Fx Manager\" nodes",
+      "derivedBrushes": [
+        "QuestRenderFxManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestSpawnManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Spawn Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Spawn Manager\" nodes",
+      "derivedBrushes": [
+        "QuestSpawnManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestTriggerManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Trigger Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Trigger Manager\" nodes",
+      "derivedBrushes": [
+        "QuestTriggerManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestEntityManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Entity Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Entity Manager\" nodes",
+      "derivedBrushes": [
+        "QuestEntityManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestEnvironmentManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Environment Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Environment Manager\" nodes",
+      "derivedBrushes": [
+        "QuestEnvironmentManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestEventManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Event Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Event Manager\" nodes",
+      "derivedBrushes": [
+        "QuestEventManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestMappinManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Mappin Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Mappin Manager\" nodes",
+      "derivedBrushes": [
+        "QuestMappinManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestRewardManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Reward Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Reward Manager\" nodes",
+      "derivedBrushes": [
+        "QuestRewardManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestTimeManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Time Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Time Manager\" nodes",
+      "derivedBrushes": [
+        "QuestTimeManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestVisionModesManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Vision Modes Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Vision Modes Manager\" nodes",
+      "derivedBrushes": [
+        "QuestVisionModesManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestVoicesetManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Voiceset Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Voiceset Manager\" nodes",
+      "derivedBrushes": [
+        "QuestVoicesetManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestFXManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest FXManager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"FX Manager\" nodes",
+      "derivedBrushes": [
+        "QuestFXManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestPuppetAIManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Puppet AIManager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Puppet AI Manager\" nodes",
+      "derivedBrushes": [
+        "QuestPuppetAIManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestCrowdManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Crowd Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Crowd Manager\" nodes",
+      "derivedBrushes": [
+        "QuestCrowdManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestInteractiveObjectManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Interactive Object Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Interactive Object Manager\" nodes",
+      "derivedBrushes": [
+        "QuestInteractiveObjectManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestPhoneManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Phone Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Phone Manager\" nodes",
+      "derivedBrushes": [
+        "QuestPhoneManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestUseWorkspotNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Use Workspot Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"Use Workspot\" nodes",
+      "derivedBrushes": [
+        "QuestUseWorkspotNodeContent"
+      ]
+    },
+    {
+      "key": "QuestWorldDataManagerNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest World Data Manager Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of \"World Data Manager\" nodes",
+      "derivedBrushes": [
+        "QuestWorldDataManagerNodeContent"
+      ]
+    },
+    {
+      "key": "QuestDefaultNodeContentColor",
+      "group": "Quest nodes",
+      "displayName": "Quest Default Node Content",
+      "kind": "Color",
+      "description": "Quest graph: body of nodes without a specific color",
+      "derivedBrushes": [
+        "QuestDefaultNodeContent"
+      ]
+    },
+    {
+      "key": "SceneStartNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Start Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Start\" nodes",
+      "derivedBrushes": [
+        "SceneStartNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneEndNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene End Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"End\" nodes",
+      "derivedBrushes": [
+        "SceneEndNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneChoiceNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Choice Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Choice\" nodes",
+      "derivedBrushes": [
+        "SceneChoiceNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneQuestNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Quest Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Quest\" nodes",
+      "derivedBrushes": [
+        "SceneQuestNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneSectionNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Section Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Section\" nodes",
+      "derivedBrushes": [
+        "SceneSectionNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneRandomizerNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Randomizer Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Randomizer\" nodes",
+      "derivedBrushes": [
+        "SceneRandomizerNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneHubNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Hub Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Hub\" nodes",
+      "derivedBrushes": [
+        "SceneHubNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneAndNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene And Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"And\" nodes",
+      "derivedBrushes": [
+        "SceneAndNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneXorNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Xor Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of \"Xor\" nodes",
+      "derivedBrushes": [
+        "SceneXorNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneDefaultNodeHeaderColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Default Node Header",
+      "kind": "Color",
+      "description": "Scene graph: header of nodes without a specific color",
+      "derivedBrushes": [
+        "SceneDefaultNodeHeader"
+      ]
+    },
+    {
+      "key": "SceneStartNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Start Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Start\" nodes",
+      "derivedBrushes": [
+        "SceneStartNodeContent"
+      ]
+    },
+    {
+      "key": "SceneEndNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene End Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"End\" nodes",
+      "derivedBrushes": [
+        "SceneEndNodeContent"
+      ]
+    },
+    {
+      "key": "SceneChoiceNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Choice Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Choice\" nodes",
+      "derivedBrushes": [
+        "SceneChoiceNodeContent"
+      ]
+    },
+    {
+      "key": "SceneQuestNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Quest Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Quest\" nodes",
+      "derivedBrushes": [
+        "SceneQuestNodeContent"
+      ]
+    },
+    {
+      "key": "SceneSectionNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Section Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Section\" nodes",
+      "derivedBrushes": [
+        "SceneSectionNodeContent"
+      ]
+    },
+    {
+      "key": "SceneRandomizerNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Randomizer Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Randomizer\" nodes",
+      "derivedBrushes": [
+        "SceneRandomizerNodeContent"
+      ]
+    },
+    {
+      "key": "SceneHubNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Hub Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Hub\" nodes",
+      "derivedBrushes": [
+        "SceneHubNodeContent"
+      ]
+    },
+    {
+      "key": "SceneAndNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene And Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"And\" nodes",
+      "derivedBrushes": [
+        "SceneAndNodeContent"
+      ]
+    },
+    {
+      "key": "SceneXorNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Xor Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of \"Xor\" nodes",
+      "derivedBrushes": [
+        "SceneXorNodeContent"
+      ]
+    },
+    {
+      "key": "SceneDefaultNodeContentColor",
+      "group": "Scene nodes",
+      "displayName": "Scene Default Node Content",
+      "kind": "Color",
+      "description": "Scene graph: body of nodes without a specific color",
+      "derivedBrushes": [
+        "SceneDefaultNodeContent"
+      ]
+    },
+    {
+      "key": "CustomSliderForegroundBrush",
+      "group": "Misc",
+      "displayName": "Custom Slider Foreground Brush",
+      "kind": "Brush",
+      "description": "Sliders: filled part / thumb"
+    },
+    {
+      "key": "CustomSliderBackgroundBrush",
+      "group": "Misc",
+      "displayName": "Custom Slider Background Brush",
+      "kind": "Brush",
+      "description": "Sliders: track"
+    },
+    {
+      "key": "CustomSliderHighlightBrush",
+      "group": "Misc",
+      "displayName": "Custom Slider Highlight Brush",
+      "kind": "Brush",
+      "description": "Sliders: hovered thumb"
+    }
+  ]
+}

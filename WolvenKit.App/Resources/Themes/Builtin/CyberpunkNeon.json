@@ -1,0 +1,30 @@
+{
+  "formatVersion": 1,
+  "name": "Cyberpunk Neon",
+  "author": "WolvenKit",
+  "description": "Classic cyberpunk neon: hot pink, cyan, signal red and yellow on blue-black.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#FF2A6D",
+  "accentForeground": "#000000",
+  "colors": {
+    "ContentBackground": "#0A1020",
+    "ContentBackgroundAlt": "#0D1428",
+    "ContentBackgroundAlt2": "#111A31",
+    "ContentBackgroundAlt3": "#16213C",
+    "ContentBackgroundAlt4": "#1C2948",
+    "ContentBackgroundAlt5": "#233256",
+    "BorderAlt": "#2A3A63",
+    "ContentForeground": "#E6ECFF",
+    "ForegroundColor": "#E6ECFF",
+    "BackgroundColor_Control": "#111A31",
+    "BackgroundColor_Frame_Active": "#16213C",
+    "BackgroundColor_Frame_Background": "#0D1428",
+    "WolvenKitProjectSource": "#FF2A6D",
+    "WolvenKitProjectSourceShadow": "#8F1A3E",
+    "WolvenKitProjectResources": "#05D9E8",
+    "WolvenKitProjectResourcesShadow": "#03737B",
+    "WolvenKitRedColor": "#FF003C",
+    "WolvenKitCyanColor": "#05D9E8",
+    "WolvenKitYellowColor": "#FCEE0A"
+  }
+}

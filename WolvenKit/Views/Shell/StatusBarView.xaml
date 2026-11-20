@@ -39,8 +39,8 @@
                     Height="{DynamicResource WolvenKitStatusBarProgressBarHeight}"
                     Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                     VerticalAlignment="Center"
-                    ProgressColor="{StaticResource WolvenKitRed}"
-                    TrackColor="#131313" />
+                    ProgressColor="{DynamicResource WolvenKitAccent}"
+                    TrackColor="{DynamicResource WolvenKitPanelProgressTrack}" />
             </StatusBarItem>
 
             <StatusBarItem

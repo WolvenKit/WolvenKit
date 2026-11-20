@@ -76,7 +76,7 @@
                         Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Visibility="{Binding IsDeleting,
                                              Converter={StaticResource InvertBooleanVisibilityConverter}}"
@@ -98,7 +98,7 @@
                         Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Visibility="{Binding IsDeleting,
                                              Converter={StaticResource InvertBooleanVisibilityConverter}}"

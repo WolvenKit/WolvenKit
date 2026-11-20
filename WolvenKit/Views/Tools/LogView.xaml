@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:core="clr-namespace:WolvenKit.Common;assembly=WolvenKit.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -86,7 +87,7 @@
                         Kind="AlphaEBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </Button>
 
                 <Button
@@ -100,7 +101,7 @@
                         Kind="AlphaWBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                 </Button>
 
                 <Button
@@ -114,7 +115,7 @@
                         Kind="AlphaSBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </Button>
 
                 <Button
@@ -141,7 +142,7 @@
                         Kind="AlphaDBox"
                         Margin="{DynamicResource WolvenKitMarginMicro}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
                 </Button>
             </StackPanel>
 
@@ -158,6 +159,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button
+                    Style="{StaticResource WKButtonStyle}"
                     x:Name="UpdateButton"
                     Grid.Column="0"
                     Height="Auto"
@@ -170,7 +172,7 @@
                         IconPack="Material"
                         Kind="Refresh"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
                 </Button>
 
                 <ComboBox
@@ -226,6 +228,7 @@
                 </ComboBox>
 
                 <Button
+                    Style="{StaticResource WKButtonStyle}"
                     x:Name="RunButton"
                     Grid.Column="2"
                     Height="Auto"
@@ -240,10 +243,11 @@
                         IconPack="Material"
                         Kind="Play"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </Button>
 
                 <Button
+                    Style="{StaticResource WKButtonStyle}"
                     x:Name="StopButton"
                     Grid.Column="3"
                     Height="Auto"
@@ -257,7 +261,7 @@
                         IconPack="Material"
                         Kind="Stop"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </Button>
             </Grid>
         </Grid>
@@ -303,12 +307,34 @@
                             VerticalAlignment="Center"
                             Background="Transparent"
                             BorderThickness="0"
-                            Foreground="{Binding TextColor}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             FontFamily="Consolas"
                             IsReadOnly="True"
                             Text="{Binding Path=Message}"
-                            TextWrapping="Wrap" />
+                            TextWrapping="Wrap">
+                            <!--  color by level from theme resources: follows a theme switch without touching the entries  -->
+                            <TextBox.Style>
+                                <Style
+                                    BasedOn="{StaticResource {x:Type TextBox}}"
+                                    TargetType="{x:Type TextBox}">
+                                    <Setter Property="Foreground" Value="{DynamicResource WolvenKitLogText}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Error}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitRed}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Warning}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitYellow}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Debug}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitPurple}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static core:Logtype.Success}">
+                                            <Setter Property="Foreground" Value="{DynamicResource WolvenKitGreen}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
 
                         <TextBlock
                             Grid.Column="1"
@@ -338,7 +364,7 @@
                                 Kind="ClipboardArrowRightOutline"
                                 Margin="{DynamicResource WolvenKitMarginMicroVertical}"
                                 Size="{DynamicResource WolvenKitIconMicro}"
-                                Foreground="White" />
+                                Foreground="{DynamicResource ContentForeground}" />
                         </Button>
                     </Grid>
                 </DataTemplate>
@@ -347,7 +373,7 @@
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer
-                        Background="#131313"
+                        Background="{DynamicResource WolvenKitPanelLogBackground}"
                         Loaded="ScrollViewer_Loaded"
                         PreviewKeyDown="ScrollViewer_OnKeyDown">
                         <ItemsPresenter />
@@ -413,7 +439,7 @@
                     IconPack="Codicons"
                     Kind="FolderOpened"
                     Size="{DynamicResource WolvenKitIconSmall}"
-                    Foreground="{StaticResource WolvenKitYellow}" />
+                    Foreground="{DynamicResource WolvenKitYellow}" />
             </Button>
 
             <Button

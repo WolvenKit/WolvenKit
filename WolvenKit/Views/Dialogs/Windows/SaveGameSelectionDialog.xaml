@@ -10,7 +10,7 @@
     d:DesignHeight="600"
     Title="Select Items"
     MinHeight="{DynamicResource WolvenKitDialogHeight}"
-    Background="{StaticResource ContentBackgroundAlt3}"
+    Background="{DynamicResource ContentBackgroundAlt3}"
     SizeToContent="Width"
     ResizeMode="NoResize">
     <syncfusion:WizardControl

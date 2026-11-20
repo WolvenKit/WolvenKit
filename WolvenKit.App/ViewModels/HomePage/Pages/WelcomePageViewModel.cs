@@ -249,6 +249,9 @@ public partial class WelcomePageViewModel : PageViewModel
         return "";
     }
 
+    /// <summary>Fills the pinned and recent project lists again (e.g. after the color theme was re-applied).</summary>
+    public void RefreshProjectLists() => ConvertRecentProjects();
+
     private void ConvertRecentProjects() // Converts Recent projects for the homepage.
     {
         RefreshPinnedProjects();

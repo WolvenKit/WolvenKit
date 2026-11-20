@@ -17,7 +17,7 @@
     d:DesignHeight="450"
     Width="{DynamicResource WolvenKitDialogWidthMedium}"
     Height="600"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -131,7 +131,7 @@
                                             Width="{DynamicResource WolvenKitIconMicro}"
                                             Height="{DynamicResource WolvenKitIconMicro}"
                                             Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                            Foreground="{StaticResource WolvenKitGreen}" />
+                                            Foreground="{DynamicResource WolvenKitGreen}" />
                                     </Button>
 
                                     <Button
@@ -145,7 +145,7 @@
                                             Width="{DynamicResource WolvenKitIconMicro}"
                                             Height="{DynamicResource WolvenKitIconMicro}"
                                             Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                            Foreground="{StaticResource WolvenKitRed}" />
+                                            Foreground="{DynamicResource WolvenKitRed}" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -156,13 +156,13 @@
 
             <Border
                 Grid.Column="2"
-                BorderBrush="#373737"
+                BorderBrush="{DynamicResource WolvenKitGray37}"
                 BorderThickness="1">
                 <ScrollViewer
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Auto">
                     <Grid
-                        Background="{StaticResource ContentBackground}"
+                        Background="{DynamicResource ContentBackground}"
                         IsSharedSizeScope="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" SharedSizeGroup="Label" />
@@ -239,7 +239,7 @@
                         Kind="NewFile"
                         Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -260,7 +260,7 @@
                         Kind="Refresh"
                         Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                         Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallLeft}"
