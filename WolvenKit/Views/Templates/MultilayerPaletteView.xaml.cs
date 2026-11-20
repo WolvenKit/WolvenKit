@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -5,8 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Splat;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -21,13 +25,54 @@ namespace WolvenKit.Views.Editors
     {
         private const double SwatchSize = 14;
 
+        /// <summary>Swatches of the grid: fewer per line, so larger.</summary>
+        private const double GridSwatchSize = 22;
+
+        /// <summary>Gap in the grid where the next column starts another hue step.</summary>
+        private const double HueStepGap = 8;
+
         /// <summary>Space between the blocks of two groups.</summary>
-        private const double GroupGap = 8;
+        private const double GroupGap = 4;
 
         /// <summary>Open or closed for all layers and files of the session.</summary>
         private static bool s_isExpanded = true;
 
+        /// <summary>Groups as columns (grid) or as rows, when there are no settings to keep it in.</summary>
+        private static bool s_gridMode = true;
+
+        /// <summary>
+        /// Visibility of the colorScale dropdown above the palette: collapsed while there is a palette to pick from,
+        /// unless the settings ask for the dropdown too; visible as the fallback when there isn't.
+        /// </summary>
+        public static readonly DependencyProperty DropdownVisibilityProperty = DependencyProperty.Register(
+            nameof(DropdownVisibility), typeof(Visibility), typeof(MultilayerPaletteView), new PropertyMetadata(Visibility.Visible));
+
+        public Visibility DropdownVisibility
+        {
+            get => (Visibility)GetValue(DropdownVisibilityProperty);
+            set => SetValue(DropdownVisibilityProperty, value);
+        }
+
+        private static ISettingsManager Settings => Locator.Current.GetService<ISettingsManager>();
+
+        /// <summary>Grid or rows, kept in the settings (also in the settings page).</summary>
+        private static bool GridMode
+        {
+            get => Settings?.MultilayerPaletteGrid ?? s_gridMode;
+            set
+            {
+                s_gridMode = value;
+                if (Settings is { } settings)
+                {
+                    settings.MultilayerPaletteGrid = value;
+                }
+            }
+        }
+
         private ChunkViewModel _subscribed;
+
+        /// <summary>Text of the search box: colours whose name doesn't contain it are dimmed.</summary>
+        private string _search = "";
 
         public MultilayerPaletteView()
         {
@@ -36,6 +81,9 @@ namespace WolvenKit.Views.Editors
             PaletteExpander.SetCurrentValue(Expander.IsExpandedProperty, s_isExpanded);
             PaletteExpander.Expanded += (_, _) => s_isExpanded = true;
             PaletteExpander.Collapsed += (_, _) => s_isExpanded = false;
+
+            // on = Rows
+            ModeSwitch.SetCurrentValue(MahApps.Metro.Controls.ToggleSwitch.IsOnProperty, !GridMode);
 
             DataContextChanged += (_, _) => Subscribe();
             Loaded += (_, _) => Subscribe();
@@ -74,9 +122,27 @@ namespace WolvenKit.Views.Editors
             }
         }
 
+        private void ModeSwitch_OnToggled(object sender, RoutedEventArgs e) => SetMode(!ModeSwitch.IsOn);
+
+        private void SetMode(bool grid)
+        {
+            if (GridMode != grid)
+            {
+                GridMode = grid;
+                Rebuild();
+            }
+        }
+
         private void Rebuild()
         {
             RowsPanel.Children.Clear();
+            ColumnsPanel.Children.Clear();
+            var gridMode = GridMode;
+            ModeSwitch.SetCurrentValue(MahApps.Metro.Controls.ToggleSwitch.IsOnProperty, !gridMode);
+            GridScroll.SetCurrentValue(VisibilityProperty, gridMode ? Visibility.Visible : Visibility.Collapsed);
+            RowsScroll.SetCurrentValue(VisibilityProperty, gridMode ? Visibility.Collapsed : Visibility.Visible);
+            // the dropdown is the fallback: shown until there's a palette to pick from
+            SetCurrentValue(DropdownVisibilityProperty, Visibility.Visible);
 
             if (Cvm is not { ParentData: Multilayer_Layer layer } cvm ||
                 layer.Material.DepotPath.GetResolvedText() is not { Length: > 0 } template ||
@@ -96,47 +162,163 @@ namespace WolvenKit.Views.Editors
             CopyTemplateButton.SetCurrentValue(VisibilityProperty,
                 cvm.CanCopyMultilayerTemplate() ? Visibility.Visible : Visibility.Collapsed);
 
+            PaletteExpander.SetCurrentValue(VisibilityProperty, exists ? Visibility.Visible : Visibility.Collapsed);
+            // a template without colours still shows the header row: its copy button is how colours get added
             if (documentTools.GetMultilayerPalette(template) is not { Count: > 0 } colors)
             {
-                PaletteExpander.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                PaletteExpander.SetCurrentValue(HeaderedContentControl.HeaderProperty, "Palette: no colours");
                 return;
             }
 
-            PaletteExpander.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            if (Settings is not { ShowColorScaleDropdown: true })
+            {
+                SetCurrentValue(DropdownVisibilityProperty, Visibility.Collapsed);
+            }
+
             var current = cvm.ResolvedData is CName name ? name.GetResolvedText() : null;
             var rows = MultilayerPalette.GroupIntoRows(colors);
+            // with the dropdown hidden the header names the current colour
             PaletteExpander.SetCurrentValue(HeaderedContentControl.HeaderProperty,
-                $"Palette: {colors.Count} colours in {rows.Count} groups");
+                $"Palette: {colors.Count} colours in {rows.Count} groups" + (current is { Length: > 0 } ? $"  ·  {current}" : ""));
 
-            // same width for every group, so the blocks line up in columns
-            var groupWidth = rows.Max(row => row.Count) * (SwatchSize + 2);
+            if (gridMode)
+            {
+                BuildGrid(MultilayerPalette.GroupIntoGrid(colors), current);
+                return;
+            }
+
+            // same width for the groups, so the blocks line up in columns: the most common group size, not the
+            // largest, so one group with custom colours doesn't widen every block; its extra colours wrap to a
+            // second line inside its own block instead of pushing the next blocks out of line
+            var typical = rows
+                .GroupBy(row => row.Count)
+                .OrderByDescending(g => g.Count())
+                .ThenByDescending(g => g.Key)
+                .First().Key;
             foreach (var row in rows)
             {
-                var panel = new StackPanel
+                var panel = new WrapPanel
                 {
                     Orientation = Orientation.Horizontal,
-                    Width = groupWidth,
-                    Margin = new Thickness(0, 0, GroupGap, GroupGap / 2),
+                    Width = typical * (SwatchSize + 1),
+                    Margin = new Thickness(0, 0, GroupGap, 1),
                 };
                 foreach (var color in row)
                 {
-                    panel.Children.Add(CreateSwatch(color, color.Name == current));
+                    panel.Children.Add(CreateSwatch(color, color.Name == current, SwatchSize, s_gridSwatchMargin));
                 }
 
                 RowsPanel.Children.Add(panel);
             }
         }
 
-        private Border CreateSwatch(MultilayerPaletteColor color, bool isCurrent)
+        /// <summary>
+        /// One strip of columns, like CDPR's material browser: the colour groups side by side in the palette order,
+        /// a wider gap between hue steps, and one row per variant suffix, so a row is the same saturation step for
+        /// every hue; an empty cell is a variant the group doesn't have. Scrolled so the current colour is in view.
+        /// </summary>
+        private void BuildGrid(MultilayerPaletteGrid grid, string current)
+        {
+            var currentOffset = -1.0;
+            var matchOffset = -1.0;
+            var x = 0.0;
+            for (var i = 0; i < grid.Columns.Count; i++)
+            {
+                var gap = i + 1 < grid.Columns.Count && grid.Columns[i + 1].HueStep != grid.Columns[i].HueStep ? HueStepGap : 0;
+                var column = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(0, 0, gap, 0),
+                };
+                var cells = grid.Columns[i].Cells;
+                for (var row = 0; row < cells.Count; row++)
+                {
+                    // a gap between the shared rows and the colours of the groups' own below them
+                    var margin = row == grid.RowSuffixes.Count && row > 0 ? s_extraRowsMargin : s_gridSwatchMargin;
+                    var color = cells[row];
+                    if (color is null)
+                    {
+                        column.Children.Add(CreateEmptyCell(GridSwatchSize, margin));
+                        continue;
+                    }
+
+                    var isCurrent = color.Name == current;
+                    if (isCurrent)
+                    {
+                        currentOffset = x;
+                    }
+
+                    if (matchOffset < 0 && Matches(color))
+                    {
+                        matchOffset = x;
+                    }
+
+                    column.Children.Add(CreateSwatch(color, isCurrent, GridSwatchSize, margin));
+                }
+
+                ColumnsPanel.Children.Add(column);
+                x += GridSwatchSize + 1 + gap;
+            }
+
+            // searching: the first match in view; else the current colour
+            var offset = Math.Max(0, _search.Length > 0 && matchOffset >= 0 ? matchOffset : currentOffset);
+            Dispatcher.InvokeAsync(() =>
+                GridScroll.ScrollToHorizontalOffset(Math.Max(0, offset - (GridScroll.ViewportWidth / 2))),
+                DispatcherPriority.Loaded);
+        }
+
+        // Shift + wheel scrolls the grid sideways; the plain wheel keeps scrolling the panel around it
+        private void GridScroll_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                GridScroll.ScrollToHorizontalOffset(GridScroll.HorizontalOffset - e.Delta);
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>1 px between the swatches (both layouts).</summary>
+        private static readonly Thickness s_gridSwatchMargin = new(0, 0, 1, 1);
+
+        /// <summary>Above the first colour below the shared rows of the grid (custom variants).</summary>
+        private static readonly Thickness s_extraRowsMargin = new(0, 6, 1, 1);
+
+        private bool Matches(MultilayerPaletteColor color) =>
+            _search.Length == 0 || color.Name.Contains(_search, StringComparison.OrdinalIgnoreCase);
+
+        private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            _search = SearchBox.Text.Trim();
+            Rebuild();
+        }
+
+        private static Border CreateEmptyCell(double size, Thickness margin)
+        {
+            var cell = new Border
+            {
+                Width = size,
+                Height = size,
+                Margin = margin,
+                BorderThickness = new Thickness(1),
+                Opacity = 0.35,
+                SnapsToDevicePixels = true,
+                ToolTip = "This group has no colour for this row",
+            };
+            cell.SetResourceReference(Border.BorderBrushProperty, "BorderAlt");
+            return cell;
+        }
+
+        private Border CreateSwatch(MultilayerPaletteColor color, bool isCurrent, double size = SwatchSize, Thickness? margin = null)
         {
             var brush = new SolidColorBrush(MultilayerPalette.ToColor(color));
             brush.Freeze();
 
             var swatch = new Border
             {
-                Width = SwatchSize,
-                Height = SwatchSize,
-                Margin = new Thickness(1),
+                Width = size,
+                Height = size,
+                Margin = margin ?? new Thickness(1),
+                Opacity = Matches(color) ? 1 : 0.15,
                 Background = brush,
                 BorderThickness = new Thickness(isCurrent ? 2 : 1),
                 Cursor = Cursors.Hand,

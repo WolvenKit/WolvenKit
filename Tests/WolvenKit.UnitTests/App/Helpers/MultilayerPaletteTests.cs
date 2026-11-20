@@ -38,6 +38,83 @@ public class MultilayerPaletteTests
         Assert.Equal(colors.Length, rows.Sum(r => r.Count));
     }
 
+    [Fact]
+    public void GroupIntoGrid_OneRowPerSuffix_BaseOnTop_SaturatedBeforeGrey()
+    {
+        var colors = new[]
+        {
+            C("aaa_null", 0.9f, 0.1f, 0.1f), C("aaa_grey", 0.5f, 0.45f, 0.45f), C("aaa_sat", 0.8f, 0.2f, 0.2f),
+            C("ccc_null", 0.2f, 0.6f, 0.9f), C("ccc_sat", 0.1f, 0.5f, 0.8f),
+        };
+
+        var grid = MultilayerPalette.GroupIntoGrid(colors);
+
+        // "grey" is only the red group's: no row of its own, below the rows
+        Assert.Equal(new[] { "null", "sat" }, grid.RowSuffixes);
+        Assert.Equal(2, grid.Columns.Count);
+        Assert.Equal(new[] { "aaa_null", "aaa_sat", "aaa_grey" }, grid.Columns[0].Cells.Select(c => c?.Name));
+        // the blue group has nothing below the rows: an empty cell
+        Assert.Equal(new[] { "ccc_null", "ccc_sat", null }, grid.Columns[1].Cells.Select(c => c?.Name));
+        Assert.Equal(0, grid.Columns[0].HueStep);
+        Assert.Equal(4, grid.Columns[1].HueStep);
+    }
+
+    [Fact]
+    public void GroupIntoGrid_ColumnsByHueStep_LightToDarkInEachStep_GreysFirst()
+    {
+        var colors = new[]
+        {
+            C("orange_null", 1.0f, 0.6f, 0.2f), // same hue step as red, lighter: before it
+            C("blue_null", 0.2f, 0.4f, 0.9f),
+            C("red_null", 0.9f, 0.1f, 0.1f),
+            C("dark_null", 0.2f, 0.2f, 0.2f),
+            C("green_null", 0.1f, 0.8f, 0.2f),
+            C("light_null", 0.8f, 0.8f, 0.8f),
+            C("darkred_null", 0.5f, 0.05f, 0.05f),
+        };
+
+        var grid = MultilayerPalette.GroupIntoGrid(colors);
+
+        Assert.Equal(new[] { "light", "dark", "orange", "red", "darkred", "green", "blue" },
+            grid.Columns.Select(c => c.Cells[0]!.Name.Split('_')[0]));
+    }
+
+    [Fact]
+    public void GroupIntoGrid_CustomColours_BelowTheRows_NotRowsOfTheirOwn()
+    {
+        var colors = new[]
+        {
+            C("aaa_null", 0.9f, 0.1f, 0.1f), C("aaa_v1", 0.8f, 0.3f, 0.3f), C("aaa_my blue", 0.0f, 0.0f, 1.0f),
+            C("ccc_null", 0.2f, 0.6f, 0.9f), C("ccc_v1", 0.3f, 0.6f, 0.8f),
+            C("ddd_null", 0.1f, 0.8f, 0.2f), C("ddd_v1", 0.3f, 0.7f, 0.4f), C("ddd_my red", 0.7f, 0.2f, 0.2f),
+        };
+
+        var grid = MultilayerPalette.GroupIntoGrid(colors);
+
+        Assert.Equal(new[] { "null", "v1" }, grid.RowSuffixes);
+        Assert.Equal(new[] { "aaa_null", "aaa_v1", "aaa_my blue" }, grid.Columns[0].Cells.Select(c => c?.Name));
+        Assert.Equal(new[] { "ddd_null", "ddd_v1", "ddd_my red" }, grid.Columns[1].Cells.Select(c => c?.Name));
+        Assert.Equal(new[] { "ccc_null", "ccc_v1", null }, grid.Columns[2].Cells.Select(c => c?.Name));
+    }
+
+    [Fact]
+    public void GroupIntoGrid_UnsharedSuffixes_KeepEachGroupsOrder()
+    {
+        var colors = new[]
+        {
+            C("aaa_null", 0.9f, 0.1f, 0.1f), C("aaa_x1", 0.8f, 0.2f, 0.2f),
+            C("ccc_null", 0.2f, 0.6f, 0.9f), C("ccc_y1", 0.1f, 0.5f, 0.8f),
+            C("ddd_null", 0.1f, 0.8f, 0.2f), C("ddd_z1", 0.1f, 0.7f, 0.2f),
+        };
+
+        var grid = MultilayerPalette.GroupIntoGrid(colors);
+
+        // four suffixes for groups of two: not aligned, each column top-aligned in its own order
+        Assert.Empty(grid.RowSuffixes);
+        Assert.All(grid.Columns, c => Assert.Equal(2, c.Cells.Count));
+        Assert.Equal(new[] { "aaa_null", "aaa_x1" }, grid.Columns[0].Cells.Select(c => c?.Name));
+    }
+
     [Theory]
     [InlineData(0.9f, 0.1f, 0.1f, 0, 0.5411, 7)]
     [InlineData(0.5f, 0.5f, 0.5f, -1, 7.2929, 4)]   // gray: hue -1, odd in Python, so reversed

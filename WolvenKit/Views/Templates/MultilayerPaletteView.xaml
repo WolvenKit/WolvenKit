@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignWidth="320"
@@ -14,16 +16,77 @@
             Margin="{DynamicResource WolvenKitMarginTiny}"
             Header="Palette"
             IsExpanded="True">
-            <ScrollViewer
-                MaxHeight="320"
-                HorizontalScrollBarVisibility="Disabled"
-                VerticalScrollBarVisibility="Auto">
+            <StackPanel>
                 <!--
-                    one block per group of the template's colours, the group's base colour first; the blocks are
-                    as wide as the largest group and flow left to right, then down, in palette order
+                    on the left the switch between the two layouts of the palette (the choice holds for all layers and
+                    files of the session); on the right the template copy, then search in the corner like the file editor's search box
                 -->
-                <WrapPanel x:Name="RowsPanel" Orientation="Horizontal" />
-            </ScrollViewer>
+                <DockPanel Margin="0,0,4,4" LastChildFill="False">
+                    <!-- "Grid / Rows ( O)" on the left: the switch as the Mod Browser one of the asset browser -->
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,6,0"
+                            VerticalAlignment="Center"
+                            Text="Grid / Rows"
+                            ToolTip="Off, Grid: colour groups as columns, variants below the base colour, scrolling sideways (like CDPR's material browser). On, Rows: colour groups as rows wrapping down (like the Blender add-on)" />
+                        <!-- MinWidth 0: the style's minimum width would leave a wide gap after the switch -->
+                        <mah:ToggleSwitch
+                            x:Name="ModeSwitch"
+                            MinWidth="0"
+                            VerticalAlignment="Center"
+                            OffContent=""
+                            OnContent=""
+                            ToolTip="Off: Grid (like CDPR's material browser). On: Rows (like the Blender add-on)"
+                            Toggled="ModeSwitch_OnToggled" />
+                    </StackPanel>
+
+                    <!-- live filter (TextChanged), the search bar of the asset browser; in the corner, like the file editor's -->
+                    <hc:SearchBar
+                        x:Name="SearchBox"
+                        Width="180"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        hc:InfoElement.Placeholder="Search, e.g. 48e702"
+                        hc:InfoElement.ShowClearButton="True"
+                        DockPanel.Dock="Right"
+                        Style="{StaticResource SearchBarPlus}"
+                        ToolTip="Dims the colours whose name doesn't contain the text"
+                        TextChanged="SearchBox_OnTextChanged" />
+
+                    <!-- only for templates that aren't the project's own yet -->
+                    <Button
+                        x:Name="CopyTemplateButton"
+                        Content="Copy template to project..."
+                        DockPanel.Dock="Right"
+                        ToolTip="Copy the layer's template into the project under a path of its own and point the layer to the copy, to add or change colours without changing the game's template"
+                        Click="CopyTemplateButton_OnClick" />
+                </DockPanel>
+
+                <!-- one column per group, base colour on top; Shift + wheel scrolls sideways -->
+                <ScrollViewer
+                    x:Name="GridScroll"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled"
+                    PreviewMouseWheel="GridScroll_OnPreviewMouseWheel">
+                    <!-- bottom margin: the scroll bar sits below the swatches, not against them -->
+                    <StackPanel
+                        x:Name="ColumnsPanel"
+                        Margin="0,0,0,8"
+                        Orientation="Horizontal" />
+                </ScrollViewer>
+
+                <ScrollViewer
+                    x:Name="RowsScroll"
+                    MaxHeight="320"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto">
+                    <!--
+                        one block per group of the template's colours, the group's base colour first; the blocks are
+                        as wide as the largest group and flow left to right, then down, in palette order
+                    -->
+                    <WrapPanel x:Name="RowsPanel" Orientation="Horizontal" />
+                </ScrollViewer>
+            </StackPanel>
         </Expander>
 
         <!-- the layer's template path leads nowhere (mistyped, or the file was renamed or moved) -->
@@ -33,14 +96,5 @@
             Foreground="{DynamicResource WolvenKitOrange}"
             TextWrapping="Wrap"
             Visibility="Collapsed" />
-
-        <!-- only for templates that aren't the project's own yet -->
-        <Button
-            x:Name="CopyTemplateButton"
-            Margin="{DynamicResource WolvenKitMarginTiny}"
-            HorizontalAlignment="Left"
-            Content="Copy template to project..."
-            ToolTip="Copy the layer's template into the project under a path of its own and point the layer to the copy, to add or change colours without changing the game's template"
-            Click="CopyTemplateButton_OnClick" />
     </StackPanel>
 </UserControl>
