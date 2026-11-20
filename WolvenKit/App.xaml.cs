@@ -132,6 +132,12 @@ namespace WolvenKit
             _themeService.CurrentThemeChanging += (_, _) => OnThemeChanging();
             _themeService.CurrentThemeChanged += (_, _) => OnThemeChanged();
 
+            // Text inputs without a context menu of their own get the white system menu from WPF. Many have styles
+            // of their own (number fields, name editors, library controls), so the menu isn't set by a style but
+            // on every text input when it loads.
+            EventManager.RegisterClassHandler(typeof(System.Windows.Controls.Primitives.TextBoxBase), FrameworkElement.LoadedEvent,
+                new RoutedEventHandler(GiveTextInputThemedMenu));
+
             // The main window is already shown (InitializeShell) and usually active: its first activation came
             // before this subscription, so the library colors were only bridged after the next one (Alt+Tab),
             // and until then the AdonisUI controls (the settings page, message boxes) kept their own gray colors.
@@ -342,6 +348,19 @@ namespace WolvenKit
             {
                 progress.IsIndeterminate = true;
                 progress.Status = EStatus.Running;
+            }
+        }
+
+        /// <summary>
+        /// Puts the themed Cut / Copy / Paste menu (App.Styles.xaml, a new one each time) on a text input that has
+        /// no context menu, so WPF doesn't build its system menu for it.
+        /// </summary>
+        private static void GiveTextInputThemedMenu(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Primitives.TextBoxBase { ContextMenu: null } input &&
+                Current?.TryFindResource("WolvenKitTextEditContextMenu") is System.Windows.Controls.ContextMenu menu)
+            {
+                input.SetCurrentValue(FrameworkElement.ContextMenuProperty, menu);
             }
         }
 

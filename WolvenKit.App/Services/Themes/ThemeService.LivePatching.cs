@@ -938,14 +938,56 @@ public sealed partial class ThemeService
             return;
         }
 
-        parent.MergedDictionaries.RemoveAt(index);
+        try
+        {
+            parent.MergedDictionaries.RemoveAt(index);
+        }
+        catch (Exception ex)
+        {
+            // WPF can throw while it invalidates the resource references of the removal (a NullReferenceException
+            // from PresentationFramework, e.g. with a popup or context menu open). The removal may or may not
+            // have happened: put the dictionary back if it's gone and patch it in place, one write at a time.
+            _loggerService.Debug($"Themes: can't detach {root.Source?.OriginalString ?? "dictionary"} for patching: {ex.Message}");
+            if (!parent.MergedDictionaries.Contains(root))
+            {
+                Reattach(parent, index, root);
+            }
+
+            RunAll(operations);
+            return;
+        }
+
         try
         {
             RunAll(operations);
         }
         finally
         {
-            parent.MergedDictionaries.Insert(index, root);
+            Reattach(parent, index, root);
+        }
+    }
+
+    /// <summary>Merges a detached dictionary back at its place; it must not stay out, or its resources are gone.</summary>
+    private void Reattach(ResourceDictionary parent, int index, ResourceDictionary root)
+    {
+        try
+        {
+            parent.MergedDictionaries.Insert(Math.Min(index, parent.MergedDictionaries.Count), root);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Debug($"Themes: can't reattach {root.Source?.OriginalString ?? "dictionary"}: {ex.Message}");
+            if (!parent.MergedDictionaries.Contains(root))
+            {
+                try
+                {
+                    parent.MergedDictionaries.Add(root);
+                }
+                catch (Exception addEx)
+                {
+                    _loggerService.Error($"Themes: lost {root.Source?.OriginalString ?? "a dictionary"} while switching themes, restart WolvenKit: {addEx.Message}");
+                }
+            }
         }
     }
 
