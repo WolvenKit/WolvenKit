@@ -129,6 +129,11 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
                 break;
             case RDTMeshViewModel meshViewModel:
                 meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
+                meshViewModel.SelectedNodeDataIndex = _selectedNodeDataIndex;
+                meshViewModel.SelectWorldNode();
+                break;
+            case RDTSectorObjectsViewModel objectsViewModel when _selectedNodeDataIndex is { } nodeDataIndex:
+                objectsViewModel.SelectWhenShown(nodeDataIndex);
                 break;
         }
 
@@ -325,6 +330,11 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
             var tab = _documentTabViewmodelFactory.RDTMeshViewModel(wss, this);
             tab.OnSectorNodeSelected += OnSectorNodeSelected;
             TabItemViewModels.Add(tab);
+
+            var objectsTab = new RDTSectorObjectsViewModel(wss, this);
+            objectsTab.NodeOpenRequested += OnSectorObjectOpenRequested;
+            objectsTab.PreviewOpenRequested += OnSectorObjectPreviewRequested;
+            TabItemViewModels.Add(objectsTab);
         }
         if (cls is worldStreamingBlock wsb)
         {
@@ -372,7 +382,40 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
 
     private string? _selectedWorldNodeIndex;
 
-    private void OnSectorNodeSelected(object? sender, string? e) => _selectedWorldNodeIndex = e;
+    // nodeData entry of the object picked in the preview or the Objects tab
+    private int? _selectedNodeDataIndex;
+
+    private void OnSectorNodeSelected(object? sender, string? e)
+    {
+        _selectedWorldNodeIndex = e;
+        _selectedNodeDataIndex = sender is RDTMeshViewModel { LastSelectedNodeDataIndices: { } indices } &&
+                                 int.TryParse(indices.Split(',')[0].Trim(), System.Globalization.NumberStyles.None,
+                                     System.Globalization.CultureInfo.InvariantCulture, out var first)
+            ? first
+            : null;
+    }
+
+    // the Objects tab: show the object in the sector preview, which selects it when it's shown
+    private void OnSectorObjectPreviewRequested(object? sender, (int NodeIndex, int NodeDataIndex) e)
+    {
+        _selectedWorldNodeIndex = e.NodeIndex.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        _selectedNodeDataIndex = e.NodeDataIndex;
+        if (TabItemViewModels.OfType<RDTMeshViewModel>().FirstOrDefault() is { } previewTab)
+        {
+            SelectedTabItemViewModel = previewTab;
+        }
+    }
+
+    // the Objects tab: show the node in the data tab, which selects it when it's shown
+    private void OnSectorObjectOpenRequested(object? sender, int nodeIndex)
+    {
+        _selectedWorldNodeIndex = nodeIndex.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        _selectedNodeDataIndex = null;
+        if (GetMainFile() is { } dataTab)
+        {
+            SelectedTabItemViewModel = dataTab;
+        }
+    }
 
     private void OnPartNameChanged(object sender, EventArgs e)
     {
@@ -403,6 +446,10 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
                     break;
                 case RDTMeshViewModel meshTab:
                     meshTab.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                case RDTSectorObjectsViewModel objectsTab:
+                    objectsTab.NodeOpenRequested -= OnSectorObjectOpenRequested;
+                    objectsTab.PreviewOpenRequested -= OnSectorObjectPreviewRequested;
                     break;
                 case RDTDataViewModel dataViewModel when !keepRootTab:
                     dataViewModel.OnSectorNodeSelected -= OnSectorNodeSelected;
