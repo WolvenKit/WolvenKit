@@ -85,6 +85,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(UiScale),
             nameof(ShowFilePreview),
             nameof(ShowAdvancedOptions),
+            nameof(MultilayerPaletteGrid),
+            nameof(ShowColorScaleDropdown),
             nameof(RefactoringCheckboxDefaultValue),
             nameof(ShowRedmodInRibbon),
             nameof(UseValidatingEditor),
@@ -385,6 +387,18 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Import/Export: Show advanced Options", GroupName = "Interface")]
     [ObservableProperty]
     private bool _showAdvancedOptions;
+
+    [Display(Name = "Multilayer palette as a grid",
+        Description = "The colours of a layer's template as a grid (colour groups as columns, like CDPR's material browser); off: as rows (like the Blender add-on). Also the Grid / Rows switch above the palette.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _multilayerPaletteGrid = true;
+
+    [Display(Name = "Multilayer colorScale: show the name dropdown with the palette",
+        Description = "Off: the colorScale dropdown only shows when the layer's template has no palette to pick from.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showColorScaleDropdown;
 
     [Display(Name = "Update references on rename",
         Description = "When renaming or moving a file or folder, should Wolvenkit try to update all references to it?",

@@ -438,7 +438,8 @@
                 <converters:RedEditorTemplateSelector.MultilayerColorScaleEditor>
                     <DataTemplate>
                         <StackPanel>
-                            <Grid>
+                            <!-- with a palette to pick from, only shown if the setting asks for it (the palette's fallback) -->
+                            <Grid Visibility="{Binding DropdownVisibility, ElementName=ColorScalePalette}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
@@ -480,7 +481,7 @@
                                     Grid.Column="1"
                                     DataContext="{Binding}" />
                             </Grid>
-                            <editors:MultilayerPaletteView DataContext="{Binding}" />
+                            <editors:MultilayerPaletteView x:Name="ColorScalePalette" DataContext="{Binding}" />
                         </StackPanel>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.MultilayerColorScaleEditor>

@@ -78,6 +78,8 @@ public class SettingsDto : ISettingsDto
         UiScale = settings.UiScale;
         ShowFilePreview = settings.ShowFilePreview;
         ShowAdvancedOptions = settings.ShowAdvancedOptions;
+        MultilayerPaletteGrid = settings.MultilayerPaletteGrid;
+        ShowColorScaleDropdown = settings.ShowColorScaleDropdown;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
@@ -157,6 +159,8 @@ public class SettingsDto : ISettingsDto
     public int UiScale { get; set; }
     public bool ShowFilePreview { get; set; }
     public bool ShowAdvancedOptions { get; set; }
+    public bool MultilayerPaletteGrid { get; set; } = true;
+    public bool ShowColorScaleDropdown { get; set; }
     public bool RefactoringCheckboxDefaultValue { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
@@ -226,6 +230,8 @@ public class SettingsDto : ISettingsDto
         settingsManager.UiScale = UiScale;
         settingsManager.ShowFilePreview = ShowFilePreview;
         settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
+        settingsManager.MultilayerPaletteGrid = MultilayerPaletteGrid;
+        settingsManager.ShowColorScaleDropdown = ShowColorScaleDropdown;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.ShowRedmodInRibbon = ShowRedmodInRibbon;
         settingsManager.UseValidatingEditor = UseValidatingEditor;
