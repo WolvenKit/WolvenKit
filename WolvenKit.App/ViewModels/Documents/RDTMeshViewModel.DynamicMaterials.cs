@@ -61,6 +61,33 @@ public partial class RDTMeshViewModel
         }
     }
 
+    /// <summary>
+    /// Resolves the dynamic materials of the shown appearance again, as RefreshMaterialsFromDisk does
+    /// for the material entries: they are not entries of their own, so an edited .mi (the dynamic
+    /// entry's, or the one its path leads to) would otherwise keep its first copy.
+    /// </summary>
+    private void RefreshDynamicMaterials(CMesh mesh, string? meshPath)
+    {
+        if (SelectedAppearance?.RawMaterials is not { } raw)
+        {
+            return;
+        }
+
+        var chunkNames = Enumerable.Range(0, mesh.Appearances.Count)
+            .SelectMany(i => ChunkMaterialNames(mesh, i))
+            .Where(n => n.Contains('@'))
+            .Distinct();
+        foreach (var chunkName in chunkNames)
+        {
+            var name = GetUniqueMaterialName(chunkName, mesh, meshPath);
+            if (raw.TryGetValue(name, out var material) && ResolveDynamicMaterial(name, chunkName, mesh) is { } fresh)
+            {
+                material.Instance = fresh.Instance;
+                material.Values = fresh.Values;
+            }
+        }
+    }
+
     /// <summary>The material of a chunk: its own entry, else the dynamic one it names, else an empty one.</summary>
     private Material ChunkMaterial(Dictionary<string, Material> materials, string chunkName, CMesh mesh, string? meshPath = null)
     {

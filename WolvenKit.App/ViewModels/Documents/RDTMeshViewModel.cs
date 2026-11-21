@@ -3994,6 +3994,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     FillFromExternal(mat, mesh, me);
                 }
             }
+
+            RefreshDynamicMaterials(mesh, meshPath);
         }
     }
 
@@ -8117,7 +8119,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return path;
         }
 
-        WarnMissingFile("microblend", path, (context ?? "") + " - using the default microblend");
+        // "none" is how a setup says it has no microblend of its own: the default one, quietly
+        if (!string.Equals(path.GetResolvedText(), "none", StringComparison.OrdinalIgnoreCase))
+        {
+            WarnMissingFile("microblend", path, (context ?? "") + " - using the default microblend");
+        }
+
         return GetProjectOrDepotFile(s_defaultMicroblend)?.RootChunk is ITexture ? s_defaultMicroblend : path;
     }
 
