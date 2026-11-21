@@ -38,6 +38,21 @@
                             OnContent=""
                             ToolTip="Off: Grid (like CDPR's material browser). On: Rows (like the Blender add-on)"
                             Toggled="ModeSwitch_OnToggled" />
+
+                        <!-- A/B test: the stored values as they are, or converted from linear like the shader uses them -->
+                        <TextBlock
+                            Margin="12,0,6,0"
+                            VerticalAlignment="Center"
+                            Text="sRGB"
+                            ToolTip="Off: colors as stored (like the Blender add-on). On: converted from linear to sRGB, as the shader applies them" />
+                        <mah:ToggleSwitch
+                            x:Name="SrgbSwitch"
+                            MinWidth="0"
+                            VerticalAlignment="Center"
+                            OffContent=""
+                            OnContent=""
+                            ToolTip="Off: colors as stored (like the Blender add-on). On: converted from linear to sRGB, as the shader applies them"
+                            Toggled="SrgbSwitch_OnToggled" />
                     </StackPanel>
 
                     <!-- live filter (TextChanged), the search bar of the asset browser; in the corner, like the file editor's -->

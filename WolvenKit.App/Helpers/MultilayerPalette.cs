@@ -30,7 +30,18 @@ public static class MultilayerPalette
     /// The color of stored channels, shown as they are (0..1 → 0..255), like the colorScale dropdown and the
     /// add-on's palette; values outside 0..1 are clamped.
     /// </summary>
-    public static Color ToColor(float r, float g, float b) => Color.FromRgb(ToByte(r), ToByte(g), ToByte(b));
+    public static Color ToColor(float r, float g, float b) => ShowAsSrgb
+        ? Color.FromRgb(ToByte(LinearToSrgb(r)), ToByte(LinearToSrgb(g)), ToByte(LinearToSrgb(b)))
+        : Color.FromRgb(ToByte(r), ToByte(g), ToByte(b));
+
+    /// <summary>
+    /// A/B test: show the stored values as the shader applies them (a linear multiplier, so converted to sRGB
+    /// for the screen) instead of as they are. Dark values come out much lighter.
+    /// </summary>
+    public static bool ShowAsSrgb { get; set; }
+
+    private static float LinearToSrgb(float c) =>
+        !float.IsFinite(c) || c <= 0.0031308f ? c * 12.92f : (1.055f * MathF.Pow(c, 1f / 2.4f)) - 0.055f;
 
     public static Color ToColor(MultilayerPaletteColor color) => ToColor(color.R, color.G, color.B);
 

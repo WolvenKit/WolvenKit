@@ -84,6 +84,7 @@ namespace WolvenKit.Views.Editors
 
             // on = Rows
             ModeSwitch.SetCurrentValue(MahApps.Metro.Controls.ToggleSwitch.IsOnProperty, !GridMode);
+            SrgbSwitch.SetCurrentValue(MahApps.Metro.Controls.ToggleSwitch.IsOnProperty, MultilayerPalette.ShowAsSrgb);
 
             DataContextChanged += (_, _) => Subscribe();
             Loaded += (_, _) => Subscribe();
@@ -123,6 +124,15 @@ namespace WolvenKit.Views.Editors
         }
 
         private void ModeSwitch_OnToggled(object sender, RoutedEventArgs e) => SetMode(!ModeSwitch.IsOn);
+
+        private void SrgbSwitch_OnToggled(object sender, RoutedEventArgs e)
+        {
+            if (MultilayerPalette.ShowAsSrgb != SrgbSwitch.IsOn)
+            {
+                MultilayerPalette.ShowAsSrgb = SrgbSwitch.IsOn;
+                Rebuild();
+            }
+        }
 
         private void SetMode(bool grid)
         {
