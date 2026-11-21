@@ -460,6 +460,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
+        // An appearance picked after the mesh was edited (an appearance deleted, Un-Dynamify): the
+        // appearances are built anew first and the same-named one is selected in the new set.
+        if (e.PropertyName == nameof(SelectedAppearance) && SelectedAppearance is not null && RebuildMeshIfChanged())
+        {
+            base.OnPropertyChanged(e);
+            return;
+        }
+
         if (e.PropertyName == nameof(SelectedAppearance) && SelectedAppearance is not null)
         {
             // before the node tree is filled, so its check boxes read the carried state

@@ -13,6 +13,7 @@ namespace WolvenKit.App.ViewModels.Documents;
 public partial class RDTMeshViewModel
 {
     private string? _builtMeshStructure;
+    private bool _rebuildingMesh;
 
     /// <summary>
     /// Appearance names, chunk materials and material entries: what the preview's appearances are
@@ -31,25 +32,38 @@ public partial class RDTMeshViewModel
     private void RememberMeshStructure() =>
         _builtMeshStructure = _data is CMesh mesh ? MeshStructure(mesh) : null;
 
-    /// <summary>Rebuilds the appearances if the mesh changed since they were built.</summary>
-    private void RebuildMeshIfChanged()
+    /// <summary>
+    /// Rebuilds the appearances if the mesh changed since they were built, keeping the selected one
+    /// (by name) if it is still there. True if it rebuilt.
+    /// </summary>
+    private bool RebuildMeshIfChanged()
     {
-        if (_data is not CMesh mesh || !IsRendered || _builtMeshStructure is not { } before ||
+        if (_rebuildingMesh || _data is not CMesh mesh || !IsRendered || _builtMeshStructure is not { } before ||
             MeshStructure(mesh) == before)
         {
-            return;
+            return false;
         }
 
-        var selected = SelectedAppearance?.Name;
-        RollbackGeneratedData();
-        Appearances = new();
-        IsRendered = false;
-        RenderMesh();
-        OnPropertyChanged(nameof(Appearances));
-
-        if (selected != null && Appearances.FirstOrDefault(a => a.Name == selected) is { } same)
+        _rebuildingMesh = true;
+        try
         {
-            SelectedAppearance = same;
+            var selected = SelectedAppearance?.Name;
+            RollbackGeneratedData();
+            Appearances = new();
+            IsRendered = false;
+            RenderMesh();
+            OnPropertyChanged(nameof(Appearances));
+
+            if (selected != null && Appearances.FirstOrDefault(a => a.Name == selected) is { } same)
+            {
+                SelectedAppearance = same;
+            }
         }
+        finally
+        {
+            _rebuildingMesh = false;
+        }
+
+        return true;
     }
 }
