@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3308
+      author: "spuddeh"
+      description: "Large RedPackages (such as .psrep files) no longer fail to read at random with \"An item with the same key has already been added\""
