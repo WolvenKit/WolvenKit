@@ -1066,6 +1066,10 @@
                             <ComboBox Grid.Row="2" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewImageAlignments}" SelectedItem="{Binding PreviewImageAlignment}"
                                       ToolTip="Center the item, or stand it on the bottom margin (shoes, props)" />
+                            <TextBlock Grid.Row="3" Grid.Column="2" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Framing" />
+                            <ComboBox Grid.Row="3" Grid.Column="3" Margin="{DynamicResource WolvenKitMarginTiny}"
+                                      ItemsSource="{Binding PreviewImageFramings}" SelectedItem="{Binding PreviewImageFraming}"
+                                      ToolTip="Fit item: the item cropped to its pixels and fitted in, each icon framed anew. Camera view: what the camera shows, zoom and position as they are (margin and align don&apos;t apply)" />
                             <TextBlock Grid.Row="3" Grid.Column="0" Margin="{DynamicResource WolvenKitMarginTiny}" VerticalAlignment="Center" Text="Background" />
                             <ComboBox Grid.Row="3" Grid.Column="1" Margin="{DynamicResource WolvenKitMarginTiny}"
                                       ItemsSource="{Binding PreviewBackgrounds}" SelectedItem="{Binding PreviewBackground}"

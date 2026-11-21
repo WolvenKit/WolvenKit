@@ -48,7 +48,8 @@ public partial class RDTMeshViewModel
 
     public PreviewImageOption PreviewImageFormat
     {
-        get => _previewImageFormat ??= PreviewImageFormats[5];
+        // the size of an inventory icon (clothing), the most common export
+        get => _previewImageFormat ??= PreviewImageFormats[0];
         set
         {
             if (SetProperty(ref _previewImageFormat, value))
@@ -103,6 +104,23 @@ public partial class RDTMeshViewModel
         get => _previewImageAlignment;
         set => SetProperty(ref _previewImageAlignment, value);
     }
+
+    /// <summary>
+    /// What the image shows: the item cropped to its pixels and fitted in (each icon framed anew),
+    /// or what the camera sees, as zoomed and placed (cut to the image's shape).
+    /// </summary>
+    public IReadOnlyList<string> PreviewImageFramings { get; } = ["Fit item", "Camera view"];
+
+    private string _previewImageFraming = "Fit item";
+
+    public string PreviewImageFraming
+    {
+        get => _previewImageFraming;
+        set => SetProperty(ref _previewImageFraming, value);
+    }
+
+    /// <summary>The image keeps the camera's view: no framing per appearance, no crop to the item.</summary>
+    public bool KeepsCameraView => PreviewImageFraming == "Camera view";
 
     public sealed record PreviewBackgroundOption(string Label, Color? Color)
     {
@@ -503,45 +521,58 @@ public partial class RDTMeshViewModel
         await GenerateMaterials(clearCache: false, refreshFromDisk: false);
     }
 
-    /// <summary>Asks for the folder of the per-appearance icons; null if cancelled or not confirmed.</summary>
-    public string? PickPreviewIconFolder(IReadOnlyList<string> appearanceNames)
+    /// <summary>The folder the icon dialog starts with: the last one used, else the project's raw folder.</summary>
+    public string GetPreviewIconFolder()
     {
-        string? rawDir = null;
+        if (s_previewImageFolder is { } last && Directory.Exists(last))
+        {
+            return last;
+        }
+
         try
         {
-            rawDir = Parent?.GetActiveProject()?.RawDirectory;
+            return Parent?.GetActiveProject()?.RawDirectory ?? string.Empty;
         }
         catch
         {
-            // no project
+            return string.Empty; // no project
         }
+    }
 
+    /// <summary>The folder picker of the icon dialog, starting at <paramref name="current"/>; null if cancelled.</summary>
+    public string? BrowsePreviewIconFolder(string? current, int appearanceCount)
+    {
         var dlg = new Microsoft.Win32.OpenFolderDialog
         {
-            Title = $"Save icons for {appearanceNames.Count} appearances ({PreviewImageSize.Width}x{PreviewImageSize.Height})",
+            Title = $"Save icons for {appearanceCount} appearances ({PreviewImageSize.Width}x{PreviewImageSize.Height})",
         };
 
-        var initial = s_previewImageFolder is { } last && Directory.Exists(last) ? last : rawDir;
+        var initial = !string.IsNullOrEmpty(current) && Directory.Exists(current) ? current : GetPreviewIconFolder();
         if (!string.IsNullOrEmpty(initial) && Directory.Exists(initial))
         {
             dlg.InitialDirectory = initial;
         }
 
-        if (dlg.ShowDialog() != true || string.IsNullOrEmpty(dlg.FolderName))
+        return dlg.ShowDialog() == true && !string.IsNullOrEmpty(dlg.FolderName) ? dlg.FolderName : null;
+    }
+
+    /// <summary>
+    /// Checks the folder of the per-appearance icons: created if missing, and asks before icon files
+    /// that are already there are overwritten. False if it can't be used or the overwrite isn't confirmed.
+    /// </summary>
+    public bool ConfirmPreviewIconFolder(string folder, IReadOnlyList<string> appearanceNames)
+    {
+        try
         {
-            return null;
+            Directory.CreateDirectory(folder);
+        }
+        catch (Exception ex)
+        {
+            ReportPreviewImageError($"the folder can't be used: {folder} ({ex.Message})");
+            return false;
         }
 
-        var folder = dlg.FolderName;
-        var existing = 0;
-        foreach (var name in appearanceNames)
-        {
-            if (File.Exists(GetPreviewIconFileName(folder, name)))
-            {
-                existing++;
-            }
-        }
-
+        var existing = appearanceNames.Count(name => File.Exists(GetPreviewIconFileName(folder, name)));
         if (existing > 0 &&
             System.Windows.MessageBox.Show(
                 $"{existing} of the {appearanceNames.Count} icon files already exist in\n{folder}\n\nOverwrite them?",
@@ -549,11 +580,11 @@ public partial class RDTMeshViewModel
                 System.Windows.MessageBoxButton.YesNo,
                 System.Windows.MessageBoxImage.Question) != System.Windows.MessageBoxResult.Yes)
         {
-            return null;
+            return false;
         }
 
         s_previewImageFolder = folder;
-        return folder;
+        return true;
     }
 
     // ---- Icon file names: <prefix><appearance><suffix>.png, remembered per file ----
@@ -750,7 +781,8 @@ public partial class RDTMeshViewModel
         var options = new PreviewImageLayout(
             PreviewImageMargin / 100f,
             PreviewImageAlignment == "Bottom",
-            PreviewBackground.Color);
+            PreviewBackground.Color,
+            KeepsCameraView);
         try
         {
             var result = await Task.Run(() => BuildPreviewImage(overBlack, overWhite, outW, outH, options, fileName));
@@ -787,7 +819,7 @@ public partial class RDTMeshViewModel
         }
     }
 
-    private sealed record PreviewImageLayout(float Margin, bool AlignBottom, Color? Background);
+    private sealed record PreviewImageLayout(float Margin, bool AlignBottom, Color? Background, bool CameraView = false);
 
     private static (int ObjectPixels, float Upscale)? BuildPreviewImage(
         Stream overBlack, Stream overWhite, int outW, int outH, PreviewImageLayout layout, string fileName)
@@ -854,13 +886,35 @@ public partial class RDTMeshViewModel
 
         // Crop with a pixel of slack for the soft edge; fit into the output without distortion,
         // with the chosen margin, centered or standing on the bottom margin.
-        var crop = Rectangle.FromLTRB(Math.Max(0, minX - 1), Math.Max(0, minY - 1), Math.Min(w, maxX + 2), Math.Min(h, maxY + 2));
-        var margin = Math.Max(layout.Margin > 0 ? 1f : 0f, Math.Min(outW, outH) * layout.Margin);
-        var scale = Math.Min((outW - 2 * margin) / crop.Width, (outH - 2 * margin) / crop.Height);
-        var dw = crop.Width * scale;
-        var dh = crop.Height * scale;
-        var top = layout.AlignBottom ? outH - margin - dh : (outH - dh) / 2f;
-        var dest = new RectangleF((outW - dw) / 2f, top, dw, dh);
+        Rectangle crop;
+        float scale;
+        RectangleF dest;
+        if (layout.CameraView)
+        {
+            // The camera's view as it is: the largest centered part of the render with the
+            // image's shape, filling the image (margin and alignment are the camera's).
+            var aspect = (float)outW / outH;
+            int cw = w, ch = (int)MathF.Round(w / aspect);
+            if (ch > h)
+            {
+                ch = h;
+                cw = Math.Min(w, (int)MathF.Round(h * aspect));
+            }
+
+            crop = new Rectangle((w - cw) / 2, (h - ch) / 2, cw, ch);
+            scale = (float)outW / cw;
+            dest = new RectangleF(0, 0, outW, outH);
+        }
+        else
+        {
+            crop = Rectangle.FromLTRB(Math.Max(0, minX - 1), Math.Max(0, minY - 1), Math.Min(w, maxX + 2), Math.Min(h, maxY + 2));
+            var margin = Math.Max(layout.Margin > 0 ? 1f : 0f, Math.Min(outW, outH) * layout.Margin);
+            scale = Math.Min((outW - 2 * margin) / crop.Width, (outH - 2 * margin) / crop.Height);
+            var dw = crop.Width * scale;
+            var dh = crop.Height * scale;
+            var top = layout.AlignBottom ? outH - margin - dh : (outH - dh) / 2f;
+            dest = new RectangleF((outW - dw) / 2f, top, dw, dh);
+        }
 
         using var output = new Bitmap(outW, outH, PixelFormat.Format32bppPArgb);
         using (var g = Graphics.FromImage(output))

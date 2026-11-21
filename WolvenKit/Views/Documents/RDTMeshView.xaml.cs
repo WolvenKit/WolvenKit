@@ -392,21 +392,16 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            // File name (prefix / suffix, remembered per file) and, with several, which appearances.
-            var picked = PickAppearances(vm, appearances.Select(a => a.Name).ToList());
-            if (picked == null)
+            // File name (prefix / suffix, remembered per file), folder and, with several, which appearances.
+            if (PickAppearances(vm, appearances.Select(a => a.Name).ToList()) is not { } choice)
             {
                 return;
             }
+
+            var (picked, folder) = choice;
 
             appearances = appearances.Where(a => picked.Contains(a.Name)).ToList();
-            if (appearances.Count == 0)
-            {
-                return;
-            }
-
-            var folder = vm.PickPreviewIconFolder(appearances.Select(a => a.Name).ToList());
-            if (folder == null)
+            if (appearances.Count == 0 || !vm.ConfirmPreviewIconFolder(folder, appearances.Select(a => a.Name).ToList()))
             {
                 return;
             }
@@ -449,11 +444,12 @@ namespace WolvenKit.Views.Documents
                     await vm.GenerateMaterialsForPreviewImageAsync();
                     // With a camera preset each appearance is shot from the preset's view (sized
                     // to that appearance); without one it is framed from the current direction.
+                    // "Camera view" images keep the camera as it is, zoom included.
                     if (vm.ActiveCameraPreset is { } iconPreset)
                     {
                         PlaceCameraPreset(iconPreset);
                     }
-                    else
+                    else if (!vm.KeepsCameraView)
                     {
                         FrameObject();
                     }
@@ -524,10 +520,11 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Dialog of the icon batch: the file name as prefix + appearance + suffix (the prefix
         /// starts as the file's name, focused and selected; both are remembered per file), an
-        /// example name, and a checklist of the appearances (all ticked, with All / None) when
-        /// there are several. Null if cancelled. Built in code, it is only used here.
+        /// example name, the folder (typed or picked), and a checklist of the appearances (all
+        /// ticked, with All / None) when there are several. Null if cancelled. Built in code, it
+        /// is only used here.
         /// </summary>
-        private HashSet<string> PickAppearances(RDTMeshViewModel vm, IReadOnlyList<string> names)
+        private (HashSet<string> Appearances, string Folder)? PickAppearances(RDTMeshViewModel vm, IReadOnlyList<string> names)
         {
             // A TextBlock, not the string: WPF reads the first '_' of a string label as an access key and hides it.
             var boxes = names.Select(n => new CheckBox
@@ -561,6 +558,24 @@ namespace WolvenKit.Views.Documents
             nameRow.Children.Add(prefix);
 
             var example = new TextBlock { Margin = new Thickness(4, 2, 4, 8), Opacity = 0.7, TextTrimming = TextTrimming.CharacterEllipsis };
+
+            // Folder: typed, or picked with the button
+            var folderBox = new TextBox { Text = vm.GetPreviewIconFolder(), VerticalContentAlignment = VerticalAlignment.Center };
+            var browse = new Button { Content = "...", MinWidth = 28, Margin = new Thickness(4, 0, 0, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = "Pick the folder" };
+            browse.Click += (_, _) =>
+            {
+                if (vm.BrowsePreviewIconFolder(folderBox.Text, names.Count) is { } picked)
+                {
+                    folderBox.SetCurrentValue(TextBox.TextProperty, picked);
+                }
+            };
+            var folderRow = new DockPanel { Margin = new Thickness(4, 2, 4, 8) };
+            var folderLabel = new TextBlock { Text = "Folder:", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 6, 0) };
+            DockPanel.SetDock(folderLabel, Dock.Left);
+            DockPanel.SetDock(browse, Dock.Right);
+            folderRow.Children.Add(folderLabel);
+            folderRow.Children.Add(browse);
+            folderRow.Children.Add(folderBox);
             // Ticked appearances that would get the same file name (one icon would overwrite the other).
             var clashWarning = new TextBlock
             {
@@ -576,7 +591,7 @@ namespace WolvenKit.Views.Documents
             {
                 Title = "Save Appearance Icons",
                 Width = 420,
-                Height = several ? Math.Min(620, 210 + 26 * names.Count) : 170,
+                Height = several ? Math.Min(650, 240 + 26 * names.Count) : 200,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 Owner = System.Windows.Window.GetWindow(this),
                 ResizeMode = ResizeMode.CanResize,
@@ -600,7 +615,7 @@ namespace WolvenKit.Views.Documents
                 var shown = ticked.FirstOrDefault() ?? names.FirstOrDefault() ?? "";
                 example.SetCurrentValue(TextBlock.TextProperty, "→ " + RDTMeshViewModel.BuildIconFileName(prefix.Text, shown, suffix.Text));
                 selectedCount.SetCurrentValue(TextBlock.TextProperty, $"{ticked.Count} of {names.Count} selected");
-                ok.SetCurrentValue(IsEnabledProperty, ticked.Count > 0);
+                ok.SetCurrentValue(IsEnabledProperty, ticked.Count > 0 && !string.IsNullOrWhiteSpace(folderBox.Text));
 
                 var clashes = RDTMeshViewModel.FindIconFileNameClashes(prefix.Text, ticked, suffix.Text);
                 clashWarning.SetCurrentValue(TextBlock.TextProperty, clashes.Count == 0
@@ -613,6 +628,7 @@ namespace WolvenKit.Views.Documents
 
             prefix.TextChanged += (_, _) => UpdateState();
             suffix.TextChanged += (_, _) => UpdateState();
+            folderBox.TextChanged += (_, _) => UpdateState();
             boxes.ForEach(b =>
             {
                 b.Checked += (_, _) => UpdateState();
@@ -639,6 +655,7 @@ namespace WolvenKit.Views.Documents
             var top = new StackPanel();
             top.Children.Add(nameRow);
             top.Children.Add(example);
+            top.Children.Add(folderRow);
             top.Children.Add(clashWarning);
             if (several)
             {
@@ -675,7 +692,7 @@ namespace WolvenKit.Views.Documents
             }
 
             vm.StoreIconNameParts(prefix.Text, suffix.Text);
-            return boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToHashSet();
+            return (boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToHashSet(), folderBox.Text.Trim());
         }
 
         /// <summary>
