@@ -140,7 +140,9 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             else if (motionEx is animSplineCompressedMotionExtraction sc)
             {
-                var duration = sc.Duration;
+                // Spline keys are stored at a fraction of the clip (0..1); glTF keys are in seconds.
+                float duration = sc.Duration;
+                float KeyTime(float timePercent) => duration > 0f ? timePercent * duration : timePercent;
 
                 if (sc.PosKeysData != null)
                 {
@@ -168,7 +170,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
                             var x = transform.TRS.t;
 
-                            translations[RootJointIndex].Add(transform.TimePercent, ((TGVec3)transform.TRS.t)._);
+                            translations[RootJointIndex].Add(KeyTime(transform.TimePercent), ((TGVec3)transform.TRS.t)._);
                         }
                     }
                 }
@@ -197,7 +199,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                                 throw new Exception($"Motion extraction in joint {transform.JointIndex}, unable to handle this!,");
                             }
 
-                            rotations[RootJointIndex].Add(transform.TimePercent, ((RGQuat)transform.TRS.r)._);
+                            rotations[RootJointIndex].Add(KeyTime(transform.TimePercent), ((RGQuat)transform.TRS.r)._);
                         }
                     }
                 }
@@ -311,25 +313,23 @@ namespace WolvenKit.Modkit.RED4.Animation
                 break;
                 case RootMotionType.TransformSplineSparseFrames:
 
+                    // Only the root joint's keys, at a fraction of the clip (0..1) as the game stores them
+                    var duration = incomingAnimData.Duration;
+                    float ToTimePercent(float seconds) => duration > 0f ? Math.Clamp(seconds / duration, 0f, 1f) : 0f;
+
                     using (var translationsBuf = new MemoryStream())
                     using (var rotationsBuf = new MemoryStream())
                     using (var translationsBW = new BinaryWriter(translationsBuf))
                     using (var rotationsBW = new BinaryWriter(rotationsBuf))
                     {
-                        foreach (var (jointIdx, timeTranslations) in incomingAnimData.Translations)
+                        foreach (var (time, translation) in rootTranslations)
                         {
-                            foreach (var (timePercent, translation) in timeTranslations)
-                            {
-                                WriteTransform16byte(translationsBW, new(timePercent, jointIdx, TransformTypeId.Translation, (TVectorGltf(translation), null, null)));
-                            }
+                            WriteTransform16byte(translationsBW, new(ToTimePercent(time), RootJointIndex, TransformTypeId.Translation, (TVectorGltf(translation), null, null)));
                         }
 
-                        foreach (var (jointIdx, timeRotations) in incomingAnimData.Rotations)
+                        foreach (var (time, rotation) in rootRotations)
                         {
-                            foreach (var (timePercent, rotation) in timeRotations)
-                            {
-                                WriteTransform16byte(rotationsBW, new(timePercent, jointIdx, TransformTypeId.Rotation, (null, RQuaternionGltf(rotation), null)));
-                            }
+                            WriteTransform16byte(rotationsBW, new(ToTimePercent(time), RootJointIndex, TransformTypeId.Rotation, (null, RQuaternionGltf(rotation), null)));
                         }
 
                         rootMotion = new animSplineCompressedMotionExtraction {
@@ -400,7 +400,13 @@ namespace WolvenKit.Modkit.RED4.Animation
 
         internal static (Vec3 v, bool wSign) CompressQuat(Quat q)
         {
-            bool wSign = q.W < 0f;
+            // q and -q are the same rotation: keep W positive, as the game's keys are (bit 15 is never set in them)
+            if (q.W < 0f)
+            {
+                q = Quat.Negate(q);
+            }
+
+            bool wSign = false;
 
             float dotWeight = Convert.ToSingle(Math.Sqrt(2f - (1f - Math.Abs(q.W))));
 
@@ -425,17 +431,18 @@ namespace WolvenKit.Modkit.RED4.Animation
                     TimePercent = timePercentU16Ratio / (float)ushort.MaxValue,
                     JointIndex = Convert.ToUInt16((bitWiseData & JointIndexMask) >> JointIndexShift),
                     V = new(x, y, z),
-                    Wsign = 0f > Convert.ToUInt16((bitWiseData & WsignMask) >> WsignMask),
+                    Wsign = (bitWiseData & WsignMask) != 0,
                 };
         }
 
         internal static bool WriteTransformTripletRaw(BinaryWriter bw, TransformTypeId transformTypeId, float timePercent, ushort jointIndex, Vec3 transform, bool wSign)
         {
-            ushort timePercentAsU16Ratio = (ushort)(timePercent * ushort.MaxValue);
+            // Rounded, not truncated: a key read and written again keeps its exact time
+            ushort timePercentAsU16Ratio = (ushort)Math.Round(Math.Clamp(timePercent, 0f, 1f) * ushort.MaxValue);
 
             ushort bitWiseData = Convert.ToUInt16(
                 0
-                | ((wSign ? 1 : 0) << WsignMask)
+                | ((wSign ? 1 : 0) << WsignShift)
                 | ((ushort)transformTypeId << TransformTypeShift)
                 | jointIndex
             );
