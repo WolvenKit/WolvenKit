@@ -295,7 +295,10 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var appearances = vm.Appearances.Where(a => a != null).ToList();
+            // Filler appearances ("=====", "----": separators in long lists) get no icon.
+            var appearances = vm.Appearances
+                .Where(a => a != null && !WolvenKit.App.Helpers.DocumentTools.PlaceholderRegex.IsMatch(a.Name))
+                .ToList();
             if (appearances.Count == 0)
             {
                 vm.ReportPreviewImageError("no appearances to save");
