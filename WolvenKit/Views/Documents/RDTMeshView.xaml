@@ -332,7 +332,36 @@
             <TextBlock
                 Foreground="White"
                 FontSize="13"
-                Text="{Binding MaterialsProgressText}" />
+                Text="{Binding MaterialsProgressText}">
+                <!-- Slow pulse while the notice is up, so it reads as work in progress -->
+                <TextBlock.Style>
+                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMaterialsProgressVisible}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard x:Name="ProgressNoticePulse">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="Opacity"
+                                                From="1"
+                                                To="0.45"
+                                                Duration="0:0:0.9"
+                                                AutoReverse="True">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <SineEase EasingMode="EaseInOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="ProgressNoticePulse" />
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </Border>
 
         <others:LoadingTextControl

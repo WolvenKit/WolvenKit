@@ -186,6 +186,12 @@ public partial class RDTMeshViewModel
                     .First(sm => sm.MaterialName == surfaceName).Material as PBRMaterial;
                 var job = PrepareDecalJob(surfaceName, surfaceMaterial, decals);
 
+                // The notice over the viewport counts bakes that report back on the UI thread
+                if (context != null)
+                {
+                    OnDecalBakeStarted();
+                }
+
                 _ = Task.Run(async () =>
                 {
                     try
@@ -212,6 +218,7 @@ public partial class RDTMeshViewModel
                     finally
                     {
                         _decalBakesRunning.TryRemove(key, out _);
+                        context?.Post(_ => OnDecalBakeFinished(), null);
                     }
 
                     if (context != null && !_disposed)

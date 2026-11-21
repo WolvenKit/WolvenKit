@@ -1111,7 +1111,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             //GetResolvedMatrix(model, ref matrix, appModels);
             model.Transform = new MatrixTransform3D(model.Matrix.ToMatrix3D());
             if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout") ||
-                model.Name == "")
+                model.Name == "" || IsShadowMesh(model.DepotPath))
             {
                 model.IsEnabled = false;
             }
@@ -1127,6 +1127,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
         return list;
     }
+
+    /// <summary>
+    /// Shadow-only meshes (weapons: w_..._shadow.mesh) only cast the shadow in game. Their component
+    /// names don't always say so, so they are recognized by the mesh file name too.
+    /// </summary>
+    private static bool IsShadowMesh(ResourcePath depotPath) =>
+        depotPath.GetResolvedText() is string path &&
+        Path.GetFileNameWithoutExtension(path).EndsWith("_shadow", StringComparison.OrdinalIgnoreCase);
 
     private static Material CreateDefaultMaterial() => new("default")
     {
@@ -4185,7 +4193,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 for (var i = 0; i < ordered.Count; i++)
                 {
                     var (name, m) = ordered[i];
-                    MaterialsProgressText = $"Generating materials {i + 1} / {ordered.Count}: {name}";
+                    MaterialsProgressText = $"Generating materials {i + 1} / {ordered.Count}: {MaterialDisplayName(name)}";
                     var materialWatch = System.Diagnostics.Stopwatch.StartNew();
                     await LoadMaterial(m, bakeMax, forceBake);
                     logger?.Debug($"[Preview] material {i + 1} / {ordered.Count} '{name}': {materialWatch.ElapsedMilliseconds} ms");
