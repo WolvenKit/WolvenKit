@@ -1,3 +1,4 @@
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types;
@@ -24,7 +25,7 @@ public partial class worldInstancedOccluderNode : IRedAppendix
             return;
         }
 
-        var length = reader.BaseReader.ReadByte(); // Could be VLQ, didn't find any with > 128 so couldn't confirm
+        var length = reader.BaseReader.ReadVLQInt32();
         for (var i = 0; i < length; i++)
         {
             Buffer.Add(new worldInstancedOccluderNode_Buffer
@@ -45,7 +46,7 @@ public partial class worldInstancedOccluderNode : IRedAppendix
             return;
         }
 
-        writer.BaseWriter.Write((byte)Buffer.Count);
+        writer.BaseWriter.WriteVLQInt32(Buffer.Count);
         foreach (var worldInstancedOccluderNodeBuffer in Buffer)
         {
             writer.Write(worldInstancedOccluderNodeBuffer.Unknown1.X);
