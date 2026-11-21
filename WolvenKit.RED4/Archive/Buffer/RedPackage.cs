@@ -30,7 +30,7 @@ public class RedPackage : Red4File, IParseableBuffer, IRedCloneable
     public List<RedBaseClass> Chunks { get; set; } = new();
     public RedBaseClass RootChunk => Chunks[0];
 
-    public Dictionary<IRedType, CRUID> ChunkDictionary { get; set; } = new();
+    public Dictionary<IRedType, CRUID> ChunkDictionary { get; set; } = new(ReferenceEqualityComparer.Instance);
 
     public RedPackage()
     {
