@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3314
+      author: "Ametis81"
+      description: "Material preview: an approximate clear coat for multilayered_clear_coat.mt, holograms as a see-through glow with scanlines, and invisible.mt draws nothing"

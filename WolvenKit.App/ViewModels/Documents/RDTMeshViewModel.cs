@@ -1891,6 +1891,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return;
         }
 
+        if (TryGetRawMaterial(sm.MaterialName, out var invisibleMat) && IsInvisibleMaterial(invisibleMat))
+        {
+            sm.IsTransparent = true;
+            return;
+        }
+
+        if (TryGetRawMaterial(sm.MaterialName, out var holoMat) && IsHologram(holoMat))
+        {
+            // a glow seen through: blended, from both sides
+            sm.IsTransparent = true;
+            MakeTwoSided(sm);
+            return;
+        }
+
         var kind = ClassifyMaterialFor(sm.MaterialName);
 
         if (Has(kind, MaterialKind.Makeup) || Has(kind, MaterialKind.Eyebrow))
@@ -2555,6 +2569,30 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         material.UVTransform = layerTile is float t && t > 0f && Math.Abs(t - 1f) > 1e-4f
             ? new UVTransform(0f, t, t)
             : UVTransform.Identity;
+
+        // invisible.mt draws nothing, not even a shadow (blended at zero alpha, see ApplyRenderFlags)
+        if (IsInvisibleMaterial(classMat))
+        {
+            material.AlbedoMap = null;
+            material.NormalMap = null;
+            material.RoughnessMetallicMap = null;
+            material.EmissiveMap = null;
+            material.RenderAlbedoMap = false;
+            material.RenderNormalMap = false;
+            material.RenderRoughnessMetallicMap = false;
+            material.RenderEmissiveMap = false;
+            material.RenderEnvironmentMap = false;
+            material.RenderShadowMap = false;
+            material.AlbedoColor = new SharpDX.Color4(0f, 0f, 0f, 0f);
+            material.EmissiveColor = new SharpDX.Color4(0f, 0f, 0f, 0f);
+            return material;
+        }
+
+        if (IsHologram(classMat))
+        {
+            SetupHologramMaterial(material, classMat!);
+            return material;
+        }
 
         bool isSkin = Has(kind, MaterialKind.Skin);
         bool isHair = Has(kind, MaterialKind.Hair);
@@ -4290,6 +4328,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 // so keys added by a previous bake do not change the stamp.
                 var original = _originalValues.GetValue(material, m => new Dictionary<string, object>(m.Values!));
                 material.Values = new Dictionary<string, object>(original);
+            }
+
+            // A hologram only needs its scanline texture (SetupHologramMaterial draws the rest).
+            if (IsHologram(material))
+            {
+                await BakeHologramScanlines(material, forceBake);
+                return;
             }
 
             var (filename_bd, filename_bn, filename_rm) = GetMaterialFilePathsFromCache(material.Name);
@@ -12021,6 +12066,89 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// </summary>
     private bool IsOpaqueSpeedTree(Material? material) =>
         IsBarkSpeedTree(material) && !(material?.Instance is { } instance && instance.EnableMask);
+
+    /// <summary>A material on invisible.mt (e.g. base\fx\_shaders\invisible.mt): it draws nothing.</summary>
+    private bool IsInvisibleMaterial(Material? material) =>
+        GetTemplateFileName(material).Equals("invisible", StringComparison.OrdinalIgnoreCase);
+    /// <summary>hologram.mt, hologram_two_sided.mt, hologram_txaa.mt, hologram_v2.mt.</summary>
+    private bool IsHologram(Material? material) =>
+        GetTemplateFileName(material).StartsWith("hologram", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// A hologram as a flat glow, an approximation of the Blender add-on's hologram.py: the
+    /// SurfaceColor (lit side) mixed with the FallofColor, twice as saturated, emitted and seen
+    /// through (Opacity). No scanlines, dots, gradients or Fresnel falloff.
+    /// </summary>
+    private void SetupHologramMaterial(PBRMaterial material, Material raw)
+    {
+        static SharpDX.Color4 Color(object? value, float r, float g, float b) => value is CColor c
+            ? new SharpDX.Color4(c.Red / 255f, c.Green / 255f, c.Blue / 255f, 1f)
+            : new SharpDX.Color4(r / 255f, g / 255f, b / 255f, 1f);
+
+        var surface = Color(FindMaterialValue(raw, "SurfaceColor"), 73f, 168f, 246f);
+        var falloff = Color(FindMaterialValue(raw, "FallofColor"), 0f, 136f, 163f);
+        // the add-on blends a fifth of the falloff color over the surface color
+        var glow = new SharpDX.Color4(
+            surface.Red * 0.8f + falloff.Red * 0.2f,
+            surface.Green * 0.8f + falloff.Green * 0.2f,
+            surface.Blue * 0.8f + falloff.Blue * 0.2f, 1f);
+        var gray = (glow.Red + glow.Green + glow.Blue) / 3f;
+        glow = new SharpDX.Color4(
+            Math.Clamp(gray + (glow.Red - gray) * 2f, 0f, 1f),
+            Math.Clamp(gray + (glow.Green - gray) * 2f, 0f, 1f),
+            Math.Clamp(gray + (glow.Blue - gray) * 2f, 0f, 1f), 1f);
+
+        var opacity = FindMaterialValue(raw, "Opacity") is { } o ? Math.Clamp(ReadFloat(o), 0f, 1f) : 1f;
+
+        // Scanlines: the shader reads the Scanline texture from the emissive slot.
+        var scanlinePng = HologramScanlinePng(raw);
+        var hasScanlines = scanlinePng != null && File.Exists(scanlinePng);
+
+        material.AlbedoMap = null;
+        material.NormalMap = null;
+        material.RoughnessMetallicMap = null;
+        material.EmissiveMap = hasScanlines ? GetOrCreateTexture(scanlinePng!) : null;
+        material.RenderAlbedoMap = false;
+        material.RenderNormalMap = false;
+        material.RenderRoughnessMetallicMap = false;
+        material.RenderEmissiveMap = hasScanlines;
+        material.RenderEnvironmentMap = false;
+        if (material is MultilayerPBRMaterial shaderMaterial)
+        {
+            var thickness = Math.Clamp(FindMaterialFloat(raw, "ScanlineThickness") ?? -0.578947f, -4f, 1f);
+            shaderMaterial.Extras = new SurfaceExtras(
+                ScanlineDensity: hasScanlines ? Math.Max(0f, FindMaterialFloat(raw, "OpaqueScanlineDensity") ?? 400f) : 0f,
+                ScanlineStretch: 1f - thickness);
+        }
+
+        material.AlbedoColor = new SharpDX.Color4(0f, 0f, 0f, (hasScanlines ? 0.85f : 0.6f) * opacity);
+        material.EmissiveColor = glow;
+        material.MetallicFactor = 0f;
+        material.RoughnessFactor = 1f;
+    }
+
+    /// <summary>The PNG of a hologram's Scanline texture (named after its path), or null without one.</summary>
+    private string? HologramScanlinePng(Material material) =>
+        FindMaterialValue(material, "Scanline") is IRedRef { DepotPath: var path } && path != ResourcePath.Empty
+            ? Path.Combine(ISettingsManager.GetTemp_OBJPath(), $"hologram_scanline_{path.GetRedHash():X16}.png")
+            : null;
+
+    private async Task BakeHologramScanlines(Material material, bool force)
+    {
+        if (HologramScanlinePng(material) is not { } png || (!force && File.Exists(png)) ||
+            FindMaterialValue(material, "Scanline") is not IRedRef scanline)
+        {
+            return;
+        }
+
+        if (await LoadTextureAsBitmap(scanline.DepotPath) is { } bmp)
+        {
+            using (bmp)
+            {
+                SavePngAtomic(bmp, png);
+            }
+        }
+    }
 
     private string GetTemplateFileName(Material? material) =>
         Path.GetFileNameWithoutExtension(ResolveTemplatePath(material?.Instance as CMaterialInstance) ?? string.Empty);
