@@ -177,6 +177,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         if (IsLoaded)
         {
+            RebuildMeshIfChanged();
             ResumeLiveMaterialUpdate();
             return;
         }
@@ -461,6 +462,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     {
         if (e.PropertyName == nameof(SelectedAppearance) && SelectedAppearance is not null)
         {
+            // before the node tree is filled, so its check boxes read the carried state
+            CarryChunkVisibility(SelectedAppearance);
             if (SelectedAppearance.ModelGroup is not null)
             {
                 SelectedModelGroup = SelectedAppearance.ModelGroup.ToList();
@@ -719,6 +722,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         {
             return;
         }
+        RememberMeshStructure();
         var materials = new Dictionary<string, Material>();
 
         // If there are no local materials defined that we can use to render the mesh, generate one
@@ -792,10 +796,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             var appMaterials = new List<Material>();
 
-            foreach (var materialName in mmapp.ChunkMaterials)
+            foreach (var materialName in ChunkMaterialNames(data, appIndex))
             {
-                var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
-                appMaterials.Add(materials.TryGetValue(name, out var material) ? material : new Material(name));
+                appMaterials.Add(ChunkMaterial(materials, materialName, data));
             }
 
             var appearance = new Appearance(mmapp.Name.ToString().NotNull());
@@ -1305,18 +1308,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             var handle = mesh.Appearances[appIndex];
             if (handle.GetValue() is meshMeshAppearance mmApp)
             {
-                foreach (var m in mmApp.ChunkMaterials)
+                foreach (var m in ChunkMaterialNames(mesh, appIndex))
                 {
                     chunkMaterialNames.Add(m.ToString() ?? string.Empty);
-                    var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh, meshPath);
-                    if (materials.TryGetValue(name, out var material))
-                    {
-                        appMaterials.Add(material);
-                    }
-                    else
-                    {
-                        appMaterials.Add(new Material(name));
-                    }
+                    appMaterials.Add(ChunkMaterial(materials, m.ToString().NotNull(), mesh, meshPath));
                 }
             }
         }
@@ -1821,12 +1816,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             // Mesh material preview in WolvenKit - safe material selection
             var chosenMatName = "default";
-            if (appearanceIndex >= 0 &&
-                appearanceIndex < cMesh.Appearances.Count &&
-                cMesh.Appearances[appearanceIndex].GetValue() is meshMeshAppearance meshApp &&
-                index < meshApp.ChunkMaterials.Count)
+            if (ChunkMaterialNames(cMesh, appearanceIndex) is { } chunkNames && index < chunkNames.Count)
             {
-                chosenMatName = meshApp.ChunkMaterials[index].ToString().NotNull();
+                chosenMatName = chunkNames[index];
             }
             else if (mesh.materialNames is { Length: > 0 } matNames)
             {
@@ -3014,11 +3006,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                     material.RenderEmissiveMap = false;
                 }
 
-                bool scaleBlack = false;
-                if (TryGetRawMaterial(name, out var scaleMat) &&
-                    scaleMat?.Values?.TryGetValue("BaseColorScale", out var scObj) == true &&
-                    scObj is Vector4 sc && sc.X < 0.05f && sc.Y < 0.05f && sc.Z < 0.05f)
-                    scaleBlack = true;
+                var scaleBlack = TryGetBaseColorScale(name, out var sc) && sc.X < 0.05f && sc.Y < 0.05f && sc.Z < 0.05f;
 
                 if (File.Exists(emissivePng))
                 {
@@ -3058,11 +3046,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 // scale is already multiplied into the PNG (see the BaseColor bake), so do not
                 // apply it a second time here. Otherwise use it as the tint.
                 var albedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
-                if (TryGetRawMaterial(name, out var matScale) &&
-                    matScale?.Values?.TryGetValue("BaseColorScale", out var scaleObj) == true &&
-                    scaleObj is Vector4 v4)
+                if (TryGetRawMaterial(name, out var matScale) && TryGetBaseColorScale(matScale?.Values, out var v4))
                 {
-                    var scaleBakedIn = matScale.Values.TryGetValue("BaseColor", out var bcObj) &&
+                    var scaleBakedIn = matScale!.Values.TryGetValue("BaseColor", out var bcObj) &&
                                        bcObj is CResourceReference<ITexture>;
                     albedoColor = scaleBakedIn
                         ? new SharpDX.Color4(1f, 1f, 1f, v4.W)
@@ -3783,10 +3769,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             return materials.Values.ToList();
         }
 
-        foreach (var materialName in meshApp.ChunkMaterials)
+        var meshAppIndex = mesh.Appearances.Select(x => x?.Chunk).ToList().IndexOf(meshApp);
+        foreach (var materialName in ChunkMaterialNames(mesh, meshAppIndex))
         {
-            var name = GetUniqueMaterialName(materialName.ToString().NotNull(), mesh, meshPath);
-            appMaterials.Add(materials.TryGetValue(name, out var m) ? m : new Material(name));
+            appMaterials.Add(ChunkMaterial(materials, materialName, mesh, meshPath));
         }
 
         return appMaterials;
@@ -3889,24 +3875,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// which is what the editor shows and edits, so unsaved edits in the open mesh reach
     /// the preview; then the raw buffer and the preload list (older files).
     /// </summary>
-    private static CMaterialInstance? GetLocalMaterialInstance(CMesh mesh, int index)
-    {
-        if (index < 0)
-            return null;
-
-        if (mesh.LocalMaterialBuffer?.Materials is { } edited && index < edited.Count &&
-            edited[index] is CMaterialInstance fromEditor)
-            return fromEditor;
-
-        if (mesh.LocalMaterialBuffer?.RawData?.Buffer.Data is CR2WList raw && index < raw.Files.Count &&
-            raw.Files[index].RootChunk is CMaterialInstance fromRaw)
-            return fromRaw;
-
-        if (index < mesh.PreloadLocalMaterialInstances.Count)
-            return mesh.PreloadLocalMaterialInstances[index]?.GetValue() as CMaterialInstance;
-
-        return null;
-    }
+    private static CMaterialInstance? GetLocalMaterialInstance(CMesh mesh, int index) =>
+        MeshMaterialLists.GetLocalMaterial(mesh, index) as CMaterialInstance;
 
     /// <summary>
     /// Depot-relative path of the open document (e.g. base\...\x.mesh): project files are
@@ -3931,76 +3901,59 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
     private void FillFromExternal(Material material, CMesh mesh, CMeshMaterialEntry me)
     {
-        // Check externalMaterials
-        if (me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count)
+        var path = MeshMaterialLists.GetExternalMaterialPath(mesh, me.Index);
+        var root = path != ResourcePath.Empty ? GetProjectOrDepotFile(path)?.RootChunk : null;
+        if (root is CMaterialInstance instance)
         {
-            var extRef = mesh.ExternalMaterials[me.Index];
-            var extFile = GetProjectOrDepotFile(extRef.DepotPath);
-            if (extFile?.RootChunk is CMaterialInstance extInst)
+            material.Instance = instance;
+            foreach (var pair in instance.Values)
             {
-                material.Instance = extInst;
-                foreach (var pair in extInst.Values)
-                {
-                    var k = pair.Key.ToString().NotNull();
-                    material.Values[k] = pair.Value;
-                }
-                return;
+                var k = pair.Key.ToString().NotNull();
+                material.Values[k] = pair.Value;
             }
-        }
-
-        // Check preloadExternalMaterials
-        if (mesh.PreloadExternalMaterials != null &&
-            me.Index >= 0 && me.Index < mesh.PreloadExternalMaterials.Count)
-        {
-            var preRef = mesh.PreloadExternalMaterials[me.Index];
-            var preFile = GetProjectOrDepotFile(preRef.DepotPath);
-            if (preFile?.RootChunk is CMaterialInstance preInst)
-            {
-                material.Instance = preInst;
-                foreach (var pair in preInst.Values)
-                {
-                    var k = pair.Key.ToString().NotNull();
-                    material.Values[k] = pair.Value;
-                }
-                return;
-            }
+            return;
         }
 
         // A mesh may point straight at a material template (.mt / .remt) instead of an instance:
         // that is valid, the template's defaults apply. Treat it as an instance without values
         // whose base is the template, so the base-material chain reads the defaults.
-        // (ExternalMaterials are async references, PreloadExternalMaterials plain ones: compare paths.)
-        var templatePath = me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count
-            ? mesh.ExternalMaterials[me.Index].DepotPath
-            : mesh.PreloadExternalMaterials != null && me.Index >= 0 && me.Index < mesh.PreloadExternalMaterials.Count
-                ? mesh.PreloadExternalMaterials[me.Index].DepotPath
-                : ResourcePath.Empty;
-        if (templatePath != ResourcePath.Empty &&
-            GetProjectOrDepotFile(templatePath)?.RootChunk is CMaterialTemplate)
+        if (root is CMaterialTemplate)
         {
             material.Instance = new CMaterialInstance
             {
-                BaseMaterial = new CResourceReference<IMaterial>(templatePath)
+                BaseMaterial = new CResourceReference<IMaterial>(path)
             };
             return;
         }
 
-        var label = SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name;
-        var extPath = me.Index >= 0 && me.Index < mesh.ExternalMaterials.Count
-            ? mesh.ExternalMaterials[me.Index].DepotPath
-            : mesh.PreloadExternalMaterials != null && me.Index >= 0 && me.Index < mesh.PreloadExternalMaterials.Count
-                ? mesh.PreloadExternalMaterials[me.Index].DepotPath
-                : ResourcePath.Empty;
-        if (extPath != ResourcePath.Empty)
+        // An entry no chunk uses (a "----- merged from …" separator, a leftover) shows nothing.
+        if (!IsUsedByChunks(mesh, me.Name.GetResolvedText() ?? string.Empty))
         {
-            WarnMissingFile("material", extPath, label);
+            return;
+        }
+
+        var label = SubmeshComponent.StripMeshPrefix(material.Name) ?? material.Name;
+        if (path != ResourcePath.Empty)
+        {
+            WarnMissingFile("material", path, label);
         }
         else
         {
+            var lists = MeshMaterialLists.HasPreloadMaterials(mesh) ? "preloadExternalMaterials" : "externalMaterials";
             Parent?.GetLoggerService()?.Warning(
-                $"[Preview] {label}: external material index {me.Index} is outside externalMaterials ({mesh.ExternalMaterials.Count}) and preloadExternalMaterials ({mesh.PreloadExternalMaterials?.Count ?? 0})");
+                $"[Preview] {label}: external material index {me.Index} is outside {lists} ({MeshMaterialLists.GetExternalMaterials(mesh).Count})");
         }
     }
+
+    /// <summary>
+    /// Whether an appearance of the mesh draws a chunk with this material entry: by name, or a
+    /// dynamic entry "@neon" through its "red@neon" chunks.
+    /// </summary>
+    private static bool IsUsedByChunks(CMesh mesh, string entryName) =>
+        mesh.Appearances.Select(a => a?.Chunk).OfType<meshMeshAppearance>()
+            .SelectMany(a => a.ChunkMaterials)
+            .Select(c => c.GetResolvedText() ?? string.Empty)
+            .Any(c => c == entryName || (entryName.StartsWith('@') && c.EndsWith(entryName, StringComparison.Ordinal)));
 
     private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh, string? meshPath = null)
     {
@@ -4116,6 +4069,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     /// </param>
     private async Task GenerateMaterials(bool clearCache, bool refreshFromDisk = true, bool rebuildMaterials = false)
     {
+        if (!IsLoadingMaterials)
+        {
+            // the mesh may have changed in the editor while the preview was shown (toolbar actions)
+            RebuildMeshIfChanged();
+        }
+
         if (IsLoadingMaterials || SelectedAppearance == null)
         {
             if (SelectedAppearance == null)
@@ -6409,13 +6368,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                     }
 
-                    if (matIndex >= 0 && meshData.LocalMaterialBuffer?.Materials != null &&
-                        matIndex < meshData.LocalMaterialBuffer.Materials.Count)
+                    if (GetLocalMaterialInstance(meshData, matIndex) is { } localMi)
                     {
-                        if (meshData.LocalMaterialBuffer.Materials[matIndex] is CMaterialInstance localMi)
-                        {
-                            material.Instance = localMi;
-                        }
+                        material.Instance = localMi;
                     }
                 }
 
@@ -7681,21 +7636,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         }
                     }
 
-                    // BaseColorScale
-                    if (albedoBmp != null && dictionary.TryGetValue("BaseColorScale", out var scaleObj))
+                    if (albedoBmp != null)
                     {
-                        float r = 1f, g = 1f, b = 1f;
-
-                        var scaleType = scaleObj.GetType().Name;
-
-                        if (scaleObj is Vector4 v4)
-                        {
-                            r = v4.X;
-                            g = v4.Y;
-                            b = v4.Z;
-                        }
-
-                        ApplyBaseColorScale(albedoBmp, r, g, b);
+                        ApplyBaseColorScale(albedoBmp, dictionary);
                     }
 
                     if (albedoBmp != null)
@@ -7903,11 +7846,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                             bmpSource.Freeze();
                         using var bmp = BitmapSourceToBitmap(bmpSource);
 
-                        // Apply BaseColorScale (e.g. nails use 0,0,0 for black)
-                        if (dictionary.TryGetValue("BaseColorScale", out var scaleObj) && scaleObj is Vector4 v4)
-                        {
-                            ApplyBaseColorScale(bmp, v4.X, v4.Y, v4.Z);
-                        }
+                        // BaseColorScale (e.g. nails use 0,0,0 for black)
+                        ApplyBaseColorScale(bmp, dictionary);
 
                         // Opaque vegetation (trunks, bark): the diffuse alpha is not coverage.
                         if (IsOpaqueSpeedTree(material))
@@ -11185,6 +11125,35 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
     }
 
     private static byte LinearToSrgbByte(float x) => (byte)Math.Clamp((int)MathF.Round(LinearToSrgb01(x) * 255f), 0, 255);
+
+    /// <summary>The BaseColorScale among a material's values (r, g, b, a), if it has one.</summary>
+    private static bool TryGetBaseColorScale(IReadOnlyDictionary<string, object>? values, [System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out Vector4 scale)
+    {
+        if (values != null && values.TryGetValue("BaseColorScale", out var value) && value is Vector4 v4)
+        {
+            scale = v4;
+            return true;
+        }
+
+        scale = null;
+        return false;
+    }
+
+    /// <summary>The BaseColorScale of the named material of the shown appearance, if it has one.</summary>
+    private bool TryGetBaseColorScale(string materialName, [System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out Vector4 scale)
+    {
+        scale = null;
+        return TryGetRawMaterial(materialName, out var material) && TryGetBaseColorScale(material?.Values, out scale);
+    }
+
+    /// <summary>Multiplies a baked albedo by the material's BaseColorScale, if it has one.</summary>
+    private static void ApplyBaseColorScale(Bitmap bmp, IReadOnlyDictionary<string, object> values)
+    {
+        if (TryGetBaseColorScale(values, out var scale))
+        {
+            ApplyBaseColorScale(bmp, scale.X, scale.Y, scale.Z);
+        }
+    }
 
     /// <summary>
     /// Multiplies an sRGB albedo by BaseColorScale the way the shader does: in linear space

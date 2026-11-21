@@ -1500,9 +1500,7 @@ public partial class RDTMeshViewModel
         material.RenderEnvironmentMap = false;
 
         var albedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
-        if (TryGetRawMaterial(name, out var raw) &&
-            raw?.Values?.TryGetValue("BaseColorScale", out var scaleObj) == true &&
-            scaleObj is Vector4 v4)
+        if (TryGetBaseColorScale(name, out var v4))
         {
             albedoColor = new SharpDX.Color4(v4.X, v4.Y, v4.Z, v4.W);
         }
