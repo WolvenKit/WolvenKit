@@ -57,7 +57,8 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             var simdBlockWidth = 4; // 128 bits
             var simdBlockPadding = (uint)simdBlockWidth - 1U;
-            var numJointsSimdAligned = (animBufSimd.NumJoints - animBufSimd.NumExtraJoints + simdBlockPadding) & (~simdBlockPadding);
+            // The buffer stores rotations (and per-frame scales) for all NumJoints, extra joints included
+            var numJointsSimdAligned = (animBufSimd.NumJoints + simdBlockPadding) & (~simdBlockPadding);
 
             uint frameCount = animBufSimd.NumFrames;
             float frameTime = animBufSimd.Duration / (frameCount - 1);
