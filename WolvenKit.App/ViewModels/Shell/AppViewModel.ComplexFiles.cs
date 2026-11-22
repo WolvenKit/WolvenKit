@@ -438,6 +438,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             baseMeshToRefits.Add(dialogModel.MaleBaseMesh, refitOptions);
         }
 
+        var xlFilePath = activeProject.ResourceFiles.FirstOrDefault(f => f.EndsWith(".xl"));
         foreach (var (baseMesh, refitMeshes) in baseMeshToRefits)
         {
             var sourcePath = Path.Join(activeProject.ModDirectory, baseMesh);
@@ -453,7 +454,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                          .Where(absolutePath => !File.Exists(absolutePath)))
             {
                 File.Copy(sourcePath, absolutePath);
-                if (_cr2WTools.ReadCr2W(absolutePath) is not { RootChunk: CMesh mesh } cr2W)
+                if (string.IsNullOrEmpty(xlFilePath) || _cr2WTools.ReadCr2W(absolutePath) is not
+                        { RootChunk: CMesh mesh } cr2W)
                 {
                     continue;
                 }
@@ -462,7 +464,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 _cr2WTools.WriteCr2W(cr2W, absolutePath);
             }
 
-            if (activeProject.ResourceFiles.FirstOrDefault(f => f.EndsWith(".xl")) is string xlFilePath)
+            if (!string.IsNullOrEmpty(xlFilePath))
             {
                 YamlHelper.AddResourcePatchEntry(
                     Path.Join(activeProject.ResourcesDirectory, xlFilePath), baseMesh, refitMeshes);
