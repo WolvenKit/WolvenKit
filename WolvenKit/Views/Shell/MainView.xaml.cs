@@ -207,9 +207,9 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
-                Interactions.ShowGenerateRefitMeshesDialogue = activeProject =>
+                Interactions.ShowGenerateRefitMeshesDialogue = args =>
                 {
-                    var dialog = new GenerateRefitMeshesDialog(activeProject);
+                    var dialog = new GenerateRefitMeshesDialog(args.activeProject, args.SettingsManager);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

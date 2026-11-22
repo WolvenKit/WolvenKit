@@ -311,7 +311,9 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to generate refit mesh copies from base_body meshes.
     /// </summary>
-    public static Func<Cp77Project, GenerateRefitMeshesDialogViewModel?> ShowGenerateRefitMeshesDialogue { get; set; } =
+    public static
+        Func<(Cp77Project activeProject, ISettingsManager SettingsManager), GenerateRefitMeshesDialogViewModel?>
+        ShowGenerateRefitMeshesDialogue { get; set; } =
         _ => throw new NotImplementedException();
 
     /// <summary>

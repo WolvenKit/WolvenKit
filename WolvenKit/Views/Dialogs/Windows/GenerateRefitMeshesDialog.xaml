@@ -5,10 +5,11 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Generate refit meshes"
     Width="{StaticResource WolvenKitDialogWidth}"
-    MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
-    MinHeight="{StaticResource WolvenKitDialogHeightMedium}"
+    MinWidth="{StaticResource WolvenKitDialogWidth}"
+    MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
     Padding="{DynamicResource WolvenKitMarginTop}"
     Background="{DynamicResource BackgroundColor_Control}"
     SizeToContent="WidthAndHeight"
@@ -103,14 +104,12 @@
                         x:Name="FemaleBaseMeshTextBox"
                         Grid.Row="6"
                         Grid.Column="1"
-                        Grid.ColumnSpan="5"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}" />
+                        Grid.ColumnSpan="5" />
 
                     <Label
                         Grid.Row="8"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
                         Content="Refits" />
 
@@ -118,9 +117,22 @@
                         x:Name="FemaleRefitsTextBox"
                         Grid.Row="8"
                         Grid.Column="1"
-                        Grid.ColumnSpan="5"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        Grid.ColumnSpan="4"
                         ToolTip="Comma-separated list, e.g. ebbp, ebbrb, ebbwtfbbq" />
+
+                    <Button
+                        x:Name="WriteFemaleRefitsButton"
+                        Grid.Row="8"
+                        Grid.Column="5"
+                        Margin="{StaticResource WolvenKitMarginTinyLeft}"
+                        Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        ToolTip="Save to Wolvenkit settings"
+                        Click="WriteFemaleRefitsButton_OnClick">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentSaveMove"
+                            Size="{DynamicResource WolvenKitIconMicro}" />
+                    </Button>
 
                     <Label
                         Grid.Row="10"
@@ -141,14 +153,12 @@
                         x:Name="MaleBaseMeshTextBox"
                         Grid.Row="14"
                         Grid.Column="1"
-                        Grid.ColumnSpan="5"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}" />
+                        Grid.ColumnSpan="5" />
 
                     <Label
                         Grid.Row="16"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
                         Content="Refits" />
 
@@ -156,9 +166,22 @@
                         x:Name="MaleRefitsTextBox"
                         Grid.Row="16"
                         Grid.Column="1"
-                        Grid.ColumnSpan="5"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        Grid.ColumnSpan="4"
                         ToolTip="Comma-separated list, e.g. atlas, gymfiend, ebbwtfbbq" />
+
+                    <Button
+                        x:Name="WriteMaleRefitsButton"
+                        Grid.Row="16"
+                        Grid.Column="5"
+                        Margin="{StaticResource WolvenKitMarginTinyLeft}"
+                        Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        ToolTip="Save to Wolvenkit settings"
+                        Click="WriteMaleRefitsButton_OnClick">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentSaveMove"
+                            Size="{DynamicResource WolvenKitIconMicro}" />
+                    </Button>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

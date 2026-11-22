@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -16,10 +17,13 @@ public partial class GenerateRefitMeshesDialogViewModel : ObservableObject
     [ObservableProperty] private string _maleRefits = "";
     [ObservableProperty] private string _femaleRefits = "";
 
-    public GenerateRefitMeshesDialogViewModel(Cp77Project activeProject)
+    public GenerateRefitMeshesDialogViewModel(Cp77Project activeProject, ISettingsManager? settingsManager)
     {
         var baseBodyMeshes = activeProject.ModFiles.Where(f => f.Contains("base_body") && f.EndsWith(".mesh")).ToList();
         MaleBaseMeshOptions = baseBodyMeshes.Where(f => f.Contains("pma")).ToDictionary(f => f, f => f);
         FemaleBaseMeshOptions = baseBodyMeshes.Where(f => f.Contains("pwa")).ToDictionary(f => f, f => f);
+
+        FemaleRefits = settingsManager?.RefitFemalePresets ?? "";
+        MaleRefits = settingsManager?.RefitMalePresets ?? "";
     }
 }

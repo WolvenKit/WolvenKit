@@ -86,6 +86,8 @@ public class SettingsDto : ISettingsDto
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         IsDiscordRPCEnabled = settings.IsDiscordRPCEnabled;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
+        RefitFemalePresets = settings.RefitFemalePresets;
+        RefitMalePresets = settings.RefitMalePresets;
         UseAuthorNameAsSubfolder = settings.UseAuthorNameAsSubfolder;
 
         MigrateSettings();
@@ -166,6 +168,8 @@ public class SettingsDto : ISettingsDto
     public bool IsDiscordRPCEnabled { get; set; } = true;
     public bool UseAuthorNameAsSubfolder { get; set; }
     public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
+    public string RefitFemalePresets { get; set; } = "lush, elegy, angel, ebb, ebbp, ebbrb, ebbprb, rb, flat, vvs";
+    public string RefitMalePresets { get; set; } = "atlas, gymfiend";
 
     #endregion
 
@@ -233,6 +237,8 @@ public class SettingsDto : ISettingsDto
         settingsManager.IsDiscordRPCEnabled = IsDiscordRPCEnabled;
         settingsManager.UseAuthorNameAsSubfolder = UseAuthorNameAsSubfolder;
         settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
+        settingsManager.RefitFemalePresets = RefitFemalePresets;
+        settingsManager.RefitMalePresets = RefitMalePresets;
 
         return settingsManager;
     }

@@ -5,16 +5,20 @@ using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 
 public partial class GenerateRefitMeshesDialog : IViewFor<GenerateRefitMeshesDialogViewModel>
 {
-    public GenerateRefitMeshesDialog(Cp77Project activeProject)
+    private readonly ISettingsManager _settingsManager;
+
+    public GenerateRefitMeshesDialog(Cp77Project activeProject, ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
         InitializeComponent();
-        ViewModel = new GenerateRefitMeshesDialogViewModel(activeProject);
+        ViewModel = new GenerateRefitMeshesDialogViewModel(activeProject, settingsManager);
         DataContext = ViewModel;
 
         Owner = Application.Current.MainWindow;
@@ -72,4 +76,25 @@ public partial class GenerateRefitMeshesDialog : IViewFor<GenerateRefitMeshesDia
         Owner = owner;
         return ShowDialog();
     }
+
+    private void WriteFemaleRefitsButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_settingsManager is null || ViewModel is null)
+        {
+            return;
+        }
+
+        _settingsManager.RefitFemalePresets = ViewModel.FemaleRefits;
+    }
+
+    private void WriteMaleRefitsButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_settingsManager is null || ViewModel is null)
+        {
+            return;
+        }
+
+        _settingsManager.RefitMalePresets = ViewModel.MaleRefits;
+    }
+
 }

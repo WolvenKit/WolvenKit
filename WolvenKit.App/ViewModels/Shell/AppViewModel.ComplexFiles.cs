@@ -414,13 +414,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-
-        var dialogModel = Interactions.ShowGenerateRefitMeshesDialogue(activeProject);
+        var dialogModel = Interactions.ShowGenerateRefitMeshesDialogue((activeProject, SettingsManager));
         if (dialogModel is null)
         {
             return;
         }
-
         var baseMeshToRefits = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
         if (!string.IsNullOrEmpty(dialogModel.FemaleBaseMesh) && !string.IsNullOrEmpty(dialogModel.FemaleRefits))
         {
