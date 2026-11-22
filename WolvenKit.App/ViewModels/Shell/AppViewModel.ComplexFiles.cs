@@ -424,7 +424,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             var refits = Array.ConvertAll(dialogModel.FemaleRefits.Split(','), p => p.Trim());
             var refitOptions = refits
-                .Select(refit => dialogModel.FemaleBaseMesh.Replace("base_body", refit))
+                .Select(refit => dialogModel.FemaleBaseMesh.Replace("base_body", refit).ToArchiveFilePath())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
             baseMeshToRefits.Add(dialogModel.FemaleBaseMesh, refitOptions);
         }
@@ -433,7 +433,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             var refits = Array.ConvertAll(dialogModel.MaleRefits.Split(','), p => p.Trim());
             var refitOptions = refits
-                .Select(refit => dialogModel.MaleBaseMesh.Replace("base_body", refit))
+                .Select(refit => dialogModel.MaleBaseMesh.Replace("base_body", refit).ToArchiveFilePath())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
             baseMeshToRefits.Add(dialogModel.MaleBaseMesh, refitOptions);
         }
