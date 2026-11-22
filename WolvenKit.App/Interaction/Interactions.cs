@@ -309,6 +309,12 @@ public static class Interactions
         _ => throw new NotImplementedException();
 
     /// <summary>
+    /// Shows dialogue to generate refit mesh copies from base_body meshes.
+    /// </summary>
+    public static Func<Cp77Project, GenerateRefitMeshesDialogViewModel?> ShowGenerateRefitMeshesDialogue { get; set; } =
+        _ => throw new NotImplementedException();
+
+    /// <summary>
     /// Shows dialogue to pick from a list of options.
     /// </summary>
     public static Func<ChecklistDialogOptions, ShowChecklistDialogViewModel?> ShowChecklistDialogue { get; set; } =

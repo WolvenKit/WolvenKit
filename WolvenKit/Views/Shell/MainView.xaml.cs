@@ -207,6 +207,17 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
+                Interactions.ShowGenerateRefitMeshesDialogue = activeProject =>
+                {
+                    var dialog = new GenerateRefitMeshesDialog(activeProject);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowCopyMeshAppearancesDialogue = (args) =>
                 {
                     var dialog = new CopyMeshAppearancesDialog(args.options, args.filterDefaultValue);
