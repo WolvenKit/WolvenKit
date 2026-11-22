@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3316
+      author: "manavortex"
+      description: "Added a CVM refresh after deleting unused materials/un-dynamify"
