@@ -370,4 +370,31 @@ public static class YamlHelper
     }
 
 
+    public static void AddResourcePatchEntry(string xlAbsolutePath, string patchSource,
+        HashSet<string> patchlings)
+    {
+        if (!File.Exists(xlAbsolutePath))
+        {
+            return;
+        }
+
+        var rootNode = ReadYamlAsNodes(xlAbsolutePath) ?? new YamlMappingNode();
+
+
+        var resourceNode = EnsureNestedMapping(rootNode, "resource");
+        var patchNode = EnsureNestedMapping(rootNode, "resource", "patch");
+
+        if (patchlings.Count == 0)
+        {
+            resourceNode.Children.Remove(new YamlScalarNode(patchSource));
+            return;
+        }
+
+        foreach (var patchling in patchlings.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+        {
+            AddToScalarOrSequence(patchNode, patchSource, patchling, StringComparison.OrdinalIgnoreCase);
+        }
+
+        WriteYaml(xlAbsolutePath, rootNode);
+    }
 }

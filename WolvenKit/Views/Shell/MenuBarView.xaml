@@ -183,6 +183,21 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <!-- Generate refit meshes -->
+                    <MenuItem
+                        x:Name="MenuItemGenerateRefitMeshes"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Refit meshes"
+                        ToolTip="Generates base_body refit meshes and updates ArchiveXL patch entries">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="Hanger"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{DynamicResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                     <Separator />
 
                     <!-- Player head -->

@@ -95,6 +95,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ReopenFiles),
             nameof(ShowVerboseLogOutput),
             nameof(IsDiscordRPCEnabled),
+            nameof(RefitFemalePresets),
+            nameof(RefitMalePresets),
             nameof(UseAuthorNameAsSubfolder)
             )
           .Subscribe(_ =>
@@ -436,6 +438,18 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private string _archiveNamesExcludeFromScan = "basegame_AMM_Props";
+
+    [Display(Name = "Default female refits (comma separated)",
+        Description = "Used to prefill the Generate refit meshes female list.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private string _refitFemalePresets = "lush, elegy, angel, ebb, ebbp, ebbrb, ebbprb, rb, flat, vvs";
+
+    [Display(Name = "Default male refits (comma separated)",
+        Description = "Used to prefill the Generate refit meshes male list.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private string _refitMalePresets = "atlas, gymfiend";
 
     #endregion
 

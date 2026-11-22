@@ -14,6 +14,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4.Types;
 using YamlDotNet.RepresentationModel;
 
 namespace WolvenKit.App.ViewModels.Shell;
@@ -412,6 +413,72 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         TemplateFileTools.GeneratePropFiles(dialogModel);
         _loggerService.Success($"{dialogModel.PropName} was created and registered!");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GenerateRefitMeshes()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        var dialogModel = Interactions.ShowGenerateRefitMeshesDialogue((activeProject, SettingsManager));
+        if (dialogModel is null)
+        {
+            return;
+        }
+        var baseMeshToRefits = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrEmpty(dialogModel.FemaleBaseMesh) && !string.IsNullOrEmpty(dialogModel.FemaleRefits))
+        {
+            var refits = Array.ConvertAll(dialogModel.FemaleRefits.Split(','), p => p.Trim());
+            var refitOptions = refits
+                .Select(refit => dialogModel.FemaleBaseMesh.Replace("base_body", refit).ToArchiveFilePath())
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            baseMeshToRefits.Add(dialogModel.FemaleBaseMesh, refitOptions);
+        }
+
+        if (!string.IsNullOrEmpty(dialogModel.MaleBaseMesh) && !string.IsNullOrEmpty(dialogModel.MaleRefits))
+        {
+            var refits = Array.ConvertAll(dialogModel.MaleRefits.Split(','), p => p.Trim());
+            var refitOptions = refits
+                .Select(refit => dialogModel.MaleBaseMesh.Replace("base_body", refit).ToArchiveFilePath())
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            baseMeshToRefits.Add(dialogModel.MaleBaseMesh, refitOptions);
+        }
+
+        var xlFilePath = activeProject.ResourceFiles.FirstOrDefault(f => f.EndsWith(".xl"));
+        foreach (var (baseMesh, refitMeshes) in baseMeshToRefits)
+        {
+            var sourcePath = Path.Join(activeProject.ModDirectory, baseMesh);
+            if (!File.Exists(sourcePath))
+            {
+                _notificationService.Error($"Base mesh file {baseMesh} does not exist in the project.");
+                _loggerService.Error($"Base mesh file {baseMesh} does not exist in the project.");
+                continue;
+            }
+
+            foreach (var absolutePath in refitMeshes
+                         .Select(refit => Path.Join(activeProject.ModDirectory, refit))
+                         .Where(absolutePath => !File.Exists(absolutePath)))
+            {
+                File.Copy(sourcePath, absolutePath);
+                if (string.IsNullOrEmpty(xlFilePath) || _cr2WTools.ReadCr2W(absolutePath) is not
+                        { RootChunk: CMesh mesh } cr2W)
+                {
+                    continue;
+                }
+
+                _documentTools.ClearMeshMaterials(mesh);
+                _cr2WTools.WriteCr2W(cr2W, absolutePath);
+            }
+
+            if (!string.IsNullOrEmpty(xlFilePath))
+            {
+                YamlHelper.AddResourcePatchEntry(
+                    Path.Join(activeProject.ResourcesDirectory, xlFilePath), baseMesh, refitMeshes);
+            }
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
