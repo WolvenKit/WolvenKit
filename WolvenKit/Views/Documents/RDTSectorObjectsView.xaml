@@ -129,6 +129,10 @@
                         ToolTip="streaming / sectors / nodeDeletions for the selected rows: index (nodeData), type, expectedNodes"
                         Click="CopyXlRemoval_OnClick" />
                     <MenuItem
+                        Header="Copy ArchiveXL mutation (.xl)"
+                        ToolTip="streaming / sectors / nodeMutations for the selected rows: index, type and their current position, orientation and scale to edit"
+                        Click="CopyXlMutation_OnClick" />
+                    <MenuItem
                         Header="Copy class, indices and position"
                         Command="{Binding CopySummaryCommand}" />
                 </ContextMenu>

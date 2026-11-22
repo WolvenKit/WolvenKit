@@ -61,6 +61,9 @@ namespace WolvenKit.Views.Documents
         private void CopyXlRemoval_OnClick(object sender, RoutedEventArgs e) =>
             _viewModel?.CopyXlRemoval(ObjectsGrid.SelectedItems.OfType<SectorObject>());
 
+        private void CopyXlMutation_OnClick(object sender, RoutedEventArgs e) =>
+            _viewModel?.CopyXlMutation(ObjectsGrid.SelectedItems.OfType<SectorObject>());
+
         private void BuildView()
         {
             if (_viewModel is null)

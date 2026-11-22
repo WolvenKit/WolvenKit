@@ -332,6 +332,21 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
         Clipboard.SetText(SectorObjectList.BuildXlRemoval(RelativeFilePath, Objects.Count, items));
     }
 
+    /// <summary>
+    /// An ArchiveXL mutation (see <see cref="SectorObjectList.BuildXlMutation"/>) of the selected rows, with their
+    /// current transforms to edit.
+    /// </summary>
+    public void CopyXlMutation(IEnumerable<SectorObject> selected)
+    {
+        var items = selected.ToList();
+        if (items.Count == 0)
+        {
+            return;
+        }
+
+        Clipboard.SetText(SectorObjectList.BuildXlMutation(RelativeFilePath, Objects.Count, items));
+    }
+
     /// <summary>Class, indices, resource and position: what an .xl removal or a bug report needs.</summary>
     [RelayCommand]
     private void CopySummary(SectorObject? item)

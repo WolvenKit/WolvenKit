@@ -111,6 +111,14 @@ public sealed class SectorObject
 
     public float Z { get; init; }
 
+    /// <summary>The nodeData entry's own transform, which an .xl mutation sets (for instanced meshes, the origin of their instances).</summary>
+    public (float X, float Y, float Z) EntryPosition { get; init; }
+
+    /// <summary>The entry's rotation as i, j, k, r.</summary>
+    public (float I, float J, float K, float R) EntryOrientation { get; init; } = (0, 0, 0, 1);
+
+    public (float X, float Y, float Z) EntryScale { get; init; } = (1, 1, 1);
+
     /// <summary>"#157 · node 1057[12]"</summary>
     public string Where => InnerIndex >= 0
         ? $"#{NodeDataIndex} · node {NodeIndex}[{InnerIndex}]"
@@ -272,6 +280,9 @@ public static class SectorObjectList
                 X = x,
                 Y = y,
                 Z = z,
+                EntryPosition = ((float)entry.Transform.Position.X, (float)entry.Transform.Position.Y, (float)entry.Transform.Position.Z),
+                EntryOrientation = (entry.Transform.Orientation.I, entry.Transform.Orientation.J, entry.Transform.Orientation.K, entry.Transform.Orientation.R),
+                EntryScale = (entry.Scale.X, entry.Scale.Y, entry.Scale.Z),
             });
         }
 
@@ -415,6 +426,69 @@ public static class SectorObjectList
         }
 
         return text.ToString();
+    }
+
+    /// <summary>
+    /// An ArchiveXL mutation of these objects: the same sector header as a removal, then for each object its
+    /// <c>index</c> (the nodeData entry) and <c>type</c> with its current <c>position</c>, <c>orientation</c> (i, j, k, r)
+    /// and <c>scale</c>, ready to edit. Debug name, resource and appearance go in comments, as in WolvenBench's
+    /// "Copy AXL node mutation", so the file says what each entry is.
+    /// </summary>
+    public static string BuildXlMutation(string sectorPath, int expectedNodes, IEnumerable<SectorObject> objects)
+    {
+        var text = new StringBuilder();
+        text.AppendLine(CultureInfo.InvariantCulture, $"# Game version: {GameVersionText((int)gameGameVersion.Current)}");
+        text.AppendLine("streaming:");
+        text.AppendLine("  sectors:");
+        text.AppendLine(CultureInfo.InvariantCulture, $"    - path: {sectorPath.Replace('/', '\\')}");
+        text.AppendLine(CultureInfo.InvariantCulture, $"      expectedNodes: {expectedNodes}");
+        text.AppendLine("      nodeMutations:");
+        foreach (var o in objects.OrderBy(o => o.NodeDataIndex))
+        {
+            text.AppendLine(CultureInfo.InvariantCulture, $"        - index: {o.NodeDataIndex}");
+            if (o.DebugName is { Length: > 0 })
+            {
+                text.AppendLine(CultureInfo.InvariantCulture, $"          # [Debug Name: {o.DebugName}]");
+            }
+
+            text.AppendLine(CultureInfo.InvariantCulture, $"          type: {o.ClassName}");
+            if (o.Resource is { Length: > 0 })
+            {
+                text.AppendLine(CultureInfo.InvariantCulture, $"          # resource: {o.Resource}");
+            }
+
+            if (o.Appearance is { Length: > 0 })
+            {
+                text.AppendLine(CultureInfo.InvariantCulture, $"          # appearance: {o.Appearance}");
+            }
+
+            var (x, y, z) = o.EntryPosition;
+            var (i, j, k, r) = o.EntryOrientation;
+            var (sx, sy, sz) = o.EntryScale;
+            text.AppendLine(CultureInfo.InvariantCulture, $"          position: [{Number(x)}, {Number(y)}, {Number(z)}, 0.0]");
+            text.AppendLine(CultureInfo.InvariantCulture, $"          orientation: [{Number(i)}, {Number(j)}, {Number(k)}, {Number(r)}]");
+            text.AppendLine(CultureInfo.InvariantCulture, $"          scale: [{Number(sx)}, {Number(sy)}, {Number(sz)}]");
+        }
+
+        return text.ToString();
+    }
+
+    /// <summary>
+    /// The shortest text that reads back as the same float ("3280.36", not 3280.360107), at most 6 decimals and at
+    /// least one: a world position's step is 1/131072.
+    /// </summary>
+    internal static string Number(float value)
+    {
+        if (!float.IsFinite(value))
+        {
+            return "0.0";
+        }
+
+        var shortest = decimal.Parse(value.ToString("R", CultureInfo.InvariantCulture), NumberStyles.Float, CultureInfo.InvariantCulture);
+        var rounded = Math.Round(shortest, 6);
+
+        // no "-0.0" for -0 or a tiny negative
+        return rounded == 0m ? "0.0" : rounded.ToString("0.0#####", CultureInfo.InvariantCulture);
     }
 
     /// <summary>"2.5" for 2500, "2.31" for 2310 (patch 2.3, hotfix 1), as the game and modding tools name versions.</summary>

@@ -65,6 +65,63 @@ public class SectorObjectListTests
     }
 
     [Fact]
+    public void BuildXlMutation_EntryTransformWithComments()
+    {
+        var tower = new SectorObject
+        {
+            NodeDataIndex = 75, NodeIndex = 40, InnerIndex = -1, ClassName = "worldStaticMeshNode",
+            Group = "Static mesh", Name = "electric_tower_b_base_metal.mesh", Variant = 0, VariantName = "Persistent",
+            DebugName = "electric_tower_b_base_metal",
+            Resource = "base\\environment\\architecture\\common\\electric_tower\\electric_tower_b_base_metal.mesh",
+            EntryPosition = (3280.36f, 458.198f, 110.715f),
+            EntryOrientation = (-0.015f, -0.003f, 0.974f, -0.225f),
+            EntryScale = (0.594f, 0.594f, 0.594f),
+        };
+        var lamp = new SectorObject
+        {
+            NodeDataIndex = 12, NodeIndex = 3, InnerIndex = 2, ClassName = "worldCookedStaticMeshNode",
+            Group = "Static mesh", Name = "lamp.mesh", Variant = 0, VariantName = "Persistent",
+            Resource = "base\\lamp.mesh", Appearance = "red",
+        };
+
+        var xl = SectorObjectList.BuildXlMutation("base/worlds/x/exterior_51_7_1_0.streamingsector", 104, [tower, lamp]);
+
+        Assert.Equal(
+            "# Game version: 2.5\n" +
+            "streaming:\n" +
+            "  sectors:\n" +
+            "    - path: base\\worlds\\x\\exterior_51_7_1_0.streamingsector\n" +
+            "      expectedNodes: 104\n" +
+            "      nodeMutations:\n" +
+            "        - index: 12\n" +
+            "          type: worldCookedStaticMeshNode\n" +
+            "          # resource: base\\lamp.mesh\n" +
+            "          # appearance: red\n" +
+            "          position: [0.0, 0.0, 0.0, 0.0]\n" +
+            "          orientation: [0.0, 0.0, 0.0, 1.0]\n" +
+            "          scale: [1.0, 1.0, 1.0]\n" +
+            "        - index: 75\n" +
+            "          # [Debug Name: electric_tower_b_base_metal]\n" +
+            "          type: worldStaticMeshNode\n" +
+            "          # resource: base\\environment\\architecture\\common\\electric_tower\\electric_tower_b_base_metal.mesh\n" +
+            "          position: [3280.36, 458.198, 110.715, 0.0]\n" +
+            "          orientation: [-0.015, -0.003, 0.974, -0.225]\n" +
+            "          scale: [0.594, 0.594, 0.594]\n",
+            xl.ReplaceLineEndings("\n"));
+    }
+
+    [Theory]
+    [InlineData(3280.36f, "3280.36")]
+    [InlineData(-0.225f, "-0.225")]
+    [InlineData(1f, "1.0")]
+    [InlineData(-0f, "0.0")]
+    [InlineData(1e-7f, "0.0")]
+    [InlineData(-1e-7f, "0.0")]
+    [InlineData(0.70710677f, "0.707107")]
+    public void Number_ShortestUpToSixDecimals(float value, string expected) =>
+        Assert.Equal(expected, SectorObjectList.Number(value));
+
+    [Fact]
     public void BuildXlRemoval_TickedInstances_OnlyThose()
     {
         var hedge = new SectorObject
