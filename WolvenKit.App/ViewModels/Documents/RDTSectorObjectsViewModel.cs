@@ -12,7 +12,7 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.App.ViewModels.Documents;
 
 /// <summary>
-/// The "Objects" tab of a sector: every object of the sector on its own row (one per nodeData entry), grouped by
+/// The "Sector Objects" tab of a sector: every object of the sector on its own row (one per nodeData entry), grouped by
 /// variant and by kind, with the class, the indices, the flags and whether it's hidden. Cooked nodes (game 2.5) are
 /// unpacked, so an object inside one is found by name like any other.
 /// </summary>
@@ -24,7 +24,7 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
 
     private readonly worldStreamingSector _sector;
 
-    public RDTSectorObjectsViewModel(worldStreamingSector sector, RedDocumentViewModel file) : base(file, "Objects")
+    public RDTSectorObjectsViewModel(worldStreamingSector sector, RedDocumentViewModel file) : base(file, "Sector Objects")
     {
         _sector = sector;
         Categories = [AllCategories, .. SectorObjectList.CategoryNames];
@@ -319,9 +319,10 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
 
     /// <summary>
     /// An ArchiveXL removal (see <see cref="SectorObjectList.BuildXlRemoval"/>) of the selected rows and of every row
-    /// with instances or actors ticked.
+    /// with instances or actors ticked. With <paramref name="entriesOnly"/>, only the entries, for a sector the file
+    /// already has.
     /// </summary>
-    public void CopyXlRemoval(IEnumerable<SectorObject> selected)
+    public void CopyXlRemoval(IEnumerable<SectorObject> selected, bool entriesOnly = false)
     {
         var items = selected.Union(Objects.Where(o => o.Elements.Any(e => e.IsChecked))).ToList();
         if (items.Count == 0)
@@ -329,14 +330,15 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
             return;
         }
 
-        Clipboard.SetText(SectorObjectList.BuildXlRemoval(RelativeFilePath, Objects.Count, items));
+        Clipboard.SetText(SectorObjectList.BuildXlRemoval(RelativeFilePath, Objects.Count, items, entriesOnly));
     }
 
     /// <summary>
     /// An ArchiveXL mutation (see <see cref="SectorObjectList.BuildXlMutation"/>) of the selected rows, with their
-    /// current transforms to edit.
+    /// current transforms to edit. With <paramref name="entriesOnly"/>, only the entries, for a sector the file
+    /// already has.
     /// </summary>
-    public void CopyXlMutation(IEnumerable<SectorObject> selected)
+    public void CopyXlMutation(IEnumerable<SectorObject> selected, bool entriesOnly = false)
     {
         var items = selected.ToList();
         if (items.Count == 0)
@@ -344,7 +346,7 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
             return;
         }
 
-        Clipboard.SetText(SectorObjectList.BuildXlMutation(RelativeFilePath, Objects.Count, items));
+        Clipboard.SetText(SectorObjectList.BuildXlMutation(RelativeFilePath, Objects.Count, items, entriesOnly));
     }
 
     /// <summary>Class, indices, resource and position: what an .xl removal or a bug report needs.</summary>

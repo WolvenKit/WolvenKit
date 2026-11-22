@@ -124,14 +124,26 @@
                         Header="Show node in the data tab"
                         Command="{Binding OpenInDataCommand}" />
                     <Separator />
-                    <MenuItem
-                        Header="Copy ArchiveXL removal (.xl)"
-                        ToolTip="streaming / sectors / nodeDeletions for the selected rows: index (nodeData), type, expectedNodes"
-                        Click="CopyXlRemoval_OnClick" />
-                    <MenuItem
-                        Header="Copy ArchiveXL mutation (.xl)"
-                        ToolTip="streaming / sectors / nodeMutations for the selected rows: index, type and their current position, orientation and scale to edit"
-                        Click="CopyXlMutation_OnClick" />
+                    <MenuItem Header="Copy ArchiveXL removal (.xl)">
+                        <MenuItem
+                            Header="Whole file"
+                            ToolTip="Game version line, streaming / sectors, this sector's path and expectedNodes, then nodeDeletions for the selected rows (index, type)"
+                            Click="CopyXlRemoval_OnClick" />
+                        <MenuItem
+                            Header="Entries only"
+                            ToolTip="Only the selected rows' entries, indented to go under nodeDeletions of this sector in a file that already has it"
+                            Click="CopyXlRemovalEntries_OnClick" />
+                    </MenuItem>
+                    <MenuItem Header="Copy ArchiveXL mutation (.xl)">
+                        <MenuItem
+                            Header="Whole file"
+                            ToolTip="Game version line, streaming / sectors, this sector's path and expectedNodes, then nodeMutations for the selected rows: index, type and their current position, orientation and scale to edit"
+                            Click="CopyXlMutation_OnClick" />
+                        <MenuItem
+                            Header="Entries only"
+                            ToolTip="Only the selected rows' entries, indented to go under nodeMutations of this sector in a file that already has it. A sector with only nodeDeletions so far needs a nodeMutations: line above them, at the same indent as nodeDeletions:"
+                            Click="CopyXlMutationEntries_OnClick" />
+                    </MenuItem>
                     <MenuItem
                         Header="Copy class, indices and position"
                         Command="{Binding CopySummaryCommand}" />

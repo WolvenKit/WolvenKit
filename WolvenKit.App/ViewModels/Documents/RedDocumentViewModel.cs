@@ -382,7 +382,7 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
 
     private string? _selectedWorldNodeIndex;
 
-    // nodeData entry of the object picked in the preview or the Objects tab
+    // nodeData entry of the object picked in the preview or the Sector Objects tab
     private int? _selectedNodeDataIndex;
 
     private void OnSectorNodeSelected(object? sender, string? e)
@@ -395,7 +395,7 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
             : null;
     }
 
-    // the Objects tab: show the object in the sector preview, which selects it when it's shown
+    // the Sector Objects tab: show the object in the sector preview, which selects it when it's shown
     private void OnSectorObjectPreviewRequested(object? sender, (int NodeIndex, int NodeDataIndex) e)
     {
         _selectedWorldNodeIndex = e.NodeIndex.ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -406,7 +406,7 @@ public partial class RedDocumentViewModel : DocumentViewModel, IDisposable
         }
     }
 
-    // the Objects tab: show the node in the data tab, which selects it when it's shown
+    // the Sector Objects tab: show the node in the data tab, which selects it when it's shown
     private void OnSectorObjectOpenRequested(object? sender, int nodeIndex)
     {
         _selectedWorldNodeIndex = nodeIndex.ToString(System.Globalization.CultureInfo.InvariantCulture);

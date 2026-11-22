@@ -6,7 +6,7 @@ namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// The target group of each world node class, as RedHotTools' world inspector groups them (Mesh, Collision,
-/// Area, Audio...), so the Objects tab of a sector filters like its targeting modes.
+/// Area, Audio...), so the Sector Objects tab of a sector filters like its targeting modes.
 /// From support/cet/modules/world/data/target-group-mapping.lua of https://github.com/psiberx/cp2077-red-hot-tools
 /// (MIT License, Copyright (c) 2022 Pavel Siberx).
 /// </summary>

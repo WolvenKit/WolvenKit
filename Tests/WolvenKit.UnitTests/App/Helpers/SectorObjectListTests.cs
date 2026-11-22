@@ -110,6 +110,38 @@ public class SectorObjectListTests
             xl.ReplaceLineEndings("\n"));
     }
 
+    [Fact]
+    public void EntriesOnly_NoHeader_SameIndent()
+    {
+        var poster = new SectorObject
+        {
+            NodeDataIndex = 2141, NodeIndex = 544, InnerIndex = 0, ClassName = "worldCookedStaticMeshNode",
+            Group = "Static mesh", Name = "poster_b.mesh", Variant = 0, VariantName = "Persistent",
+            X = 1, Y = 2, Z = 3,
+            EntryPosition = (1, 2, 3),
+        };
+
+        var removal = SectorObjectList.BuildXlRemoval("x.streamingsector", 10, [poster], entriesOnly: true);
+        Assert.Equal(
+            "        # poster_b.mesh (Persistent) at 1, 2, 3\n" +
+            "        - index: 2141\n" +
+            "          type: worldCookedStaticMeshNode\n",
+            removal.ReplaceLineEndings("\n"));
+
+        var mutation = SectorObjectList.BuildXlMutation("x.streamingsector", 10, [poster], entriesOnly: true);
+        Assert.Equal(
+            "        - index: 2141\n" +
+            "          type: worldCookedStaticMeshNode\n" +
+            "          position: [1.0, 2.0, 3.0, 0.0]\n" +
+            "          orientation: [0.0, 0.0, 0.0, 1.0]\n" +
+            "          scale: [1.0, 1.0, 1.0]\n",
+            mutation.ReplaceLineEndings("\n"));
+
+        // the entries line up under the whole file's list
+        Assert.EndsWith(mutation, SectorObjectList.BuildXlMutation("x.streamingsector", 10, [poster]));
+        Assert.EndsWith(removal, SectorObjectList.BuildXlRemoval("x.streamingsector", 10, [poster]));
+    }
+
     [Theory]
     [InlineData(3280.36f, "3280.36")]
     [InlineData(-0.225f, "-0.225")]

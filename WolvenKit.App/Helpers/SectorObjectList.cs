@@ -396,17 +396,17 @@ public static class SectorObjectList
     /// class of its node, as ArchiveXL checks them; <c>expectedNodes</c> counts the nodeData entries. An object with
     /// some (not all) of its instances or actors ticked keeps the others: only those are removed
     /// (instanceDeletions / actorDeletions, with the count ArchiveXL expects). A comment above each entry names it.
+    /// With <paramref name="entriesOnly"/>, only the entries, indented to go under the nodeDeletions of a sector the
+    /// file already has.
     /// </summary>
-    public static string BuildXlRemoval(string sectorPath, int expectedNodes, IEnumerable<SectorObject> objects)
+    public static string BuildXlRemoval(string sectorPath, int expectedNodes, IEnumerable<SectorObject> objects, bool entriesOnly = false)
     {
         var text = new StringBuilder();
-        // ArchiveXL Sector Updater and Removal Editor read the game version a file was made for from this line
-        text.AppendLine(CultureInfo.InvariantCulture, $"# Game version: {GameVersionText((int)gameGameVersion.Current)}");
-        text.AppendLine("streaming:");
-        text.AppendLine("  sectors:");
-        text.AppendLine(CultureInfo.InvariantCulture, $"    - path: {sectorPath.Replace('/', '\\')}");
-        text.AppendLine(CultureInfo.InvariantCulture, $"      expectedNodes: {expectedNodes}");
-        text.AppendLine("      nodeDeletions:");
+        if (!entriesOnly)
+        {
+            AppendXlHeader(text, sectorPath, expectedNodes, "nodeDeletions");
+        }
+
         foreach (var o in objects.OrderBy(o => o.NodeDataIndex))
         {
             var detail = o.Detail is { Length: > 0 } d ? $", {d}" : "";
@@ -432,17 +432,17 @@ public static class SectorObjectList
     /// An ArchiveXL mutation of these objects: the same sector header as a removal, then for each object its
     /// <c>index</c> (the nodeData entry) and <c>type</c> with its current <c>position</c>, <c>orientation</c> (i, j, k, r)
     /// and <c>scale</c>, ready to edit. Debug name, resource and appearance go in comments, as in WolvenBench's
-    /// "Copy AXL node mutation", so the file says what each entry is.
+    /// "Copy AXL node mutation", so the file says what each entry is. With <paramref name="entriesOnly"/>, only the
+    /// entries, indented to go under the nodeMutations of a sector the file already has.
     /// </summary>
-    public static string BuildXlMutation(string sectorPath, int expectedNodes, IEnumerable<SectorObject> objects)
+    public static string BuildXlMutation(string sectorPath, int expectedNodes, IEnumerable<SectorObject> objects, bool entriesOnly = false)
     {
         var text = new StringBuilder();
-        text.AppendLine(CultureInfo.InvariantCulture, $"# Game version: {GameVersionText((int)gameGameVersion.Current)}");
-        text.AppendLine("streaming:");
-        text.AppendLine("  sectors:");
-        text.AppendLine(CultureInfo.InvariantCulture, $"    - path: {sectorPath.Replace('/', '\\')}");
-        text.AppendLine(CultureInfo.InvariantCulture, $"      expectedNodes: {expectedNodes}");
-        text.AppendLine("      nodeMutations:");
+        if (!entriesOnly)
+        {
+            AppendXlHeader(text, sectorPath, expectedNodes, "nodeMutations");
+        }
+
         foreach (var o in objects.OrderBy(o => o.NodeDataIndex))
         {
             text.AppendLine(CultureInfo.InvariantCulture, $"        - index: {o.NodeDataIndex}");
@@ -471,6 +471,21 @@ public static class SectorObjectList
         }
 
         return text.ToString();
+    }
+
+    /// <summary>
+    /// The start of an .xl file for one sector, down to its list of entries: the game version line (ArchiveXL Sector
+    /// Updater and Removal Editor read the version a file was made for from it), streaming / sectors, the sector's path
+    /// and expectedNodes, and the list's key.
+    /// </summary>
+    private static void AppendXlHeader(StringBuilder text, string sectorPath, int expectedNodes, string listKey)
+    {
+        text.AppendLine(CultureInfo.InvariantCulture, $"# Game version: {GameVersionText((int)gameGameVersion.Current)}");
+        text.AppendLine("streaming:");
+        text.AppendLine("  sectors:");
+        text.AppendLine(CultureInfo.InvariantCulture, $"    - path: {sectorPath.Replace('/', '\\')}");
+        text.AppendLine(CultureInfo.InvariantCulture, $"      expectedNodes: {expectedNodes}");
+        text.AppendLine(CultureInfo.InvariantCulture, $"      {listKey}:");
     }
 
     /// <summary>

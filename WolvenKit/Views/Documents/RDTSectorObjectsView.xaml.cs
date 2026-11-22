@@ -11,7 +11,7 @@ using WolvenKit.App.ViewModels.Documents;
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
-    /// The Objects tab of a sector. The rows are grouped by node range and kind here, and filtered with the view
+    /// The Sector Objects tab of a sector. The rows are grouped by node range and kind here, and filtered with the view
     /// model's <see cref="RDTSectorObjectsViewModel.Matches"/>.
     /// </summary>
     public partial class RDTSectorObjectsView : UserControl
@@ -61,8 +61,14 @@ namespace WolvenKit.Views.Documents
         private void CopyXlRemoval_OnClick(object sender, RoutedEventArgs e) =>
             _viewModel?.CopyXlRemoval(ObjectsGrid.SelectedItems.OfType<SectorObject>());
 
+        private void CopyXlRemovalEntries_OnClick(object sender, RoutedEventArgs e) =>
+            _viewModel?.CopyXlRemoval(ObjectsGrid.SelectedItems.OfType<SectorObject>(), entriesOnly: true);
+
         private void CopyXlMutation_OnClick(object sender, RoutedEventArgs e) =>
             _viewModel?.CopyXlMutation(ObjectsGrid.SelectedItems.OfType<SectorObject>());
+
+        private void CopyXlMutationEntries_OnClick(object sender, RoutedEventArgs e) =>
+            _viewModel?.CopyXlMutation(ObjectsGrid.SelectedItems.OfType<SectorObject>(), entriesOnly: true);
 
         private void BuildView()
         {
