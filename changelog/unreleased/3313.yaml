@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3313
+      author: "Ametis81"
+      description: "Delete Unused Materials keeps the external materials the mesh uses, and Un-Dynamify Materials points the new entries at the materials added for them"
