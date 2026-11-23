@@ -58,6 +58,9 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        private void ShowInPreview_OnClick(object sender, RoutedEventArgs e) =>
+            _viewModel?.ShowInPreview(ObjectsGrid.SelectedItems.OfType<SectorObject>());
+
         private void CopyXlRemoval_OnClick(object sender, RoutedEventArgs e) =>
             _viewModel?.CopyXlRemoval(ObjectsGrid.SelectedItems.OfType<SectorObject>());
 
@@ -66,6 +69,9 @@ namespace WolvenKit.Views.Documents
 
         private void CopyXlMutation_OnClick(object sender, RoutedEventArgs e) =>
             _viewModel?.CopyXlMutation(ObjectsGrid.SelectedItems.OfType<SectorObject>());
+
+        private void CopySummary_OnClick(object sender, RoutedEventArgs e) =>
+            _viewModel?.CopySummary(ObjectsGrid.SelectedItems.OfType<SectorObject>());
 
         private void CopyXlMutationEntries_OnClick(object sender, RoutedEventArgs e) =>
             _viewModel?.CopyXlMutation(ObjectsGrid.SelectedItems.OfType<SectorObject>(), entriesOnly: true);
@@ -100,6 +106,13 @@ namespace WolvenKit.Views.Documents
             if (ObjectsGrid.ItemsSource is ICollectionView view)
             {
                 view.Refresh();
+            }
+
+            // search cleared: back to the selected row (its group stays open), not to the top of the whole list
+            if (_viewModel is { IsFiltering: false, SelectedObject: { } selected } && _viewModel.Matches(selected))
+            {
+                Dispatcher.BeginInvoke(new Action(() => ObjectsGrid.ScrollIntoView(selected)),
+                    System.Windows.Threading.DispatcherPriority.ContextIdle);
             }
         }
 

@@ -98,12 +98,29 @@ public sealed partial class ThemeService
 
     private void OnElementLoaded(object sender, RoutedEventArgs e)
     {
+        if (sender is Window window)
+        {
+            ApplyWindowBorder(window);
+        }
+
         // Many views merge their own copy of the HandyControl theme (<hc:ThemeResources/> in
         // UserControl.Resources). Patch those local dictionaries right away; HandyControl styles use
         // DynamicResource, so the view picks the colors up immediately.
-        if (_patchedTheme is not null && sender is FrameworkElement element && HasOwnResources(element))
+        if (_patchedTheme is not null && sender is FrameworkElement element && IsWolvenKitView(element))
         {
-            if (ScanDictionary(element.Resources, null, null, false) > 0)
+            var found = 0;
+            if (HasOwnResources(element))
+            {
+                found += ScanDictionary(element.Resources, null, null, false);
+            }
+
+            // most dialogs merge it one level down, in the Resources of their root Grid
+            if ((element as ContentControl)?.Content is FrameworkElement root && HasOwnResources(root))
+            {
+                found += ScanDictionary(root.Resources, null, null, false);
+            }
+
+            if (found > 0)
             {
                 PatchSources(_patchedTheme);
             }
@@ -119,15 +136,17 @@ public sealed partial class ThemeService
     /// Views and dialogs of WolvenKit itself. FrameworkElement.Resources creates an empty dictionary on first
     /// access, so it is only touched for these (not for every small UserControl like icons).
     /// </summary>
-    private static bool HasOwnResources(FrameworkElement element)
+    private static bool IsWolvenKitView(FrameworkElement element)
     {
         var type = element.GetType();
         return type.Namespace?.StartsWith("WolvenKit.Views", StringComparison.Ordinal) == true
                && (type.Name.EndsWith("View", StringComparison.Ordinal)
                    || type.Name.EndsWith("Dialog", StringComparison.Ordinal)
-                   || type.Name.EndsWith("Window", StringComparison.Ordinal))
-               && (element.Resources.Count > 0 || element.Resources.MergedDictionaries.Count > 0);
+                   || type.Name.EndsWith("Window", StringComparison.Ordinal));
     }
+
+    private static bool HasOwnResources(FrameworkElement element) =>
+        element.Resources.Count > 0 || element.Resources.MergedDictionaries.Count > 0;
 
     private void RescanAndPatch()
     {
@@ -607,6 +626,7 @@ public sealed partial class ThemeService
     private void PatchSources(ThemeDto theme)
     {
         _patchedTheme = theme;
+        ApplyWindowBorders();
         var map = BuildColorMap(theme);
         var neutralMapper = BuildNeutralMapper(theme);
 

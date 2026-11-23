@@ -1558,6 +1558,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if ((args.Position - down).Length < 4)
         {
             ClearSelection();
+            ClearSectorPick();
         }
     }
 
@@ -1567,6 +1568,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         RetoreSelectedMeshMaterial();
         CurrentSelection.Unselect();
         SelectedItem = null;
+    }
+
+    /// <summary>
+    /// Nothing picked in the sector any more: the data tab and the Sector Objects tab drop the object too.
+    /// </summary>
+    private void ClearSectorPick()
+    {
+        if (LastSelectedNodeDataIndices is null && SelectedNodeIndex is null)
+        {
+            return;
+        }
+
+        SelectedNodeIndex = null;
+        SelectedNodeDataIndex = null;
+        LastSelectedNodeDataIndices = null;
+        OnSectorNodeSelected?.Invoke(this, null);
     }
 
 
@@ -1609,36 +1626,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
             if (ShiftKeyPressed)
             {
-                if (Camera != null)
-                {
-                    // Zoom to the selected submesh
-                    var v = submesh.BoundsWithTransform;
-
-                    // Calculate the center of the bbox
-                    SharpDX.Vector3 bboxCenter = new SharpDX.Vector3(v.Center.X, v.Center.Y, v.Center.Z);
-
-                    // Calculate the extent of the bbox along each axis
-                    SharpDX.Vector3 bboxExtent = v.Maximum - v.Minimum;
-
-                    // Calculate the maximum extent of the bbox
-                    float maxExtent = Math.Max(bboxExtent.X, Math.Max(bboxExtent.Y, bboxExtent.Z));
-
-                    // Calculate the distance from the camera to ensure the entire bbox is visible
-                    float distance = maxExtent / (float)Math.Tan(SharpDX.MathUtil.DegreesToRadians(45.0f) / 2); // Assuming 45 degree field of view
-
-                    SharpDX.Vector3 CameraPos = new SharpDX.Vector3((float)Camera.Position.X, (float)Camera.Position.Y, (float)Camera.Position.Z);
-
-                    // Calculate the new camera position and target
-                    SharpDX.Vector3 newPosition = bboxCenter + SharpDX.Vector3.Normalize(CameraPos - bboxCenter) * distance;
-                    SharpDX.Vector3 newDirection = SharpDX.Vector3.Normalize(bboxCenter - newPosition);
-
-
-                    Camera?.AnimateTo(
-                    new System.Windows.Media.Media3D.Point3D(newPosition.X, newPosition.Y, newPosition.Z),
-                    new Vector3D(newDirection.X, newDirection.Y, newDirection.Z),
-                    new Vector3D(0, 1, 0),
-                    s_cameraAnimationTime);
-                }
+                // Zoom to the selected submesh
+                ZoomToBounds(submesh.BoundsWithTransform);
             }
         }
 
@@ -2002,8 +1991,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (sm.IsTransparent || !TryGetRawMaterial(sm.MaterialName, out var alphaMat) || alphaMat.Values == null)
             return;
 
-        // Vegetation: leaves and fronds are cut-out cards seen from both sides (one-sided
-        // trunks and seams stay culled).
+        // Vegetation: leaves and fronds are cut-out cards seen from both sides; bark (one-sided trunks, seams)
+        // stays culled, opaque or cut out by its enableMask.
         if (IsSpeedTreeMaterial(alphaMat))
         {
             if (IsOpaqueSpeedTree(alphaMat))
@@ -2011,7 +2000,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 return; // trunks / bark: opaque whatever the diffuse alpha holds
             }
 
-            MakeTwoSided(sm);
+            if (!IsBarkSpeedTree(alphaMat))
+            {
+                MakeTwoSided(sm);
+            }
         }
 
         // Cutout / masked materials (chains, fences, foliage). The bake makes their alpha binary;
@@ -4479,7 +4471,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution) &&
                 (File.Exists(filename_rm) || !IsDeferredGlass(material.Name, material)) &&
                 (File.Exists(filename_bd) || !IsSpeedTreeMaterial(material)) &&
-                (!IsOpaqueSpeedTree(material) || File.Exists(filename_bd + ".opaque")))
+                (!IsOpaqueSpeedTree(material) || File.Exists(filename_bd + ".opaque")) &&
+                // bark with enableMask was baked opaque before (black where its alpha cuts it out): bake it again
+                (IsOpaqueSpeedTree(material) || !File.Exists(filename_bd + ".opaque")) &&
+                (!HasFoliageProfile(material, dictionary) || File.Exists(filename_bd + ".foliage")))
             {
                 PreviewTrace($"[Cache] '{material.Name}' up to date");
                 return;
@@ -4488,7 +4483,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             PreviewTrace($"Baking material: {material.Name}");
 
             // Something changed (or no cache yet): drop old outputs so every branch bakes again.
-            foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng })
+            foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng, filename_bd + ".foliage", filename_bd + ".opaque" })
             {
                 try
                 { if (File.Exists(f)) File.Delete(f); }
@@ -7912,6 +7907,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                         // BaseColorScale (e.g. nails use 0,0,0 for black)
                         ApplyBaseColorScale(bmp, dictionary);
 
+                        // Vegetation: leaves recolored by the color gradient of their foliage profile
+                        if (ApplyFoliageProfileTint(bmp, material, dictionary))
+                        {
+                            try
+                            { File.WriteAllText(filename_bd + ".foliage", string.Empty); }
+                            catch { /* ignore */ }
+                        }
+
                         // Opaque vegetation (trunks, bark): the diffuse alpha is not coverage.
                         if (IsOpaqueSpeedTree(material))
                         {
@@ -11108,6 +11111,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 // }
 
                 break;
+            // the type folders of a sector (Meshes, Entities, ...) hold the node rows
+            case GroupModel3DExt folder when IsSectorTypeFolder(folder):
+                foreach (var folderChild in folder.Children)
+                {
+                    if (findMeshChild(folderChild) is { } result)
+                    {
+                        return result;
+                    }
+                }
+
+                break;
             default:
                 break;
         }
@@ -11121,6 +11135,184 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         !string.IsNullOrEmpty(indices) &&
         indices.Split(',').Any(i => int.TryParse(i.Trim(), System.Globalization.NumberStyles.None,
             System.Globalization.CultureInfo.InvariantCulture, out var value) && value == entry);
+
+    /// <summary>
+    /// Flies the camera so the whole box is in view, from the side it's looked at now (as Shift+click on a mesh).
+    /// </summary>
+    public void ZoomToBounds(SharpDX.BoundingBox v)
+    {
+        if (Camera == null)
+        {
+            return;
+        }
+
+        // Calculate the center of the bbox
+        var bboxCenter = new SharpDX.Vector3(v.Center.X, v.Center.Y, v.Center.Z);
+
+        // Calculate the maximum extent of the bbox
+        var bboxExtent = v.Maximum - v.Minimum;
+        var maxExtent = Math.Max(bboxExtent.X, Math.Max(bboxExtent.Y, bboxExtent.Z));
+
+        // Calculate the distance from the camera to ensure the entire bbox is visible (45 degree field of view)
+        var distance = maxExtent / (float)Math.Tan(SharpDX.MathUtil.DegreesToRadians(45.0f) / 2);
+
+        var cameraPos = new SharpDX.Vector3((float)Camera.Position.X, (float)Camera.Position.Y, (float)Camera.Position.Z);
+
+        // from the current side; a camera already at the center keeps its look direction
+        var away = cameraPos - bboxCenter;
+        if (away.LengthSquared() < 1e-6f)
+        {
+            away = -new SharpDX.Vector3((float)Camera.LookDirection.X, (float)Camera.LookDirection.Y, (float)Camera.LookDirection.Z);
+        }
+
+        // Calculate the new camera position and target
+        var newPosition = bboxCenter + SharpDX.Vector3.Normalize(away) * distance;
+        var newDirection = bboxCenter - newPosition;
+
+        Camera.AnimateTo(
+            new System.Windows.Media.Media3D.Point3D(newPosition.X, newPosition.Y, newPosition.Z),
+            new Vector3D(newDirection.X, newDirection.Y, newDirection.Z),
+            new Vector3D(0, 1, 0),
+            s_cameraAnimationTime);
+    }
+
+    /// <summary>
+    /// Sector objects (node index, nodeData index) to fly the camera to once they're found in the preview: set by
+    /// "Show in Sector Preview" of the Sector Objects tab. The view takes them after a frame is drawn (see
+    /// <see cref="TryTakePendingZoom"/>), so its own framing of a freshly loaded sector doesn't override the flight.
+    /// </summary>
+    public IReadOnlyList<(int NodeIndex, int NodeDataIndex)>? PendingZoom
+    {
+        get => _pendingZoom;
+        set
+        {
+            _pendingZoom = value;
+            _pendingZoomFrames = 0;
+        }
+    }
+
+    private IReadOnlyList<(int NodeIndex, int NodeDataIndex)>? _pendingZoom;
+
+    // frames drawn while the objects of PendingZoom weren't found (the sector still loading)
+    private int _pendingZoomFrames;
+
+    // about ten seconds of frames: a sector that loads slower than that is not waited for
+    private const int PendingZoomMaxFrames = 600;
+
+    /// <summary>
+    /// The box of all objects of <see cref="PendingZoom"/> once they're rendered; then PendingZoom is cleared. Called
+    /// by the view after each frame until it succeeds or gives up.
+    /// </summary>
+    public bool TryTakePendingZoom(out SharpDX.BoundingBox bounds)
+    {
+        bounds = default;
+        if (PendingZoom is not { Count: > 0 } targets)
+        {
+            return false;
+        }
+
+        if (TryGetObjectsBounds(targets, out bounds))
+        {
+            PendingZoom = null;
+            ZoomExtentsRequested = false;
+            return true;
+        }
+
+        if (++_pendingZoomFrames > PendingZoomMaxFrames)
+        {
+            PreviewTrace($"[Zoom] none of the {targets.Count} object(s) found in the preview (node {targets[0].NodeIndex}, nodeData #{targets[0].NodeDataIndex})");
+            PendingZoom = null;
+        }
+
+        return false;
+    }
+
+    // The world box of the objects found in the preview (node index, nodeData index); false while none is rendered
+    // yet. Computed from the geometry and the transforms down the tree, not from Helix's BoundsWithTransform: that
+    // one is only right once the node has been drawn, and parts never drawn (hidden appearance parts, collision)
+    // kept their local box near the origin, which put the camera far away.
+    private bool TryGetObjectsBounds(IReadOnlyList<(int NodeIndex, int NodeDataIndex)> targets, out SharpDX.BoundingBox bounds)
+    {
+        SharpDX.BoundingBox? box = null;
+        foreach (var (nodeIndex, nodeDataIndex) in targets)
+        {
+            var index = nodeIndex.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            if (!AddNodeBounds(index, nodeDataIndex))
+            {
+                // the node's first row, as SelectWorldNode
+                AddNodeBounds(index, null);
+            }
+        }
+
+        bounds = box ?? default;
+        return box is not null;
+
+        bool AddNodeBounds(string index, int? entry)
+        {
+            var found = false;
+            foreach (var appearance in Appearances)
+            {
+                foreach (var model in appearance.ModelGroup.AsList())
+                {
+                    found |= Visit(model, SharpDX.Matrix.Identity, false);
+                }
+            }
+
+            return found;
+
+            // inside: within the matching node row, every drawn submesh counts
+            bool Visit(object element, SharpDX.Matrix parent, bool inside)
+            {
+                var world = element is HelixToolkit.Wpf.SharpDX.Element3D { Transform: { } transform } &&
+                            !transform.Value.IsIdentity
+                    ? ToSharpDxMatrix(transform.Value) * parent
+                    : parent;
+
+                switch (element)
+                {
+                    case SubmeshComponent submesh when inside:
+                        if (submesh.IsRendering && submesh.Geometry is { } geometry &&
+                            geometry.Bound.Maximum != geometry.Bound.Minimum)
+                        {
+                            var corners = geometry.Bound.GetCorners();
+                            for (var c = 0; c < corners.Length; c++)
+                            {
+                                corners[c] = SharpDX.Vector3.TransformCoordinate(corners[c], world);
+                            }
+
+                            var part = SharpDX.BoundingBox.FromPoints(corners);
+                            box = box is { } merged ? SharpDX.BoundingBox.Merge(merged, part) : part;
+                        }
+
+                        return true;
+                    case MeshComponent row when !inside && row.WorldNodeIndex == index &&
+                                                 (entry is not { } e || HasNodeDataIndex(row.WorldNodeDataIndices, e)):
+                        foreach (var child in row.Children)
+                        {
+                            Visit(child, world, true);
+                        }
+
+                        return true;
+                    case HelixToolkit.Wpf.SharpDX.GroupModel3D group when inside || group is SectorGroup || IsSectorTypeFolder(group):
+                        var any = false;
+                        foreach (var child in group.Children)
+                        {
+                            any |= Visit(child, world, inside);
+                        }
+
+                        return any;
+                    default:
+                        return false;
+                }
+            }
+        }
+    }
+
+    private static SharpDX.Matrix ToSharpDxMatrix(System.Windows.Media.Media3D.Matrix3D m) => new(
+        (float)m.M11, (float)m.M12, (float)m.M13, (float)m.M14,
+        (float)m.M21, (float)m.M22, (float)m.M23, (float)m.M24,
+        (float)m.M31, (float)m.M32, (float)m.M33, (float)m.M34,
+        (float)m.OffsetX, (float)m.OffsetY, (float)m.OffsetZ, (float)m.M44);
 
     public void SelectWorldNode()
     {
@@ -11923,15 +12115,154 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             dictionary["Normal"] = normal;
         }
 
-        // Trunks, bark and seams (onesided / seams) are opaque: their diffuse alpha is not a cut-out.
+        // Bark without enableMask is opaque: its diffuse alpha is not a cut-out.
         if (!IsOpaqueSpeedTree(material) && !dictionary.ContainsKey("AlphaThreshold"))
         {
             dictionary["AlphaThreshold"] = (CFloat)0.5f;
         }
     }
 
-    /// <summary>One-sided and seam vegetation (trunks, bark): drawn opaque, culled.</summary>
-    private bool IsOpaqueSpeedTree(Material? material)
+    /// <summary>Leaves (not trunks or bark) of a SpeedTree material with a FoliageProfile set.</summary>
+    private bool HasFoliageProfile(Material? material, IReadOnlyDictionary<string, object> dictionary) =>
+        IsSpeedTreeMaterial(material) && !IsBarkSpeedTree(material) &&
+        dictionary.TryGetValue("FoliageProfile", out var value) && value is IRedRef { DepotPath: var path } &&
+        path != ResourcePath.Empty;
+
+    /// <summary>
+    /// Recolors SpeedTree leaves with the color gradient of their foliage profile (.fp): colorGradient, mixed in by
+    /// colorGradientWeight (less by preserveOriginalColor), darkened by colorGradientDarkenWeight. The leaf keeps its
+    /// own brightness and detail, the gradient gives the hue (a green atlas becomes a pink sakura). Only green to
+    /// yellow pixels count as leaves: the brown branches of an atlas or a billboard keep their color.
+    /// An approximation of the game's shader: it gives each tree its own place on the gradient, the preview takes
+    /// the middle of the gradient's points (a typical tree).
+    /// </summary>
+    /// <returns>Whether the bitmap was recolored.</returns>
+    private bool ApplyFoliageProfileTint(Bitmap bmp, Material? material, IReadOnlyDictionary<string, object> dictionary)
+    {
+        if (!HasFoliageProfile(material, dictionary) || dictionary["FoliageProfile"] is not IRedRef profileRef ||
+            GetProjectOrDepotFile(profileRef.DepotPath)?.RootChunk is not CFoliageProfile profile)
+        {
+            return false;
+        }
+
+        var weight = Math.Clamp((float)profile.ColorGradientWeight, 0f, 1f) *
+                     (1f - Math.Clamp((float)profile.PreserveOriginalColor, 0f, 1f));
+        if (weight <= 0f || profile.ColorGradient.DepotPath == ResourcePath.Empty ||
+            GetProjectOrDepotFile(profile.ColorGradient.DepotPath)?.RootChunk is not CGradient gradient ||
+            gradient.GradientEntries.Count == 0)
+        {
+            return false;
+        }
+
+        var entries = gradient.GradientEntries
+            .Select(e => new GradientEntry(e.Value, e.Color.Red, e.Color.Green, e.Color.Blue))
+            .OrderBy(e => e.Value)
+            .ToList();
+        var (c1, c2, blend) = InterpolateGradient(entries, (entries[0].Value + entries[^1].Value) / 2f);
+        var tintR = SrgbToLinear01(((c1.R * (1 - blend)) + (c2.R * blend)) / 255f);
+        var tintG = SrgbToLinear01(((c1.G * (1 - blend)) + (c2.G * blend)) / 255f);
+        var tintB = SrgbToLinear01(((c1.B * (1 - blend)) + (c2.B * blend)) / 255f);
+        var tintLuminance = Math.Max((0.2126f * tintR) + (0.7152f * tintG) + (0.0722f * tintB), 1e-4f);
+        var darken = 1f - Math.Clamp((float)profile.ColorGradientDarkenWeight, 0f, 1f);
+
+        var linear = new float[256];
+        for (var i = 0; i < 256; i++)
+        {
+            linear[i] = SrgbToLinear01(i / 255f);
+        }
+
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            unsafe
+            {
+                var ptr = (byte*)data.Scan0;
+                for (var y = 0; y < bmp.Height; y++)
+                {
+                    var row = ptr + (y * data.Stride);
+                    for (var x = 0; x < bmp.Width; x++)
+                    {
+                        var px = row + (x * 4);
+                        if (px[3] == 0)
+                        {
+                            continue;
+                        }
+
+                        // BGRA
+                        var leaf = LeafAmount(px[2], px[1], px[0]) * weight;
+                        if (leaf <= 0f)
+                        {
+                            continue;
+                        }
+
+                        var b = linear[px[0]];
+                        var g = linear[px[1]];
+                        var r = linear[px[2]];
+                        var scale = ((0.2126f * r) + (0.7152f * g) + (0.0722f * b)) / tintLuminance * darken;
+                        px[0] = LinearToSrgbByte(b + (((tintB * scale) - b) * leaf));
+                        px[1] = LinearToSrgbByte(g + (((tintG * scale) - g) * leaf));
+                        px[2] = LinearToSrgbByte(r + (((tintR * scale) - r) * leaf));
+                    }
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// How much a pixel looks like a leaf, 0 to 1: yellow to green hues (about 60° to 160°) with some saturation.
+    /// Brown branches (hue under 40°), gray and blue-green get 0, with a soft edge between.
+    /// </summary>
+    private static float LeafAmount(byte r, byte g, byte b)
+    {
+        var max = Math.Max(r, Math.Max(g, b));
+        var min = Math.Min(r, Math.Min(g, b));
+        if (max == 0 || max == min)
+        {
+            return 0f;
+        }
+
+        var delta = (float)(max - min);
+        var saturation = delta / max;
+        float hue;
+        if (max == r)
+        {
+            hue = 60f * (((g - b) / delta) % 6f);
+        }
+        else if (max == g)
+        {
+            hue = 60f * (((b - r) / delta) + 2f);
+        }
+        else
+        {
+            hue = 60f * (((r - g) / delta) + 4f);
+        }
+
+        if (hue < 0f)
+        {
+            hue += 360f;
+        }
+
+        return SmoothStep(40f, 60f, hue) * (1f - SmoothStep(160f, 190f, hue)) * SmoothStep(0.08f, 0.2f, saturation);
+
+        static float SmoothStep(float from, float to, float x)
+        {
+            var t = Math.Clamp((x - from) / (to - from), 0f, 1f);
+            return t * t * (3f - (2f * t));
+        }
+    }
+
+    /// <summary>
+    /// Bark of vegetation, seen from outside only (culled): one-sided trunks and branches
+    /// (speedtree_3d_v8_onesided.mt) and seams, where a branch meets the trunk (speedtree_3d_v8_seams.mt).
+    /// </summary>
+    private bool IsBarkSpeedTree(Material? material)
     {
         if (!IsSpeedTreeMaterial(material))
         {
@@ -11943,6 +12274,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 !template.Contains("gradient", StringComparison.OrdinalIgnoreCase)) ||
                template.Contains("seams", StringComparison.OrdinalIgnoreCase);
     }
+
+    /// <summary>
+    /// Bark drawn opaque: its instance has enableMask off, so the diffuse alpha is not a cut-out. With enableMask
+    /// (seams, the ragged top of a lower trunk such as niwaki_bark_down) the alpha cuts it out, black where it is 0.
+    /// </summary>
+    private bool IsOpaqueSpeedTree(Material? material) =>
+        IsBarkSpeedTree(material) && !(material?.Instance is { } instance && instance.EnableMask);
 
     /// <summary>A material on invisible.mt (e.g. base\fx\_shaders\invisible.mt): it draws nothing.</summary>
     private bool IsInvisibleMaterial(Material? material) =>

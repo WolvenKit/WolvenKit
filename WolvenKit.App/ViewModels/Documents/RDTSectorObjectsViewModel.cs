@@ -36,8 +36,17 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
     /// <summary>Asks the document to show this node in the data tab.</summary>
     public event EventHandler<int>? NodeOpenRequested;
 
-    /// <summary>Asks the document to show this object (node index, nodeData index) in the sector preview.</summary>
-    public event EventHandler<(int NodeIndex, int NodeDataIndex)>? PreviewOpenRequested;
+    /// <summary>
+    /// Asks the document to show these objects (node index, nodeData index) in the sector preview: the first one is
+    /// selected, and the camera flies to them all.
+    /// </summary>
+    public event EventHandler<IReadOnlyList<(int NodeIndex, int NodeDataIndex)>>? PreviewOpenRequested;
+
+    /// <summary>
+    /// A row was selected here (node index, nodeData index): the sector preview and the data tab pick the same object
+    /// the next time they're shown.
+    /// </summary>
+    public event EventHandler<(int NodeIndex, int NodeDataIndex)>? ObjectPicked;
 
     /// <summary>Raised when the rows to show change, so the view refreshes its filter.</summary>
     public event EventHandler? FilterChanged;
@@ -59,6 +68,14 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private SectorObject? _selectedObject;
 
+    partial void OnSelectedObjectChanged(SectorObject? value)
+    {
+        if (value is not null)
+        {
+            ObjectPicked?.Invoke(this, (value.NodeIndex, value.NodeDataIndex));
+        }
+    }
+
     [ObservableProperty] private bool _onlyInXl;
 
     /// <summary>Result of the last .xl check, shown under the summary; empty without one.</summary>
@@ -79,6 +96,12 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
 
     // an object picked in the preview, selected the next time the list is built
     private int? _pendingNodeDataIndex;
+
+    // whether that pick searches the list down to its row
+    private bool _pendingSearch = true;
+
+    // the search the preview pick put in ("#123"), cleared with the pick
+    private string? _pickFilter;
 
     partial void OnFilterTextChanged(string value)
     {
@@ -134,8 +157,13 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
             _pendingNodeDataIndex = null;
             if (objects.FirstOrDefault(o => o.NodeDataIndex == pending) is { } picked)
             {
-                // shows the one row, its groups open
-                FilterText = $"#{picked.NodeDataIndex}";
+                if (_pendingSearch)
+                {
+                    // shows the one row, its groups open
+                    _pickFilter = $"#{picked.NodeDataIndex}";
+                    FilterText = _pickFilter;
+                }
+
                 SelectedObject = picked;
             }
         }
@@ -304,16 +332,44 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
             result.SectorRejected ? " · expectedNodes differs: ArchiveXL skips the whole sector" : "");
     }
 
-    /// <summary>The object picked in the sector preview: selected when this tab is shown.</summary>
-    public void SelectWhenShown(int nodeDataIndex) => _pendingNodeDataIndex = nodeDataIndex;
-
-    /// <summary>Shows the object in the sector preview.</summary>
-    [RelayCommand]
-    private void ShowInPreview(SectorObject? item)
+    /// <summary>
+    /// The object picked in the sector preview, or the row last selected here: selected when this tab is shown. With
+    /// <paramref name="search"/>, the list is searched down to that one row.
+    /// </summary>
+    public void SelectWhenShown(int nodeDataIndex, bool search = true)
     {
-        if ((item ?? SelectedObject) is { } target)
+        _pendingNodeDataIndex = nodeDataIndex;
+        _pendingSearch = search;
+    }
+
+    /// <summary>
+    /// The preview's selection was cleared: no row selected, and the search the pick put in goes, so the whole list
+    /// shows again. A search typed by hand stays.
+    /// </summary>
+    public void ClearPick()
+    {
+        _pendingNodeDataIndex = null;
+        if (_pickFilter is not null && FilterText == _pickFilter)
         {
-            PreviewOpenRequested?.Invoke(this, (target.NodeIndex, target.NodeDataIndex));
+            FilterText = "";
+        }
+
+        _pickFilter = null;
+        SelectedObject = null;
+    }
+
+    /// <summary>Shows the selected rows in the sector preview, the camera flown to them.</summary>
+    public void ShowInPreview(IEnumerable<SectorObject> selected)
+    {
+        var targets = selected.OrderBy(o => o.NodeDataIndex).Select(o => (o.NodeIndex, o.NodeDataIndex)).ToList();
+        if (targets.Count == 0 && SelectedObject is { } current)
+        {
+            targets.Add((current.NodeIndex, current.NodeDataIndex));
+        }
+
+        if (targets.Count > 0)
+        {
+            PreviewOpenRequested?.Invoke(this, targets);
         }
     }
 
@@ -349,13 +405,21 @@ public partial class RDTSectorObjectsViewModel : RedDocumentTabViewModel
         Clipboard.SetText(SectorObjectList.BuildXlMutation(RelativeFilePath, Objects.Count, items, entriesOnly));
     }
 
-    /// <summary>Class, indices, resource and position: what an .xl removal or a bug report needs.</summary>
-    [RelayCommand]
-    private void CopySummary(SectorObject? item)
+    /// <summary>
+    /// Class, indices, resource and position of the selected rows, one line each: what an .xl removal or a bug
+    /// report needs.
+    /// </summary>
+    public void CopySummary(IEnumerable<SectorObject> selected)
     {
-        if ((item ?? SelectedObject) is { } target)
+        var items = selected.OrderBy(o => o.NodeDataIndex).ToList();
+        if (items.Count == 0 && SelectedObject is { } current)
         {
-            Clipboard.SetText(target.Summary);
+            items.Add(current);
+        }
+
+        if (items.Count > 0)
+        {
+            Clipboard.SetText(string.Join(Environment.NewLine, items.Select(o => o.Summary)));
         }
     }
 }
