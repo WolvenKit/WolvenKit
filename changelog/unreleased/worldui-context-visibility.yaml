@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 0
+      author: "jackhumbert"
+      description: "worlduiContextVisibility (inkHudWidgetSpawnEntry.contextVisibility) reads and writes SceneTier4 and SceneTier5 as their own bits; they were SceneDefault and SceneTier1, so saving an .inkhud moved its entries' scene tiers"
