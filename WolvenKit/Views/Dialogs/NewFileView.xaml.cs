@@ -1,6 +1,8 @@
+using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -47,5 +49,30 @@ namespace WolvenKit.Views.Dialogs
             });
 
         }
+
+        private void SearchBar_OnTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => ApplySearch();
+
+        // another category: its files are searched with the same text
+        private void DataGrid_OnItemsSourceChanged(object sender, Syncfusion.UI.Xaml.Grid.GridItemsSourceChangedEventArgs e) =>
+            ApplySearch();
+
+        /// <summary>Shows the files whose name, extension or description holds the search text.</summary>
+        private void ApplySearch()
+        {
+            if (DataGrid.View is not { } view)
+            {
+                return;
+            }
+
+            var text = SearchBar.Text?.Trim() ?? "";
+            view.Filter = text.Length == 0
+                ? null
+                : item => item is AddFileModel file &&
+                          (Holds(file.Name, text) || Holds(file.Extension, text) || Holds(file.Description, text));
+            view.RefreshFilter();
+        }
+
+        private static bool Holds(string value, string text) =>
+            value?.Contains(text, StringComparison.OrdinalIgnoreCase) == true;
     }
 }

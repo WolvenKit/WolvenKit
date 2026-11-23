@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3318
+      author: "Ametis81"
+      description: "New file dialog: a search bar filters the file types by name and description across categories"
