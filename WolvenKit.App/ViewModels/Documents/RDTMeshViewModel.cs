@@ -1778,8 +1778,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
         if (sm.IsTransparent || !TryGetRawMaterial(sm.MaterialName, out var alphaMat) || alphaMat.Values == null)
             return;
 
-        // Vegetation: leaves and fronds are cut-out cards seen from both sides (one-sided
-        // trunks and seams stay culled).
+        // Vegetation: leaves and fronds are cut-out cards seen from both sides; bark (one-sided trunks, seams)
+        // stays culled, opaque or cut out by its enableMask.
         if (IsSpeedTreeMaterial(alphaMat))
         {
             if (IsOpaqueSpeedTree(alphaMat))
@@ -1787,7 +1787,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 return; // trunks / bark: opaque whatever the diffuse alpha holds
             }
 
-            MakeTwoSided(sm);
+            if (!IsBarkSpeedTree(alphaMat))
+            {
+                MakeTwoSided(sm);
+            }
         }
 
         // Cutout / masked materials (chains, fences, foliage). The bake makes their alpha binary;
@@ -4192,7 +4195,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             if (!forceBake && IsBakeUpToDate(depsPath, valuesStamp, bakeResolution) &&
                 (File.Exists(filename_rm) || !IsDeferredGlass(material.Name, material)) &&
                 (File.Exists(filename_bd) || !IsSpeedTreeMaterial(material)) &&
-                (!IsOpaqueSpeedTree(material) || File.Exists(filename_bd + ".opaque")))
+                (!IsOpaqueSpeedTree(material) || File.Exists(filename_bd + ".opaque")) &&
+                // bark with enableMask was baked opaque before (black where its alpha cuts it out): bake it again
+                (IsOpaqueSpeedTree(material) || !File.Exists(filename_bd + ".opaque")) &&
+                (!HasFoliageProfile(material, dictionary) || File.Exists(filename_bd + ".foliage")))
             {
                 Parent?.GetLoggerService()?.Debug($"[Cache] '{material.Name}' up to date");
                 return;
@@ -4201,7 +4207,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             Parent?.GetLoggerService()?.Debug($"Baking material: {material.Name}");
 
             // Something changed (or no cache yet): drop old outputs so every branch bakes again.
-            foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng })
+            foreach (var f in new[] { filename_bd, filename_bn, filename_rm, emissivePng, filename_bd + ".foliage", filename_bd + ".opaque" })
             {
                 try
                 { if (File.Exists(f)) File.Delete(f); }
@@ -7671,6 +7677,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
 
                         // BaseColorScale (e.g. nails use 0,0,0 for black)
                         ApplyBaseColorScale(bmp, dictionary);
+
+                        // Vegetation: leaves recolored by the color gradient of their foliage profile
+                        if (ApplyFoliageProfileTint(bmp, material, dictionary))
+                        {
+                            try
+                            { File.WriteAllText(filename_bd + ".foliage", string.Empty); }
+                            catch { /* ignore */ }
+                        }
 
                         // Opaque vegetation (trunks, bark): the diffuse alpha is not coverage.
                         if (IsOpaqueSpeedTree(material))
@@ -11195,15 +11209,154 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
             dictionary["Normal"] = normal;
         }
 
-        // Trunks, bark and seams (onesided / seams) are opaque: their diffuse alpha is not a cut-out.
+        // Bark without enableMask is opaque: its diffuse alpha is not a cut-out.
         if (!IsOpaqueSpeedTree(material) && !dictionary.ContainsKey("AlphaThreshold"))
         {
             dictionary["AlphaThreshold"] = (CFloat)0.5f;
         }
     }
 
-    /// <summary>One-sided and seam vegetation (trunks, bark): drawn opaque, culled.</summary>
-    private bool IsOpaqueSpeedTree(Material? material)
+    /// <summary>Leaves (not trunks or bark) of a SpeedTree material with a FoliageProfile set.</summary>
+    private bool HasFoliageProfile(Material? material, IReadOnlyDictionary<string, object> dictionary) =>
+        IsSpeedTreeMaterial(material) && !IsBarkSpeedTree(material) &&
+        dictionary.TryGetValue("FoliageProfile", out var value) && value is IRedRef { DepotPath: var path } &&
+        path != ResourcePath.Empty;
+
+    /// <summary>
+    /// Recolors SpeedTree leaves with the color gradient of their foliage profile (.fp): colorGradient, mixed in by
+    /// colorGradientWeight (less by preserveOriginalColor), darkened by colorGradientDarkenWeight. The leaf keeps its
+    /// own brightness and detail, the gradient gives the hue (a green atlas becomes a pink sakura). Only green to
+    /// yellow pixels count as leaves: the brown branches of an atlas or a billboard keep their color.
+    /// An approximation of the game's shader: it gives each tree its own place on the gradient, the preview takes
+    /// the middle of the gradient's points (a typical tree).
+    /// </summary>
+    /// <returns>Whether the bitmap was recolored.</returns>
+    private bool ApplyFoliageProfileTint(Bitmap bmp, Material? material, IReadOnlyDictionary<string, object> dictionary)
+    {
+        if (!HasFoliageProfile(material, dictionary) || dictionary["FoliageProfile"] is not IRedRef profileRef ||
+            GetProjectOrDepotFile(profileRef.DepotPath)?.RootChunk is not CFoliageProfile profile)
+        {
+            return false;
+        }
+
+        var weight = Math.Clamp((float)profile.ColorGradientWeight, 0f, 1f) *
+                     (1f - Math.Clamp((float)profile.PreserveOriginalColor, 0f, 1f));
+        if (weight <= 0f || profile.ColorGradient.DepotPath == ResourcePath.Empty ||
+            GetProjectOrDepotFile(profile.ColorGradient.DepotPath)?.RootChunk is not CGradient gradient ||
+            gradient.GradientEntries.Count == 0)
+        {
+            return false;
+        }
+
+        var entries = gradient.GradientEntries
+            .Select(e => new GradientEntry(e.Value, e.Color.Red, e.Color.Green, e.Color.Blue))
+            .OrderBy(e => e.Value)
+            .ToList();
+        var (c1, c2, blend) = InterpolateGradient(entries, (entries[0].Value + entries[^1].Value) / 2f);
+        var tintR = SrgbToLinear01(((c1.R * (1 - blend)) + (c2.R * blend)) / 255f);
+        var tintG = SrgbToLinear01(((c1.G * (1 - blend)) + (c2.G * blend)) / 255f);
+        var tintB = SrgbToLinear01(((c1.B * (1 - blend)) + (c2.B * blend)) / 255f);
+        var tintLuminance = Math.Max((0.2126f * tintR) + (0.7152f * tintG) + (0.0722f * tintB), 1e-4f);
+        var darken = 1f - Math.Clamp((float)profile.ColorGradientDarkenWeight, 0f, 1f);
+
+        var linear = new float[256];
+        for (var i = 0; i < 256; i++)
+        {
+            linear[i] = SrgbToLinear01(i / 255f);
+        }
+
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var data = bmp.LockBits(rect, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        try
+        {
+            unsafe
+            {
+                var ptr = (byte*)data.Scan0;
+                for (var y = 0; y < bmp.Height; y++)
+                {
+                    var row = ptr + (y * data.Stride);
+                    for (var x = 0; x < bmp.Width; x++)
+                    {
+                        var px = row + (x * 4);
+                        if (px[3] == 0)
+                        {
+                            continue;
+                        }
+
+                        // BGRA
+                        var leaf = LeafAmount(px[2], px[1], px[0]) * weight;
+                        if (leaf <= 0f)
+                        {
+                            continue;
+                        }
+
+                        var b = linear[px[0]];
+                        var g = linear[px[1]];
+                        var r = linear[px[2]];
+                        var scale = ((0.2126f * r) + (0.7152f * g) + (0.0722f * b)) / tintLuminance * darken;
+                        px[0] = LinearToSrgbByte(b + (((tintB * scale) - b) * leaf));
+                        px[1] = LinearToSrgbByte(g + (((tintG * scale) - g) * leaf));
+                        px[2] = LinearToSrgbByte(r + (((tintR * scale) - r) * leaf));
+                    }
+                }
+            }
+        }
+        finally
+        {
+            bmp.UnlockBits(data);
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// How much a pixel looks like a leaf, 0 to 1: yellow to green hues (about 60° to 160°) with some saturation.
+    /// Brown branches (hue under 40°), gray and blue-green get 0, with a soft edge between.
+    /// </summary>
+    private static float LeafAmount(byte r, byte g, byte b)
+    {
+        var max = Math.Max(r, Math.Max(g, b));
+        var min = Math.Min(r, Math.Min(g, b));
+        if (max == 0 || max == min)
+        {
+            return 0f;
+        }
+
+        var delta = (float)(max - min);
+        var saturation = delta / max;
+        float hue;
+        if (max == r)
+        {
+            hue = 60f * (((g - b) / delta) % 6f);
+        }
+        else if (max == g)
+        {
+            hue = 60f * (((b - r) / delta) + 2f);
+        }
+        else
+        {
+            hue = 60f * (((r - g) / delta) + 4f);
+        }
+
+        if (hue < 0f)
+        {
+            hue += 360f;
+        }
+
+        return SmoothStep(40f, 60f, hue) * (1f - SmoothStep(160f, 190f, hue)) * SmoothStep(0.08f, 0.2f, saturation);
+
+        static float SmoothStep(float from, float to, float x)
+        {
+            var t = Math.Clamp((x - from) / (to - from), 0f, 1f);
+            return t * t * (3f - (2f * t));
+        }
+    }
+
+    /// <summary>
+    /// Bark of vegetation, seen from outside only (culled): one-sided trunks and branches
+    /// (speedtree_3d_v8_onesided.mt) and seams, where a branch meets the trunk (speedtree_3d_v8_seams.mt).
+    /// </summary>
+    private bool IsBarkSpeedTree(Material? material)
     {
         if (!IsSpeedTreeMaterial(material))
         {
@@ -11215,6 +11368,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IDisposable
                 !template.Contains("gradient", StringComparison.OrdinalIgnoreCase)) ||
                template.Contains("seams", StringComparison.OrdinalIgnoreCase);
     }
+
+    /// <summary>
+    /// Bark drawn opaque: its instance has enableMask off, so the diffuse alpha is not a cut-out. With enableMask
+    /// (seams, the ragged top of a lower trunk such as niwaki_bark_down) the alpha cuts it out, black where it is 0.
+    /// </summary>
+    private bool IsOpaqueSpeedTree(Material? material) =>
+        IsBarkSpeedTree(material) && !(material?.Instance is { } instance && instance.EnableMask);
 
     private string GetTemplateFileName(Material? material) =>
         Path.GetFileNameWithoutExtension(ResolveTemplatePath(material?.Instance as CMaterialInstance) ?? string.Empty);
