@@ -115,7 +115,8 @@ public sealed partial class ThemeService
             }
 
             // most dialogs merge it one level down, in the Resources of their root Grid
-            if ((element as ContentControl)?.Content is FrameworkElement root && HasOwnResources(root))
+            var root = (element as ContentControl)?.Content as FrameworkElement;
+            if (root is not null && HasOwnResources(root))
             {
                 found += ScanDictionary(root.Resources, null, null, false);
             }
@@ -124,12 +125,68 @@ public sealed partial class ThemeService
             {
                 PatchSources(_patchedTheme);
             }
+
+            ApplyHandyControlAccent(element);
+            if (root is not null)
+            {
+                ApplyHandyControlAccent(root);
+            }
         }
 
         if (_rescanTimer is { IsEnabled: false })
         {
             _rescanTimer.Start();
         }
+    }
+
+    // HandyControl's accent keys: its check boxes, toggles, focused borders, selected items and primary buttons
+    private static readonly string[] s_handyControlAccentKeys = ["PrimaryColor", "PrimaryBrush", "DarkPrimaryColor", "DarkPrimaryBrush"];
+
+    /// <summary>
+    /// A view or dialog with its own copy of the HandyControl theme (<c>hc:ThemeResources</c> merged into its
+    /// Resources, often with <c>hc:ThemeManager.RequestedAccentColor</c>) keeps HandyControl's blue for check boxes
+    /// and the like even when that copy is patched. The theme's accent is put on the element itself, as own keys of
+    /// its Resources: they come before every merged dictionary, and HandyControl reads them as DynamicResource.
+    /// </summary>
+    private void ApplyHandyControlAccent(FrameworkElement element)
+    {
+        if (_patchedTheme is not { } theme || !HasOwnResources(element) ||
+            !element.Resources.MergedDictionaries.Any(d => d.GetType().Name == "ThemeResources"))
+        {
+            return;
+        }
+
+        var map = BuildColorMap(theme);
+        if (!map.ContainsKey("PrimaryBrush"))
+        {
+            return;
+        }
+
+        foreach (var key in s_handyControlAccentKeys)
+        {
+            if (map.TryGetValue(key, out var color))
+            {
+                SetColorKey(element, key, color);
+            }
+        }
+
+        // text and check marks drawn on the accent (selected list item, ticked box): black on a light accent
+        var onAccent = ResolveReadableAccentForeground(theme) ?? Colors.White;
+        SetColorKey(element, "TextIconColor", onAccent);
+        SetColorKey(element, "TextIconBrush", onAccent);
+    }
+
+    private static void SetColorKey(FrameworkElement element, string key, Color color)
+    {
+        if (key.EndsWith("Color", StringComparison.Ordinal))
+        {
+            element.Resources[key] = color;
+            return;
+        }
+
+        var brush = new SolidColorBrush(color);
+        brush.Freeze();
+        element.Resources[key] = brush;
     }
 
     /// <summary>
