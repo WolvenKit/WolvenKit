@@ -51,8 +51,28 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
+            SceneGraphEditor.CanvasRealized += OnEditorCanvasRealized;
             Loaded += OnViewLoaded;
             Unloaded += OnViewUnloaded;
+        }
+
+        /// <summary>
+        /// Drops the loading overlay once the graph is finished building.
+        /// </summary>
+        /// <remarks>
+        /// The overlay prevents the user clicking nodes mid-realization.
+        /// </remarks>
+        private void OnEditorCanvasRealized(object? sender, RedGraph? graph)
+        {
+            if (_disposed || DataContext is not SceneGraphViewModel viewModel)
+            {
+                return;
+            }
+
+            viewModel.SetGraphLoaded();
+
+            // Restore selection after graph is loaded
+            RestoreSelectionIfReady(viewModel.Parent);
         }
 
         private void OnViewLoaded(object sender, RoutedEventArgs e)
@@ -91,15 +111,6 @@ namespace WolvenKit.Views.Documents
             {
                 SetupConnectionTemplate();
                 UpdateConnectionPathTypes(viewModel.MainGraph);
-
-                // Add a small delay to ensure smooth loading experience
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    viewModel.SetGraphLoaded();
-
-                    // Restore selection after graph is loaded
-                    RestoreSelectionIfReady(viewModel.Parent);
-                }), System.Windows.Threading.DispatcherPriority.Background);
             }), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
@@ -1001,6 +1012,7 @@ namespace WolvenKit.Views.Documents
 
             _disposed = true;
             UnsubscribeFromGraph();
+            SceneGraphEditor.CanvasRealized -= OnEditorCanvasRealized;
             DataContextChanged -= OnDataContextChanged;
             Loaded -= OnViewLoaded;
             Unloaded -= OnViewUnloaded;

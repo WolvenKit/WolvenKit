@@ -74,9 +74,26 @@ namespace WolvenKit.Views.Documents
             DataContextChanged += OnDataContextChanged;
 
             QuestPhaseGraphEditor.SourceChanged += OnEditorSourceChanged;
+            QuestPhaseGraphEditor.CanvasRealized += OnEditorCanvasRealized;
 
             // Add keyboard shortcut for subgraph navigation (Tab key)
             KeyDown += OnKeyDown;
+        }
+
+        /// <summary>
+        /// Drops the loading overlay once the graph is finished building.
+        /// </summary>
+        /// <remarks>
+        /// The overlay prevents the user clicking nodes mid-realization.
+        /// </remarks>
+        private void OnEditorCanvasRealized(object? sender, RedGraph? graph)
+        {
+            if (_disposed || DataContext is not QuestPhaseGraphViewModel viewModel)
+            {
+                return;
+            }
+
+            viewModel.SetGraphLoaded();
         }
 
         private void OnEditorSourceChanged(object? sender, RedGraph? graph)
@@ -232,6 +249,7 @@ namespace WolvenKit.Views.Documents
                 UnsubscribeFromGraph();
 
                 QuestPhaseGraphEditor.SourceChanged -= OnEditorSourceChanged;
+                QuestPhaseGraphEditor.CanvasRealized -= OnEditorCanvasRealized;
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
 
@@ -286,12 +304,6 @@ namespace WolvenKit.Views.Documents
             {
                 SetupConnectionTemplate();
                 BuildBreadcrumb(); // Initialize breadcrumb navigation
-
-                // Add a small delay to ensure smooth loading experience
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    viewModel.SetGraphLoaded();
-                }), DispatcherPriority.Background);
             }), DispatcherPriority.Loaded);
         }
 
