@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3320
+      author: "Ametis81"
+      description: "Editor tabs of files with the same name show the folders that tell them apart, and a file tab's menu has Open in Asset Browser; Find used files works with mods loaded"
