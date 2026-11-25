@@ -392,6 +392,8 @@ namespace WolvenKit.Views.Shell
             if (ViewModel?.GetToolViewModel<ProjectExplorerViewModel>() is { } pe)
             {
                 pe.SaveProjectExplorerTabIfDirty();
+                // Otherwise folders opened/closed in the last few seconds (before the 10s autosave) are lost.
+                pe.SaveProjectExplorerExpansionStateIfDirty();
                 pe.StopWatcher();
             }
 

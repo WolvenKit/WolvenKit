@@ -2150,7 +2150,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = true;
     }
 
-    private void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
+    /// <summary>
+    /// Writes the folder expand/collapse state to the project's tree state file, if it changed.
+    /// Called every 10 seconds, on project switch and when WolvenKit closes.
+    /// </summary>
+    public void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
 
     private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
     {
@@ -2159,8 +2163,20 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
-        _hasUnsavedFileTreeChanges = false;
+        try
+        {
+            File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
+            _hasUnsavedFileTreeChanges = false;
+        }
+        catch (IOException e)
+        {
+            // File locked (OneDrive, antivirus...): stay dirty and try again on the next tick.
+            _loggerService.Debug($"Project Explorer: couldn't save folder expansion state: {e.Message}");
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            _loggerService.Debug($"Project Explorer: couldn't save folder expansion state: {e.Message}");
+        }
     }
 
     #endregion expansion state
