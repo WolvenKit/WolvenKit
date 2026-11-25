@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3282
+      author: "Ametis81"
+      description: "Project Explorer: faster search filtering while typing."
