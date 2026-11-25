@@ -69,6 +69,8 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
                 .OrderBy(x => x.TypeName)
         );
         SelectedType = ValidNewTypes.FirstOrDefault()!;
+
+        LoadTemplates();
     }
 
     partial void OnSelectedTypeChanged(TypeDesc value)
