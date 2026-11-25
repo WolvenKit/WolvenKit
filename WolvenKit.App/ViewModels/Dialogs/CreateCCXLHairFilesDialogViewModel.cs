@@ -1,17 +1,20 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
-
+using System.ComponentModel;
+using WolvenKit.Interfaces.Extensions;
 namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 {
+
+    [ObservableProperty] private bool _vType = true;
+    [ObservableProperty] private string _parentFolderName = "";
+    [ObservableProperty] private string _axlFile = "";
 
     [ObservableProperty] private string _hairmodName = "";
     [ObservableProperty] private string _ccDisplayName = "";
@@ -33,7 +36,15 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
     [ObservableProperty] private string _selectedAnimGraphFile = "";
 
     [ObservableProperty] private string _selectedJsonFile = "";
+    [ObservableProperty] private bool _isPhysEnabled= false;
+    [ObservableProperty] private bool _isAppEnabled = false;
 
+    [ObservableProperty] private bool _isJsonEnabled = false;
+    [ObservableProperty] private bool _isInkCCEnabled = false;
+    [ObservableProperty] private bool _isCybMeshEnabled = false;
+    [ObservableProperty] private bool _isShadowMeshEnabled = false;
+
+    [ObservableProperty] private Dictionary<string, string> _projectFolders;
 
 
 
@@ -48,6 +59,8 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
         _projectResourceTools = projectResourceTools;
 
 
+
+        ProjectFolders = activeProject.GetAllFolders(activeProject.ModDirectory).ToDictionary<string, string>(x => x);
 
         InkCCFileOption.AddRange<string>(
             activeProject.ModFiles
@@ -108,6 +121,17 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 
     }
 
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ParentFolderName))
+        {
+             ParentFolderName = ParentFolderName.ToArchiveFilePath();
+        }
+
+        base.OnPropertyChanged(e);
+    }
+
     [ObservableProperty]
     private List<string> _inkCCFileOption = [];
 
@@ -129,6 +153,8 @@ public partial class CreateCCXLHairFilesDialogViewModel : ObservableObject
 
 
     public void SetFiles() {
+        AxlFile = _activeProject.ModName + "_ccxl";
+
         HairmodName = _activeProject.ModName;
 
         SelectedInkCCFile = InkCCFileOption.FirstOrDefault()!;

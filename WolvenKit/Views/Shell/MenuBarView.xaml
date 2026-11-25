@@ -193,7 +193,7 @@
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
-                                Kind="TshirtCrew"
+                                Kind="HairDryer"
                                 Size="{DynamicResource WolvenKitIconTiny}"
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>

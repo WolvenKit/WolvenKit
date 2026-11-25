@@ -5,17 +5,24 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     Title="Convert hair to CCXL material"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    FocusManager.FocusedElement="{Binding ElementName=FilterableDropdownMenu}"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen">
-
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
     <Grid
+        Height="Auto"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+
         <Grid.Resources>
+
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources />
@@ -33,240 +40,533 @@
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
-                PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
-                <Grid
-                    Margin="{DynamicResource WolvenKitMarginTiny}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthLarge}" />
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="15" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Hair Mod Name:" />
-                    <TextBox
-                        x:Name="FileHairModName"
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        Text="{Binding HairmodName,
-                                       UpdateSourceTrigger=PropertyChanged}"
-                        KeyboardNavigation.TabIndex="6" />
+                <StackPanel>
 
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Name Displayed in CC" />
-                    <TextBox
-                        x:Name="CCDisplayName"
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        Text="{Binding CcDisplayName,
-                                       UpdateSourceTrigger=PropertyChanged}"
-                        KeyboardNavigation.TabIndex="6" />
+                    <Grid
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <Label
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Ink CC file:" />
-                    <ComboBox
-                        x:Name="InkCCDropdown"
-                        Grid.Row="4"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding InkCCFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedInkCCFile}"
-                        KeyboardNavigation.TabIndex="1" />
 
-                    <Label
-                        Grid.Row="6"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Json file:" />
-                    <ComboBox
-                        x:Name="JsonDropdown"
-                        Grid.Row="6"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding JsonFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedJsonFile}"
-                        KeyboardNavigation.TabIndex="1" />
 
-                    <Label
-                        Grid.Row="8"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Main hair App File:" />
-                    <ComboBox
-                        x:Name="MainAppDropdown"
-                        Grid.Row="8"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding AppFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedMainAppFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                    <Label
-                        Grid.Row="10"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Cyberware hair App File:" />
-                    <ComboBox
-                        x:Name="CybAppDropdown"
-                        Grid.Row="10"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding AppFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedCybAppFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                    <Label
-                        Grid.Row="12"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Shadow hair App File:" />
-                    <ComboBox
-                        x:Name="ShadowAppDropdown"
-                        Grid.Row="12"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding AppFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedShadowAppFile}"
-                        KeyboardNavigation.TabIndex="1" />
 
-                    <Label
-                        Grid.Row="14"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Main hair Mesh File:" />
-                    <ComboBox
-                        x:Name="MainMeshDropdown"
-                        Grid.Row="14"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding MeshFileOption,
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            Padding="4"
+                            BorderBrush="{DynamicResource WolvenKitBorderBrush}"
+                            BorderThickness="0,0,0,1">
+                            <TextBlock
+                                FontSize="{DynamicResource WolvenKitFontMedium}"
+                                Text="Structure setup" />
+
+                        </Border>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="V type" />
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <RadioButton
+                                Margin="0,0,15,0"
+                                Content="Female"
+                                GroupName="BodyType"
+                                IsChecked="{Binding VType,
+                                                    Mode=TwoWay}" />
+
+                            <RadioButton
+                                Content="Male"
+                                GroupName="BodyType" />
+
+                        </StackPanel>
+
+                        <editors:FilterableDropdownMenu
+                            x:Name="FilterableDropdownMenu"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Label="Parent folder:"
+                            Options="{Binding ProjectFolders,
                                               UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedMainMeshFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                    <Label
-                        Grid.Row="16"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Cyberware hair Mesh File:" />
-                    <ComboBox
-                        x:Name="CybMeshDropdown"
-                        Grid.Row="16"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding MeshFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedCybMeshFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                    <Label
-                        Grid.Row="18"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Shadow hair Mesh File:" />
-                    <ComboBox
-                        x:Name="ShadowMeshDropdown"
-                        Grid.Row="18"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding MeshFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedShadowMeshFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                    <Label
-                        Grid.Row="20"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Rig File:" />
-                    <ComboBox
-                        x:Name="RigDropdown"
-                        Grid.Row="20"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding RigFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedRigFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                    <Label
-                        Grid.Row="22"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Animgraph File:" />
-                    <ComboBox
-                        x:Name="AnimGraphDropdown"
-                        Grid.Row="22"
-                        Grid.Column="2"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        ItemsSource="{Binding AnimGraphFileOption,
-                                              UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedAnimGraphFile}"
-                        KeyboardNavigation.TabIndex="1" />
-                </Grid>
+                            SelectedOption="{Binding ParentFolderName,
+                                                     Mode=TwoWay}"
+                            IsInline="True" />
+
+
+                        <TextBox
+                            x:Name="ParentFolderPathBox"
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            Text="{Binding SelectedOption,
+                                           ElementName=FilterableDropdownMenu}"
+                            KeyboardNavigation.TabIndex="-1" />
+                        <Label
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="ArchiveXL File:" />
+                        <TextBox
+                            x:Name="AXLFileName"
+                            Grid.Row="6"
+                            Grid.Column="2"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            Text="{Binding AxlFile,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            KeyboardNavigation.TabIndex="6" />
+
+
+                    </Grid>
+                    <!-- Naming Grid -->
+                    <Grid
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <Border
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            Padding="4"
+                            BorderBrush="{DynamicResource WolvenKitBorderBrush}"
+                            BorderThickness="0,0,0,1">
+                            <TextBlock
+                                FontSize="{DynamicResource WolvenKitFontMedium}"
+                                Text="Naming" />
+
+                        </Border>
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            Content="Hair Mod Name" />
+
+                        <TextBox
+                            x:Name="FileHairModName"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            Text="{Binding HairmodName,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            KeyboardNavigation.TabIndex="6" />
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Grid.ColumnSpan="2"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
+                            Text="Name used within files" />
+
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="Name used in CC" />
+                        <TextBox
+                            x:Name="CCDisplayName"
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            Text="{Binding CcDisplayName,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            KeyboardNavigation.TabIndex="6" />
+                        <TextBlock
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Grid.ColumnSpan="2"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
+                            Text="Human-readable name for the character creation screen" />
+
+                    </Grid>
+
+                    <!-- Mesh Grid -->
+                    <Grid
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        Visibility="{Binding CreateFactory,
+                                             Converter={StaticResource InvertBooleanConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            Padding="4"
+                            BorderBrush="{DynamicResource WolvenKitBorderBrush}"
+                            BorderThickness="0,0,0,1">
+                            <TextBlock
+                                FontSize="{DynamicResource WolvenKitFontMedium}"
+                                Text="Mesh files" />
+
+                        </Border>
+
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="Main Mesh File:" />
+                        <ComboBox
+                            x:Name="MainMeshDropdown"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            ItemsSource="{Binding MeshFileOption,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedMainMeshFile}"
+                            KeyboardNavigation.TabIndex="1" />
+
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="Cyberware Mesh File:" />
+
+                        <CheckBox
+                            x:Name="CybMeshCheck"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            IsChecked="{Binding IsCybMeshEnabled}" />
+                        <ComboBox
+                            x:Name="CybMeshDropdown"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            IsEnabled="{Binding IsChecked,
+                                                ElementName=CybMeshCheck}"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            ItemsSource="{Binding MeshFileOption,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedCybMeshFile}"
+                            KeyboardNavigation.TabIndex="1" />
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="Shadow Mesh File:" />
+                        <CheckBox
+                            x:Name="ShadowMeshCheck"
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            IsChecked="{Binding IsShadowMeshEnabled}" />
+                        <ComboBox
+                            x:Name="ShadowMeshDropdown"
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            IsEnabled="{Binding IsChecked,
+                                                ElementName=ShadowMeshCheck}"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            ItemsSource="{Binding MeshFileOption,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedShadowMeshFile}"
+                            KeyboardNavigation.TabIndex="1" />
+
+
+                    </Grid>
+
+
+                    <!-- InkCC JSON Grid -->
+
+                    <Grid
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            Padding="4"
+                            BorderBrush="{DynamicResource WolvenKitBorderBrush}"
+                            BorderThickness="0,0,0,1">
+                            <TextBlock
+                                FontSize="{DynamicResource WolvenKitFontMedium}"
+                                Text="InkCC Json files" />
+
+                        </Border>
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="Ink CC file:" />
+                        <CheckBox
+                            x:Name="InkCheck"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding IsInkCCEnabled}" />
+
+                        <ComboBox
+                            x:Name="InkCCDropdown"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            IsEnabled="{Binding IsChecked,
+                                                ElementName=InkCheck}"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            ItemsSource="{Binding InkCCFileOption,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedInkCCFile}"
+                            KeyboardNavigation.TabIndex="1" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Background="#252525"
+                            BorderThickness="0"
+                            Content="Json file:" />
+                        <CheckBox
+                            x:Name="JSONCheck"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            IsChecked="{Binding IsJsonEnabled}" />
+                        <ComboBox
+                            x:Name="JsonDropdown"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            IsEnabled="{Binding IsChecked,
+                                                ElementName=JSONCheck}"
+                            helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                            ItemsSource="{Binding JsonFileOption,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedJsonFile}"
+                            KeyboardNavigation.TabIndex="1" />
+
+                    </Grid>
+
+
+                    <!-- App Grid -->
+                    <StackPanel Margin="{DynamicResource WolvenKitMarginTiny}">
+                        <Border
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            Padding="4"
+                            BorderBrush="{DynamicResource WolvenKitBorderBrush}"
+                            BorderThickness="0,0,0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="{DynamicResource WolvenKitFontMedium}"
+                                    Text="Appearance Files" />
+                                <CheckBox
+                                    x:Name="AppCheck"
+                                    Margin="8,0,0,0"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding IsAppEnabled}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Grid Visibility="{Binding IsChecked, ElementName=AppCheck, Converter={StaticResource BoolToVis}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Background="#252525"
+                                BorderThickness="0"
+                                Content="Main App File:" />
+                            <ComboBox
+                                x:Name="MainAppDropdown"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                                ItemsSource="{Binding AppFileOption,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding SelectedMainAppFile}"
+                                KeyboardNavigation.TabIndex="1" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Background="#252525"
+                                BorderThickness="0"
+                                Content="Cyberware App File:" />
+                            <ComboBox
+                                x:Name="CybAppDropdown"
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                                ItemsSource="{Binding AppFileOption,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding SelectedCybAppFile}"
+                                KeyboardNavigation.TabIndex="1" />
+
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Background="#252525"
+                                BorderThickness="0"
+                                Content="Shadow App File:" />
+                            <ComboBox
+                                x:Name="ShadowAppDropdown"
+                                Grid.Row="4"
+                                Grid.Column="2"
+                                helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                                ItemsSource="{Binding AppFileOption,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding SelectedShadowAppFile}"
+                                KeyboardNavigation.TabIndex="1" />
+                        </Grid>
+                    </StackPanel>
+                    <!-- Rig Grid -->
+                    <StackPanel Margin="{DynamicResource WolvenKitMarginTiny}">
+                        <Border
+                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                            Padding="4"
+                            BorderBrush="{DynamicResource WolvenKitBorderBrush}"
+                            BorderThickness="0,0,0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="{DynamicResource WolvenKitFontMedium}"
+                                    Text="Hair Physics files" />
+                                <CheckBox
+                                    x:Name="PhysCheck"
+                                    Margin="8,0,0,0"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding IsPhysEnabled}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Grid Visibility="{Binding IsChecked, ElementName=PhysCheck, Converter={StaticResource BoolToVis}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Background="#252525"
+                                BorderThickness="0"
+                                Content="Rig file:" />
+                            <ComboBox
+                                x:Name="RigDropdown"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                ItemsSource="{Binding RigFileOption,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding SelectedRigFile}"
+                                KeyboardNavigation.TabIndex="1" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Background="#252525"
+                                BorderThickness="0"
+                                Content="Animgraph file:" />
+                            <ComboBox
+                                x:Name="AnimGraphDropdown"
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                ItemsSource="{Binding AnimGraphFileOption,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding SelectedAnimGraphFile}"
+                                KeyboardNavigation.TabIndex="1" />
+                        </Grid>
+                    </StackPanel>
+
+                </StackPanel>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
     </Grid>
