@@ -67,6 +67,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemGeneratePropFile)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.GenerateRefitMeshesCommand,
+                    view => view.MenuItemGenerateRefitMeshes)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.AddPlayerHeadCommand,
                     view => view.MenuItemAddPlayerHead)
                 .DisposeWith(disposables);

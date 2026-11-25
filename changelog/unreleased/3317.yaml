@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3317
+      author: "manavortex"
+      description: "Refit mesh generator (you still need to refit yourself)"
