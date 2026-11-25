@@ -26,13 +26,10 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-                IEnumerable<byte> outBuffer = new List<byte>();
-                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
+                var r = Oodle.Compress(inbuffer, out var outBuffer, true);
 
-                var b = outBuffer.ToArray();
-
-                var crc = Crc32Algorithm.Compute(b);
-                bw.Write(b);
+                var crc = Crc32Algorithm.Compute(outBuffer);
+                bw.Write(outBuffer);
 
                 return ((uint)r, crc);
             }
