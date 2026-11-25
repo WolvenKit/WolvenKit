@@ -285,10 +285,7 @@ public partial class ProjectExplorerViewModel
                     continue;
                 }
 
-                if (!parent.Children.Contains(current))
-                {
-                    parent.Children.Add(current);
-                }
+                parent.Children.Add(current);
 
                 ExpandParentsOf(parent);
             }
