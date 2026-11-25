@@ -97,7 +97,7 @@
 
             <!--
                 TextBlock Margin="15" HorizontalAlignment="Center" VerticalAlignment="Center"
-                Foreground="{StaticResource WolvenKitRed}"
+                Foreground="{DynamicResource WolvenKitRed}"
                 Text="Theme changes will take affect after restart." /
             -->
 

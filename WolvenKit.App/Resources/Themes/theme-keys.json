@@ -512,6 +512,9 @@
       "group": "Backgrounds",
       "displayName": "Background Color Input Field Readonly",
       "kind": "Color",
+      "derivedBrushes": [
+        "BackgroundBrush_InputField_Readonly"
+      ],
       "description": "Background of read-only input fields"
     },
     {

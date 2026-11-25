@@ -26,7 +26,6 @@
 
     <Grid
         Height="Auto"
-        Margin="{DynamicResource WolvenKitMarginHeader}"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <ResourceDictionary>
@@ -100,7 +99,7 @@
                     x:Key="InlineLabelStyle"
                     BasedOn="{StaticResource LabelStyle}"
                     TargetType="{x:Type Label}">
-                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
                     <Setter Property="Padding" Value="0" />
                 </Style>
 
@@ -273,41 +272,45 @@
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Read appearances from Mesh 1 (the text box is ignored)"
                             Content="1" />
                         <CheckBox
                             x:Name="MeshFile1ReadAppearancesCheckbox"
                             Margin="{DynamicResource WolvenKitMarginRight}"
-                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            ToolTip="Read appearances from Mesh 1 (the text box is ignored)"
                             KeyboardNavigation.TabIndex="-1"
                             Click="OnReadAppearancesCheckboxChecked" />
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Read appearances from Mesh 2 (the text box is ignored)"
                             Content="2" />
                         <CheckBox
                             x:Name="MeshFile2ReadAppearancesCheckbox"
                             Margin="{DynamicResource WolvenKitMarginRight}"
-                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            ToolTip="Read appearances from Mesh 2 (the text box is ignored)"
                             KeyboardNavigation.TabIndex="-1"
                             Click="OnReadAppearancesCheckboxChecked" />
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Read appearances from Mesh 3 (the text box is ignored)"
                             Content="3" />
                         <CheckBox
                             x:Name="MeshFile3ReadAppearancesCheckbox"
                             Margin="{DynamicResource WolvenKitMarginRight}"
-                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            ToolTip="Read appearances from Mesh 3 (the text box is ignored)"
                             KeyboardNavigation.TabIndex="-1"
                             Click="OnReadAppearancesCheckboxChecked" />
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Read appearances from Mesh 4 (the text box is ignored)"
                             Content="4" />
                         <CheckBox
                             x:Name="MeshFile4ReadAppearancesCheckbox"
                             Margin="{DynamicResource WolvenKitMarginRight}"
-                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            ToolTip="Read appearances from Mesh 4 (the text box is ignored)"
                             KeyboardNavigation.TabIndex="-1"
                             Click="OnReadAppearancesCheckboxChecked" />
 
@@ -370,9 +373,11 @@
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Write appearance names into Mesh 1"
                             Content="1" />
                         <CheckBox
                             x:Name="MeshFile1UseAppearancesCheckbox"
+                            ToolTip="Write appearance names into Mesh 1"
                             Grid.Row="20"
                             Grid.Column="2"
                             Margin="{DynamicResource WolvenKitMarginRight}"
@@ -381,9 +386,11 @@
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Write appearance names into Mesh 2"
                             Content="2" />
                         <CheckBox
                             x:Name="MeshFile2UseAppearancesCheckbox"
+                            ToolTip="Write appearance names into Mesh 2"
                             Grid.Row="23"
                             Grid.Column="2"
                             Margin="{DynamicResource WolvenKitMarginRight}"
@@ -391,9 +398,11 @@
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Write appearance names into Mesh 3"
                             Content="3" />
                         <CheckBox
                             x:Name="MeshFile3UseAppearancesCheckbox"
+                            ToolTip="Write appearance names into Mesh 3"
                             Grid.Row="26"
                             Grid.Column="2"
                             Margin="{DynamicResource WolvenKitMarginRight}"
@@ -401,9 +410,11 @@
 
                         <Label
                             Style="{StaticResource InlineLabelStyle}"
+                            ToolTip="Write appearance names into Mesh 4"
                             Content="4" />
                         <CheckBox
                             x:Name="MeshFile4UseAppearancesCheckbox"
+                            ToolTip="Write appearance names into Mesh 4"
                             Grid.Row="29"
                             Grid.Column="2"
                             Margin="{DynamicResource WolvenKitMarginRight}"

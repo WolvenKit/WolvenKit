@@ -102,7 +102,7 @@
                         Grid.Column="1"
                         Grid.ColumnSpan="4"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
-                        Background="{StaticResource BackgroundBrush_InputField_Readonly}"
+                        Background="{DynamicResource BackgroundBrush_InputField_Readonly}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         IsReadOnly="True" />
 

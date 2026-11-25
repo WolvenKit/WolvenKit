@@ -186,7 +186,7 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Trigger.Setters>
-                                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitRed}" />
                                             <Setter Property="BorderThickness" Value="10" />
                                             <Setter Property="SnapsToDevicePixels" Value="True" />
                                         </Trigger.Setters>

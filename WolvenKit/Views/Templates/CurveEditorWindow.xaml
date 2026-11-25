@@ -221,7 +221,7 @@
 
                                             <GeometryDrawing.Pen>
                                                 <Pen
-                                                    Brush="{StaticResource WolvenKitGraphGrid}"
+                                                    Brush="{DynamicResource WolvenKitGraphGrid}"
                                                     Thickness="1" />
                                             </GeometryDrawing.Pen>
                                         </GeometryDrawing>
