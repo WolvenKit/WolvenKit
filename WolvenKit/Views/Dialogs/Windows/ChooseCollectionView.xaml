@@ -12,7 +12,7 @@
     Title="Select Items"
     MinWidth="{DynamicResource WolvenKitDialogWidthLarge}"
     MinHeight="{DynamicResource WolvenKitDialogHeightMedium}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <syncfusion:WizardControl
         CancelButtonCancelsWindow="True"
         CancelEnabled="True"

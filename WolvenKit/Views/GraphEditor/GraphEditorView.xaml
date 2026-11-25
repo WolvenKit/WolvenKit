@@ -104,16 +104,16 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </UserControl.Resources>
-    <Grid Background="{StaticResource ContentBackground}">
+    <Grid Background="{DynamicResource ContentBackground}">
         <!-- Major grid layer -->
         <Border
-            Background="{StaticResource EditorGridMajorBrush}"
+            Background="{DynamicResource EditorGridMajorBrush}"
             IsHitTestVisible="False" />
 
         <!-- Editor with minor grid background -->
         <nodify:NodifyEditor
             x:Name="Editor"
-            Background="{StaticResource EditorGridBrush}"
+            Background="{DynamicResource EditorGridBrush}"
             Connections="{Binding ElementName=uc,
                                   Path=Source.Connections}"
             ContextMenuOpening="Editor_OnContextMenuOpening"
@@ -148,7 +148,7 @@
                             Orientation="Horizontal">
                             <TextBlock
                                 VerticalAlignment="Center"
-                                Foreground="#888888"
+                                Foreground="{DynamicResource WolvenKitGray88}"
                                 FontSize="13"
                                 FontFamily="Consolas"
                                 Text="{Binding NodeIdText}"
@@ -233,7 +233,7 @@
                             Orientation="Horizontal">
                             <TextBlock
                                 VerticalAlignment="Center"
-                                Foreground="#888888"
+                                Foreground="{DynamicResource WolvenKitGray88}"
                                 FontSize="15"
                                 FontFamily="Consolas"
                                 Text="{Binding NodeIdText}"
@@ -334,7 +334,7 @@
                                                 Orientation="Horizontal">
                                                 <TextBlock
                                                     Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                                    Foreground="#999999"
+                                                    Foreground="{DynamicResource WolvenKitGray99}"
                                                     Text="{Binding Key}"
                                                     TextTrimming="CharacterEllipsis"
                                                     ToolTip="{Binding Key}" />
@@ -409,7 +409,7 @@
                                     <DataTrigger
                                         Binding="{Binding IsSelected}"
                                         Value="True">
-                                        <Setter Property="BorderBrush" Value="{StaticResource WolvenKitYellow}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitYellow}" />
                                         <Setter Property="BorderThickness" Value="2" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -442,7 +442,7 @@
                                             <TextBlock
                                                 Margin="4,0,0,0"
                                                 VerticalAlignment="Center"
-                                                Foreground="#777777"
+                                                Foreground="{DynamicResource WolvenKitGray77}"
                                                 FontSize="10"
                                                 FontFamily="Consolas"
                                                 Text="{Binding Subtitle}">
@@ -483,7 +483,7 @@
                                             <!-- Scene nodes only: Show Title as coordinate FIRST -->
                                             <TextBlock
                                                 VerticalAlignment="Center"
-                                                Foreground="#777777"
+                                                Foreground="{DynamicResource WolvenKitGray77}"
                                                 FontSize="10"
                                                 FontFamily="Consolas"
                                                 Text="{Binding Title}">
@@ -666,15 +666,15 @@
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
                                 <Setter Property="Cursor" Value="Hand" />
-                                <Setter Property="Stroke" Value="#FF7F7F7F" />
+                                <Setter Property="Stroke" Value="{DynamicResource WolvenKitGray7F}" />
                                 <Setter Property="StrokeThickness" Value="2.5" />
 
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                        <Setter Property="Stroke" Value="{DynamicResource WolvenKitYellow}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitGreen}" />
+                                        <Setter Property="Stroke" Value="{DynamicResource WolvenKitGreen}" />
                                     </Trigger>
 
                                     <!--
@@ -717,7 +717,7 @@
                     <Setter Property="Panel.ZIndex" Value="{Binding ZIndex, FallbackValue=0}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitYellow}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitYellow}" />
                             <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
                     </Style.Triggers>

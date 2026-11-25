@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WolvenKit.Views.Templates
 {
@@ -172,6 +173,32 @@ namespace WolvenKit.Views.Templates
             {
                 icon.SetResourceReference(MarginProperty, "WolvenKitMarginTiny");
             }
+
+            // A menu icon without its own color would inherit the menu item's foreground, which the Syncfusion
+            // menu style changes on hover (dark on some themes). Use the theme text color instead.
+            if (IsMenuItemIcon(icon)
+                && DependencyPropertyHelper.GetValueSource(icon, ForegroundProperty).BaseValueSource
+                    is BaseValueSource.Inherited or BaseValueSource.Default)
+            {
+                icon.SetResourceReference(ForegroundProperty, "ContentForeground");
+            }
+        }
+
+        private static bool IsMenuItemIcon(IconBox icon)
+        {
+            if (LogicalTreeHelper.GetParent(icon) is MenuItem logicalParent)
+            {
+                return ReferenceEquals(logicalParent.Icon, icon);
+            }
+
+            for (var parent = VisualTreeHelper.GetParent(icon); parent is not null; parent = VisualTreeHelper.GetParent(parent))
+            {
+                if (parent is MenuItem menuItem)
+                {
+                    return ReferenceEquals(menuItem.Icon, icon);
+                }
+            }
+            return false;
         }
     }
 }

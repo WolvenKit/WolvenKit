@@ -45,13 +45,13 @@
             TargetType="TextBlock">
             <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
             <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource ContentBackgroundAlt}">
+    <Grid Background="{DynamicResource ContentBackgroundAlt}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -63,8 +63,8 @@
         <Border
             Grid.Row="0"
             Padding="8,6"
-            Background="{StaticResource ContentBackground}"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource ContentBackground}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -80,10 +80,10 @@
                         Kind="TimelineClockOutline"
                         Margin="{DynamicResource WolvenKitMarginSmallRight}"
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                        Foreground="{DynamicResource WolvenKitYellow}" />
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         FontWeight="Bold"
                         Text="Section Timeline" />
@@ -116,7 +116,7 @@
                         Text="Duration:" />
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         FontSize="{DynamicResource WolvenKitFontBody}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:N0}ms ({1:N2}s)">
@@ -130,8 +130,8 @@
                     <Button
                         Margin="8,0,0,0"
                         Padding="8,3"
-                        Background="{StaticResource WolvenKitRed}"
-                        BorderBrush="{StaticResource WolvenKitRed}"
+                        Background="{DynamicResource WolvenKitRed}"
+                        BorderBrush="{DynamicResource WolvenKitRed}"
                         Command="{Binding ExtendSectionDurationToEventsCommand}"
                         Foreground="White"
                         ToolTip="Extend section duration to the end of the last event"
@@ -157,8 +157,8 @@
         <Border
             Grid.Row="1"
             Height="24"
-            Background="#FF2D2D30"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource WolvenKitGray2D}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,0,1"
             Visibility="{Binding HasSectionNode,
                                  Converter={StaticResource BoolToVis}}">
@@ -170,7 +170,7 @@
 
                 <Border
                     Grid.Column="0"
-                    Background="#FF252526" />
+                    Background="{DynamicResource WolvenKitGray25}" />
 
                 <Canvas
                     x:Name="TimeRulerCanvas"
@@ -197,14 +197,14 @@
                 <!-- Track Labels -->
                 <ItemsControl
                     Grid.Column="0"
-                    Background="#FF252526"
+                    Background="{DynamicResource WolvenKitGray25}"
                     ItemsSource="{Binding Tracks}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:TimelineTrack}">
                             <Border
                                 Height="{Binding HeightMultiplier,
                                                  Converter={StaticResource HeightToPixels}}"
-                                BorderBrush="{StaticResource BorderAlt}"
+                                BorderBrush="{DynamicResource BorderAlt}"
                                 BorderThickness="0,0,0,1">
                                 <StackPanel
                                     VerticalAlignment="Center"
@@ -238,7 +238,7 @@
                                     FallbackValue=800}"
                     Height="{Binding TotalTrackHeight,
                                      FallbackValue=200}"
-                    Background="#FF1E1E1E"
+                    Background="{DynamicResource WolvenKitGray1E}"
                     ClipToBounds="True"
                     MouseLeftButtonDown="TimelineCanvas_MouseLeftButtonDown"
                     MouseLeftButtonUp="TimelineCanvas_MouseLeftButtonUp"
@@ -272,8 +272,8 @@
         <Border
             Grid.Row="3"
             Padding="8,4"
-            Background="{StaticResource ContentBackground}"
-            BorderBrush="{StaticResource BorderAlt}"
+            Background="{DynamicResource ContentBackground}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,1,0,0"
             Visibility="{Binding HasSectionNode,
                                  Converter={StaticResource BoolToVis}}">
@@ -291,7 +291,7 @@
                     <CheckBox
                         Margin="{DynamicResource WolvenKitMarginSmallRight}"
                         VerticalAlignment="Center"
-                        Foreground="White"
+                        Foreground="{DynamicResource ContentForeground}"
                         Content="Snap"
                         IsChecked="{Binding IsSnapEnabled}" />
                     <TextBox

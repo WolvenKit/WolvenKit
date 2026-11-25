@@ -17,7 +17,7 @@
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
     Padding="{DynamicResource WolvenKitMargin}"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    Background="{DynamicResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -46,7 +46,7 @@
                 Padding="0"
                 Source="{Binding Body}"
                 FontSize="{DynamicResource WolvenKitFontBody}"
-                Background="{StaticResource ContentBackgroundAlt3}">
+                Background="{DynamicResource ContentBackgroundAlt3}">
             </markdown:SfMarkdownViewer>
         </ScrollViewer>
 
@@ -59,7 +59,7 @@
                 Width="{DynamicResource WolvenKitIcon}"
                 Height="{DynamicResource WolvenKitIcon}"
                 Margin="{DynamicResource WolvenKitMarginSmall}"
-                Foreground="{StaticResource WolvenKitRed}"
+                Foreground="{DynamicResource WolvenKitRed}"
                 Visibility="{Binding ShowLoadingSpinner,
                                      Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
@@ -129,7 +129,7 @@
                                         Binding="{Binding (ItemsControl.AlternationIndex),
                                                           RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
                                         Value="0">
-                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="Background" Value="{DynamicResource WolvenKitRed}" />
                                         <Setter Property="BorderBrush" Value="{x:Null}" />
                                     </DataTrigger>
                                 </Style.Triggers>

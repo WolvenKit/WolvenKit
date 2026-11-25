@@ -11,7 +11,7 @@
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="av"
     Width="{DynamicResource WolvenKitDialogWidthSmall}"
-    Background="{StaticResource ContentBackgroundAlt3}"
+    Background="{DynamicResource ContentBackgroundAlt3}"
     BorderBrush="{x:Null}"
     Tag="Project Wizard">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
@@ -160,7 +160,7 @@
             <TextBlock
                 Grid.Column="1"
                 VerticalAlignment="Center"
-                Foreground="{StaticResource WolvenKitRed}"
+                Foreground="{DynamicResource WolvenKitRed}"
                 Text="{Binding WhyNotCreate}" />
 
             <Button
@@ -170,7 +170,7 @@
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 Padding="{DynamicResource WolvenKitMarginSmall}"
                 HorizontalAlignment="Right"
-                Background="{StaticResource WolvenKitRed}"
+                Background="{DynamicResource WolvenKitRed}"
                 Content="Create" />
 
             <Button

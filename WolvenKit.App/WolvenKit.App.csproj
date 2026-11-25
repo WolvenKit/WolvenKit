@@ -54,6 +54,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
+    <EmbeddedResource Include="Resources\Themes\theme-keys.json" />
+    <EmbeddedResource Include="Resources\Themes\Builtin\*.json" />
   </ItemGroup>
 
   <ItemGroup>
