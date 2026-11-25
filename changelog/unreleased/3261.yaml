@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3261
+      author: ["seberoth", "notaspirit"]
+      description: "Support reading and writing worldStreamingSector files with version 62 shipped in 2.31"
