@@ -1022,28 +1022,14 @@ public class DocumentTools
             .ToList();
     }
 
-
-    private static readonly Dictionary<string, List<string>> s_patchMeshPathCache = [];
-
-
     /// <summary>
     /// Returns a list of absolute paths to .xl files patching the current mesh.
     /// If no project files are found, it will search in the base game installation folder.
     /// </summary>
     /// <param name="pathToPatch"></param>
-    /// <param name="clearCache"></param>
     /// <returns></returns>
-    public List<string> FindPatchFilePaths(string pathToPatch, bool clearCache = false)
+    public List<string> FindPatchFilePaths(string pathToPatch)
     {
-        if (clearCache)
-        {
-            s_patchMeshPathCache.Clear();
-        }
-
-        if (s_patchMeshPathCache.TryGetValue(pathToPatch, out var cachedList))
-        {
-            return cachedList;
-        }
 
         List<string> ret = [];
 
@@ -1100,18 +1086,21 @@ public class DocumentTools
             ret.Add(absolutePath);
         });
 
-        ret = ret.Distinct().ToList();
-
-        s_patchMeshPathCache.TryAdd(pathToPatch, ret);
-
-        return ret;
+        return ret.Distinct().ToList();
     }
+
 
     public List<string> FindPatchMeshPaths(string pathToPatch)
     {
-        List<string> ret = [];
-
         var patchFiles = FindPatchFilePaths(pathToPatch);
+
+        if (patchFiles.Count == 0)
+        {
+            return [];
+        }
+
+        Dictionary<string, List<string>> patchDict = [];
+        Dictionary<string, List<string>> scopeDict = [];
 
         foreach (var patchFile in patchFiles)
         {
@@ -1121,27 +1110,72 @@ public class DocumentTools
             }
 
             if (ArchiveXlHelper.YamlToObject(yamlText) is not Dictionary<object, object> yamlObject ||
-                yamlObject.TryGetValue("resource", out var resource) == false ||
-                resource is not Dictionary<object, object> r ||
-                r.TryGetValue("patch", out var patchValue) != true ||
-                patchValue is not Dictionary<object, object> patchDict)
+                !yamlObject.TryGetValue("resource", out var resource) ||
+                resource is not Dictionary<object, object> r)
             {
                 continue;
             }
 
-            foreach (var kvp in patchDict)
+            // collect scopes
+            if (r.TryGetValue("scope", out var scopeValue) &&
+                scopeValue is Dictionary<object, object> scope)
             {
-                if (kvp.Key is not string patchMesh || kvp.Value is not List<object> patchedMeshes ||
-                    patchedMeshes.OfType<string>().All(path => path != pathToPatch))
+                foreach (var kvp in scope)
+                {
+                    if (kvp.Key is not string scopeName || kvp.Value is not List<object> patchedMeshes)
+                    {
+                        continue;
+                    }
+
+                    var scopedFiles = scopeDict.TryGetValue(scopeName, out var value) ? value : [];
+                    scopedFiles.AddRange(patchedMeshes.OfType<string>());
+                    scopeDict[scopeName] = scopedFiles.Distinct().ToList();
+                }
+            }
+
+            // collect patch meshes
+            if (!r.TryGetValue("patch", out var patchValue) ||
+                patchValue is not Dictionary<object, object> dict)
+            {
+                continue;
+            }
+
+            foreach (var kvp in dict)
+            {
+                if (kvp.Key is not string patchMesh || kvp.Value is not List<object> patchedMeshes)
                 {
                     continue;
                 }
 
-                ret.Add(patchMesh);
+                var targetMeshes = patchDict.TryGetValue(patchMesh, out var value) ? value : [];
+                targetMeshes.AddRange(patchedMeshes.OfType<string>());
+                patchDict[patchMesh] = targetMeshes.Distinct().ToList();
             }
         }
 
-        return ret.Distinct().ToList();
+        // iterate over a copy of the list and resolve scopes
+        foreach (var key in patchDict.Keys.ToList())
+        {
+            patchDict[key] = patchDict[key]
+                .SelectMany<string, string>(v =>
+                    scopeDict.TryGetValue(v, out var scopedValues)
+                        ? scopedValues
+                        : new[] { v })
+                .ToList();
+        }
+
+        // patch paths can be non-distinct, as multiple mods can patch
+        var ret = patchDict.Keys.Where(f => patchDict[f].Contains(pathToPatch)).Distinct().ToList();
+        if (ret.Count > 0)
+        {
+            return ret;
+        }
+
+        // if we didn't find any patch meshes, the user has probably already moved the mesh.
+        // Let's try to find it by file name (but only allow single matches!)
+        pathToPatch = Path.GetFileName(pathToPatch);
+        return patchDict.Keys.Where(f => patchDict[f].Count(p => p.Contains(pathToPatch)) == 1).Distinct().ToList();
+
     }
 
     public void ClearMeshMaterials(CMesh mesh)
