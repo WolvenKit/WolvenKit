@@ -517,6 +517,12 @@
         <Setter Property="TabItemSelectedBorderBrush" Value="{DynamicResource WolvenKitAccentShadow}" />
         <Setter Property="TabItemSelectedForeground" Value="{DynamicResource WolvenKitAccentForeground}" />
         <Setter Property="TabPanelBackground" Value="{DynamicResource ContentBackgroundAlt2}" />
+        <!--
+            The tabs take Syncfusion's tab style by name. As the implicit style they got another one after a theme
+            change while WolvenKit runs (without the template of TabItemHeaderStyle="Fill"): the selected tab lost
+            its accent color until restart.
+        -->
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource SyncfusionTabItemExtStyle}" />
         <!--  the base style captures its foreground on load (stayed on the previous theme after a switch)  -->
         <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
         <!--

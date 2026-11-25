@@ -29,6 +29,12 @@ public partial class TypeSelectorDialog : ReactiveUserControl<TypeSelectorDialog
 
         TypeDataGrid.FilterRowCellRenderers.Add("TextBoxExt", new GridFilterRowTextBoxRendererExt());
 
+        // Escape closes the dialog as Cancel does. The keyboard focus starts in the dialog: it stayed on the "+"
+        // button of the editor that opened it, where Escape didn't reach the dialog.
+        PreviewKeyDown += OnPreviewKeyDown;
+        Loaded += (_, _) => Dispatcher.BeginInvoke(() => TypeDataGrid.Focus(),
+            System.Windows.Threading.DispatcherPriority.Input);
+
         this.WhenActivated(disposables =>
         {
             TypeDataGrid.ClearFilters();
@@ -45,5 +51,16 @@ public partial class TypeSelectorDialog : ReactiveUserControl<TypeSelectorDialog
             this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                 .DisposeWith(disposables);
         });
+    }
+
+    private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Escape || ViewModel is null)
+        {
+            return;
+        }
+
+        ViewModel.CancelCommand.Execute(null);
+        e.Handled = true;
     }
 }

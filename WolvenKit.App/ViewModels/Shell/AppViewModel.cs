@@ -252,8 +252,47 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             dockElement.PropertyChanged += DockedView_OnPropertyChanged;
         }
 
+        UpdateDocumentPathHints();
         OpenDocumentChanged?.Invoke(this, EventArgs.Empty);
 
+    }
+
+    /// <summary>
+    /// The Asset Browser can show the game file of this open document (a project file in the archive folder, or a
+    /// file opened from the game).
+    /// </summary>
+    public bool CanShowInAssetBrowser(IDocumentViewModel? document) =>
+        document is RedDocumentViewModel &&
+        AssetBrowserLookup.TryGetHash(document.FilePath, _projectManager.ActiveProject?.ModDirectory, out _);
+
+    /// <summary>
+    /// Opens the Asset Browser on the game file of this open document, as "Open in Asset Browser" of the
+    /// Project Explorer does.
+    /// </summary>
+    public void ShowInAssetBrowser(IDocumentViewModel document)
+    {
+        if (document is not RedDocumentViewModel ||
+            !AssetBrowserLookup.TryGetHash(document.FilePath, _projectManager.ActiveProject?.ModDirectory, out var hash))
+        {
+            return;
+        }
+
+        var assetBrowser = GetToolViewModel<AssetBrowserViewModel>();
+        assetBrowser.IsVisible = true;
+        assetBrowser.ShowFile(hash);
+    }
+
+    /// <summary>
+    /// Tabs of open files with the same name show the part of their folder path that tells them apart.
+    /// </summary>
+    private void UpdateDocumentPathHints()
+    {
+        var documents = DockedViews.OfType<DocumentViewModel>().ToList();
+        var hints = DocumentPathHints.Compute(documents.Select(d => (string?)d.FilePath).ToList());
+        for (var i = 0; i < documents.Count; i++)
+        {
+            documents[i].PathHint = hints[i];
+        }
     }
 
     public class DockedViewVisibleChangedEventArgs(IDockElement element)
@@ -266,6 +305,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        // saved under another path
+        if (e.PropertyName == nameof(DocumentViewModel.FilePath))
+        {
+            UpdateDocumentPathHints();
+            return;
+        }
+
         if (e.PropertyName != nameof(IDockElement.IsVisible) || sender is not IDockElement dockElement)
         {
             return;

@@ -79,6 +79,8 @@ namespace WolvenKit.Views.Shell
                     new RoutedEventHandler((sender, _) => UseThemeTabBrushes(sender as TabControlExt)));
                 EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ContextMenu), System.Windows.Controls.ContextMenu.OpenedEvent,
                     new RoutedEventHandler((sender, _) => G_Dock?.OnContextMenuOpened(sender as System.Windows.Controls.ContextMenu)));
+                EventManager.RegisterClassHandler(typeof(TabItemExt), ContextMenuService.ContextMenuOpeningEvent,
+                    new ContextMenuEventHandler(OnTabContextMenuOpening));
             }
         }
 
@@ -197,6 +199,8 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         private void OnContextMenuOpened(System.Windows.Controls.ContextMenu menu)
         {
+            AddDocumentTabMenuItems(menu);
+
             if (menu?.PlacementTarget is not DependencyObject target
                 || !IsInsideTabControlExt(target)
                 || Application.Current?.TryFindResource("WolvenKitTabListMenuItemStyle") is not Style style)
@@ -220,6 +224,236 @@ namespace WolvenKit.Views.Shell
                 _tabListMenuLogged = true;
                 _logger.Debug($"Themes: tab list menu restyled ({count} of {menu.Items.Count} items).");
             }
+        }
+
+        private const string OpenInAssetBrowserTag = "WolvenKitOpenInAssetBrowser";
+
+        /// <summary>
+        /// Right click on the tab of an open file: "Open in Asset Browser", as in the Project Explorer.
+        /// </summary>
+        private void AddDocumentTabMenuItems(System.Windows.Controls.ContextMenu menu)
+        {
+            if (menu is null || _viewModel is null)
+            {
+                return;
+            }
+
+            var target = menu.PlacementTarget as DependencyObject;
+            var tab = target is null ? null : FindTabItem(target);
+
+            // a menu of something inside the tab (property tree, ...) is not the tab's menu
+            if (tab is not null && !IsOnTabItself(tab, target))
+            {
+                return;
+            }
+
+            // Only the menu of an open file's tab. Tabs inside a document (the tabs of a file's editor, Properties,
+            // ...) belong to tab controls with Syncfusion's tab menu turned off.
+            if (tab is not null ? !ShowsTabMenu(tab) && !HasOtherItems(menu) : !HasDocumentTabItems(menu))
+            {
+                return;
+            }
+
+            // the right-clicked tab's document; a tool panel's tab (Asset Browser, ...) gets nothing; the active
+            // document if the menu doesn't say which tab it is for
+            var pane = tab is null ? null : FindDockElement(tab);
+            if (pane is not null and not IDocumentViewModel)
+            {
+                return;
+            }
+            var document = pane as IDocumentViewModel ?? ActiveDocument;
+
+            if (menu.ItemsSource is not null)
+            {
+                return;
+            }
+
+            var existing = menu.Items.OfType<System.Windows.Controls.MenuItem>()
+                .FirstOrDefault(i => Equals(i.Tag, OpenInAssetBrowserTag));
+            var separator = menu.Items.OfType<System.Windows.Controls.Separator>()
+                .FirstOrDefault(i => Equals(i.Tag, OpenInAssetBrowserTag));
+
+            if (document is null || !_viewModel.CanShowInAssetBrowser(document))
+            {
+                // the same menu can open for another tab later
+                existing?.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                separator?.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                return;
+            }
+
+            if (existing is null)
+            {
+                existing = new System.Windows.Controls.MenuItem
+                {
+                    Header = "Open in Asset Browser",
+                    Tag = OpenInAssetBrowserTag
+                };
+                existing.Click += (sender, _) =>
+                {
+                    if ((sender as FrameworkElement)?.DataContext is IDocumentViewModel clicked)
+                    {
+                        _viewModel?.ShowInAssetBrowser(clicked);
+                    }
+                };
+                separator = new System.Windows.Controls.Separator { Tag = OpenInAssetBrowserTag };
+                menu.Items.Add(separator);
+                menu.Items.Add(existing);
+            }
+
+            existing.DataContext = document;
+            existing.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            separator?.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        /// <summary>
+        /// The menu of an open file's tab: it holds Syncfusion's "Close All But This".
+        /// </summary>
+        private static bool HasDocumentTabItems(System.Windows.Controls.ContextMenu menu)
+        {
+            foreach (var item in menu.Items)
+            {
+                var header = (item as HeaderedItemsControl)?.Header ?? item;
+                if (header is string text && text.Replace("_", "").Equals("Close All But This", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The tab control of this tab shows Syncfusion's tab menu (Close, Close All But This, ...).
+        /// </summary>
+        private static bool ShowsTabMenu(TabItemExt tab) => FindTabControl(tab) is { ShowTabItemContextMenu: true };
+
+        private static TabControlExt FindTabControl(TabItemExt tab)
+        {
+            if (ItemsControl.ItemsControlFromItemContainer(tab) is TabControlExt owner)
+            {
+                return owner;
+            }
+
+            DependencyObject element = tab;
+            for (var depth = 0; depth < 12 && element is not null; depth++)
+            {
+                if (element is TabControlExt tabControl)
+                {
+                    return tabControl;
+                }
+                element = element is Visual or System.Windows.Media.Media3D.Visual3D
+                    ? VisualTreeHelper.GetParent(element)
+                    : LogicalTreeHelper.GetParent(element);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Tabs of tab controls with Syncfusion's tab menu turned off (inside a file's editor, Properties, ...)
+        /// still opened an empty menu on right click: don't open it.
+        /// </summary>
+        private static void OnTabContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (sender is TabItemExt tab
+                && IsOnTabItself(tab, e.OriginalSource as DependencyObject)
+                && FindTabControl(tab) is not null
+                && !ShowsTabMenu(tab)
+                && (tab.ContextMenu is null || !HasOtherItems(tab.ContextMenu)))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// The right click is on the tab itself (its header). A tab control shows the selected tab's content outside
+        /// of the tab item, so an element inside the item is part of the header; the walk stops at a nested tab or menu.
+        /// </summary>
+        private static bool IsOnTabItself(TabItemExt tab, DependencyObject source)
+        {
+            for (var depth = 0; depth < 32 && source is not null; depth++)
+            {
+                if (ReferenceEquals(source, tab))
+                {
+                    return true;
+                }
+                if (source is TabItemExt or System.Windows.Controls.Primitives.MenuBase)
+                {
+                    return false;
+                }
+                source = source is Visual or System.Windows.Media.Media3D.Visual3D
+                    ? VisualTreeHelper.GetParent(source)
+                    : LogicalTreeHelper.GetParent(source);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The menu shows something besides "Open in Asset Browser".
+        /// </summary>
+        private static bool HasOtherItems(System.Windows.Controls.ContextMenu menu) =>
+            menu.ItemsSource is not null
+            || menu.Items.Cast<object>().Any(i =>
+                !(i is FrameworkElement element && Equals(element.Tag, OpenInAssetBrowserTag))
+                && (i is not UIElement ui || ui.Visibility == Visibility.Visible));
+
+        private static TabItemExt FindTabItem(DependencyObject element)
+        {
+            for (var depth = 0; depth < 8 && element is not null; depth++)
+            {
+                if (element is TabItemExt tab)
+                {
+                    return tab;
+                }
+                element = element is Visual or System.Windows.Media.Media3D.Visual3D
+                    ? VisualTreeHelper.GetParent(element)
+                    : LogicalTreeHelper.GetParent(element);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The pane (document or tool) of a DockingManager tab: the tab holds the ContentControl this adapter
+        /// created for it.
+        /// </summary>
+        private static IDockElement FindDockElement(TabItemExt tab)
+        {
+            object content = tab;
+            for (var depth = 0; depth < 4 && content is not null; depth++)
+            {
+                if (content is IDockElement pane)
+                {
+                    return pane;
+                }
+                content = (content as ContentControl)?.Content;
+            }
+
+            // the tab's header shows the pane: its DataContext (see HeaderTemplate, RedDocumentHeader)
+            return FindHeaderPane(tab, 0);
+        }
+
+        private static IDockElement FindHeaderPane(DependencyObject element, int depth)
+        {
+            if (depth > 12)
+            {
+                return null;
+            }
+
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i);
+                if (child is FrameworkElement { Name: "RedDocumentHeader", DataContext: IDockElement pane })
+                {
+                    return pane;
+                }
+                if (child is TabItemExt)
+                {
+                    continue;
+                }
+                if (FindHeaderPane(child, depth + 1) is { } found)
+                {
+                    return found;
+                }
+            }
+            return null;
         }
 
         private static bool IsInsideTabControlExt(DependencyObject element)
