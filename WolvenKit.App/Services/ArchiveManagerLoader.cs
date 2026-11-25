@@ -56,6 +56,13 @@ public sealed class ArchiveManagerLoader: IArchiveManagerLoader
             return;
         }
 
+        // Prevent overlapping archive loads.
+        if (_archiveManager.IsManagerLoading)
+        {
+            _loggerService.Debug("The Archive Manager is already loading. Skipping a second load.");
+            return;
+        }
+
         if (_settingsManager.CP77ExecutablePath is null)
         {
             _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");

@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3182
+      author: "Akiway"
+      description: "The Scene Editor can now generate vanilla lipsync animation sets for every installed voice-over language and assign them in the scene."

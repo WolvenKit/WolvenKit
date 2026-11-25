@@ -232,6 +232,22 @@
                 </Style.Triggers>
             </Style>
 
+            <!-- .scene -->
+            <Style
+                x:Key="ShowSceneMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType}"
+                        Value="{x:Static documents:RedDocumentItemType.Scene}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <!-- App file: .app -->
             <Style
                 x:Key="ShowAppMenuItemStyle"
@@ -1040,6 +1056,34 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="EmoticonHappy"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!-- .scene -->
+            <MenuItem
+                Style="{StaticResource ShowSceneMenuItemStyle}"
+                Header="Scene"
+                SubmenuOpened="OnMenuOpened"
+                SubmenuClosed="OnMenuClosed">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="MovieOpen"
+                        Foreground="White" />
+                </MenuItem.Icon>
+
+                <!-- Generate lipsync anim sets -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Header="Generate vanilla lipsync anim sets"
+                    ToolTip="Copies the base game lipsync animations of this scene's dialogue lines into anim sets of the project, and registers them for this scene in a lipmap through ArchiveXL"
+                    Command="{Binding Path=GenerateLipsyncAnimSetsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="AccountVoice"
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
