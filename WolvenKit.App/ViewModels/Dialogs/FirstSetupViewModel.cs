@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -86,7 +87,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
         {
             Title = "Select Cyberpunk 2077 executable",
             Multiselect = false,
-            Filter = "Cyberpunk2077.exe|*.exe"
+            Filter = "Cyberpunk 2077 Executable (Cyberpunk2077.exe, cpLauncher.exe, gamelaunchhelper.exe)|Cyberpunk2077.exe;cpLauncher.exe;gamelaunchhelper.exe|Executable files (*.exe)|*.exe|All files (*.*)|*.*"
         };
 
         if (dlg.ShowDialog() != true)
@@ -101,6 +102,29 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
         }
 
         CP77ExePath = result;
+    }
+
+    [RelayCommand]
+    private void OpenCP77GameFolder()
+    {
+        var dlg = new FolderPicker
+        {
+            Title = "Select Cyberpunk 2077 installation folder",
+            ForceFileSystem = true
+        };
+
+        if (dlg.ShowDialog() != true)
+        {
+            return;
+        }
+
+        var result = dlg.ResultPath;
+        if (string.IsNullOrEmpty(result))
+        {
+            return;
+        }
+
+        CP77ExePath = ResolveExecutablePath(result);
     }
 
     [RelayCommand]
@@ -132,17 +156,49 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     private delegate void StrDelegate(string value);
 
-    private const string _steamCommonInstallLocation = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe";
+    private static readonly string[] _knownDefaultLocations =
+    [
+        "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe",
+        "C:\\GOG Games\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe"
+    ];
     private const string _uninstallKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
     private const string _uninstallKey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
+    private static string? ResolveExecutablePath(string? path)
+    {
+        if (!string.IsNullOrEmpty(path) && Directory.Exists(path) && !File.Exists(path))
+        {
+            var resolved = Red4PathHelper.ResolveExecutable(path);
+            if (resolved is not null)
+            {
+                return resolved.FullName;
+            }
+        }
+
+        return path;
+    }
+
     private void TryToFindCP77ExecutableAutomatically()
     {
-        // Try Steam Default
-        if (File.Exists(_steamCommonInstallLocation))
+        // Try Known Default Locations (Steam, GOG)
+        foreach (var location in _knownDefaultLocations)
         {
-            CP77ExePath = _steamCommonInstallLocation;
-            return;
+            if (File.Exists(location))
+            {
+                CP77ExePath = location;
+                return;
+            }
+        }
+
+        // Try dynamically detected Xbox PC installation locations across all ready drives
+        foreach (var xboxLocation in Red4PathHelper.GetDefaultXboxGameLocations())
+        {
+            var exe = Red4PathHelper.ResolveExecutable(xboxLocation);
+            if (exe is not null)
+            {
+                CP77ExePath = exe.FullName;
+                return;
+            }
         }
 
         // Parallel Lookup through Registry Uninstall SubKeys.
@@ -209,7 +265,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     public void ExecuteFinish()
     {
-        _settingsManager.CP77ExecutablePath = CP77ExePath;
+        _settingsManager.CP77ExecutablePath = ResolveExecutablePath(CP77ExePath);
         _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
         _settingsManager.Bounce();
     }
@@ -219,17 +275,40 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
     public void ValidateCP77ExePath()
     {
         ClearError(nameof(CP77ExePath));
-        if (File.Exists(CP77ExePath) && Path.GetFileName(CP77ExePath).Equals(Core.Constants.Red4Exe))
+
+        if (string.IsNullOrWhiteSpace(CP77ExePath))
         {
-            var oodle = Path.Combine(new FileInfo(CP77ExePath).Directory!.FullName, Core.Constants.Oodle);
-            if (!File.Exists(oodle))
+            AddError(nameof(CP77ExePath), "Locate game executable (.exe) or installation folder for full WolvenKit functionality.");
+            return;
+        }
+
+        var path = CP77ExePath;
+        if (Directory.Exists(path) && !File.Exists(path))
+        {
+            var resolvedExe = Red4PathHelper.ResolveExecutable(path);
+            if (resolvedExe is not null)
             {
-                AddError(nameof(CP77ExePath), $"Oodle dll was not found within the game installation. Please make sure you have {Core.Constants.Oodle} next to your game executable.");
+                path = resolvedExe.FullName;
+            }
+            else
+            {
+                AddError(nameof(CP77ExePath), "No Cyberpunk 2077 executable found in the selected folder.");
+                return;
+            }
+        }
+
+        if (File.Exists(path) && Red4PathHelper.IsRed4Executable(path))
+        {
+            var rootDir = Red4PathHelper.ResolveGameRootDir(path);
+            var oodle = Red4PathHelper.ResolveOodleDll(rootDir, path);
+            if (string.IsNullOrEmpty(oodle) || !File.Exists(oodle))
+            {
+                AddError(nameof(CP77ExePath), $"Oodle dll was not found within the game installation. Please make sure you have {Core.Constants.Oodle} in your game installation.");
             }
         }
         else
         {
-            AddError(nameof(CP77ExePath), "Locate game executable (.exe) for full WolvenKit functionality.");
+            AddError(nameof(CP77ExePath), "Locate game executable (.exe) or installation folder for full WolvenKit functionality.");
         }
     }
 

@@ -62,7 +62,7 @@ namespace WolvenKit.Views.HomePage.Pages
             {
                 case nameof(ISettingsDto.CP77ExecutablePath):
                     propertyItem.Editor =
-                        new SingleFilePathEditor() { Filters = new PathEditorFilter[] { new("Cyberpunk2077.exe", "*.exe") } };
+                        new SingleFilePathEditor() { Filters = new PathEditorFilter[] { new("Cyberpunk 2077 Executable", "*.exe") } };
                     break;
                 case nameof(ISettingsManager.MaterialRepositoryPath):
                     propertyItem.Editor = new SingleFolderPathEditor();

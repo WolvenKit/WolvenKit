@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands;
@@ -36,13 +37,8 @@ internal class ConflictsCommand : CommandBase
         }
 
         // check if game dir
-        if (!path.Name.Equals("Cyberpunk 2077"))
-        {
-            logger.Error("Incorrect input path: Not game folder");
-            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
-        }
-        var gameExe = new FileInfo(Path.Combine(path.FullName, "bin", "x64", "Cyberpunk2077.exe"));
-        if (!gameExe.Exists)
+        var gameExe = Red4PathHelper.ResolveExecutable(path.FullName);
+        if (gameExe is null)
         {
             logger.Error("Incorrect input path: Not game folder");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
