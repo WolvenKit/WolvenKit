@@ -278,6 +278,8 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                     {
                         try
                         {
+                            // before the conversion: a native crash in it leaves this as the last line of the log
+                            _loggerService.Debug($"Uncooking {entry.Name}");
                             exportArgs.Get<MlmaskExportArgs>().AsList = false;
                             await _modTools.UncookSingleAsync(entry.GetArchive<ICyberGameArchive>(), entry.Key, materialRepoDir, exportArgs);
 
@@ -302,6 +304,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                         {
                             try
                             {
+                                _loggerService.Debug($"Uncooking {entry.Name}");
                                 exportArgs.Get<MlmaskExportArgs>().AsList = false;
                                 _modTools.UncookSingle(entry.GetArchive<Archive>(), entry.Key, materialRepoDir, exportArgs);
 

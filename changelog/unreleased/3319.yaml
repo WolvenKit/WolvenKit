@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3319
+      author: "Ametis81"
+      description: "Depot generation no longer runs out of memory converting textures, and textures with no raw format (TRF_Invalid) open and uncook again"

@@ -1006,7 +1006,10 @@ public partial class RedImage : IDisposable
             result._uncompressedFormat = metadata.Format;
         }
 
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        // the raw format only tells the uncompressed format; some vanilla compressed textures have none
+        // (TRF_Invalid, e.g. t_001__drill_machine_screen_m.xbm): they stay readable, without an uncompressed format
+        if (TexHelper.Instance.IsCompressed(metadata.Format) &&
+            info.RawFormat is not (ETextureRawFormat.TRF_Invalid or ETextureRawFormat.TRF_Max))
         {
             result.UncompressedFormat = CommonFunctions.GetDXGIFormat(ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
         }
