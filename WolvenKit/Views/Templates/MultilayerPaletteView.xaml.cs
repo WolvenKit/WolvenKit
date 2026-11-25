@@ -71,6 +71,12 @@ namespace WolvenKit.Views.Editors
 
         private ChunkViewModel _subscribed;
 
+        /// <summary>The layer of the colorScale: its material decides the palette.</summary>
+        private ChunkViewModel _subscribedLayer;
+
+        /// <summary>The template the palette was built for.</summary>
+        private string _template;
+
         /// <summary>Text of the search box: colors whose name doesn't contain it are dimmed.</summary>
         private string _search = "";
 
@@ -100,6 +106,12 @@ namespace WolvenKit.Views.Editors
             {
                 cvm.PropertyChanged += OnCvmPropertyChanged;
                 _subscribed = cvm;
+
+                if (cvm.Parent is { } layer)
+                {
+                    layer.PropertyChanged += OnLayerPropertyChanged;
+                    _subscribedLayer = layer;
+                }
             }
 
             Rebuild();
@@ -112,12 +124,29 @@ namespace WolvenKit.Views.Editors
                 _subscribed.PropertyChanged -= OnCvmPropertyChanged;
                 _subscribed = null;
             }
+
+            if (_subscribedLayer is not null)
+            {
+                _subscribedLayer.PropertyChanged -= OnLayerPropertyChanged;
+                _subscribedLayer = null;
+            }
         }
 
         // the outline follows a colorScale picked in the dropdown or typed
         private void OnCvmPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ChunkViewModel.Data))
+            {
+                Rebuild();
+            }
+        }
+
+        // another material picked for the layer: the palette of its template
+        private void OnLayerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ChunkViewModel.Data) &&
+                Cvm is { ParentData: Multilayer_Layer layer } &&
+                layer.Material.DepotPath.GetResolvedText() != _template)
             {
                 Rebuild();
             }
@@ -153,6 +182,7 @@ namespace WolvenKit.Views.Editors
             RowsScroll.SetCurrentValue(VisibilityProperty, gridMode ? Visibility.Collapsed : Visibility.Visible);
             // the dropdown is the fallback: shown until there's a palette to pick from
             SetCurrentValue(DropdownVisibilityProperty, Visibility.Visible);
+            _template = (Cvm?.ParentData as Multilayer_Layer)?.Material.DepotPath.GetResolvedText();
 
             if (Cvm is not { ParentData: Multilayer_Layer layer } cvm ||
                 layer.Material.DepotPath.GetResolvedText() is not { Length: > 0 } template ||
