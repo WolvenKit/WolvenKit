@@ -94,6 +94,7 @@ public partial class TemplateFileTools
             atlasFileName: fileName,
             tileWidth: 200,
             tileHeight: 200,
+            false,
             _cr2WTools,
             project
         );

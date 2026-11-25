@@ -5,6 +5,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Interfaces.Extensions;
+using StringSplitOptions = System.StringSplitOptions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -17,12 +18,14 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         ExistingFiles = project.ModFiles.Where(f => f.HasFileExtension(".inkatlas"))
             .ToDictionary<string, string>(x => x);
         InkatlasFileName = $"{project.Name}_icons";
+        CreateIconsByName = "";
 
         IconFileSizes = new Dictionary<string, (int, int)>()
         {
             { "Clothing item (160x160)", (160, 160) },
-            { "Weapon small (160x80)", (160, 80) },
-            { "Weapon (160x120)", (160, 80) },
+            { "Weapon big (320x160)", (320, 160) },
+            { "Weapon gun (320x120)", (320, 120) },
+            { "Weapon Melee (Machete, 320x80)", (320, 80) },
             { "NPV", (200, 200) },
         };
     }
@@ -46,6 +49,11 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
                 }
 
                 break;
+            case nameof(CreateIconsByName):
+                CreateIconsByNameList.Clear();
+                CreateIconsByNameList.AddRange(CreateIconsByName.Split([',', ';', ' ', '\n'],
+                    StringSplitOptions.RemoveEmptyEntries));
+                break;
         }
 
         base.OnPropertyChanged(e);
@@ -61,6 +69,11 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// Remember the last selection
     /// </summary>
     [ObservableProperty] private bool _rememberValues = true;
+
+    /// <summary>
+    /// Crop icons (instead of scaling them)?
+    /// </summary>
+    [ObservableProperty] private bool _cropIcons = false;
 
     /// <summary>
     /// Relative path to inkatlas folder
@@ -91,4 +104,11 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// Source directory for raw png files
     /// </summary>
     [ObservableProperty] private string _pngSourceDir = "";
+
+    /// <summary>
+    /// List of icons to create by name
+    /// </summary>
+    [ObservableProperty] private string _createIconsByName = "";
+
+    public List<string> CreateIconsByNameList { get; set; } = [];
 }
