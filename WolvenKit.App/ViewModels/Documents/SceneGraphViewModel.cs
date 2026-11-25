@@ -586,7 +586,8 @@ namespace WolvenKit.App.ViewModels.Documents
         /// <summary>
         /// Takes a dialogue export written by another tool - the Dialogue Browser CET mod writes
         /// one from its conversation panel - and adds its lines to the screenplay store, with
-        /// their embedded text and lipsync animations.
+        /// their embedded text and lipsync animations. Where the user asks for it, the same lines
+        /// are also laid out as a section node in the graph.
         /// </summary>
         [RelayCommand]
         private void ImportDialogue()
@@ -608,8 +609,8 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 var dialog = Interactions.ShowDialogueImport(new DialogueImportDialogOptions(
                     FileName,
-                    existingLineLocStrings,
-                    existingOptionLocStrings,
+                    screenplayLines,
+                    screenplayOptions,
                     GetSceneActorOptions()));
 
                 // Cancelled.
@@ -641,15 +642,42 @@ namespace WolvenKit.App.ViewModels.Documents
                 var addedOptions = 0;
                 var addedTexts = 0;
                 var addedActors = 0;
+                var reusedLines = 0;
+                var repairedLines = 0;
                 var skipped = 0;
+
+                // The lines as a section plays them, gathered as they are dealt with so each is
+                // paired with the item id it actually plays. Empty when no section was asked for.
+                var sectionLines = new List<SectionDialogueLine>();
 
                 foreach (var selection in importedLines)
                 {
                     var line = selection.Line;
 
-                    // Checked again here rather than trusted from the dialog: its list was built
-                    // when it opened, and the same locstring must never end up with two screenplay
-                    // entries pointing at it.
+                    // Already in the scene, taken so a section can play the entry that is there.
+                    // Nothing is written for it - not the entry, and not its embedded text, which is
+                    // not this import's to change. An entry with no item id gets one, since an event
+                    // needs a target.
+                    if (selection.ExistingLine is { } existingLine)
+                    {
+                        if (!SceneEditingHelper.HasAssignedItemId(existingLine.ItemId))
+                        {
+                            existingLine.ItemId = new scnscreenplayItemId { Id = nextLineItemId };
+                            nextLineItemId += SceneEditingHelper.ScreenplayItemIdStep;
+                            repairedLines++;
+                        }
+
+                        if (dialog.CreateSectionNode)
+                        {
+                            sectionLines.Add(selection.ToSectionLine(existingLine.ItemId));
+                        }
+
+                        reusedLines++;
+                        continue;
+                    }
+
+                    // Checked again rather than trusted from the dialog, whose list was built when
+                    // it opened: one locstring must never get two screenplay entries.
                     var known = line.IsChoiceOption ? existingOptionLocStrings : existingLineLocStrings;
 
                     if (!known.Add(line.LocStringId))
@@ -663,11 +691,11 @@ namespace WolvenKit.App.ViewModels.Documents
                         screenplayOptions.Add(new scnscreenplayChoiceOption
                         {
                             ItemId = new scnscreenplayItemId { Id = nextOptionItemId },
-                            LocstringId = new scnlocLocstringId { Ruid = (CRUID)line.LocStringId },
+                            LocstringId = new scnlocLocstringId { Ruid = line.LocStringId },
                             Usage = new scnscreenplayOptionUsage { PlayerGenderMask = new scnGenderMask { Mask = 3 } }
                         });
 
-                        nextOptionItemId += 256;
+                        nextOptionItemId += SceneEditingHelper.ScreenplayItemIdStep;
                         addedOptions++;
                     }
                     else
@@ -675,7 +703,7 @@ namespace WolvenKit.App.ViewModels.Documents
                         var dialogueLine = new scnscreenplayDialogLine
                         {
                             ItemId = new scnscreenplayItemId { Id = nextLineItemId },
-                            LocstringId = new scnlocLocstringId { Ruid = (CRUID)line.LocStringId },
+                            LocstringId = new scnlocLocstringId { Ruid = line.LocStringId },
                             Usage = new scnscreenplayLineUsage { PlayerGenderMask = new scnGenderMask { Mask = 3 } }
                         };
 
@@ -683,15 +711,15 @@ namespace WolvenKit.App.ViewModels.Documents
                         // against the scene's cast by name, then whatever the user picked instead.
                         // A line they left unassigned keeps the default, which is the same "no
                         // actor" a line added by hand starts out with.
-                        if (selection.SpeakerActorId is { } speakerActorId)
+                        if (selection.Speaker is { } speaker)
                         {
-                            dialogueLine.Speaker = new scnActorId { Id = speakerActorId };
+                            dialogueLine.Speaker = speaker;
                             addedActors++;
                         }
 
-                        if (selection.AddresseeActorId is { } addresseeActorId)
+                        if (selection.Addressee is { } addressee)
                         {
-                            dialogueLine.Addressee = new scnActorId { Id = addresseeActorId };
+                            dialogueLine.Addressee = addressee;
                             addedActors++;
                         }
 
@@ -710,7 +738,12 @@ namespace WolvenKit.App.ViewModels.Documents
 
                         screenplayLines.Add(dialogueLine);
 
-                        nextLineItemId += 256;
+                        if (dialog.CreateSectionNode)
+                        {
+                            sectionLines.Add(selection.ToSectionLine(dialogueLine.ItemId));
+                        }
+
+                        nextLineItemId += SceneEditingHelper.ScreenplayItemIdStep;
                         addedLines++;
                     }
 
@@ -720,7 +753,9 @@ namespace WolvenKit.App.ViewModels.Documents
                     }
                 }
 
-                if (addedLines == 0 && addedOptions == 0)
+                // Nothing written, nothing repaired and nothing to lay out: the import had no
+                // effect at all.
+                if (addedLines == 0 && addedOptions == 0 && repairedLines == 0 && sectionLines.Count == 0)
                 {
                     _logger?.Warning("Dialogue import: every line was already in the scene.");
                     return;
@@ -742,8 +777,8 @@ namespace WolvenKit.App.ViewModels.Documents
                     UpdateTabContent(SelectedTab);
                 }
 
-                // Auto-expand to show what came in. A payload can hold both, and both halves of the
-                // store are worth revealing when it does.
+                // Auto-expand to show what came in - both halves, where a payload held both. A run
+                // that only reused what was there reveals neither.
                 if (addedLines > 0)
                 {
                     ExpandToNewEntry("screenplayStore", "lines");
@@ -758,16 +793,98 @@ namespace WolvenKit.App.ViewModels.Documents
                 OnPropertyChanged(nameof(TotalDialogues));
                 OnPropertyChanged(nameof(TotalChoices));
 
+                var section = CreateSectionForImport(dialog, sectionLines);
+
+                // A run that wrote nothing to the store should not lead with "Imported 0 dialogue
+                // line(s)".
+                var wroteToStore = addedLines > 0 || addedOptions > 0;
+
                 _logger?.Success(
-                    $"Imported {addedLines} dialogue line(s)" +
-                    (addedOptions > 0 ? $" and {addedOptions} choice option(s)" : "") +
-                    (createEmbeddedText ? $", {addedTexts} with embedded text" : "") +
-                    (addedActors > 0 ? $", {addedActors} speaker/addressee assignment(s)" : "") +
-                    (skipped > 0 ? $". Skipped {skipped} already in the scene" : ""));
+                    (wroteToStore
+                        ? $"Imported {addedLines} dialogue line(s)" +
+                          (addedOptions > 0 ? $", {addedOptions} choice option(s)" : "") +
+                          (createEmbeddedText ? $", {addedTexts} with embedded text" : "") +
+                          (addedActors > 0 ? $", and {addedActors} speaker/addressee assignment(s)" : "") +
+                          (reusedLines > 0 ? $".\n Reused {reusedLines} line(s)" : "")
+                        : $"Reused {reusedLines} line(s), no new lines added") +
+                    (repairedLines > 0
+                        ? $".\n Gave an item id to {repairedLines} existing screenplay entr" +
+                          (repairedLines == 1 ? "y" : "ies")
+                        : "") +
+                    (section is not null
+                        ? $".\n Section node created, running {section.DurationMs}ms" +
+                          $" over {section.ActorCount} actor(s)"
+                        : "") +
+                    (skipped > 0 ? $".\n Skipped {skipped} already in the scene" : ""));
             }
             catch (Exception ex)
             {
                 _logger?.Error($"Failed to import dialogue: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Lays an import out as a section node in the graph, where the user asked for one.
+        /// </summary>
+        /// <param name="dialog">
+        /// Dialog state used to name the section node.
+        /// </param>
+        /// <param name="lines">
+        /// The lines, each already carrying the item id it plays. Empty for an import of nothing but
+        /// choice options, since an option is picked rather than played.
+        /// </param>
+        /// <returns>What was built, or null where nothing was.</returns>
+        private BuiltDialogueSection? CreateSectionForImport(
+            DialogueImportDialogViewModel dialog,
+            List<SectionDialogueLine> lines)
+        {
+            if (!dialog.CreateSectionNode)
+            {
+                return null;
+            }
+
+            if (lines.Count == 0)
+            {
+                _logger?.Warning(
+                    "Dialogue import: nothing to lay out as a section - a choice option is picked, not played.");
+                return null;
+            }
+
+            try
+            {
+                var section = SceneSectionBuilder.Build(lines);
+
+                MainGraph.AddSceneNode(
+                    section.Node,
+                    MainGraph.GetFreeCanvasPoint(),
+                    SceneSectionBuilder.SanitizeNotablePointName(dialog.ConversationName));
+
+                OnPropertyChanged(nameof(TotalNodes));
+
+                if (section.EstimatedDurationCount > 0)
+                {
+                    _logger?.Info(
+                        $"Dialogue import: the export gave no length for {section.EstimatedDurationCount} " +
+                        "line(s), so the section estimated them from their text. Check them on the timeline.");
+                }
+
+                // An export with no start times loses the original conversation's pacing, which is
+                // worth saying before the user wonders where it went.
+                if (section.PlacedByExportCount < lines.Count)
+                {
+                    _logger?.Info(
+                        $"Dialogue import: the export placed {section.PlacedByExportCount} of {lines.Count} " +
+                        "line(s) on its own timeline; the rest were laid end to end. A newer Dialogue " +
+                        "Browser exports the conversation's own timings.");
+                }
+
+                return section;
+            }
+            catch (Exception ex)
+            {
+                // The lines are in the store either way; only the section is lost.
+                _logger?.Error($"Imported the lines, but could not lay them out as a section: {ex.Message}");
+                return null;
             }
         }
 
@@ -808,22 +925,26 @@ namespace WolvenKit.App.ViewModels.Documents
         /// <summary>
         /// Locstring ids of a screenplay collection, as something an import can be checked against.
         /// </summary>
-        private static HashSet<ulong> GetLocStringIds(IEnumerable<scnlocLocstringId?>? locStringIds) =>
+        private static HashSet<CRUID> GetLocStringIds(IEnumerable<scnlocLocstringId?>? locStringIds) =>
             locStringIds?
                 .Where(locStringId => locStringId != null)
-                .Select(locStringId => (ulong)locStringId!.Ruid)
+                .Select(locStringId => locStringId!.Ruid)
                 .ToHashSet() ?? [];
 
         /// <summary>
         /// Embeds a line's text into the scene's locStore, as a payload entry plus the descriptor
         /// that points a locstring at it.
         /// </summary>
+        /// <param name="locStringId">Locstring id to describe.</param>
+        /// <param name="text">Text to embed.</param>
+        /// <param name="random">Random source for variant ids.</param>
         /// <param name="describedLocStrings">
         /// The locstrings the locStore already describes, which this adds to. Handed in rather than
         /// read from the store so that importing n lines does not walk it n times.
         /// </param>
         /// <returns>False when there was nothing to embed, or the locStore already describes this locstring.</returns>
-        private bool AddEmbeddedText(ulong locStringId, string text, Random random, HashSet<ulong> describedLocStrings)
+        private bool AddEmbeddedText(
+            CRUID locStringId, string text, Random random, HashSet<CRUID> describedLocStrings)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -849,7 +970,7 @@ namespace WolvenKit.App.ViewModels.Documents
             // Create VdEntry (descriptor entry) linking locStringId to the payload with en_us locale
             _sceneData.LocStore.VdEntries.Add(new scnlocLocStoreEmbeddedVariantDescriptorEntry
             {
-                LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringId },
+                LocstringId = new scnlocLocstringId { Ruid = locStringId },
                 VariantId = new scnlocVariantId { Ruid = variantCruid },
                 VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
                 Signature = new scnlocSignature { Val = 3 }, // gender mask: 1 = male, 2 = female, 3 = both
