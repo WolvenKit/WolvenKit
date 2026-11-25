@@ -169,15 +169,36 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
 
         var elementCount = _reader.ReadInt32();
 
-        for (var i = 0; i < elementCount; i++)
+        // The element type, once: it used to be copied for every element.
+        var elementTypeInfos = redTypeInfos.Skip(1).ToList();
+
+        // Byte arrays in one read: rendRenderMeshBlobHeader.opacityMicromaps of a vegetation
+        // mesh has ~10 million entries, read one by one (with a type dispatch and a boxed
+        // value each) that took ~10 s per mesh.
+        if (type == typeof(CArray<CUInt8>) && elementCount > 0 &&
+            BaseStream.Length - BaseStream.Position >= elementCount)
         {
-            result.Add(Read(redTypeInfos.Skip(1).ToList()));
+            var bytes = _reader.ReadBytes(elementCount);
+            var list = new List<CUInt8>(bytes.Length);
+            foreach (var b in bytes)
+            {
+                list.Add(b);
+            }
+
+            result = new CArray<CUInt8>(list!);
+        }
+        else
+        {
+            for (var i = 0; i < elementCount; i++)
+            {
+                result.Add(Read(elementTypeInfos));
+            }
         }
 
         var remaining = size - (BaseStream.Position - startPos);
         while (readAdditionalBytes && remaining > 0)
         {
-            result.Add(Read(redTypeInfos.Skip(1).ToList()));
+            result.Add(Read(elementTypeInfos));
 
             remaining = size - (BaseStream.Position - startPos);
         }
