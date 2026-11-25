@@ -193,7 +193,9 @@ public class DocumentTools
         bool sortAndDistinct = true)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
+        {
             return [];
+        }
 
         var journalPaths = CollectProjectFiles(".journal");
 
@@ -233,7 +235,7 @@ public class DocumentTools
                 _cr2wFileCache[x.Key] = cr2w;
             }
 
-            return await GetJournalIDsAsync(cr2w, x.Value!, filter);
+            return await GetJournalIDsAsync(cr2w, x.Value!, filter ?? "");
         });
 
         var results = await Task.WhenAll(tasks);
@@ -269,9 +271,12 @@ public class DocumentTools
     }
 
     private async Task<List<JournalPathOption>> GetJournalIDsAsync(CR2WFile? cr2W, string absoluteFilePath,
-        string? filter = null)
+        string filter = "")
     {
-        if (cr2W == null || string.IsNullOrEmpty(filter)) return [];
+        if (cr2W == null)
+        {
+            return [];
+        }
 
         var filterKey = (absoluteFilePath, filter);
 
