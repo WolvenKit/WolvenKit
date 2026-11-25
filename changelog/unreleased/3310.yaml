@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 3310
+      author: "spuddeh"
+      description: "worldInstancedOccluderNode entries of a node with 64 or more of them no longer read as garbage"
