@@ -170,10 +170,18 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
         if (InplaceCompressedBuffer != null)
         {
             var tmpBytes = InplaceCompressedBuffer.Buffer.GetBytes();
+            var real_memsize = 0u;
             if (Oodle.IsCompressed(tmpBytes))
             {
+                real_memsize = BitConverter.ToUInt32( tmpBytes, 4 );
                 Oodle.DecompressBuffer(tmpBytes, out var raw);
                 tmpBytes = raw;
+                if (Oodle.IsCompressed(tmpBytes))
+                {
+                    real_memsize = BitConverter.ToUInt32( tmpBytes, 4 );
+                    Oodle.DecompressBuffer(tmpBytes, out var realraw);
+                    tmpBytes = realraw;
+                }
             }
             defferedBuffer = new MemoryStream(tmpBytes);
         }
@@ -202,11 +210,9 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
             var wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
             var component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
             var boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
-
             var x = DequantU16toF32(br.ReadUInt16());
             var y = DequantU16toF32(br.ReadUInt16());
             var z = DequantU16toF32(br.ReadUInt16());
-
             AnimKeys.Add(ToAnimKey(timeNormalized, boneIdx, component, x, y, z, wSign));
         }
 
