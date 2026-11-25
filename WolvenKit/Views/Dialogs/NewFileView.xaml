@@ -56,68 +56,81 @@
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 
-        <syncfusion:SfDataGrid
-            x:Name="DataGrid"
+        <DockPanel
             Grid.Row="0"
-            Grid.Column="2"
-            HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
-            RowHeight="{DynamicResource WolvenKitNewFileRowHeight}"
-            FilterRowPosition="FixedTop"
-            AutoGenerateColumns="False">
-            <syncfusion:SfDataGrid.Columns>
+            Grid.Column="2">
+            <!-- searches the files of the selected category -->
+            <hc:SearchBar
+                x:Name="SearchBar"
+                DockPanel.Dock="Top"
+                Margin="0,0,0,2"
+                Background="{DynamicResource BackgroundColor_Frame_Background}"
+                BorderBrush="{DynamicResource WolvenKitSearchBorder}"
+                BorderThickness="1"
+                Style="{StaticResource SearchBarStyle}"
+                hc:BorderElement.CornerRadius="0"
+                hc:InfoElement.Placeholder="Search files"
+                hc:InfoElement.ShowClearButton="True"
+                FlowDirection="LeftToRight"
+                IsRealTime="True"
+                TextChanged="SearchBar_OnTextChanged" />
 
-                <syncfusion:GridTemplateColumn
-                    ColumnSizer="AutoLastColumnFill"
-                    AllowFiltering="True"
-                    AllowSorting="True"
-                    HeaderText="File"
-                    IsReadOnly="True"
-                    MappingName="Name"
-                    UseBindingValue="True"
-                    ValueBinding="{Binding Path=FullText}"
-                    FilterRowEditorType="TextBox"
-                    FilterRowCondition="Contains"
-                    ImmediateUpdateColumnFilter="True">
+            <syncfusion:SfDataGrid
+                x:Name="DataGrid"
+                HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
+                RowHeight="{DynamicResource WolvenKitNewFileRowHeight}"
+                ItemsSourceChanged="DataGrid_OnItemsSourceChanged"
+                AutoGenerateColumns="False">
+                <syncfusion:SfDataGrid.Columns>
 
-                    <syncfusion:GridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid
-                                Margin="{DynamicResource WolvenKitMarginTinyVertical}"
-                                VerticalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="{DynamicResource WolvenKitNewFileIconWidth}" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+                    <syncfusion:GridTemplateColumn
+                        ColumnSizer="AutoLastColumnFill"
+                        AllowFiltering="False"
+                        AllowSorting="True"
+                        HeaderText="File"
+                        IsReadOnly="True"
+                        MappingName="Name">
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                        <syncfusion:GridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid
+                                    Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                                    VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{DynamicResource WolvenKitNewFileIconWidth}" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
 
-                                <others:FileIcon
-                                    Grid.RowSpan="2"
-                                    Grid.Column="0"
-                                    Width="{DynamicResource WolvenKitIconTiny}"
-                                    Icon="{Binding Extension}" />
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
-                                    FontWeight="Bold"
-                                    Text="{Binding Name}" />
+                                    <others:FileIcon
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Width="{DynamicResource WolvenKitIconTiny}"
+                                        Icon="{Binding Extension}" />
 
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
-                                    Text="{Binding Description}" />
-                            </Grid>
-                        </DataTemplate>
-                    </syncfusion:GridTemplateColumn.CellTemplate>
-                </syncfusion:GridTemplateColumn>
-            </syncfusion:SfDataGrid.Columns>
-        </syncfusion:SfDataGrid>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                                        FontWeight="Bold"
+                                        Text="{Binding Name}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                                        Text="{Binding Description}" />
+                                </Grid>
+                            </DataTemplate>
+                        </syncfusion:GridTemplateColumn.CellTemplate>
+                    </syncfusion:GridTemplateColumn>
+                </syncfusion:SfDataGrid.Columns>
+            </syncfusion:SfDataGrid>
+        </DockPanel>
 
         <!-- BOTTOM NAME BAR -->
         <Border
