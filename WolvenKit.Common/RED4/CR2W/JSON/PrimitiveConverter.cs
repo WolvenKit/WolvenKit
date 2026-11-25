@@ -70,7 +70,7 @@ public class CKeyValuePairConverter : CustomRedConverter<CKeyValuePair>
         {
             throw new JsonException();
         }
-        var (valType, _) = RedReflection.GetCSTypeFromRedType(reader.GetString().NotNull());
+        var (valType, _) = RedReflection.GetCSTypeFromRedType(reader.GetString().NotNull(), RedJsonSerializer.GetHeader().GameVersion);
         if (valType == null)
         {
             throw new JsonException();
@@ -522,7 +522,7 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
                     }
                     else
                     {
-                        cls = RedTypeManager.Create(clsType);
+                        cls = RedTypeManager.Create(clsType, RedJsonSerializer.GetHeader().GameVersion);
                     }
 
                     typeInfo = RedReflection.GetTypeInfo(cls);
@@ -638,7 +638,7 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
         }
         else
         {
-            cls = RedTypeManager.Create(clsType);
+            cls = RedTypeManager.Create(clsType, RedJsonSerializer.GetHeader().GameVersion);
         }
 
         if (refId != null && !_referenceResolver.HasReference(refId))
@@ -718,7 +718,7 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
                 reader.Read();
 
                 var propertyTypeStr = reader.GetString().NotNull();
-                var (propertyType, _) = RedReflection.GetCSTypeFromRedType(propertyTypeStr);
+                var (propertyType, _) = RedReflection.GetCSTypeFromRedType(propertyTypeStr, RedJsonSerializer.GetHeader().GameVersion);
                 valInfo = cls.AddDynamicProperty(key, propertyType);
 
                 reader.Read();
@@ -1088,7 +1088,7 @@ public class CR2WFileConverter : CustomRedConverter<CR2WFile>
                             throw new JsonException();
                         }
 
-                        _referenceResolver.AddReference(i.ToString(), RedTypeManager.Create(type));
+                        _referenceResolver.AddReference(i.ToString(), RedTypeManager.Create(type, RedJsonSerializer.GetHeader().GameVersion));
                     }
 
                     var conv = (RedClassConverter)options.GetConverter(typeof(RedBaseClass));
