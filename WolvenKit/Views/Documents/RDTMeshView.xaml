@@ -1277,7 +1277,7 @@
                 x:Name="NodeSearchHint"
                 DockPanel.Dock="Top"
                 Margin="{DynamicResource WolvenKitMarginTiny}"
-                Foreground="{StaticResource WolvenKitYellow}"
+                Foreground="{DynamicResource WolvenKitYellow}"
                 TextWrapping="Wrap"
                 Visibility="Collapsed">
                 <Run Text="The selected object is hidden by the search." />

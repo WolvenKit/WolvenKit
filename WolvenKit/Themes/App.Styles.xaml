@@ -317,7 +317,7 @@
     <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
 
     <SolidColorBrush x:Key="BackgroundBrush_InputField" Color="{DynamicResource ContentBackgroundAlt2}" />
-    <SolidColorBrush x:Key="BackgroundBrush_InputField_Readonly" Color="{DynamicResource BackgroundColor_InputField_Readonly}" />
+    <SolidColorBrush x:Key="BackgroundBrush_InputField_Readonly" Color="{StaticResource BackgroundColor_InputField_Readonly}" />
 
     <!-- Graph and Curve Editors -->
     <SolidColorBrush x:Key="WolvenKitGraphGrid" Color="{StaticResource WolvenKitGraphGridColor}" />

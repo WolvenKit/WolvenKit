@@ -26,7 +26,6 @@
     </Window.Resources>
     <Grid
         Height="Auto"
-        Margin="{DynamicResource WolvenKitMarginHeader}"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <ResourceDictionary>

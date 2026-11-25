@@ -35,7 +35,7 @@
 
                             <GeometryDrawing.Pen>
                                 <Pen
-                                    Brush="{StaticResource ForegroundColor}"
+                                    Brush="{DynamicResource ForegroundColor}"
                                     Thickness="1" />
                             </GeometryDrawing.Pen>
                         </GeometryDrawing>

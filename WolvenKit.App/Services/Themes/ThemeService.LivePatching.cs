@@ -101,6 +101,7 @@ public sealed partial class ThemeService
         if (sender is Window window)
         {
             ApplyWindowBorder(window);
+            ApplyWindowBackground(window);
         }
 
         // Many views merge their own copy of the HandyControl theme (<hc:ThemeResources/> in

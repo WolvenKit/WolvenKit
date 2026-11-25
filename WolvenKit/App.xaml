@@ -279,11 +279,130 @@
                 </StackPanel>
             </ControlTemplate>
 
+            <!--
+                Wizards (the dialogs of File > Generate files and the like): Syncfusion's MaterialDark styles take their
+                colors with StaticResource, so a theme changed while WolvenKit runs only reached them after a restart.
+                The same colors as DynamicResource, and the navigation bar's buttons as WolvenKit buttons.
+            -->
+            <Style
+                BasedOn="{StaticResource {x:Type syncfusion:WizardControl}}"
+                TargetType="{x:Type syncfusion:WizardControl}">
+                <Setter Property="Background" Value="{DynamicResource PopupBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+                <Setter Property="Foreground" Value="{DynamicResource ContentForeground}" />
+            </Style>
+
+            <Style
+                BasedOn="{StaticResource {x:Type syncfusion:WizardPage}}"
+                TargetType="{x:Type syncfusion:WizardPage}">
+                <Setter Property="Background" Value="{DynamicResource PopupBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+                <Setter Property="BannerBackground" Value="{DynamicResource PopupBackground}" />
+                <Style.Triggers>
+                    <!--  no dialog shows a banner image: drop the empty banner column and its border on the left  -->
+                    <Trigger Property="PageType" Value="Exterior">
+                        <Setter Property="BannerImageWidth" Value="0" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                Data grids (the song list of the RadioExt dialog and the like): the same reason, for their borders and
+                header background. Views with their own GridCell / GridHeaderCellControl styles keep them.
+            -->
+            <Style
+                BasedOn="{StaticResource {x:Type syncfusion:SfDataGrid}}"
+                TargetType="{x:Type syncfusion:SfDataGrid}">
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+            </Style>
+
+            <Style
+                BasedOn="{StaticResource {x:Type syncfusion:GridHeaderCellControl}}"
+                TargetType="{x:Type syncfusion:GridHeaderCellControl}">
+                <Setter Property="Background" Value="{DynamicResource ContentBackgroundAlt2}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+            </Style>
+
+            <Style
+                BasedOn="{StaticResource {x:Type syncfusion:GridCell}}"
+                TargetType="{x:Type syncfusion:GridCell}">
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+            </Style>
+
             <Style
                 BasedOn="{StaticResource SyncfusionWizardNavigationAreaStyle}"
                 TargetType="{x:Type syncfusion:WizardNavigationArea}">
                 <Setter Property="MinHeight" Value="{DynamicResource WolvenKitWizardNavBarMinHeight}" />
                 <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
+                <Setter Property="Background" Value="{DynamicResource PopupBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
+                <!--  Syncfusion's template (MaterialDark 34.2.2) with WolvenKit buttons and a plain Border  -->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type syncfusion:WizardNavigationArea}">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="True">
+                                <Grid MinHeight="24" Margin="{TemplateBinding Padding}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button
+                                        x:Name="PART_HelpButton"
+                                        Style="{StaticResource WKButtonStyle}"
+                                        MinWidth="66"
+                                        Margin="8,0,8,0"
+                                        Command="syncfusion:WizardCommands.Help"
+                                        Content="{Binding HelpText, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                        Visibility="{Binding (syncfusion:WizardControl.SelectedWizardPage).(syncfusion:WizardPage.HelpVisibility), RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}" />
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            x:Name="PART_CancelButton"
+                                            Style="{StaticResource WKButtonStyle}"
+                                            MinWidth="66"
+                                            Margin="0,0,8,0"
+                                            Command="syncfusion:WizardCommands.Cancel"
+                                            Content="{Binding CancelText, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                            Visibility="{Binding (syncfusion:WizardControl.SelectedWizardPage).(syncfusion:WizardPage.CancelVisibility), RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}" />
+                                        <Button
+                                            x:Name="PART_BackButton"
+                                            Style="{StaticResource WKButtonStyle}"
+                                            MinWidth="66"
+                                            Margin="0,0,8,0"
+                                            Command="syncfusion:WizardCommands.Previous"
+                                            Content="{Binding BackText, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                            Visibility="{Binding (syncfusion:WizardControl.SelectedWizardPage).(syncfusion:WizardPage.BackVisibility), RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}" />
+                                        <Button
+                                            x:Name="PART_NextButton"
+                                            Style="{StaticResource WKButtonStyle}"
+                                            MinWidth="66"
+                                            Margin="0,0,8,0"
+                                            Command="syncfusion:WizardCommands.Next"
+                                            Content="{Binding NextText, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                            IsDefault="{Binding NextFocused, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                            Visibility="{Binding (syncfusion:WizardControl.SelectedWizardPage).(syncfusion:WizardPage.NextVisibility), RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}" />
+                                        <Button
+                                            x:Name="PART_FinishButton"
+                                            Style="{StaticResource WKButtonStyle}"
+                                            MinWidth="66"
+                                            Margin="0,0,8,0"
+                                            Command="syncfusion:WizardCommands.Finish"
+                                            Content="{Binding FinishText, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                            IsDefault="{Binding FinishFocused, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}"
+                                            Visibility="{Binding (syncfusion:WizardControl.SelectedWizardPage).(syncfusion:WizardPage.FinishVisibility), RelativeSource={RelativeSource AncestorType={x:Type syncfusion:WizardControl}}}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

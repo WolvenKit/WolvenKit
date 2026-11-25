@@ -933,7 +933,7 @@
                             x:Name="TopLine"
                             MinHeight="27"
                             Margin="160,0,0,0"
-                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderBrush="{DynamicResource BorderAlt}"
                             BorderThickness="1,1,0,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -970,7 +970,7 @@
                                 <GridSplitter
                                     Grid.Column="2"
                                     HorizontalAlignment="Stretch"
-                                    Background="{StaticResource BorderAlt}" />
+                                    Background="{DynamicResource BorderAlt}" />
                                 <ContentControl
                                     Grid.Column="3"
                                     Content="{Binding}"
@@ -1241,7 +1241,7 @@
                     <Border
                         Height="Auto"
                         VerticalAlignment="Top"
-                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderBrush="{DynamicResource BorderAlt}"
                         BorderThickness="0,0,0,1">
                         <ItemsPresenter />
                     </Border>
@@ -1256,7 +1256,7 @@
                         <Border
                             Height="Auto"
                             VerticalAlignment="Top"
-                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderBrush="{DynamicResource BorderAlt}"
                             BorderThickness="0,0,0,1">
                             <ItemsPresenter />
                         </Border>
@@ -1268,7 +1268,7 @@
                         <Border
                             Height="Auto"
                             VerticalAlignment="Top"
-                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderBrush="{DynamicResource BorderAlt}"
                             BorderThickness="0,0,0,1">
                             <ItemsPresenter />
                         </Border>
@@ -1276,7 +1276,7 @@
                 </ItemsControl.Template-->
             <!--ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="TopLine" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderAlt}" MinHeight="{DynamicResource RowHeight}">
+                        <Border x:Name="TopLine" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource BorderAlt}" MinHeight="{DynamicResource RowHeight}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition>
@@ -1297,7 +1297,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}" ToolTip="{Binding XPath}" VerticalAlignment="Top" TextTrimming="CharacterEllipsis" Margin="6,5,0,5" Style="{StaticResource PGNameStyle}"/>
                                 <ContentPresenter ContentTemplate="{StaticResource DeleteButton}" DataContext="{Binding}" Grid.Column="1" x:Name="DeleteButtonWrapper" VerticalAlignment="Top" Margin="0,6,0,0"/>
-                                <GridSplitter Grid.Column="2" Background="{StaticResource BorderAlt}" HorizontalAlignment="Stretch"  />
+                                <GridSplitter Grid.Column="2" Background="{DynamicResource BorderAlt}" HorizontalAlignment="Stretch"  />
                                 <ContentControl Grid.Column="3" ToolTip="{Binding Type}" ContentTemplateSelector="{StaticResource redEditorTemplates}" Content="{Binding}"/>
                             </Grid>
                         </Border>
