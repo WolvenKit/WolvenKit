@@ -50,7 +50,7 @@
                         Grid.Row="0"
                         Orientation="Vertical">
                         <TextBlock
-                            Foreground="{StaticResource WolvenKitYellow}"
+                            Foreground="{DynamicResource WolvenKitYellow}"
                             FontSize="{DynamicResource WolvenKitFontMedium}"
                             FontWeight="Bold"
                             Visibility="{Binding IsExperimental,
@@ -73,7 +73,7 @@
                         MinHeight="100"
                         VerticalAlignment="Top"
                         VerticalContentAlignment="Top"
-                        Background="{StaticResource BackgroundColor_Frame_Background}"
+                        Background="{DynamicResource BackgroundColor_Frame_Background}"
                         AcceptsReturn="True"
                         TextWrapping="WrapWithOverflow"
                         VerticalScrollBarVisibility="Auto"

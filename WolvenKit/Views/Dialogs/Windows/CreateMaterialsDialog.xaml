@@ -56,7 +56,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Base material:" />
                     <TextBox
@@ -70,7 +70,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Local material:" />
                     <CheckBox
@@ -83,7 +83,7 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Resolve dynamic paths:" />
                     <CheckBox
@@ -96,7 +96,7 @@
                         Grid.Row="3"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Background="#252525"
+                        Background="{DynamicResource WolvenKitGray25}"
                         BorderThickness="0"
                         Content="Remember selection:" />
                     <CheckBox

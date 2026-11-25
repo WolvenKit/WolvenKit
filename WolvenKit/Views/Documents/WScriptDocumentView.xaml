@@ -47,7 +47,7 @@
 
         <Menu
             Grid.Row="0"
-            Background="{StaticResource ContentBackgroundAlt4}">
+            Background="{DynamicResource ContentBackgroundAlt4}">
             <Menu.Resources>
                 <Style TargetType="{x:Type MenuItem}">
                     <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
@@ -65,7 +65,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Play"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -80,7 +80,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="BugPlay"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Foreground="{DynamicResource WolvenKitGreen}" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -93,7 +93,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Stop"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                        Foreground="{DynamicResource WolvenKitRed}" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -106,7 +106,7 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Refresh"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                        Foreground="{DynamicResource WolvenKitPurple}" />
                 </MenuItem.Icon>
             </MenuItem>
         </Menu>
@@ -115,8 +115,8 @@
             x:Name="ScriptTextEditor"
             Grid.Row="1"
             Margin="0"
-            Background="{StaticResource ContentBackground}"
-            Foreground="{StaticResource ContentForeground}"
+            Background="{DynamicResource ContentBackground}"
+            Foreground="{DynamicResource ContentForeground}"
             FontSize="{DynamicResource WolvenKitFontAltTitle}"
             FontFamily="Consolas"
             ShowLineNumbers="True"

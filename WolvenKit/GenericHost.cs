@@ -13,6 +13,7 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Services;
+using WolvenKit.App.Services.Themes;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.HomePage;
@@ -68,6 +69,8 @@ namespace WolvenKit
                     services.AddSingleton<CRUIDService>(x => new CRUIDService(false));    // can this be transient?
                     services.AddSingleton<MySink>();                                                            // can this be transient?
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                                    // can this be transient?
+                    services.AddSingleton<IThemeRepository, ThemeRepository>();
+                    services.AddSingleton<IThemeService, ThemeService>();
                     services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IUpdateService, UpdateService>();
 

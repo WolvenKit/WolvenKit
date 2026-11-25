@@ -55,7 +55,7 @@
             <Border
                 BorderBrush="Black"
                 BorderThickness="2">
-                <Grid Background="{StaticResource ContentBackground}">
+                <Grid Background="{DynamicResource ContentBackground}">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />

@@ -26,7 +26,7 @@
                     Kind="ChartBellCurve"
                     Margin="0"
                     Size="{DynamicResource WolvenKitIconMicro}"
-                    Foreground="{StaticResource WolvenKitCyan}" />
+                    Foreground="{DynamicResource WolvenKitCyan}" />
 
                 <TextBlock
                     Margin="{DynamicResource WolvenKitMarginSmallLeft}"
@@ -50,7 +50,7 @@
                 Kind="ChartBellCurve"
                 Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                 Size="{DynamicResource WolvenKitIconMilli}"
-                Foreground="{StaticResource WolvenKitCyan}" />
+                Foreground="{DynamicResource WolvenKitCyan}" />
         </Button>
     </Grid>
 </UserControl>

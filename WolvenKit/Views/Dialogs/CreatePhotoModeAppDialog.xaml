@@ -88,7 +88,7 @@
                            Grid.Row="0"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0" /> <!-- Label for the dropdown -->
 
                     <ComboBox x:Name="AppFileDropdown"
                               Grid.Row="0"
@@ -103,7 +103,7 @@
                            Grid.Row="2"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0" /> <!-- Label for the dropdown -->
 
                     <CheckBox x:Name="CreateAppFileCheckbox"
                               Grid.Row="2"
@@ -128,7 +128,7 @@
                            Grid.Row="4"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0" /> <!-- Label for the dropdown -->
 
                     <ComboBox x:Name="EntFileDropdown"
                               Grid.Row="4"
@@ -146,7 +146,7 @@
                            Grid.Row="6"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0" /> <!-- Label for the dropdown -->
 
                     <CheckBox x:Name="CreateEntFileCheckbox"
                               Grid.Row="6"
@@ -171,7 +171,7 @@
                            Grid.Row="8"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0" /> <!-- Label for the dropdown -->
 
                     <TextBox
                         x:Name="RelativePathTextBox"
@@ -188,7 +188,7 @@
                            Grid.Row="10"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0" /> <!-- Label for the dropdown -->
 
                     <TextBox x:Name="NpcNameTextbox"
                              Grid.Row="10"
@@ -203,17 +203,17 @@
                                     <DataTrigger
                                         Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}"
                                         Value="1">
-                                        <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitRed}" />
                                     </DataTrigger>
                                     <DataTrigger
                                         Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}"
                                         Value="2">
-                                        <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitRed}" />
                                     </DataTrigger>
                                     <DataTrigger
                                         Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}"
                                         Value="3">
-                                        <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitRed}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -238,7 +238,7 @@
                     <Label Content="JSON file"
                            Grid.Row="12"
                            Grid.Column="0"
-                           Background="#252525" BorderThickness="0"
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0"
                            HorizontalAlignment="Left" /> <!-- Label for the dropdown -->
 
                     <CheckBox x:Name="CreateJsonFileCheckbox"
@@ -262,7 +262,7 @@
                     <Label Content=".inkatlas file"
                            Grid.Row="14"
                            Grid.Column="0"
-                           Background="#252525" BorderThickness="0"
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0"
                            HorizontalAlignment="Left" /> <!-- Label for the dropdown -->
 
                     <CheckBox x:Name="CreateInkatlasFileCheckbox"
@@ -286,7 +286,7 @@
                     <Label Content="Yaml file"
                            Grid.Row="16"
                            Grid.Column="0"
-                           Background="#252525" BorderThickness="0"
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0"
                            HorizontalAlignment="Left" /> <!-- Label for the dropdown -->
 
                     <CheckBox x:Name="CreateYamlFileCheckbox"
@@ -310,7 +310,7 @@
                     <Label Content=".xl file"
                            Grid.Row="18"
                            Grid.Column="0"
-                           Background="#252525" BorderThickness="0"
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0"
                            HorizontalAlignment="Left" /> <!-- Label for the dropdown -->
 
                     <CheckBox x:Name="CreateXlFileCheckbox"
@@ -335,7 +335,7 @@
                     <Label Content="Overwrite existing File?"
                            Grid.Row="20"
                            Grid.Column="0"
-                           Background="#252525" BorderThickness="0"
+                           Background="{DynamicResource WolvenKitGray25}" BorderThickness="0"
                            HorizontalAlignment="Left" />
 
                     <CheckBox x:Name="OverwriteCheckbox"

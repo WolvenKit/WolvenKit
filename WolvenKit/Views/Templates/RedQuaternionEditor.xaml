@@ -26,7 +26,7 @@
 
         <Border
             Grid.Column="0"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="0,0,1,0" />
 
         <TextBlock
@@ -45,7 +45,7 @@
 
         <Border
             Grid.Column="2"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,1,0" />
 
         <TextBlock
@@ -64,7 +64,7 @@
 
         <Border
             Grid.Column="4"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,1,0" />
 
         <TextBlock
@@ -83,7 +83,7 @@
 
         <Border
             Grid.Column="6"
-            BorderBrush="{StaticResource BorderAlt}"
+            BorderBrush="{DynamicResource BorderAlt}"
             BorderThickness="1,0,1,0" />
 
         <TextBlock

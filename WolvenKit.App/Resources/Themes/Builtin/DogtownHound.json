@@ -1,0 +1,32 @@
+{
+  "formatVersion": 1,
+  "name": "Dogtown Hound",
+  "author": "WolvenKit",
+  "description": "Dogtown Hound: charcoal fur, cream highlights, lime green accent and honey orange details.",
+  "basedOn": "WolvenKit Dark",
+  "accent": "#B9D85A",
+  "accentForeground": "#1A2108",
+  "colors": {
+    "ContentBackground": "#121311",
+    "ContentBackgroundAlt": "#161714",
+    "ContentBackgroundAlt2": "#1B1C18",
+    "ContentBackgroundAlt3": "#21231E",
+    "ContentBackgroundAlt4": "#292B25",
+    "ContentBackgroundAlt5": "#33362E",
+    "BorderAlt": "#4A4030",
+    "ContentForeground": "#EEF2DE",
+    "ForegroundColor": "#EEF2DE",
+    "BackgroundColor_Control": "#1B1C18",
+    "BackgroundColor_Frame_Active": "#21231E",
+    "BackgroundColor_Frame_Background": "#161714",
+    "WolvenKitProjectSource": "#B9D85A",
+    "WolvenKitProjectSourceShadow": "#5E6E2C",
+    "WolvenKitProjectResources": "#DEA854",
+    "WolvenKitProjectResourcesShadow": "#7A5A2A",
+    "WolvenKitStatusBarReady": "#9A6424",
+    "WolvenKitStatusBarBusy": "#5E6E2C",
+    "WolvenKitPanelHeaderSelected": "#2E2618",
+    "WolvenKitOrangeColor": "#DEA854",
+    "CustomSliderForegroundBrush": "#DEA854"
+  }
+}

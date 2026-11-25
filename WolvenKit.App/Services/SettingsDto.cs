@@ -69,6 +69,7 @@ public class SettingsDto : ISettingsDto
         UpdateChannel = settings.UpdateChannel;
         ShowGuidedTour = settings.ShowGuidedTour;
         ThemeAccentString = settings.ThemeAccentString;
+        ActiveTheme = settings.ActiveTheme;
         DefaultProjectPath = settings.DefaultProjectPath;
         ModderName = settings.ModderName;
         ModderEmail = settings.ModderEmail;
@@ -143,6 +144,7 @@ public class SettingsDto : ISettingsDto
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }
     public string? ThemeAccentString { get; set; }
+    public string? ActiveTheme { get; set; }
     public string? DefaultProjectPath { get; set; }
     public string? ModderName { get; set; }
     public string? ModderEmail { get; set; }
@@ -215,6 +217,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.UpdateChannel = UpdateChannel;
         settingsManager.ShowGuidedTour = ShowGuidedTour;
         settingsManager.ThemeAccentString = ThemeAccentString;
+        settingsManager.ActiveTheme = ActiveTheme;
         settingsManager.DefaultProjectPath = DefaultProjectPath;
         settingsManager.ModderName = ModderName;
         settingsManager.ModderEmail = ModderEmail;

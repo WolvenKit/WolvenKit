@@ -293,3 +293,6 @@ Libs/Irrlicht.dll
 WolvenKit.IrrlichtLime/Release-x86
 msbuild.binlog
 !texconv.pdb
+# Python bytecode (tools/)
+__pycache__/
+*.pyc
