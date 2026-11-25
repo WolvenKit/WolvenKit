@@ -165,14 +165,9 @@
                                     </Style>
                                 </Grid.Style>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
+                                <local:GraphEditorPropertiesPanel>
 
                                 <tools:RedTreeView
-                                    Grid.Column="0"
                                     ItemsSource="{Binding DataContext.SelectedTabContent,
                                                           RelativeSource={RelativeSource AncestorType={x:Type local:BehaviorGraphView}}}"
                                     SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk,
@@ -183,15 +178,13 @@
                                                             Mode=TwoWay}" />
 
                                 <GridSplitter
-                                    Grid.Column="1"
-                                    Width="4"
-                                    HorizontalAlignment="Stretch"
-                                    Background="#FF404040" />
+                                    Background="#FF404040"
+                                    ResizeBehavior="PreviousAndNext" />
 
                                 <editors:RedTypeView
-                                    Grid.Column="2"
                                     DataContext="{Binding DataContext.RDTViewModel.SelectedChunk,
-                                                          RelativeSource={RelativeSource AncestorType={x:Type local:BehaviorGraphView}}}" />
+                                                              RelativeSource={RelativeSource AncestorType={x:Type local:BehaviorGraphView}}}" />
+                                </local:GraphEditorPropertiesPanel>
                             </Grid>
 
                             <local:NodePropertiesView>

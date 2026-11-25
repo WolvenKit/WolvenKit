@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -38,6 +39,7 @@ namespace WolvenKit.Views.Documents
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
         private RedGraph? _subscribedGraph;
+        private readonly ISettingsManager _settingsManager;
 
         // Selection persistence across document switches
         private static readonly Dictionary<string, uint> s_documentNodeSelections = new();
@@ -49,6 +51,9 @@ namespace WolvenKit.Views.Documents
 
         public SceneGraphView()
         {
+            _settingsManager = Locator.Current.GetService<ISettingsManager>() ??
+                               throw new ArgumentNullException(nameof(ISettingsManager));
+
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             Loaded += OnViewLoaded;
@@ -1013,7 +1018,43 @@ namespace WolvenKit.Views.Documents
             if (e.NewValue is false)
             {
                 TimelineRow.SetCurrentValue(RowDefinition.HeightProperty, GridLength.Auto);
+                return;
             }
+
+            RestoreTimelineHeight();
+        }
+
+        private void TimelineSplitter_OnDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            if (TimelinePanel.IsVisible && TimelineRow.ActualHeight >= TimelinePanel.MinHeight)
+            {
+                _settingsManager.SceneEditorTimelineHeight = TimelineRow.ActualHeight;
+            }
+        }
+
+        private void RestoreTimelineHeight()
+        {
+            if (_settingsManager.SceneEditorTimelineHeight <= 0)
+            {
+                TimelineRow.SetCurrentValue(RowDefinition.HeightProperty, GridLength.Auto);
+                return;
+            }
+
+            const double minimumGraphHeight = 200;
+            const double splitterHeight = 4;
+            var maximumTimelineHeight = MainContentGrid.ActualHeight > 0
+                ? Math.Max(
+                    TimelinePanel.MinHeight,
+                    MainContentGrid.ActualHeight - minimumGraphHeight - splitterHeight)
+                : Math.Max(TimelinePanel.MinHeight, _settingsManager.SceneEditorTimelineHeight);
+            var timelineHeight = Math.Clamp(
+                _settingsManager.SceneEditorTimelineHeight,
+                TimelinePanel.MinHeight,
+                maximumTimelineHeight);
+
+            TimelineRow.SetCurrentValue(
+                RowDefinition.HeightProperty,
+                new GridLength(timelineHeight));
         }
     }
 }
