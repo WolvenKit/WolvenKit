@@ -775,7 +775,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     }
 
 
-    private List<LoadableModel> LoadMeshes(IList<RedBaseClass>? chunks)
+    private List<LoadableModel> LoadMeshes(IList<RedBaseClass>? chunks, string? appearanceName = null)
     {
         if (chunks == null || chunks.Count == 0)
         {
@@ -786,7 +786,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var component in chunks)
         {
-            ProcessComponents(component, appModels);
+            ProcessComponents(component, appModels, appearanceName);
         }
 
         var list = new List<LoadableModel>();
@@ -819,7 +819,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         Instance = new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(@"engine\materials\metal_base.remt") }
     };
 
-    private void ProcessComponents(RedBaseClass component, Dictionary<string, LoadableModel> appModels)
+    private void ProcessComponents(RedBaseClass component, Dictionary<string, LoadableModel> appModels, string? appearanceName = null)
     {
         var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
         var depotPath = ResourcePath.Empty;
@@ -946,6 +946,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         if (apps.Count == 0)
         {
             apps.Add("default");
+        }
+
+        if (appearanceName is not null && apps.Contains(appearanceName, StringComparer.Ordinal))
+        {
+            meshApp = appearanceName;
         }
 
         var appIndex = 0;
@@ -3655,7 +3660,7 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
         }
 
         // ent.appearances.Count == null => it's not a root entity
-        var models = LoadMeshes(pkg.Chunks);
+        var models = LoadMeshes(pkg.Chunks, appearance?.AppearanceName);
 
         if (models.Count == 0)
         {
@@ -3695,6 +3700,61 @@ public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
             meshApp.ModelGroup.Add(cGroup);
             Appearances.Add(meshApp);
             SelectedAppearance = meshApp;
+
+            var appearanceNames = models
+                .SelectMany(model => model.MeshFile?.RootChunk is CMesh mesh
+                    ? mesh.Appearances.Select(handle => handle.GetValue()).OfType<meshMeshAppearance>()
+                        .Select(meshAppearance => meshAppearance.Name.ToString().NotNull()) : [])
+                .Where(name => !string.IsNullOrWhiteSpace(name) && !name.Equals("default", StringComparison.OrdinalIgnoreCase))
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+
+            foreach (var variantName in appearanceNames)
+            {
+                var variantModels = LoadMeshes(pkg.Chunks, variantName);
+                if (variantModels.Count == 0)
+                {
+                    continue;
+                }
+
+                var variant = new Appearance(variantName)
+                {
+                    AppearanceName = variantName,
+                    Models = variantModels
+                };
+                var variantGroup = new MeshComponent()
+                {
+                    WorldNodeIndex = string.Empty,
+                    WorldNodeDataIndices = string.Empty
+                };
+                foreach (var model in variantModels)
+                {
+                    foreach (var material in model.Materials)
+                    {
+                        variant.RawMaterials[material.Name] = material;
+                    }
+
+                    if (model.MeshFile?.RootChunk is CMesh modelMesh)
+                    {
+                        model.Meshes = MakeMesh(modelMesh, model.ChunkMask, model.AppearanceIndex);
+                    }
+
+                    foreach (var submesh in model.Meshes)
+                    {
+                        variantGroup.Children.Add(submesh);
+                        if (!variant.LODLUT.TryGetValue(submesh.LOD, out var lodMeshes))
+                        {
+                            lodMeshes = [];
+                            variant.LODLUT[submesh.LOD] = lodMeshes;
+                        }
+
+                        lodMeshes.Add(submesh);
+                    }
+                }
+
+                variant.ModelGroup.Add(variantGroup);
+                Appearances.Add(variant);
+            }
         }
 
         var el = new GroupModel3DExt();
