@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 3218
+      author: "MORTEM3845"
+      description: "Add New File to the Project Explorer context menu."
