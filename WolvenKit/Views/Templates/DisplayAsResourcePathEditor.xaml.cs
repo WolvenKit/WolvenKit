@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -39,11 +40,25 @@ namespace WolvenKit.Views.Templates
             set => SetValue(RedNumberProperty, value);
         }
 
+        // the text as typed, so a trailing "\" that ResourcePath trims stays in the box (see RedRefEditor)
+        private string _typedDepotPath;
+
         /// <summary>Gets or sets the depot path represented by <see cref="RedNumber"/>.</summary>
         public string DepotPath
         {
-            get => GetResourcePath().GetResolvedText() ?? string.Empty;
-            set => SetResourcePath(string.IsNullOrWhiteSpace(value) ? ResourcePath.Empty : (ResourcePath)value.Trim());
+            get
+            {
+                var path = GetResourcePath().GetResolvedText() ?? string.Empty;
+                return _typedDepotPath is not null &&
+                       string.Equals(ResourcePath.SanitizePath(_typedDepotPath), ResourcePath.SanitizePath(path), StringComparison.Ordinal)
+                    ? _typedDepotPath
+                    : path;
+            }
+            set
+            {
+                _typedDepotPath = value;
+                SetResourcePath(string.IsNullOrWhiteSpace(value) ? ResourcePath.Empty : (ResourcePath)value.Trim());
+            }
         }
 
         /// <summary>Gets or sets the formatted hash.</summary>
