@@ -36,6 +36,33 @@ public partial class ChunkViewModel
 
     #region methods
 
+    private bool CanJumpToArrayIndex() => IsArray && PropertyCount > 0;
+
+    [RelayCommand(CanExecute = nameof(CanJumpToArrayIndex))]
+    private async Task JumpToArrayIndex()
+    {
+        if (!CanJumpToArrayIndex() || Tab is null)
+        {
+            return;
+        }
+
+        CalculateProperties();
+        var input = await Interactions.ShowInputBoxAsync($"Jump to array index (0–{Properties.Count - 1})", "0");
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return;
+        }
+
+        if (!int.TryParse(input, out var index) || index < 0 || index >= Properties.Count)
+        {
+            await Interactions.ShowMessageBoxAsync($"Enter an index from 0 to {Properties.Count - 1}.",
+                "Invalid array index", WMessageBoxButtons.Ok);
+            return;
+        }
+
+        Tab.ScrollToNode(Properties[index]);
+    }
+
     public void RefreshContextMenuFlags()
     {
         IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
@@ -53,6 +80,7 @@ public partial class ChunkViewModel
 
     public void RefreshCommandStatus()
     {
+        JumpToArrayIndexCommand.NotifyCanExecuteChanged();
         GenerateChildCruidsCommand.NotifyCanExecuteChanged();
         ReindexChildDataIndexPropertiesCommand.NotifyCanExecuteChanged();
     }
