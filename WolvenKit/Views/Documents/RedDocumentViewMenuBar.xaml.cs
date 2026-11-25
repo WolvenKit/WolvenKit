@@ -78,6 +78,7 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
 
             InitializeInstanceObjects();
+            RegisterForThemeChanges();
 
             DataContext = new RedDocumentViewToolbarModel(
                 _settingsManager,

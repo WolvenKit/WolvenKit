@@ -434,7 +434,7 @@ namespace WolvenKit
             // Both the layout pass before hiding and a short delay are needed: without them the window shows a
             // solid color instead of its content.
             window.InvalidateVisual();
-            window.UpdateLayout();
+            TryUpdateLayout(window, logger, "before hiding the window");
             window.Visibility = Visibility.Collapsed;
 
             var showTimer = new System.Windows.Threading.DispatcherTimer { Interval = s_showAfterHideDelay };
@@ -455,7 +455,7 @@ namespace WolvenKit
                 {
                     // Always shown again: an exception above used to leave WolvenKit running without its window.
                     window.InvalidateVisual();
-                    window.UpdateLayout();
+                    TryUpdateLayout(window, logger, "before showing the window");
                     window.Visibility = Visibility.Visible;
                 }
 
@@ -476,6 +476,22 @@ namespace WolvenKit
                     System.Windows.Threading.DispatcherPriority.ContextIdle);
             };
             showTimer.Start();
+
+            // With a file open, a list in a docked panel can throw while it is re-measured with the re-applied
+            // skin (NullReferenceException in VirtualizingStackPanel.InsertContainer, inside WPF). The window is
+            // hidden and shown again right after, which measures it anew, so the switch goes on instead of
+            // stopping half-done.
+            static void TryUpdateLayout(Window window, ILoggerService logger, string step)
+            {
+                try
+                {
+                    window.UpdateLayout();
+                }
+                catch (NullReferenceException ex) when (ex.StackTrace?.Contains("VirtualizingStackPanel") == true)
+                {
+                    logger?.Debug($"Themes: a list could not be measured {step}, it is measured again later.");
+                }
+            }
 
             void Reapply()
             {
