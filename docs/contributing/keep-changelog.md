@@ -21,9 +21,11 @@ Each changes entry follows the following format:
     # `Core`, `Common`, `RED4` and `Modkit` are considered nuget packages.
     # Pick as many as apply.
     packages: ["App", "CLI", "Nuget Packages"]
-    # Pull request number associated with this change.
+    # Pull request number(s) associated with this change.
+    # Accepts a single number or a list when several PRs contributed to the change.
     pr-number: 0
-    # Authors github username, necessary for proper attribution
+    # GitHub username(s) of the author(s), necessary for proper attribution.
+    # Accepts a single name or a list; all authors are credited in the changelog.
     author: ""
     # User facing change description
     description: ""
