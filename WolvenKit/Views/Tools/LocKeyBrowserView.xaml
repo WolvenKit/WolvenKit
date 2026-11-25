@@ -15,12 +15,6 @@
     d:DesignWidth="800"
     d:DesignHeight="450">
     <Grid Background="{DynamicResource ContentBackgroundAlt3}">
-        <Grid.Resources>
-            <Style TargetType="syncfusion:FilterRowControl">
-                <Setter Property="Background" Value="{DynamicResource WolvenKitCyanShadow50}" />
-            </Style>
-        </Grid.Resources>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -55,9 +49,20 @@
             EnableDataVirtualization="True"
             FilterRowPosition="FixedTop"
             IsReadOnly="True"
+            BorderBrush="{DynamicResource WolvenKitGridLine}"
             ItemsSource="{Binding LocKeys}"
+            RowSelectionBrush="{DynamicResource WolvenKitListSelection}"
             SelectedItem="{Binding SelectedLocKey}"
             SelectionMode="Extended">
+            <!-- grid lines and frame: faint text color, readable on light and dark themes -->
+            <syncfusion:SfDataGrid.Resources>
+                <Style TargetType="syncfusion:GridCell">
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
+                </Style>
+                <Style TargetType="syncfusion:GridHeaderCellControl">
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitGridLine}" />
+                </Style>
+            </syncfusion:SfDataGrid.Resources>
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn
                     ColumnSizer="Auto"
@@ -78,7 +83,8 @@
 
         <syncfusion:SfGridSplitter
             Grid.Row="2"
-            HorizontalAlignment="Stretch" />
+            HorizontalAlignment="Stretch"
+            Background="{DynamicResource ContentBackgroundAlt3}" />
 
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
@@ -113,7 +119,7 @@
                         Grid.Column="1"
                         Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
                         VerticalAlignment="Center"
-                        Foreground="Gold"
+                        Foreground="{DynamicResource WolvenKitYellow}"
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedPrimaryKey,
                                        Mode=OneWay}" />

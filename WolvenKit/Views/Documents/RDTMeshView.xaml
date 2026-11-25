@@ -638,7 +638,7 @@
                                     ToolTip="Generate the material previews. Hold Ctrl to clear the cache and regenerate everything (or use the arrow menu).">
                                     <!--
                                         The label is the content, not a Button.Style: a button with its own style loses the skin
-                                        (gray background) and the app-wide TextBlock style would override its yellow text.
+                                        (grey background) and the app-wide TextBlock style would override its yellow text.
                                     -->
                                     <TextBlock>
                                         <TextBlock.Style>

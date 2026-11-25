@@ -132,6 +132,18 @@ namespace WolvenKit
             _themeService.CurrentThemeChanging += (_, _) => OnThemeChanging();
             _themeService.CurrentThemeChanged += (_, _) => OnThemeChanged();
 
+            // Text inputs without a context menu of their own get the white system menu from WPF. Many have styles
+            // of their own (number fields, name editors, library controls), so the menu isn't set by a style but
+            // on every text input when it loads.
+            EventManager.RegisterClassHandler(typeof(System.Windows.Controls.Primitives.TextBoxBase), FrameworkElement.LoadedEvent,
+                new RoutedEventHandler(GiveTextInputThemedMenu));
+
+            // The main window is already shown (InitializeShell) and usually active: its first activation came
+            // before this subscription, so the library colors were only bridged after the next one (Alt+Tab),
+            // and until then the AdonisUI controls (the settings page, message boxes) kept their own gray colors.
+            // Bridge them now; the first activation still re-does it.
+            ApplyThemeOverridesOnTop();
+
             // SfSkinManager may merge its own brush dictionaries when the main window gets its theme;
             // keep the WolvenKit theme overrides on top of them.
             Activated += OnFirstActivated;
@@ -239,6 +251,12 @@ namespace WolvenKit
         private void OnFirstActivated(object sender, EventArgs e)
         {
             Activated -= OnFirstActivated;
+            ApplyThemeOverridesOnTop();
+        }
+
+        /// <summary>The theme dictionary back on top, and the theme colors copied to the AdonisUI / MahApps keys.</summary>
+        private void ApplyThemeOverridesOnTop()
+        {
             _themeService.EnsureResourcesOnTop();
             WolvenKit.Helpers.AdonisThemeBridge.Apply();
         }
@@ -246,7 +264,9 @@ namespace WolvenKit
         private static IThemeSetting BuildTheme(ISettingsManager settingsManager, IThemeService themeService)
         {
             var theme = themeService.Current;
-            var accentForeground = themeService.ResolveAccentForeground(theme);
+            // text on Syncfusion's primary (accent) color; stays Syncfusion's default unless the theme sets one
+            // or the accent is too light for white text
+            var accentForeground = themeService.ResolveReadableAccentForeground(theme);
 
             var settings = new MaterialDarkThemeSettings
             {
@@ -331,6 +351,19 @@ namespace WolvenKit
             }
         }
 
+        /// <summary>
+        /// Puts the themed Cut / Copy / Paste menu (App.Styles.xaml, a new one each time) on a text input that has
+        /// no context menu, so WPF doesn't build its system menu for it.
+        /// </summary>
+        private static void GiveTextInputThemedMenu(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Primitives.TextBoxBase { ContextMenu: null } input &&
+                Current?.TryFindResource("WolvenKitTextEditContextMenu") is System.Windows.Controls.ContextMenu menu)
+            {
+                input.SetCurrentValue(FrameworkElement.ContextMenuProperty, menu);
+            }
+        }
+
         private void OnThemeChanged()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -409,11 +442,27 @@ namespace WolvenKit
             {
                 showTimer.Stop();
 
-                // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
-                themeService.Refresh();
-                window.InvalidateVisual();
-                window.UpdateLayout();
-                window.Visibility = Visibility.Visible;
+                try
+                {
+                    // Syncfusion may have merged new dictionaries while re-applying; patch them before showing
+                    themeService.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    logger?.Error($"Themes: could not patch the dictionaries loaded while switching: {ex.Message}");
+                }
+                finally
+                {
+                    // Always shown again: an exception above used to leave WolvenKit running without its window.
+                    window.InvalidateVisual();
+                    window.UpdateLayout();
+                    window.Visibility = Visibility.Visible;
+                }
+
+                // Property grids keep the colors they were templated with (e.g. the Export/Import tool settings)
+                window.Dispatcher.BeginInvoke(
+                    () => WolvenKit.Helpers.SyncfusionFreshStyles.RefreshPropertyGrids(logger),
+                    System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
                 if (dockState is not null)
                 {

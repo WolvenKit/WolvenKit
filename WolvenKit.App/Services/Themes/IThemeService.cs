@@ -80,6 +80,13 @@ public interface IThemeService
     int Refresh();
 
     /// <summary>
+    /// Writes the current theme into <paramref name="dictionary"/>, a dictionary that is not part of the
+    /// application resources (e.g. a fresh copy of Syncfusion styles kept in a control's resources).
+    /// Returns the number of theme colors found in it.
+    /// </summary>
+    int Patch(ResourceDictionary dictionary);
+
+    /// <summary>
     /// Temporarily makes the read-only theme dictionaries (Syncfusion's shared Brushes.xaml) writable, so
     /// SfSkinManager can re-register its theme settings. Dispose to seal them again.
     /// </summary>
@@ -113,7 +120,14 @@ public interface IThemeService
 
     Color ResolveAccent(ThemeDto theme);
 
+    /// <summary>Text color on the accent set by the theme or a theme it is based on; null if none sets one.</summary>
     Color? ResolveAccentForeground(ThemeDto theme);
+
+    /// <summary>
+    /// Text color to use on the accent: <see cref="ResolveAccentForeground"/>, else black when white text would be
+    /// hard to read on the accent (light accents). Null keeps the default (white).
+    /// </summary>
+    Color? ResolveReadableAccentForeground(ThemeDto theme);
 
     string GetUniqueName(string baseName);
 

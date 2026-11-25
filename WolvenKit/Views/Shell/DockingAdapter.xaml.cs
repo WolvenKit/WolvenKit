@@ -64,6 +64,22 @@ namespace WolvenKit.Views.Shell
             {
                 themeService.Register(this);
             }
+
+            if (!s_headerHandlerRegistered)
+            {
+                s_headerHandlerRegistered = true;
+                EventManager.RegisterClassHandler(typeof(DockHeaderPresenter), LoadedEvent,
+                    new RoutedEventHandler((sender, _) => G_Dock?.UseOwnCloseButtonTemplate(sender as DependencyObject)));
+                // a panel that is closed and opened again keeps its header, but its close button is loaded again
+                // with the Syncfusion template
+                EventManager.RegisterClassHandler(typeof(System.Windows.Controls.Primitives.ToggleButton), LoadedEvent,
+                    new RoutedEventHandler((sender, _) => G_Dock?.OnToggleButtonLoaded(sender as System.Windows.Controls.Primitives.ToggleButton)));
+                // the same tab brushes as after a switch, from the start (Syncfusion's own values otherwise)
+                EventManager.RegisterClassHandler(typeof(TabControlExt), LoadedEvent,
+                    new RoutedEventHandler((sender, _) => UseThemeTabBrushes(sender as TabControlExt)));
+                EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ContextMenu), System.Windows.Controls.ContextMenu.OpenedEvent,
+                    new RoutedEventHandler((sender, _) => G_Dock?.OnContextMenuOpened(sender as System.Windows.Controls.ContextMenu)));
+            }
         }
 
         /// <summary>
@@ -73,75 +89,259 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         void WolvenKit.App.Services.Themes.IThemeAware.OnThemeChanged()
         {
-            var fresh = LoadFreshDockingStyles();
+            var fresh = WolvenKit.Helpers.SyncfusionFreshStyles.Load(WolvenKit.Helpers.SyncfusionFreshStyles.DockingManagerStyles, _logger);
             PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabItemStyleProperty,
                 Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabItemStyleProperty), fresh, "SyncfusionDocumentTabItemExtStyle"));
             PART_DockingManager.SetCurrentValue(DockingManager.DocumentTabControlStyleProperty,
                 Rebase((Style)PART_DockingManager.GetValue(DockingManager.DocumentTabControlStyleProperty), fresh, "SyncfusionDocumentTabControlExtStyle"));
+
+            // after the skin was re-applied (it runs synchronously on the same switch)
+            Dispatcher.BeginInvoke(RenewHeaderButtonTemplates, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
-        private const string SyncfusionDockingStylesUri =
-            "pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml";
+        private static bool s_headerHandlerRegistered;
+        private bool _headerButtonsLogged;
 
         /// <summary>
-        /// A new instance of Syncfusion's DockingManager styles. Its styles are created on first access, so after
-        /// its Brushes.xaml is swapped for the application's (recolored) one they pick up the current theme colors.
-        /// The styles already in the application resources keep the colors from when they were first used.
+        /// The close button in a panel header doesn't use CloseButtonTemplate: the Syncfusion header template gives
+        /// it its own template (accent square on hover, its own colors, the active panel's one differs from the
+        /// buttons next to it). Give it ours, like the menu and pin buttons. A local value, so the header's
+        /// triggers don't swap it back.
         /// </summary>
-        private ResourceDictionary LoadFreshDockingStyles()
+        private void UseOwnCloseButtonTemplate(DependencyObject header)
         {
-            try
+            if (header is null || PART_DockingManager.TryFindResource("WolvenKitButtonsTemplate") is not ControlTemplate template)
             {
-                if (FindSyncfusionBrushes(Application.Current.Resources) is not { } brushes)
+                return;
+            }
+
+            var buttons = new List<System.Windows.Controls.Primitives.ToggleButton>();
+            CollectToggleButtons(header, buttons);
+
+            if (!_headerButtonsLogged && buttons.Count > 0)
+            {
+                _headerButtonsLogged = true;
+                _logger.Debug($"Themes: panel header buttons: {string.Join(", ", buttons.Select(b => string.IsNullOrEmpty(b.Name) ? "(unnamed)" : b.Name))}");
+            }
+
+            foreach (var button in buttons)
+            {
+                if (!button.Name.Contains("Close", StringComparison.OrdinalIgnoreCase))
                 {
-                    _logger.Debug("Themes: Syncfusion Brushes.xaml not found in the application resources.");
-                    return null;
+                    continue;
                 }
 
-                var fresh = new ResourceDictionary { Source = new Uri(SyncfusionDockingStylesUri, UriKind.Absolute) };
-                ReplaceSyncfusionBrushes(fresh, brushes);
-                return fresh;
-            }
-            catch (Exception e)
-            {
-                _logger.Warning($"Themes: could not load the Syncfusion docking styles: {e.Message}");
-                return null;
+                SetOwnTemplate(button, template);
+
+                // Syncfusion sets the template again when the panel is shown again (closed and opened, docked
+                // back): put ours back whenever it changes
+                if (!s_watchedCloseButtons.TryGetValue(button, out _))
+                {
+                    s_watchedCloseButtons.Add(button, new object());
+                    s_templateDescriptor?.AddValueChanged(button, OnCloseButtonTemplateChanged);
+                }
             }
         }
 
-        private static bool IsSyncfusionBrushes(ResourceDictionary dictionary) =>
-            dictionary.Source?.OriginalString.EndsWith("/Common/Brushes.xaml", StringComparison.OrdinalIgnoreCase) == true;
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<System.Windows.Controls.Primitives.ToggleButton, object> s_watchedCloseButtons = new();
 
-        private static ResourceDictionary FindSyncfusionBrushes(ResourceDictionary dictionary)
+        private static readonly DependencyPropertyDescriptor s_templateDescriptor =
+            DependencyPropertyDescriptor.FromProperty(System.Windows.Controls.Control.TemplateProperty, typeof(System.Windows.Controls.Primitives.ToggleButton));
+
+        private static void OnCloseButtonTemplateChanged(object sender, EventArgs e)
         {
-            foreach (var merged in dictionary.MergedDictionaries)
+            if (sender is System.Windows.Controls.Primitives.ToggleButton button
+                && G_Dock?.PART_DockingManager.TryFindResource("WolvenKitButtonsTemplate") is ControlTemplate template
+                && !ReferenceEquals(button.Template, template))
             {
-                if (IsSyncfusionBrushes(merged))
-                {
-                    return merged;
-                }
-                if (FindSyncfusionBrushes(merged) is { } found)
-                {
-                    return found;
-                }
+                // after the current change is done
+                button.Dispatcher.BeginInvoke(() => SetOwnTemplate(button, template), System.Windows.Threading.DispatcherPriority.Loaded);
             }
-            return null;
         }
 
-        private static void ReplaceSyncfusionBrushes(ResourceDictionary dictionary, ResourceDictionary brushes)
+        private static void SetOwnTemplate(System.Windows.Controls.Primitives.ToggleButton button, ControlTemplate template)
         {
-            for (var i = 0; i < dictionary.MergedDictionaries.Count; i++)
+            if (!ReferenceEquals(button.Template, template))
             {
-                var merged = dictionary.MergedDictionaries[i];
-                if (IsSyncfusionBrushes(merged))
+#pragma warning disable WPF0041 // a local value on purpose: the header template's own setters must not win
+                button.SetValue(System.Windows.Controls.Control.TemplateProperty, template);
+#pragma warning restore WPF0041
+            }
+        }
+
+        private void OnToggleButtonLoaded(System.Windows.Controls.Primitives.ToggleButton button)
+        {
+            if (button is null || !button.Name.Contains("Close", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            // only the close buttons of panel headers
+            DependencyObject parent = button;
+            for (var depth = 0; depth < 12 && parent is not null; depth++)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+                if (parent is DockHeaderPresenter header)
                 {
-                    dictionary.MergedDictionaries[i] = brushes;
+                    UseOwnCloseButtonTemplate(header);
+                    return;
+                }
+            }
+        }
+
+        private bool _tabListMenuLogged;
+
+        /// <summary>
+        /// The items of a tab list menu (arrow next to the Project Explorer tabs) get a style from Syncfusion that
+        /// keeps the colors of the theme the menu was created with. Put ours on them whenever the menu opens.
+        /// </summary>
+        private void OnContextMenuOpened(System.Windows.Controls.ContextMenu menu)
+        {
+            if (menu?.PlacementTarget is not DependencyObject target
+                || !IsInsideTabControlExt(target)
+                || Application.Current?.TryFindResource("WolvenKitTabListMenuItemStyle") is not Style style)
+            {
+                return;
+            }
+
+            var count = 0;
+            for (var i = 0; i < menu.Items.Count; i++)
+            {
+                if ((menu.Items[i] as System.Windows.Controls.MenuItem ?? menu.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.MenuItem) is { } item
+                    && !ReferenceEquals(item.Style, style))
+                {
+                    item.Style = style;
+                    count++;
+                }
+            }
+
+            if (!_tabListMenuLogged)
+            {
+                _tabListMenuLogged = true;
+                _logger.Debug($"Themes: tab list menu restyled ({count} of {menu.Items.Count} items).");
+            }
+        }
+
+        private static bool IsInsideTabControlExt(DependencyObject element)
+        {
+            for (var depth = 0; depth < 12 && element is not null; depth++)
+            {
+                if (element is TabControlExt)
+                {
+                    return true;
+                }
+                element = element is Visual or System.Windows.Media.Media3D.Visual3D
+                    ? VisualTreeHelper.GetParent(element)
+                    : LogicalTreeHelper.GetParent(element);
+            }
+            return false;
+        }
+
+        private static readonly (DependencyProperty Property, string Key)[] s_tabControlBrushes =
+        [
+            (TabControlExt.TabItemHoverBackgroundProperty, "WolvenKitAccentShadow"),
+            (TabControlExt.TabItemHoverBorderBrushProperty, "WolvenKitAccentShadow"),
+            (TabControlExt.TabItemHoverForegroundProperty, "WolvenKitAccentShadowForeground"),
+            (TabControlExt.TabItemSelectedBackgroundProperty, "WolvenKitAccent"),
+            (TabControlExt.TabItemSelectedBorderBrushProperty, "WolvenKitAccentShadow"),
+            (TabControlExt.TabItemSelectedForegroundProperty, "WolvenKitAccentForeground"),
+        ];
+
+        /// <summary>
+        /// Syncfusion sets some tab brushes itself and keeps the value of the theme WolvenKit started with (seen:
+        /// TabItemSelectedBorderBrush, which also colors the hovered tab list button). References to the theme keys
+        /// replace them and follow every switch.
+        /// </summary>
+        private static void UseThemeTabBrushes(TabControlExt tabControl)
+        {
+            if (tabControl is null || tabControl is DocumentTabControl || !HasWolvenKitTabStyle(tabControl))
+            {
+                return;
+            }
+
+            foreach (var (property, key) in s_tabControlBrushes)
+            {
+                tabControl.SetResourceReference(property, key);
+            }
+        }
+
+        /// <summary>Uses WolvenKitTabControl (or a style based on it): the only one setting a tab list menu template.</summary>
+        private static bool HasWolvenKitTabStyle(TabControlExt tabControl)
+        {
+            for (var style = tabControl.Style; style is not null; style = style.BasedOn)
+            {
+                if (style.Setters.OfType<Setter>().Any(s => s.Property == TabControlExt.TabListContextMenuTemplateProperty))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void ForEachDockHeader(DependencyObject element, Action<DependencyObject> action)
+        {
+            var count = VisualTreeHelper.GetChildrenCount(element);
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i);
+                if (child is DockHeaderPresenter)
+                {
+                    action(child);
                 }
                 else
                 {
-                    ReplaceSyncfusionBrushes(merged, brushes);
+                    ForEachDockHeader(child, action);
                 }
             }
+        }
+
+        private static void CollectToggleButtons(DependencyObject element, List<System.Windows.Controls.Primitives.ToggleButton> buttons)
+        {
+            var count = VisualTreeHelper.GetChildrenCount(element);
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i);
+                if (child is System.Windows.Controls.Primitives.ToggleButton button)
+                {
+                    buttons.Add(button);
+                }
+                else
+                {
+                    CollectToggleButtons(child, buttons);
+                }
+            }
+        }
+
+        private static readonly string[] s_headerButtonTemplates =
+        [
+            "AwlButtonTemplate", "CloseButtonTemplate", "MenuButtonTemplate",
+            "MaximizeButtonTemplate", "MinimizeButtonTemplate", "RestoreButtonTemplate"
+        ];
+
+        /// <summary>
+        /// The panel header buttons (menu, pin, close) kept the icon color of the theme they were built with: the
+        /// theme colors in their template triggers were not re-read after a switch. Handing the DockingManager
+        /// its button templates again makes it rebuild the buttons with the current colors.
+        /// </summary>
+        private void RenewHeaderButtonTemplates()
+        {
+            var renewed = 0;
+            foreach (var name in s_headerButtonTemplates)
+            {
+                if (DependencyPropertyDescriptor.FromName(name, typeof(DockingManager), typeof(DockingManager)) is not { } descriptor
+                    || PART_DockingManager.GetValue(descriptor.DependencyProperty) is not ControlTemplate template)
+                {
+                    continue;
+                }
+
+                PART_DockingManager.SetCurrentValue(descriptor.DependencyProperty, null);
+                PART_DockingManager.SetCurrentValue(descriptor.DependencyProperty, template);
+                renewed++;
+            }
+
+            // headers that were not rebuilt keep the close button template set on them
+            ForEachDockHeader(PART_DockingManager, UseOwnCloseButtonTemplate);
+            _logger.Debug($"Themes: {renewed} panel header button templates renewed.");
         }
 
         /// <summary>A copy of <paramref name="style"/> based on <paramref name="baseKey"/> from <paramref name="fresh"/>.</summary>
@@ -600,6 +800,10 @@ namespace WolvenKit.Views.Shell
             {
                 _stateChanged = true;
             }
+
+            // a panel shown again (opened from the menu, docked back) can get new header buttons
+            Dispatcher.BeginInvoke(() => ForEachDockHeader(PART_DockingManager, UseOwnCloseButtonTemplate),
+                System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -434,7 +434,8 @@ public sealed partial class ThemeService
             map.TryAdd("DarkPrimaryBrush", shadow);
         }
 
-        if (ResolveAccentForeground(theme) is { } accentForeground)
+        // set by the theme, or black on a light accent the theme gives no text color for
+        if (ResolveReadableAccentForeground(theme) is { } accentForeground)
         {
             map.TryAdd("WolvenKitAccentForeground", accentForeground);
         }
@@ -446,6 +447,13 @@ public sealed partial class ThemeService
             {
                 var text = map.TryGetValue("ContentForeground", out var fg) ? fg : GetDefaultColor("ContentForeground") ?? Colors.White;
                 var readable = ContrastRatio(Colors.White, background) >= ContrastRatio(text, background) ? Colors.White : text;
+                // a light surface (e.g. the dark variant of a pale accent) where white and the light text of a
+                // dark theme are both hard to read: black. Same limit as text on the accent, so the built-in
+                // themes, whose white text on these surfaces stays above it, keep their look.
+                if (ContrastRatio(readable, background) < MinAccentTextContrast && ContrastRatio(Colors.Black, background) > ContrastRatio(readable, background))
+                {
+                    readable = Colors.Black;
+                }
                 map[target] = readable;
                 foreach (var derived in Catalog.Find(target)?.DerivedBrushes ?? [])
                 {
@@ -494,6 +502,8 @@ public sealed partial class ThemeService
         ("WolvenKitYellowShadow50Color", "WolvenKitYellowShadowColor", c => WithAlpha(c, 0x7F)),
         ("WolvenKitYellowShadow25Color", "WolvenKitYellowShadowColor", c => WithAlpha(Darken(c, 0.55), 0x7F)),
         ("WolvenKitCyan50", "WolvenKitCyanColor", c => WithAlpha(c, 0x7F)),
+        // text color, faint: visible on light and dark backgrounds alike
+        ("WolvenKitGridLine", "ContentForeground", c => WithAlpha(c, 0x33)),
         ("WolvenKitTan50", "WolvenKitTanColor", c => WithAlpha(c, 0x7F)),
     ];
 
@@ -557,7 +567,7 @@ public sealed partial class ThemeService
         var anchors = new SortedList<double, (Color From, Color To)>();
         foreach (var (key, to) in ResolveOverrides(theme))
         {
-            if (!_defaults.TryGetValue(key, out var resource))
+            if (s_notNeutralAnchors.Contains(key) || !_defaults.TryGetValue(key, out var resource))
             {
                 continue;
             }
@@ -606,6 +616,19 @@ public sealed partial class ThemeService
             return Color.FromArgb(color.A, mapped.R, mapped.G, mapped.B);
         };
     }
+
+    /// <summary>
+    /// Text drawn on colored surfaces (accent, active panel header). Its default is white like the main text, but a
+    /// light theme often keeps it white: as an anchor it would map white to white, and the light icons of the
+    /// Syncfusion controls (filter, expander and dropdown arrows, menu check marks) would stay white on a light
+    /// background.
+    /// </summary>
+    private static readonly HashSet<string> s_notNeutralAnchors =
+    [
+        "WolvenKitAccentForeground",
+        "WolvenKitAccentShadowForeground",
+        "WolvenKitPanelHeaderSelectedForeground",
+    ];
 
     private static bool IsNeutral(Color c) => Math.Max(c.R, Math.Max(c.G, c.B)) - Math.Min(c.R, Math.Min(c.G, c.B)) <= 12;
 
@@ -993,14 +1016,56 @@ public sealed partial class ThemeService
             return;
         }
 
-        parent.MergedDictionaries.RemoveAt(index);
+        try
+        {
+            parent.MergedDictionaries.RemoveAt(index);
+        }
+        catch (Exception ex)
+        {
+            // WPF can throw while it invalidates the resource references of the removal (a NullReferenceException
+            // from PresentationFramework, e.g. with a popup or context menu open). The removal may or may not
+            // have happened: put the dictionary back if it's gone and patch it in place, one write at a time.
+            _loggerService.Debug($"Themes: can't detach {root.Source?.OriginalString ?? "dictionary"} for patching: {ex.Message}");
+            if (!parent.MergedDictionaries.Contains(root))
+            {
+                Reattach(parent, index, root);
+            }
+
+            RunAll(operations);
+            return;
+        }
+
         try
         {
             RunAll(operations);
         }
         finally
         {
-            parent.MergedDictionaries.Insert(index, root);
+            Reattach(parent, index, root);
+        }
+    }
+
+    /// <summary>Merges a detached dictionary back at its place; it must not stay out, or its resources are gone.</summary>
+    private void Reattach(ResourceDictionary parent, int index, ResourceDictionary root)
+    {
+        try
+        {
+            parent.MergedDictionaries.Insert(Math.Min(index, parent.MergedDictionaries.Count), root);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Debug($"Themes: can't reattach {root.Source?.OriginalString ?? "dictionary"}: {ex.Message}");
+            if (!parent.MergedDictionaries.Contains(root))
+            {
+                try
+                {
+                    parent.MergedDictionaries.Add(root);
+                }
+                catch (Exception addEx)
+                {
+                    _loggerService.Error($"Themes: lost {root.Source?.OriginalString ?? "a dictionary"} while switching themes, restart WolvenKit: {addEx.Message}");
+                }
+            }
         }
     }
 

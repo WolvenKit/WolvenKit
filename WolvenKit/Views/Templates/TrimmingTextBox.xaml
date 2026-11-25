@@ -41,18 +41,22 @@
                 ContextMenuOpening="RefreshContextMenu"
                 DataObject.Pasting="RealTextBox_OnPasting">
                 <TextBox.ContextMenu>
-                    <ContextMenu>
+                    <!--  same look as the other text input menus (App.Styles.xaml)  -->
+                    <ContextMenu Style="{StaticResource WolvenKitTextEditContextMenuStyle}">
                         <MenuItem
                             x:Name="CutMenuItem"
                             Header="Cut"
+                            InputGestureText="Ctrl+X"
                             Click="Cut_Click" />
                         <MenuItem
                             x:Name="CopyMenuItem"
                             Header="Copy"
+                            InputGestureText="Ctrl+C"
                             Click="Copy_Click" />
                         <MenuItem
                             x:Name="PasteMenuItem"
                             Header="Paste"
+                            InputGestureText="Ctrl+V"
                             Click="Paste_Click" />
 
                         <Separator x:Name="DynamicSeparator">
@@ -60,6 +64,9 @@
                                 <Style
                                     BasedOn="{StaticResource {x:Type Separator}}"
                                     TargetType="Separator">
+                                    <!--  a theme line like the menu's border, not the library's  -->
+                                    <Setter Property="Background" Value="{DynamicResource BorderAlt}" />
+                                    <Setter Property="Margin" Value="8,4" />
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
@@ -80,7 +87,7 @@
                             Click="MakeDynamic_Click">
                             <MenuItem.Style>
                                 <Style
-                                    BasedOn="{StaticResource {x:Type MenuItem}}"
+                                    BasedOn="{StaticResource WolvenKitTabListMenuItemStyle}"
                                     TargetType="MenuItem">
                                     <Style.Triggers>
                                         <MultiDataTrigger>
@@ -111,15 +118,14 @@
                 x:Name="StartTrimming"
                 Grid.Column="0"
                 Visibility="Hidden">
-                <!--  Theme background with a darkening fade toward the edge  -->
-                <Rectangle Fill="{Binding ElementName=UserControl, Path=Background}" />
-                <Rectangle>
-                    <Rectangle.Fill>
+                <!--  the text fades into the field's own background toward the edge (a black fade looked odd on light themes)  -->
+                <Rectangle Fill="{Binding ElementName=UserControl, Path=Background}">
+                    <Rectangle.OpacityMask>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                             <GradientStop Offset="0.0" Color="#FF000000" />
                             <GradientStop Offset="1.0" Color="#00000000" />
                         </LinearGradientBrush>
-                    </Rectangle.Fill>
+                    </Rectangle.OpacityMask>
                 </Rectangle>
 
                 <TextBox
@@ -133,15 +139,14 @@
                 x:Name="EndTrimming"
                 Grid.Column="2"
                 Visibility="Hidden">
-                <!--  Theme background with a darkening fade toward the edge  -->
-                <Rectangle Fill="{Binding ElementName=UserControl, Path=Background}" />
-                <Rectangle>
-                    <Rectangle.Fill>
+                <!--  the text fades into the field's own background toward the edge (a black fade looked odd on light themes)  -->
+                <Rectangle Fill="{Binding ElementName=UserControl, Path=Background}">
+                    <Rectangle.OpacityMask>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                             <GradientStop Offset="0.0" Color="#00000000" />
                             <GradientStop Offset="1.0" Color="#FF000000" />
                         </LinearGradientBrush>
-                    </Rectangle.Fill>
+                    </Rectangle.OpacityMask>
                 </Rectangle>
 
                 <TextBox
