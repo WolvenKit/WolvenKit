@@ -21,6 +21,12 @@ namespace WolvenKit.Converters
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedVectorColorEditor { get; set; }
+
+        /// <summary>v of a colorScale override of a multilayer template: a color palette for its three channels.</summary>
+        public DataTemplate RedOverrideColorEditor { get; set; }
+
+        /// <summary>colorScale of a layer of a multilayer setup: the dropdown, and the template's colors as a palette.</summary>
+        public DataTemplate MultilayerColorScaleEditor { get; set; }
         public DataTemplate FilterableDropdownCNameEditor { get; set; }
         public DataTemplate FilterableDropdownRedstringEditor { get; set; }
         public DataTemplate FilterableDropdownRedRefEditor { get; set; }
@@ -49,9 +55,6 @@ namespace WolvenKit.Converters
         public DataTemplate RedTypeViewer { get; set; }
         public DataTemplate NullTemplate { get; set; }
 
-        // Some vectors are actually colours
-        private static readonly string[] s_vectorsAsColors = ["BaseColorScale", "HSV_Mod", "TintColor"];
-
         // Some uints are actually chunkMasks
         private static readonly string[] s_chunkMaskProperties = ["chunkMask", "componentIndexMask"];
 
@@ -69,6 +72,18 @@ namespace WolvenKit.Converters
             if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
             {
                 return RedNodeRefEditor;
+            }
+
+            // multilayer colors: the channels of an override (they stay editable one by one under v),
+            // and the colorScale a layer picks from its template
+            if (vm.Name == "v" && vm.ParentData is Multilayer_LayerTemplateOverridesColor)
+            {
+                return RedOverrideColorEditor;
+            }
+
+            if (vm.Name == "colorScale" && vm.ParentData is Multilayer_Layer && vm.PropertyType.IsAssignableTo(typeof(CName)))
+            {
+                return MultilayerColorScaleEditor;
             }
 
             if (vm.PropertyType.IsAssignableTo(typeof(CString)))
@@ -148,7 +163,7 @@ namespace WolvenKit.Converters
             {
                 // Some vectors are actually colours
                 if (vm.Parent?.ResolvedData is CKeyValuePair pair &&
-                    s_vectorsAsColors.Contains(pair.Key.GetResolvedText() ?? ""))
+                    WolvenKit.App.Helpers.ColorPreviewHelper.IsColorParameter(pair.Key.GetResolvedText()))
                 {
                     return RedVectorColorEditor;
                 }
