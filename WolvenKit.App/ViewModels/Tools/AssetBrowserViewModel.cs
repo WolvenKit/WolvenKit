@@ -319,10 +319,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 {
                     var hash = file.GetGameFile().Key;
 
-                    var usedBy = await db.Files.Include("Uses")
+                    var usedBy = (await db.Files.Include("Uses")
                         .Where(x => x.Uses != null && x.Uses.Any(y => y.Hash == hash))
                         .Select(x => x.Hash)
-                        .ToListAsync();
+                        .ToListAsync())
+                        .ToHashSet();
 
                     //add all found items to
                     _archiveManager.Archives
@@ -333,6 +334,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
                         .Bind(out var list)
                         .Subscribe()
                         .Dispose();
+
+                    ReportLookup("is used by", file.Name, usedBy.Count, list.Count,
+                        $"{file.Name}: no file in the Wolvenkit Resources database uses it (or the database is older than this file).");
 
                     // This will go into an endless refresh loop if SuppressNotification is not set, which
                     // prevents the task from completing.
@@ -354,6 +358,25 @@ public partial class AssetBrowserViewModel : ToolViewModel
         });
 
         _progressService.IsIndeterminate = false;
+    }
+
+    /// <summary>
+    /// Says why a "Find used files" / "Find files using this" search shows nothing instead of an empty list without
+    /// a word: nothing in the resources database (made for some game version), or none of it in the loaded archives.
+    /// </summary>
+    private void ReportLookup(string relation, string fileName, int inDatabaseCount, int shownCount, string noneInDatabase)
+    {
+        _loggerService.Debug($"Asset Browser: {fileName} {relation} {inDatabaseCount} file(s) in the resources database, {shownCount} of them in the loaded archives.");
+
+        if (inDatabaseCount == 0)
+        {
+            DispatcherHelper.RunOnMainThread(() => _notificationService.Info(noneInDatabase));
+        }
+        else if (shownCount == 0)
+        {
+            DispatcherHelper.RunOnMainThread(() => _notificationService.Warning(
+                $"{fileName}: the files found in the Wolvenkit Resources database aren't in the loaded archives."));
+        }
     }
 
     [RelayCommand]
@@ -397,22 +420,41 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 {
                     var hash = file.GetGameFile().Key;
 
-                    var uses = await db.Files.Include("Archive").Include("Uses")
-                        .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName &&
-                                    x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
-                        .Where(x => x.Uses != null)
-                        .Select(x => x.Uses!.Select(y => y.Hash))
+                    // The database lists a file per archive it was in when the database was made. Game updates
+                    // move files to other archives, and a mod or project file isn't in it at all: look the file up
+                    // by its hash, in its own archive if the database has that one, otherwise in any.
+                    var entries = await db.Files.Include("Archive").Include("Uses")
+                        .Where(x => x.Hash == hash && x.Uses != null)
+                        .Select(x => new
+                        {
+                            ArchiveName = x.Archive != null ? x.Archive.Name : null,
+                            ArchiveSource = x.Archive != null ? x.Archive.Source : null,
+                            Uses = x.Uses!.Select(y => y.Hash).ToList()
+                        })
                         .ToListAsync();
+
+                    // the archive's own name: file.ArchiveName is its path relative to the game folder once mods
+                    // are loaded, which never matched the names in the database
+                    var archive = file.GetGameFile().GetArchive();
+                    var sameArchive = entries
+                        .Where(x => x.ArchiveName == archive.Name && x.ArchiveSource == archive.Source.ToString())
+                        .ToList();
+                    var usedHashes = (sameArchive.Count > 0 ? sameArchive : entries)
+                        .SelectMany(x => x.Uses)
+                        .ToHashSet();
 
                     //add all found items to asset browser
                     _archiveManager.Archives
                         .Connect()
                         .TransformMany(x => x.Files.Values, y => y.Key)
-                        .Filter(x => uses.Any(y => y.Contains(x.Key)))
+                        .Filter(x => usedHashes.Contains(x.Key))
                         .Transform(x => new RedFileViewModel(x))
                         .Bind(out var list)
                         .Subscribe()
                         .Dispose();
+
+                    ReportLookup("uses", file.Name, usedHashes.Count, list.Count,
+                        $"{file.Name}: the Wolvenkit Resources database lists no files it uses (it uses none, or the database is older than this file).");
 
                     RightItems.Clear();
                     RightItems.AddRange(list);
@@ -737,12 +779,17 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// Navigates the Asset Browser to the existing file.
     /// </summary>
     /// <param name="file"></param>
-    public void ShowFile(FileSystemModel file)
+    public void ShowFile(FileSystemModel file) => ShowFile(file.Hash);
+
+    /// <summary>
+    /// Selects the game file with this hash and browses to its folder.
+    /// </summary>
+    public void ShowFile(ulong hash)
     {
         _archiveManager.Archives
             .Connect()
             .TransformMany(x => x.Files.Values, y => y.Key)
-            .Filter(x => x.Key == file.Hash)
+            .Filter(x => x.Key == hash)
             .Transform(x => new RedFileViewModel(x))
             .Bind(out var list)
             .Subscribe()

@@ -32,6 +32,12 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     [ObservableProperty] private bool _isReadOnly;
     [ObservableProperty] private bool _showToolbar;
 
+    /// <summary>
+    /// Part of the folder path shown next to the tab label when another open file has the same name
+    /// (null otherwise). Set by the app view model, see <see cref="WolvenKit.App.Helpers.DocumentPathHints"/>.
+    /// </summary>
+    [ObservableProperty] private string? _pathHint;
+
     public DateTime OpenedAt { get; init; }
 
     private bool _isDirty;

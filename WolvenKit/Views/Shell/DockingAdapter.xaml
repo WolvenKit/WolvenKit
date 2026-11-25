@@ -505,6 +505,15 @@
                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                                 Text="{Binding Path=Header}" />
 
+                            <!--  another open file has the same name: the folders that tell them apart (dimmed)  -->
+                            <TextBlock
+                                x:Name="PathHint"
+                                Margin="6,0,0,1"
+                                Style="{x:Null}"
+                                Opacity="0.65"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Text="{Binding Path=PathHint}" />
+
                             <!--
                                 TextBlock Text="*"
                                 Margin="0,0,0,1"
@@ -526,6 +535,10 @@
                     </Grid>
 
                     <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.PathHint, ElementName=RedDocumentHeader}" Value="{x:Null}">
+                            <Setter TargetName="PathHint" Property="UIElement.Visibility" Value="Collapsed" />
+                        </DataTrigger>
+
                         <DataTrigger
                             Binding="{Binding Content.Content.Content.Extension,
                                               RelativeSource={RelativeSource FindAncestor,
