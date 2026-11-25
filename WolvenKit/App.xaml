@@ -279,6 +279,8 @@
                 </StackPanel>
             </ControlTemplate>
 
+            <syncfusion:WizardPageVisibility x:Key="WolvenKitWizardPageVisibility" />
+
             <!--
                 Wizards (the dialogs of File > Generate files and the like): Syncfusion's MaterialDark styles take their
                 colors with StaticResource, so a theme changed while WolvenKit runs only reached them after a restart.
@@ -299,10 +301,61 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource BorderAlt}" />
                 <Setter Property="BannerBackground" Value="{DynamicResource PopupBackground}" />
                 <Style.Triggers>
-                    <!--  no dialog shows a banner image: drop the empty banner column and its border on the left  -->
+                    <!--
+                        Syncfusion's Exterior page (MaterialDark 34.2.2) without its banner column on the left: no dialog
+                        shows a banner image, and the empty column made the left margin wider than the right one.
+                    -->
                     <Trigger Property="PageType" Value="Exterior">
-                        <Setter Property="BannerImageWidth" Value="0" />
                         <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type syncfusion:WizardPage}">
+                                    <Grid
+                                        Background="{TemplateBinding Background}"
+                                        Visibility="{TemplateBinding IsSelected, Converter={StaticResource WolvenKitWizardPageVisibility}}">
+                                        <Grid Margin="12">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock
+                                                x:Name="PART_TitleTextBlock"
+                                                Grid.Row="0"
+                                                Margin="0,0,0,12"
+                                                FontSize="{DynamicResource WolvenKitFontTitle}"
+                                                Text="{TemplateBinding Title}"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock
+                                                x:Name="PART_DescriptionTextBlock"
+                                                Grid.Row="1"
+                                                Margin="0,0,0,12"
+                                                Text="{TemplateBinding Description}"
+                                                TextWrapping="Wrap" />
+                                            <ContentPresenter
+                                                Grid.Row="2"
+                                                Content="{TemplateBinding Content}"
+                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                                        </Grid>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="Title" Value="">
+                                            <Setter TargetName="PART_TitleTextBlock" Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                        <Trigger Property="Title" Value="{x:Null}">
+                                            <Setter TargetName="PART_TitleTextBlock" Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                        <Trigger Property="Description" Value="">
+                                            <Setter TargetName="PART_DescriptionTextBlock" Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                        <Trigger Property="Description" Value="{x:Null}">
+                                            <Setter TargetName="PART_DescriptionTextBlock" Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Trigger>
                 </Style.Triggers>
             </Style>
