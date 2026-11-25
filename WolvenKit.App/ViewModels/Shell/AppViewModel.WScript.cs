@@ -239,11 +239,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         return Path.Join(resourceDir, _entspawnerExportRelPath);
     }
 
-    private bool CanImportEntitySpawner() =>
-        CanShowProjectActions() && (
-            (GetEntspawnerGameDir() is string path && Directory.Exists(path))
-            || (GetEntspawnerRawDir() is string resourcePath && Directory.Exists(resourcePath))
-        );
+    private bool CanImportEntitySpawner() => CanShowProjectActions();
 
     [RelayCommand(CanExecute = nameof(CanImportEntitySpawner))]
     private async Task ImportFromEntitySpawner()
@@ -267,12 +263,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var initialDir = GetImportDirectoryPath();
         if (initialDir is null)
         {
-            _loggerService.Error("No .json files were found in the following directories:"
-                                 + "\n\t - " + entspawnerGameDir
-                                 + "\n\t - " + entspawnerProjectDir
+            _loggerService.Info("No .json files were found in the following directories:"
+                                + "\n\t - " + entspawnerGameDir
+                                + "\n\t - " + entspawnerProjectDir
             );
-            _notificationService.Error("No .json files were found. Check the log view for more detail.");
-            return;
+            initialDir = SettingsManager.GetRED4GameRootDir();
         }
 
         // Grab a json file from the correct folder

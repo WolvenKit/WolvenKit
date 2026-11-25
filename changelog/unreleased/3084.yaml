@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3084
+      author: "manavortex"
+      description: "Re-named 'import object spawner .json' to 'import worldbuilder .json', import now lets you browse for file"
