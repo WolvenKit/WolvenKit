@@ -372,12 +372,11 @@ namespace WolvenKit.Views.Shell
 
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            // No window move from the dimmed background behind a dialog: moving the window from there (DragMove)
+            // left the tabs inside an open file's editor without a highlighted selected tab. The title bar still
+            // moves the window.
             base.OnMouseLeftButtonDown(e);
-            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-            {
-                mainWindow?.DragMove();
-            }
+            e.Handled = true;
         }
 
         protected override void OnClosing(CancelEventArgs e)
