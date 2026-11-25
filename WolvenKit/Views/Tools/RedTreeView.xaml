@@ -745,7 +745,15 @@
                                          RelativeSource={RelativeSource AncestorType=ContextMenu},
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.JumpToArrayIndexCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="SelectColor"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <!-- Search & Replace -->
                 <MenuItem
