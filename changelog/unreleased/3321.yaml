@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3321
+      author: "Ametis81"
+      description: "The dimmed background behind a dialog no longer moves the window, and Escape cancels Select Existing Type"
