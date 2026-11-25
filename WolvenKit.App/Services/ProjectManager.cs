@@ -83,6 +83,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             }
 
             ActiveProject = x.Result;
+            (_archiveManager.ProjectArchive as IDisposable)?.Dispose(); // its folder watcher
             _archiveManager.ProjectArchive = x.Result.AsArchive();
             IsProjectLoaded = true;
 

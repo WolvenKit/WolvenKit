@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3287
+      author: "Ametis81"
+      description: "Project-aware file lookups no longer list the whole project folder on every access; opening sector previews in big projects is faster."
