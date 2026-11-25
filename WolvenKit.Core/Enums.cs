@@ -95,7 +95,7 @@ namespace WolvenKit.Common
         memoryresident_1_general
     }
 
-    public enum Logtype
+    public enum LogType
     {
         Normal,
         Error,

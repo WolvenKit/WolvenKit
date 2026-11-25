@@ -25,15 +25,15 @@ namespace WolvenKit.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is Logtype type
+            return value is LogType type
                 ? type switch
                 {
-                    Logtype.Normal => DependencyProperty.UnsetValue,
-                    Logtype.Error => new SolidColorBrush(Colors.Red),
-                    Logtype.Important => new SolidColorBrush(Colors.Orange),
-                    Logtype.Success => new SolidColorBrush(Colors.GreenYellow),
-                    Logtype.Warning => new SolidColorBrush(Colors.Purple),
-                    Logtype.Debug => DependencyProperty.UnsetValue,
+                    LogType.Normal => DependencyProperty.UnsetValue,
+                    LogType.Error => new SolidColorBrush(Colors.Red),
+                    LogType.Important => new SolidColorBrush(Colors.Orange),
+                    LogType.Success => new SolidColorBrush(Colors.GreenYellow),
+                    LogType.Warning => new SolidColorBrush(Colors.Purple),
+                    LogType.Debug => DependencyProperty.UnsetValue,
                     _ => throw new ArgumentOutOfRangeException()
                 }
                 : DependencyProperty.UnsetValue;
