@@ -18,7 +18,7 @@ namespace WolvenKit.Converters
     /// <summary>
     /// Converts RedBaseClass instances to a collection containing a single ChunkViewModel for RedTreeView
     /// </summary>
-    public class RedTypeToChunkViewModelCollectionConverter : IValueConverter
+    public class RedTypeToChunkViewModelCollectionConverter : IMultiValueConverter
     {
         private static ILoggerService? s_loggerService;
         private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
@@ -36,9 +36,10 @@ namespace WolvenKit.Converters
             s_globalCache.Remove(redData);
         }
 
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        public object? Convert(object[] values, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is not RedBaseClass redData)
+            if (values.Length < 2 || values[0] is not RedBaseClass redData ||
+                values[1] is not RedDocumentViewModel document)
             {
                 return null;
             }
@@ -46,7 +47,7 @@ namespace WolvenKit.Converters
             try
             {
                 // Always create fresh ChunkViewModel to ensure correct document context
-                var result = CreateChunkViewModelCollection(redData);
+                var result = CreateChunkViewModelCollection(redData, document);
                 return result;
             }
             catch (Exception ex)
@@ -58,7 +59,7 @@ namespace WolvenKit.Converters
             }
         }
 
-        private List<ChunkViewModel> CreateChunkViewModelCollection(RedBaseClass redData)
+        private List<ChunkViewModel> CreateChunkViewModelCollection(RedBaseClass redData, RedDocumentViewModel document)
         {
             try
             {
@@ -79,8 +80,7 @@ namespace WolvenKit.Converters
 
                 // Try to get the current document's RDTDataViewModel to use as Tab reference
                 // This ensures property edits can mark the document as dirty and save properly
-                var currentDocument = appViewModel.ActiveDocument as RedDocumentViewModel;
-                var currentTab = currentDocument?.SelectedTabItemViewModel;
+                var currentTab = document.SelectedTabItemViewModel;
 
                 ChunkViewModel chunkViewModel;
 
@@ -134,7 +134,7 @@ namespace WolvenKit.Converters
                     AutoExpandProperties(chunkViewModel, redData);
 
                     // Auto-select important properties for specific node types
-                    NodePropertiesSelectionService.Instance.AutoSelectImportantProperty(chunkViewModel);
+                    NodePropertiesSelectionService.ForData(redData).AutoSelectImportantProperty(chunkViewModel);
                 }
                 catch (Exception ex)
                 {
@@ -336,7 +336,7 @@ namespace WolvenKit.Converters
             propertyName.Equals("script", StringComparison.OrdinalIgnoreCase) ||
             propertyName.Equals("task", StringComparison.OrdinalIgnoreCase);
 
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        public object[] ConvertBack(object? value, Type[] targetTypes, object? parameter, CultureInfo culture)
         {
             throw new NotSupportedException("RedTypeToChunkViewModelCollectionConverter is one-way only");
         }

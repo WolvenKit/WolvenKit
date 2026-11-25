@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3222
+      author: "MORTEM3845"
+      description: "Keep selection, properties and timelines scoped to their graph document when using floating editor windows."

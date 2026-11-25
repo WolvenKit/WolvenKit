@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Timeline;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Timeline;
 
 namespace WolvenKit.Views.Timeline;
@@ -121,7 +122,17 @@ public partial class SectionTimelineView : UserControl
             return;
         }
 
-        _viewModel = new SectionTimelineViewModel();
+        RedDocumentViewModel? document = null;
+        for (var parent = VisualTreeHelper.GetParent(this); parent is not null; parent = VisualTreeHelper.GetParent(parent))
+        {
+            if (parent is FrameworkElement { DataContext: SceneGraphViewModel scene })
+            {
+                document = scene.Parent;
+                break;
+            }
+        }
+
+        _viewModel = new SectionTimelineViewModel(document);
         _viewModel.PropertyChanged += ViewModel_PropertyChanged;
         DataContext = _viewModel;
     }

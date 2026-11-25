@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.Timeline;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 namespace WolvenKit.App.ViewModels.Timeline;
@@ -17,9 +18,9 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
     private const double BaseRowHeight = 56.0;
     private const double BasePixelsPerMs = 0.1;
 
-    public SectionTimelineViewModel()
+    public SectionTimelineViewModel(RedDocumentViewModel? document = null)
     {
-        _service = new TimelineService();
+        _service = new TimelineService(document);
         _service.PropertyChanged += OnServicePropertyChanged;
     }
 

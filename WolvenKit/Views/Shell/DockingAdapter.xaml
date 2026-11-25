@@ -70,7 +70,6 @@
             KeyDown="PART_DockingManagerOnKeyDown"
             CloseOtherTabs="PART_DockingManager_OnCloseOtherTabs"
             CloseTabOnMiddleClick="True"
-            DockStateChanged="PART_DockingManagerOnDockStateChanged"
             DockStateChanging="PART_DockingManagerOnDockStateChanging"
             DocumentCloseButtonType="Both"
             DraggingType="NormalDragging"

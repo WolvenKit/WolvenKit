@@ -145,10 +145,7 @@ public partial class GraphEditorView : UserControl
                 return;
             }
 
-            if (value is not null || ReferenceEquals(NodeSelectionService.Instance.SelectedNode, previousNode))
-            {
-                NodeSelectionService.Instance.SelectedNode = value;
-            }
+            NodeSelectionService.Instance.SetSelectedNode(value, previousNode);
         }
     }
 
