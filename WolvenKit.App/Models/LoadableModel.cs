@@ -29,6 +29,9 @@ public class LoadableModel : IBindable, INode
     public string? BindName { get; set; }
     public string? SlotName { get; set; }
 
+    /// <summary>Rig the mesh is skinned to (skinning bindName), if any.</summary>
+    public string? SkinName { get; set; }
+
     public ulong ChunkMask { get; set; } = ulong.MaxValue;
     public List<bool> ChunkList { get; set; } = new(64);
     public ObservableCollection<int> AllChunks { get; set; } = new();

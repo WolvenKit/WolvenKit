@@ -27,6 +27,22 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+            // The side panel's settings take up to 60 % of the height and scroll beyond it, so the
+            // node tree keeps room on short windows.
+            SidePanelGrid.SizeChanged += (_, e) => SidePanelScroll.SetCurrentValue(MaxHeightProperty, Math.Max(120, e.NewSize.Height * 0.6));
+
+            NodeTreeGrid.NodeExpanded += NodeTreeGrid_OnNodeToggled;
+            NodeTreeGrid.NodeCollapsed += NodeTreeGrid_OnNodeToggled;
+            // a new scene (appearance, sector) gets the search that is typed in
+            // and opens on the selection: back from another tab of the document the tree is new and
+            // closed, while the object stays selected in the viewport
+            NodeTreeGrid.ItemsSourceChanged += (_, _) =>
+                Dispatcher.InvokeAsync(() =>
+                {
+                    ApplyNodeSearch(NodeSearchBox.Text?.Trim());
+                    RevealSelectedItem();
+                }, DispatcherPriority.Background);
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is RDTMeshViewModel vm)
@@ -39,9 +55,10 @@ namespace WolvenKit.Views.Documents
                         {
                             if (!vm.IsObjectPreview)
                             {
-                                // A sector's root holds every node of it (thousands): opened on
-                                // demand, or by a click in the viewport, not on every open.
-                                NodeTreeGrid.SetCurrentValue(SfTreeGrid.AutoExpandModeProperty, AutoExpandMode.None);
+                                // A sector's root opens on its type folders (a dozen); the
+                                // folders, with up to thousands of nodes, stay closed.
+                                // node type column (its funnel picks the kinds of nodes to show)
+                                NodeTypeColumn.SetCurrentValue(Syncfusion.UI.Xaml.Grid.GridColumnBase.IsHiddenProperty, false);
                             }
 
                             NodeTreeGrid.SetBinding(Syncfusion.UI.Xaml.TreeGrid.SfTreeGrid.ItemsSourceProperty,
@@ -89,8 +106,10 @@ namespace WolvenKit.Views.Documents
                         .DisposeWith(disposables);
 
                     // Viewport → tree: when the selection changes (e.g. a click in the viewport),
-                    // expand the branch that holds it and scroll it into view.
+                    // expand the branch that holds it and scroll it into view; also for the
+                    // selection the view model already holds when the tab is shown again.
                     vm.PropertyChanged += OnViewModelPropertyChanged;
+                    _ = Dispatcher.BeginInvoke(new Action(RevealSelectedItem), DispatcherPriority.ApplicationIdle);
                     Disposable
                         .Create(() => vm.PropertyChanged -= OnViewModelPropertyChanged)
                         .DisposeWith(disposables);
@@ -127,51 +146,25 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// The tree only expands root nodes, so a deeper item has no row yet.
         /// Walk from the tree root to the item, expanding each ancestor, then select and scroll.
+        /// An item the search hides gets a hint next to the search box instead.
         /// </summary>
         private void RevealSelectedItem()
         {
             if (ViewModel?.SelectedItem is not DependencyObject target || NodeTreeGrid.View == null)
             {
+                ShowHiddenBySearchHint(false);
                 return;
             }
 
-            var chain = new List<DependencyObject>();
-            for (var current = target; current != null; current = LogicalTreeHelper.GetParent(current))
+            if (!IsShownBySearch(target))
             {
-                chain.Insert(0, current);
+                ShowHiddenBySearchHint(true);
+                return;
             }
 
-            // View.Nodes is a TreeNodeCollection, ChildNodes is TreeNodes: walk both as TreeNode sequences.
-            IEnumerable<TreeNode> nodes = NodeTreeGrid.View.Nodes;
-            TreeNode found = null;
-            foreach (var item in chain)
-            {
-                var node = nodes.FirstOrDefault(n => ReferenceEquals(n.Item, item));
-                if (node == null)
-                {
-                    if (found == null)
-                    {
-                        continue; // still above the tree's root items
-                    }
+            ShowHiddenBySearchHint(false);
 
-                    return; // branch not in the tree (e.g. filtered out)
-                }
-
-                found = node;
-                if (ReferenceEquals(item, target))
-                {
-                    break;
-                }
-
-                if (!node.IsExpanded)
-                {
-                    NodeTreeGrid.ExpandNode(node);
-                }
-
-                nodes = node.ChildNodes;
-            }
-
-            if (found == null || !ReferenceEquals(found.Item, target))
+            if (ExpandTreePathTo(target) is not { } found)
             {
                 return;
             }
@@ -186,6 +179,60 @@ namespace WolvenKit.Views.Documents
             if (rowIndex >= 0)
             {
                 NodeTreeGrid.ScrollInView(new RowColumnIndex(rowIndex, 0));
+            }
+        }
+
+        /// <summary>
+        /// Expands the ancestors of <paramref name="target"/> from the tree root down (the item
+        /// itself stays as it is); its row, or null when its branch is not in the tree.
+        /// </summary>
+        private TreeNode ExpandTreePathTo(DependencyObject target)
+        {
+            var chain = new List<DependencyObject>();
+            for (var current = target; current != null; current = LogicalTreeHelper.GetParent(current))
+            {
+                chain.Insert(0, current);
+            }
+
+            // Not the user's own toggles: no branch-wide expanding with a held modifier.
+            _togglingNodes = true;
+            try
+            {
+                // View.Nodes is a TreeNodeCollection, ChildNodes is TreeNodes: walk both as TreeNode sequences.
+                IEnumerable<TreeNode> nodes = NodeTreeGrid.View.Nodes;
+                TreeNode found = null;
+                foreach (var item in chain)
+                {
+                    var node = nodes.FirstOrDefault(n => ReferenceEquals(n.Item, item));
+                    if (node == null)
+                    {
+                        if (found == null)
+                        {
+                            continue; // still above the tree's root items
+                        }
+
+                        return null; // branch not in the tree (e.g. filtered out)
+                    }
+
+                    found = node;
+                    if (ReferenceEquals(item, target))
+                    {
+                        return node;
+                    }
+
+                    if (!node.IsExpanded)
+                    {
+                        NodeTreeGrid.ExpandNode(node);
+                    }
+
+                    nodes = node.ChildNodes;
+                }
+
+                return null;
+            }
+            finally
+            {
+                _togglingNodes = false;
             }
         }
 
@@ -345,27 +392,27 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            // File name (prefix / suffix, remembered per file) and, with several, which appearances.
-            var picked = PickAppearances(vm, appearances.Select(a => a.Name).ToList());
-            if (picked == null)
+            // File name (prefix / suffix, remembered per file), folder and, with several, which appearances.
+            if (PickAppearances(vm, appearances.Select(a => a.Name).ToList()) is not { } choice)
             {
                 return;
             }
+
+            var (picked, folder) = choice;
 
             appearances = appearances.Where(a => picked.Contains(a.Name)).ToList();
-            if (appearances.Count == 0)
-            {
-                return;
-            }
-
-            var folder = vm.PickPreviewIconFolder(appearances.Select(a => a.Name).ToList());
-            if (folder == null)
+            if (appearances.Count == 0 || !vm.ConfirmPreviewIconFolder(folder, appearances.Select(a => a.Name).ToList()))
             {
                 return;
             }
 
             _savingIcons = true;
             var original = vm.SelectedAppearance;
+            // The batch frames every appearance and may switch to a preset's projection and
+            // lighting: all of it is put back afterwards, as it was before the batch.
+            var originalProjection = vm.PreviewCamera;
+            var originalLighting = vm.PreviewLighting;
+            var originalView = GetCameraView();
             var saved = 0;
             var failed = new List<string>();
             var cancelled = false;
@@ -397,11 +444,12 @@ namespace WolvenKit.Views.Documents
                     await vm.GenerateMaterialsForPreviewImageAsync();
                     // With a camera preset each appearance is shot from the preset's view (sized
                     // to that appearance); without one it is framed from the current direction.
+                    // "Camera view" images keep the camera as it is, zoom included.
                     if (vm.ActiveCameraPreset is { } iconPreset)
                     {
                         PlaceCameraPreset(iconPreset);
                     }
-                    else
+                    else if (!vm.KeepsCameraView)
                     {
                         FrameObject();
                     }
@@ -438,6 +486,23 @@ namespace WolvenKit.Views.Documents
                     vm.SelectedAppearance = original;
                 }
 
+                try
+                {
+                    vm.PreviewLighting = originalLighting;
+                    // A new projection swaps the camera and frames the object (at Background,
+                    // from the combo box); the old view is placed after that, under the cover.
+                    vm.PreviewCamera = originalProjection;
+                    await WaitFramesAsync(2);
+                    if (originalView is { } view)
+                    {
+                        SetCameraView(view);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    vm.ReportPreviewImageError($"the view could not be restored: {ex.Message}");
+                }
+
                 vm.IsSavingImage = false;
                 vm.IsSavingImageBatch = false;
                 _savingIcons = false;
@@ -455,10 +520,11 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Dialog of the icon batch: the file name as prefix + appearance + suffix (the prefix
         /// starts as the file's name, focused and selected; both are remembered per file), an
-        /// example name, and a checklist of the appearances (all ticked, with All / None) when
-        /// there are several. Null if cancelled. Built in code, it is only used here.
+        /// example name, the folder (typed or picked), and a checklist of the appearances (all
+        /// ticked, with All / None) when there are several. Null if cancelled. Built in code, it
+        /// is only used here.
         /// </summary>
-        private HashSet<string> PickAppearances(RDTMeshViewModel vm, IReadOnlyList<string> names)
+        private (HashSet<string> Appearances, string Folder)? PickAppearances(RDTMeshViewModel vm, IReadOnlyList<string> names)
         {
             // A TextBlock, not the string: WPF reads the first '_' of a string label as an access key and hides it.
             var boxes = names.Select(n => new CheckBox
@@ -492,27 +558,40 @@ namespace WolvenKit.Views.Documents
             nameRow.Children.Add(prefix);
 
             var example = new TextBlock { Margin = new Thickness(4, 2, 4, 8), Opacity = 0.7, TextTrimming = TextTrimming.CharacterEllipsis };
-            void UpdateExample()
-            {
-                var shown = boxes.FirstOrDefault(b => b.IsChecked == true)?.Tag as string ?? names.FirstOrDefault() ?? "";
-                example.SetCurrentValue(TextBlock.TextProperty, "→ " + RDTMeshViewModel.BuildIconFileName(prefix.Text, shown, suffix.Text));
-            }
 
-            prefix.TextChanged += (_, _) => UpdateExample();
-            suffix.TextChanged += (_, _) => UpdateExample();
-            boxes.ForEach(b =>
+            // Folder: typed, or picked with the button
+            var folderBox = new TextBox { Text = vm.GetPreviewIconFolder(), VerticalContentAlignment = VerticalAlignment.Center };
+            var browse = new Button { Content = "...", MinWidth = 28, Margin = new Thickness(4, 0, 0, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = "Pick the folder" };
+            browse.Click += (_, _) =>
             {
-                b.Checked += (_, _) => UpdateExample();
-                b.Unchecked += (_, _) => UpdateExample();
-            });
-            UpdateExample();
+                if (vm.BrowsePreviewIconFolder(folderBox.Text, names.Count) is { } picked)
+                {
+                    folderBox.SetCurrentValue(TextBox.TextProperty, picked);
+                }
+            };
+            var folderRow = new DockPanel { Margin = new Thickness(4, 2, 4, 8) };
+            var folderLabel = new TextBlock { Text = "Folder:", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 6, 0) };
+            DockPanel.SetDock(folderLabel, Dock.Left);
+            DockPanel.SetDock(browse, Dock.Right);
+            folderRow.Children.Add(folderLabel);
+            folderRow.Children.Add(browse);
+            folderRow.Children.Add(folderBox);
+            // Ticked appearances that would get the same file name (one icon would overwrite the other).
+            var clashWarning = new TextBlock
+            {
+                Margin = new Thickness(4, 0, 4, 8),
+                TextWrapping = TextWrapping.Wrap,
+                Foreground = (System.Windows.Media.Brush)FindResource("WolvenKitYellow"),
+                Visibility = Visibility.Collapsed,
+            };
+            var selectedCount = new TextBlock { Margin = new Thickness(4, 2, 4, 6), Opacity = 0.7, HorizontalAlignment = HorizontalAlignment.Right };
 
             var several = names.Count > 1;
             var window = new System.Windows.Window
             {
                 Title = "Save Appearance Icons",
                 Width = 420,
-                Height = several ? Math.Min(620, 210 + 26 * names.Count) : 170,
+                Height = several ? Math.Min(650, 240 + 26 * names.Count) : 200,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 Owner = System.Windows.Window.GetWindow(this),
                 ResizeMode = ResizeMode.CanResize,
@@ -526,9 +605,38 @@ namespace WolvenKit.Views.Documents
                 return b;
             }
 
-            var buttons = new DockPanel { LastChildFill = false, Margin = new Thickness(4) };
             var cancel = MakeButton("Cancel", () => window.DialogResult = false, isCancel: true);
             var ok = MakeButton("Save", () => window.DialogResult = true, isDefault: true);
+
+            // Example name, "N of M selected", the name clash warning, and Save only with something ticked.
+            void UpdateState()
+            {
+                var ticked = boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToList();
+                var shown = ticked.FirstOrDefault() ?? names.FirstOrDefault() ?? "";
+                example.SetCurrentValue(TextBlock.TextProperty, "→ " + RDTMeshViewModel.BuildIconFileName(prefix.Text, shown, suffix.Text));
+                selectedCount.SetCurrentValue(TextBlock.TextProperty, $"{ticked.Count} of {names.Count} selected");
+                ok.SetCurrentValue(IsEnabledProperty, ticked.Count > 0 && !string.IsNullOrWhiteSpace(folderBox.Text));
+
+                var clashes = RDTMeshViewModel.FindIconFileNameClashes(prefix.Text, ticked, suffix.Text);
+                clashWarning.SetCurrentValue(TextBlock.TextProperty, clashes.Count == 0
+                    ? ""
+                    : "Same file name, only the last one would be kept: " +
+                      string.Join("; ", clashes.Select(group =>
+                          string.Join(", ", group) + " → " + RDTMeshViewModel.BuildIconFileName(prefix.Text, group[0], suffix.Text))));
+                clashWarning.SetCurrentValue(VisibilityProperty, clashes.Count == 0 ? Visibility.Collapsed : Visibility.Visible);
+            }
+
+            prefix.TextChanged += (_, _) => UpdateState();
+            suffix.TextChanged += (_, _) => UpdateState();
+            folderBox.TextChanged += (_, _) => UpdateState();
+            boxes.ForEach(b =>
+            {
+                b.Checked += (_, _) => UpdateState();
+                b.Unchecked += (_, _) => UpdateState();
+            });
+            UpdateState();
+
+            var buttons = new DockPanel { LastChildFill = false, Margin = new Thickness(4) };
             if (several)
             {
                 var all = MakeButton("All", () => boxes.ForEach(b => b.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, true)));
@@ -547,9 +655,15 @@ namespace WolvenKit.Views.Documents
             var top = new StackPanel();
             top.Children.Add(nameRow);
             top.Children.Add(example);
+            top.Children.Add(folderRow);
+            top.Children.Add(clashWarning);
             if (several)
             {
-                top.Children.Add(new TextBlock { Text = "Appearances to save:", Margin = new Thickness(4, 2, 4, 6) });
+                var listHeader = new DockPanel();
+                DockPanel.SetDock(selectedCount, Dock.Right);
+                listHeader.Children.Add(selectedCount);
+                listHeader.Children.Add(new TextBlock { Text = "Appearances to save:", Margin = new Thickness(4, 2, 4, 6) });
+                top.Children.Add(listHeader);
             }
 
             var root = new DockPanel { Margin = new Thickness(6) };
@@ -578,7 +692,7 @@ namespace WolvenKit.Views.Documents
             }
 
             vm.StoreIconNameParts(prefix.Text, suffix.Text);
-            return boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToHashSet();
+            return (boxes.Where(b => b.IsChecked == true).Select(b => (string)b.Tag).ToHashSet(), folderBox.Text.Trim());
         }
 
         /// <summary>
@@ -805,7 +919,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>Puts the camera where the preset says, scaled to the object shown now.</summary>
         private void PlaceCameraPreset(WolvenKit.App.ViewModels.Documents.RDTMeshViewModel.CameraPreset preset)
         {
-            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera || SceneSphere() is not { } sphere)
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera || SceneSphere() is not { } sphere)
             {
                 return;
             }
@@ -822,13 +936,47 @@ namespace WolvenKit.Views.Documents
             up.Normalize();
             var target = sphere.Center + new System.Windows.Media.Media3D.Vector3D(preset.TargetX, preset.TargetY, preset.TargetZ) * r;
             var lookVector = look * (Math.Max(preset.Distance, 1e-3) * r);
-            var position = target - lookVector;
+            SetCameraView(new CameraView(target - lookVector, lookVector, up, preset.OrthoWidth * r));
+        }
 
-            if (camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera orthographic && preset.OrthoWidth > 0)
+        /// <summary>Where the camera is and looks; OrthoWidth is 0 for a perspective camera.</summary>
+        private sealed record CameraView(
+            System.Windows.Media.Media3D.Point3D Position,
+            System.Windows.Media.Media3D.Vector3D LookVector,
+            System.Windows.Media.Media3D.Vector3D Up,
+            double OrthoWidth);
+
+        /// <summary>The current view, from the render camera (mouse navigation changes only that one); null without a camera.</summary>
+        private CameraView GetCameraView()
+        {
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera)
             {
-                orthographic.AnimateWidth(preset.OrthoWidth * r, 0);
+                return null;
             }
 
+            var core = camera.CameraInternal;
+            return new CameraView(
+                new(core.Position.X, core.Position.Y, core.Position.Z),
+                new(core.LookDirection.X, core.LookDirection.Y, core.LookDirection.Z),
+                new(core.UpDirection.X, core.UpDirection.Y, core.UpDirection.Z),
+                camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera ortho ? ortho.Width : 0);
+        }
+
+        /// <summary>Puts the view on both the WPF camera and the render camera, so neither keeps an old value.</summary>
+        private void SetCameraView(CameraView view)
+        {
+            if (ViewModel?.Camera is not HelixToolkit.Wpf.SharpDX.ProjectionCamera camera ||
+                view.LookVector.LengthSquared < 1e-12 || view.Up.LengthSquared < 1e-12)
+            {
+                return;
+            }
+
+            if (camera is HelixToolkit.Wpf.SharpDX.OrthographicCamera orthographic && view.OrthoWidth > 0)
+            {
+                orthographic.AnimateWidth(view.OrthoWidth, 0);
+            }
+
+            var (position, lookVector, up) = (view.Position, view.LookVector, view.Up);
             camera.AnimateTo(position, lookVector, up, 0);
             camera.CameraInternal.AnimateTo(
                 new((float)position.X, (float)position.Y, (float)position.Z),
@@ -836,6 +984,387 @@ namespace WolvenKit.Views.Documents
                 new((float)up.X, (float)up.Y, (float)up.Z),
                 0);
             UpdateFollowLights();
+        }
+
+        // ---- Node tree: search ----
+        // Keeps the rows whose name, node index or path contains the text, with their parents
+        // (the tree's FilterLevel) and everything under them. Up to NodeSearchExpandLimit found
+        // rows get their parents opened; a node number that matches exactly one node selects it.
+
+        private const int NodeSearchExpandLimit = 200;
+
+        private DispatcherTimer _nodeSearchTimer;
+        private HashSet<object> _nodeSearchMatches;
+
+        /// <summary>The typed text and, when it is a node number ("#0264", "0264", "264"), that number without '#' and leading zeros.</summary>
+        private sealed record NodeSearchQuery(string Text, string Number);
+
+        private void NodeSearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var empty = string.IsNullOrEmpty(NodeSearchBox.Text);
+            NodeSearchClearButton.SetCurrentValue(VisibilityProperty, empty ? Visibility.Collapsed : Visibility.Visible);
+
+            _nodeSearchTimer ??= new DispatcherTimer(TimeSpan.FromMilliseconds(250), DispatcherPriority.Background,
+                (_, _) =>
+                {
+                    _nodeSearchTimer.Stop();
+                    ApplyNodeSearch(NodeSearchBox.Text?.Trim());
+                }, Dispatcher);
+            _nodeSearchTimer.Stop();
+
+            // clearing shows the whole tree at once
+            if (empty)
+            {
+                ApplyNodeSearch(null);
+                return;
+            }
+
+            _nodeSearchTimer.Start();
+        }
+
+        private void NodeSearchBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && !string.IsNullOrEmpty(NodeSearchBox.Text))
+            {
+                NodeSearchBox.Clear();
+                e.Handled = true;
+            }
+        }
+
+        private void ClearNodeSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            NodeSearchBox.Clear();
+            NodeSearchBox.Focus();
+        }
+
+        /// <summary>Hint link: clears the search, then opens the tree to the selected object.</summary>
+        private void ClearNodeSearchAndReveal_OnClick(object sender, RoutedEventArgs e)
+        {
+            NodeSearchBox.Clear();
+            Dispatcher.BeginInvoke(new Action(RevealSelectedItem), DispatcherPriority.Background);
+        }
+
+        // Ctrl+F anywhere in the preview: to the search box. Preview: the viewport would take the key first.
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+
+            if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control && NodeSearchBox.IsVisible)
+            {
+                NodeSearchBox.Focus();
+                NodeSearchBox.SelectAll();
+                e.Handled = true;
+            }
+        }
+
+        private void ApplyNodeSearch(string text)
+        {
+            ShowHiddenBySearchHint(false);
+
+            if (NodeTreeGrid.View is not { } view)
+            {
+                return;
+            }
+
+            // A newer search (or clearing) drops what an older one left queued.
+            var generation = ++_nodeSearchGeneration;
+
+            if (string.IsNullOrEmpty(text))
+            {
+                _nodeSearchMatches = null;
+                view.Filter = null;
+                view.RefreshFilter();
+                SetNodeSearchCount(null);
+                AfterNodeTreeRefresh(generation, ScrollNodeTreeToTop);
+                return;
+            }
+
+            var query = new NodeSearchQuery(text, NormalizeNodeNumber(text));
+            var matches = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            var found = new List<object>();
+            var numbered = new List<WolvenKit.App.Models.MeshComponent>();
+            if (ViewModel?.SelectedModelGroup is { } roots)
+            {
+                foreach (var root in roots)
+                {
+                    CollectNodeSearchMatches(root, query, false, matches, found, numbered);
+                }
+            }
+
+            _nodeSearchMatches = matches;
+            view.Filter = item => _nodeSearchMatches?.Contains(item) != false;
+            view.RefreshFilter();
+            SetNodeSearchCount(found.Count);
+
+            AfterNodeTreeRefresh(generation, () =>
+            {
+                ScrollNodeTreeToTop();
+
+                // With a few hundred rows the tree stays usable; beyond that only the count is shown.
+                if (found.Count <= NodeSearchExpandLimit)
+                {
+                    ExpandFoundRows(found);
+                }
+
+                // A node number that is exactly one node's index: select it and scroll to it (also
+                // past the limit: "1" finds hundreds of nodes, but means node #0001).
+                if (numbered is [var exact])
+                {
+                    if (ViewModel is { } vm && !ReferenceEquals(vm.SelectedItem, exact))
+                    {
+                        vm.SelectedItem = exact; // the view model's change reveals it in the tree
+                    }
+                    else
+                    {
+                        RevealSelectedItem();
+                    }
+                }
+            });
+        }
+
+        private int _nodeSearchGeneration;
+
+        /// <summary>
+        /// Runs <paramref name="action"/> once the grid has rebuilt its rows for the new filter,
+        /// unless another search came first. With expanding, scrolling and selecting in the same
+        /// pass as RefreshFilter, a one-digit search hung WolvenKit: the grid showed the root
+        /// collapsed over the old rows and threw ArgumentOutOfRangeException ("-1 out of range
+        /// 0 to 0") over and over.
+        /// </summary>
+        private void AfterNodeTreeRefresh(int generation, Action action) =>
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (generation == _nodeSearchGeneration && NodeTreeGrid.View != null)
+                {
+                    action();
+                }
+            }), DispatcherPriority.Background);
+
+        /// <summary>Opens the parents of the found rows; each parent once (hundreds of rows share a few folders and nodes).</summary>
+        private void ExpandFoundRows(List<object> found)
+        {
+            var opened = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            foreach (var element in found.OfType<DependencyObject>())
+            {
+                if (LogicalTreeHelper.GetParent(element) is not { } parent || opened.Contains(parent))
+                {
+                    continue;
+                }
+
+                ExpandTreePathTo(element);
+                var current = parent;
+                while (current != null && opened.Add(current))
+                {
+                    current = LogicalTreeHelper.GetParent(current);
+                }
+            }
+        }
+
+        /// <summary>Count next to the search box: "12 found", "Nothing found", hidden without a search.</summary>
+        private void SetNodeSearchCount(int? count)
+        {
+            var text = count switch
+            {
+                null => "",
+                0 => "Nothing found",
+                > NodeSearchExpandLimit => $"{count} found, not expanded",
+                _ => $"{count} found",
+            };
+
+            NodeSearchCount.SetCurrentValue(TextBlock.TextProperty, text);
+            NodeSearchCount.SetCurrentValue(VisibilityProperty, count == null ? Visibility.Collapsed : Visibility.Visible);
+        }
+
+        /// <summary>
+        /// Back to the first row: a new filter left the old scroll offset, and when it was past
+        /// the end of the shorter list the tree showed no rows at all.
+        /// </summary>
+        private void ScrollNodeTreeToTop()
+        {
+            if (NodeTreeGrid.View is { } view && ((IEnumerable<TreeNode>)view.Nodes).FirstOrDefault() is { } first &&
+                NodeTreeGrid.ResolveToRowIndex(first) is var rowIndex and >= 0)
+            {
+                NodeTreeGrid.ScrollInView(new RowColumnIndex(rowIndex, 0));
+            }
+        }
+
+        private void ShowHiddenBySearchHint(bool show) =>
+            NodeSearchHint.SetCurrentValue(VisibilityProperty, show ? Visibility.Visible : Visibility.Collapsed);
+
+        /// <summary>
+        /// Whether the search keeps the element's row: it or something under it was found
+        /// (FilterLevel Extended keeps the parents of found rows). True without a search.
+        /// </summary>
+        private bool IsShownBySearch(object element)
+        {
+            if (_nodeSearchMatches is not { } matches || matches.Contains(element))
+            {
+                return true;
+            }
+
+            return element is HelixToolkit.Wpf.SharpDX.GroupModel3D group && group.Children.Any(IsShownBySearch);
+        }
+
+        /// <summary>
+        /// "#0264", "0264" and "264" → "264"; "#0" and "000" → "0". Null when the text is not a
+        /// node number (after an optional '#', digits only).
+        /// </summary>
+        private static string NormalizeNodeNumber(string text)
+        {
+            var digits = text?.Trim().TrimStart('#');
+            if (string.IsNullOrEmpty(digits) || !digits.All(char.IsAsciiDigit))
+            {
+                return null;
+            }
+
+            var number = digits.TrimStart('0');
+            return number.Length == 0 ? "0" : number;
+        }
+
+        // found: the rows that match by themselves and are not inside another found row, in tree
+        // order (what the count shows and whose parents are opened). numbered: the nodes whose
+        // index is the typed number, wherever they are (the sector's own name may match too).
+        private static void CollectNodeSearchMatches(object element, NodeSearchQuery query, bool underMatch,
+            HashSet<object> matches, List<object> found, List<WolvenKit.App.Models.MeshComponent> numbered)
+        {
+            var self = NodeMatches(element, query);
+            if (self && !underMatch)
+            {
+                found.Add(element);
+            }
+
+            if (element is WolvenKit.App.Models.MeshComponent mesh && IsNumber(mesh.WorldNodeIndex, query.Number))
+            {
+                numbered.Add(mesh);
+            }
+
+            var match = underMatch || self;
+            if (match)
+            {
+                matches.Add(element);
+            }
+
+            if (element is HelixToolkit.Wpf.SharpDX.GroupModel3D group)
+            {
+                foreach (var child in group.Children)
+                {
+                    CollectNodeSearchMatches(child, query, match, matches, found, numbered);
+                }
+            }
+        }
+
+        // "#264" and "0264" find "#0264": the index compared without '#' and leading zeros
+        // (a part of a number still finds it through the "#0264" label)
+        private static bool IsNumber(string index, string number) =>
+            number != null && NormalizeNodeNumber(index) == number;
+
+        private static bool NodeMatches(object element, NodeSearchQuery query)
+        {
+            var text = query.Text;
+
+            static bool Has(string value, string text) =>
+                !string.IsNullOrEmpty(value) && value.Contains(text, StringComparison.OrdinalIgnoreCase);
+
+            return element switch
+            {
+                WolvenKit.App.Models.MeshComponent mesh =>
+                    Has(mesh.Text, text) || Has(mesh.Name, text) || IsNumber(mesh.WorldNodeIndex, query.Number) ||
+                    Has(mesh.DepotPath.GetResolvedText(), text) || Has(mesh.WorldNodeType, text),
+                // A sector's type folder ("Meshes (264)") is only a container: its name and count
+                // would bring in all of its nodes.
+                WolvenKit.App.Models.GroupModel3DExt folder when RDTMeshViewModel.IsSectorTypeFolder(folder) => false,
+                WolvenKit.App.Models.GroupModel3DExt group => Has(group.Text, text) || Has(group.Name, text),
+                WolvenKit.App.Models.SubmeshComponent submesh => Has(submesh.Text, text) || Has(submesh.Name, text),
+                HelixToolkit.Wpf.SharpDX.Element3D other => Has(other.Name, text),
+                _ => false,
+            };
+        }
+
+        // ---- Node tree: expand / collapse with modifiers, as in Blender's outliner ----
+        // Shift: the node's whole branch. Ctrl: its siblings too. Ctrl+Shift: the siblings' branches.
+
+        private bool _togglingNodes;
+
+        private void NodeTreeGrid_OnNodeToggled(object sender, EventArgs e)
+        {
+            var node = e switch
+            {
+                NodeExpandedEventArgs expanded => expanded.Node,
+                NodeCollapsedEventArgs collapsed => collapsed.Node,
+                _ => null,
+            };
+            var modifiers = Keyboard.Modifiers;
+            // Only the user's own clicks / keys in the tree: a viewport click with Shift opens
+            // the tree to the picked mesh and must not open whole branches.
+            if (_togglingNodes || node == null ||
+                (modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) == 0 ||
+                !(NodeTreeGrid.IsMouseOver || NodeTreeGrid.IsKeyboardFocusWithin))
+            {
+                return;
+            }
+
+            // From the event, not node.IsExpanded: the grid raises it before the flag is set.
+            var expand = e is NodeExpandedEventArgs;
+            var branch = (modifiers & ModifierKeys.Shift) != 0;
+            var siblings = (modifiers & ModifierKeys.Control) != 0;
+
+            // Right away: queued on the dispatcher it waited for the 3D view's frames (seconds).
+            // The grid echoes these toggles later, in the same direction, so the echoes change nothing.
+            ToggleNodes(node, expand, branch, siblings);
+        }
+
+        private void ToggleNodes(TreeNode node, bool expand, bool branch, bool siblings)
+        {
+            _togglingNodes = true;
+            try
+            {
+                // Copied by hand: Syncfusion's node collections throw on CopyTo, which ToList uses.
+                var targets = new List<TreeNode>();
+                if (siblings)
+                {
+                    foreach (var sibling in node.ParentNode?.ChildNodes ?? (IEnumerable<TreeNode>)NodeTreeGrid.View.Nodes)
+                    {
+                        targets.Add(sibling);
+                    }
+                }
+                else
+                {
+                    targets.Add(node);
+                }
+
+                // The clicked node itself was already toggled by the grid.
+                if (!branch)
+                {
+                    targets.Remove(node);
+                }
+
+                foreach (var target in targets)
+                {
+                    if (branch)
+                    {
+                        if (expand)
+                        {
+                            NodeTreeGrid.ExpandAllNodes(target);
+                        }
+                        else
+                        {
+                            NodeTreeGrid.CollapseAllNodes(target);
+                        }
+                    }
+                    else if (expand && !target.IsExpanded)
+                    {
+                        NodeTreeGrid.ExpandNode(target);
+                    }
+                    else if (!expand && target.IsExpanded)
+                    {
+                        NodeTreeGrid.CollapseNode(target);
+                    }
+                }
+            }
+            finally
+            {
+                _togglingNodes = false;
+            }
         }
 
         private void PreviewCamera_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
