@@ -44,6 +44,7 @@ cbuffer cbSurfaceExtra : register(b12)
     float4 sxSpecTint;   // rgb specular tint, w: 1 = use it
     float4 sxGlass;      // x: edge tint exponent (0 = off), y: vertex colour tint amount, w: 1 = clay view
     float4 sxGlassBack;  // x: 1 = back faces are glass backs, y: back reflection power, z: back opacity
+    float4 sxHolo;       // hologram scanlines: x density (0 = off), y stretch; the scanline texture is in the emissive slot
 };
 
 cbuffer cbMultilayer : register(b11)
@@ -64,6 +65,11 @@ cbuffer cbMultilayer : register(b11)
     float4 mlOverlayB;
     // x: 1 = normals blended as RNM.
     float4 mlOverlayFlags;
+    // Clear coat (multilayered_clear_coat.mt), an approximation: the coat tints the surface from
+    // mlCoatFwd (facing the view) to mlCoatSide (grazing), the mother-of-pearl shift.
+    // mlCoatFwd.w: 1 = coat on; mlCoatSide.w: Fresnel exponent of the shift
+    float4 mlCoatFwd;
+    float4 mlCoatSide;
     // Per layer, ML_VEC_PER_LAYER vectors:
     //  0: colorScale.rgb, opacity
     //  1: matTile, mbTile, offsetU, offsetV
@@ -505,6 +511,12 @@ float4 mlMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
     float4 albedo = float4(input.cDiffuse.xyz * surf.albedo, 1);
     albedo = lerp(albedo, input.c, vertColorBlending);
 
+    if (mlCoatFwd.w > 0)
+    {
+        float grazing = pow(1 - saturate(dot(N, V)), max(mlCoatSide.w, 0.05));
+        albedo.rgb *= lerp(mlCoatFwd.rgb, mlCoatSide.rgb, grazing);
+    }
+
     // Material factors multiply the maps, as with the baked RM map.
     float3 RMA = float3(ConstantAO, ConstantRoughness * surf.roughness, ConstantMetallic * surf.metallic);
     if (SSAOEnabled)
@@ -608,10 +620,22 @@ float4 pbrMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
         RMA.r *= texSSAOMap.SampleLevel(samplerSurface, quadTex, 0).r;
     }
 
+    // Hologram scanlines (Blender add-on hologram.py): the Scanline texture's red channel, read at
+    // frac of the position's X / Z (game axes: preview x and y) times OpaqueScanlineDensity, Y
+    // stretched by 1 - ScanlineThickness around 0.5; it is the hologram's coverage.
+    float scanline = 1;
+    const bool hologram = sxHolo.x > 0;
+    if (hologram)
+    {
+        float2 scanUV = frac(float2(-input.wp.x, input.wp.y) * sxHolo.x);
+        scanUV.y = scanUV.y * sxHolo.y + 0.5 - sxHolo.y * 0.5;
+        scanline = bHasEmissiveMap ? texEmissiveMap.Sample(samplerSurface, scanUV).r : 1;
+    }
+
     gSpecTint = sxSpecTint.w > 0.5 ? sxSpecTint.rgb : float3(1, 1, 1);
     // A glass back face mostly only reflects (BackFacesReflectionPower); OpacityBackFace
     // keeps some of the tint. Blending cannot add light, so the back gets a faint alpha.
-    const float frontAlpha = albedo.a * input.cDiffuse.a;
+    const float frontAlpha = albedo.a * input.cDiffuse.a * scanline;
     if (glassBack)
     {
         albedo.rgb *= saturate(sxGlassBack.z);
@@ -635,7 +659,7 @@ float4 pbrMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
     }
     color.rgb *= s;
     float3 emissive = vMaterialEmissive.rgb;
-    if (bHasEmissiveMap)
+    if (bHasEmissiveMap && !hologram)
     {
         emissive *= texEmissiveMap.Sample(samplerSurface, input.t).rgb;
     }

@@ -1087,6 +1087,11 @@ public partial class RDTMeshViewModel
         Set(c, 0, written, globalIdx, globalIntensity, 0f);
         Set(c, 4, gScaleU, gScaleV, gBiasU, gBiasV);
         Set(c, MultilayerConstants.DebugOffset, 0f, -1f, 0f, 0f); // filled per draw
+        if (ReadClearCoat(material) is { } coat)
+        {
+            Set(c, MultilayerConstants.CoatOffset, coat.Fwd.X, coat.Fwd.Y, coat.Fwd.Z, 1f);
+            Set(c, MultilayerConstants.CoatOffset + 4, coat.Side.X, coat.Side.Y, coat.Side.Z, coat.Exponent);
+        }
         Set(c, MultilayerConstants.OverlayOffset, -1f, -1f, -1f, -1f); // no decal overlay
         Set(c, MultilayerConstants.OverlayBOffset, -1f, -1f, -1f, -1f);
         Set(c, MultilayerConstants.OverlayFlagsOffset, 0f, 0f, 0f, 0f);
@@ -1510,7 +1515,34 @@ public partial class RDTMeshViewModel
         material.MetallicFactor = 0.8f;
         material.MultilayerData = data;
 
+        // multilayered_clear_coat.mt: the coat's sharp highlight (its tint is in the shader)
+        var coat = TryGetRawMaterial(name, out var coatMaterial) ? ReadClearCoat(coatMaterial) : null;
+        material.ClearCoatStrength = coat != null ? 1f : 0f;
+        material.ClearCoatRoughness = coat?.Roughness ?? 0f;
+
         return material;
+    }
+
+    /// <summary>
+    /// The clear coat of a multilayered_clear_coat.mt material (CoatTintFwd / CoatTintSide /
+    /// CoatTintFresnelBias / CoatRoughnessBase, through the .mi chain), or null without one.
+    /// An approximation: the coat covers the whole surface (CoatLayerMin / Max are not used).
+    /// </summary>
+    private (System.Numerics.Vector3 Fwd, System.Numerics.Vector3 Side, float Exponent, float Roughness)? ReadClearCoat(Material? material)
+    {
+        if (material == null ||
+            FindMaterialValue(material, "CoatTintFwd") is not CColor fwd ||
+            FindMaterialValue(material, "CoatTintSide") is not CColor side)
+        {
+            return null;
+        }
+
+        static System.Numerics.Vector3 Rgb(CColor c) => new(c.Red / 255f, c.Green / 255f, c.Blue / 255f);
+
+        // a higher bias moves the shift towards the facing angles
+        var bias = FindMaterialValue(material, "CoatTintFresnelBias") is { } b ? ReadFloat(b) : 1f;
+        var roughness = FindMaterialValue(material, "CoatRoughnessBase") is { } r ? ReadFloat(r) : 0.05f;
+        return (Rgb(fwd), Rgb(side), 2f / Math.Max(bias, 0.25f), Math.Clamp(roughness, 0f, 1f));
     }
 
     /// <summary>
