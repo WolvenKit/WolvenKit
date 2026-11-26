@@ -221,19 +221,20 @@ public static class SectorObjectList
             var node = nodeIndex >= 0 && nodeIndex < sector.Nodes.Count ? sector.Nodes[nodeIndex]?.Chunk : null;
             var className = node?.GetType().Name ?? "missing node";
             var variant = VariantOf(ranges, i);
-            var flags = (ENodeFlags)entry.NodeFlags;
+            var flags = GetNodeFlags(entry);
 
             // only cooked nodes (and instanced meshes, cooked too) pick an inner node; occluders have an instanceIndex of 0
             var inner = -1;
             object? innerNode = null;
-            if (node is worldCookedNode && (uint)entry.InstanceIndex != NoInstance)
+            var instanceIndex = GetInstanceIndex(entry);
+            if (node is worldCookedNode && instanceIndex != NoInstance)
             {
                 if (!innerCache.TryGetValue(nodeIndex, out var list))
                 {
                     innerCache[nodeIndex] = list = InnerNodes(node);
                 }
 
-                inner = (int)(uint)entry.InstanceIndex;
+                inner = (int)instanceIndex;
                 innerNode = list is not null && inner >= 0 && inner < list.Count ? list[inner] : null;
             }
 
@@ -305,7 +306,7 @@ public static class SectorObjectList
     /// destructible instanced mesh, the actors of a collision node or of the inner node of a cooked one.
     /// </summary>
     private static (SectorElementKind Kind, IReadOnlyList<SectorObjectElement> Elements) Elements(
-        RedBaseClass? node, int inner, worldCompiledNodeInstanceSetupInfo entry)
+        RedBaseClass? node, int inner, ICompiledNodeInstanceSetupInfo entry)
     {
         switch (node)
         {
@@ -536,6 +537,18 @@ public static class SectorObjectList
     /// "Static mesh" for worldCookedStaticMeshNode and worldStaticMeshNode, "AI spot" for worldAISpotNode,
     /// "Compiled community area" for worldCompiledCommunityAreaNode_Streamable.
     /// </summary>
+    private static ENodeFlags GetNodeFlags(ICompiledNodeInstanceSetupInfo entry) => entry switch
+    {
+        worldCompiledNodeInstanceSetupInfo c => (ENodeFlags)c.NodeFlags,
+        _ => 0
+    };
+
+    private static uint GetInstanceIndex(ICompiledNodeInstanceSetupInfo entry) => entry switch
+    {
+        worldCompiledNodeInstanceSetupInfo c => (uint)c.InstanceIndex,
+        _ => NoInstance
+    };
+
     internal static string GroupName(string className)
     {
         var name = className;

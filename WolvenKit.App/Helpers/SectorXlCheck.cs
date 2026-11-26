@@ -137,13 +137,16 @@ public static class SectorXlCheck
             IReadOnlyList<int> elements = Array.Empty<int>();
             var dropped = false;
 
-            if (Child(node, "instanceDeletions") is YamlSequenceNode instances ||
-                Child(node, "instanceMutations") is YamlSequenceNode instancesM)
+            var instances = Child(node, "instanceDeletions") as YamlSequenceNode
+                         ?? Child(node, "instanceMutations") as YamlSequenceNode;
+            var actors = Child(node, "actorDeletions") as YamlSequenceNode
+                      ?? Child(node, "actorMutations") as YamlSequenceNode;
+
+            if (instances is not null)
             {
-                var seq = instances ?? instancesM;
                 if (Int(node, "expectedInstances") is { } exp && exp > 0)
                 {
-                    var parsed = Elements(seq!);
+                    var parsed = Elements(instances);
                     if (parsed.All(e => e >= 0 && e < exp))
                     {
                         kind = SectorElementKind.Instance;
@@ -160,13 +163,11 @@ public static class SectorXlCheck
                     dropped = true;
                 }
             }
-            else if (Child(node, "actorDeletions") is YamlSequenceNode actors ||
-                     Child(node, "actorMutations") is YamlSequenceNode actorsM)
+            else if (actors is not null)
             {
-                var seq = actors ?? actorsM;
                 if (Int(node, "expectedActors") is { } exp && exp > 0)
                 {
-                    var parsed = Elements(seq!);
+                    var parsed = Elements(actors);
                     if (parsed.All(e => e >= 0 && e < exp))
                     {
                         kind = SectorElementKind.Actor;
