@@ -96,20 +96,11 @@ public class CvmMaterialTools
     public static bool HasPreloadMaterials(ChunkViewModel cvm) =>
         cvm.GetRootModel() is { ResolvedData: CMesh mesh } && HasPreloadMaterials(mesh);
 
-    private static bool HasPreloadMaterials(CMesh mesh) =>
-        mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
+    private static bool HasPreloadMaterials(CMesh mesh) => MeshMaterialLists.HasPreloadMaterials(mesh);
 
     # endregion
 
-    private static List<IMaterial> GetLocalMaterials(CMesh mesh)
-    {
-        if (HasPreloadMaterials(mesh))
-        {
-            return mesh.PreloadLocalMaterialInstances.Select(r => r.Chunk).OfType<IMaterial>().ToList();
-        }
-
-        return mesh.LocalMaterialBuffer.Materials.ToList();
-    }
+    private static List<IMaterial> GetLocalMaterials(CMesh mesh) => MeshMaterialLists.GetLocalMaterials(mesh);
 
     private static void SetLocalMaterials(CMesh mesh, List<IMaterial> materials, bool isPreload)
     {
@@ -124,15 +115,7 @@ public class CvmMaterialTools
         mesh.LocalMaterialBuffer.Materials.AddRange(materials.Cast<CMaterialInstance>());
     }
 
-    private static List<IRedRef> GetExternalMaterials(CMesh mesh)
-    {
-        if (HasPreloadMaterials(mesh))
-        {
-            return mesh.PreloadExternalMaterials.Cast<IRedRef>().ToList();
-        }
-
-        return mesh.ExternalMaterials.Cast<IRedRef>().ToList();
-    }
+    private static List<IRedRef> GetExternalMaterials(CMesh mesh) => MeshMaterialLists.GetExternalMaterials(mesh);
 
     /// <summary>
     /// Sets a mesh file's external materials to the provided list of materials.
