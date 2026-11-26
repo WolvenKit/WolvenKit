@@ -7,7 +7,7 @@ using YamlDotNet.RepresentationModel;
 
 namespace WolvenKit.App.Helpers;
 
-/// <summary>One entry of an ArchiveXL removal: nodeDeletions[] of a sector.</summary>
+/// <summary>One entry of an ArchiveXL removal or mutation.</summary>
 public sealed record XlNodeDeletion(
     int Index,
     string Type,
@@ -15,8 +15,12 @@ public sealed record XlNodeDeletion(
     int ExpectedElements,
     IReadOnlyList<int> Elements);
 
-/// <summary>A sector of an ArchiveXL file (streaming / sectors[]) with its removals.</summary>
-public sealed record XlSectorBlock(string Path, int? ExpectedNodes, IReadOnlyList<XlNodeDeletion> Deletions);
+/// <summary>A sector of an ArchiveXL file (streaming / sectors[]) with its removals and mutations.</summary>
+public sealed record XlSectorBlock(
+    string Path,
+    int? ExpectedNodes,
+    IReadOnlyList<XlNodeDeletion> Deletions,
+    IReadOnlyList<XlNodeDeletion> Mutations);
 
 /// <summary>What a check of an .xl against a sector found.</summary>
 public sealed class XlCheckResult
@@ -37,10 +41,10 @@ public sealed class XlCheckResult
 }
 
 /// <summary>
-/// Reads the sector removals of an ArchiveXL file and checks them against a sector the way ArchiveXL does
-/// (WorldStreaming extension): the nodeData count against expectedNodes, the class of each entry's node against type,
-/// and for single instances or actors their count against expectedInstances / expectedActors. Game patches reorder
-/// the nodes of sectors (2.5 did it for every sector), so an old file can point at other objects.
+/// Reads the sector removals and mutations of an ArchiveXL file and checks them against a sector the way
+/// ArchiveXL does (WorldStreaming/Config.cpp): nodeData count against expectedNodes, class against type,
+/// and for single instances or actors their count against expectedInstances / expectedActors.
+/// Missing expected* or an out-of-range single index makes ArchiveXL drop the singles and remove the whole node.
 /// </summary>
 public static class SectorXlCheck
 {
@@ -69,27 +73,9 @@ public static class SectorXlCheck
                     continue;
                 }
 
-                var deletions = new List<XlNodeDeletion>();
-                if (Child(sector, "nodeDeletions") is YamlSequenceNode nodes)
-                {
-                    foreach (var node in nodes.OfType<YamlMappingNode>())
-                    {
-                        if (Int(node, "index") is not { } index || Scalar(node, "type") is not { Length: > 0 } type)
-                        {
-                            continue;
-                        }
-
-                        var (kind, expected, elements) =
-                            Child(node, "instanceDeletions") is YamlSequenceNode instances
-                                ? (SectorElementKind.Instance, Int(node, "expectedInstances") ?? 0, Elements(instances))
-                                : Child(node, "actorDeletions") is YamlSequenceNode actors
-                                    ? (SectorElementKind.Actor, Int(node, "expectedActors") ?? 0, Elements(actors))
-                                    : (SectorElementKind.None, 0, new List<int>());
-                        deletions.Add(new XlNodeDeletion(index, type, kind, expected, elements));
-                    }
-                }
-
-                result.Add(new XlSectorBlock(path, Int(sector, "expectedNodes"), deletions));
+                var deletions = ReadEntries(sector, "nodeDeletions");
+                var mutations = ReadEntries(sector, "nodeMutations");
+                result.Add(new XlSectorBlock(path, Int(sector, "expectedNodes"), deletions, mutations));
             }
         }
 
@@ -118,41 +104,139 @@ public static class SectorXlCheck
 
         foreach (var deletion in block.Deletions)
         {
-            if (deletion.Index < 0 || deletion.Index >= objects.Count)
-            {
-                result.Problems.Add($"#{deletion.Index} ({deletion.Type}): no such nodeData entry.");
-                continue;
-            }
+            CheckEntry(result, deletion, objects, isMutation: false);
+        }
 
-            var o = objects[deletion.Index];
-            string? problem = null;
-            if (!string.Equals(o.ClassName, deletion.Type, StringComparison.Ordinal))
-            {
-                problem = $"is {o.ClassName}, the file expects {deletion.Type}";
-            }
-            else if (deletion.ElementKind != SectorElementKind.None &&
-                     (deletion.ElementKind != o.ElementKind || deletion.ExpectedElements != o.Elements.Count))
-            {
-                var what = deletion.ElementKind == SectorElementKind.Actor ? "actors" : "instances";
-                problem = $"has {o.Elements.Count} {what}, the file expects {deletion.ExpectedElements}";
-            }
-            else if (deletion.Elements.Any(e => e < 0 || e >= Math.Max(deletion.ExpectedElements, 0)))
-            {
-                problem = "a single removal is out of range";
-            }
-
-            if (problem is not null)
-            {
-                result.RowProblems[deletion.Index] = problem;
-                result.Problems.Add($"#{deletion.Index} {o.Name}: {problem}.");
-            }
-            else
-            {
-                result.Valid[deletion.Index] = deletion;
-            }
+        foreach (var mutation in block.Mutations)
+        {
+            CheckEntry(result, mutation, objects, isMutation: true);
         }
 
         return result;
+    }
+
+    // Mirrors ArchiveXL ParseSubDeletions: missing/invalid expected* or any out-of-range index
+    // clears the singles (whole-node removal). expected = -1 marks "singles were dropped".
+    private static List<XlNodeDeletion> ReadEntries(YamlMappingNode sector, string key)
+    {
+        var list = new List<XlNodeDeletion>();
+        if (Child(sector, key) is not YamlSequenceNode nodes)
+        {
+            return list;
+        }
+
+        foreach (var node in nodes.OfType<YamlMappingNode>())
+        {
+            if (Int(node, "index") is not { } index || Scalar(node, "type") is not { Length: > 0 } type)
+            {
+                continue;
+            }
+
+            var kind = SectorElementKind.None;
+            var expected = 0;
+            IReadOnlyList<int> elements = Array.Empty<int>();
+            var dropped = false;
+
+            if (Child(node, "instanceDeletions") is YamlSequenceNode instances ||
+                Child(node, "instanceMutations") is YamlSequenceNode instancesM)
+            {
+                var seq = instances ?? instancesM;
+                if (Int(node, "expectedInstances") is { } exp && exp > 0)
+                {
+                    var parsed = Elements(seq!);
+                    if (parsed.All(e => e >= 0 && e < exp))
+                    {
+                        kind = SectorElementKind.Instance;
+                        expected = exp;
+                        elements = parsed;
+                    }
+                    else
+                    {
+                        dropped = true;
+                    }
+                }
+                else
+                {
+                    dropped = true;
+                }
+            }
+            else if (Child(node, "actorDeletions") is YamlSequenceNode actors ||
+                     Child(node, "actorMutations") is YamlSequenceNode actorsM)
+            {
+                var seq = actors ?? actorsM;
+                if (Int(node, "expectedActors") is { } exp && exp > 0)
+                {
+                    var parsed = Elements(seq!);
+                    if (parsed.All(e => e >= 0 && e < exp))
+                    {
+                        kind = SectorElementKind.Actor;
+                        expected = exp;
+                        elements = parsed;
+                    }
+                    else
+                    {
+                        dropped = true;
+                    }
+                }
+                else
+                {
+                    dropped = true;
+                }
+            }
+
+            if (dropped)
+            {
+                expected = -1;
+            }
+
+            list.Add(new XlNodeDeletion(index, type, kind, expected, elements));
+        }
+
+        return list;
+    }
+
+    private static void CheckEntry(XlCheckResult result, XlNodeDeletion entry, IReadOnlyList<SectorObject> objects, bool isMutation)
+    {
+        var label = isMutation ? "mutation" : "removal";
+        if (entry.Index < 0 || entry.Index >= objects.Count)
+        {
+            result.Problems.Add($"#{entry.Index} ({entry.Type}): no such nodeData entry ({label}).");
+            return;
+        }
+
+        var o = objects[entry.Index];
+        string? problem = null;
+        var effective = entry;
+
+        if (entry.ExpectedElements < 0)
+        {
+            problem = "expected* missing or a single index is out of range; ArchiveXL drops the singles and removes the whole node";
+            effective = entry with { ExpectedElements = 0, Elements = Array.Empty<int>() };
+        }
+        else if (!string.Equals(o.ClassName, entry.Type, StringComparison.Ordinal))
+        {
+            problem = $"is {o.ClassName}, the file expects {entry.Type}";
+        }
+        else if (entry.ElementKind != SectorElementKind.None &&
+                 (entry.ElementKind != o.ElementKind || entry.ExpectedElements != o.Elements.Count))
+        {
+            var what = entry.ElementKind == SectorElementKind.Actor ? "actors" : "instances";
+            problem = $"has {o.Elements.Count} {what}, the file expects {entry.ExpectedElements}";
+        }
+
+        if (problem is not null)
+        {
+            result.RowProblems[entry.Index] = problem;
+            result.Problems.Add($"#{entry.Index} {o.Name}: {problem}.");
+            if (!isMutation && effective.ElementKind == SectorElementKind.None && entry.ExpectedElements < 0)
+            {
+                result.Valid[entry.Index] = effective;
+            }
+        }
+        else if (!isMutation)
+        {
+            result.Valid[entry.Index] = entry;
+        }
     }
 
     private static YamlNode? Child(YamlMappingNode node, string key) =>
