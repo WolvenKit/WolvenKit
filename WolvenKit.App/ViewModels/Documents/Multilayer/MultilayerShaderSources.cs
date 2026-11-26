@@ -42,7 +42,7 @@ SamplerState mlSampler : register(s10);
 cbuffer cbSurfaceExtra : register(b12)
 {
     float4 sxSpecTint;   // rgb specular tint, w: 1 = use it
-    float4 sxGlass;      // x: edge tint exponent (0 = off), y: vertex colour tint amount
+    float4 sxGlass;      // x: edge tint exponent (0 = off), y: vertex colour tint amount, w: 1 = clay view
     float4 sxGlassBack;  // x: 1 = back faces are glass backs, y: back reflection power, z: back opacity
 };
 
@@ -441,8 +441,34 @@ void mlApplyOverlay(inout MLSurface surf, float2 t, float3 worldNormal)
 ML_VS_OUTPUT
 
 // Same as psMeshPBR main, with the multilayer surface in place of the texture maps.
-float4 mlMain(MLVSOutput vsOut) : SV_Target
+// Clay view: the look of a mesh before its materials are generated (grey 0.5, Helix's default
+// PBR factors: smooth, not metallic), with the mesh's own normals, no textures, opaque,
+// shadows and ambient as usual. Shows the shape.
+float4 mlClay(MLVSOutput vsOut, bool isFront)
 {
+    PSInput input = mlToPSInput(vsOut);
+    const float3 V = normalize(input.vEye.xyz);
+    // The vertex normal as it is, like an ungenerated material: the game's meshes do not wind
+    // their triangles the way Helix counts "front", so flipping back faces by SV_IsFrontFace
+    // turned every normal inside out (the light seemed to come from below).
+    float3 N = bRenderFlat ? normalize(cross(ddy(input.wp.xyz), ddx(input.wp.xyz))) : normalize(input.n);
+    float3 color = LightSurface(input.wp, V, N, float3(0.5, 0.5, 0.5), 0, 0, 1, 0.5, 0, 0);
+    if (bHasShadowMap && bRenderShadowMap && dot(getLookDir(vLightView), N) > 0)
+    {
+        color *= shadowStrength(input.sp);
+    }
+    color += vLightAmbient.rgb;
+    color += mlKeepInputs(vsOut) * mlDebug.w; // always 0: keeps every interpolator (see mlMain)
+    return float4(color, 1);
+}
+
+float4 mlMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
+{
+    if (sxGlass.w > 0.5)
+    {
+        return mlClay(vsOut, isFront);
+    }
+
     PSInput input = mlToPSInput(vsOut);
     const float3 V = normalize(input.vEye.xyz);
 
@@ -514,6 +540,11 @@ float4 mlMain(MLVSOutput vsOut) : SV_Target
 // tangent frame above instead of PeturbNormal. Same bindings as Helix's PBR pass.
 float4 pbrMain(MLVSOutput vsOut, bool isFront : SV_IsFrontFace) : SV_Target
 {
+    if (sxGlass.w > 0.5)
+    {
+        return mlClay(vsOut, isFront);
+    }
+
     PSInput input = mlToPSInput(vsOut);
     const float3 V = normalize(input.vEye.xyz);
 

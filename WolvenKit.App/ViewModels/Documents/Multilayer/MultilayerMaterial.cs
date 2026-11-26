@@ -50,7 +50,7 @@ public struct SurfaceExtraConstants
     /// <summary>rgb: specular tint, w: 1 = use it.</summary>
     public SharpDX.Vector4 SpecularTint;
 
-    /// <summary>x: edge tint exponent (0 = off), y: vertex color tint amount, zw: unused.</summary>
+    /// <summary>x: edge tint exponent (0 = off), y: vertex color tint amount, z: unused, w: 1 = clay view.</summary>
     public SharpDX.Vector4 Glass;
 
     /// <summary>x: 1 = back faces shaded as glass backs, y: back reflection power, z: back opacity, w: alpha clip threshold (0 = off).</summary>
@@ -168,6 +168,13 @@ public class MultilayerPBRMaterial : PBRMaterial
         set => ((MultilayerPBRMaterialCore)Core).Extras = value;
     }
 
+    /// <summary>Not drawn as clay in the clay view (sector previews).</summary>
+    public bool ClayExempt
+    {
+        get => ((MultilayerPBRMaterialCore)Core).ClayExempt;
+        set => ((MultilayerPBRMaterialCore)Core).ClayExempt = value;
+    }
+
     /// <summary>Redraw without touching the GPU data (debug view switches).</summary>
     public void RequestRedraw() => ((MultilayerPBRMaterialCore)Core).RedrawToken++;
 
@@ -220,7 +227,7 @@ public class MultilayerPBRMaterial : PBRMaterial
     }
 
     // Freezable.Clone() creates the instance here, then copies the dependency properties.
-    protected override Freezable CreateInstanceCore() => new MultilayerPBRMaterial { MultilayerData = MultilayerData, Extras = Extras };
+    protected override Freezable CreateInstanceCore() => new MultilayerPBRMaterial { MultilayerData = MultilayerData, Extras = Extras, ClayExempt = ClayExempt };
 
     public override PBRMaterial CloneMaterial()
     {
@@ -228,6 +235,7 @@ public class MultilayerPBRMaterial : PBRMaterial
         CopyTo(clone);
         clone.MultilayerData = MultilayerData;
         clone.Extras = Extras;
+        clone.ClayExempt = ClayExempt;
         return clone;
     }
 
@@ -310,6 +318,9 @@ public sealed class MultilayerPBRMaterialCore : PBRMaterialCore
         set => Set(ref _extras, value);
     }
 
+    /// <summary>Not drawn as clay in the clay view (sector previews).</summary>
+    public bool ClayExempt { get; set; }
+
     private int _redrawToken;
 
     /// <summary>Any change raises PropertyChanged, which makes the viewport redraw (debug view switches).</summary>
@@ -336,6 +347,7 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
     private readonly ShaderPass _smoothPbrPass;
     private readonly ShaderPass _smoothPbrOitPass;
     private readonly ShaderPass _smoothPbrOitDpPass;
+    private readonly ShaderPass _wireframeAlphaPass;
     private readonly ConstantBufferComponent _constantBuffer;
     private readonly ConstantBufferComponent _extraBuffer;
     private SurfaceExtraConstants _extraConstants;
@@ -354,6 +366,7 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
         _smoothPbrPass = technique[MultilayerShader.SmoothPbrPassName];
         _smoothPbrOitPass = technique[MultilayerShader.SmoothPbrOitPassName];
         _smoothPbrOitDpPass = technique[MultilayerShader.SmoothPbrOitDpPassName];
+        _wireframeAlphaPass = technique[MultilayerShader.WireframeAlphaPassName];
         _sampler = manager.StateManager.Register(MultilayerShader.SamplerDescription);
         _constantBuffer = new ConstantBufferComponent(
             new ConstantBufferDescription(MultilayerShader.ConstantBufferName, MultilayerConstants.SizeInBytes));
@@ -433,6 +446,23 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
         return base.GetPass(renderType, context);
     }
 
+    /// <summary>
+    /// Every draw of these passes writes the buffer, so none reads the previous material's
+    /// extras; the clay view rides along in it.
+    /// </summary>
+    private void UploadExtras(DeviceContextProxy deviceContext)
+    {
+        _extraConstants = _core.Extras?.ToConstants() ?? new SurfaceExtras().ToConstants();
+        _extraConstants.Glass.W = MultilayerShader.ClayView && !_core.ClayExempt ? 1f : 0f;
+        _extraBuffer.Upload(deviceContext, ref _extraConstants);
+    }
+
+    /// <summary>Opaque meshes draw their wireframe blended (see the pass in MultilayerEffectsManager).</summary>
+    public override ShaderPass GetWireframePass(RenderType renderType, RenderContext context) =>
+        renderType != RenderType.Transparent && !_wireframeAlphaPass.IsNULL
+            ? _wireframeAlphaPass
+            : base.GetWireframePass(renderType, context);
+
     public override bool BindMaterialResources(RenderContext context, DeviceContextProxy deviceContext, ShaderPass shaderPass)
     {
         // Shadow / SSAO / environment bindings: identical registers in both pixel shaders.
@@ -450,13 +480,12 @@ public sealed class MultilayerPBRMaterialVariable : PBRMaterialVariable
             _constants[MultilayerConstants.DebugOffset] = _core.DebugMode;
             _constants[MultilayerConstants.DebugOffset + 1] = _core.SoloLayer;
             _constantBuffer.Upload(deviceContext, ref _constants);
+            UploadExtras(deviceContext);
         }
         else if (ReferenceEquals(shaderPass, _smoothPbrPass) || ReferenceEquals(shaderPass, _smoothPbrOitPass) ||
                  ReferenceEquals(shaderPass, _smoothPbrOitDpPass))
         {
-            // Every plain draw writes the buffer, so none reads the previous material's extras.
-            _extraConstants = _core.Extras?.ToConstants() ?? new SurfaceExtras().ToConstants();
-            _extraBuffer.Upload(deviceContext, ref _extraConstants);
+            UploadExtras(deviceContext);
         }
 
         return result;
@@ -506,6 +535,21 @@ public class MultilayerEffectsManager : DefaultEffectsManager
                 new ShaderDescription(MultilayerShader.SmoothPbrOitPassName, ShaderStage.Pixel, new ShaderReflector(), oit),
                 DefaultBlendStateDescriptions.BSOITBlend, DefaultDepthStencilDescriptions.DSSLessNoWrite));
         }
+
+        // Helix's wireframe pass writes the edge color without blending; this copy blends it,
+        // so the color's alpha (the preview's wireframe opacity) shows the surface through.
+        mesh.AddPass(new ShaderPassDescription(MultilayerShader.WireframeAlphaPassName)
+        {
+            InputLayoutDescription = new InputLayoutDescription(DefaultVSShaderByteCodes.VSMeshDefault, DefaultInputLayout.VSInput),
+            ShaderList = new[]
+            {
+                DefaultVSShaderDescriptions.VSMeshWireframe,
+                DefaultPSShaderDescriptions.PSMeshWireframe,
+            },
+            BlendStateDescription = DefaultBlendStateDescriptions.BSAlphaBlend,
+            DepthStencilStateDescription = DefaultDepthStencilDescriptions.DSSLessEqualNoWrite,
+            Topology = global::SharpDX.Direct3D.PrimitiveTopology.TriangleList,
+        });
 
         if (MultilayerShader.GetPbrOitDpBytecode() is { } dp)
         {
