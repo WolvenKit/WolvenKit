@@ -93,7 +93,13 @@ namespace WolvenKit.Views.Documents
                     EventHandler rendered = (_, _) =>
                     {
                         vm.OnViewportRendered();
-                        if (vm.ZoomExtentsRequested)
+
+                        // "Show in Sector Preview": fly to the objects once they're drawn, after any framing
+                        if (vm.TryTakePendingZoom(out var zoomBounds))
+                        {
+                            _ = Dispatcher.InvokeAsync(() => vm.ZoomToBounds(zoomBounds), DispatcherPriority.ContextIdle);
+                        }
+                        else if (vm.ZoomExtentsRequested)
                         {
                             // the sector was built after the view was shown: frame it now
                             vm.ZoomExtentsRequested = false;
