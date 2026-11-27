@@ -40,42 +40,4 @@ public partial class worldCookedNode : IRedAppendix
     {
         // throw new NotImplementedException();
     }
-
-    protected Dictionary<uint, List<worldCompiledNodeInstanceSetupInfo>> GetRelatedNodes(worldStreamingSector rootClass)
-    {
-        if (rootClass.NodeData.Data is not worldNodeDataBuffer nodeDataBuffer)
-        {
-            throw new Exception();
-        }
-
-        var index = -1;
-        for (var i = 0; i < rootClass.Nodes.Count; i++)
-        {
-            if (ReferenceEquals(this, rootClass.Nodes[i].GetValue()))
-            {
-                index = i;
-                break;
-            }
-        }
-
-        if (index == -1)
-        {
-            throw new Exception();
-        }
-
-        var relatedNodes = new Dictionary<uint, List<worldCompiledNodeInstanceSetupInfo>>();
-        foreach (var node in nodeDataBuffer)
-        {
-            if (node.NodeIdx == (ulong)index)
-            {
-                if (!relatedNodes.ContainsKey(node.InstanceIndex))
-                {
-                    relatedNodes.Add(node.InstanceIndex, new List<worldCompiledNodeInstanceSetupInfo>());
-                }
-                relatedNodes[node.InstanceIndex].Add(node);
-            }
-        }
-
-        return relatedNodes;
-    }
 }

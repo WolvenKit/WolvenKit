@@ -202,6 +202,22 @@ public static class SectorObjectList
 
     private static readonly ConcurrentDictionary<(Type, string), PropertyInfo?> s_properties = new();
 
+    /// <summary>
+    /// The instanceIndex of a nodeData entry. The node data can also hold legacy (game 2.3) entries, which have none.
+    /// </summary>
+    public static uint InstanceIndexOf(ICompiledNodeInstanceSetupInfo entry) =>
+        entry is worldCompiledNodeInstanceSetupInfo current ? (uint)current.InstanceIndex : NoInstance;
+
+    /// <summary>
+    /// The node flags of a nodeData entry, current or legacy (game 2.3).
+    /// </summary>
+    public static ENodeFlags NodeFlagsOf(ICompiledNodeInstanceSetupInfo entry) => entry switch
+    {
+        worldCompiledNodeInstanceSetupInfo current => (ENodeFlags)current.NodeFlags,
+        WolvenKit.RED4.Types.Legacy.V2310.worldCompiledNodeInstanceSetupInfo legacy => (ENodeFlags)legacy.NodeFlags,
+        _ => default,
+    };
+
     public static List<SectorObject> Build(worldStreamingSector sector)
     {
         var result = new List<SectorObject>();
@@ -221,19 +237,19 @@ public static class SectorObjectList
             var node = nodeIndex >= 0 && nodeIndex < sector.Nodes.Count ? sector.Nodes[nodeIndex]?.Chunk : null;
             var className = node?.GetType().Name ?? "missing node";
             var variant = VariantOf(ranges, i);
-            var flags = (ENodeFlags)entry.NodeFlags;
+            var flags = NodeFlagsOf(entry);
 
             // only cooked nodes (and instanced meshes, cooked too) pick an inner node; occluders have an instanceIndex of 0
             var inner = -1;
             object? innerNode = null;
-            if (node is worldCookedNode && (uint)entry.InstanceIndex != NoInstance)
+            if (node is worldCookedNode && InstanceIndexOf(entry) != NoInstance)
             {
                 if (!innerCache.TryGetValue(nodeIndex, out var list))
                 {
                     innerCache[nodeIndex] = list = InnerNodes(node);
                 }
 
-                inner = (int)(uint)entry.InstanceIndex;
+                inner = (int)InstanceIndexOf(entry);
                 innerNode = list is not null && inner >= 0 && inner < list.Count ? list[inner] : null;
             }
 
@@ -305,7 +321,7 @@ public static class SectorObjectList
     /// destructible instanced mesh, the actors of a collision node or of the inner node of a cooked one.
     /// </summary>
     private static (SectorElementKind Kind, IReadOnlyList<SectorObjectElement> Elements) Elements(
-        RedBaseClass? node, int inner, worldCompiledNodeInstanceSetupInfo entry)
+        RedBaseClass? node, int inner, ICompiledNodeInstanceSetupInfo entry)
     {
         switch (node)
         {

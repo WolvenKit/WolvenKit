@@ -72,6 +72,22 @@ public partial class CR2WReader
         return EFileReadErrorCodes.NoError;
     }
 
+    private void CheckFileVersion()
+    {
+        if (_namesList.Count < 2)
+        {
+            return;
+        }
+
+        if (_namesList[1] == "worldStreamingSector")
+        {
+            if (!_namesList.Contains("cookedWorldTransformsBuffer"))
+            {
+                GameVersion = Enums.gameGameVersion.CP77_Patch_2_3_Hotfix1;
+            }
+        }
+    }
+
     public EFileReadErrorCodes ReadFile(out CR2WFile? file, bool parseBuffer = true)
     {
         var result = ReadFileInfo(out var info);
@@ -102,6 +118,8 @@ public partial class CR2WReader
         _cr2wFile.MetaData.BuildVersion = info.FileHeader.buildVersion;
         _cr2wFile.MetaData.ObjectsEnd = info.FileHeader.objectsEnd;
 
+        CheckFileVersion();
+
         // use 1 as 0 is always empty
         _cr2wFile.MetaData.HashVersion = IdentifyHash(info.StringDict[1], info.NameInfo[1].hash);
         if (_cr2wFile.MetaData.HashVersion == EHashVersion.Unknown)
@@ -122,17 +140,19 @@ public partial class CR2WReader
             throw new TodoException("Found unsupported PropertyInfo");
         }
 
-        // Init before reading so CHandle/CWeakHandle can be resolved directly
-        var chunkPos = BaseStream.Position;
-        for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
-        {
-            InitChunk(i);
-        }
-
-        BaseStream.Position = chunkPos;
         for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
         {
             ReadChunk(i);
+        }
+
+        foreach (var (index, handles) in _handles)
+        {
+            _chunks[index].IsUsed = true;
+
+            foreach (var handle in handles)
+            {
+                handle.SetValue(_chunks[index].Instance);
+            }
         }
 
         var clones = new List<RedBuffer>();
@@ -201,6 +221,8 @@ public partial class CR2WReader
             throw new TodoException();
         }*/
 
+        _cr2wFile.MetaData.GameVersion = GameVersion;
+
         file = _cr2wFile;
 
         return EFileReadErrorCodes.NoError;
@@ -235,12 +257,14 @@ public partial class CR2WReader
 
     private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new();
 
-    private void InitChunk(int chunkIndex)
+    private void ReadChunk(int chunkIndex)
     {
         var info = _cr2wFile.Info.ExportInfo[chunkIndex];
 
+        Debug.Assert(BaseStream.Position == info.dataOffset);
+
         var redTypeName = GetStringValue(info.className);
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!, GameVersion);
 
         var instance = RedTypeManager.Create(type);
         if (instance is DynamicBaseClass dbc)
@@ -255,27 +279,20 @@ public partial class CR2WReader
             }
         }
 
-        if (chunkIndex == 0)
-        {
-            _cr2wFile.RootChunk = instance;
-        }
-
-        _chunks.Add(chunkIndex, new ChunkInfo(instance));
-    }
-
-    private void ReadChunk(int chunkIndex)
-    {
-        var info = _cr2wFile.Info.ExportInfo[chunkIndex];
-
-        Debug.Assert(BaseStream.Position == info.dataOffset);
-
-        ReadClass(_chunks[chunkIndex].Instance, info.dataSize);
+        ReadClass(ref instance, info.dataSize);
 
         if (BaseStream.Position - info.dataOffset != info.dataSize)
         {
             LoggerService?.Warning("Chunk size mismatch! Could lead to problems");
             BaseStream.Position = info.dataOffset + info.dataSize;
         }
+
+        if (chunkIndex == 0)
+        {
+            _cr2wFile.RootChunk = instance;
+        }
+
+        _chunks.Add(chunkIndex, new ChunkInfo(instance));
     }
 
     private RedBuffer ReadBuffer(CR2WBufferInfo info)

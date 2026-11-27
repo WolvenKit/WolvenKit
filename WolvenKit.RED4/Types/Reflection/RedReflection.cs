@@ -9,8 +9,7 @@ namespace WolvenKit.RED4.Types;
 public static class RedReflection
 {
     private static readonly ConcurrentDictionary<Type, object?> s_defaultValueCache = new();
-    private static readonly Dictionary<string, Type> s_redTypeCache = new();
-    private static readonly Dictionary<Type, string> s_redTypeCacheReverse = new();
+    private static readonly RedTypeCache s_redTypeCache = new();
 
     private static readonly Dictionary<string, ExtendedEnumInfo> s_redEnumCache = new();
     private static readonly Dictionary<Type, ExtendedEnumInfo> s_enumInfoCache = new();
@@ -22,14 +21,14 @@ public static class RedReflection
     // Types whose RED name can't be built because they contain an enum without RTTI (e.g. WolvenKit-internal enums).
     // Cached so the lookup isn't repeated on every call: fallback display name + the enum that failed.
     private static readonly ConcurrentDictionary<int, (string Name, Type UnknownEnum)> s_csTypeFallbackCache = new();
-    private static readonly ConcurrentDictionary<string, (Type, Flags)> s_csTypeCache2 = new();
+    private static readonly ConcurrentDictionary<(string, int), (Type, Flags)> s_csTypeCache2 = new();
 
 
     static RedReflection()
     {
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
         {
-            var res = AddRedType(type);
+            s_redTypeCache.Add(type);
         }
 
         foreach (var type in typeof(Enums).GetNestedTypes())
@@ -62,7 +61,13 @@ public static class RedReflection
     public static ExtendedTypeInfo GetTypeInfo(Type type) =>
         s_typeInfoCache.GetOrAdd(type, static t => new ExtendedTypeInfo(t));
 
-    public static Dictionary<string, Type> GetTypes() => new(s_redTypeCache);
+    public static Dictionary<string, Type> GetTypes() => s_redTypeCache.GetTypes();
+
+    public static bool TryGetType(string redName, int gameVersion, [NotNullWhen(true)] out Type? type)
+    {
+        type = s_redTypeCache.GetValue(redName, gameVersion);
+        return type != null;
+    }
 
     public static ExtendedPropertyInfo? GetNativePropertyInfo(Type classType, string propertyName) =>
         GetTypeInfo(classType).GetNativePropertyInfoByName(propertyName);
@@ -111,14 +116,7 @@ public static class RedReflection
         return extendedPropertyInfo.IsDefault(value);
     }
 
-    public static string? GetTypeRedName(Type type)
-    {
-        if (s_redTypeCacheReverse.TryGetValue(type, out var result))
-        {
-            return result;
-        }
-        return null;
-    }
+    public static string? GetTypeRedName(Type type) => s_redTypeCache.GetKey(type);
 
     public static ExtendedEnumInfo GetEnumTypeInfo(Type type) =>
         s_enumInfoCache.TryGetValue(type, out var info) ? info : throw new NotSupportedException(type.Name);
@@ -130,7 +128,17 @@ public static class RedReflection
 
     public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName)
     {
-        if (s_csTypeCache2.TryGetValue(redTypeName, out var tuple))
+        return GetCSTypeFromRedType(redTypeName, Enums.gameGameVersion.Current);
+    }
+
+    public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName, Enums.gameGameVersion gameVersion)
+    {
+        return GetCSTypeFromRedType(redTypeName, (int)gameVersion);
+    }
+
+    public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName, int gameVersion)
+    {
+        if (s_csTypeCache2.TryGetValue((redTypeName, gameVersion), out var tuple))
         {
             return (tuple.Item1, tuple.Item2.Clone());
         }
@@ -158,7 +166,7 @@ public static class RedReflection
                 subType = subType[(strVal.Length + 2)..];
             }
 
-            if (s_redTypeCache.TryGetValue(subType, out var tType))
+            if (TryGetType(subType, gameVersion, out var tType))
             {
                 type = type == null ? tType : tType.MakeGenericType(type);
 
@@ -223,7 +231,7 @@ public static class RedReflection
         flagValues.Reverse();
         var flags = new Flags(flagValues.ToArray());
 
-        s_csTypeCache2.TryAdd(redTypeName, (type, flags.Clone()));
+        s_csTypeCache2.TryAdd((redTypeName, gameVersion), (type, flags.Clone()));
 
         return (type, flags);
     }
@@ -327,50 +335,6 @@ public static class RedReflection
         return true;
     }
 
-    public static bool AddRedType(Type type)
-    {
-        if (type.FullName is null
-            || type.FullName.StartsWith("WolvenKit.RED4.Archive.Buffer") // hack: skip custom types derived f. IRedType
-            || !typeof(IRedType).IsAssignableFrom(type))
-        {
-            return false;
-        }
-
-        var redAttr = type.GetCustomAttribute<REDAttribute>();
-        if (redAttr != null)
-        {
-            if (s_redTypeCache.ContainsKey(redAttr.Name))
-            {
-                Debugger.Break();
-            }
-
-            if (s_redTypeCacheReverse.ContainsKey(type))
-            {
-                Debugger.Break();
-            }
-
-            s_redTypeCache.TryAdd(redAttr.Name, type);
-            s_redTypeCacheReverse.TryAdd(type, redAttr.Name);
-        }
-        else
-        {
-            if (s_redTypeCache.ContainsKey(type.Name))
-            {
-                Debugger.Break();
-            }
-
-            if (s_redTypeCacheReverse.ContainsKey(type))
-            {
-                Debugger.Break();
-            }
-
-            s_redTypeCache.TryAdd(type.Name, type);
-            s_redTypeCacheReverse.TryAdd(type, type.Name);
-        }
-
-        return true;
-    }
-
     public static bool AddEnumType(Type type)
     {
         if (type.IsEnum)
@@ -428,7 +392,7 @@ public static class RedReflection
     public static List<RedTypeInfo> GetRedTypeInfos(Type type, Flags? flags = null) =>
         GetRedTypeInfos(GetRedTypeFromCSType(type, flags));
 
-    public static List<RedTypeInfo> GetRedTypeInfos(string redTypeName)
+    public static List<RedTypeInfo> GetRedTypeInfos(string redTypeName, Enums.gameGameVersion gameVersion = Enums.gameGameVersion.Current)
     {
         var result = new List<RedTypeInfo>();
 
@@ -548,7 +512,7 @@ public static class RedReflection
                     break;
 
                 default:
-                    if (s_redTypeCache.TryGetValue(str, out var type1) &&
+                    if (TryGetType(str, (int)gameVersion, out var type1) &&
                         type1.IsAssignableTo(typeof(RedBaseClass)))
                     {
                         result.Add(new RedTypeInfo(BaseRedType.Class, type1));

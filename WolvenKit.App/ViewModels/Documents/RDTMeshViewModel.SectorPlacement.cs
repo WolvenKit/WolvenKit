@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -40,7 +41,7 @@ public partial class RDTMeshViewModel
     /// <param name="Frames">deformation frames in the placement's space, or null</param>
     private sealed record SectorMeshPlacement(int NodeDataIndex, Matrix3D Matrix, IReadOnlyList<CMatrix>? Frames = null);
 
-    private static Matrix3D SectorNodeMatrix(worldCompiledNodeInstanceSetupInfo info)
+    private static Matrix3D SectorNodeMatrix(ICompiledNodeInstanceSetupInfo info)
     {
         var matrix = new Matrix3D();
         matrix.Scale(ToScaleVector3D(info.Scale));
@@ -80,7 +81,7 @@ public partial class RDTMeshViewModel
     /// One tree row per inner node, one instance per entry.
     /// </summary>
     private void AddCookedSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
-        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, int innerCount,
+        worldNodeDataBuffer buffer, List<ICompiledNodeInstanceSetupInfo> transforms, int innerCount,
         Func<int, (ResourcePath Mesh, CName Appearance)> innerMesh,
         Func<int, IReadOnlyList<CMatrix>?>? innerFrames = null,
         SectorBendAxis bendAxis = SectorBendAxis.PositiveY)
@@ -88,7 +89,7 @@ public partial class RDTMeshViewModel
         var byInner = new SortedDictionary<int, List<SectorMeshPlacement>>();
         foreach (var info in transforms)
         {
-            var inner = (int)(uint)info.InstanceIndex;
+            var inner = (int)SectorObjectList.InstanceIndexOf(info);
             if (inner < 0 || inner >= innerCount)
             {
                 continue;
@@ -116,13 +117,13 @@ public partial class RDTMeshViewModel
     /// instanceIndex picks. The transforms are world space, so the entry's own transform is not applied.
     /// </summary>
     private void AddInstancedSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
-        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms,
+        worldNodeDataBuffer buffer, List<ICompiledNodeInstanceSetupInfo> transforms,
         worldInstancedMeshNodeBuffer inner, WorldTransformsBuffer world)
     {
         var dataIndices = new SortedDictionary<int, List<int>>();
         foreach (var info in transforms)
         {
-            var index = (int)(uint)info.InstanceIndex;
+            var index = (int)SectorObjectList.InstanceIndexOf(info);
             if (index < 0 || index >= inner.InnerNodes.Count || index >= inner.TransformRanges.Count)
             {
                 continue;
@@ -302,7 +303,7 @@ public partial class RDTMeshViewModel
     /// It used to be one mesh at the node's origin.
     /// </summary>
     private void AddFoliageSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
-        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldFoliageNode node)
+        worldNodeDataBuffer buffer, List<ICompiledNodeInstanceSetupInfo> transforms, worldFoliageNode node)
     {
         if (GetProjectOrDepotFile(node.FoliageResource.DepotPath)?.RootChunk is not worldFoliageCompiledResource resource ||
             resource.DataBuffer.Data is not FoliageBuffer foliage)
@@ -360,7 +361,7 @@ public partial class RDTMeshViewModel
     /// nodeData entry of the node. Only the first entry was used.
     /// </summary>
     private void AddDestructibleSectorMeshes(List<Element3D> groups, Appearance app, string name, string typeStr, ulong handleIndex,
-        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldInstancedDestructibleMeshNode node)
+        worldNodeDataBuffer buffer, List<ICompiledNodeInstanceSetupInfo> transforms, worldInstancedDestructibleMeshNode node)
     {
         // the instance transforms (relative to the node) as hardware instances of each entry's placement
         var instances = new List<SharpDX.Matrix>();
@@ -398,7 +399,7 @@ public partial class RDTMeshViewModel
     /// in the node's color. They were drawn as a box sized from the first outline point.
     /// </summary>
     private void AddAreaShape(List<Element3D> groups, string name, string typeStr, ulong handleIndex, string indexStr,
-        worldNodeDataBuffer buffer, List<worldCompiledNodeInstanceSetupInfo> transforms, worldAreaShapeNode node)
+        worldNodeDataBuffer buffer, List<ICompiledNodeInstanceSetupInfo> transforms, worldAreaShapeNode node)
     {
         if (node.Outline.Chunk is not { Points.Count: >= 3 } outline)
         {

@@ -232,7 +232,7 @@ public class TweakDBReader : Red4Reader
     public override IRedResourceAsyncReference ReadCResourceAsyncReference(List<RedTypeInfo> redTypeInfos, uint size) =>
         new CResourceAsyncReference<CResource>(BaseReader.ReadUInt64());
 
-    public override void ReadClass(RedBaseClass cls, uint size)
+    public override void ReadClass(ref RedBaseClass cls, uint size)
     {
         if (cls is Vector2 vector2)
         {
