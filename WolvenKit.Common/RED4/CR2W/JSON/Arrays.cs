@@ -71,6 +71,12 @@ public class CArrayConverter : CustomRedConverter<IRedArray>
 
         var arr = (IRedArray)RedTypeManager.CreateRedType(typeToConvert);
 
+        var innerType = arr.InnerType;
+        if (innerType.IsInterface)
+        {
+            innerType = RedJsonSerializer.GetTypeFromInterface(innerType) ?? innerType;
+        }
+
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndArray)
@@ -79,13 +85,13 @@ public class CArrayConverter : CustomRedConverter<IRedArray>
             }
 
             object? val;
-            if (options.GetConverter(arr.InnerType) is ICustomRedConverter converter)
+            if (options.GetConverter(innerType) is ICustomRedConverter converter)
             {
-                val = converter.ReadRedType(ref reader, arr.InnerType, options);
+                val = converter.ReadRedType(ref reader, innerType, options);
             }
             else
             {
-                val = JsonSerializer.Deserialize(ref reader, arr.InnerType, options);
+                val = JsonSerializer.Deserialize(ref reader, innerType, options);
             }
 
             arr.Add(val);

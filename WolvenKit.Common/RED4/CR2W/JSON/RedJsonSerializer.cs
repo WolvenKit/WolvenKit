@@ -33,7 +33,8 @@ public static class RedJsonSerializer
             {
                 Modifiers =
                 {
-                    NumberHandlingResolver
+                    NumberHandlingResolver,
+                    InterfaceHandlingResolver
                 }
             },
             Encoder = JavaScriptEncoder.Default,
@@ -83,6 +84,38 @@ public static class RedJsonSerializer
         };
     }
 
+    internal static Type? GetTypeFromInterface(Type type)
+    {
+        if (!type.IsInterface)
+        {
+            return null;
+        }
+
+        if (type == typeof(ICompiledNodeInstanceSetupInfo))
+        {
+            var gameVersion = GetHeader().GameVersion;
+            if (gameVersion < (int)Enums.gameGameVersion.CP77_Patch_2_5)
+            {
+                return typeof(Types.Legacy.V2310.worldCompiledNodeInstanceSetupInfo);
+            }
+            else
+            {
+                return typeof(worldCompiledNodeInstanceSetupInfo);
+            }
+        }
+
+        return null;
+    }
+
+    private static void InterfaceHandlingResolver(JsonTypeInfo obj)
+    {
+        var type = GetTypeFromInterface(obj.Type);
+        if (type != null)
+        {
+            obj.CreateObject = () => RedTypeManager.Create(type);
+        }
+    }
+
     private static void NumberHandlingResolver(JsonTypeInfo obj)
     {
         if (obj.Type == typeof(long) || obj.Type == typeof(ulong))
@@ -90,6 +123,9 @@ public static class RedJsonSerializer
             obj.NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString;
         }
     }
+
+    internal static JsonHeader GetHeader() =>
+        s_threadedStorage[Environment.CurrentManagedThreadId];
 
     internal static void SetHeader(JsonHeader header) =>
         s_threadedStorage[Environment.CurrentManagedThreadId] = header;

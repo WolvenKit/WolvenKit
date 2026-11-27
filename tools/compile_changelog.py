@@ -51,10 +51,42 @@ def load_changes(yaml_path: Path) -> list[dict]:
     return changes
 
 
+def to_list(value: object) -> list[str]:
+    """
+    Normalize a scalar or a list of values into a clean list of strings.
+
+    Changelog entries historically used single values (``author: alice`` and
+    ``pr-number: 123``). Both fields now also accept lists (e.g.
+    ``author: [alice, bob]`` and ``pr-number: [123, 456]``). Comma-separated
+    scalars from older entries are split as well, so every contributor gets
+    attributed.
+    """
+    if value is None:
+        return []
+
+    values = value if isinstance(value, (list, tuple, set)) else [value]
+    result: list[str] = []
+
+    for item in values:
+        if item is None:
+            continue
+        for part in str(item).split(","):
+            part = part.strip()
+            if part:
+                result.append(part)
+
+    return result
+
+
+def format_authors(authors: list[str]) -> str:
+    """Render author handles, each with its own @ mention."""
+    return ", ".join(f"@{author.lstrip('@')}" for author in authors)
+
+
 def group_changes(changes: list[dict]) -> dict:
     """
     Returns a nested dict:
-        { package -> { type -> [ {description, author}, … ] } }
+        { package -> { type -> [ {description, authors, pr_numbers}, … ] } }
     Entries without a package go under the sentinel key None.
     """
     grouped: dict = defaultdict(lambda: defaultdict(list))
@@ -64,7 +96,8 @@ def group_changes(changes: list[dict]) -> dict:
             continue
         entry_type = str(entry.get("type", "")).strip().lower()
         packages   = entry.get("packages") or [None]
-        author     = str(entry.get("author", "")).strip()
+        authors    = to_list(entry.get("author") or entry.get("authors"))
+        pr_numbers = to_list(entry.get("pr-number") or entry.get("pr-numbers"))
         description = str(entry.get("description", "")).strip()
 
         if not description:
@@ -73,7 +106,13 @@ def group_changes(changes: list[dict]) -> dict:
         for pkg in packages:
             pkg_key = str(pkg).strip() if pkg else None
             grouped[pkg_key][entry_type].append(
-                {"description": description, "author": author}
+                {
+                    "description": description,
+                    "authors": authors,
+                    "pr_numbers": pr_numbers,
+                    # Kept for callers that relied on the old single-value shape.
+                    "author": ", ".join(authors),
+                }
             )
 
     return grouped
@@ -107,11 +146,11 @@ def build_markdown(version: str, grouped: dict) -> str:
         for t in ordered_types(grouped[pkg]):
             type_label = t.capitalize()
             for item in grouped[pkg][t]:
-                author = item["author"]
-                desc   = item["description"]
-                bullet = f"* *{type_label}*: {desc}"
-                if author:
-                    bullet += f" by @{author}"
+                authors = to_list(item.get("authors") or item.get("author"))
+                desc    = item["description"]
+                bullet  = f"* *{type_label}*: {desc}"
+                if authors:
+                    bullet += f" by {format_authors(authors)}"
                 lines.append(bullet)
 
         lines.append("")
@@ -135,11 +174,11 @@ def build_bbcode(version: str, grouped: dict) -> str:
         for t in ordered_types(grouped[pkg]):
             type_label = t.capitalize()
             for item in grouped[pkg][t]:
-                author = item["author"]
-                desc   = item["description"]
-                bullet = f"[*] [i]{type_label}[/i]: {desc}"
-                if author:
-                    bullet += f" by @{author}"
+                authors = to_list(item.get("authors") or item.get("author"))
+                desc    = item["description"]
+                bullet  = f"[*] [i]{type_label}[/i]: {desc}"
+                if authors:
+                    bullet += f" by {format_authors(authors)}"
                 lines.append(bullet)
 
         lines.append("")

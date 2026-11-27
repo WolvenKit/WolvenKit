@@ -12,6 +12,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 using static WolvenKit.RED4.Types.Enums;
+using V2310 = WolvenKit.RED4.Types.Legacy.V2310;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
@@ -583,6 +584,28 @@ public partial class ChunkViewModel
                 Value = $"#{sst.NodeIdx} => {StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
                 IsValueExtrapolated = true;
                 return;
+            case ICompiledNodeInstanceSetupInfo cnisi:
+                var referencedNodeIndex = (int)(ulong)cnisi.NodeIdx;
+                if (Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
+                    referencedNodeIndex < wss.Nodes.Count)
+                {
+                    var node = wss.Nodes[referencedNodeIndex].Chunk;
+                    Value = $"#{referencedNodeIndex}";
+                    if (node?.GetType().Name is { } nodeName && !string.IsNullOrEmpty(node?.GetType().Name))
+                    {
+                        Value = $"{Value} => {nodeName}";
+                    }
+
+                    IsValueExtrapolated = true;
+                }
+
+                if (cnisi.GlobalNodeId.Hash != 0)
+                {
+                    Value = $"{Value} ({StringHelper.StringifyNodeRefHash(cnisi.GlobalNodeId.Hash)})";
+                    IsValueExtrapolated = true;
+                }
+
+                break;
             case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
                 Value = $"{StringHelper.Stringify(aiSpot.Resource.DepotPath)}";
                 IsValueExtrapolated = true;

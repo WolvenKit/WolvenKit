@@ -86,6 +86,12 @@ public partial class worldStreamingSector : IRedAppendix
         VariantIndices = new CArray<CInt32>();
 
         Version = reader.ReadCInt32();
+        reader.GameVersion = (int)Version switch
+        {
+            62 => Enums.gameGameVersion.CP77_Patch_2_3_Hotfix1,
+            68 => Enums.gameGameVersion.Current,
+            _ => throw new NotSupportedException()
+        };
 
         var innerSize = reader.BaseReader.ReadInt32();
 

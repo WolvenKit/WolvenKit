@@ -98,15 +98,29 @@ namespace WolvenKit.Views.Editors
         }
 
 
+        // The text as typed: every keystroke goes through ResourcePath, which trims a trailing "\" or "/" (and
+        // lowercases), so reading the path back would swallow the separator just typed and the next folder couldn't
+        // be typed. While the typed text stands for the same path, the box keeps it.
+        private string _typedDepotPath;
+
         public string DepotPath
         {
-            get => RedRef?.DepotPath ?? ResourcePath.Empty;
+            get
+            {
+                string path = RedRef?.DepotPath ?? ResourcePath.Empty;
+                return _typedDepotPath is not null &&
+                       string.Equals(ResourcePath.SanitizePath(_typedDepotPath), ResourcePath.SanitizePath(path), StringComparison.Ordinal)
+                    ? _typedDepotPath
+                    : path;
+            }
             set
             {
                 if (RedRef is null)
                 {
                     return;
                 }
+
+                _typedDepotPath = value;
                 if (!string.IsNullOrEmpty(value.Trim()))
                 {
                     SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)value, RedRef.Flags));
@@ -319,6 +333,12 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private void TrimmingTextbox_OnFocusLost(object sender, EventArgs e) => RecalculateFlags();
+        private void TrimmingTextbox_OnFocusLost(object sender, EventArgs e)
+        {
+            // done typing: show the path as stored
+            _typedDepotPath = null;
+            OnPropertyChanged(nameof(DepotPath));
+            RecalculateFlags();
+        }
     }
 }

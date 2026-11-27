@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3315
+      author: "Ametis81"
+      description: "A backslash can be typed in depot path boxes again instead of vanishing mid-typing"
