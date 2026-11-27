@@ -8,6 +8,7 @@ using System.Windows.Media;
 using DynamicData;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
@@ -546,5 +547,75 @@ public abstract partial class StringHelper
 
     public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 
-    public static string? StringifyNodeRefHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : hash.ToString();
+    public static string? StringifyNodeRefHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : "";
+
+    public static string GetEntityShortName(gameEntityReference entityRef)
+    {
+        var fullEntityName = QuestConditionHelper.ParseGameEntityReference(entityRef);
+        if (fullEntityName == "-")
+        {
+            return "";
+        }
+
+        return fullEntityName.Split("/")[^1];
+    }
+
+    public static string FormatCharacterWorkspotCondition(questCharacterWorkspot_ConditionType workspot)
+    {
+        var subject = workspot.IsPlayer ? "Player" : QuestConditionHelper.ParseGameEntityReference(workspot.PuppetRef);
+        var spotRef = workspot.SpotRef.GetResolvedText();
+
+        if (string.IsNullOrEmpty(workspot.AnimationName) || workspot.AnimationName == "None")
+        {
+            return $"{subject} at {spotRef}";
+        }
+
+        var waitText = workspot.WaitForAnimEnd ? " (wait for end)" : "";
+        return $"{subject} at {spotRef} with animation: {workspot.AnimationName}{waitText}";
+    }
+
+    public static string? Stringify(communityCommunityEntryPhaseSpotsData entryPhaseSpot) =>
+        Stringify(entryPhaseSpot.EntryPhaseName);
+
+    public static string Stringify(CArray<communityCommunityEntryPhaseTimePeriodData> phaseSpotsAry)
+    {
+        var paths = phaseSpotsAry
+            .Select(timeData => Stringify(timeData.PeriodName))
+            .Where(text => text != "")
+            .ToList();
+
+        return "[" + paths.Aggregate((a, b) => $"{a}, {b}") + "]";
+    }
+
+    public static string? Stringify(questObjectDistance questDistance)
+    {
+        var entity = "";
+        var noderef2 = "";
+        if (questDistance.EntityRef.Chunk is { } entityRef)
+        {
+            entity = QuestConditionHelper.FormatUniversalRef(entityRef);
+        }
+
+        if (questDistance.NodeRef2.Reference.GetRedHash() is var hash && hash != 0)
+        {
+            noderef2 = StringifyNodeRefHash(hash) ?? "";
+        }
+
+        if (string.IsNullOrEmpty(entity) && string.IsNullOrEmpty(noderef2))
+        {
+            return null;
+        }
+
+        if (string.IsNullOrEmpty(entity))
+        {
+            return noderef2;
+        }
+
+        if (string.IsNullOrEmpty(noderef2))
+        {
+            return entity;
+        }
+
+        return $"{entity} <-> {noderef2}";
+    }
 }

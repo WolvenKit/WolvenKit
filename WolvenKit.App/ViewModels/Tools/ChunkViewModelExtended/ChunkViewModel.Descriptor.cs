@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -201,6 +202,9 @@ public partial class ChunkViewModel
                 return;
             case worldNode:
                 // TODO find fallback properties for other node types
+                break;
+            case communityCommunityEntryPhaseSpotsData phaseSpots:
+                Descriptor = StringHelper.Stringify(phaseSpots) ?? "";
                 break;
             case CHandle<animAnimNode_Base> { Chunk: animAnimNode_Switch } handle
                 when handle.Chunk.GetProperty("InputNodes") is CArray<animPoseLink> animAry:
@@ -468,7 +472,7 @@ public partial class ChunkViewModel
                 Descriptor = $"{performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText()}";
                 return;
             case gameEntityReference gameEntRef:
-                Descriptor = $"{gameEntRef.DynamicEntityUniqueName.GetResolvedText()}";
+                Descriptor = StringHelper.GetEntityShortName(gameEntRef);
                 return;
             case scnLipsyncAnimSetSRRef lipsyncAnim:
                 Descriptor = StringHelper.StringifyOrNull(lipsyncAnim.LipsyncAnimSet.DepotPath)
@@ -680,6 +684,12 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case questCharacterWorkspot_ConditionType workspotCon:
+                Descriptor = StringHelper.FormatCharacterWorkspotCondition(workspotCon).Split(" at ")[0];
+                return;
+            case questCharacterCondition when GetPropertyChild("Type") is { ResolvedData: questCharacterWorkspot_ConditionType questCon } child:
+                Descriptor = child.Descriptor ?? StringHelper.FormatCharacterWorkspotCondition(questCon).Split(" at ")[0];
+                return;
             case questNodeDefinition qnd:
                 Descriptor = qnd.Id.ToString();
                 return;

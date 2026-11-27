@@ -7,12 +7,13 @@ using System.Linq;
 using System.Reflection;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 using static WolvenKit.RED4.Types.Enums;
-using V2310 =  WolvenKit.RED4.Types.Legacy.V2310;
+using V2310 = WolvenKit.RED4.Types.Legacy.V2310;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
@@ -289,6 +290,33 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
 
+            case communityCommunityEntryPhaseSpotsData
+            {
+                TimePeriodsData: CArray<communityCommunityEntryPhaseTimePeriodData> timePeriods
+            }:
+                Value = StringHelper.Stringify(timePeriods);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case communityCommunityEntrySpotsData
+            {
+                PhasesData: CArray<communityCommunityEntryPhaseSpotsData> phaseSpots
+            }:
+                Value = "[" + string.Join(", ",
+                    phaseSpots.Select(phase => StringHelper.Stringify(phase.EntryPhaseName))) + "]";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case communityCommunityEntryPhaseTimePeriodData comTimePeriod:
+                Value = StringHelper.Stringify(comTimePeriod.PeriodName) ?? "";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case CArray<communityCommunityEntryPhaseTimePeriodData> phaseSpotsAry:
+                Value = StringHelper.Stringify(phaseSpotsAry);
+                IsValueExtrapolated = true;
+                break;
+            case communityArea when Parent?.ResolvedData is worldNode parentWorldNode:
+                Value = StringHelper.Stringify(parentWorldNode.DebugName) ?? "";
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case gameJournalFolderEntry folderEntry:
                 Value = $"[{folderEntry.Entries.Count}]";
                 IsValueExtrapolated = true;
@@ -553,6 +581,10 @@ public partial class ChunkViewModel
 
             #endregion
 
+            case worldCompiledNodeInstanceSetupInfo { GlobalNodeId: { } worldGlobalNodeID } sst:
+                Value = $"#{sst.NodeIdx} => {StringHelper.StringifyNodeRefHash(worldGlobalNodeID.Hash)}";
+                IsValueExtrapolated = true;
+                return;
             case ICompiledNodeInstanceSetupInfo cnisi:
                 var referencedNodeIndex = (int)(ulong)cnisi.NodeIdx;
                 if (Parent?.Parent?.ResolvedData is worldStreamingSector wss &&
@@ -560,10 +592,11 @@ public partial class ChunkViewModel
                 {
                     var node = wss.Nodes[referencedNodeIndex].Chunk;
                     Value = $"#{referencedNodeIndex}";
-                    if (node?.GetType().Name is {  } nodeName && !string.IsNullOrEmpty(node?.GetType().Name))
+                    if (node?.GetType().Name is { } nodeName && !string.IsNullOrEmpty(node?.GetType().Name))
                     {
                         Value = $"{Value} => {nodeName}";
                     }
+
                     IsValueExtrapolated = true;
                 }
 
@@ -572,6 +605,7 @@ public partial class ChunkViewModel
                     Value = $"{Value} ({StringHelper.StringifyNodeRefHash(cnisi.GlobalNodeId.Hash)})";
                     IsValueExtrapolated = true;
                 }
+
                 break;
             case worldAISpotNode {Spot: { Chunk: AIActionSpot aiSpot }} :
                 Value = $"{StringHelper.Stringify(aiSpot.Resource.DepotPath)}";
@@ -756,6 +790,34 @@ public partial class ChunkViewModel
                 Value = $"{string.Join(", ", childDescriptors)}";
                 IsValueExtrapolated = true;
                 break;
+            case questCharacterWorkspot_ConditionType workspotCon:
+                Value = StringHelper.FormatCharacterWorkspotCondition(workspotCon).Split(" at ")[^1];
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questObjectDistance questObjectDistance:
+                Value = StringHelper.Stringify(questObjectDistance);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questDistanceComparison_ConditionType questDistanceCondition:
+                Value = QuestConditionHelper.FormatDistanceConditionType(questDistanceCondition);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questValueDistance valueDistance:
+                Value = valueDistance.DistanceValue.ToString();
+                break;
+            case questCharacterCondition when GetPropertyChild("Type") is
+                { ResolvedData: questCharacterWorkspot_ConditionType questCon } typeChild:
+                if (typeChild.Value is string childValue)
+                {
+                    Value = childValue;
+                }
+                else
+                {
+                    Value = StringHelper.FormatCharacterWorkspotCondition(questCon).Split(" at ")[^1];
+                }
+
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case questFactsDBCondition condition:
                 switch (condition.Type?.GetValue())
                 {
@@ -772,6 +834,14 @@ public partial class ChunkViewModel
                 }
 
                 IsValueExtrapolated = true;
+                break;
+            case questUniversalRef universalRef:
+                Value = QuestConditionHelper.FormatUniversalRef(universalRef);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questIBaseCondition questDistance:
+                Value = QuestConditionHelper.FormatConditionSemantically(questDistance);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
                 break;
             case gameSceneTierData data when data.EmptyHands:
                 Value = $"(empty hands)";
@@ -1292,7 +1362,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = locSignature.Val != 0;
                 break;
             case gameEntityReference gameEntRef:
-                Value = gameEntRef.Reference.GetResolvedText();
+                Value = QuestConditionHelper.ParseGameEntityReference(gameEntRef);
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             case gameEntitySpawnerComponent when GetPropertyChild("slotDataArray") is ChunkViewModel sda:
