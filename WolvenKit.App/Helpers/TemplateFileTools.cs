@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Threading;
+using Cyotek.Drawing.BitmapFont;
 using DynamicData;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -1606,7 +1606,340 @@ public partial class TemplateFileTools
 
                                                  """;
 
+    public void GenerateHairCCXLFiles(CreateCCXLHairFilesDialogViewModel paths)
+    {
+
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        var projPath = Path.Combine(activeProject.ModDirectory, paths.ParentFolderName);
+
+        Directory.CreateDirectory(projPath);
+
+
+        if (!paths.IsCybMeshEnabled)
+        {
+            var modDir = activeProject.ModDirectory;
+            var sourcePath = Path.Combine(modDir, paths.SelectedMainMeshFile);
+            var destPath = Path.Combine(projPath, "meshes", $"{paths.HairmodName}_cyberware.mesh");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(destPath)!);
+            File.Copy(sourcePath, destPath, overwrite: true);
+
+            paths.SelectedCybMeshFile = Path.GetRelativePath(modDir, destPath);
+        }
+
+        if (!paths.IsShadowMeshEnabled)
+        {
+            paths.SelectedShadowMeshFile = $"base\\characters\\common\\hair\\shadow_meshes\\hh_077_ma__nomad_shadow_npc.mesh";
+        }
+
+
+        //TODO:
+        /* 
+         -IsINKCCEnabled
+         -IsAppEnabled
+         -Copying Mesh to target folder
+         -(optional) warn about unprocessed mesh?
+         */
+        //Setup the ArchiveXL File
+
+        //Assign CC name
+        HairCCXLJSONHelper(paths, projPath);
+
+        _loggerService.Warning(paths.SelectedJsonFile);
+
+
+        //Attach meshes to apps
+        HairCCXLAppHelper(paths, paths.SelectedMainAppFile);
+        HairCCXLAppHelper(paths, paths.SelectedCybAppFile);
+        HairCCXLAppHelper(paths, paths.SelectedShadowAppFile);
+
+        HairCCXLInkCCHelper(paths);
+        HairCCXLAxlHelper(paths);
+
+
+    }
+
+    private bool HairCCXLAxlHelper(CreateCCXLHairFilesDialogViewModel paths)
+    {
+        if (_projectManager.ActiveProject?.ResourcesDirectory is not string resourcesDir)
+        {
+            _loggerService.Error("Active project or its resources directory is null. Cannot create .archive.xl file.");
+            return false;
+        }
+
+        var archiveXlPath = Path.Combine(resourcesDir, $"{paths.AxlFile}.archive.xl");
+        var custType = paths.VType ? "female" : "male";
+        var hairType = paths.VType ? "player_wa_hair" : "player_ma_hair";
+
+        var content = s_hairccxlFileTemplate
+            .Replace("{{inkcc}}", $"{custType}: {paths.SelectedInkCCFile}")
+            .Replace("{{json}}", paths.SelectedJsonFile)
+            .Replace("{{cybapp}}", paths.SelectedCybAppFile)
+            .Replace("{{fppapp}}", paths.SelectedShadowAppFile)
+            .Replace("{{app}}", paths.SelectedMainAppFile)
+            .Replace("{{hair_type}}", hairType)
+            .Replace("{{cybmesh}}", paths.SelectedCybMeshFile)
+            .Replace("{{mesh}}", paths.SelectedMainMeshFile);
+
+        File.WriteAllText(archiveXlPath, content);
+
+
+
+        return true;
+    }
+
+    private bool HairCCXLJSONHelper(CreateCCXLHairFilesDialogViewModel paths, string projPath)
+    {
+
+
+        if (_projectManager.ActiveProject?.ModDirectory is not string modDir)
+        { 
+
+            _loggerService.Error("Active project or its resources directory is null.");
+            return false;
+        }
+
+        var hairName = paths.HairmodName;
+
+
+        var onscreenEntries = new localizationPersistenceOnScreenEntries();
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+
+            FemaleVariant = paths.CcDisplayName,
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"UI-Customization-{hairName}",
+        });
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+
+            FemaleVariant = paths.CcDisplayName,
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"UI-Customization-{hairName}_cyberware",
+        });
+
+        var onscreenRoot = new CHandle<ISerializable>(onscreenEntries);
+
+        var cr2W = new CR2WFile()
+        {
+            RootChunk = new JsonResource()
+            {
+                Root = onscreenRoot
+            }
+        };
+
+        string jsonPath;
+        if (paths.IsJsonEnabled)
+        {
+            jsonPath = Path.Combine(modDir, paths.SelectedJsonFile);
+        }
+        else
+        {
+            jsonPath = Path.Combine(projPath, "localization", $"{hairName}_loc.json");
+            paths.SelectedJsonFile = Path.GetRelativePath(modDir, jsonPath);
+        }
+
+
+        _cr2WTools.WriteCr2W(cr2W, jsonPath);
+        return true;
+    }
+
+    private bool HairCCXLInkCCHelper(CreateCCXLHairFilesDialogViewModel paths)
+    {
+        if (_projectManager.ActiveProject?.ModDirectory is not string modDir)
+        {
+
+            _loggerService.Error("Active project or its resources directory is null.");
+            return false;
+        }
+        var absolutepath = Path.Join(modDir, paths.SelectedInkCCFile);
+
+
+        if (_cr2WTools.ReadCr2W(absolutepath) is not { RootChunk: gameuiCharacterCustomizationInfoResource inkCC } cr2W)
+        {
+            _loggerService.Error($"invalid .inkcc: {absolutepath}");
+            return false;
+        }
+
+        var headCustOp = inkCC.HeadCustomizationOptions;
+
+        var hairName = paths.HairmodName;
+
+        foreach (var hairSwitch in headCustOp
+            .Select(h => h.Chunk)
+            .OfType<gameuiSwitcherInfo>())
+        {
+            var option = hairSwitch.Options.FirstOrDefault()!;
+
+            var type = hairSwitch.Link.ToString() is { Length: > 0 } link ? link : hairSwitch.Name.ToString();
+
+            switch (type)
+            {
+                case "None":
+                    option.Names = [$"{hairName}_cyberware", $"{hairName}_fpp"];
+                    option.LocalizedName = $"UI-Customization-{hairName}";
+
+                    break;
+
+                case "hairstyle":
+                    option.Names = [$"{hairName}", $"{hairName}_fpp"];
+                    option.LocalizedName = $"UI-Customization-{hairName}";
+                    break;
+            }
+
+        }
+
+        foreach (var hairApp in headCustOp
+        .Select(h => h.Chunk!)
+        .OfType<gameuiAppearanceInfo>())
+        {
+            var type = hairApp.Name.GetResolvedText() ?? "";
+            switch (type)
+            {
+                case var t when t!.Contains("_cyberware"):
+                    hairApp.Name= $"{hairName}_cyberware";
+                    hairApp.Resource = new CResourceAsyncReference<appearanceAppearanceResource>(paths.SelectedCybAppFile);
+                    
+                    break;
+
+                case var t when t!.Contains("_fpp"):
+                    hairApp.Name = $"{hairName}_fpp";
+                    hairApp.Resource = new CResourceAsyncReference<appearanceAppearanceResource>(paths.SelectedShadowAppFile);
+                    break;
+
+                default:
+                    hairApp.Name = $"{hairName}";
+                    hairApp.Resource =  new CResourceAsyncReference<appearanceAppearanceResource>(paths.SelectedMainAppFile);
+                    break;
+
+            }
+        }
+
+
+        var hairGroups = inkCC.HeadGroups.OfType<gameuiOptionsGroup>();
+
+        hairGroups.FirstOrDefault(s => s.Name == "hairs")?.Options = [$"{hairName}", $"{hairName}_cyberware"];
+
+        hairGroups.FirstOrDefault(s => s.Name == "character_customization")?.Options = [$"{hairName}", $"{hairName}_cyberware", $"{hairName}_fpp"];
+
+        hairGroups.FirstOrDefault(s => s.Name == "FPP_hairs")?.Options = [$"{hairName}_fpp"];
+
+
+        _cr2WTools.WriteCr2W(cr2W, absolutepath);
+        _loggerService.Warning("hi");
+        return true;
+    }
+
+    private bool HairCCXLAppHelper(CreateCCXLHairFilesDialogViewModel paths, string appPath)
+    {
+        if (_projectManager.ActiveProject?.ModDirectory is not string modDir)
+        {
+
+            _loggerService.Error("Active project or its resources directory is null.");
+            return false;
+        }
+        var absolutepath = Path.Join(modDir, appPath);
+
+        if (_cr2WTools.ReadCr2W(absolutepath) is not { RootChunk: appearanceAppearanceResource app } cr2W)
+        {
+            _loggerService.Error($"invalid .app: {absolutepath}");
+            return false;
+        }
+
+        var rootComponent = app.Appearances.First().Chunk!;
+
+        foreach (var item in rootComponent.Components)
+        {
+            switch (item)
+            {
+                case entAnimatedComponent anim:
+                    anim.Graph = new CResourceReference<animAnimGraph>(paths.SelectedAnimGraphFile);
+                    anim.Rig = new CResourceReference<animRig>(paths.SelectedRigFile);
+                    break;
+
+                case entSkinnedMeshComponent mesh when mesh.Name.ToString()?.Contains("_shadow") == true:
+                    mesh.Name = paths.HairmodName+"_shadow";
+                    mesh.Mesh = new CResourceAsyncReference<CMesh>(paths.SelectedShadowMeshFile);
+
+                    break;
+
+                case entSkinnedMeshComponent mesh when mesh.Name.ToString()?.Contains("_cyberware") == true:
+                    mesh.Name = paths.HairmodName+"_cyberware";
+                    mesh.Mesh = new CResourceAsyncReference<CMesh>(paths.SelectedCybMeshFile);
+
+                    break;
+
+                case entSkinnedMeshComponent mesh:
+                    mesh.Name = paths.HairmodName;
+                    mesh.Mesh = new CResourceAsyncReference<CMesh>(paths.SelectedMainMeshFile);
+
+                    break;
+            }
+            
+        }
+
+        switch (Path.GetFileNameWithoutExtension(appPath))
+        {
+            case var r when r.Contains("_fpp"):
+                rootComponent.ResolvedDependencies[0] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedCybMeshFile);
+
+                break;
+
+            case var r when r.Contains("_cyberware"):
+
+                rootComponent.ResolvedDependencies[2] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedCybMeshFile);
+
+                rootComponent.ResolvedDependencies[3] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedShadowMeshFile);
+
+                break;
+
+            default:
+
+                rootComponent.ResolvedDependencies[3] =
+                   new CResourceAsyncReference<CResource>(paths.SelectedMainMeshFile);
+
+                rootComponent.ResolvedDependencies[4] =
+                    new CResourceAsyncReference<CResource>(paths.SelectedShadowMeshFile);
+
+
+                break;
+        }
+
+        _cr2WTools.WriteCr2W(cr2W, absolutepath);
+        return true;
+
+
+
+    }
+    private const string s_hairccxlFileTemplate = """
+                                                            customizations:
+                                                              {{inkcc}}
+                                                            localization:
+                                                              onscreens:
+                                                                en-us: {{json}}
+                                                            resource:
+                                                              scope:
+                                                                {{hair_type}}.app:
+                                                                  - {{app}}
+                                                                  - {{cybapp}}
+                                                                  - {{fppapp}}
+                                                                {{hair_type}}.mesh:
+                                                                  - {{mesh}}
+                                                                  - {{cybmesh}}
+                                                            ;
+                                                            """;
 }
+
+
 
 public class PhotomodeYamlOptions
 {

@@ -352,4 +352,12 @@ public static class Interactions
     /// </summary>
     public static Func<Cp77Project, AddRadioExtFilesDialogViewModel?> CreateOrEditRadioDialog { get; set; } =
         project => throw new NotImplementedException();
+
+    /// <summary>
+    /// Shows dialogue to create CCXL-compatible Hair files
+    /// </summary>
+
+    public static Func<(Cp77Project activeProject, ISettingsManager settingsManager), CreateCCXLHairFilesDialogViewModel?>
+    ShowCCXLHairDialog
+    { get; set; } = _ => throw new NotImplementedException();
 }

@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Octokit;
+using System.Text.RegularExpressions;
+using System.Threading;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Interaction.Options;
@@ -548,4 +549,40 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             _notificationService.Success($"Successfully added {filesToAdd.Count} files to your project.");
         }
     }
+
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void CreateCCXLHairFiles() {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
+        {
+            return;
+        }
+
+        var dialogModel = Interactions.ShowCCXLHairDialog((activeProject, SettingsManager));
+
+        if (dialogModel is null)
+        {
+            return;
+        }
+
+        if (!dialogModel.IsPhysEnabled)
+        {
+            dialogModel.SelectedAnimGraphFile = $"base\\characters\\common\\hair\\hh_033_wa__player\\hh_033_wa__player_dangle.animgraph";
+            dialogModel.SelectedRigFile = $"base\\characters\\common\\hair\\hh_033_wa__player\\hh_033_wa__player_dangle.rig";
+            _loggerService.Info("Hair Physics option disabled, using base game animgraph and rig files");
+        }
+
+
+
+        TemplateFileTools.GenerateHairCCXLFiles(dialogModel);
+        _loggerService.Success("Hair CCXL Generation Complete!");
+    }
+    
+
 }

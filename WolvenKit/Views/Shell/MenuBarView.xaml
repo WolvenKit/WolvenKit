@@ -198,6 +198,21 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+
+                    <!-- Hair CCXL files -->
+                    <MenuItem
+                        x:Name="MenuItemCreateCCXLHairFiles"
+                        Margin="2,1"
+                        Header="Hair CCXL (ArchiveXL)"
+                        ToolTip="Adds all necessary files for a new ArchiveXL item">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="HairDryer"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator />
 
                     <!-- Player head -->
