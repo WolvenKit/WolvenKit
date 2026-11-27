@@ -547,21 +547,17 @@ public abstract partial class StringHelper
 
     public static bool IsNoneOrEmpty(string text) => string.IsNullOrEmpty(text) || text == "None";
 
-    public static string? StringifyNodeRefHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : hash.ToString();
+    public static string? StringifyNodeRefHash(ulong hash) => hash != 0 ? ((NodeRef)hash).ToString() : "";
 
-    public static string Stringify(gameEntityReference entityRef)
+    public static string GetEntityShortName(gameEntityReference entityRef)
     {
-        if (entityRef.Reference.GetResolvedText() is string s && !string.IsNullOrEmpty(s))
+        var fullEntityName = QuestConditionHelper.ParseGameEntityReference(entityRef);
+        if (fullEntityName == "-")
         {
-            return s;
+            return "";
         }
 
-        if (entityRef.DynamicEntityUniqueName.GetResolvedText() is string s2 && !string.IsNullOrEmpty(s2))
-        {
-            return s2;
-        }
-
-        return Stringify(entityRef.Names.FirstOrDefault());
+        return fullEntityName.Split("/")[^1];
     }
 
     public static string FormatCharacterWorkspotCondition(questCharacterWorkspot_ConditionType workspot)
@@ -589,5 +585,37 @@ public abstract partial class StringHelper
             .ToList();
 
         return "[" + paths.Aggregate((a, b) => $"{a}, {b}") + "]";
+    }
+
+    public static string? Stringify(questObjectDistance questDistance)
+    {
+        var entity = "";
+        var noderef2 = "";
+        if (questDistance.EntityRef.Chunk is { } entityRef)
+        {
+            entity = QuestConditionHelper.FormatUniversalRef(entityRef);
+        }
+
+        if (questDistance.NodeRef2.Reference.GetRedHash() is var hash && hash != 0)
+        {
+            noderef2 = StringifyNodeRefHash(hash) ?? "";
+        }
+
+        if (string.IsNullOrEmpty(entity) && string.IsNullOrEmpty(noderef2))
+        {
+            return null;
+        }
+
+        if (string.IsNullOrEmpty(entity))
+        {
+            return noderef2;
+        }
+
+        if (string.IsNullOrEmpty(noderef2))
+        {
+            return entity;
+        }
+
+        return $"{entity} <-> {noderef2}";
     }
 }

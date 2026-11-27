@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -793,7 +794,18 @@ public partial class ChunkViewModel
                 Value = StringHelper.FormatCharacterWorkspotCondition(workspotCon).Split(" at ")[^1];
                 IsValueExtrapolated = !string.IsNullOrEmpty(Value);
                 break;
-            case questCharacterCondition charCon when GetPropertyChild("Type") is
+            case questObjectDistance questObjectDistance:
+                Value = StringHelper.Stringify(questObjectDistance);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questDistanceComparison_ConditionType questDistanceCondition:
+                Value = QuestConditionHelper.FormatDistanceConditionType(questDistanceCondition);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questValueDistance valueDistance:
+                Value = valueDistance.DistanceValue.ToString();
+                break;
+            case questCharacterCondition when GetPropertyChild("Type") is
                 { ResolvedData: questCharacterWorkspot_ConditionType questCon } typeChild:
                 if (typeChild.Value is string childValue)
                 {
@@ -822,6 +834,14 @@ public partial class ChunkViewModel
                 }
 
                 IsValueExtrapolated = true;
+                break;
+            case questUniversalRef universalRef:
+                Value = QuestConditionHelper.FormatUniversalRef(universalRef);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
+            case questIBaseCondition questDistance:
+                Value = QuestConditionHelper.FormatConditionSemantically(questDistance);
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
                 break;
             case gameSceneTierData data when data.EmptyHands:
                 Value = $"(empty hands)";
@@ -1342,7 +1362,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = locSignature.Val != 0;
                 break;
             case gameEntityReference gameEntRef:
-                Value = gameEntRef.Reference.GetResolvedText();
+                Value = QuestConditionHelper.ParseGameEntityReference(gameEntRef);
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             case gameEntitySpawnerComponent when GetPropertyChild("slotDataArray") is ChunkViewModel sda:

@@ -106,7 +106,7 @@ public class QuestConditionHelper
         return details;
     }
 
-    private static string FormatConditionSemantically(questIBaseCondition condition)
+    public static string FormatConditionSemantically(questIBaseCondition condition)
     {
         return condition switch
         {
@@ -329,49 +329,55 @@ public class QuestConditionHelper
         };
     }
 
-    private static string FormatDistanceCondition(questDistanceCondition distance)
+    public static string FormatDistanceCondition(questDistanceCondition distance) =>
+        FormatDistanceConditionType(distance.Type?.Chunk);
+
+    public static string FormatDistanceConditionType(questIDistanceConditionType? dist)
     {
-        if (distance.Type?.Chunk is questDistanceComparison_ConditionType distComp)
+        if (dist is not questDistanceComparison_ConditionType distComp)
         {
-            var comparison = MapComparisonOperator((object)distComp.ComparisonType);
-            var distanceValue = distComp.DistanceDefinition2?.Chunk?.DistanceValue;
-
-            // Try to extract both endpoints from DistanceDefinition1 (entityRef and nodeRef2)
-            string endpointA = "-";
-            string endpointB = "-";
-
-            var objectDistance = distComp.DistanceDefinition1?.Chunk;
-            if (objectDistance != null)
-            {
-                if (objectDistance.EntityRef?.Chunk != null)
-                {
-                    endpointA = FormatUniversalRef(objectDistance.EntityRef.Chunk);
-                }
-
-                // NodeRef2 is a gameEntityReference
-                var nodeRefText = ParseGameEntityReference(objectDistance.NodeRef2);
-                if (!string.IsNullOrEmpty(nodeRefText) && nodeRefText != "-")
-                {
-                    endpointB = nodeRefText;
-                }
-            }
-
-            if (endpointA != "-" && endpointB != "-")
-            {
-                return $"Distance {endpointA} and {endpointB} {comparison} {distanceValue}m";
-            }
-            if (endpointA != "-")
-            {
-                return $"Distance from {endpointA} {comparison} {distanceValue}m";
-            }
-            if (endpointB != "-")
-            {
-                return $"Distance to {endpointB} {comparison} {distanceValue}m";
-            }
-
-            return $"Distance {comparison} {distanceValue}m";
+            return "Distance condition";
         }
-        return "Distance condition";
+
+        var comparison = MapComparisonOperator((object)distComp.ComparisonType);
+        var distanceValue = distComp.DistanceDefinition2?.Chunk?.DistanceValue;
+
+        // Try to extract both endpoints from DistanceDefinition1 (entityRef and nodeRef2)
+        var endpointA = "-";
+        var endpointB = "-";
+
+        var objectDistance = distComp.DistanceDefinition1?.Chunk;
+        if (objectDistance != null)
+        {
+            if (objectDistance.EntityRef?.Chunk != null)
+            {
+                endpointA = FormatUniversalRef(objectDistance.EntityRef.Chunk);
+            }
+
+            // NodeRef2 is a gameEntityReference
+            var nodeRefText = ParseGameEntityReference(objectDistance.NodeRef2);
+            if (!string.IsNullOrEmpty(nodeRefText) && nodeRefText != "-")
+            {
+                endpointB = nodeRefText;
+            }
+        }
+
+        if (endpointA != "-" && endpointB != "-")
+        {
+            return $"Distance {endpointA} and {endpointB} {comparison} {distanceValue}m";
+        }
+
+        if (endpointA != "-")
+        {
+            return $"Distance from {endpointA} {comparison} {distanceValue}m";
+        }
+
+        if (endpointB != "-")
+        {
+            return $"Distance to {endpointB} {comparison} {distanceValue}m";
+        }
+
+        return $"Distance {comparison} {distanceValue}m";
     }
 
     private static string FormatLogicalCondition(questLogicalCondition logical)
@@ -539,7 +545,7 @@ public class QuestConditionHelper
         return str;
     }
 
-    private static string FormatUniversalRef(questUniversalRef? universalRef)
+    public static string FormatUniversalRef(questUniversalRef? universalRef)
     {
         if (universalRef == null)
         {

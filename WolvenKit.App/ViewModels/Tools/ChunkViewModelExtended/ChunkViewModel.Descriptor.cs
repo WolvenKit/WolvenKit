@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -471,7 +472,7 @@ public partial class ChunkViewModel
                 Descriptor = $"{performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText()}";
                 return;
             case gameEntityReference gameEntRef:
-                Descriptor = $"{gameEntRef.DynamicEntityUniqueName.GetResolvedText()}";
+                Descriptor = StringHelper.GetEntityShortName(gameEntRef);
                 return;
             case scnLipsyncAnimSetSRRef lipsyncAnim:
                 Descriptor = StringHelper.StringifyOrNull(lipsyncAnim.LipsyncAnimSet.DepotPath)
